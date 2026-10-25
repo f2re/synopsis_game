@@ -1,0 +1,41 @@
+version: 1
+id: reference-campus
+status: example
+
+# Reference visual profile only. Deployments may override this with the institution/campus location.
+# Do not derive this automatically from a player's precise location.
+latitude: 59.9386
+longitude: 30.3141
+timezone: Europe/Moscow
+
+solar_model:
+  source: "tested solar-position utility"
+  phases:
+    dawn:
+      solar_elevation_min_deg: -6
+      solar_elevation_max_deg: 0
+    day:
+      solar_elevation_min_deg: 6
+      solar_elevation_max_deg: 90
+    golden_hour:
+      solar_elevation_min_deg: 0
+      solar_elevation_max_deg: 6
+    civil_twilight:
+      solar_elevation_min_deg: -6
+      solar_elevation_max_deg: 0
+    night:
+      solar_elevation_min_deg: -90
+      solar_elevation_max_deg: -6
+
+runtime:
+  source_of_time: server
+  allow_demo_override: true
+  allow_accelerated_cycle: true
+  persist_phase_across_navigation: true
+
+art_tokens: design/tokens/pixel-art-theme.yaml
+
+notes:
+  - "Dawn vs dusk is resolved from whether solar elevation is rising or falling."
+  - "Golden-hour/civil-twilight mapping may be refined after visual testing, but must remain deterministic."
+  - "Meteorological task data are never changed by world location or decorative weather."
