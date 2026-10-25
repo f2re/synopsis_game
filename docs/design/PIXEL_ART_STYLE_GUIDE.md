@@ -1,470 +1,466 @@
-# Pixel-art Style Guide
+# Руководство по пиксельной графике
 
-Status: `accepted-art-direction`
+**Статус:** принято как художественный эталон
 
-This document fixes the visual direction for the **Synoptic Center** game. It should be treated as the baseline for future UI, illustration, animation and front-end implementation unless superseded by an explicit design decision.
+Этот документ фиксирует визуальное направление игры «Синоптический центр». Он является основой для будущих экранов, иллюстраций, анимаций и реализации интерфейса, пока отдельным архитектурным или художественным решением не утверждено иное.
 
-## 1. Visual goal
+## 1. Визуальная цель
 
-The game should feel like a **modern, cozy, high-quality pixel-art game**, not a retro parody and not an LMS dashboard with a pixel filter.
+Игра должна ощущаться как **современная, уютная и качественно выполненная игра в пиксельной графике**, а не как ретро-пародия и не как учебная информационная панель с наложенным «пиксельным фильтром».
 
-The desired emotional mix:
+Желаемое сочетание ощущений:
 
-- competence and curiosity;
-- evening research-campus atmosphere;
-- warmth from interior lights against cool blue-violet skies;
-- a sense that the center is alive even when the player is idle;
-- a competitive layer that can become energetic without becoming militaristic;
-- small recurring discoveries that make the player want to return.
+- профессиональная компетентность и любопытство;
+- атмосфера исследовательского метеорологического кампуса;
+- тёплый свет помещений на фоне холодного синего или фиолетового неба;
+- ощущение, что центр продолжает жить, даже когда игрок ничего не делает;
+- соревновательная энергия без милитаризации;
+- небольшие открытия и изменения, ради которых хочется возвращаться.
 
-The strongest reference is the hub screen. Other screens are specializations of the same world.
+Главный экран центра задаёт художественный язык. Все остальные экраны являются развитием того же мира.
 
-## 2. Fixed reference screens
+## 2. Зафиксированные эталонные экраны
 
-### Hub / Synoptic Center
+### Главный центр
 
-![Hub](../../design/pixel-art/01_hub.webp)
+![Главный центр](../../design/pixel-art/01_hub.webp)
 
-Defines:
+Фиксирует:
 
-- the world and campus;
-- warm-window / cool-sky contrast;
-- readable modular buildings;
-- small moving people and environmental life;
-- the primary CTA hierarchy;
-- how secondary HUD elements stay visually quiet.
+- внешний вид мира и кампуса;
+- контраст тёплых окон и холодного неба;
+- читаемые модульные здания;
+- небольших движущихся персонажей и фоновую жизнь;
+- иерархию главного действия;
+- спокойное визуальное поведение вторичных элементов интерфейса.
 
-### Blitz
+### Блиц
 
-![Blitz](../../design/pixel-art/02_blitz.webp)
+![Блиц](../../design/pixel-art/02_blitz.webp)
 
-Defines:
+Фиксирует:
 
-- one-task-one-focus composition;
-- task timer and streak;
-- minimal queue of next task categories;
-- supportive character reaction;
-- short, positive feedback loops.
+- композицию «одна задача — один фокус»;
+- таймер и серию;
+- небольшой список следующих категорий;
+- реакцию сопровождающего персонажа;
+- короткую и положительную обратную связь.
 
-### Realtime duel
+### Синоптическая дуэль
 
-![Duel](../../design/pixel-art/03_duel.webp)
+![Дуэль](../../design/pixel-art/03_duel.webp)
 
-Defines:
+Фиксирует:
 
-- mirrored PvP composition;
-- shared map as the dominant scene;
-- Reliability and OR as peripheral HUD;
-- parry / counter / combo effects;
-- esports energy without hiding professional data.
+- симметричную соревновательную композицию;
+- общую карту как главный объект;
+- Надёжность и оперативный ресурс как периферийные показатели;
+- парирование, контратаку и серию;
+- зрелищность без перекрытия профессиональных данных.
 
-### Inventory
+### Инвентарь
 
-![Inventory](../../design/pixel-art/04_inventory.webp)
+![Инвентарь](../../design/pixel-art/04_inventory.webp)
 
-Defines:
+Фиксирует:
 
-- character identity;
-- funny but relevant synoptic equipment;
-- collection UX;
-- cosmetics and desk personalization;
-- visual progression of tools.
+- постоянную идентичность персонажа;
+- тематические инструменты синоптика;
+- коллекционный интерфейс;
+- персонализацию рабочего места;
+- визуальное развитие инструментов.
 
-### Tournament / spectator broadcast
+### Турнир и большой экран
 
-![Tournament](../../design/pixel-art/05_tournament.webp)
+![Турнир](../../design/pixel-art/05_tournament.webp)
 
-Defines:
+Фиксирует:
 
-- projector-readable spectator hierarchy;
-- classroom tournament atmosphere;
-- team colors and event feed;
-- tournament bracket and presenter layer;
-- big-screen readability from several meters away.
+- иерархию, читаемую с проектора;
+- атмосферу турнира учебной группы;
+- командные цвета и ленту важных событий;
+- положение турнирной сетки;
+- читаемость с нескольких метров.
 
-### Progression / seasonal journey
+### Развитие и сезонный путь
 
-![Progression](../../design/pixel-art/06_progression.webp)
+![Развитие](../../design/pixel-art/06_progression.webp)
 
-Defines:
+Фиксирует:
 
-- reasons to return daily;
-- mastery tracks;
-- career progression;
-- room unlocks;
-- seasonal rewards and collectible cosmetics.
+- причины возвращаться в игру;
+- линии освоения навыков;
+- карьерное развитие;
+- открытие помещений центра;
+- сезонные награды и коллекционные предметы.
 
-> The repository previews are deliberately lightweight. Production assets should be recreated as authored sprites, layers and reusable UI components rather than shipping these concept images as backgrounds.
+> Изображения в репозитории служат художественными эталонами. В рабочей версии графика должна быть воссоздана как отдельные слои, наборы кадров и переиспользуемые компоненты, а не использоваться как одна неподвижная картинка.
 
-## 3. Composition hierarchy
+## 3. Иерархия композиции
 
-Every player-facing screen follows this hierarchy:
+Каждый экран игрока следует порядку:
 
-1. **Current situation / map / task** — dominant.
-2. **One primary action** — immediately obvious.
-3. **Match or session state** — Reliability, OR, timer, streak.
-4. **Secondary navigation and progress.**
-5. **Decorative world detail.**
+1. **Текущая ситуация, карта или задача** — главный объект.
+2. **Одно основное действие** — сразу заметно.
+3. **Состояние матча или занятия** — Надёжность, оперативный ресурс, время, серия.
+4. **Вторичная навигация и развитие.**
+5. **Декоративные детали живого мира.**
 
-Do not give equal visual weight to every panel.
+Все панели не должны иметь одинаковый визуальный вес.
 
-A three-second glance must answer:
+За три секунды пользователь должен понять:
 
-- what am I doing now?
-- where do I act?
-- am I doing well?
-- what is interactive and what is scenery?
+- что он делает сейчас;
+- где нужно действовать;
+- насколько успешно идёт работа;
+- что интерактивно, а что является фоном.
 
-## 4. Pixel-art language
+## 4. Язык пиксельной графики
 
-### 4.1. Modern pixel art, not low-resolution imitation
+### 4.1. Современная пиксельная графика, а не имитация низкого разрешения
 
-Use crisp clusters, controlled anti-aliasing and deliberate shapes. Avoid random one-pixel noise.
+Используются чёткие группы пикселей, контролируемое сглаживание и осмысленные формы. Случайный одиночный шум не используется.
 
-Recommended production workflow:
+Рекомендуемый порядок подготовки:
 
-- build world/sprite art on a fixed logical pixel grid;
-- upscale using nearest-neighbor where appropriate;
-- allow standard vector/UI text layers above the pixel scene if that improves readability;
-- never blur professional symbols or map labels just to make them “more pixel”.
+- мир и персонажи строятся на фиксированной логической пиксельной сетке;
+- увеличение выполняется целыми коэффициентами там, где это уместно;
+- обычный векторный текст может располагаться поверх пиксельной сцены, если так лучше читается кириллица;
+- профессиональные символы и подписи карты нельзя размывать ради «более пиксельного вида».
 
-### 4.2. Shape language
+### 4.2. Язык форм
 
-World:
+Мир:
 
-- compact architectural silhouettes;
-- rounded observatory domes;
-- radio masts, anemometers, radomes, balloons;
-- small trees, lamps, benches, books and map cabinets.
+- компактные архитектурные силуэты;
+- округлые купола и радары;
+- радиомачты, анемометры, радиопрозрачные купола, зонды;
+- небольшие деревья, фонари, скамейки, книги и шкафы с картами.
 
-UI:
+Интерфейс:
 
-- dark navy panels;
-- 1–2 px-style inner highlights;
-- moderate corner chamfers/rounding;
-- clear icon blocks;
-- strong amber highlight for the primary CTA.
+- тёмные сине-графитовые панели;
+- тонкие внутренние подсветки;
+- умеренно скруглённые или скошенные углы;
+- чёткие пиктограммы;
+- тёплый янтарный акцент для главного действия.
 
-## 5. Palette roles
+## 5. Цветовые роли
 
-The exact colors belong in design tokens, but the role split is fixed.
+Точные значения хранятся в [`../../design/tokens/pixel-art-theme.yaml`](../../design/tokens/pixel-art-theme.yaml), но распределение ролей фиксировано.
 
-### World palette
+### Цвета мира
 
-- dusk navy / indigo sky;
-- violet and pink atmospheric gradients;
-- warm amber / tungsten interiors;
-- deep green vegetation;
-- muted concrete / stone / steel.
+- тёмно-синее и индиговое небо;
+- фиолетовые и розовые атмосферные переходы;
+- тёплый янтарный свет помещений;
+- глубокая зелень растительности;
+- приглушённые бетон, камень и металл.
 
-### Game UI palette
+### Цвета игрового интерфейса
 
-- dark desaturated navy base;
-- pale blue for neutral information;
-- amber/gold for primary CTA and earned rewards;
-- green for verified success;
-- red only for error/opponent/negative event where it cannot be confused with meteorological semantics.
+- тёмная ненасыщенная синяя основа;
+- светло-голубой для нейтральной информации;
+- янтарный и золотой для главного действия и заслуженных наград;
+- зелёный для подтверждённого успеха;
+- красный только для ошибки или отрицательного события там, где его нельзя спутать с метеорологической семантикой.
 
-### Meteorological semantics
+### Метеорологическая семантика
 
-Professional map colors are reserved and must not be repurposed by generic UI effects.
+Профессиональные цвета карты зарезервированы и не используются как произвольные игровые эффекты.
 
-Examples:
+Примеры:
 
-- warm front red;
-- cold front blue;
-- occlusion purple;
-- map-lift colors and other profile-specific semantics stay under `--meteo-*` tokens.
+- тёплый фронт — красный;
+- холодный фронт — синий;
+- фронт окклюзии — фиолетовый;
+- цвета подъёма карты и другие методические обозначения хранятся в отдельных токенах `--meteo-*`.
 
-Game cosmetics may never recolor a standard meteorological symbol inside an educational task.
+Предмет оформления никогда не перекрашивает стандартный метеорологический знак внутри учебной задачи.
 
-## 6. Living background system
+## 6. Система живого фона
 
-The hub should feel alive even when the user does nothing.
+Главный центр должен ощущаться живым даже при полном бездействии игрока.
 
-### Ambient loops
+### Фоновые циклы
 
-Use short loops assembled from sprites and transforms:
+Используются короткие повторяемые анимации:
 
-- birds cross the sky in small groups;
-- clouds drift at multiple parallax speeds;
-- flags and windsocks move gently;
-- tower lights blink;
-- radar dish rotates slowly;
-- balloon rises or drifts in the far background;
-- leaves/ivy move subtly;
-- selected windows flicker as people pass;
-- small staff sprites walk between rooms;
-- paper corner or hanging map can flutter indoors.
+- небольшие группы птиц пересекают небо;
+- облака движутся на нескольких глубинах;
+- флаги и ветроуказатели слегка колышутся;
+- сигнальные огни мигают;
+- антенна радара медленно вращается;
+- зонд поднимается или уходит вдаль;
+- листья и плющ двигаются едва заметно;
+- в отдельных окнах проходят сотрудники;
+- небольшие персонажи перемещаются между зданиями;
+- край карты или лист бумаги может слегка колыхаться в помещении.
 
-### Animation budget
+### Бюджет анимации
 
-At any moment only a few ambient loops should draw attention. Background animation must never compete with a current task.
+Одновременно внимание должны привлекать только несколько фоновых циклов. Фон не конкурирует с текущим заданием.
 
-Recommended layers:
+Рекомендуемые слои:
 
-1. far sky/clouds;
-2. mountains/city;
-3. campus architecture;
-4. ambient NPCs/animals;
-5. UI;
-6. feedback particles.
+1. дальнее небо и облака;
+2. город, рельеф или дальний фон;
+3. архитектура центра;
+4. фоновые персонажи и животные;
+5. интерфейс;
+6. короткие эффекты обратной связи.
 
-## 7. Birds and companions
+## 7. Птицы и спутники
 
-Birds are a recurring “life signal” of the world.
+Птицы — постоянный признак «живого мира».
 
-Use:
+Использовать:
 
-- distant flock silhouettes in hub/tournament backgrounds;
-- local birds on railings and windowsills;
-- collectible companions such as `Синичка`, `Чайка` or regional species;
-- tiny idle animations: head tilt, hop, wing shake, short flight.
+- силуэты дальних стай;
+- птиц на перилах, крышах и подоконниках;
+- коллекционных спутников: синичку, чайку, баклана, снегиря и региональные виды;
+- небольшие циклы покоя: поворот головы, прыжок, встряхивание крыла, короткий перелёт.
 
-Companions are cosmetic/social and must not create Ranked advantages.
+Спутники являются только визуальными и социальными элементами и не дают преимуществ в рейтинговом режиме.
 
-## 8. Synoptician character
+## 8. Персонаж синоптика
 
-The player avatar should be recognizable but secondary to the map during work.
+Персонаж должен быть узнаваемым, но во время работы оставаться вторичным по отношению к карте.
 
-Character slots:
+Слоты внешнего вида:
 
-- headwear;
-- jacket / field coat;
-- backpack;
-- footwear;
-- held object;
-- companion;
-- profile badge.
+- головной убор;
+- куртка или полевая одежда;
+- рюкзак;
+- обувь;
+- предмет в руках;
+- спутник;
+- профильный значок.
 
-Possible visual progression:
+Возможное визуальное развитие:
 
-- practical student backpack;
-- field jacket;
-- archive/map case;
-- aerology badge;
-- tournament insignia;
-- seasonal weather accessories.
+- студенческий рюкзак;
+- полевая куртка;
+- папка или футляр карт;
+- значок аэрологии;
+- турнирная нашивка;
+- сезонные аксессуары.
 
-The avatar may react to success/failure in Blitz and post-match screens, but should not obscure the task.
+Персонаж может реагировать на успех или ошибку в блице и после матча, но не должен закрывать задачу.
 
-## 9. Inventory philosophy
+## 9. Философия инвентаря
 
-Inventory is about identity, collection and playful professional tools — not pay-to-win stats.
+Инвентарь создаёт идентичность, коллекционирование и профессиональный юмор, а не боевое преимущество.
 
-### Core themed items
+### Основные тематические предметы
 
-- **Front pencil** — red/blue, for front-related visual identity.
-- **Isobar pencil** — soft black/graphite.
-- **Cartographic ruler**.
-- **Station plotting / puançon tool**.
-- **Weather loupe**.
-- **Archive notebook**.
-- **Map layer cards**.
-- **Radar token**.
-- **Aerology balloon badge**.
-- **Map case**.
-- **Desk lamp**.
-- **Pins and patches**.
+- **Фронтальный карандаш** — красно-синий;
+- **Изобарный карандаш** — мягкий чёрный;
+- **Картографическая линейка**;
+- **Инструмент схемы станции**;
+- **Метеорологическая лупа**;
+- **Архивный блокнот**;
+- **Карточки слоёв карты**;
+- **Радарный жетон**;
+- **Значок аэрологического зонда**;
+- **Папка карт**;
+- **Настольная лампа**;
+- **Значки и нашивки**.
 
-### Pencil progression
+### Развитие коллекции карандашей
 
-Pencils are a recurring humorous collectible system.
+Параметры в основном визуальные:
 
-Possible attributes are mostly visual/UX:
+- форма корпуса;
+- цвет торца;
+- степень износа;
+- форма заточки;
+- предварительный просмотр толщины линии;
+- сезонное оформление;
+- памятная гравировка.
 
-- body style;
-- cap/end color;
-- wear level;
-- sharpened / soft tip animation;
-- line preview thickness;
-- seasonal skin;
-- engraved achievement marks.
+Пример уровней коллекции:
 
-Example tiers:
+1. ученический карандаш;
+2. полевой карандаш;
+3. профессиональный синоптический;
+4. комплект ведущего синоптика;
+5. архивное или памятное издание.
 
-1. Student pencil;
-2. Field pencil;
-3. Synoptic pencil;
-4. Senior synoptician set;
-5. Archival / commemorative edition.
+Более высокий уровень карандаша не раскрывает ответы и не меняет подсчёт рейтингового матча.
 
-Do not make a higher-level pencil reveal correct answers or alter Ranked scoring.
+## 10. Правила отдельных экранов
 
-## 10. Screen-specific rules
+### Главный центр
 
-### Hub
+- 65–80% общего впечатления принадлежит живой сцене;
+- здания являются смысловыми входами в компетенции;
+- одно крупное главное действие — «Начать смену»;
+- блиц, дуэль, инвентарь, турнир, архив и задания — вторичные входы.
 
-- 65–80% of the visual impression belongs to the world scene.
-- Buildings are semantic shortcuts to competencies.
-- One large CTA: `Начать смену`.
-- Blitz, Duel, Inventory, Tournament, Archive and Tasks are secondary entrances.
+### Блиц
 
-### Blitz
+- одна крупная рабочая область задания;
+- ответы находятся в удобной зоне;
+- таймер видим, но не доминирует;
+- эффект серии занимает менее секунды и быстро возвращает внимание к задаче;
+- реакция персонажа находится на периферии.
 
-- one large task surface;
-- answers in thumb / eye-friendly zone;
-- timer is visible but not dominant;
-- combo feedback lasts under ~1 s before returning focus;
-- assistant/avatar reaction is peripheral.
+### Дуэль
 
-### Duel
+- карта или задача остаётся в центре;
+- Надёжность игроков расположена симметрично сверху;
+- эффекты по возможности происходят по краям карты;
+- нет тряски, мешающей читать подписи;
+- щит, парирование и контратака используют короткий световой импульс, а не длинные частицы.
 
-- map/task remains central;
-- Reliability bars symmetrical at top;
-- effects occur outside or at edges of the map where possible;
-- no screen shake that makes map labels unreadable;
-- shield/parry/counter use icon + short light burst, not long particles.
+### Турнир
 
-### Tournament
+- сначала проектируется для проектора;
+- крупные имена, счёт, раунд и карта;
+- лента событий показывает только важные действия;
+- административные элементы отделены от публичного слоя;
+- правильный ответ скрывается до момента, разрешённого правилами.
 
-- designed for projector first;
-- large names, scores, round and map;
-- event feed limited to latest important actions;
-- instructor controls separated from the public layer;
-- correct answer remains hidden until the rules allow revealing it.
+### Инвентарь
 
-### Inventory
+- персонаж и слоты снаряжения формируют главную композицию;
+- карточки предметов могут быть плотнее, чем активный игровой экран;
+- при выборе предмета показывается короткая анимация;
+- коллекционные показатели не должны выглядеть как рейтинговая сила, если её нет.
 
-- character + equipment slots form the main composition;
-- item cards can be denser than active gameplay screens;
-- preview animations on hover/select;
-- stats shown for collection/progression should not imply Ranked power if none exists.
+### Развитие
 
-### Progression
+- показывается путь, помещения и реальные изменения мира;
+- открываются места, задания и режимы;
+- избегается визуальный шум типичных платных сезонных систем;
+- награды связаны с погодой, исследованиями и кампусом.
 
-- show path, rooms and tangible world changes;
-- progression should unlock visual places, tasks and modes;
-- avoid generic battle-pass visual clutter;
-- rewards need a weather/research/campus theme.
+## 11. Правила анимации
 
-## 11. Animation rules
+### Полезная анимация
 
-### Useful animation
+- слой карты мягко появляется;
+- изобара или фронт возникает вдоль реального пути игрока;
+- элементы станции точно встают на место;
+- изменение Надёжности сопровождается коротким импульсом;
+- оперативный ресурс перемещается к своему индикатору;
+- парирование гасит входящий эффект;
+- улучшение помещения добавляет реальную деталь в мир центра.
 
-- map layer fades/slides in;
-- isobar/front appears along the player’s actual path;
-- correct station elements snap into place;
-- Reliability changes with a short pulse;
-- OR travels as a small energy pulse to the resource icon;
-- parry absorbs an incoming effect;
-- room upgrade adds a real environmental detail to the hub.
+### Избегать
 
-### Avoid
+- постоянных частиц на весь экран;
+- сильной тряски камеры;
+- быстрых вспышек позади метеорологических данных;
+- анимации, длящейся дольше учебного действия;
+- декоративных эффектов, перекрашивающих фронты и наблюдения.
 
-- constant full-screen particles;
-- aggressive camera shake;
-- rapid flashes behind meteorological data;
-- animation longer than the learning action it acknowledges;
-- decorative effects that recolor front symbols or observation data.
+## 12. Переиспользуемые элементы реализации
 
-## 12. Reusable implementation primitives
-
-The production design should be feasible without generative imagery at runtime.
-
-Build the visual system from reusable authored pieces:
+Рабочая версия не должна зависеть от генерации изображений во время игры.
 
 ### CSS / SVG / DOM
 
-- panel frames;
-- buttons;
-- meters;
-- task cards;
-- icons;
-- tabs;
-- bracket lines;
-- progress tracks;
-- map overlays where vector semantics are preferable.
+- рамки панелей;
+- кнопки;
+- шкалы;
+- карточки заданий;
+- значки;
+- вкладки;
+- линии турнирной сетки;
+- дорожки прогресса;
+- векторные наложения карты.
 
 ### Canvas / WebGL
 
-- synoptic map interaction;
-- drawing fronts/isobars;
-- smooth highlighting;
-- particles limited to feedback;
-- optional parallax world layers.
+- интерактивная синоптическая карта;
+- проведение фронтов и изобар;
+- подсветка;
+- ограниченные частицы обратной связи;
+- при необходимости слои глубины живого мира.
 
-### Sprite sheets
+### Наборы кадров
 
-- characters;
-- birds;
-- flags;
-- radar dish;
-- balloon;
-- plants;
-- lights;
-- small room activity;
-- weather companions;
-- tool item animations.
+- персонажи;
+- птицы;
+- флаги;
+- антенна радара;
+- зонд;
+- растения;
+- огни;
+- небольшая активность помещений;
+- спутники;
+- анимации инструментов.
 
-## 13. Suggested sprite scales
+## 13. Рекомендуемые логические размеры
 
-These are starting points, not hard engine limits:
+Это исходные ориентиры, а не жёсткие ограничения движка:
 
-- tiny ambient NPC: 16×24 or 20×28 logical px;
-- main avatar: 32×48 / 48×64 logical px;
-- bird: 8×8 to 16×12;
-- item icon: 24×24 or 32×32;
-- building module: tiled / layered, not one giant bitmap;
-- feedback effect: 16–48 px with short lifetime.
+- маленький фоновый персонаж: 16×24 или 20×28 логических пикселей;
+- основной персонаж: 32×48 или 48×64;
+- птица: 8×8…16×12;
+- значок предмета: 24×24 или 32×32;
+- здание собирается из модулей и слоёв, а не одной огромной картинки;
+- короткий эффект: 16–48 пикселей.
 
-Use integer scaling for sprite art where possible.
+Пиксельная графика по возможности масштабируется целыми коэффициентами.
 
-## 14. Return-to-game atmosphere
+## 14. Атмосфера возвращения в игру
 
-The world should change gently so the center feels inhabited.
+Мир должен постепенно меняться и создавать ощущение обитаемого центра.
 
-Possible non-gameplay variation:
+Возможные вариации:
 
-- sunrise / day / sunset / night lighting;
-- rain on windows;
-- first snow;
-- fog in the valley;
-- clear starry night;
-- seasonal plants and banners;
-- different birds by season;
-- different NPC routines;
-- a rare balloon or aircraft pass;
-- lights switching on in unlocked rooms.
+- рассвет, день, закат, сумерки и ночь;
+- дождь по стеклу;
+- первый снег;
+- туман в долине;
+- ясная звёздная ночь;
+- сезонная растительность и плакаты;
+- разные птицы по сезону;
+- разные маршруты сотрудников;
+- редкий пролёт зонда или самолёта;
+- включение света в открытых помещениях.
 
-These are visual variations and should not fabricate meteorological observations used in a task.
+Эти изменения являются визуальными и не создают фиктивные метеорологические наблюдения для учебной задачи.
 
-## 15. Accessibility
+## 15. Доступность
 
-Pixel art must not reduce usability.
+Пиксельная графика не должна ухудшать использование игры.
 
-- task text uses a highly legible font with Cyrillic support;
-- text does not need to be a pixel font if readability suffers;
-- color is never the only carrier of correctness;
-- front symbols retain shape differences;
-- reduced-motion mode disables parallax and most ambient loops;
-- map information can be zoomed;
-- projector mode uses larger type and reduced decorative density.
+- текст заданий набирается хорошо читаемым шрифтом с кириллицей;
+- текст не обязан быть пиксельным, если это ухудшает чтение;
+- цвет никогда не является единственным носителем правильности;
+- формы фронтов остаются различимыми;
+- режим уменьшенной анимации отключает большинство постоянных фоновых циклов;
+- карту можно масштабировать;
+- большой экран использует более крупный текст и меньшую плотность декора.
 
-## 16. Acceptance checklist for new screens
+## 16. Проверка нового экрана
 
-A new screen belongs to this visual system if:
+Новый экран соответствует художественной системе, если:
 
-- [ ] it clearly shares the same campus/world palette;
-- [ ] the active task is visually dominant when learning is happening;
-- [ ] pixel art supports, rather than reduces, readability;
-- [ ] professional symbols remain semantically correct;
-- [ ] background life is subtle and loopable;
-- [ ] important animation communicates cause/effect;
-- [ ] no cosmetic creates Ranked advantage;
-- [ ] the screen can be decomposed into reusable sprites/shapes/components;
-- [ ] mobile and reduced-motion variants are feasible;
-- [ ] it is visually recognizable as the same game as the six fixed references above.
+- [ ] использует ту же палитру мира центра;
+- [ ] активная учебная задача визуально доминирует;
+- [ ] пиксельная графика улучшает, а не ухудшает чтение;
+- [ ] профессиональные обозначения остаются корректными;
+- [ ] фоновая жизнь спокойна и циклична;
+- [ ] важная анимация показывает причину и следствие;
+- [ ] предметы оформления не дают рейтингового преимущества;
+- [ ] экран раскладывается на переиспользуемые слои, формы и компоненты;
+- [ ] возможны мобильный вариант и режим уменьшенной анимации;
+- [ ] экран узнаётся как часть того же мира, что шесть эталонных сцен.
 
-## 17. Change policy
+## 17. Правила изменения художественного направления
 
-A large visual change should update this guide and, if it changes product identity, be accompanied by an ADR.
+Крупное визуальное изменение требует обновления этого документа и, если меняется идентичность продукта, отдельного архитектурного решения.
 
-Examples requiring explicit review:
+Явной приёмки требуют:
 
-- switching away from pixel art;
-- replacing the campus world with a pure dashboard;
-- making characters the dominant object in professional tasks;
-- changing semantic meteorological colors;
-- introducing visually noisy combat effects;
-- changing inventory from cosmetic/collection to Ranked power.
+- отказ от пиксельной графики;
+- замена живого центра на чистую информационную панель;
+- превращение персонажа в главный объект профессиональной задачи;
+- изменение метеорологических семантических цветов;
+- добавление визуально шумных боевых эффектов;
+- превращение инвентаря из коллекционной системы в источник рейтинговой силы.
