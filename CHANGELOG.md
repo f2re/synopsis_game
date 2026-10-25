@@ -1,0 +1,39 @@
+# Changelog
+
+Все заметные изменения проекта должны фиксироваться здесь. Формат ориентирован на Keep a Changelog, версии — SemVer после появления релизов.
+
+## [Unreleased]
+
+### Added
+
+- базовый GDD и описание концепции;
+- документация российской синоптической школы;
+- правила gameplay/balance;
+- realtime PvP, spectator, instructor и replay концепция;
+- content schema и method profiles;
+- технические требования и art direction;
+- roadmap и source policy;
+- модульный docs index;
+- архитектурная структура;
+- каталог игровых механик;
+- карта учебных модулей;
+- MVP backlog;
+- idea backlog;
+- ADR process;
+- quality gates;
+- contributing/security guidance.
+
+### Changed
+
+- документация переведена от плоского набора файлов к модульной иерархии.
+
+### Pending
+
+- выбор лицензии;
+- инициализация monorepo;
+- первый versioned content pack;
+- первый playable vertical slice.
+
+## Правило ведения
+
+Не добавлять сюда каждую мелкую правку текста. Фиксировать изменения, которые заметны разработчику, автору контента, методисту или пользователю.
