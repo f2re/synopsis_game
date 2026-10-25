@@ -1,43 +1,43 @@
-# ADR-0002: Autonomous living runtime as a product foundation
+# ADR-0002 — Автономная работа и живой мир как основа продукта
 
-**Status:** accepted
+**Статус:** принято
 
-## Context
+## Исходная ситуация
 
-The project originally described a classroom-first game where an instructor could create rooms, launch tournaments and operate projector mode. The updated product direction requires the system to be interesting and functional without continuous instructor operation and to behave like a living game world rather than a static learning dashboard.
+Первоначально проект описывался как игра для учебной аудитории, где преподаватель мог создавать комнаты, запускать турниры и управлять проектором. Обновлённая концепция требует, чтобы система была интересной и работоспособной без постоянного участия преподавателя и воспринималась как живой игровой мир, а не как статичная учебная информационная панель.
 
-## Decision
+## Решение
 
-We adopt the following as product-level architectural constraints:
+Принимаются следующие архитектурные ограничения уровня продукта:
 
-1. The hub is a layered living world with time-of-day, seasons, ambient animation, interactive animals/objects and discoveries.
-2. КН-01 supports a live-data pipeline from real station telegram feeds through versioned parser/encoder rulesets and validated snapshot packs.
-3. Match validation, ranking, tournament progression and result calculation are autonomous.
-4. Arena TV/projector mode automatically selects and switches live matches, highlights, leaderboards and attract-mode scenes.
-5. Public self-registration is disabled; users are provisioned by an administrator/roster import.
-6. Classroom login is intentionally simple, with security profiles separating trusted local deployments from public Internet deployments.
-7. Avatar customization and earned cosmetics are a permanent identity layer, but cannot change Ranked power.
-8. Instructor tools remain available for configuration, review and override, but are not required for ordinary runtime operation.
+1. Главный центр — многослойный живой мир со временем суток, сезонами, фоновой анимацией, интерактивными животными и объектами, а также «Находками мира».
+2. КН-01 поддерживает поток реальных телеграмм станций через версионируемый декодер/кодировщик, контроль качества и фиксированные снимки данных.
+3. Проверка ответов, рейтинг, продвижение турнира и расчёт результата выполняются автоматически.
+4. Автономный большой экран самостоятельно выбирает и переключает текущие матчи, яркие моменты, таблицу лидеров и демонстрационные сцены.
+5. Публичная саморегистрация отключена; пользователей создаёт администратор или импорт списка.
+6. Вход в учебной аудитории намеренно упрощён; профили безопасности разделяют доверенное локальное развёртывание и открытый интернет-доступ.
+7. Персонализация персонажа и заработанные предметы оформления являются постоянным слоем идентичности, но не изменяют силу игрока в рейтинговом режиме.
+8. Средства преподавателя остаются для настройки, методического контроля и исключительных вмешательств, но не требуются для обычной работы игры.
 
-## Consequences
+## Последствия
 
-### Positive
+### Положительные
 
-- the game can run in a classroom, hallway display or event unattended;
-- current real data can continuously create fresh training material;
-- school visitors can understand and watch the game without an instructor explanation;
-- the hub becomes a return-to-game space rather than menu chrome;
-- user identity is simple for controlled educational deployments;
-- cosmetics give long-term progression without pay-to-win.
+- игра может работать в аудитории, холле или на мероприятии без постоянного оператора;
+- актуальные реальные данные непрерывно создают новый учебный материал;
+- школьники и гости могут понять и наблюдать игру без обязательного объяснения преподавателя;
+- главный центр становится пространством, куда хочется возвращаться, а не просто меню;
+- вход остаётся простым в контролируемой образовательной среде;
+- предметы оформления дают долгосрочное развитие без покупки игровой силы.
 
-### Costs
+### Стоимость и ограничения
 
-- additional `world-engine`, `live-ingest`, `broadcast-selector`, `identity` and `rewards` domains;
-- stronger automated validation is mandatory;
-- kiosk/display reliability becomes a production requirement;
-- very short classroom PINs require deployment-specific controls and cannot be treated as secure Internet passwords.
+- появляются дополнительные программные области `world-engine`, `live-ingest`, `broadcast-selector`, `identity` и `rewards`;
+- автоматическая проверка становится обязательной частью архитектуры;
+- надёжность постоянного большого экрана становится эксплуатационным требованием;
+- очень короткие коды входа требуют отдельного локального профиля безопасности и не могут считаться полноценными паролями для открытого Интернета.
 
-## References
+## Связанные материалы
 
 - [`../00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md`](../00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md)
 - [`../design/LIVING_WORLD_SYSTEM.md`](../design/LIVING_WORLD_SYSTEM.md)
