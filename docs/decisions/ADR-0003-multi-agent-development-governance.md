@@ -1,47 +1,48 @@
-# ADR-0003: Provider-neutral multi-agent development governance
+# ADR-0003 — Независимая многоагентная разработка и приёмка
 
-**Status:** accepted
+**Статус:** принято  
+**Дата:** 2026-10-25
 
-**Date:** 2026-10-25
+## Исходная ситуация
 
-## Context
+Проект объединяет предметно-критичную российскую синоптическую метеорологию, приём актуальных КН-01, сетевые соревнования, постоянный живой мир в пиксельной графике, браузерную анимацию, звуковую среду, закрытый список пользователей и автономный публичный экран.
 
-The project combines domain-critical Russian synoptic meteorology, live KN-01 ingestion, realtime PvP, a persistent pixel-art living world, browser animation/performance, audio assets, closed-roster identity and autonomous public display. A single generalist agent can implement a feature but must not also be the sole authority that accepts its methodology, visual coherence, security and release readiness.
+Один универсальный агент может реализовать отдельную функцию, но не должен одновременно быть единственным источником методической, художественной, технической и эксплуатационной приёмки собственной работы.
 
-The project is expected to be worked on with Codex, Claude Code and Gemini/Antigravity. Provider-specific capabilities differ, therefore role ownership and acceptance criteria must remain independent of model vendor.
+Проект предполагает работу в Codex, Claude Code и Gemini/Antigravity. Возможности конкретных сред различаются, поэтому ответственность ролей и критерии приёмки должны быть независимы от поставщика модели.
 
-## Decision
+## Решение
 
-1. `AGENTS.md` is the repository-wide operating contract.
-2. `agents/registry.yaml` is the canonical role/provider/ownership/reviewer registry.
-3. Codex, Claude Code and Gemini/Antigravity receive thin project entrypoints (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`).
-4. Antigravity additionally uses `.agents/rules`, `.agents/workflows` and `.agents/skills` for repeatable workspace operations.
-5. Every roadmap task has one implementation owner; independent review roles are attached by risk/domain.
-6. Self-approval is forbidden for gated work.
-7. Ranked/Exam meteorological truth requires two independent roles: Russian Synoptic Methodologist and Meteorological Verifier.
-8. Art Direction, browser/performance, security/privacy and integration/release are independent blocking gates where applicable.
-9. A provider can be substituted by the fallback provider without changing the role contract or acceptance standard.
-10. Agent execution must leave auditable artifacts: commits, tests, handoff records, review verdicts or equivalent logs. A claimed background agent run without evidence is not considered work completed.
+1. [`AGENTS.md`](../../AGENTS.md) является общим договором работы агентов в репозитории.
+2. [`agents/registry.yaml`](../../agents/registry.yaml) является каноническим реестром ролей, предпочтительных сред, владельцев и проверяющих.
+3. Codex, Claude Code и Gemini/Antigravity получают собственные входные файлы (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`), которые ссылаются на один общий набор правил.
+4. Antigravity дополнительно использует `.agents/rules`, `.agents/workflows` и `.agents/skills` для повторяемых рабочих процедур.
+5. У каждой задачи плана реализации есть один основной исполнитель; независимые проверяющие назначаются по риску и предметной области.
+6. Самоприёмка запрещена там, где установлен обязательный независимый контроль.
+7. Метеорологическая истинность рейтингового и экзаменационного задания требует двух независимых ролей: методолога российской синоптической школы и метеорологического верификатора.
+8. Художественная приёмка, браузерная производительность, безопасность/приватность и интеграционная приёмка являются независимыми блокирующими проверками там, где это применимо.
+9. При замене одной среды исполнения другой критерии роли и качества не меняются.
+10. Работа агента должна оставлять проверяемый след: изменения в репозитории, результаты тестов, записи передачи работы, заключения проверяющих или равнозначные журналы. Заявление о якобы выполненной фоновой работе без такого следа не считается выполненной задачей.
 
-## Consequences
+## Последствия
 
-### Positive
+### Положительные
 
-- meteorological answers receive independent source-backed acceptance;
-- art direction cannot silently drift between implementation agents;
-- browser performance and accessibility can veto visually approved but unusable effects;
-- audio rights/provenance become explicit;
-- Codex/Claude/Gemini can work in parallel under the same task vocabulary;
-- implementation ownership is traceable to roadmap task IDs.
+- метеорологические ответы получают независимую проверку по источникам;
+- художественное направление не «плывёт» между разными исполнителями;
+- специалист по производительности и доступности может отклонить красивый, но непригодный эффект;
+- происхождение и права звуковых материалов фиксируются явно;
+- Codex, Claude Code и Gemini могут работать параллельно с одной системой идентификаторов задач;
+- ответственность за реализацию прослеживается до конкретной задачи плана.
 
-### Costs
+### Стоимость и ограничения
 
-- more review handoffs;
-- some tasks require multiple provider sessions;
-- provider adapters and workflows must be maintained as tools evolve;
-- blocked reviewer disagreement can delay Ranked publication.
+- увеличивается число передач работы между ролями;
+- некоторые задачи требуют нескольких независимых сеансов в разных средах;
+- адаптеры и инструкции для разных сред необходимо поддерживать по мере развития инструментов;
+- разногласие проверяющих может задержать публикацию рейтингового учебного содержания, что считается правильным поведением системы качества.
 
-## References
+## Связанные материалы
 
 - [`../../AGENTS.md`](../../AGENTS.md)
 - [`../../CLAUDE.md`](../../CLAUDE.md)
@@ -49,4 +50,5 @@ The project is expected to be worked on with Codex, Claude Code and Gemini/Antig
 - [`../../agents/README.md`](../../agents/README.md)
 - [`../../agents/registry.yaml`](../../agents/registry.yaml)
 - [`../../agents/tasks/FOUNDATION_OWNERSHIP.md`](../../agents/tasks/FOUNDATION_OWNERSHIP.md)
+- [`../agents/MULTI_AGENT_DEVELOPMENT.md`](../agents/MULTI_AGENT_DEVELOPMENT.md)
 - [`../testing/QUALITY_GATES.md`](../testing/QUALITY_GATES.md)
