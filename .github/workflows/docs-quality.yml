@@ -1,4 +1,4 @@
-name: Docs & repository quality
+name: Качество документации и репозитория
 
 on:
   push:
@@ -12,13 +12,13 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Получить исходный код
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Подготовить Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Validate repository structure, JSON and local links
+      - name: Проверить структуру репозитория, JSON и локальные ссылки
         run: python tools/validate_repo.py
