@@ -1,0 +1,30 @@
+{
+  "id": "RUS_CLASSIC_TRAINING_V1",
+  "version": "0.1.0",
+  "name": "Российская классическая школа — учебный профиль v1",
+  "status": "draft",
+  "language": "ru",
+  "notation": {
+    "surface_low": "Н",
+    "surface_high": "В",
+    "pressure_fall": "П",
+    "pressure_rise": "Р",
+    "thermal_cold": "Х",
+    "thermal_warm": "Т"
+  },
+  "sources": [
+    "ZVEREV_1977",
+    "ROSHYDROMET_KN01_2013"
+  ],
+  "rules": {
+    "front_requires_multiple_signs": true,
+    "use_previous_terms": true,
+    "vertical_coordination_required": true,
+    "kn01_ruleset_source": "ROSHYDROMET_KN01_2013"
+  },
+  "review": {
+    "methodical": "pending",
+    "independent_verification": "pending",
+    "publication_allowed": false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "skills": [
+    {
+      "id": "kn01_temperature_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование температуры воздуха в группе 1snTTT"
+    },
+    {
+      "id": "kn01_dewpoint_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование точки росы в группе 2snTdTdTd"
+    },
+    {
+      "id": "kn01_station_pressure_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование давления на уровне станции в группе 3PoPoPoPo"
+    },
+    {
+      "id": "kn01_pressure_tendency_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование барической тенденции в группе 5appp"
+    },
+    {
+      "id": "kn01_group_order",
+      "module_id": "MET-02",
+      "name": "Порядок кодовых групп раздела 1 КН-01 SYNOP"
+    }
+  ]
+}

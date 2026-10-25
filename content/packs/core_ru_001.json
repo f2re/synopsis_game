@@ -1,0 +1,24 @@
+{
+  "id": "core_ru_001",
+  "version": "0.1.0",
+  "method_profile": "RUS_CLASSIC_TRAINING_V1",
+  "balance_profile": "ranked_s1_v3",
+  "status": "draft",
+  "tasks": [
+    "kn01_temp_001",
+    "kn01_dewpoint_001",
+    "kn01_station_pressure_001",
+    "kn01_tendency_001",
+    "kn01_section1_order_001"
+  ],
+  "created_at": "2026-10-25T19:40:00Z",
+  "review": {
+    "source_check": "passed",
+    "methodical": "pending",
+    "independent_verification": "pending",
+    "language": "passed",
+    "technical": "passed",
+    "publication_allowed": false
+  },
+  "notes": "Первый эталонный пакет создаётся как черновик. Он не может использоваться в рейтинговом режиме до независимой методической приёмки."
+}
