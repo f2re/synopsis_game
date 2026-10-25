@@ -4,17 +4,18 @@
 
 ### Современная соревновательная учебная игра по синоптической метеорологии
 
-**Российская синоптическая школа · процедурное обучение · realtime PvP · командные смены · реальные архивные ситуации**
+**Российская синоптическая школа · live КН-01 · realtime PvP · автономные турниры · живой pixel-art мир**
 
 [![Docs & repository quality](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 ![Project status](https://img.shields.io/badge/status-specification%20%26%20MVP%20planning-1f6feb)
 ![Methodology](https://img.shields.io/badge/methodology-Russian%20synoptic%20school-0a7f5a)
-![PvP](https://img.shields.io/badge/realtime-PvP%20%7C%20spectator%20%7C%20replay-6f42c1)
-![Content](https://img.shields.io/badge/content-versioned%20%26%20source--tracked-e67e22)
-![UI](https://img.shields.io/badge/UI-game--first-0ea5e9)
+![Live data](https://img.shields.io/badge/KN--01-live%20data-0ea5e9)
+![Runtime](https://img.shields.io/badge/runtime-autonomous-6f42c1)
+![World](https://img.shields.io/badge/world-living%20pixel--art-e67e22)
+![Ranked](https://img.shields.io/badge/Ranked-no%20pay--to--win-0a7f5a)
 ![License](https://img.shields.io/badge/license-pending-lightgrey)
 
-[Документация](docs/README.md) · [GDD](docs/00_VISION_GDD.md) · [Российская школа](docs/01_RUSSIAN_SYNOPIC_SCHOOL.md) · [MVP backlog](docs/roadmap/MVP_BACKLOG.md) · [Идеи](docs/ideas/IDEA_BACKLOG.md) · [Contributing](CONTRIBUTING.md)
+[Документация](docs/README.md) · [GDD](docs/00_VISION_GDD.md) · [Foundations](docs/00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md) · [Российская школа](docs/01_RUSSIAN_SYNOPIC_SCHOOL.md) · [MVP backlog](docs/roadmap/MVP_BACKLOG.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -22,35 +23,190 @@
 
 ## Идея
 
-**«Синоптический центр»** — web-first игра для студентов-метеорологов, где профессиональная операция синоптика является непосредственно игровым действием.
+**«Синоптический центр»** — web-first игра для студентов-метеорологов и образовательных мероприятий, где профессиональная операция синоптика является непосредственно игровым действием.
 
 > **Знание не проверяется перед игровым действием — знание и есть игровое действие.**
 
-Игрок не отвечает на тест ради условной монеты. Он дешифрирует КН-01, собирает схему станции, проводит критику наблюдений, анализирует приземную карту, АТ/ОТ и фронты — и именно качество этих действий определяет исход смены, дуэли или командного матча.
+Игрок дешифрирует КН-01, собирает схему станции, проводит критику наблюдений, анализирует приземные карты, АТ/ОТ и фронты — и качество этих действий определяет исход смены, блица, дуэли или командного матча.
 
-Проект ориентирован на отечественную синоптическую школу и разделяет:
+Новая фундаментальная модель проекта добавляет ещё один принцип:
 
-1. классическую учебную методику;
-2. практикумы и кафедральные варианты;
-3. действующие нормативные/методические документы;
-4. игровые условности, которые никогда не выдаются за метеорологические правила.
+> **Игра живёт сама.** Мир меняется, реальные данные поступают автоматически, матчи и турниры считаются сервером, а большой экран сам выбирает интересный live battle или attract-mode.
 
 ---
 
-## Что делает проект отличающимся
+## Фундаментальные принципы
 
 | Принцип | Реализация |
 |---|---|
 | 🎯 Процедурное обучение | студент запоминает **что и в каком порядке делать**, а не только определения |
-| 🗺️ Карта — главный экран | активная карта/задача доминирует, дашборды вторичны |
 | 🇷🇺 Российская школа | В/Н, П/Р, подъём карты, историчность, трёхмерность, АТ/ОТ, ВФЗ, ПЭСМ |
+| 🌐 Live КН-01 | реальные метеотелеграммы станций могут автоматически становиться заданиями |
+| 🧠 Автоматическая проверка | parser/encoder/validators формируют эталон без ручной оценки преподавателя |
 | ⚔️ Knowledge-as-action | правильная профессиональная операция сама создаёт игровой эффект |
-| 🧠 Mastery ≠ рейтинг | учебный прогресс и PvP Arena Rating разделены |
-| 🛰️ Реальные ситуации | сложные кейсы строятся на архивных данных с provenance |
-| 🧩 Контент без переписывания движка | задания, профили методик и сценарии — versioned data |
-| 🧑‍🏫 Classroom-first | QR-room, массовый блиц, projector spectator, instructor analytics |
-| 🔁 Replay | матч хранится как event log с версиями rules/content/profile |
-| ⚖️ Честный Ranked | постоянная прокачка не усиливает игрока в рейтинговом матче |
+| 🏟️ Autonomous Arena TV | экран сам выбирает лучший live match, replay, leaderboard или attract-mode |
+| 🌅 Living world | день/ночь, сезоны, птицы, белки, NPC, радар, фонари и интерактивные микро-события |
+| 👤 Персональный синоптик | внешний вид, одежда, инструменты, companions и коллекции |
+| 🔒 Closed roster | саморегистрации нет; пользователей добавляет администратор |
+| 🧩 Versioned content | правила КН-01, методики, задачи и сценарии версионируются |
+| ⚖️ Честный Ranked | косметика и прокачка не дают преимущества в рейтинговом матче |
+| 🔁 Replay | матч хранится как event log с версиями rules/content/source snapshot |
+
+Подробно: **[Фундаментальные runtime-принципы](docs/00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md)**.
+
+---
+
+## Живой Синоптический центр
+
+Хаб — не статичный фон и не меню.
+
+Он должен меняться в течение дня:
+
+```text
+рассвет → день → сумерки → вечер → ночь
+```
+
+Меняются:
+
+- небо и свет;
+- окна и фонари;
+- активность помещений;
+- NPC;
+- птицы и животные;
+- радар/мачты/флаги;
+- сезонный декор;
+- редкие фоновые события.
+
+На птиц, бакланов/чаек, белок, флюгер, радар, фонтан и другие объекты можно нажимать. Часть взаимодействий открывает `World Discoveries`, косметику или просто забавную реакцию.
+
+Всё строится из sprites/layers/CSS/SVG/Canvas, а не одного огромного static background.
+
+- [Pixel-art Style Guide](docs/design/PIXEL_ART_STYLE_GUIDE.md)
+- [Living World System](docs/design/LIVING_WORLD_SYSTEM.md)
+- [Reference screens](design/pixel-art/README.md)
+
+---
+
+## Live КН-01
+
+КН-01 должен поддерживать свежие реальные наблюдения, а не только заранее написанные вопросы.
+
+```text
+папка / socket / WebSocket feed
+        ↓
+raw telegram store
+        ↓
+versioned KN01 parser
+        ↓
+canonical observation
+        ↓
+QC / validation
+        ↓
+live snapshot pack
+        ↓
+automatic task generator
+        ↓
+Solo / Blitz / PvP
+```
+
+Из одной реальной станции можно автоматически получить задания на:
+
+- decode температуры/давления/ветра/ww;
+- encode группы;
+- сборку схемы станции;
+- восстановление давления;
+- сравнение сроков;
+- критику наблюдений.
+
+Матч работает на фиксированном snapshot, поэтому live-данные не ломают fairness и replay.
+
+Подробнее: **[Live КН-01 Pipeline](docs/content/LIVE_KN01_PIPELINE.md)**.
+
+---
+
+## Автономные матчи и большой экран
+
+Основной runtime не требует преподавателя как оператора.
+
+Сервер сам:
+
+- проверяет ответы;
+- считает результат;
+- формирует matchmaking;
+- продвигает bracket;
+- выдаёт награды;
+- выбирает, какой матч показывать на большом экране.
+
+`Arena TV` автоматически предпочитает:
+
+1. финал;
+2. полуфинал;
+3. матч сильнейших;
+4. близкий матч/камбэк;
+5. массовый Blitz;
+6. highlight replay;
+7. leaderboard;
+8. living-world attract mode.
+
+Это позволяет поставить экран в аудитории, холле или на дне открытых дверей и не управлять им вручную.
+
+Подробнее: **[Autonomous Arena Display](docs/realtime/AUTONOMOUS_ARENA_DISPLAY.md)**.
+
+---
+
+## Закрытый roster и быстрый вход
+
+Публичной регистрации нет.
+
+```text
+Admin/import
+    ↓
+разрешённый roster
+    ↓
+выбор группы
+    ↓
+выбор своего профиля
+    ↓
+короткий classroom PIN/code
+    ↓
+игра
+```
+
+Очень короткий код в 1–2 символа рассматривается только как удобный **classroom credential** в локальном доверенном режиме с rate limiting/lockout. Для публичного интернет-доступа security profile требует более сильный PIN или device pairing.
+
+Подробнее: **[Roster Login & Access](docs/accounts/ROSTER_LOGIN_AND_ACCESS.md)**.
+
+---
+
+## Персонаж и коллекции
+
+Игрок создаёт собственного пиксельного синоптика:
+
+- тон кожи;
+- причёска;
+- волосы;
+- одежда;
+- рюкзак;
+- обувь;
+- инструмент в руках;
+- значки;
+- companion.
+
+Стартовые направления:
+
+- спортивный;
+- строгий;
+- полевой/походный;
+- туристический;
+- учебный/лабораторный.
+
+Атрибутика зарабатывается за игру: Blitz, Duel, турниры, mastery, достижения, квалификации, архивные боссы и World Discoveries.
+
+Особая коллекционная линия — синоптические карандаши: красно-синий фронтальный, мягкий чёрный изобарный, набор для подъёма карты, футляры, заточка, памятные и сезонные версии.
+
+Все предметы — `cosmetic_only` для Ranked.
+
+Подробнее: **[Avatar & Cosmetic Progression](docs/game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)**.
 
 ---
 
@@ -60,28 +216,27 @@
 
 - ежедневная «Синоптическая смена»;
 - интервальное повторение;
+- live КН-01 training;
 - квалификационные допуски;
 - архивные ситуации;
-- комплексные «боссы» — реальные синоптические процессы.
+- комплексные «боссы».
 
 ### Realtime PvP
 
-- **Blitz** — 60–120 секунд коротких заданий;
-- **1v1 Синоптическая дуэль** — 3–6 минут;
-- **2v2 Синоптическая бригада** — приземный + высотный анализ;
-- **3v3 Оперативная смена** — наблюдения, фронтология, аэрология;
-- массовая квалификация + playoff;
-- турнир учебной группы.
+- **Blitz** — 60–120 секунд;
+- **1v1 Синоптическая дуэль**;
+- **2v2 Синоптическая бригада**;
+- **3v3 Оперативная смена**;
+- mass qualifier + playoff;
+- автоматический турнир группы.
 
 ### Cooperative PvE
-
-Примеры крупных сценариев:
 
 - ныряющий циклон;
 - южный циклон;
 - блокирующий антициклон;
 - зимнее ОЯ;
-- активный конвективный фронт;
+- конвективный фронт;
 - авиационная смена.
 
 ---
@@ -93,32 +248,13 @@
 | КН-01 / короткий decode | быстрый импульс + оперативный ресурс |
 | Схема станции | защитный щит |
 | Критика наблюдений | parry / контратака |
-| Изобары / П–Р | medium action / контроль |
-| Подъём карты | поддержка серии и workflow |
+| Изобары / П–Р | контроль |
+| Подъём карты | поддержка серии/workflow |
 | Фронт по комплексу признаков | heavy action |
 | Согласование АТ/ОТ | усиление командного решения |
 | ПЭСМ | комплексное финальное действие |
 
-Игровые эффекты имеют нейтральные названия и не подменяют физические метеорологические термины.
-
----
-
-## Предметные модули
-
-Начальный путь:
-
-```mermaid
-flowchart LR
-    A[Условные знаки] --> B[КН-01]
-    B --> C[Схема станции]
-    C --> D[Критика наблюдений]
-    D --> E[Приземный анализ]
-    E --> F[АТ-850 / ОТ]
-    F --> G[Фронтология]
-    G --> H[ПЭСМ / прогноз]
-```
-
-Полная карта модулей: **[docs/meteorology/CONTENT_MODULES.md](docs/meteorology/CONTENT_MODULES.md)**.
+Игровые эффекты не переименовывают реальные метеорологические понятия и не искажают профессиональную семантику.
 
 ---
 
@@ -126,168 +262,109 @@ flowchart LR
 
 ```text
 apps/
-├── web/                 student + instructor + spectator routes
-├── server/              REST + authoritative realtime
-└── tools/               content authoring/import
+├── web/
+├── server/
+├── display/             # Arena TV / kiosk
+└── tools/
 
 packages/
 ├── meteorology-domain/
-├── content-schema/
+├── kn01-codec/
+├── live-ingest/
 ├── content-engine/
 ├── game-rules/
 ├── realtime-protocol/
+├── broadcast-selector/
+├── world-engine/
+├── identity/
+├── rewards/
 ├── map-engine/
 ├── replay/
-├── ui/
-└── analytics-domain/
-
-content/
-├── sources/
-├── method-profiles/
-├── skills/
-├── packs/
-├── tasks/
-├── scenarios/
-└── balance/
+└── ui/
 ```
 
-Главное правило архитектуры: **предметное знание, игровой баланс, UI и realtime-протокол не смешиваются в одном модуле**.
+Ключевое правило: **метеорологическое знание, live-ingest, игровой баланс, identity, visual world и realtime не смешиваются в одном модуле**.
 
-Подробнее: [docs/architecture/README.md](docs/architecture/README.md).
+Подробнее: [Architecture](docs/architecture/README.md).
 
 ---
 
 ## Документация
 
-### Базовые спецификации
+### Базовые документы
 
 | Документ | Содержание |
 |---|---|
-| [00 — Vision / GDD](docs/00_VISION_GDD.md) | продуктовая концепция, прогрессия, режимы |
-| [01 — Российская синоптическая школа](docs/01_RUSSIAN_SYNOPIC_SCHOOL.md) | терминология и методические принципы |
-| [02 — Gameplay & Balance](docs/02_GAMEPLAY_AND_BALANCE.md) | Надёжность, OR, эффекты, рейтинги |
-| [03 — Realtime PvP](docs/03_REALTIME_PVP_AND_BROADCAST.md) | матчи, spectator, instructor, replay |
-| [04 — Content & Tasks](docs/04_CONTENT_AND_TASKS.md) | типы задач и контент-пайплайн |
-| [05 — Content Schema](docs/05_CONTENT_SCHEMA.md) | JSON-сущности и versioning |
-| [06 — Technical Requirements](docs/06_TECHNICAL_REQUIREMENTS.md) | архитектура, security, performance |
-| [07 — Art Direction & UX](docs/07_ART_DIRECTION_AND_UX.md) | современный game-first интерфейс |
-| [08 — Implementation Roadmap](docs/08_IMPLEMENTATION_ROADMAP.md) | этапы и gates |
-| [09 — Source Policy](docs/09_SOURCE_POLICY.md) | источники, provenance, review |
+| [00 — Vision / GDD](docs/00_VISION_GDD.md) | продуктовая концепция |
+| [00A — Foundations](docs/00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md) | принятые фундаментальные runtime-идеи |
+| [01 — Российская школа](docs/01_RUSSIAN_SYNOPIC_SCHOOL.md) | терминология и методика |
+| [02 — Gameplay & Balance](docs/02_GAMEPLAY_AND_BALANCE.md) | Надёжность, OR, рейтинги |
+| [03 — Realtime PvP](docs/03_REALTIME_PVP_AND_BROADCAST.md) | матчи, автономные турниры, broadcast, replay |
+| [04 — Content & Tasks](docs/04_CONTENT_AND_TASKS.md) | типы задач |
+| [05 — Content Schema](docs/05_CONTENT_SCHEMA.md) | JSON/versioning |
+| [06 — Technical Requirements](docs/06_TECHNICAL_REQUIREMENTS.md) | security/performance |
+| [07 — Art Direction & UX](docs/07_ART_DIRECTION_AND_UX.md) | game-first UI |
+| [08 — Roadmap](docs/08_IMPLEMENTATION_ROADMAP.md) | этапы |
+| [09 — Source Policy](docs/09_SOURCE_POLICY.md) | provenance/review |
 
-### Модульные документы
+### Новые фундаментальные модули
 
-- [Полная карта документации](docs/README.md)
-- [Каталог механик](docs/game-design/MECHANICS_CATALOG.md)
-- [Учебные модули](docs/meteorology/CONTENT_MODULES.md)
-- [MVP backlog](docs/roadmap/MVP_BACKLOG.md)
-- [Idea backlog](docs/ideas/IDEA_BACKLOG.md)
-- [ADR](docs/decisions/README.md)
-- [Quality gates](docs/testing/QUALITY_GATES.md)
-- [Content workspace](content/README.md)
+- [Living World System](docs/design/LIVING_WORLD_SYSTEM.md)
+- [Live КН-01 Pipeline](docs/content/LIVE_KN01_PIPELINE.md)
+- [Autonomous Arena Display](docs/realtime/AUTONOMOUS_ARENA_DISPLAY.md)
+- [Roster Login & Access](docs/accounts/ROSTER_LOGIN_AND_ACCESS.md)
+- [Avatar & Cosmetic Progression](docs/game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
+- [Foundation Epics](docs/roadmap/FOUNDATION_EPICS.md)
+- [ADR-0002](docs/decisions/ADR-0002-autonomous-living-runtime.md)
+
+Полный индекс: **[docs/README.md](docs/README.md)**.
 
 ---
 
-## Целевой MVP
+## Foundation implementation gate
 
-MVP должен доказать четыре вещи:
+Концепция считается реально вошедшей в продукт, когда одновременно работают:
 
-1. короткие профессиональные задания удобно решать на компьютере и смартфоне;
-2. Blitz и 1v1 действительно интересны без искусственного pay/grind advantage;
-3. преподаватель может запустить аудиторию в общий турнир и вывести матч на проектор;
-4. новый проверенный content pack подключается без изменения клиентского движка.
+- закрытый roster + быстрый classroom login;
+- live КН-01 source → автоматически проверяемая задача;
+- полностью автономный 1v1;
+- Arena TV сам показывает матч и возвращается в attract-mode;
+- хаб имеет минимум 4 time-of-day состояния;
+- avatar сохраняется и виден в duel/spectator;
+- награда за игру открывает cosmetic item без Ranked advantage.
 
-Минимальный предметный состав:
-
-- КН-01;
-- схема нанесения станции;
-- условные обозначения;
-- В/Н и П/Р;
-- критика наблюдений;
-- базовое барическое поле;
-- алгоритмический конструктор;
-- начальная фронтология;
-- вводный АТ-850 / ОТ.
-
-Исполнимый список: **[docs/roadmap/MVP_BACKLOG.md](docs/roadmap/MVP_BACKLOG.md)**.
+Исполнимый backlog: **[FOUNDATION_EPICS.md](docs/roadmap/FOUNDATION_EPICS.md)**.
 
 ---
 
 ## Методическая корректность
 
-Любое эталонное задание должно отвечать на вопрос:
+Любое эталонное задание должно отвечать:
 
 > **Из какого источника, какой редакции и по какому method profile этот ответ считается правильным?**
 
-Классический учебник, локальная кафедральная последовательность и современный норматив не сливаются в единое неявное правило. Для расхождений создаются versioned method profiles.
+Классический учебник, кафедральная методика и современный норматив не смешиваются в неявное правило. Для КН-01 дополнительно фиксируется `kn01_ruleset_id` и snapshot/source version.
 
-AI может помогать готовить draft, distractors и JSON, но не является источником правильного ответа.
-
----
-
-## Развитие проекта
-
-```text
-Идея
-  ↓
-Idea backlog
-  ↓
-Mechanic / ADR / methodology proposal
-  ↓
-MVP backlog / issue
-  ↓
-Vertical slice
-  ↓
-Tests + method review
-  ↓
-Pilot
-  ↓
-Versioned release
-```
-
-Новые идеи удобно добавлять в [IDEA_BACKLOG](docs/ideas/IDEA_BACKLOG.md), а отдельные механики — в [MECHANICS_CATALOG](docs/game-design/MECHANICS_CATALOG.md).
+AI может помогать с draft и интерфейсом, но не является источником правильного метеорологического ответа.
 
 ---
 
 ## Contributing
 
-См. **[CONTRIBUTING.md](CONTRIBUTING.md)** и [quality gates](docs/testing/QUALITY_GATES.md).
-
-Для PR уже предусмотрены отдельные проверки для:
-
-- предметной методики;
-- source provenance;
-- gameplay fairness;
-- realtime/server authority;
-- replay/version compatibility;
-- mobile/accessibility.
-
-Есть отдельные issue forms для bug, feature/game mechanic, content и methodology.
+См. [CONTRIBUTING.md](CONTRIBUTING.md) и [quality gates](docs/testing/QUALITY_GATES.md).
 
 ---
 
-## Автоматические проверки
+## Статус
 
-Workflow `Docs & repository quality` проверяет:
-
-- обязательные проектные файлы;
-- JSON syntax;
-- локальные Markdown-ссылки;
-- дубли ID механик/идей/ADR.
-
-Проверки будут расширяться вместе с появлением schema/content packages.
-
----
-
-## Статус проекта
-
-**Сейчас:** спецификация, модульная документация и MVP planning.  
-**Следующий технический milestone:** инициализация monorepo + content schema + первый playable vertical slice.  
-**Лицензия:** пока не выбрана — до её явного добавления не предполагать автоматически разрешённый режим переиспользования кода/контента.
+**Сейчас:** specification + modular design + MVP/foundation planning.  
+**Следующий milestone:** monorepo + identity/roster + KN01 codec/live-ingest + первый autonomous 1v1 + Arena TV + living hub slice.  
+**Лицензия:** пока не выбрана.
 
 ---
 
 <div align="center">
 
-**Синоптический центр — учиться анализировать атмосферу через действие, соревнование и разбор реальных ситуаций.**
+**Синоптический центр — атмосфера, которая живёт; знания, которые становятся действием.**
 
 </div>
