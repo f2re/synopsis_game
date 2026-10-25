@@ -1,6 +1,6 @@
 # Документация проекта «Синоптический центр»
 
-Этот каталог — единая точка входа в проектную документацию. Документы разделены на **базовые спецификации** и **модульные расширения**, чтобы механику, методику, архитектуру и контент можно было изменять независимо.
+Этот каталог — единая точка входа в проектную документацию. Документы разделены на **базовые спецификации** и **модульные расширения**, чтобы механику, методику, архитектуру, контент и визуальный язык можно было изменять независимо.
 
 ## 1. Базовые спецификации
 
@@ -26,6 +26,7 @@
 | Architecture | [Архитектура](architecture/README.md) | границы пакетов, зависимости, versioning |
 | Content | [Authoring guide](content/AUTHORING_GUIDE.md) | как добавить новое задание/сценарий |
 | UX | [Screen map](ux/SCREEN_MAP.md) | маршруты, экраны и визуальная иерархия |
+| Design | [Pixel-art style guide](design/PIXEL_ART_STYLE_GUIDE.md) | зафиксированный визуальный baseline, анимация, персонажи, инвентарь |
 | Roadmap | [MVP backlog](roadmap/MVP_BACKLOG.md) | исполнимые задачи первого vertical slice |
 | Ideas | [Idea backlog](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия |
 | Decisions | [ADR](decisions/README.md) | почему приняты дорогие/сквозные решения |
@@ -40,11 +41,14 @@ docs/
 ├── architecture/      # модульная архитектура и границы сервисов
 ├── content/           # авторинг и workflow контента
 ├── ux/                # screen map, HUD, responsive rules
+├── design/            # зафиксированный visual language и style guides
 ├── roadmap/           # исполнимые задачи и MVP backlog
 ├── ideas/             # идеи, эксперименты и гипотезы
 ├── decisions/         # ADR — архитектурные и продуктовые решения
 └── testing/           # quality gates и тестовые стратегии
 ```
+
+Визуальные reference screens хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md), чтобы документация ссылалась на реальные зафиксированные концепты.
 
 ## 3. Что где редактировать
 
@@ -55,7 +59,8 @@ docs/
 - Новая **сущность JSON** → `05_CONTENT_SCHEMA.md`.
 - Изменение **архитектуры** → `architecture/` + ADR.
 - Новое **задание или сценарий** → `content/AUTHORING_GUIDE.md` + `content/` в корне проекта.
-- Изменение **экранов/пространства UI** → `ux/SCREEN_MAP.md` + `07_ART_DIRECTION_AND_UX.md`.
+- Изменение **маршрутов/структуры экранов** → `ux/SCREEN_MAP.md`.
+- Изменение **визуального языка, пиксель-арта, анимации или инвентаря** → `design/PIXEL_ART_STYLE_GUIDE.md`; крупный сдвиг визуальной идентичности дополнительно требует ADR.
 - Новая **идея** → `ideas/IDEA_BACKLOG.md` до переноса в roadmap.
 - Готовая к реализации идея → `roadmap/MVP_BACKLOG.md` с acceptance criteria.
 
@@ -67,6 +72,7 @@ docs/
 - `proposed` — готово к обсуждению;
 - `accepted` — принято как проектное решение;
 - `method_reviewed` — проверено предметным специалистом;
+- `accepted-art-direction` — зафиксировано как визуальный baseline;
 - `implemented` — реализовано в коде;
 - `deprecated` — заменено новым решением.
 
@@ -97,7 +103,9 @@ TaskDefinition / Scenario
         ↓
 Режим матча
         ↓
-UI / UX
+UX / screen structure
+        ↓
+Visual language / animation
         ↓
 Realtime / storage / analytics
 ```
@@ -115,8 +123,9 @@ Realtime / storage / analytics
 5. [Architecture](architecture/README.md)
 6. [Authoring guide](content/AUTHORING_GUIDE.md)
 7. [Screen map](ux/SCREEN_MAP.md)
-8. [MVP backlog](roadmap/MVP_BACKLOG.md)
-9. [Quality gates](testing/QUALITY_GATES.md)
+8. [Pixel-art style guide](design/PIXEL_ART_STYLE_GUIDE.md)
+9. [MVP backlog](roadmap/MVP_BACKLOG.md)
+10. [Quality gates](testing/QUALITY_GATES.md)
 
 ## 8. Золотое правило документации
 
