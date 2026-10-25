@@ -1,0 +1,57 @@
+name: Methodology / terminology change
+description: Изменение трактовки термина, нотации, алгоритма или учебного правила
+title: "method: "
+labels: []
+body:
+  - type: textarea
+    id: current
+    attributes:
+      label: Текущее правило / формулировка
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Предлагаемое изменение
+    validations:
+      required: true
+  - type: dropdown
+    id: authority
+    attributes:
+      label: Тип источника
+      options:
+        - official_current
+        - classic_textbook
+        - university_practicum
+        - department_custom
+        - project_assumption
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Источник / редакция / локатор
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: На какие method profiles влияет?
+    validations:
+      required: true
+  - type: textarea
+    id: conflicts
+    attributes:
+      label: Известные расхождения с другими источниками
+  - type: textarea
+    id: migration
+    attributes:
+      label: Влияние на существующий content/replay
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Проверки
+      options:
+        - label: Изменение не выдаёт кафедральный вариант за универсальный норматив.
+        - label: При конфликте источников предлагается отдельный profile/version.
+        - label: Указано, нужен ли method reviewer.
