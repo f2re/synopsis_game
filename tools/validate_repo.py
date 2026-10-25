@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lightweight repository validation with no third-party dependencies."""
+"""Лёгкая проверка структуры репозитория без сторонних зависимостей."""
 
 from __future__ import annotations
 
@@ -16,6 +16,40 @@ ID_PATTERNS = [
     re.compile(r"\b(IDEA-\d{3})\b"),
     re.compile(r"\b(ADR-\d{4})\b"),
 ]
+
+# Эти выражения запрещены только в обычном пояснительном Markdown-тексте.
+# Блоки кода, inline-code, URL и специально посвящённая языку страница исключаются.
+LANGUAGE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\bStatus\s*:", re.IGNORECASE), "используйте «Статус:»"),
+    (re.compile(r"\bliving document\b", re.IGNORECASE), "используйте «постоянно обновляемый документ»"),
+    (re.compile(r"\bAcceptance criteria\b", re.IGNORECASE), "используйте «критерии приёмки»"),
+    (re.compile(r"\bDefinition of Ready\b", re.IGNORECASE), "используйте «условия готовности к началу работы»"),
+    (re.compile(r"\bDefinition of Done\b", re.IGNORECASE), "используйте «условия завершения»"),
+    (re.compile(r"\bgameplay\b", re.IGNORECASE), "используйте «игровая механика» или «игровой процесс»"),
+    (re.compile(r"\bruntime\b", re.IGNORECASE), "используйте «рабочий контур» или «работа системы»"),
+    (re.compile(r"\bbacklog\b", re.IGNORECASE), "используйте «перечень задач»"),
+    (re.compile(r"\broadmap\b", re.IGNORECASE), "используйте «план реализации»"),
+    (re.compile(r"\brealtime\b", re.IGNORECASE), "используйте «в реальном времени»"),
+    (re.compile(r"\bleaderboard\b", re.IGNORECASE), "используйте «таблица лидеров»"),
+    (re.compile(r"\bmatchmaking\b", re.IGNORECASE), "используйте «подбор соперников»"),
+    (re.compile(r"\battract mode\b", re.IGNORECASE), "используйте «демонстрационный режим»"),
+    (re.compile(r"\bliving world\b", re.IGNORECASE), "используйте «живой мир»"),
+    (re.compile(r"\bpay[- ]to[- ]win\b", re.IGNORECASE), "используйте «продажа игровой силы»"),
+    (re.compile(r"\bgame[- ]first\b", re.IGNORECASE), "опишите приоритет текущей задачи по-русски"),
+    (re.compile(r"\bweb[- ]first\b", re.IGNORECASE), "используйте «браузерная архитектура»"),
+    (re.compile(r"\bконтент(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «учебное содержание» или «материал»"),
+    (re.compile(r"\bгеймпле(?:й|я|ем|ю)\b", re.IGNORECASE), "используйте «игровая механика» или «игровой процесс»"),
+    (re.compile(r"\bрантайм(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «рабочий контур»"),
+    (re.compile(r"\bбэклог(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «перечень задач»"),
+    (re.compile(r"\bроадмап(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «план реализации»"),
+    (re.compile(r"\bревью\b", re.IGNORECASE), "используйте «проверка» или «приёмка»"),
+    (re.compile(r"\bворкфлоу\b", re.IGNORECASE), "используйте «порядок работы»"),
+    (re.compile(r"\bпайплайн(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «поток обработки» или «конвейер»"),
+    (re.compile(r"\bснапшот(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «снимок данных»"),
+    (re.compile(r"\bрепле(?:й|я|ем|ю)\b", re.IGNORECASE), "используйте «повтор» или «воспроизведение»"),
+    (re.compile(r"\bлидерборд(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «таблица лидеров»"),
+    (re.compile(r"\bматчмейкинг(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «подбор соперников»"),
+)
 
 
 def check_json() -> list[str]:
@@ -76,6 +110,42 @@ def check_duplicate_catalog_ids() -> list[str]:
     return errors
 
 
+def strip_nonprose_markdown(text: str) -> str:
+    """Убирает области, где иностранные идентификаторы являются частью контракта."""
+    text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    text = re.sub(r"`[^`]+`", "", text)
+    text = re.sub(r"\[[^\]]*\]\([^)]+\)", "", text)
+    text = re.sub(r"https?://\S+", "", text)
+    return text
+
+
+def check_documentation_language() -> list[str]:
+    errors: list[str] = []
+    paths = [ROOT / "README.md", ROOT / "CONTRIBUTING.md"]
+    docs_root = ROOT / "docs"
+    if docs_root.exists():
+        paths.extend(sorted(docs_root.rglob("*.md")))
+
+    excluded = {
+        ROOT / "docs" / "LANGUAGE_POLICY.md",  # содержит примеры запрещённых слов намеренно
+    }
+
+    for path in paths:
+        if not path.exists() or path in excluded:
+            continue
+        prose = strip_nonprose_markdown(path.read_text(encoding="utf-8"))
+        for line_no, line in enumerate(prose.splitlines(), start=1):
+            for pattern, recommendation in LANGUAGE_PATTERNS:
+                match = pattern.search(line)
+                if match:
+                    fragment = match.group(0)
+                    errors.append(
+                        f"documentation language: {path.relative_to(ROOT)}:{line_no}: "
+                        f"{fragment!r}; {recommendation}"
+                    )
+    return errors
+
+
 def _load_json(path: Path) -> object:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -90,7 +160,7 @@ def _collect_records(directory: str, list_key: str | None = None) -> tuple[list[
         try:
             data = _load_json(path)
         except Exception:
-            continue  # check_json reports syntax errors separately
+            continue  # синтаксические ошибки уже сообщает check_json
         items: object
         if list_key and isinstance(data, dict) and list_key in data:
             items = data[list_key]
@@ -105,9 +175,9 @@ def _collect_records(directory: str, list_key: str | None = None) -> tuple[list[
             if not isinstance(item, dict):
                 errors.append(f"content record is not an object: {path.relative_to(ROOT)}")
                 continue
-            item = dict(item)
-            item["__path__"] = path
-            records.append(item)
+            record = dict(item)
+            record["__path__"] = path
+            records.append(record)
     return records, errors
 
 
@@ -122,17 +192,15 @@ def _index_records(records: list[dict], kind: str) -> tuple[dict[str, dict], lis
             errors.append(f"{kind} without id: {rel}")
             continue
         if identifier in index:
-            prev = index[identifier].get("__path__", ROOT)
-            prev_rel = prev.relative_to(ROOT) if isinstance(prev, Path) else prev
-            errors.append(f"duplicate {kind} id {identifier}: {prev_rel} and {rel}")
+            previous = index[identifier].get("__path__", ROOT)
+            previous_rel = previous.relative_to(ROOT) if isinstance(previous, Path) else previous
+            errors.append(f"duplicate {kind} id {identifier}: {previous_rel} and {rel}")
             continue
         index[identifier] = record
     return index, errors
 
 
 def _source_ids(value: object) -> list[str]:
-    if value is None:
-        return []
     if not isinstance(value, list):
         return []
     result: list[str] = []
@@ -145,32 +213,33 @@ def _source_ids(value: object) -> list[str]:
 
 
 def check_content_integrity() -> list[str]:
+    """Проверяет ссылки между источниками, методиками, навыками, заданиями и пакетами."""
     errors: list[str] = []
-    source_records, e = _collect_records("sources", "sources")
-    errors.extend(e)
-    method_records, e = _collect_records("method-profiles")
-    errors.extend(e)
-    skill_records, e = _collect_records("skills", "skills")
-    errors.extend(e)
-    task_records, e = _collect_records("tasks", "tasks")
-    errors.extend(e)
-    balance_records, e = _collect_records("balance")
-    errors.extend(e)
-    pack_records, e = _collect_records("packs")
-    errors.extend(e)
+    source_records, current = _collect_records("sources", "sources")
+    errors.extend(current)
+    method_records, current = _collect_records("method-profiles")
+    errors.extend(current)
+    skill_records, current = _collect_records("skills", "skills")
+    errors.extend(current)
+    task_records, current = _collect_records("tasks", "tasks")
+    errors.extend(current)
+    balance_records, current = _collect_records("balance")
+    errors.extend(current)
+    pack_records, current = _collect_records("packs")
+    errors.extend(current)
 
-    sources, e = _index_records(source_records, "source")
-    errors.extend(e)
-    methods, e = _index_records(method_records, "method profile")
-    errors.extend(e)
-    skills, e = _index_records(skill_records, "skill")
-    errors.extend(e)
-    tasks, e = _index_records(task_records, "task")
-    errors.extend(e)
-    balances, e = _index_records(balance_records, "balance profile")
-    errors.extend(e)
-    packs, e = _index_records(pack_records, "content pack")
-    errors.extend(e)
+    sources, current = _index_records(source_records, "source")
+    errors.extend(current)
+    methods, current = _index_records(method_records, "method profile")
+    errors.extend(current)
+    skills, current = _index_records(skill_records, "skill")
+    errors.extend(current)
+    tasks, current = _index_records(task_records, "task")
+    errors.extend(current)
+    balances, current = _index_records(balance_records, "balance profile")
+    errors.extend(current)
+    packs, current = _index_records(pack_records, "content pack")
+    errors.extend(current)
 
     for identifier, method in methods.items():
         for source_id in _source_ids(method.get("sources")):
@@ -222,29 +291,32 @@ def check_required_files() -> list[str]:
         "SECURITY.md",
         "CHANGELOG.md",
         "docs/README.md",
+        "docs/LANGUAGE_POLICY.md",
         "docs/00_VISION_GDD.md",
         "docs/01_RUSSIAN_SYNOPIC_SCHOOL.md",
         "docs/09_SOURCE_POLICY.md",
+        "docs/agents/MULTI_AGENT_DEVELOPMENT.md",
         "docs/testing/QUALITY_GATES.md",
     ]
     return [f"missing required file: {name}" for name in required if not (ROOT / name).exists()]
 
 
 def main() -> int:
-    errors = []
+    errors: list[str] = []
     errors.extend(check_required_files())
     errors.extend(check_json())
     errors.extend(check_markdown_links())
     errors.extend(check_duplicate_catalog_ids())
+    errors.extend(check_documentation_language())
     errors.extend(check_content_integrity())
 
     if errors:
-        print("Repository validation failed:")
+        print("Проверка репозитория завершилась с ошибками:")
         for error in errors:
             print(f" - {error}")
         return 1
 
-    print("Repository validation passed.")
+    print("Проверка репозитория успешно завершена.")
     return 0
 
 
