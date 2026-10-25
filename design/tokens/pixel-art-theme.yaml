@@ -1,0 +1,97 @@
+version: 1
+status: accepted-art-direction
+notes:
+  - UI colors are separate from meteorological semantic colors.
+  - Runtime may interpolate world lighting between phase tokens.
+  - Accessibility variants may adjust luminance/contrast but not meteorological meaning.
+
+ui:
+  panel: "#0E1B36"
+  panel_elevated: "#14264A"
+  panel_border: "#36527D"
+  text_primary: "#F3F7FF"
+  text_secondary: "#B8C7E0"
+  primary_cta: "#F6B73C"
+  primary_cta_highlight: "#FFD978"
+  success: "#45D483"
+  warning: "#F0A646"
+  error: "#E95757"
+  focus: "#69B9FF"
+
+meteo:
+  cold_front: "#2878D8"
+  warm_front: "#E44747"
+  occlusion: "#8A54C5"
+  stationary_cold: "#2878D8"
+  stationary_warm: "#E44747"
+  pressure_high: "#2F67B7"
+  pressure_low: "#D94848"
+  tendency_rise: "#2B70C9"
+  tendency_fall: "#D94848"
+  relative_topography_cold: "#347FD0"
+  relative_topography_warm: "#D95745"
+  note: "These values are semantic defaults; a method profile may define print/training variants. Cosmetics must not redefine them."
+
+world_base:
+  concrete: "#647087"
+  dark_stone: "#28354A"
+  vegetation_dark: "#173F3A"
+  vegetation_mid: "#2D6752"
+  warm_window: "#FFC864"
+  tungsten: "#FFB552"
+  water_dark: "#153D66"
+
+phases:
+  dawn:
+    sky_top: "#243B72"
+    sky_horizon: "#E98A79"
+    ambient_tint: "#B58BA0"
+    shadow: "#33435F"
+    window_light_strength: 0.45
+    lamp_strength: 0.20
+    stars_strength: 0.10
+  day:
+    sky_top: "#4B91C8"
+    sky_horizon: "#B9D8E8"
+    ambient_tint: "#D5E3E6"
+    shadow: "#536577"
+    window_light_strength: 0.05
+    lamp_strength: 0.00
+    stars_strength: 0.00
+  golden_hour:
+    sky_top: "#4B4C8B"
+    sky_horizon: "#F4A35F"
+    ambient_tint: "#C98F87"
+    shadow: "#3A4163"
+    window_light_strength: 0.55
+    lamp_strength: 0.35
+    stars_strength: 0.00
+  civil_twilight:
+    sky_top: "#202C5D"
+    sky_horizon: "#A76B87"
+    ambient_tint: "#6C6689"
+    shadow: "#242D4A"
+    window_light_strength: 0.80
+    lamp_strength: 0.75
+    stars_strength: 0.35
+  night:
+    sky_top: "#08152F"
+    sky_horizon: "#182B50"
+    ambient_tint: "#344568"
+    shadow: "#111C32"
+    window_light_strength: 1.00
+    lamp_strength: 1.00
+    stars_strength: 1.00
+
+fx:
+  reward_gold: "#F6B73C"
+  verified_green: "#45D483"
+  shield_cyan: "#52C4E8"
+  opponent_alert: "#EF665C"
+  combo_glow: "#FFD25A"
+
+rules:
+  - "Never use fx/opponent red to recolor a warm-front symbol."
+  - "Never use decorative blue to alter cold-front geometry."
+  - "World phase tokens may tint scenery; task/map semantic layers remain color-stable."
+  - "Text may use non-pixel fonts when Cyrillic readability requires it."
