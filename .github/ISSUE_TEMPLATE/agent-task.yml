@@ -1,0 +1,95 @@
+name: Agent task
+about: Implementation task with explicit owner and independent review gates
+title: "[TASK-ID] "
+labels: []
+body:
+  - type: input
+    id: task_id
+    attributes:
+      label: Task ID
+      placeholder: WORLD-002
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Implementation owner agent
+      options:
+        - orchestrator
+        - meteo-methodologist-ru
+        - live-kn01-engineer
+        - art-director
+        - pixel-asset-designer
+        - living-world-engineer
+        - audio-ambient-designer
+        - web-performance-engineer
+        - realtime-arena-engineer
+        - identity-avatar-engineer
+        - gameplay-balance-designer
+    validations:
+      required: true
+  - type: dropdown
+    id: preferred_provider
+    attributes:
+      label: Preferred execution provider
+      options:
+        - Codex
+        - Claude Code
+        - Gemini / Antigravity
+        - Provider-neutral / choose from registry
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / outcome
+      description: State observable outcome, not only implementation idea.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is in and explicitly out of this task.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Reproducible checks for completion.
+    validations:
+      required: true
+  - type: checkboxes
+    id: gates
+    attributes:
+      label: Independent gates required
+      options:
+        - label: Meteorology methodologist
+        - label: Independent meteorology verifier
+        - label: Art Director
+        - label: Browser performance
+        - label: UX / accessibility
+        - label: Security / privacy
+        - label: Integration / release
+  - type: textarea
+    id: sources
+    attributes:
+      label: Method profile / sources / design references
+      description: Required for content/methodology; otherwise list relevant architecture/art docs.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / conflicting files
+      description: Mention tasks/branches that must land first or files shared with parallel work.
+  - type: checkboxes
+    id: readiness
+    attributes:
+      label: Ready to start
+      options:
+        - label: Owner matches `agents/registry.yaml` / ownership matrix.
+          required: true
+        - label: Required independent reviewers are identified before implementation.
+          required: true
+        - label: No accepted ADR/fundamental principle is silently contradicted.
+          required: true
