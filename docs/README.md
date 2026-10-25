@@ -1,95 +1,107 @@
 # Документация проекта «Синоптический центр»
 
-Этот каталог — единая точка входа в проектную документацию. Документы разделены на **базовые спецификации** и **модульные расширения**, чтобы механику, методику, архитектуру, контент и визуальный язык можно было изменять независимо.
+Этот каталог — единая точка входа в проектную документацию. Документы разделены на **базовые спецификации** и **модульные расширения**, чтобы методику, игровую механику, архитектуру, учебное содержание и визуальный язык можно было изменять независимо.
 
-> После GDD обязательно читать [`00A — Фундаментальные runtime-принципы`](00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md). Он фиксирует живой мир, live КН-01, автономную Arena TV, закрытый roster и персонализируемого персонажа как основы продукта.
+> После общего описания игры обязательно прочитать [`00A — Основополагающие принципы работы системы`](00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md). Этот документ фиксирует живой мир, актуальные КН-01, автономный большой экран, закрытый список пользователей и персонализируемого персонажа как основы продукта.
+
+Основной язык документации — русский. Правила употребления иностранных технических терминов приведены в [языковой политике](LANGUAGE_POLICY.md).
 
 ## 1. Базовые спецификации
 
 | № | Документ | Назначение |
 |---|---|---|
-| 00 | [Видение и GDD](00_VISION_GDD.md) | продуктовая идея, игровые циклы, прогрессия, режимы |
-| 00A | [Фундаментальные runtime-принципы](00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md) | живой мир, автономность, live-данные, roster, avatar |
-| 01 | [Российская синоптическая школа](01_RUSSIAN_SYNOPIC_SCHOOL.md) | терминология, принципы отечественной школы, методические ограничения |
-| 02 | [Gameplay и баланс](02_GAMEPLAY_AND_BALANCE.md) | боевые эффекты, OR, Надёжность, PvP, рейтинги |
-| 03 | [Realtime PvP и трансляции](03_REALTIME_PVP_AND_BROADCAST.md) | WebSocket, автономные турниры, Arena TV, replay |
-| 04 | [Контент и типы заданий](04_CONTENT_AND_TASKS.md) | renderers, drills, сценарии, реальные/синтетические данные |
-| 05 | [Content schema](05_CONTENT_SCHEMA.md) | JSON, MethodProfile, ContentPack, TaskDefinition, ReplayManifest |
-| 06 | [Технические требования](06_TECHNICAL_REQUIREMENTS.md) | web-first архитектура, домены, security, performance |
-| 07 | [Арт-дирекшн и UX](07_ART_DIRECTION_AND_UX.md) | game-first UI, карта как сцена, mobile/spectator/instructor UX |
-| 08 | [Roadmap](08_IMPLEMENTATION_ROADMAP.md) | этапы, gates, epics, Definition of MVP |
-| 09 | [Политика источников](09_SOURCE_POLICY.md) | provenance, authority, review и правила публикации контента |
+| 00 | [Концепция и общее описание игры](00_VISION_GDD.md) | продуктовая идея, игровые циклы, развитие игрока и режимы |
+| 00A | [Основополагающие принципы работы системы](00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md) | живой мир, автономность, актуальные данные, список пользователей, персонаж |
+| 01 | [Российская синоптическая школа](01_RUSSIAN_SYNOPIC_SCHOOL.md) | терминология, принципы отечественной школы и методические ограничения |
+| 02 | [Игровая механика и баланс](02_GAMEPLAY_AND_BALANCE.md) | Надёжность, оперативный ресурс, соревновательные эффекты и рейтинг |
+| 03 | [Сетевые матчи и автономная трансляция](03_REALTIME_PVP_AND_BROADCAST.md) | WebSocket, турниры, большой экран и воспроизведение матчей |
+| 04 | [Учебное содержание и типы заданий](04_CONTENT_AND_TASKS.md) | типы упражнений, сценарии, реальные и учебные данные |
+| 05 | [Схема данных учебного содержания](05_CONTENT_SCHEMA.md) | JSON-сущности, методические профили, задания и правила версионирования |
+| 06 | [Технические требования](06_TECHNICAL_REQUIREMENTS.md) | браузерная архитектура, безопасность, производительность и доступность |
+| 07 | [Художественное направление и интерфейс](07_ART_DIRECTION_AND_UX.md) | визуальная иерархия, карта как главная сцена, мобильные и экранные режимы |
+| 08 | [План реализации](08_IMPLEMENTATION_ROADMAP.md) | этапы, задачи и критерии готовности |
+| 09 | [Политика источников](09_SOURCE_POLICY.md) | происхождение данных, авторитетность источников, проверка и публикация |
 
 ## 2. Модульная документация
 
 | Раздел | Документ | Для чего |
 |---|---|---|
-| Game Design | [Каталог механик](game-design/MECHANICS_CATALOG.md) | добавлять/менять механику без раздувания GDD |
-| Game Design | [Avatar & Cosmetic Progression](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md) | персонализация, заработанные предметы, companions |
-| Meteorology | [Учебные модули](meteorology/CONTENT_MODULES.md) | предметная карта курса и зависимости |
-| Architecture | [Архитектура](architecture/README.md) | границы пакетов, live-ingest, broadcast, identity, world-engine |
-| Content | [Authoring guide](content/AUTHORING_GUIDE.md) | как добавить новое задание/сценарий |
-| Content | [Live КН-01 pipeline](content/LIVE_KN01_PIPELINE.md) | реальные станции, file/socket feed, parser/encoder, snapshot pool |
-| Realtime | [Autonomous Arena Display](realtime/AUTONOMOUS_ARENA_DISPLAY.md) | автоматический выбор live-матча, kiosk/attract mode |
-| Accounts | [Roster Login & Access](accounts/ROSTER_LOGIN_AND_ACCESS.md) | без саморегистрации, admin roster, classroom PIN/code |
-| UX | [Screen map](ux/SCREEN_MAP.md) | маршруты, экраны и визуальная иерархия |
-| Design | [Pixel-art style guide](design/PIXEL_ART_STYLE_GUIDE.md) | зафиксированный визуальный baseline, персонажи, инвентарь |
-| Design | [Living World System](design/LIVING_WORLD_SYSTEM.md) | время суток, фоновые анимации, птицы/животные, interactables |
-| Roadmap | [MVP backlog](roadmap/MVP_BACKLOG.md) | исполнимые задачи первого vertical slice |
-| Ideas | [Idea backlog](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия |
-| Decisions | [ADR](decisions/README.md) | почему приняты дорогие/сквозные решения |
-| Testing | [Quality gates](testing/QUALITY_GATES.md) | Definition of Ready/Done и проверки |
+| Игровая механика | [Каталог механик](game-design/MECHANICS_CATALOG.md) | добавлять и изменять механики без разрастания общего описания игры |
+| Игровая механика | [Персонаж и коллекционная прогрессия](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md) | персонализация, заработанные предметы и спутники |
+| Метеорология | [Учебные модули](meteorology/CONTENT_MODULES.md) | предметная карта курса и зависимости между разделами |
+| Архитектура | [Архитектура](architecture/README.md) | границы программных модулей, приём данных, трансляция, пользователи и живой мир |
+| Учебное содержание | [Руководство по добавлению заданий](content/AUTHORING_GUIDE.md) | как добавить новое задание или сценарий |
+| Учебное содержание | [Поток обработки актуальных КН-01](content/LIVE_KN01_PIPELINE.md) | реальные станции, входные потоки, декодирование, контроль качества и снимки данных |
+| Сетевой режим | [Автономный экран арены](realtime/AUTONOMOUS_ARENA_DISPLAY.md) | автоматический выбор матча, демонстрационный режим и большой экран |
+| Пользователи | [Список пользователей, вход и доступ](accounts/ROSTER_LOGIN_AND_ACCESS.md) | отсутствие саморегистрации, список администратора и короткий код входа |
+| Интерфейс | [Карта экранов](ux/SCREEN_MAP.md) | маршруты, экраны и визуальная иерархия |
+| Дизайн | [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md) | зафиксированное художественное направление, персонажи и инвентарь |
+| Дизайн | [Система живого мира](design/LIVING_WORLD_SYSTEM.md) | время суток, фоновая анимация, птицы, животные и интерактивные объекты |
+| Планирование | [Перечень задач первого рабочего среза](roadmap/MVP_BACKLOG.md) | исполнимые задачи начальной реализации |
+| Планирование | [Основополагающие задачи](roadmap/FOUNDATION_EPICS.md) | живой мир, КН-01, арена, пользователи и персонаж |
+| Идеи | [Реестр идей](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия в план |
+| Решения | [Архитектурные решения](decisions/README.md) | почему приняты сквозные и труднообратимые решения |
+| Проверка | [Критерии качества](testing/QUALITY_GATES.md) | условия готовности задачи и требования перед объединением изменений |
+| Агенты | [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md) | роли Codex, Claude Code, Gemini/Antigravity, маршрутизация задач и независимая приёмка |
 
 Целевая иерархия:
 
 ```text
 docs/
-├── game-design/       # игровые механики, avatar, rewards
+├── game-design/       # игровые механики, персонаж, награды
 ├── meteorology/       # учебные модули и предметные границы
 ├── architecture/      # модульная архитектура и границы сервисов
-├── content/           # authoring + live data pipelines
-├── realtime/          # online game + autonomous display
-├── accounts/          # roster, login, roles, privacy
-├── ux/                # screen map, HUD, responsive rules
-├── design/            # visual language, pixel art, living world
-├── roadmap/           # исполнимые задачи и MVP backlog
+├── content/           # задания и потоки актуальных данных
+├── realtime/          # сетевые матчи и автономный большой экран
+├── accounts/          # пользователи, вход, роли, приватность
+├── ux/                # экраны, интерфейс и адаптивность
+├── design/            # визуальный язык, пиксельная графика, живой мир
+├── roadmap/           # задачи реализации
 ├── ideas/             # идеи, эксперименты и гипотезы
-├── decisions/         # ADR — архитектурные и продуктовые решения
-└── testing/           # quality gates и тестовые стратегии
+├── decisions/         # архитектурные и продуктовые решения
+├── agents/            # организация многоагентной разработки
+└── testing/           # критерии качества и стратегия испытаний
 ```
 
-Визуальные reference screens хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md), чтобы документация ссылалась на реальные зафиксированные концепты.
+Названия каталогов сохраняются как технические пути. В обычном тексте используются русские термины.
+
+Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md).
 
 ## 3. Что где редактировать
 
-- Изменение **фундаментальной модели runtime** → `00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md` + ADR при конфликте с принятым принципом.
+- Изменение **основополагающей модели работы системы** → `00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md` и архитектурное решение, если меняется уже принятый принцип.
 - Изменение **термина или методики** → `01_RUSSIAN_SYNOPIC_SCHOOL.md`, `meteorology/`, `09_SOURCE_POLICY.md`.
 - Новая **игровая механика** → `game-design/MECHANICS_CATALOG.md`.
-- Персонализация/награды → `game-design/AVATAR_AND_COSMETIC_PROGRESSION.md`.
-- Новый **режим игры** → GDD + отдельная карточка механики/режима.
-- Изменение **баланса** → `02_GAMEPLAY_AND_BALANCE.md`, затем `BalanceProfile`.
+- Персонализация и награды → `game-design/AVATAR_AND_COSMETIC_PROGRESSION.md`.
+- Новый **режим игры** → общее описание игры и отдельная карточка механики.
+- Изменение **баланса** → `02_GAMEPLAY_AND_BALANCE.md`, затем соответствующий профиль баланса.
 - Новая **сущность JSON** → `05_CONTENT_SCHEMA.md`.
-- Изменение **архитектуры** → `architecture/` + ADR.
-- Новое **задание или сценарий** → `content/AUTHORING_GUIDE.md` + `content/` в корне проекта.
-- Live КН-01 / real-time data feed → `content/LIVE_KN01_PIPELINE.md`.
-- Arena TV / автоматическая трансляция → `realtime/AUTONOMOUS_ARENA_DISPLAY.md`.
-- Login/roster/security profile → `accounts/ROSTER_LOGIN_AND_ACCESS.md`.
-- Изменение **маршрутов/структуры экранов** → `ux/SCREEN_MAP.md`.
-- Пиксель-арт/визуальный язык → `design/PIXEL_ART_STYLE_GUIDE.md`.
-- Фоновая жизнь/время суток/interactables → `design/LIVING_WORLD_SYSTEM.md`.
-- Новая **идея** → `ideas/IDEA_BACKLOG.md` до переноса в roadmap.
-- Готовая к реализации идея → `roadmap/MVP_BACKLOG.md` с acceptance criteria.
+- Изменение **архитектуры** → `architecture/` и архитектурное решение.
+- Новое **задание или сценарий** → `content/AUTHORING_GUIDE.md` и каталог `content/` в корне проекта.
+- Актуальные КН-01 и входные потоки данных → `content/LIVE_KN01_PIPELINE.md`.
+- Автономная трансляция и большой экран → `realtime/AUTONOMOUS_ARENA_DISPLAY.md`.
+- Вход, список пользователей и профили безопасности → `accounts/ROSTER_LOGIN_AND_ACCESS.md`.
+- Изменение **структуры экранов** → `ux/SCREEN_MAP.md`.
+- Пиксельная графика и визуальный язык → `design/PIXEL_ART_STYLE_GUIDE.md`.
+- Фоновая жизнь, время суток и интерактивные объекты → `design/LIVING_WORLD_SYSTEM.md`.
+- Новая **идея** → `ideas/IDEA_BACKLOG.md` до переноса в план реализации.
+- Готовая к реализации идея → `roadmap/MVP_BACKLOG.md` с явными критериями приёмки.
+- Изменение **правил работы агентов** → `AGENTS.md`, `agents/`, `.agents/` и при необходимости отдельное архитектурное решение.
 
 ## 4. Статусы документов
 
-- `draft` — идея или черновик;
-- `proposed` — готово к обсуждению;
-- `accepted` — принято как проектное решение;
-- `accepted-concept` — концепт принят как основа дальнейшей спецификации;
-- `method_reviewed` — проверено предметным специалистом;
-- `accepted-art-direction` — зафиксировано как визуальный baseline;
-- `implemented` — реализовано в коде;
-- `deprecated` — заменено новым решением.
+В текстах документации используются русские статусы:
+
+- **черновик** — идея или незавершённый документ;
+- **предложено** — готово к обсуждению;
+- **принято** — принято как проектное решение;
+- **принятая концепция** — концепция принята как основа дальнейшей спецификации;
+- **методически проверено** — проверено предметным специалистом;
+- **принято как художественный эталон** — зафиксировано как визуальная основа;
+- **реализовано** — реализовано в коде;
+- **устарело** — заменено новым решением.
+
+Если программная схема требует машинного значения вроде `accepted`, оно сохраняется только внутри поля данных или программного идентификатора.
 
 ## 5. Правило модульности
 
@@ -97,53 +109,56 @@ docs/
 
 1. учебный смысл;
 2. игровые коэффициенты;
-3. UI;
+3. интерфейс;
 4. сетевой протокол;
 5. конкретная технология реализации.
 
-Эти слои связаны ссылками и ID, но меняются независимо.
+Эти слои связаны ссылками и идентификаторами, но изменяются независимо.
 
 ## 6. Иерархия решений
 
 ```text
-Источники / live data / методика
+Источники / актуальные данные / методика
         ↓
 Предметная модель
         ↓
-TaskDefinition / generated TaskInstance
+Определение задания / экземпляр задания
         ↓
 Игровые правила
         ↓
-Match / tournament runtime
+Матч / турнир
         ↓
-Autonomous broadcast / replay
+Автономная трансляция / воспроизведение
         ↓
-UX / screen structure
+Структура экранов
         ↓
-Visual language / living world
+Визуальный язык / живой мир
         ↓
-Storage / analytics / rewards
+Хранение / аналитика / награды
 ```
 
-## 7. Начать реализацию
+Названия сущностей `TaskDefinition`, `TaskInstance`, `ContentPack` и другие программные идентификаторы остаются без перевода в схемах и коде, но не используются как основная лексика пояснительного текста.
 
-Для vertical slice читать:
+## 7. Порядок знакомства с проектом
 
-1. [00 — GDD](00_VISION_GDD.md)
-2. [00A — Foundations](00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md)
+Для первого рабочего среза читать:
+
+1. [00 — Концепция игры](00_VISION_GDD.md)
+2. [00A — Основополагающие принципы](00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md)
 3. [01 — Российская школа](01_RUSSIAN_SYNOPIC_SCHOOL.md)
-4. [04 — Контент](04_CONTENT_AND_TASKS.md)
-5. [Live КН-01](content/LIVE_KN01_PIPELINE.md)
-6. [Architecture](architecture/README.md)
-7. [Realtime](03_REALTIME_PVP_AND_BROADCAST.md)
-8. [Roster/Login](accounts/ROSTER_LOGIN_AND_ACCESS.md)
-9. [Screen map](ux/SCREEN_MAP.md)
-10. [Pixel-art style guide](design/PIXEL_ART_STYLE_GUIDE.md)
-11. [Living World](design/LIVING_WORLD_SYSTEM.md)
-12. [Avatar/Cosmetics](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
-13. [MVP backlog](roadmap/MVP_BACKLOG.md)
-14. [Quality gates](testing/QUALITY_GATES.md)
+4. [04 — Учебное содержание](04_CONTENT_AND_TASKS.md)
+5. [Актуальные КН-01](content/LIVE_KN01_PIPELINE.md)
+6. [Архитектура](architecture/README.md)
+7. [Сетевые матчи](03_REALTIME_PVP_AND_BROADCAST.md)
+8. [Пользователи и вход](accounts/ROSTER_LOGIN_AND_ACCESS.md)
+9. [Карта экранов](ux/SCREEN_MAP.md)
+10. [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md)
+11. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
+12. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
+13. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
+14. [Критерии качества](testing/QUALITY_GATES.md)
+15. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
 
 ## 8. Золотое правило документации
 
-Если решение нельзя однозначно отнести к одному из слоёв — его сначала оформить как ADR или идею, а не зашивать напрямую в код.
+Если решение нельзя однозначно отнести к одному из слоёв, его сначала оформляют как архитектурное решение или отдельную идею, а не вшивают напрямую в код.
