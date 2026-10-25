@@ -1,5 +1,5 @@
 name: Agent task
-about: Implementation task with explicit owner and independent review gates
+description: Implementation task with explicit owner and independent review gates
 title: "[TASK-ID] "
 labels: []
 body:
