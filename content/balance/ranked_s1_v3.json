@@ -1,0 +1,15 @@
+{
+  "id": "ranked_s1_v3",
+  "version": "0.1.0",
+  "status": "draft",
+  "reliability_max": 100,
+  "or_max": 5,
+  "effects": {
+    "quick": 5,
+    "medium": 10,
+    "heavy": 18
+  },
+  "speed_bonus_max": 0.15,
+  "control_chain_limit": 1,
+  "notes": "Стартовый профиль баланса из проектной схемы. Не относится к метеорологической истине и должен настраиваться по результатам игровых испытаний."
+}

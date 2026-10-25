@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1.0",
+  "tasks": [
+    {
+      "id": "kn01_temp_001",
+      "topic": "kn01",
+      "skills": ["kn01_temperature_decode"],
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_CLASSIC_TRAINING_V1",
+      "data_origin": "synthetic_drill",
+      "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "payload": {"group": "1snTTT", "encoded": "10234"},
+      "answer": {"kind": "numeric", "value": 23.4, "unit": "degC", "tolerance": 0.0},
+      "sources": [{"source_id": "ROSHYDROMET_KN01_2013", "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"}],
+      "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+      "principle_tags": ["code_reading", "temperature_group"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    },
+    {
+      "id": "kn01_dewpoint_001",
+      "topic": "kn01",
+      "skills": ["kn01_dewpoint_decode"],
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_CLASSIC_TRAINING_V1",
+      "data_origin": "synthetic_drill",
+      "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+      "payload": {"group": "2snTdTdTd", "encoded": "21052"},
+      "answer": {"kind": "numeric", "value": -5.2, "unit": "degC", "tolerance": 0.0},
+      "sources": [{"source_id": "ROSHYDROMET_KN01_2013", "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"}],
+      "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+      "principle_tags": ["code_reading", "dew_point_group"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    },
+    {
+      "id": "kn01_station_pressure_001",
+      "topic": "kn01",
+      "skills": ["kn01_station_pressure_decode"],
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_CLASSIC_TRAINING_V1",
+      "data_origin": "authored_training",
+      "question": "Какое давление на уровне станции закодировано группой 30218?",
+      "payload": {"group": "3PoPoPoPo", "encoded": "30218"},
+      "answer": {"kind": "numeric", "value": 1021.8, "unit": "hPa", "tolerance": 0.0},
+      "sources": [{"source_id": "ROSHYDROMET_KN01_2013", "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"}],
+      "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+      "principle_tags": ["code_reading", "station_pressure"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    },
+    {
+      "id": "kn01_tendency_001",
+      "topic": "kn01",
+      "skills": ["kn01_pressure_tendency_decode"],
+      "type": "multiChoice",
+      "difficulty": 2,
+      "method_profile": "RUS_CLASSIC_TRAINING_V1",
+      "data_origin": "authored_training",
+      "question": "Что означает группа 57103 КН-01 SYNOP?",
+      "payload": {
+        "group": "5appp",
+        "encoded": "57103",
+        "options": [
+          "Равномерное падение давления; за последние 3 часа давление понизилось на 10,3 гПа",
+          "Равномерный рост давления; за последние 3 часа давление повысилось на 10,3 гПа",
+          "Давление не изменилось за последние 3 часа",
+          "Падение давления на 1,03 гПа за последний час"
+        ]
+      },
+      "answer": {"kind": "choice_index", "value": 0},
+      "sources": [{"source_id": "ROSHYDROMET_KN01_2013", "locator": "глава 1, таблица 1, группа 5appp; пример 57103"}],
+      "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+      "principle_tags": ["code_reading", "pressure_tendency"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    },
+    {
+      "id": "kn01_section1_order_001",
+      "topic": "kn01",
+      "skills": ["kn01_group_order"],
+      "type": "sequence",
+      "difficulty": 2,
+      "method_profile": "RUS_CLASSIC_TRAINING_V1",
+      "data_origin": "authored_training",
+      "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+      "steps": ["iRixhVV", "Nddff", "1snTTT", "2snTdTdTd", "3PoPoPoPo", "4PPPP или 4a3hhh", "5appp"],
+      "correct_order": [0, 1, 2, 3, 4, 5, 6],
+      "allowed_swaps": [],
+      "sources": [{"source_id": "ROSHYDROMET_KN01_2013", "locator": "схема кода, раздел 1; с. 6 файла PDF"}],
+      "explanation": "Кодовые группы в сводке должны располагаться в порядке, заданном схемой КН-01. Отсутствующая по правилам группа может не передаваться, но порядок присутствующих групп не меняется.",
+      "principle_tags": ["code_structure", "group_order"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    }
+  ]
+}

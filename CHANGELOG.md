@@ -21,7 +21,9 @@
 - idea backlog;
 - ADR process;
 - quality gates;
-- contributing/security guidance.
+- contributing/security guidance;
+- первый черновой версионируемый пакет учебного содержания `core_ru_001@0.1.0` с пятью заданиями КН-01, реестром источников, профилем методики, навыками и профилем баланса;
+- проверка ссылочной целостности учебного содержания в `tools/validate_repo.py`.
 
 ### Changed
 
@@ -31,7 +33,6 @@
 
 - выбор лицензии;
 - инициализация monorepo;
-- первый versioned content pack;
 - первый playable vertical slice.
 
 ## Правило ведения
