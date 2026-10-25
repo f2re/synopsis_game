@@ -1,0 +1,58 @@
+name: Bug report
+description: Ошибка в коде, UI, realtime, replay или инфраструктуре
+title: "bug: "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Что произошло?
+      description: Опишите наблюдаемое поведение.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Что ожидалось?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Как воспроизвести
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Область
+      options:
+        - Student UI
+        - Map renderer
+        - Content engine
+        - Game rules
+        - Realtime / WebSocket
+        - Spectator / Instructor
+        - Replay
+        - Auth / Security
+        - CI / Tooling
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Окружение
+      placeholder: "browser/device/OS/commit"
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Логи, replay ID, screenshots
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Проверки
+      options:
+        - label: Я проверил, что это не методическая неоднозначность контента.
+        - label: В issue нет секретов или персональных данных студентов.
