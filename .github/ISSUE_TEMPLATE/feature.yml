@@ -1,0 +1,67 @@
+name: Feature / game mechanic
+description: Новая механика, режим, UX-возможность или инструмент
+title: "feat: "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую проблему решаем?
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Предлагаемая механика / решение
+    validations:
+      required: true
+  - type: textarea
+    id: learning
+    attributes:
+      label: Учебная ценность
+      description: Какой навык или профессиональную последовательность формирует?
+    validations:
+      required: true
+  - type: textarea
+    id: gameplay
+    attributes:
+      label: Игровой цикл
+      description: Вход → действие игрока → результат → feedback.
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Где используется?
+      multiple: true
+      options:
+        - Solo
+        - Blitz
+        - 1v1
+        - 2v2
+        - 3v3
+        - PvE / Raid
+        - Instructor
+        - Spectator
+        - Meta progression
+  - type: textarea
+    id: risks
+    attributes:
+      label: Риски и ограничения
+      description: Методика, fairness, UX, техническая стоимость, accessibility.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: dropdown
+    id: size
+    attributes:
+      label: Оценка размера
+      options:
+        - S
+        - M
+        - L
+        - XL
+        - Unknown
