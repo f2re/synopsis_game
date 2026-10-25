@@ -1,174 +1,130 @@
 # Contributing to «Синоптический центр»
 
-Проект сочетает game design, realtime-разработку и предметную синоптическую метеорологию. Поэтому изменение считается корректным только тогда, когда оно не ломает соседние слои.
+Проект сочетает game design, realtime-разработку, browser graphics/audio и предметную синоптическую метеорологию. Изменение считается корректным только тогда, когда не ломает соседние слои и прошло обязательные независимые gates.
 
 ## 1. С чего начать
 
 Перед работой прочитайте:
 
-1. `README.md`;
-2. `docs/README.md`;
-3. документ соответствующего домена;
-4. `docs/testing/QUALITY_GATES.md`.
+1. `AGENTS.md`;
+2. `agents/registry.yaml`;
+3. свою карточку в `agents/roles/`;
+4. `README.md` и `docs/README.md`;
+5. документ соответствующего домена;
+6. `docs/testing/QUALITY_GATES.md` и `agents/QUALITY_GATES.md`.
 
-Для предметного контента дополнительно обязательны:
+Provider adapters: `CLAUDE.md`, `GEMINI.md`; Antigravity workflows/skills находятся в `.agents/`.
 
-- `docs/01_RUSSIAN_SYNOPIC_SCHOOL.md`;
-- `docs/09_SOURCE_POLICY.md`;
-- `docs/05_CONTENT_SCHEMA.md`.
+Для предметного контента дополнительно обязательны `docs/01_RUSSIAN_SYNOPIC_SCHOOL.md`, `docs/09_SOURCE_POLICY.md`, `docs/05_CONTENT_SCHEMA.md`.
 
-## 2. Типы изменений
+## 2. Ownership и review
 
-### Код
+Один task имеет одного implementation owner по `agents/tasks/FOUNDATION_OWNERSHIP.md`. Реализующий агент не принимает собственный gated результат.
 
-Изменяет engine, UI, realtime, storage, map renderer, tooling.
+Обязательные независимые контуры:
 
-### Content
+- meteorology → `meteo-methodologist-ru` + `meteo-verifier`;
+- visual direction → `art-director`;
+- animation/browser cost → `web-performance-engineer`;
+- auth/feed/privacy → `security-privacy-reviewer`;
+- shared playable baseline → `integration-release-engineer`.
 
-Добавляет/меняет tasks, scenarios, method profiles, sources, skills.
+## 3. Типы изменений
 
-### Methodology
+- **Code** — engine, UI, realtime, storage, renderer, tooling.
+- **Content** — tasks, scenarios, method profiles, sources, skills.
+- **Methodology** — термин, последовательность, допустимый ответ, нотация или правило.
+- **Game design** — механика, режим, баланс, progression/rewards.
+- **Art/Audio** — sprites, world layers, animation, soundscape, external assets.
+- **Documentation** — спецификация без изменения поведения.
 
-Меняет трактовку термина, последовательность, допустимый ответ, нотацию или правило.
+## 4. Ветка, handoff и PR
 
-### Game design
+Рекомендуемая agent-ветка:
 
-Меняет механику, режим, баланс, progression.
+`agent/<agent-id>/<task-id>-<slug>`
 
-### Documentation
+Один PR — одна логическая цель. Handoff оформляется по `agents/ROUTING_AND_HANDOFF.md` и указывает scope, files, tests/evidence, assumptions, risks и next reviewers.
 
-Уточняет спецификацию без изменения поведения.
-
-## 3. Ветка и PR
-
-Рекомендуемые имена веток:
-
-```text
-feat/...
-fix/...
-docs/...
-content/...
-method/...
-refactor/...
-```
-
-Один PR — одна логическая цель.
-
-## 4. Commit messages
-
-Рекомендуемый формат:
+Commit examples:
 
 ```text
 feat: add blitz match state
 fix: reject client-side answer payload
 content: add KN-01 temperature drills
-docs: document method profile versioning
 method: clarify map lift terminology
+art: add dusk bird sprite states
+perf: throttle hidden ambient loops
 ```
 
-## 5. Изменение учебного контента
+## 5. Учебный контент и российская методика
 
-PR должен явно ответить:
+PR должен явно указать `method_profile`, источник/редакцию/локатор, origin материала, provenance/rights и reason codes.
 
-- какой `method_profile` используется;
-- какой источник подтверждает правильный ответ;
-- есть ли локатор страницы/раздела;
-- это реальный или синтетический материал;
-- если реальный — есть ли provenance/rights;
-- какие reason codes возникают при ошибках;
-- проверено ли задание на неоднозначность.
+Нельзя использовать «так принято» без источника для Ranked/Exam. Не смешивать классический учебник, кафедральную методику, действующий документ и игровую условность. При легитимном расхождении создаётся отдельный профиль/версия.
 
-Нельзя использовать «так принято» без источника для Ranked/Exam content.
+Для Ranked/Exam требуется `METEO_ACCEPTED`: две независимые проверки и, где возможно, машинный fixture/test.
 
-## 6. Изменение российской терминологии
+## 6. Новая игровая механика
 
-Не смешивать:
+Сначала `docs/game-design/MECHANICS_CATALOG.md` или `docs/ideas/IDEA_BACKLOG.md`.
 
-- классический учебник;
-- кафедральную методику;
-- действующий официальный документ;
-- проектную игровую условность.
+Опишите учебную цель, игровой цикл, effect/cost, риски, Ranked impact, accessibility и acceptance criteria. Pay/grind-to-win запрещён; правильность важнее скорости.
 
-Если два источника расходятся, создаётся отдельный профиль/версия, а не молчаливое «исправление» одного другим.
+## 7. Art, living world и audio
 
-## 7. Новая игровая механика
+Визуал следует `docs/design/PIXEL_ART_STYLE_GUIDE.md`, `docs/design/LIVING_WORLD_SYSTEM.md` и `design/tokens/pixel-art-theme.yaml`.
 
-Сначала добавить карточку в `docs/game-design/MECHANICS_CATALOG.md` или `docs/ideas/IDEA_BACKLOG.md`.
-
-Минимально описать:
-
-- учебную цель;
-- игровой цикл;
-- эффект;
-- стоимость/сложность;
-- риски;
-- влияние на Ranked;
-- acceptance criteria.
+- task/map остаётся главным объектом;
+- `meteo.*` цвета/геометрия не меняются косметикой;
+- world phase берётся из конфигурируемого `world_location`, а не скрытого местоположения пользователя;
+- production assets декомпозируются в sprites/layers/components;
+- heavy animation требует performance gate и reduced-motion;
+- external audio/art имеет URL, author, license, attribution, local path/checksum; неизвестные права = reject.
 
 ## 8. Архитектурное изменение
 
-Если изменение влияет на несколько пакетов, format replay, versioning, storage, security model или content semantics — нужен ADR в `docs/decisions/`.
+Если меняются несколько пакетов, replay/versioning/storage/security/content semantics или фундаментальный runtime-принцип — нужен ADR в `docs/decisions/`.
 
 ## 9. UI/UX
 
-Главное правило: student UI — game-first, не dashboard-first.
-
-Во время активной задачи:
-
-- карта/задача доминирует;
-- вторичная статистика не конкурирует с ней;
-- mobile сохраняет один фокус;
-- учебные цвета не подменяются декоративной темой.
+Student UI — game-first, не dashboard-first. Desktop/mobile/projector должны сохранять понятную иерархию. Keyboard/focus, readable contrast, touch targets и reduced-motion обязательны для core flow.
 
 ## 10. Тесты
 
-В зависимости от изменения нужны:
-
-- unit tests;
-- integration tests;
-- E2E;
-- content validation;
-- property-based tests для генераторов;
-- replay determinism;
-- visual/regression checks для ключевых renderers.
+В зависимости от изменения нужны unit, integration, E2E, content validation, property-based генераторные тесты, replay determinism, visual/regression и performance profiling.
 
 ## 11. Definition of Ready
 
-Не начинайте крупную задачу без:
+Task готов к разработке, если есть:
 
-- ясного scope;
-- acceptance criteria;
-- dependency list;
-- нужного source/method profile для учебной логики;
-- понимания, что не входит в задачу.
+- ID, owner agent и reviewers;
+- ясный scope/acceptance criteria/dependencies;
+- source/method profile для предметной логики;
+- UX/art reference для пользовательского изменения;
+- тестовый сценарий;
+- понимание, что не входит в задачу.
 
 ## 12. Definition of Done
 
-PR считается готовым, когда:
+Feature готова, когда:
 
 - CI зелёный;
-- документация обновлена;
-- изменения покрыты подходящими тестами;
-- method/content review выполнен, если требуется;
-- нет скрытой зависимости от конкретной кафедральной трактовки;
-- replay/versioning не нарушены.
+- owner tests выполнены;
+- все required independent gates закрыты;
+- документация/schema обновлены;
+- нет critical methodology ambiguity;
+- replay/version policy соблюдена;
+- Integration/Release agent воспроизвёл acceptance criteria.
 
-## 13. Что приветствуется
+## 13. Не допускается
 
-- маленькие вертикальные срезы;
-- реальные архивные сценарии с provenance;
-- автоматические валидаторы;
-- accessibility;
-- low-end mobile performance;
-- инструменты для преподавателя;
-- хорошие объяснения ошибок.
-
-## 14. Что не приветствуется
-
-- pay-to-win;
+- self-approval gated work;
 - hardcoded учебные ответы в UI;
-- синтетические карты, выданные за реальные;
-- механики без учебной цели;
+- AI-generated правильные ответы без source-backed acceptance;
+- синтетические карты под видом реальных;
+- pay-to-win;
+- неизвестно лицензированные скачанные assets;
 - декоративный dashboard вместо игрового процесса;
-- AI-generated правильные ответы без проверки;
-- изменение published content задним числом.
+- изменение published content задним числом;
+- утверждение, что agent/test/review «выполнен», без проверяемого артефакта.
