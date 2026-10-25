@@ -1,279 +1,280 @@
-# Foundation Epics — living world, live data, autonomous arena, roster, avatar
+# Основополагающие задачи — живой мир, актуальные данные, автономная арена, пользователи и персонаж
 
-**Статус:** proposed
+**Статус:** предложено
 
-Этот backlog раскладывает принятые фундаментальные идеи на исполнимые эпики.
+Этот документ раскладывает принятые фундаментальные идеи на исполнимые задачи.
 
-## EPIC WORLD — Living World
+## Блок WORLD — живой мир
 
-### WORLD-001 — Time-of-day state machine
+### WORLD-001 — Автомат состояний времени суток
 
-- рассвет / день / сумерки / вечер / ночь;
-- server/local installation time profile;
-- accelerated demo profile;
-- lighting tokens and masks.
+- рассвет / день / золотой час / сумерки / ночь;
+- профиль времени и местоположения установленного центра;
+- ускоренный демонстрационный цикл;
+- световые токены и маски.
 
-**Done:** переход между состояниями не требует смены полного background bitmap.
+**Готово, когда:** переход между состояниями не требует замены всей фоновой картинки.
 
-### WORLD-002 — Ambient layer engine
+### WORLD-002 — Движок фоновых слоёв
 
-- clouds;
-- birds;
-- flags;
-- radar;
-- tower lights;
-- NPC;
-- trees;
-- water.
+- облака;
+- птицы;
+- флаги;
+- радар;
+- сигнальные огни;
+- сотрудники центра;
+- деревья;
+- вода.
 
-**Done:** минимум 6 независимых loops + battle-focus density profile.
+**Готово, когда:** работает не менее шести независимых циклов и отдельный спокойный профиль для активного матча.
 
-### WORLD-003 — Interactive world objects
+### WORLD-003 — Интерактивные объекты мира
 
-- birds;
-- squirrel;
-- radar;
-- balloon;
-- archive window;
-- fountain/globe.
+- птицы;
+- белка;
+- радар;
+- зонд;
+- окно архива;
+- фонтан или глобус.
 
-**Done:** минимум 5 interactables с короткой реакцией.
+**Готово, когда:** есть не менее пяти интерактивных объектов с короткой реакцией.
 
-### WORLD-004 — Discoveries
+### WORLD-004 — «Находки мира»
 
-- collection schema;
-- rare ambient event;
-- persistence;
-- cosmetic-only reward hook.
+- схема коллекции;
+- редкие фоновые события;
+- сохранение открытий;
+- связь только с визуальными наградами.
 
-### WORLD-005 — Reduced motion
+### WORLD-005 — Уменьшенная анимация
 
-**Done:** parallax/continuous loops отключаются без потери состояния мира.
-
----
-
-## EPIC LIVE-KN01 — Real observation pipeline
-
-### KN01-LIVE-001 — Raw ingress
-
-- file spool;
-- batch fixture;
-- TCP/WebSocket adapter interface;
-- raw immutable storage.
-
-### KN01-LIVE-002 — Station registry
-
-- station resolver;
-- aliases;
-- active/inactive;
-- coordinates and metadata.
-
-### KN01-LIVE-003 — Versioned codec
-
-- parser;
-- encoder;
-- ruleset ID;
-- round-trip tests.
-
-### KN01-LIVE-004 — QC / quarantine
-
-- malformed payload;
-- unknown station;
-- stale timestamp;
-- duplicate;
-- parser mismatch.
-
-### KN01-LIVE-005 — Snapshot pack builder
-
-**Done:** validated live data can be frozen into a deterministic match/replay pool.
-
-### KN01-LIVE-006 — Task generator
-
-Generate:
-
-- decode temperature;
-- decode pressure;
-- wind;
-- ww;
-- station plot;
-- encode group;
-- critique variants.
-
-### KN01-LIVE-007 — Feed failover
-
-`live → recent snapshot → cache → archive`.
+**Готово, когда:** параллакс и постоянные циклы отключаются без потери состояния мира и функциональности.
 
 ---
 
-## EPIC AUTO-ARENA — Autonomous game/broadcast runtime
+## Блок KN01-LIVE — реальные наблюдения
 
-### ARENA-001 — Matchmaking queue
+### KN01-LIVE-001 — Приём исходных данных
 
-- active roster;
-- rating constraints;
-- mode preference;
-- fair pairing.
+- файловая очередь;
+- пакетные тестовые данные;
+- интерфейсы адаптеров TCP/WebSocket;
+- неизменяемое хранение исходного сообщения.
 
-### ARENA-002 — Automatic tournament progression
+### KN01-LIVE-002 — Реестр станций
 
-- qualifier;
-- bracket;
-- advancement;
-- rewards;
-- no instructor action required.
+- определение станции;
+- псевдонимы;
+- активность;
+- координаты и метаданные.
 
-### ARENA-003 — Broadcast selector
+### KN01-LIVE-003 — Версионируемый кодек
 
-Ranking inputs:
+- декодер;
+- кодировщик;
+- идентификатор набора правил;
+- тесты обратного преобразования.
 
-- tournament stage;
-- ratings;
-- score closeness;
-- streak/comeback;
-- scene dwell time.
+### KN01-LIVE-004 — Контроль качества и карантин
 
-### ARENA-004 — Arena TV client
+- повреждённое сообщение;
+- неизвестная станция;
+- устаревший срок;
+- дубль;
+- несоответствие версии правил.
 
-- fullscreen;
-- read-only display role;
-- reconnect;
-- kiosk startup;
-- spectator-safe data.
+### KN01-LIVE-005 — Построение снимка данных
 
-### ARENA-005 — Attract mode
+**Готово, когда:** проверенные актуальные данные можно зафиксировать в детерминированный набор для матча и его воспроизведения.
 
-- living hub;
-- leaderboard;
-- recent achievements;
-- demo replay;
-- short educational captions.
+### KN01-LIVE-006 — Генератор заданий
 
-### ARENA-006 — Highlight engine
+Создаёт задания на:
 
-- comeback;
-- combo;
-- parry;
-- final round;
-- record;
-- automatic replay snippet.
+- дешифрирование температуры;
+- дешифрирование давления;
+- ветер;
+- `ww`;
+- схему станции;
+- кодирование группы;
+- критику наблюдений.
 
-### ARENA-007 — Watchdog/offline fallback
+### KN01-LIVE-007 — Резервная цепочка
 
-**Done:** display never remains blank on backend failure.
+`актуальные данные → недавний снимок → кэш → архив`.
 
 ---
 
-## EPIC IDENTITY — Closed roster and simple login
+## Блок AUTO-ARENA — автономные матчи и большой экран
 
-### ID-001 — Admin roster CRUD
+### ARENA-001 — Очередь и подбор соперников
 
-- create;
-- disable;
-- group;
-- roles;
-- reset code.
+- активные пользователи;
+- ограничения рейтинга;
+- предпочтение режима;
+- равенство условий.
 
-### ID-002 — CSV/JSON roster import
+### ARENA-002 — Автоматическое ведение турнира
 
-- validation;
-- conflict report;
-- dry-run.
+- отбор;
+- турнирная сетка;
+- продвижение победителей;
+- награды;
+- отсутствие необходимости действий преподавателя.
 
-### ID-003 — Classroom login
+### ARENA-003 — Выбор сцены большого экрана
 
-`group → user → PIN/code → session`.
+Учитываются:
 
-### ID-004 — Security profiles
+- стадия турнира;
+- рейтинг;
+- близость счёта;
+- серия или камбэк;
+- длительность текущего показа.
 
-- `trusted-classroom`;
-- `public-internet`;
-- rate limits;
-- progressive delay;
-- lockout.
+### ARENA-004 — Клиент автономного большого экрана
 
-### ID-005 — Display role
+- полноэкранная работа;
+- роль только для чтения `display`;
+- автоматическое переподключение;
+- запуск в постоянном экранном режиме;
+- только разрешённые зрительские данные.
 
-Read-only spectator credentials with no private data.
+### ARENA-005 — Демонстрационный режим
 
-### ID-006 — Temporary guest roster
+- живой центр;
+- таблица лидеров;
+- последние достижения;
+- демонстрационное воспроизведение;
+- короткие образовательные подписи.
 
-For school/open-day events.
+### ARENA-006 — Выделение ярких моментов
 
----
+- камбэк;
+- серия;
+- парирование;
+- финальный раунд;
+- рекорд;
+- автоматический короткий повтор.
 
-## EPIC AVATAR — Personalized synoptician
+### ARENA-007 — Самовосстановление и резервный режим
 
-### AVATAR-001 — Avatar schema
-
-- body/skin tone;
-- hair;
-- headwear;
-- clothes;
-- footwear;
-- backpack;
-- held item;
-- companion;
-- badge.
-
-### AVATAR-002 — First-login creator
-
-Target: finish in under 60 seconds.
-
-### AVATAR-003 — Starter style packs
-
-- sport;
-- strict;
-- field;
-- tourist;
-- lab/student.
-
-### AVATAR-004 — Cosmetic inventory
-
-- rarity;
-- unlock provenance;
-- preview;
-- equip.
-
-### AVATAR-005 — Pencil collection
-
-- front pencil;
-- isobar pencil;
-- map-lift set;
-- visual level/tier;
-- sharpening/idle animations.
-
-### AVATAR-006 — Companion system
-
-- tit;
-- seagull;
-- cormorant;
-- bullfinch;
-- squirrel/event pets.
-
-### AVATAR-007 — Reward hooks
-
-Connect rewards to:
-
-- Blitz;
-- Duel;
-- tournament;
-- mastery;
-- achievement;
-- archive boss;
-- World Discovery.
-
-**Hard rule:** no Ranked power.
+**Готово, когда:** большой экран не остаётся пустым при временном отказе серверной части.
 
 ---
 
-## Suggested implementation order
+## Блок IDENTITY — закрытый список пользователей и быстрый вход
+
+### ID-001 — Управление списком администратором
+
+- создание;
+- отключение;
+- группы;
+- роли;
+- сброс кода входа.
+
+### ID-002 — Импорт CSV/JSON
+
+- проверка;
+- отчёт по конфликтам;
+- пробный запуск без записи.
+
+### ID-003 — Вход в аудитории
+
+`группа → пользователь → код → сессия`.
+
+### ID-004 — Профили безопасности
+
+Технические профили:
+
+- `trusted-classroom` — доверенная локальная аудитория;
+- `public-internet` — открытый интернет-доступ.
+
+Обязательны ограничения попыток, нарастающая задержка и временная блокировка.
+
+### ID-005 — Роль большого экрана
+
+Отдельные полномочия только для чтения без доступа к приватным данным.
+
+### ID-006 — Временные гостевые профили
+
+Для школьных мероприятий и дней открытых дверей.
+
+---
+
+## Блок AVATAR — персонализированный синоптик
+
+### AVATAR-001 — Схема персонажа
+
+- тело и тон кожи;
+- волосы;
+- головной убор;
+- одежда;
+- обувь;
+- рюкзак;
+- предмет в руках;
+- спутник;
+- значок.
+
+### AVATAR-002 — Настройка при первом входе
+
+Цель: базовая настройка не более чем за одну минуту.
+
+### AVATAR-003 — Стартовые стили
+
+- спортивный;
+- строгий;
+- полевой;
+- туристический;
+- учебный или лабораторный.
+
+### AVATAR-004 — Инвентарь предметов оформления
+
+- редкость;
+- происхождение награды;
+- предварительный просмотр;
+- экипировка.
+
+### AVATAR-005 — Коллекция карандашей
+
+- фронтальный карандаш;
+- изобарный карандаш;
+- набор для подъёма карты;
+- визуальные уровни коллекции;
+- анимация заточки и спокойного состояния.
+
+### AVATAR-006 — Система спутников
+
+- синичка;
+- чайка;
+- баклан;
+- снегирь;
+- белка и другие событийные спутники.
+
+### AVATAR-007 — Связь наград с игрой
+
+Награды выдаются за:
+
+- блиц;
+- дуэль;
+- турнир;
+- освоение навыков;
+- достижения;
+- архивные ситуации;
+- «Находки мира».
+
+**Жёсткое правило:** никаких преимуществ в рейтинговом матче.
+
+---
+
+## Рекомендуемый порядок реализации
 
 ```text
 ID-001/003
     ↓
 KN01-LIVE-001/003/005
     ↓
-basic task generator
+базовый генератор заданий
     ↓
 ARENA-001/003/004
     ↓
@@ -281,19 +282,19 @@ WORLD-001/002
     ↓
 AVATAR-001/002
     ↓
-WORLD interactables + cosmetics
+интерактивный мир + предметы оформления
     ↓
-full autonomous tournament/highlights
+полный автономный турнир + яркие моменты
 ```
 
-## Foundation Gate
+## Итоговый критерий основополагающего этапа
 
-Новая концепция считается реально вошедшей в продукт, когда одновременно работают:
+Фундаментальная концепция считается вошедшей в продукт, когда одновременно работают:
 
-- закрытый roster + быстрый login;
-- один live КН-01 source → автоматически проверяемая задача;
-- один полностью автономный 1v1;
-- Arena TV самостоятельно показывает матч и возвращается в attract-mode;
-- хаб имеет минимум 4 time-of-day состояния;
-- avatar сохраняется и виден в duel/spectator;
-- награда за матч открывает cosmetic item без влияния на Ranked.
+- закрытый список пользователей и быстрый вход;
+- один источник актуальных КН-01 создаёт автоматически проверяемое задание;
+- один полностью автономный матч 1×1;
+- большой экран самостоятельно показывает матч и возвращается в демонстрационный режим;
+- центр имеет не менее четырёх состояний времени суток;
+- персонаж сохраняется и виден в дуэли и зрительском режиме;
+- награда открывает предмет оформления без влияния на рейтинговый результат.
