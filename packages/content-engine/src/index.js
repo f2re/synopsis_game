@@ -25,6 +25,7 @@ function responseDescriptor(definition) {
   }
   if (definition.answer?.kind === 'choice_index') return { kind: 'choice' };
   if (definition.type === 'sequence') return { kind: 'sequence' };
+  if (definition.type === 'stationPlot' && definition.answer?.kind === 'station_plot') return { kind: 'stationPlot' };
   return { kind: definition.type };
 }
 
@@ -71,6 +72,30 @@ export function createTaskInstance(definition, options) {
     return { publicTask, validationContext: { kind: 'sequence', canonicalByPublic } };
   }
 
+  if (definition.type === 'stationPlot') {
+    const observations = definition.payload?.observations;
+    const slots = definition.payload?.slots;
+    const placements = definition.answer?.placements;
+    if (!Array.isArray(observations) || !Array.isArray(slots) || definition.answer?.kind !== 'station_plot' || !placements || typeof placements !== 'object') {
+      throw new Error(`Некорректное задание stationPlot: ${definition.id}`);
+    }
+    const observationIds = new Set(observations.map((item) => item?.id));
+    const slotIds = new Set(slots.map((item) => item?.id));
+    for (const [observationId, slotId] of Object.entries(placements)) {
+      if (!observationIds.has(observationId) || !slotIds.has(slotId)) {
+        throw new Error(`Некорректное соответствие stationPlot ${definition.id}: ${observationId} -> ${slotId}`);
+      }
+    }
+    publicTask.payload = {
+      profile: definition.payload?.profile ?? null,
+      station: structuredClone(definition.payload?.station ?? null),
+      observations: structuredClone(observations),
+      slots: structuredClone(slots),
+      canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
+    };
+    return { publicTask, validationContext: { kind: 'stationPlot' } };
+  }
+
   throw new Error(`Тип задания ${definition.type} пока не поддерживается первым рабочим срезом`);
 }
 
@@ -111,11 +136,33 @@ export function validateTaskAnswer(definition, validationContext, submitted) {
     };
   }
 
+  if (definition.type === 'stationPlot') {
+    const expected = definition.answer?.placements ?? {};
+    const placements = submitted && typeof submitted === 'object' && submitted.placements && typeof submitted.placements === 'object'
+      ? submitted.placements
+      : {};
+    const components = Object.entries(expected).map(([observationId, expectedSlotId]) => {
+      const submittedSlotId = placements[observationId] ?? null;
+      return {
+        observationId,
+        submittedSlotId,
+        expectedSlotId,
+        correct: submittedSlotId === expectedSlotId,
+      };
+    });
+    return {
+      correct: components.length > 0 && components.every((item) => item.correct),
+      normalizedAnswer: { placements: { ...placements } },
+      correctAnswer: { placements: { ...expected } },
+      details: { components },
+    };
+  }
+
   throw new Error(`Проверка типа ${definition.type} пока не поддерживается`);
 }
 
 export function assertPublicTaskSafe(publicTask) {
-  const forbidden = new Set(['answer', 'correct_order', 'correctOrder', 'canonicalByPublic', 'validationContext']);
+  const forbidden = new Set(['answer', 'correct_order', 'correctOrder', 'canonicalByPublic', 'validationContext', 'correctPlacements']);
   const visit = (value) => {
     if (!value || typeof value !== 'object') return;
     for (const [key, child] of Object.entries(value)) {
