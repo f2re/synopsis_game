@@ -1,6 +1,6 @@
 # Foundation task ownership
 
-Canonical foundation task definitions live in `docs/roadmap/FOUNDATION_EPICS.md`. Phaser/WebGL and asset-pipeline definitions live in `docs/roadmap/PIXEL_RUNTIME_EPICS.md`. This file assigns implementation ownership and independent acceptance.
+Canonical foundation task definitions live in `docs/roadmap/FOUNDATION_EPICS.md`. Phaser/WebGL and asset-pipeline definitions live in `docs/roadmap/PIXEL_RUNTIME_EPICS.md`. Sprite-production definitions live in `docs/roadmap/SPRITE_PRODUCTION_EPICS.md`. This file assigns implementation ownership and independent acceptance.
 
 ## ENGINE — Phaser/WebGL runtime
 
@@ -22,6 +22,21 @@ Canonical foundation task definitions live in `docs/roadmap/FOUNDATION_EPICS.md`
 | ASSET-004 Tiled scene contract | `pixel-asset-pipeline-engineer` | `game-runtime-webgl-engineer`, `living-world-engineer`, `art-director` |
 | ASSET-005 Provenance/reproducibility | `pixel-asset-pipeline-engineer` | `integration-release-engineer` |
 | ASSET-006 Visual/runtime regression fixtures | `integration-release-engineer` | `art-director`, `web-performance-engineer` |
+
+## SPRITE — production art families
+
+Canonical scope, animation counts and sequencing are defined in `docs/design/sprites/` and `docs/roadmap/SPRITE_PRODUCTION_EPICS.md`.
+
+| Tasks | Owner | Required review |
+|---|---|---|
+| SPRITE-001 | `pixel-asset-designer` | `art-director`, `pixel-asset-pipeline-engineer` |
+| SPRITE-002…004 | `pixel-asset-designer` | `art-director`, `pixel-asset-pipeline-engineer`; add `identity-avatar-engineer`, `game-runtime-webgl-engineer` or `web-performance-engineer` as specified by the task |
+| SPRITE-005…010 | `pixel-asset-designer` | `art-director`, `living-world-engineer`; add pipeline/runtime/performance review as specified |
+| SPRITE-011 | `pixel-asset-designer` | `art-director`, `ux-accessibility-reviewer`, `meteo-methodologist-ru` for the boundary with professional meteorological graphics |
+| SPRITE-012…016 | `pixel-asset-designer` | task-specific reviewers from the sprite roadmap |
+| SPRITE-017 | `integration-release-engineer` | `pixel-asset-pipeline-engineer`, `art-director`, `web-performance-engineer` |
+
+A `SPRITE-*` task is incomplete until the whole required family exists: variants, directions, states, transitions, reduced-motion fallback, manifest data and reproducible generated output. A single showcase frame cannot close a sprite task.
 
 ## WORLD — Living World
 
