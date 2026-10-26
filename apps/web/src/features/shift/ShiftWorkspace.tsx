@@ -198,6 +198,11 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
               {!feedback.feedback.correct && stationTask && <p>Красным отмечено ошибочное размещение, жёлтым — нормативная позиция для пропущенного или неверно размещённого элемента.</p>}
               {!feedback.feedback.correct && findError && <p><strong>Физическое нарушение:</strong> станция {correctAnswerText(feedback.feedback.correctAnswer)}. На планшоне она отмечена зелёным, ваш выбор — красным.</p>}
               <p>{feedback.feedback.explanation}</p>
+              {feedback.feedback.principleTags.length > 0 && (
+                <div className="shift-principles" aria-label="Проверяемые принципы">
+                  {feedback.feedback.principleTags.map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
+              )}
               {feedback.feedback.sources.map((source) => <div className="shift-source" key={`${source.sourceId}-${source.locator}`}><strong>{source.title}</strong><span>{source.locator}</span></div>)}
               <button className="shift-primary" type="button" onClick={advance}>{feedback.completed ? `Завершить смену · ${feedback.progress.correct}/${feedback.progress.total}` : 'Следующее задание'}</button>
             </section>
