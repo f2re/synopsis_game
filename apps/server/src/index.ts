@@ -195,7 +195,7 @@ const server = createServer(async (request, response) => {
       const input: CreateUserInput = {
         displayName: String(body.displayName ?? ''),
         groupId: String(body.groupId ?? ''),
-        roles: Array.isArray(body.roles) && body.roles.length > 0 ? body.roles as CreateUserInput['roles'] : ['student'],
+        roles: Array.isArray(body.roles) ? (body.roles as CreateUserInput['roles']) : [],
         initialCode: typeof body.initialCode === 'string' && body.initialCode.trim().length > 0 ? body.initialCode.trim() : undefined,
       };
       sendJson(response, 201, { user: await identity.createUser(bearer(request), input) });

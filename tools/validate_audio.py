@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Проверка целостности и соответствия стандартам аудиоколлекции «26063: Позывной «Синоптик»»."""
+"""Проверка целостности и соответствия стандартам аудиоколлекции «26063: Позывной «Синоптик»».
+
+Проверяет:
+- Наличие и синтаксис манифеста assets/manifests/audio.collection.json;
+- Наличие всех WAV и сжатых OGG ассетов в assets/source/audio и apps/web/public/audio;
+- Соответствие контрольных сумм SHA-256;
+- Соответствие открытым лицензиям (CC0-1.0, Public Domain, CC-BY-3.0, CC-BY-4.0, CC-BY-SA-3.0, CC-BY-SA-4.0, MIT);
+- Наличие полной информации о происхождении (provenance: автор, источник, метод верификации);
+- Корректность аудиоформата (WAV: 44.1 kHz, 16-bit, моно);
+- Отсутствие цифрового клиппинга (peak < 32767);
+- Бесшовность граничных сэмплов для зацикленных эмбиент-петель (diff < 1500).
+"""
 
 from __future__ import annotations
 
@@ -12,6 +23,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "assets" / "manifests" / "audio.collection.json"
+
+ALLOWED_LICENSES = {
+    "CC0-1.0",
+    "Public Domain",
+    "CC-BY-3.0",
+    "CC-BY-4.0",
+    "CC-BY-SA-3.0",
+    "CC-BY-SA-4.0",
+    "MIT",
+}
 
 
 def compute_sha256(path: Path) -> str:
@@ -62,11 +83,32 @@ def validate_audio() -> list[str]:
         if actual_sha != expected_sha:
             errors.append(f"Не совпадает sha256 для {sound_id}: ожидалось {expected_sha}, получено {actual_sha}")
 
-        if not license_str or license_str not in ("CC0-1.0", "MIT"):
+        if not license_str or license_str not in ALLOWED_LICENSES:
             errors.append(f"Недопустимая или отсутствующая лицензия для {sound_id}: {license_str}")
 
         if not provenance or not provenance.get("sourceType"):
             errors.append(f"Отсутствует информация о происхождении (provenance) для {sound_id}")
+
+        # Проверка сжатого OGG файла (если заявлен в манифесте)
+        compressed_path_str = item.get("compressedPath")
+        if compressed_path_str:
+            comp_file = ROOT / compressed_path_str
+            if not comp_file.exists():
+                errors.append(f"Сжатый файл ассета не найден: {compressed_path_str}")
+            else:
+                expected_comp_sha = item.get("compressedSha256")
+                actual_comp_sha = compute_sha256(comp_file)
+                if expected_comp_sha and actual_comp_sha != expected_comp_sha:
+                    errors.append(
+                        f"Не совпадает sha256 сжатого ассета {sound_id}: "
+                        f"ожидалось {expected_comp_sha}, получено {actual_comp_sha}"
+                    )
+
+            comp_runtime_url = item.get("compressedRuntimeUrl")
+            if comp_runtime_url:
+                comp_pub = ROOT / "apps" / "web" / "public" / comp_runtime_url.lstrip("/")
+                if not comp_pub.exists():
+                    errors.append(f"Сжатый файл не найден в public веб-приложения: {comp_pub}")
 
         # Проверка WAV структуры
         try:

@@ -21,8 +21,10 @@ function ArenaTvPlaceholder() {
   return (
     <main className="arena-tv-placeholder" aria-labelledby="arena-title">
       <section>
+        <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 64, height: 64, marginBottom: 12 }} />
         <span>{GAME_MARK} · режим большого экрана</span>
         <h1 id="arena-title">Arena TV</h1>
+        <div className="ui-compass-divider" aria-hidden="true" />
         <p>Публичный экран не получает список пользователей, коды входа или административные данные.</p>
         <button className="secondary-button" onClick={() => navigate('/')} style={{ marginTop: 16 }}>
           ← На главную
@@ -86,6 +88,7 @@ function Home({
           </aside>
         ) : (
           <aside className="game-user-overlay" aria-label="Статус наблюдателя">
+            <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" />
             <div className="game-user-brand">
               <span className="prototype-kicker">{GAME_MARK} · {GAME_CALLSIGN}</span>
               <span className="observer-chip">👁 Режим наблюдателя</span>

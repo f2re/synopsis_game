@@ -162,6 +162,14 @@ agents:
     reviews: [all-implementation-epics]
     role_file: agents/roles/integration-release-engineer.md
 
+  - id: ui-pixel-designer
+    title: Pixel UI & Design System Designer
+    preferred_provider: antigravity-gemini
+    fallback_provider: claude-code
+    owns: [UI, design-system, windows, buttons, controls, micro-animations, pixel-frames]
+    reviewers: [art-director, ux-accessibility-reviewer, web-performance-engineer]
+    role_file: agents/roles/ui-pixel-designer.md
+
 acceptance_gates:
   meteorology:
     required: [meteo-methodologist-ru, meteo-verifier]

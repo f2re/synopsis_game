@@ -187,9 +187,14 @@ export function AdminLoginScreen({
   return (
     <main className="app-shell identity-shell">
       <section className="panel login-panel" aria-labelledby="admin-login-title">
-        <div className="brand-mark" aria-hidden="true">
-          <img src="/ui/icons/instrument_radar.png" alt="" className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-          <span className="brand-mark-fallback">⚙</span>
+        <div className="login-header-row">
+          <div className="brand-mark" aria-hidden="true">
+            <img src="/ui/icons/instrument_radar.png" alt="" className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            <span className="brand-mark-fallback">⚙</span>
+          </div>
+          <button type="button" className="ghost-button login-close-button" onClick={onBack} aria-label="Назад" title="Вернуться на главную">
+            ✕
+          </button>
         </div>
         <span className="prototype-kicker">26063 · Служебный раздел</span>
         <h1 id="admin-login-title">Вход администратора</h1>
@@ -530,6 +535,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
           <div>
             <span className="prototype-kicker">26063 · Панель управления</span>
             <h1 id="admin-title">Учебные группы и доступ</h1>
+            <div className="ui-compass-divider" aria-hidden="true" />
             <p className="muted tiny">Создавайте группы, добавляйте учащихся по ФИО и управляйте доступом.</p>
           </div>
           <div className="row-actions">

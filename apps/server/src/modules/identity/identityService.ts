@@ -49,7 +49,7 @@ export interface IdentityServiceOptions {
 export interface CreateUserInput {
   displayName: string;
   groupId: string;
-  roles: UserRole[];
+  roles?: UserRole[];
   initialCode?: string;
   codeSet?: boolean;
 }
@@ -87,14 +87,11 @@ function normalizeText(value: unknown, field: string, maxLength: number): string
 }
 
 function normalizeRoles(value: unknown): UserRole[] {
-  if (!Array.isArray(value) || value.length === 0) {
-    throw new IdentityError(400, 'Нужно назначить хотя бы одну роль', 'invalid_roles');
+  if (!value || !Array.isArray(value)) {
+    return [];
   }
   const roles = [...new Set(value)] as unknown[];
-  if (roles.some((role) => typeof role !== 'string' || !USER_ROLES.includes(role as UserRole))) {
-    throw new IdentityError(400, 'Неизвестная роль пользователя', 'invalid_roles');
-  }
-  return roles as UserRole[];
+  return roles.filter((role): role is UserRole => typeof role === 'string' && USER_ROLES.includes(role as UserRole));
 }
 
 function scryptKey(code: string, salt: string): Promise<Buffer> {
@@ -361,9 +358,7 @@ export class IdentityService {
   async batchCreateUsers(token: string, input: BatchCreateUsersInput): Promise<BatchCreateResult> {
     this.requireAdmin(token);
     const groupId = normalizeText(input.groupId, 'groupId', 64);
-    const roles = Array.isArray(input.roles) && input.roles.length > 0
-      ? normalizeRoles(input.roles)
-      : ['student' as UserRole];
+    const roles = normalizeRoles(input.roles);
 
     if (!Array.isArray(input.users) || input.users.length === 0) {
       throw new IdentityError(400, 'Список пользователей для импорта пуст', 'empty_batch');

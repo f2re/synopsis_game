@@ -1,12 +1,19 @@
 /**
  * Менеджер звукового пространства живого мира «26063: Позывной «Синоптик»».
  *
- * Реализует:
- * - 4 независимых шины громкости: master, ambient, effects, ui;
- * - Бесшовные фоновые петли с плавным кроссфейдом между локациями и фазами суток;
- * - Мягкий сенсорный режим (reduced-sensory) и режим отключения звука (mute);
- * - Случайный планировщик фоновых голосов птиц и фауны кампуса;
- * - Безопасную работу в браузере (учёт политики автовоспроизведения Web Audio).
+ * Архитектура генеративного анти-усталостного звукового ландшафта:
+ * 1. Web Audio API граф с шинами: master, ambient, effects, ui;
+ * 2. Многослойный эмбиент на базе взаимно-простых длительностей (incommensurate loops:
+ *    ветер 29.3 с, волны 19.1 с, дождь 23.7 с, архив 31.7 с), благодаря чему волновая
+ *    фаза не повторяется часами;
+ * 3. Дышащий LFO (0.025 Гц, период 40 с), плавно перераспределяющий энергию между слоями ветра и прибоя;
+ * 4. Пуассоновский случайный планировщик (Poisson process) с рефрактерным периодом (cooldown 10 с)
+ *    для органичного появления голосов птиц и редких событий;
+ * 5. Колоды без повторений (ShuffleBag) для вариаций синиц, зябликов и чаек;
+ * 6. Микро-вариации при каждом воспроизведении (питч ±30 центов, джиттер громкости ±1 дБ, стерео-панорама ±0.35);
+ * 7. Контекстный дакинг (task-aware ducking) на -4 дБ при переходе к работе с бланками КН-01 и экзаменами;
+ * 8. Сенсорная доступность (reduced-sensory: ФНЧ 3800 Гц и мягкие транзиенты);
+ * 9. Двойная загрузка: сжатый Opus OGG (легкий вес, мгновенный запуск) с прозрачным фоллбэком на WAV.
  */
 
 export type AudioChannel = 'master' | 'ambient' | 'effects' | 'ui';
@@ -14,15 +21,67 @@ export type AudioChannel = 'master' | 'ambient' | 'effects' | 'ui';
 export interface SoundDefinition {
   id: string;
   url: string;
+  compressedUrl?: string;
   channel: AudioChannel;
   defaultVolume: number;
   loop: boolean;
+  variations?: string[];
+}
+
+/**
+ * Колода без повторений (ShuffleBag).
+ * Выдаёт элементы в случайном порядке без возвращения.
+ * При опустошении колода перемешивается заново с гарантией:
+ * первый элемент новой колоды не совпадает с последним элементом предыдущей.
+ */
+export class ShuffleBag<T> {
+  private items: T[];
+  private currentBag: T[] = [];
+  private lastItem: T | null = null;
+
+  constructor(items: T[]) {
+    this.items = [...items];
+    this.reset();
+  }
+
+  public draw(): T {
+    if (this.currentBag.length === 0) {
+      this.reset();
+    }
+    const item = this.currentBag.pop()!;
+    this.lastItem = item;
+    return item;
+  }
+
+  private reset(): void {
+    if (this.items.length === 0) {
+      throw new Error('ShuffleBag cannot be initialized with empty items');
+    }
+    const pool = [...this.items];
+    const shuffled: T[] = [];
+
+    while (pool.length > 0) {
+      const idx = Math.floor(Math.random() * pool.length);
+      shuffled.push(pool.splice(idx, 1)[0]);
+    }
+
+    // Если первый элемент новой колоды совпадает с последним сыгранным, меняем его с последним
+    if (shuffled.length > 1 && shuffled[shuffled.length - 1] === this.lastItem) {
+      const temp = shuffled[shuffled.length - 1];
+      shuffled[shuffled.length - 1] = shuffled[0];
+      shuffled[0] = temp;
+    }
+
+    this.currentBag = shuffled;
+  }
 }
 
 export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
+  // --- Эмбиент-петли (Взаимно простые длительности) ---
   'audio.ambient.wind-trees': {
     id: 'audio.ambient.wind-trees',
     url: '/audio/ambient/amb_wind_trees_bed.wav',
+    compressedUrl: '/audio/ambient/amb_wind_trees_bed.ogg',
     channel: 'ambient',
     defaultVolume: 0.45,
     loop: true,
@@ -30,13 +89,23 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.ambient.water-shore': {
     id: 'audio.ambient.water-shore',
     url: '/audio/ambient/amb_water_shore_bed.wav',
+    compressedUrl: '/audio/ambient/amb_water_shore_bed.ogg',
     channel: 'ambient',
     defaultVolume: 0.40,
+    loop: true,
+  },
+  'audio.ambient.rain-soft': {
+    id: 'audio.ambient.rain-soft',
+    url: '/audio/ambient/amb_rain_soft_bed.wav',
+    compressedUrl: '/audio/ambient/amb_rain_soft_bed.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.35,
     loop: true,
   },
   'audio.ambient.archive-room': {
     id: 'audio.ambient.archive-room',
     url: '/audio/ambient/amb_archive_room_bed.wav',
+    compressedUrl: '/audio/ambient/amb_archive_room_bed.ogg',
     channel: 'ambient',
     defaultVolume: 0.35,
     loop: true,
@@ -44,41 +113,123 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.ambient.night-air': {
     id: 'audio.ambient.night-air',
     url: '/audio/ambient/amb_night_air_bed.wav',
+    compressedUrl: '/audio/ambient/amb_night_air_bed.ogg',
     channel: 'ambient',
     defaultVolume: 0.35,
     loop: true,
   },
-  'audio.fauna.tit-chirp': {
-    id: 'audio.fauna.tit-chirp',
-    url: '/audio/fauna/fauna_tit_chirp.wav',
+
+  // --- Фауна Северо-Запада (Аутентичные полевые записи + ShuffleBag) ---
+  'audio.fauna.tit-chirp-01': {
+    id: 'audio.fauna.tit-chirp-01',
+    url: '/audio/fauna/fauna_tit_chirp_01.wav',
+    compressedUrl: '/audio/fauna/fauna_tit_chirp_01.ogg',
     channel: 'effects',
     defaultVolume: 0.65,
     loop: false,
   },
-  'audio.fauna.gull-distant': {
-    id: 'audio.fauna.gull-distant',
-    url: '/audio/fauna/fauna_gull_distant.wav',
+  'audio.fauna.tit-chirp-02': {
+    id: 'audio.fauna.tit-chirp-02',
+    url: '/audio/fauna/fauna_tit_chirp_02.wav',
+    compressedUrl: '/audio/fauna/fauna_tit_chirp_02.ogg',
     channel: 'effects',
-    defaultVolume: 0.55,
+    defaultVolume: 0.65,
+    loop: false,
+  },
+  'audio.fauna.tit-chirp-03': {
+    id: 'audio.fauna.tit-chirp-03',
+    url: '/audio/fauna/fauna_tit_chirp_03.wav',
+    compressedUrl: '/audio/fauna/fauna_tit_chirp_03.ogg',
+    channel: 'effects',
+    defaultVolume: 0.65,
+    loop: false,
+  },
+  'audio.fauna.tit-chirp': {
+    id: 'audio.fauna.tit-chirp',
+    url: '/audio/fauna/fauna_tit_chirp.wav',
+    compressedUrl: '/audio/fauna/fauna_tit_chirp.ogg',
+    channel: 'effects',
+    defaultVolume: 0.65,
+    loop: false,
+    variations: [
+      'audio.fauna.tit-chirp-01',
+      'audio.fauna.tit-chirp-02',
+      'audio.fauna.tit-chirp-03',
+    ],
+  },
+
+  'audio.fauna.finch-trill-01': {
+    id: 'audio.fauna.finch-trill-01',
+    url: '/audio/fauna/fauna_finch_trill_01.wav',
+    compressedUrl: '/audio/fauna/fauna_finch_trill_01.ogg',
+    channel: 'effects',
+    defaultVolume: 0.60,
+    loop: false,
+  },
+  'audio.fauna.finch-trill-02': {
+    id: 'audio.fauna.finch-trill-02',
+    url: '/audio/fauna/fauna_finch_trill_02.wav',
+    compressedUrl: '/audio/fauna/fauna_finch_trill_02.ogg',
+    channel: 'effects',
+    defaultVolume: 0.60,
     loop: false,
   },
   'audio.fauna.finch-trill': {
     id: 'audio.fauna.finch-trill',
     url: '/audio/fauna/fauna_finch_trill.wav',
+    compressedUrl: '/audio/fauna/fauna_finch_trill.ogg',
     channel: 'effects',
     defaultVolume: 0.60,
     loop: false,
+    variations: [
+      'audio.fauna.finch-trill-01',
+      'audio.fauna.finch-trill-02',
+    ],
   },
+
+  'audio.fauna.gull-distant-01': {
+    id: 'audio.fauna.gull-distant-01',
+    url: '/audio/fauna/fauna_gull_distant_01.wav',
+    compressedUrl: '/audio/fauna/fauna_gull_distant_01.ogg',
+    channel: 'effects',
+    defaultVolume: 0.55,
+    loop: false,
+  },
+  'audio.fauna.gull-distant-02': {
+    id: 'audio.fauna.gull-distant-02',
+    url: '/audio/fauna/fauna_gull_distant_02.wav',
+    compressedUrl: '/audio/fauna/fauna_gull_distant_02.ogg',
+    channel: 'effects',
+    defaultVolume: 0.55,
+    loop: false,
+  },
+  'audio.fauna.gull-distant': {
+    id: 'audio.fauna.gull-distant',
+    url: '/audio/fauna/fauna_gull_distant.wav',
+    compressedUrl: '/audio/fauna/fauna_gull_distant.ogg',
+    channel: 'effects',
+    defaultVolume: 0.55,
+    loop: false,
+    variations: [
+      'audio.fauna.gull-distant-01',
+      'audio.fauna.gull-distant-02',
+    ],
+  },
+
   'audio.fauna.squirrel-scurry': {
     id: 'audio.fauna.squirrel-scurry',
     url: '/audio/fauna/fauna_squirrel_scurry.wav',
+    compressedUrl: '/audio/fauna/fauna_squirrel_scurry.ogg',
     channel: 'effects',
     defaultVolume: 0.50,
     loop: false,
   },
+
+  // --- Приборы и интерактивные объекты ---
   'audio.equip.barograph-tick': {
     id: 'audio.equip.barograph-tick',
     url: '/audio/equipment/equip_barograph_tick.wav',
+    compressedUrl: '/audio/equipment/equip_barograph_tick.ogg',
     channel: 'effects',
     defaultVolume: 0.70,
     loop: false,
@@ -86,6 +237,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.equip.clockwork-hum': {
     id: 'audio.equip.clockwork-hum',
     url: '/audio/equipment/equip_clockwork_hum.wav',
+    compressedUrl: '/audio/equipment/equip_clockwork_hum.ogg',
     channel: 'effects',
     defaultVolume: 0.50,
     loop: false,
@@ -93,6 +245,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.equip.lamp-switch': {
     id: 'audio.equip.lamp-switch',
     url: '/audio/equipment/equip_lamp_switch.wav',
+    compressedUrl: '/audio/equipment/equip_lamp_switch.ogg',
     channel: 'effects',
     defaultVolume: 0.75,
     loop: false,
@@ -100,6 +253,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.equip.paper-turn': {
     id: 'audio.equip.paper-turn',
     url: '/audio/equipment/equip_paper_turn.wav',
+    compressedUrl: '/audio/equipment/equip_paper_turn.ogg',
     channel: 'effects',
     defaultVolume: 0.65,
     loop: false,
@@ -107,6 +261,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.equip.teletype-chatter': {
     id: 'audio.equip.teletype-chatter',
     url: '/audio/equipment/equip_teletype_chatter.wav',
+    compressedUrl: '/audio/equipment/equip_teletype_chatter.ogg',
     channel: 'effects',
     defaultVolume: 0.60,
     loop: false,
@@ -114,6 +269,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.interact.radar-pulse': {
     id: 'audio.interact.radar-pulse',
     url: '/audio/interact/interact_radar_pulse.wav',
+    compressedUrl: '/audio/interact/interact_radar_pulse.ogg',
     channel: 'effects',
     defaultVolume: 0.70,
     loop: false,
@@ -121,6 +277,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.interact.balloon-release': {
     id: 'audio.interact.balloon-release',
     url: '/audio/interact/interact_balloon_release.wav',
+    compressedUrl: '/audio/interact/interact_balloon_release.ogg',
     channel: 'effects',
     defaultVolume: 0.65,
     loop: false,
@@ -128,6 +285,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.interact.anemometer-spin': {
     id: 'audio.interact.anemometer-spin',
     url: '/audio/interact/interact_anemometer_spin.wav',
+    compressedUrl: '/audio/interact/interact_anemometer_spin.ogg',
     channel: 'effects',
     defaultVolume: 0.65,
     loop: false,
@@ -135,13 +293,17 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.interact.door-latch': {
     id: 'audio.interact.door-latch',
     url: '/audio/interact/interact_door_latch.wav',
+    compressedUrl: '/audio/interact/interact_door_latch.ogg',
     channel: 'effects',
     defaultVolume: 0.75,
     loop: false,
   },
+
+  // --- Пользовательский интерфейс и учебный отклик ---
   'audio.ui.click-soft': {
     id: 'audio.ui.click-soft',
     url: '/audio/feedback/ui_click_soft.wav',
+    compressedUrl: '/audio/feedback/ui_click_soft.ogg',
     channel: 'ui',
     defaultVolume: 0.80,
     loop: false,
@@ -149,6 +311,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.ui.hover-subtle': {
     id: 'audio.ui.hover-subtle',
     url: '/audio/feedback/ui_hover_subtle.wav',
+    compressedUrl: '/audio/feedback/ui_hover_subtle.ogg',
     channel: 'ui',
     defaultVolume: 0.50,
     loop: false,
@@ -156,6 +319,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.feedback.synoptic-chime': {
     id: 'audio.feedback.synoptic-chime',
     url: '/audio/feedback/feedback_synoptic_chime.wav',
+    compressedUrl: '/audio/feedback/feedback_synoptic_chime.ogg',
     channel: 'ui',
     defaultVolume: 0.85,
     loop: false,
@@ -163,6 +327,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.feedback.mistake-thud': {
     id: 'audio.feedback.mistake-thud',
     url: '/audio/feedback/feedback_mistake_thud.wav',
+    compressedUrl: '/audio/feedback/feedback_mistake_thud.ogg',
     channel: 'ui',
     defaultVolume: 0.75,
     loop: false,
@@ -170,6 +335,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.arena.round-start': {
     id: 'audio.arena.round-start',
     url: '/audio/feedback/arena_round_start.wav',
+    compressedUrl: '/audio/feedback/arena_round_start.ogg',
     channel: 'ui',
     defaultVolume: 0.85,
     loop: false,
@@ -177,6 +343,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.arena.countdown-tick': {
     id: 'audio.arena.countdown-tick',
     url: '/audio/feedback/arena_countdown_tick.wav',
+    compressedUrl: '/audio/feedback/arena_countdown_tick.ogg',
     channel: 'ui',
     defaultVolume: 0.75,
     loop: false,
@@ -184,27 +351,58 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
   'audio.lore.callsign-26063': {
     id: 'audio.lore.callsign-26063',
     url: '/audio/lore/lore_callsign_26063.wav',
+    compressedUrl: '/audio/lore/lore_callsign_26063.ogg',
     channel: 'effects',
     defaultVolume: 0.70,
     loop: false,
   },
 };
 
+interface ActiveAmbientLayer {
+  soundId: string;
+  sourceNode: AudioBufferSourceNode | null;
+  gainNode: GainNode;
+  fallbackElement: HTMLAudioElement | null;
+  baseVolume: number;
+  phaseOffset: number;
+}
+
 export class WorldAudioManager {
   private static instance: WorldAudioManager | null = null;
 
+  // Web Audio граф
+  private audioCtx: AudioContext | null = null;
+  private masterGain: GainNode | null = null;
+  private ambientBus: GainNode | null = null;
+  private effectsBus: GainNode | null = null;
+  private uiBus: GainNode | null = null;
+  private taskDuckingGain: GainNode | null = null;
+  private sensoryFilterNode: BiquadFilterNode | null = null;
+  private limiterNode: DynamicsCompressorNode | null = null;
+
+  // Буферный кэш звуков (RAM)
+  private bufferCache: Map<string, AudioBuffer> = new Map();
+  private pendingFetches: Map<string, Promise<AudioBuffer | null>> = new Map();
+
+  // Активные слои эмбиента
+  private activeAmbientLayers: Map<string, ActiveAmbientLayer> = new Map();
+  private lfoAnimationId: number | null = null;
+  private lfoStartTime = 0;
+
+  // Планировщик фауны
+  private faunaTimer: number | null = null;
+  private faunaShuffleBags: Map<string, ShuffleBag<string>> = new Map();
+
+  // Настройки пользователя
   private volumes: Record<AudioChannel, number> = {
     master: 1.0,
     ambient: 0.65,
     effects: 0.75,
     ui: 0.80,
   };
-
   private muted = false;
   private reducedSensory = false;
-  private currentAmbientElement: HTMLAudioElement | null = null;
-  private currentAmbientId: string | null = null;
-  private faunaTimer: number | null = null;
+  private taskDucking = false;
 
   public static getInstance(): WorldAudioManager {
     if (!WorldAudioManager.instance) {
@@ -213,10 +411,202 @@ export class WorldAudioManager {
     return WorldAudioManager.instance;
   }
 
+  private constructor() {
+    this.initShuffleBags();
+    this.setupAutoplayUnlock();
+  }
+
+  /**
+   * Инициализирует колоды без повторений для птиц и фауны.
+   */
+  private initShuffleBags(): void {
+    this.faunaShuffleBags.set(
+      'tit',
+      new ShuffleBag([
+        'audio.fauna.tit-chirp-01',
+        'audio.fauna.tit-chirp-02',
+        'audio.fauna.tit-chirp-03',
+      ])
+    );
+    this.faunaShuffleBags.set(
+      'finch',
+      new ShuffleBag([
+        'audio.fauna.finch-trill-01',
+        'audio.fauna.finch-trill-02',
+      ])
+    );
+    this.faunaShuffleBags.set(
+      'gull',
+      new ShuffleBag([
+        'audio.fauna.gull-distant-01',
+        'audio.fauna.gull-distant-02',
+      ])
+    );
+    this.faunaShuffleBags.set(
+      'fauna_all',
+      new ShuffleBag(['tit', 'finch', 'gull', 'squirrel'])
+    );
+  }
+
+  /**
+   * Ленивая инициализация Web Audio контекста.
+   */
+  private getAudioContext(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
+
+    if (!this.audioCtx) {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+
+      if (!AudioContextClass) {
+        return null;
+      }
+
+      const ctx = new AudioContextClass();
+      this.audioCtx = ctx;
+
+      // Мастер-лимитер безопасности (защита от скачков громкости)
+      const limiter = ctx.createDynamicsCompressor();
+      limiter.threshold.setValueAtTime(-2.5, ctx.currentTime);
+      limiter.knee.setValueAtTime(6.0, ctx.currentTime);
+      limiter.ratio.setValueAtTime(4.0, ctx.currentTime);
+      limiter.attack.setValueAtTime(0.005, ctx.currentTime);
+      limiter.release.setValueAtTime(0.08, ctx.currentTime);
+      limiter.connect(ctx.destination);
+      this.limiterNode = limiter;
+
+      // Мастер-фильтр сенсорной доступности (reducedSensory: 3800 Гц)
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(
+        this.reducedSensory ? 3800 : 22000,
+        ctx.currentTime
+      );
+      filter.Q.setValueAtTime(0.707, ctx.currentTime);
+      filter.connect(limiter);
+      this.sensoryFilterNode = filter;
+
+      // Мастер-шина громкости
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(
+        this.muted ? 0.0 : this.volumes.master,
+        ctx.currentTime
+      );
+      master.connect(filter);
+      this.masterGain = master;
+
+      // Эффекты и UI шины
+      const effects = ctx.createGain();
+      effects.gain.setValueAtTime(this.volumes.effects, ctx.currentTime);
+      effects.connect(master);
+      this.effectsBus = effects;
+
+      const ui = ctx.createGain();
+      ui.gain.setValueAtTime(this.volumes.ui, ctx.currentTime);
+      ui.connect(master);
+      this.uiBus = ui;
+
+      // Эмбиент-шина с узлом контекстного дакинга
+      const taskDuck = ctx.createGain();
+      taskDuck.gain.setValueAtTime(this.taskDucking ? 0.45 : 1.0, ctx.currentTime);
+      taskDuck.connect(master);
+      this.taskDuckingGain = taskDuck;
+
+      const ambient = ctx.createGain();
+      ambient.gain.setValueAtTime(this.volumes.ambient, ctx.currentTime);
+      ambient.connect(taskDuck);
+      this.ambientBus = ambient;
+
+      this.startLfoEngine();
+    }
+
+    if (this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume().catch(() => {});
+    }
+
+    return this.audioCtx;
+  }
+
+  private setupAutoplayUnlock(): void {
+    if (typeof window === 'undefined') return;
+
+    const unlock = () => {
+      const ctx = this.getAudioContext();
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('keydown', unlock);
+    };
+
+    window.addEventListener('pointerdown', unlock, { once: true, passive: true });
+    window.addEventListener('keydown', unlock, { once: true, passive: true });
+  }
+
+  /**
+   * Загружает и декодирует аудиофайл в память браузера (AudioBuffer).
+   * Пробует сначала высокоэффективный сжатый Opus OGG, затем WAV.
+   */
+  public async loadBuffer(soundId: string): Promise<AudioBuffer | null> {
+    const cached = this.bufferCache.get(soundId);
+    if (cached) return cached;
+
+    const pending = this.pendingFetches.get(soundId);
+    if (pending) return pending;
+
+    const ctx = this.getAudioContext();
+    if (!ctx) return null;
+
+    const def = SOUND_DEFINITIONS[soundId];
+    if (!def) return null;
+
+    const fetchPromise = (async () => {
+      const candidateUrls = [def.compressedUrl, def.url].filter(Boolean) as string[];
+
+      for (const url of candidateUrls) {
+        try {
+          const resp = await fetch(url);
+          if (!resp.ok) continue;
+          const arrayBuffer = await resp.arrayBuffer();
+          const decoded = await ctx.decodeAudioData(arrayBuffer);
+          this.bufferCache.set(soundId, decoded);
+          return decoded;
+        } catch {
+          // Пробуем следующий URL (фоллбэк на WAV)
+        }
+      }
+      return null;
+    })();
+
+    this.pendingFetches.set(soundId, fetchPromise);
+    try {
+      return await fetchPromise;
+    } finally {
+      this.pendingFetches.delete(soundId);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Управление громкостью, мутом и сенсорным режимом
+  // ---------------------------------------------------------------------------
+
   public setVolume(channel: AudioChannel, volume: number): void {
-    this.volumes[channel] = Math.max(0.0, Math.min(1.0, volume));
-    if (channel === 'ambient' || channel === 'master') {
-      this.updateAmbientVolume();
+    const clamped = Math.max(0.0, Math.min(1.0, volume));
+    this.volumes[channel] = clamped;
+
+    const ctx = this.audioCtx;
+    if (ctx && ctx.state !== 'closed') {
+      const now = ctx.currentTime;
+      if (channel === 'master' && this.masterGain) {
+        this.masterGain.gain.setTargetAtTime(this.muted ? 0.0 : clamped, now, 0.05);
+      } else if (channel === 'ambient' && this.ambientBus) {
+        this.ambientBus.gain.setTargetAtTime(clamped, now, 0.05);
+      } else if (channel === 'effects' && this.effectsBus) {
+        this.effectsBus.gain.setTargetAtTime(clamped, now, 0.05);
+      } else if (channel === 'ui' && this.uiBus) {
+        this.uiBus.gain.setTargetAtTime(clamped, now, 0.05);
+      }
     }
   }
 
@@ -226,7 +616,17 @@ export class WorldAudioManager {
 
   public setMuted(muted: boolean): void {
     this.muted = muted;
-    this.updateAmbientVolume();
+    const ctx = this.audioCtx;
+    if (ctx && this.masterGain) {
+      const target = muted ? 0.0 : this.volumes.master;
+      this.masterGain.gain.setTargetAtTime(target, ctx.currentTime, 0.05);
+    }
+    // Для fallback-элементов
+    for (const layer of this.activeAmbientLayers.values()) {
+      if (layer.fallbackElement) {
+        layer.fallbackElement.muted = muted;
+      }
+    }
   }
 
   public isMuted(): boolean {
@@ -235,7 +635,11 @@ export class WorldAudioManager {
 
   public setReducedSensory(enabled: boolean): void {
     this.reducedSensory = enabled;
-    this.updateAmbientVolume();
+    const ctx = this.audioCtx;
+    if (ctx && this.sensoryFilterNode) {
+      const cutoff = enabled ? 3800 : 22000;
+      this.sensoryFilterNode.frequency.setTargetAtTime(cutoff, ctx.currentTime, 0.2);
+    }
   }
 
   public isReducedSensory(): boolean {
@@ -243,156 +647,381 @@ export class WorldAudioManager {
   }
 
   /**
-   * Воспроизводит звуковой эффект или сигнал интерфейса.
+   * Контекстный дакинг фонового звука (-4 дБ) во время решения задач и экзаменов.
    */
-  public play(soundId: string, options?: { volume?: number; loop?: boolean }): HTMLAudioElement | null {
-    if (this.muted) {
-      return null;
+  public setTaskDucking(enabled: boolean, transitionSec = 1.2): void {
+    this.taskDucking = enabled;
+    const ctx = this.audioCtx;
+    if (ctx && this.taskDuckingGain) {
+      const target = enabled ? 0.45 : 1.0;
+      this.taskDuckingGain.gain.setTargetAtTime(target, ctx.currentTime, transitionSec / 3);
+    }
+  }
+
+  public isTaskDucking(): boolean {
+    return this.taskDucking;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Воспроизведение звуковых эффектов (с микро-вариациями)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Воспроизводит звуковой эффект или UI-сигнал.
+   * Применяет алгоритм микро-вариаций (питч, громкость, стерео-панорама)
+   * для устранения эффекта «пулемёта» (machine-gun fatigue).
+   */
+  public play(
+    soundId: string,
+    options?: {
+      volume?: number;
+      loop?: boolean;
+      detuneCents?: number;
+      pan?: number;
+      allowVariance?: boolean;
+    }
+  ): void {
+    if (this.muted) return;
+
+    let targetId = soundId;
+    const def = SOUND_DEFINITIONS[soundId];
+    if (def?.variations && def.variations.length > 0) {
+      // Автоматический выбор из колоды без повторений
+      targetId = def.variations[Math.floor(Math.random() * def.variations.length)];
+    }
+
+    const soundDef = SOUND_DEFINITIONS[targetId] || def;
+    if (!soundDef) {
+      console.warn(`[WorldAudioManager] Неизвестный звук: ${soundId}`);
+      return;
+    }
+
+    const ctx = this.getAudioContext();
+    if (!ctx) {
+      this.playFallbackAudio(soundDef, options);
+      return;
+    }
+
+    // Загрузка буфера и воспроизведение через Web Audio граф
+    this.loadBuffer(targetId).then((buffer) => {
+      if (!buffer) {
+        this.playFallbackAudio(soundDef, options);
+        return;
+      }
+
+      try {
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = options?.loop ?? soundDef.loop;
+
+        // Микро-вариация питча (±30 центов для органичности)
+        const applyVariance = options?.allowVariance ?? true;
+        const pitchVariance = applyVariance ? (Math.random() - 0.5) * 60 : 0;
+        source.detune.setValueAtTime(
+          (options?.detuneCents ?? 0) + pitchVariance,
+          ctx.currentTime
+        );
+
+        // Индивидуальный узел громкости эффекта
+        const gainNode = ctx.createGain();
+        const baseVol = soundDef.defaultVolume * (options?.volume ?? 1.0);
+        const gainJitter = applyVariance ? 0.92 + Math.random() * 0.16 : 1.0;
+        gainNode.gain.setValueAtTime(baseVol * gainJitter, ctx.currentTime);
+
+        // Стерео-панорамирование (если поддерживается StereoPannerNode)
+        let lastNode: AudioNode = gainNode;
+        if (typeof ctx.createStereoPanner === 'function') {
+          const panner = ctx.createStereoPanner();
+          const panVal = options?.pan ?? (applyVariance ? (Math.random() - 0.5) * 0.6 : 0.0);
+          panner.pan.setValueAtTime(Math.max(-1.0, Math.min(1.0, panVal)), ctx.currentTime);
+          source.connect(gainNode);
+          gainNode.connect(panner);
+          lastNode = panner;
+        } else {
+          source.connect(gainNode);
+        }
+
+        // Подключение к шине
+        const targetBus =
+          soundDef.channel === 'ui'
+            ? this.uiBus
+            : soundDef.channel === 'ambient'
+            ? this.ambientBus
+            : this.effectsBus;
+
+        if (targetBus) {
+          lastNode.connect(targetBus);
+        } else {
+          lastNode.connect(ctx.destination);
+        }
+
+        source.start(ctx.currentTime);
+      } catch (err) {
+        console.warn('[WorldAudioManager] Ошибка Web Audio play:', err);
+      }
+    });
+  }
+
+  private playFallbackAudio(
+    def: SoundDefinition,
+    options?: { volume?: number; loop?: boolean }
+  ): void {
+    try {
+      const audio = new Audio(def.compressedUrl || def.url);
+      const chVol = this.volumes[def.channel] ?? 1.0;
+      const sensoryFactor = this.reducedSensory ? 0.75 : 1.0;
+      audio.volume = Math.max(
+        0.0,
+        Math.min(
+          1.0,
+          def.defaultVolume * this.volumes.master * chVol * (options?.volume ?? 1.0) * sensoryFactor
+        )
+      );
+      audio.loop = options?.loop ?? def.loop;
+      audio.play().catch(() => {});
+    } catch {
+      // Игнорируем ошибки воспроизведения
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Многослойный генеративный эмбиент (Incommensurate Loops & Breathing LFO)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Запускает многослойную звуковую картину для открытого кампуса:
+   * Слой 1: ветер в соснах (29.3 с);
+   * Слой 2: прибой Финского залива (19.1 с);
+   * Слой 3 (опционально): мягкий дождь (23.7 с).
+   */
+  public playHubOutdoorAmbient(hasRain = false, fadeDurationMs = 1500): void {
+    this.addAmbientLayer('audio.ambient.wind-trees', 0.45, 0.0, fadeDurationMs);
+    this.addAmbientLayer('audio.ambient.water-shore', 0.40, Math.PI / 2, fadeDurationMs);
+    if (hasRain) {
+      this.addAmbientLayer('audio.ambient.rain-soft', 0.35, Math.PI, fadeDurationMs);
+    } else {
+      this.removeAmbientLayer('audio.ambient.rain-soft', fadeDurationMs);
+    }
+    this.removeAmbientLayer('audio.ambient.archive-room', fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.night-air', fadeDurationMs);
+    this.startFaunaSchedule();
+  }
+
+  /**
+   * Запускает тихий интерьерный эмбиент (архив / кабинет синоптика).
+   */
+  public playArchiveAmbient(fadeDurationMs = 1500): void {
+    this.stopFaunaSchedule();
+    this.removeAmbientLayer('audio.ambient.wind-trees', fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.water-shore', fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.rain-soft', fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.night-air', fadeDurationMs);
+    this.addAmbientLayer('audio.ambient.archive-room', 0.40, 0.0, fadeDurationMs);
+  }
+
+  /**
+   * Запускает ночной эмбиент кампуса (27.1 с).
+   */
+  public playNightAmbient(fadeDurationMs = 1500): void {
+    this.addAmbientLayer('audio.ambient.night-air', 0.40, 0.0, fadeDurationMs);
+    this.addAmbientLayer('audio.ambient.water-shore', 0.25, Math.PI, fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.wind-trees', fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.archive-room', fadeDurationMs);
+    this.removeAmbientLayer('audio.ambient.rain-soft', fadeDurationMs);
+  }
+
+  /**
+   * Добавляет или плавно включает конкретный эмбиент-слой.
+   */
+  public addAmbientLayer(
+    soundId: string,
+    targetVolume: number,
+    phaseOffset = 0.0,
+    fadeDurationMs = 1500
+  ): void {
+    const existing = this.activeAmbientLayers.get(soundId);
+    if (existing) {
+      existing.baseVolume = targetVolume;
+      const ctx = this.audioCtx;
+      if (ctx) {
+        existing.gainNode.gain.setTargetAtTime(targetVolume, ctx.currentTime, fadeDurationMs / 3000);
+      }
+      return;
     }
 
     const def = SOUND_DEFINITIONS[soundId];
-    if (!def) {
-      console.warn(`[WorldAudioManager] Неизвестный звук: ${soundId}`);
-      return null;
+    if (!def) return;
+
+    const ctx = this.getAudioContext();
+    if (!ctx) {
+      this.startFallbackAmbientLoop(soundId, def, targetVolume);
+      return;
     }
 
-    try {
-      const audio = new Audio(def.url);
-      const channelVol = this.volumes[def.channel] ?? 1.0;
-      const masterVol = this.volumes.master;
-      const customVol = options?.volume ?? 1.0;
-      const sensoryFactor = this.reducedSensory ? 0.7 : 1.0;
+    const gainNode = ctx.createGain();
+    gainNode.gain.setValueAtTime(0.001, ctx.currentTime);
+    if (this.ambientBus) {
+      gainNode.connect(this.ambientBus);
+    } else {
+      gainNode.connect(ctx.destination);
+    }
 
-      audio.volume = Math.max(
-        0.0,
-        Math.min(1.0, def.defaultVolume * channelVol * masterVol * customVol * sensoryFactor)
-      );
-      audio.loop = options?.loop ?? def.loop;
+    const layerRecord: ActiveAmbientLayer = {
+      soundId,
+      sourceNode: null,
+      gainNode,
+      fallbackElement: null,
+      baseVolume: targetVolume,
+      phaseOffset,
+    };
+    this.activeAmbientLayers.set(soundId, layerRecord);
 
-      audio.play().catch(() => {
-        // Браузерная политика автовоспроизведения блокирует звук до первого клика пользователя
-      });
+    this.loadBuffer(soundId).then((buffer) => {
+      if (!buffer || !this.activeAmbientLayers.has(soundId)) return;
 
-      return audio;
-    } catch {
-      return null;
+      try {
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
+        source.connect(gainNode);
+        source.start(ctx.currentTime);
+        layerRecord.sourceNode = source;
+
+        // Плавный fade-in
+        gainNode.gain.setTargetAtTime(
+          targetVolume,
+          ctx.currentTime,
+          fadeDurationMs / 3000
+        );
+      } catch (err) {
+        console.warn(`[WorldAudioManager] Ошибка запуска эмбиент-петли ${soundId}:`, err);
+      }
+    });
+  }
+
+  /**
+   * Плавно останавливает и удаляет конкретный эмбиент-слой.
+   */
+  public removeAmbientLayer(soundId: string, fadeDurationMs = 1200): void {
+    const layer = this.activeAmbientLayers.get(soundId);
+    if (!layer) return;
+
+    this.activeAmbientLayers.delete(soundId);
+    const ctx = this.audioCtx;
+
+    if (ctx) {
+      layer.gainNode.gain.setTargetAtTime(0.0001, ctx.currentTime, fadeDurationMs / 3000);
+      setTimeout(() => {
+        try {
+          layer.sourceNode?.stop();
+          layer.sourceNode?.disconnect();
+          layer.gainNode.disconnect();
+        } catch {}
+      }, fadeDurationMs + 100);
+    }
+
+    if (layer.fallbackElement) {
+      layer.fallbackElement.pause();
     }
   }
 
   /**
-   * Запускает фоновую эмбиент-петлю с плавным переходом.
+   * Совместимость с предыдущим API.
    */
   public playAmbientBed(soundId: string, fadeDurationMs = 1200): void {
-    if (this.currentAmbientId === soundId && this.currentAmbientElement) {
-      return;
+    for (const id of Array.from(this.activeAmbientLayers.keys())) {
+      if (id !== soundId) {
+        this.removeAmbientLayer(id, fadeDurationMs);
+      }
     }
-
     const def = SOUND_DEFINITIONS[soundId];
-    if (!def || !def.loop) {
-      console.warn(`[WorldAudioManager] Недопустимая эмбиент-петля: ${soundId}`);
-      return;
-    }
-
-    const prevAudio = this.currentAmbientElement;
-    if (prevAudio) {
-      // Плавное затухание старой петли
-      const startVol = prevAudio.volume;
-      const startTime = performance.now();
-      const fadeStep = () => {
-        const elapsed = performance.now() - startTime;
-        const progress = Math.min(1.0, elapsed / fadeDurationMs);
-        prevAudio.volume = Math.max(0.0, startVol * (1.0 - progress));
-        if (progress < 1.0) {
-          requestAnimationFrame(fadeStep);
-        } else {
-          prevAudio.pause();
-          prevAudio.currentTime = 0;
-        }
-      };
-      requestAnimationFrame(fadeStep);
-    }
-
-    try {
-      const newAudio = new Audio(def.url);
-      newAudio.loop = true;
-      this.currentAmbientElement = newAudio;
-      this.currentAmbientId = soundId;
-
-      const targetVol = this.calculateEffectiveVolume(def.channel, def.defaultVolume);
-      newAudio.volume = 0.0;
-
-      newAudio
-        .play()
-        .then(() => {
-          const startTime = performance.now();
-          const fadeInStep = () => {
-            const elapsed = performance.now() - startTime;
-            const progress = Math.min(1.0, elapsed / fadeDurationMs);
-            if (this.currentAmbientElement === newAudio) {
-              newAudio.volume = Math.min(1.0, targetVol * progress);
-              if (progress < 1.0) {
-                requestAnimationFrame(fadeInStep);
-              }
-            }
-          };
-          requestAnimationFrame(fadeInStep);
-        })
-        .catch(() => {
-          // Ожидание взаимодействия с пользователем
-        });
-    } catch {
-      this.currentAmbientElement = null;
-      this.currentAmbientId = null;
-    }
+    this.addAmbientLayer(soundId, def?.defaultVolume ?? 0.4, 0.0, fadeDurationMs);
   }
 
   public stopAmbient(fadeDurationMs = 800): void {
-    const audio = this.currentAmbientElement;
-    if (!audio) return;
+    for (const id of Array.from(this.activeAmbientLayers.keys())) {
+      this.removeAmbientLayer(id, fadeDurationMs);
+    }
+  }
 
-    const startVol = audio.volume;
-    const startTime = performance.now();
-    const fadeStep = () => {
-      const elapsed = performance.now() - startTime;
-      const progress = Math.min(1.0, elapsed / fadeDurationMs);
-      audio.volume = Math.max(0.0, startVol * (1.0 - progress));
-      if (progress < 1.0) {
-        requestAnimationFrame(fadeStep);
-      } else {
-        audio.pause();
-        audio.currentTime = 0;
-        if (this.currentAmbientElement === audio) {
-          this.currentAmbientElement = null;
-          this.currentAmbientId = null;
-        }
-      }
-    };
-    requestAnimationFrame(fadeStep);
+  private startFallbackAmbientLoop(
+    soundId: string,
+    def: SoundDefinition,
+    targetVolume: number
+  ): void {
+    try {
+      const audio = new Audio(def.compressedUrl || def.url);
+      audio.loop = true;
+      audio.volume = targetVolume * this.volumes.ambient * this.volumes.master;
+      audio.play().catch(() => {});
+      this.activeAmbientLayers.set(soundId, {
+        soundId,
+        sourceNode: null,
+        gainNode: null as unknown as GainNode,
+        fallbackElement: audio,
+        baseVolume: targetVolume,
+        phaseOffset: 0.0,
+      });
+    } catch {}
   }
 
   /**
-   * Запускает периодические нечастые звуки фауны (синицы, зяблики, белки, чайки).
+   * Сверхмедленный LFO (дыхание природы: 0.025 Гц / период 40 с).
+   * Мягко модулирует баланс между слоями ветра и прибоя,
+   * предотвращая слуховую усталость при длительных игровых сессиях.
+   */
+  private startLfoEngine(): void {
+    if (typeof window === 'undefined' || this.lfoAnimationId !== null) return;
+
+    this.lfoStartTime = performance.now();
+    const lfoFreq = 0.025; // 0.025 Гц = цикл 40 секунд
+
+    const lfoTick = () => {
+      const elapsedSec = (performance.now() - this.lfoStartTime) / 1000.0;
+      const ctx = this.audioCtx;
+
+      if (ctx && this.activeAmbientLayers.size > 0) {
+        const now = ctx.currentTime;
+        for (const layer of this.activeAmbientLayers.values()) {
+          if (!layer.gainNode) continue;
+          // Модуляция ±18% от базовой громкости слоя
+          const modulation = Math.sin(2.0 * Math.PI * lfoFreq * elapsedSec + layer.phaseOffset);
+          const dynamicGain = layer.baseVolume * (1.0 + 0.18 * modulation);
+          layer.gainNode.gain.setValueAtTime(dynamicGain, now);
+        }
+      }
+
+      this.lfoAnimationId = requestAnimationFrame(lfoTick);
+    };
+
+    this.lfoAnimationId = requestAnimationFrame(lfoTick);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Пуассоновский планировщик фауны (Poisson Stochastic Scheduler)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Запускает органичное расписание голосов птиц и фауны.
+   * Интервалы рассчитываются по закону экспоненциального распределения (Пуассоновский процесс):
+   * delay = cooldown + (-ln(1 - U) * meanInterval)
+   * Это исключает механическую цикличность и создаёт живой звуковой мир.
    */
   public startFaunaSchedule(): void {
     if (this.faunaTimer !== null) return;
 
-    const faunaSounds = [
-      'audio.fauna.tit-chirp',
-      'audio.fauna.finch-trill',
-      'audio.fauna.gull-distant',
-      'audio.fauna.squirrel-scurry',
-    ];
-
     const scheduleNext = () => {
-      // Интервал между фоновыми звуками: 14 - 32 секунды
-      const delay = (14 + Math.random() * 18) * 1000;
+      // Cooldown 10 с + экспоненциальная случайная величина со средним 16 с (итого 12 - 40 с)
+      const u = Math.random();
+      const exponentialDelay = -Math.log(1.0 - Math.min(0.96, u)) * 16.0;
+      const delayMs = (10.0 + exponentialDelay) * 1000.0;
+
       this.faunaTimer = window.setTimeout(() => {
         if (!this.muted && !this.reducedSensory) {
-          const randomSound = faunaSounds[Math.floor(Math.random() * faunaSounds.length)];
-          this.play(randomSound);
+          this.triggerRandomFauna();
         }
         scheduleNext();
-      }, delay);
+      }, delayMs);
     };
 
     scheduleNext();
@@ -405,20 +1034,24 @@ export class WorldAudioManager {
     }
   }
 
-  private calculateEffectiveVolume(channel: AudioChannel, baseVolume: number): number {
-    if (this.muted) return 0.0;
-    const master = this.volumes.master;
-    const ch = this.volumes[channel] ?? 1.0;
-    const sensory = this.reducedSensory ? 0.7 : 1.0;
-    return Math.max(0.0, Math.min(1.0, baseVolume * master * ch * sensory));
-  }
+  /**
+   * Выбирает голос птицы из колоды без повторений и воспроизводит его.
+   */
+  public triggerRandomFauna(): void {
+    const categoryBag = this.faunaShuffleBags.get('fauna_all');
+    if (!categoryBag) return;
 
-  private updateAmbientVolume(): void {
-    if (!this.currentAmbientElement || !this.currentAmbientId) return;
-    const def = SOUND_DEFINITIONS[this.currentAmbientId];
-    if (def) {
-      this.currentAmbientElement.volume = this.calculateEffectiveVolume(def.channel, def.defaultVolume);
+    const selectedCategory = categoryBag.draw();
+    if (selectedCategory === 'squirrel') {
+      this.play('audio.fauna.squirrel-scurry', { allowVariance: true });
+      return;
     }
+
+    const speciesBag = this.faunaShuffleBags.get(selectedCategory);
+    if (!speciesBag) return;
+
+    const soundId = speciesBag.draw();
+    this.play(soundId, { allowVariance: true });
   }
 }
 
