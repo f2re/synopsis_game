@@ -23,14 +23,24 @@ export interface SessionUser {
   status: UserStatus;
   avatar: AvatarProfile;
   createdAt: string;
+  codeSet?: boolean;
   lastLoginAt?: string;
 }
 
-export interface AdminUser extends SessionUser { disabledAt?: string; lockedUntil?: string; }
-export interface RosterUser { id: string; displayName: string; groupId: string; }
+export interface AdminUser extends SessionUser {
+  disabledAt?: string;
+  lockedUntil?: string;
+}
+
+export interface RosterUser {
+  id: string;
+  displayName: string;
+  groupId: string;
+  hasCode?: boolean;
+}
+
 export interface TaskOption { id: number; label: string; }
 export interface TaskStep { id: number; label: string; }
-
 export interface StationPlotObservation {
   id: string;
   stationId?: string;
@@ -120,13 +130,20 @@ export interface ShiftAnswerResponse {
 const TOKEN_KEY = 'synopsis.session.token';
 
 export class ApiError extends Error {
-  constructor(public readonly status: number, message: string, public readonly code?: string) { super(message); }
+  constructor(public readonly status: number, message: string, public readonly code?: string) {
+    super(message);
+  }
 }
-export function getSessionToken(): string | null { return sessionStorage.getItem(TOKEN_KEY); }
+
+export function getSessionToken(): string | null {
+  return sessionStorage.getItem(TOKEN_KEY);
+}
+
 export function setSessionToken(token: string | null): void {
   if (token) sessionStorage.setItem(TOKEN_KEY, token);
   else sessionStorage.removeItem(TOKEN_KEY);
 }
+
 async function request<T>(path: string, init: RequestInit = {}, authenticated = false): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set('accept', 'application/json');
@@ -138,29 +155,101 @@ async function request<T>(path: string, init: RequestInit = {}, authenticated = 
   }
   const response = await fetch(path, { ...init, headers });
   const payload = await response.json().catch(() => ({})) as Record<string, unknown>;
-  if (!response.ok) throw new ApiError(response.status, String(payload.error ?? 'Ошибка запроса'), String(payload.code ?? ''));
+  if (!response.ok) {
+    throw new ApiError(response.status, String(payload.error ?? 'Ошибка запроса'), String(payload.code ?? ''));
+  }
   return payload as T;
 }
 
 export const api = {
-  async groups(): Promise<string[]> { return (await request<{ groups: string[] }>('/api/identity/groups')).groups; },
-  async roster(groupId: string): Promise<RosterUser[]> { return (await request<{ users: RosterUser[] }>(`/api/identity/roster?group=${encodeURIComponent(groupId)}`)).users; },
+  async groups(): Promise<string[]> {
+    return (await request<{ groups: string[] }>('/api/identity/groups')).groups;
+  },
+  async roster(groupId: string): Promise<RosterUser[]> {
+    return (await request<{ users: RosterUser[] }>(`/api/identity/roster?group=${encodeURIComponent(groupId)}`)).users;
+  },
   async login(userId: string, code: string): Promise<SessionUser> {
-    const result = await request<{ token: string; user: SessionUser }>('/api/identity/login', { method: 'POST', body: JSON.stringify({ userId, code }) });
-    setSessionToken(result.token); return result.user;
+    const result = await request<{ token: string; user: SessionUser }>('/api/identity/login', {
+      method: 'POST',
+      body: JSON.stringify({ userId, code }),
+    });
+    setSessionToken(result.token);
+    return result.user;
   },
-  async logout(): Promise<void> { try { await request('/api/identity/logout', { method: 'POST' }, true); } finally { setSessionToken(null); } },
-  async me(): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', {}, true)).user; },
-  async updateAvatar(avatar: AvatarProfile): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }) }, true)).user; },
-  async startShift(): Promise<ShiftStartResponse> { return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true); },
-  async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true); },
+  async adminLogin(code: string): Promise<SessionUser> {
+    const result = await request<{ token: string; user: SessionUser }>('/api/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+    setSessionToken(result.token);
+    return result.user;
+  },
+  async setCode(newCode: string, currentCode?: string): Promise<SessionUser> {
+    return (await request<{ user: SessionUser }>('/api/identity/set-code', {
+      method: 'POST',
+      body: JSON.stringify({ newCode, currentCode }),
+    }, true)).user;
+  },
+  async logout(): Promise<void> {
+    try {
+      await request('/api/identity/logout', { method: 'POST' }, true);
+    } finally {
+      setSessionToken(null);
+    }
+  },
+  async me(): Promise<SessionUser> {
+    return (await request<{ user: SessionUser }>('/api/identity/me', {}, true)).user;
+  },
+  async updateAvatar(avatar: AvatarProfile): Promise<SessionUser> {
+    return (await request<{ user: SessionUser }>('/api/identity/avatar', {
+      method: 'PATCH',
+      body: JSON.stringify({ avatar }),
+    }, true)).user;
+  },
+  async startShift(): Promise<ShiftStartResponse> {
+    return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true);
+  },
+  async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress }> {
+    return request<{ task: ShiftTask; progress: ShiftProgress }>(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true);
+  },
   async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown): Promise<ShiftAnswerResponse> {
-    return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, { method: 'POST', body: JSON.stringify({ shiftId, answer }) }, true);
+    return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, {
+      method: 'POST',
+      body: JSON.stringify({ shiftId, answer }),
+    }, true);
   },
-  async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true); },
-  async adminUsers(): Promise<AdminUser[]> { return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users; },
-  async createUser(input: { displayName: string; groupId: string; roles: UserRole[]; initialCode: string }): Promise<AdminUser> { return (await request<{ user: AdminUser }>('/api/admin/users', { method: 'POST', body: JSON.stringify(input) }, true)).user; },
-  async batchCreateUsers(input: { groupId: string; roles?: UserRole[]; users: Array<{ displayName: string; initialCode?: string }> }): Promise<{ groupId: string; count: number; created: Array<AdminUser & { initialCode: string }> }> { return request('/api/admin/users/batch', { method: 'POST', body: JSON.stringify(input) }, true); },
-  async setUserStatus(userId: string, status: UserStatus): Promise<AdminUser> { return (await request<{ user: AdminUser }>(`/api/admin/users/${encodeURIComponent(userId)}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }, true)).user; },
-  async resetCode(userId: string, code: string): Promise<void> { await request(`/api/admin/users/${encodeURIComponent(userId)}/reset-code`, { method: 'POST', body: JSON.stringify({ code }) }, true); },
+  async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }> {
+    return request<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }>(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true);
+  },
+  async adminUsers(): Promise<AdminUser[]> {
+    return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users;
+  },
+  async createUser(input: { displayName: string; groupId: string; roles?: UserRole[]; initialCode?: string }): Promise<AdminUser> {
+    return (await request<{ user: AdminUser }>('/api/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }, true)).user;
+  },
+  async batchCreateUsers(input: {
+    groupId: string;
+    roles?: UserRole[];
+    users: Array<{ displayName: string; initialCode?: string }>;
+  }): Promise<{ groupId: string; count: number; created: Array<AdminUser & { initialCode: string }> }> {
+    return request('/api/admin/users/batch', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }, true);
+  },
+  async setUserStatus(userId: string, status: UserStatus): Promise<AdminUser> {
+    return (await request<{ user: AdminUser }>(`/api/admin/users/${encodeURIComponent(userId)}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }, true)).user;
+  },
+  async resetCode(userId: string, code?: string): Promise<void> {
+    await request(`/api/admin/users/${encodeURIComponent(userId)}/reset-code`, {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    }, true);
+  },
 };
