@@ -5,9 +5,12 @@
     <Directory /opt/synopsis-game/current/web>
         Options -Indexes +FollowSymLinks
         AllowOverride None
-        Require all granted
         FallbackResource /index.html
     </Directory>
+
+    <Location />
+        __ACCESS_REQUIRE__
+    </Location>
 
     ProxyPreserveHost On
     ProxyPass        /api/ http://127.0.0.1:__API_PORT__/api/
