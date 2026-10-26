@@ -140,9 +140,10 @@ export function parseTelegram(raw, rulesetId) {
   const groups = [];
   const unparsed = [];
   for (const token of tokens) {
-    if (/^[1235]\d{4}$/.test(token)) {
+    const normalized = token.endsWith('=') ? token.slice(0, -1) : token;
+    if (/^[1235]\d{4}$/.test(normalized)) {
       try {
-        groups.push(parseGroup(token, rulesetId));
+        groups.push(parseGroup(normalized, rulesetId));
       } catch {
         unparsed.push(token);
       }
