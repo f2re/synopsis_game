@@ -10,7 +10,7 @@
 
 **Состояние:** первый рабочий срез · **Лицензия:** не выбрана
 
-[Документация](docs/README.md) · [Концепция](docs/00_VISION_GDD.md) · [Российская синоптическая школа](docs/01_RUSSIAN_SYNOPIC_SCHOOL.md) · [Архитектура](docs/architecture/README.md) · [План реализации](docs/08_IMPLEMENTATION_ROADMAP.md)
+[Документация](docs/README.md) · [Концепция](docs/00_VISION_GDD.md) · [Российская синоптическая школа](docs/01_RUSSIAN_SYNOPIC_SCHOOL.md) · [Архитектура](docs/architecture/README.md) · [Развёртывание](docs/deployment/DEPLOYMENT_AND_UPDATES.md) · [План реализации](docs/08_IMPLEMENTATION_ROADMAP.md)
 
 </div>
 
@@ -146,6 +146,25 @@ tools/
 
 Подробнее: [Модель данных](docs/05_CONTENT_SCHEMA.md).
 
+## Релизы и развёртывание
+
+Релиз — готовый Linux x86-64 архив: собранный браузерный клиент со стилями и Phaser-ресурсами, сервер, встроенный Node.js LTS, systemd и шаблоны Nginx/Apache. На целевой машине исходники не собираются.
+
+Основные инварианты:
+
+- версии приложения лежат в `/opt/synopsis-game/releases/<version>`;
+- локальные настройки и секреты — в `/etc/synopsis-game`;
+- рейтинги, матчи и прочие изменяемые данные — в `/var/lib/synopsis-game` или внешнем PostgreSQL;
+- новая версия добавляет недостающие настройки, но не заменяет уже настроенные значения;
+- перед миграциями создаётся резервная копия;
+- переключение версии атомарное, после него проверяется `/ready`;
+- неуспешное обновление возвращает предыдущий релиз;
+- Nginx/Apache могут ограничить доступ реальными LAN CIDR;
+- для изолированной сети обновления могут поступать из локального каталога;
+- конечный релиз проверяется в Astra Linux Special Edition 1.7.
+
+Документы: [развёртывание и обновления](docs/deployment/DEPLOYMENT_AND_UPDATES.md), [ADR-0006](docs/decisions/ADR-0006-release-deployment-and-update-model.md).
+
 ## Агенты разработки
 
 Роли и приёмка разделены. Исполнитель не принимает собственное изменение.
@@ -170,6 +189,10 @@ tools/
 ```bash
 python tools/validate_repo.py
 python tools/validate_architecture.py
+python tools/validate_deployment.py
+python tools/test_deployment.py
+pnpm typecheck
+pnpm build
 ```
 
 <div align="center">
