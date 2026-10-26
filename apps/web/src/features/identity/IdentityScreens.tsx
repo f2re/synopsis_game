@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { api, ApiError, type AdminUser, type RosterUser, type SessionUser, type UserRole } from '../../api';
 
 export function LoginScreen({ onLogin }: { onLogin: (user: SessionUser) => void }) {

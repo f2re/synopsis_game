@@ -111,6 +111,16 @@ export const api = {
       body: JSON.stringify(input),
     }, true)).user;
   },
+  async batchCreateUsers(input: {
+    groupId: string;
+    roles?: UserRole[];
+    users: Array<{ displayName: string; initialCode?: string }>;
+  }): Promise<{ groupId: string; count: number; created: Array<AdminUser & { initialCode: string }> }> {
+    return await request('/api/admin/users/batch', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }, true);
+  },
   async setUserStatus(userId: string, status: UserStatus): Promise<AdminUser> {
     return (await request<{ user: AdminUser }>(`/api/admin/users/${encodeURIComponent(userId)}/status`, {
       method: 'PATCH',
