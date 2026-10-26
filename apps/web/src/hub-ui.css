@@ -1,0 +1,125 @@
+/* Hub-specific quiet HUD overrides. Loaded after styles.css. */
+.game-user-overlay {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  left: auto;
+  z-index: 30;
+  display: block;
+  width: auto;
+  max-width: min(280px, calc(100vw - 24px));
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  animation: none;
+}
+
+.game-user-chip {
+  min-height: 44px;
+  max-width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border: 1px solid var(--ui-panel-border);
+  border-radius: 4px;
+  color: var(--ui-text-primary);
+  background: rgba(20, 63, 76, 0.94);
+  box-shadow: 0 3px 0 rgba(4, 10, 22, 0.72);
+  text-align: left;
+  image-rendering: pixelated;
+}
+
+.game-user-chip:hover,
+.game-user-chip:focus-visible {
+  border-color: var(--ui-primary-cta);
+  background: rgba(27, 86, 96, 0.96);
+  outline: none;
+}
+
+.game-user-chip-copy {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.game-user-chip-copy strong,
+.game-user-chip-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-user-chip-copy strong {
+  font-family: var(--font-pixel-ui);
+  font-size: 0.78rem;
+  line-height: 1.15;
+  color: var(--ui-text-primary);
+}
+
+.game-user-chip-copy small {
+  font-family: var(--font-pixel-dense);
+  font-size: 0.68rem;
+  line-height: 1.1;
+  color: var(--ui-text-secondary);
+}
+
+.game-user-chip-caret {
+  margin-left: auto;
+  color: var(--ui-primary-cta);
+  font-family: var(--font-pixel-dense);
+  font-size: 0.7rem;
+}
+
+.game-user-chip-crest {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.game-session-popover {
+  width: min(220px, calc(100vw - 24px));
+  margin: 6px 0 0 auto;
+  padding: 7px;
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--ui-panel-border);
+  border-radius: 4px;
+  background: rgba(20, 63, 76, 0.98);
+  box-shadow: 0 4px 0 rgba(4, 10, 22, 0.82);
+}
+
+.game-session-popover .ghost-button,
+.game-session-popover .primary-button {
+  width: 100%;
+  min-height: 44px;
+  justify-content: flex-start;
+  padding: 6px 9px;
+  font-family: var(--font-pixel-ui);
+  font-size: 0.78rem;
+}
+
+.game-session-popover .primary-button {
+  justify-content: center;
+}
+
+@media (max-width: 700px) {
+  .game-user-overlay {
+    top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
+    left: auto;
+    max-width: calc(100vw - 16px);
+  }
+
+  .game-user-chip-copy strong {
+    max-width: 150px;
+  }
+
+  .game-user-chip-copy small {
+    display: none;
+  }
+}

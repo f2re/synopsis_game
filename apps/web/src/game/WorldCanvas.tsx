@@ -33,7 +33,8 @@ export function WorldCanvas() {
       ref={hostRef}
       className="world-canvas-host"
       role="application"
-      aria-label="Интерактивный пиксельный кампус: доступен Архив, остальные локации пока закрыты"
+      tabIndex={0}
+      aria-label="Интерактивный пиксельный кампус. Tab — переход между локациями, Enter или пробел — выбор, Escape — закрыть выбор."
     />
   );
 }
