@@ -55,10 +55,6 @@ def restore_backup(backup_dir, app_env):
         data=STATE/'data'; shutil.rmtree(str(data),ignore_errors=True)
         if (backup_dir/'data').exists(): shutil.copytree(str(backup_dir/'data'),str(data))
         else: data.mkdir(parents=True,exist_ok=True)
-    elif kind=='postgres' and (backup_dir/'postgres.dump').exists():
-        url=cfg.get('DATABASE_URL','')
-        if not url: raise RuntimeError('DATABASE_URL is required to restore PostgreSQL backup')
-        run('pg_restore','--clean','--if-exists','--no-owner','--exit-on-error','--dbname',url,str(backup_dir/'postgres.dump'))
     migrations=STATE/'migrations'; shutil.rmtree(str(migrations),ignore_errors=True)
     if (backup_dir/'migrations').exists(): shutil.copytree(str(backup_dir/'migrations'),str(migrations))
     else: migrations.mkdir(parents=True,exist_ok=True)
