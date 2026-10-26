@@ -198,7 +198,7 @@ export const api = {
   async adminUsers(): Promise<AdminUser[]> {
     return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users;
   },
-  async createUser(input: { displayName: string; groupId: string; roles: UserRole[]; initialCode: string }): Promise<AdminUser> {
+  async createUser(input: { displayName: string; groupId: string; roles?: UserRole[]; initialCode?: string }): Promise<AdminUser> {
     return (await request<{ user: AdminUser }>('/api/admin/users', {
       method: 'POST',
       body: JSON.stringify(input),
