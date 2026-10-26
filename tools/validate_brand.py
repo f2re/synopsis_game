@@ -11,9 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = '26063: Позывной «Синоптик»'
 TEXT_SUFFIXES = {'.md', '.txt', '.json', '.yaml', '.yml', '.ts', '.tsx', '.js', '.jsx', '.html', '.css', '.svg'}
 EXCLUDED_PARTS = {'.git', 'node_modules', 'dist', 'coverage'}
-OLD_BRAND = re.compile(
-    r'синоптическ(?:ий|ого|ому|им|ом)\s+центр(?:а|у|ом|е)?',
-    re.IGNORECASE,
+OLD_BRANDS = (
+    re.compile(r'синоптическ(?:ий|ого|ому|им|ом)\s+центр(?:а|у|ом|е)?', re.IGNORECASE),
+    re.compile(r'\bSynoptic\s+Center\b', re.IGNORECASE),
 )
 
 
@@ -33,9 +33,10 @@ def main() -> int:
         rel = path.relative_to(ROOT)
         canonical_found = canonical_found or CANONICAL in text
         for line_no, line in enumerate(text.splitlines(), start=1):
-            match = OLD_BRAND.search(line)
-            if match:
-                errors.append(f'{rel}:{line_no}: устаревшее название: {match.group(0)!r}')
+            for pattern in OLD_BRANDS:
+                match = pattern.search(line)
+                if match:
+                    errors.append(f'{rel}:{line_no}: устаревшее название: {match.group(0)!r}')
 
     if not canonical_found:
         errors.append(f'каноническое название {CANONICAL!r} не найдено')
