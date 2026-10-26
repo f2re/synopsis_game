@@ -1,24 +1,30 @@
+import fs from 'node:fs';
+import os from 'node:os';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { resolve } from 'node:path';
 import { IdentityError, IdentityService, type CreateUserInput } from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
 
-const PORT = Number(process.env.SYNOPSIS_SERVER_PORT ?? 8787);
-const STORE_PATH = process.env.SYNOPSIS_IDENTITY_STORE ?? resolve(process.cwd(), '.local/identity.json');
+const HOST = process.env.API_BIND ?? '127.0.0.1';
+const PORT = Number(process.env.API_PORT ?? process.env.SYNOPSIS_SERVER_PORT ?? 4174);
+const STORE_PATH = process.env.SYNOPSIS_IDENTITY_STORE ??
+  (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/identity.json' : resolve(process.cwd(), '.local/identity.json'));
 const SECURITY_PROFILE = process.env.SYNOPSIS_SECURITY_PROFILE === 'trusted' ? 'trusted' : 'public';
+const startedAt = new Date().toISOString();
+const version = process.env.SYNOPSIS_VERSION ?? (() => {
+  try {
+    return fs.readFileSync(process.env.SYNOPSIS_VERSION_FILE ?? '/opt/synopsis-game/current/VERSION', 'utf8').trim();
+  } catch {
+    return 'dev';
+  }
+})();
 
-const identity = new IdentityService({
-  storePath: STORE_PATH,
-  securityProfile: SECURITY_PROFILE,
-});
+const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE });
 await identity.init();
 
 const bootstrapCode = process.env.SYNOPSIS_BOOTSTRAP_ADMIN_CODE;
 if (bootstrapCode) {
-  const created = await identity.bootstrapAdmin(
-    process.env.SYNOPSIS_BOOTSTRAP_ADMIN_NAME ?? 'Администратор',
-    bootstrapCode,
-  );
+  const created = await identity.bootstrapAdmin(process.env.SYNOPSIS_BOOTSTRAP_ADMIN_NAME ?? 'Администратор', bootstrapCode);
   if (created) console.info('Создан первоначальный администратор. Bootstrap-код больше не нужен.');
 } else if (!identity.hasAdmin()) {
   console.warn('Администратор не создан. Для первого запуска задайте SYNOPSIS_BOOTSTRAP_ADMIN_CODE.');
@@ -67,56 +73,62 @@ const server = createServer(async (request, response) => {
     const url = new URL(request.url, `http://${request.headers.host ?? 'localhost'}`);
     const path = url.pathname;
 
-    if (request.method === 'GET' && path === '/api/health') {
-      sendJson(response, 200, { ok: true, service: 'synopsis-server' });
+    if (request.method === 'GET' && (path === '/health' || path === '/api/health')) {
+      sendJson(response, 200, { status: 'ok', service: 'synopsis-server', version, startedAt });
       return;
     }
-
+    if (request.method === 'GET' && (path === '/ready' || path === '/api/ready')) {
+      sendJson(response, 200, {
+        status: 'ready', version, hostname: os.hostname(), configSchema: Number(process.env.CONFIG_SCHEMA_VERSION ?? '1'),
+      });
+      return;
+    }
+    if (request.method === 'GET' && path === '/api/runtime-config') {
+      sendJson(response, 200, {
+        version,
+        publicUrl: process.env.PUBLIC_URL ?? '',
+        websocketPath: process.env.WS_PATH ?? '/ws',
+        mapsProvider: process.env.MAPS_PROVIDER ?? 'none',
+        mapsBaseUrl: process.env.MAPS_BASE_URL ?? '',
+        kn01Transport: process.env.KN01_TRANSPORT ?? 'file',
+      });
+      return;
+    }
     if (request.method === 'GET' && path === '/api/identity/groups') {
       sendJson(response, 200, { groups: identity.listGroups() });
       return;
     }
-
     if (request.method === 'GET' && path === '/api/identity/roster') {
-      const groupId = url.searchParams.get('group') ?? '';
-      sendJson(response, 200, { users: identity.listRoster(groupId) });
+      sendJson(response, 200, { users: identity.listRoster(url.searchParams.get('group') ?? '') });
       return;
     }
-
     if (request.method === 'POST' && path === '/api/identity/login') {
       const body = await readJson(request);
-      const result = await identity.login(String(body.userId ?? ''), String(body.code ?? ''), clientIp(request));
-      sendJson(response, 200, result);
+      sendJson(response, 200, await identity.login(String(body.userId ?? ''), String(body.code ?? ''), clientIp(request)));
       return;
     }
-
     if (request.method === 'POST' && path === '/api/identity/logout') {
       identity.logout(bearer(request));
       sendJson(response, 200, { ok: true });
       return;
     }
-
     if (request.method === 'GET' && path === '/api/identity/me') {
       sendJson(response, 200, { user: identity.me(bearer(request)) });
       return;
     }
-
     if (request.method === 'GET' && path === '/api/identity/avatar/catalog') {
       sendJson(response, 200, { catalog: identity.getAvatarCatalog() });
       return;
     }
-
     if (request.method === 'PATCH' && path === '/api/identity/avatar') {
       const body = await readJson(request);
       sendJson(response, 200, { user: await identity.updateAvatar(bearer(request), body.avatar) });
       return;
     }
-
     if (request.method === 'GET' && path === '/api/admin/users') {
       sendJson(response, 200, { users: identity.listUsers(bearer(request)) });
       return;
     }
-
     if (request.method === 'POST' && path === '/api/admin/users') {
       const body = await readJson(request);
       const input: CreateUserInput = {
@@ -128,15 +140,14 @@ const server = createServer(async (request, response) => {
       sendJson(response, 201, { user: await identity.createUser(bearer(request), input) });
       return;
     }
-
     const statusMatch = path.match(/^\/api\/admin\/users\/([^/]+)\/status$/);
     if (request.method === 'PATCH' && statusMatch) {
       const body = await readJson(request);
-      const status = String(body.status ?? '') as UserStatus;
-      sendJson(response, 200, { user: await identity.setUserStatus(bearer(request), statusMatch[1], status) });
+      sendJson(response, 200, {
+        user: await identity.setUserStatus(bearer(request), statusMatch[1], String(body.status ?? '') as UserStatus),
+      });
       return;
     }
-
     const resetMatch = path.match(/^\/api\/admin\/users\/([^/]+)\/reset-code$/);
     if (request.method === 'POST' && resetMatch) {
       const body = await readJson(request);
@@ -144,7 +155,6 @@ const server = createServer(async (request, response) => {
       sendJson(response, 200, { ok: true });
       return;
     }
-
     sendJson(response, 404, { error: 'Маршрут не найден', code: 'not_found' });
   } catch (error) {
     if (error instanceof IdentityError) {
@@ -156,8 +166,16 @@ const server = createServer(async (request, response) => {
   }
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.info(`Synopsis server: http://127.0.0.1:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.info(`Synopsis server ${version}: http://${HOST}:${PORT}`);
   console.info(`Identity store: ${STORE_PATH}`);
   console.info(`Security profile: ${SECURITY_PROFILE}`);
 });
+
+function shutdown(signal: string): void {
+  console.info(`${signal}: остановка сервера`);
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(1), 10_000).unref();
+}
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
