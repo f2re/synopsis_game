@@ -3,6 +3,11 @@ set -euo pipefail
 if [[ ${EUID:-$(id -u)} -ne 0 ]]; then echo "Запустите от root." >&2; exit 1; fi
 RELEASE_ARCHIVE=${1:-}
 if [[ -z "$RELEASE_ARCHIVE" || ! -f "$RELEASE_ARCHIVE" ]]; then echo "Использование: $0 <release.tar.gz>" >&2; exit 2; fi
+if [[ -f "$RELEASE_ARCHIVE.sha256" ]]; then
+  EXPECTED=$(awk 'NR==1{print $1}' "$RELEASE_ARCHIVE.sha256")
+  ACTUAL=$(sha256sum "$RELEASE_ARCHIVE" | awk '{print $1}')
+  [[ "$ACTUAL" == "$EXPECTED" ]] || { echo "SHA-256 релиза не совпадает" >&2; exit 3; }
+fi
 if [[ -r /etc/os-release ]]; then . /etc/os-release; fi
 IS_DEBIAN=0
 if [[ ${ID:-} == "astra" || ${ID_LIKE:-} == *debian* ]]; then
@@ -16,27 +21,35 @@ install -d -m 0755 /opt/synopsis-game/releases
 install -d -m 0750 -o root -g synopsis-game /etc/synopsis-game
 install -d -m 0750 -o synopsis-game -g synopsis-game /var/lib/synopsis-game/{data,kn01/inbox,backups,migrations}
 install -d -m 0750 -o synopsis-game -g synopsis-game /var/log/synopsis-game
-python3 /dev/stdin "$RELEASE_ARCHIVE" <<'PY'
+DEST=$(python3 /dev/stdin "$RELEASE_ARCHIVE" <<'PY'
 import tarfile, sys, tempfile, shutil
 from pathlib import Path
 archive=Path(sys.argv[1]).resolve(); root=Path('/opt/synopsis-game'); releases=root/'releases'
+def inside(base,path):
+    try: path.relative_to(base); return True
+    except ValueError: return False
 with tempfile.TemporaryDirectory() as td:
-    td=Path(td)
-    with tarfile.open(archive,'r:*') as tf:
-        base=td.resolve()
+    td=Path(td); base=td.resolve()
+    with tarfile.open(str(archive),'r:*') as tf:
         for m in tf.getmembers():
             dest=(td/m.name).resolve()
-            if dest!=base and base not in dest.parents: raise RuntimeError(f'unsafe archive path: {m.name}')
-        tf.extractall(td)
+            if dest!=base and not inside(base,dest): raise RuntimeError('unsafe archive path: %s' % m.name)
+            if m.issym():
+                linked=(dest.parent/m.linkname).resolve()
+                if linked!=base and not inside(base,linked): raise RuntimeError('unsafe symlink: %s' % m.name)
+            if m.islnk():
+                linked=(td/m.linkname).resolve()
+                if linked!=base and not inside(base,linked): raise RuntimeError('unsafe hardlink: %s' % m.name)
+        tf.extractall(str(td))
     dirs=[p for p in td.iterdir() if p.is_dir()]; src=dirs[0] if len(dirs)==1 else td
     version=(src/'VERSION').read_text().strip(); dest=releases/version
-    if dest.exists(): shutil.rmtree(dest)
-    shutil.copytree(src,dest,symlinks=True)
+    if dest.exists(): shutil.rmtree(str(dest))
+    shutil.copytree(str(src),str(dest),symlinks=True)
     print(dest)
 PY
-VERSION=$(tar -xOf "$RELEASE_ARCHIVE" --wildcards '*/VERSION' 2>/dev/null | head -n1 || true)
-[[ -n "$VERSION" ]] || VERSION=$(find /opt/synopsis-game/releases -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort -V | tail -n1)
-ln -sfn "/opt/synopsis-game/releases/$VERSION" /opt/synopsis-game/current
+)
+VERSION=$(basename "$DEST")
+ln -sfn "$DEST" /opt/synopsis-game/current
 DEFAULTS=/opt/synopsis-game/current/deploy/config/defaults.env
 if [[ ! -f /etc/synopsis-game/app.env ]]; then install -m 0640 -o root -g synopsis-game "$DEFAULTS" /etc/synopsis-game/app.env; fi
 CONFIG_FILE=/etc/synopsis-game/app.env DEFAULTS_FILE="$DEFAULTS" /bin/bash /opt/synopsis-game/current/deploy/scripts/configure.sh
