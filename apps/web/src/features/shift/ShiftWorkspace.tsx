@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { api, type ShiftAnswerResponse, type ShiftTask, type StationPlotPayload, type TaskStep } from '../../api';
+import {
+  api,
+  type ShiftAnswerResponse,
+  type ShiftTask,
+  type StationBoardPayload,
+  type StationPlotPayload,
+  type TaskStep,
+} from '../../api';
 import { GAME_MARK } from '../../brand';
+import { StationBoardTask } from './StationBoardTask';
 import { StationPlotTask } from './StationPlotTask';
 import './ShiftWorkspace.css';
 
-function normalizedNumber(value: string): number {
-  return Number(value.trim().replace(',', '.'));
-}
-
+function normalizedNumber(value: string): number { return Number(value.trim().replace(',', '.')); }
 function correctAnswerText(value: unknown): string {
   if (Array.isArray(value)) return value.join(' → ');
   if (value === null || value === undefined) return '—';
@@ -56,7 +61,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     if (task.response.kind === 'numeric') return numeric.trim() !== '' && Number.isFinite(normalizedNumber(numeric));
     if (task.response.kind === 'choice') return choiceIndex !== null;
     if (task.response.kind === 'sequence') return steps.length > 0;
-    if (task.response.kind === 'stationPlot') {
+    if (task.response.kind === 'stationPlot' || task.response.kind === 'stationBoard') {
       const required = task.payload?.observations?.length ?? 0;
       return required > 0 && Object.keys(placements).length === required;
     }
@@ -99,32 +104,22 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     else onExit();
   }
 
-  if (loading) {
-    return <main className="shift-shell"><section className="shift-loading">Готовим учебную смену…</section></main>;
-  }
-
+  if (loading) return <main className="shift-shell"><section className="shift-loading">Готовим учебную смену…</section></main>;
   if (error && !task) {
-    return (
-      <main className="shift-shell">
-        <section className="shift-loading">
-          <strong>Смена не запущена</strong>
-          <p>{error}</p>
-          <button className="secondary-button" onClick={onExit}>Вернуться в центр</button>
-        </section>
-      </main>
-    );
+    return <main className="shift-shell"><section className="shift-loading"><strong>Смена не запущена</strong><p>{error}</p><button className="secondary-button" onClick={onExit}>Вернуться в центр</button></section></main>;
   }
-
   if (!task) return null;
 
   const stationPlot = task.response.kind === 'stationPlot';
+  const stationBoard = task.response.kind === 'stationBoard';
+  const stationTask = stationPlot || stationBoard;
 
   return (
     <main className="shift-shell">
       <header className="shift-topbar">
         <div>
           <span className="shift-kicker">{GAME_MARK} · учебная смена</span>
-          <strong>{stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
+          <strong>{stationBoard ? 'Учебный планшон' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
         </div>
         <div className="shift-progress" aria-label={`Выполнено ${progress.answered} из ${progress.total}`}>
           <span>{progress.current}/{progress.total}</span>
@@ -136,81 +131,43 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       <section className="shift-stage" aria-live="polite">
         <aside className="shift-context">
           <span>Тема</span>
-          <strong>{stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
-          <p>{stationPlot
-            ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
-            : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
+          <strong>{stationBoard ? 'Планшет приземных наблюдений' : stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
+          <p>{stationBoard
+            ? 'Работайте сразу с несколькими станциями на едином листе. Координаты станций и моделей нормированы и не зависят от размера экрана.'
+            : stationPlot
+              ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
+              : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
           {contentStatus !== 'published' && <div className="shift-draft">Учебный пакет проходит независимую методическую приёмку. Рейтинговый режим отключён.</div>}
         </aside>
 
-        <article className={`shift-card ${stationPlot ? 'shift-card-wide' : ''}`}>
-          <div className="shift-card-meta">
-            <span>Задание {progress.current}</span>
-            <span>Сложность {task.difficulty}</span>
-          </div>
+        <article className={`shift-card ${stationTask ? 'shift-card-wide' : ''}`}>
+          <div className="shift-card-meta"><span>Задание {progress.current}</span><span>Сложность {task.difficulty}</span></div>
           <h1>{task.question}</h1>
 
-          {task.payload?.encoded && (
-            <div className="kn01-code" aria-label={`Кодовая группа ${task.payload.encoded}`}>{task.payload.encoded}</div>
-          )}
+          {task.payload?.encoded && <div className="kn01-code" aria-label={`Кодовая группа ${task.payload.encoded}`}>{task.payload.encoded}</div>}
           {task.payload?.group && <div className="kn01-group">Структура: <code>{task.payload.group}</code></div>}
 
           {!feedback && task.response.kind === 'numeric' && (
-            <label className="shift-numeric">
-              <span>Ответ</span>
-              <div>
-                <input
-                  autoFocus
-                  inputMode="decimal"
-                  value={numeric}
-                  onChange={(event) => setNumeric(event.target.value)}
-                  onKeyDown={(event) => { if (event.key === 'Enter' && canSubmit) void submit(); }}
-                  aria-label="Числовой ответ"
-                />
-                {task.response.unit && <b>{task.response.unit === 'degC' ? '°C' : task.response.unit}</b>}
-              </div>
-            </label>
+            <label className="shift-numeric"><span>Ответ</span><div><input autoFocus inputMode="decimal" value={numeric} onChange={(event) => setNumeric(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && canSubmit) void submit(); }} aria-label="Числовой ответ" />{task.response.unit && <b>{task.response.unit === 'degC' ? '°C' : task.response.unit}</b>}</div></label>
           )}
 
           {!feedback && task.response.kind === 'choice' && (
             <div className="shift-options" role="radiogroup" aria-label="Варианты ответа">
-              {(task.payload?.options ?? []).map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={choiceIndex === option.id}
-                  className={choiceIndex === option.id ? 'is-selected' : ''}
-                  onClick={() => setChoiceIndex(option.id)}
-                >
-                  <span>{String.fromCharCode(65 + option.id)}</span>{option.label}
-                </button>
-              ))}
+              {(task.payload?.options ?? []).map((option) => <button key={option.id} type="button" role="radio" aria-checked={choiceIndex === option.id} className={choiceIndex === option.id ? 'is-selected' : ''} onClick={() => setChoiceIndex(option.id)}><span>{String.fromCharCode(65 + option.id)}</span>{option.label}</button>)}
             </div>
           )}
 
           {!feedback && task.response.kind === 'sequence' && (
             <div className="shift-sequence" aria-label="Порядок групп">
-              {steps.map((step, index) => (
-                <div key={step.id} className="shift-sequence-row">
-                  <b>{index + 1}</b><code>{step.label}</code>
-                  <div>
-                    <button type="button" onClick={() => moveStep(index, -1)} disabled={index === 0} aria-label={`Поднять ${step.label}`}>↑</button>
-                    <button type="button" onClick={() => moveStep(index, 1)} disabled={index === steps.length - 1} aria-label={`Опустить ${step.label}`}>↓</button>
-                  </div>
-                </div>
-              ))}
+              {steps.map((step, index) => <div key={step.id} className="shift-sequence-row"><b>{index + 1}</b><code>{step.label}</code><div><button type="button" onClick={() => moveStep(index, -1)} disabled={index === 0} aria-label={`Поднять ${step.label}`}>↑</button><button type="button" onClick={() => moveStep(index, 1)} disabled={index === steps.length - 1} aria-label={`Опустить ${step.label}`}>↓</button></div></div>)}
             </div>
           )}
 
-          {task.response.kind === 'stationPlot' && task.payload?.observations && task.payload?.slots && (
-            <StationPlotTask
-              payload={task.payload as StationPlotPayload}
-              placements={placements}
-              onChange={setPlacements}
-              disabled={Boolean(feedback)}
-              results={feedback?.feedback.details?.components}
-            />
+          {stationPlot && task.payload?.observations && task.payload?.slots && (
+            <StationPlotTask payload={task.payload as StationPlotPayload} placements={placements} onChange={setPlacements} disabled={Boolean(feedback)} results={feedback?.feedback.details?.components} />
+          )}
+          {stationBoard && task.payload?.observations && task.payload?.slots && task.payload?.stations && task.payload?.canvas && (
+            <StationBoardTask payload={task.payload as StationBoardPayload} placements={placements} onChange={setPlacements} disabled={Boolean(feedback)} results={feedback?.feedback.details?.components} />
           )}
 
           {error && <div className="shift-error" role="alert">{error}</div>}
@@ -218,27 +175,13 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
           {feedback ? (
             <section className={`shift-feedback ${feedback.feedback.correct ? 'is-correct' : 'is-wrong'}`}>
               <div className="shift-feedback-title">{feedback.feedback.correct ? 'Верно' : 'Нужно исправить принцип'}</div>
-              {!feedback.feedback.correct && task.response.kind !== 'stationPlot' && (
-                <p><strong>Правильный ответ:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>
-              )}
-              {!feedback.feedback.correct && task.response.kind === 'stationPlot' && (
-                <p>Красным отмечено ошибочное размещение, жёлтым — позиция, куда этот элемент должен быть перенесён.</p>
-              )}
+              {!feedback.feedback.correct && !stationTask && <p><strong>Правильный ответ:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>}
+              {!feedback.feedback.correct && stationTask && <p>Красным отмечено ошибочное размещение, жёлтым — нормативная позиция для пропущенного или неверно размещённого элемента.</p>}
               <p>{feedback.feedback.explanation}</p>
-              {feedback.feedback.sources.map((source) => (
-                <div className="shift-source" key={`${source.sourceId}-${source.locator}`}>
-                  <strong>{source.title}</strong><span>{source.locator}</span>
-                </div>
-              ))}
-              <button className="shift-primary" type="button" onClick={advance}>
-                {feedback.completed ? `Завершить смену · ${feedback.progress.correct}/${feedback.progress.total}` : 'Следующее задание'}
-              </button>
+              {feedback.feedback.sources.map((source) => <div className="shift-source" key={`${source.sourceId}-${source.locator}`}><strong>{source.title}</strong><span>{source.locator}</span></div>)}
+              <button className="shift-primary" type="button" onClick={advance}>{feedback.completed ? `Завершить смену · ${feedback.progress.correct}/${feedback.progress.total}` : 'Следующее задание'}</button>
             </section>
-          ) : (
-            <button className="shift-primary" type="button" onClick={() => void submit()} disabled={!canSubmit}>
-              {submitting ? 'Проверяем…' : 'Проверить'}
-            </button>
-          )}
+          ) : <button className="shift-primary" type="button" onClick={() => void submit()} disabled={!canSubmit}>{submitting ? 'Проверяем…' : 'Проверить'}</button>}
         </article>
       </section>
     </main>
