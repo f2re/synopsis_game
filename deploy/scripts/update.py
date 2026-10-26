@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, fcntl, hashlib, os, shutil, subprocess, tarfile, tempfile
+import argparse, fcntl, hashlib, os, re, shutil, subprocess, tarfile, tempfile
 from pathlib import Path
 
 ROOT=Path('/opt/synopsis-game'); ETC=Path('/etc/synopsis-game'); STATE=Path('/var/lib/synopsis-game')
@@ -11,6 +11,9 @@ def sha256(path):
     with path.open('rb') as f:
         for chunk in iter(lambda:f.read(1024*1024),b''): h.update(chunk)
     return h.hexdigest()
+def semver(value):
+    match=re.match(r'^(\d+)\.(\d+)\.(\d+)', value or '')
+    return tuple(map(int,match.groups())) if match else None
 def is_within(base, path):
     try:
         path.relative_to(base); return True
@@ -47,11 +50,18 @@ def install_units(release):
 def restore_backup(backup_dir, app_env):
     if not backup_dir: return
     if (backup_dir/'etc/app.env').exists(): shutil.copy2(str(backup_dir/'etc/app.env'),str(app_env))
-    cfg=env_file(app_env)
-    if cfg.get('DATABASE_KIND','sqlite')=='sqlite' and (backup_dir/'data').exists():
-        data=STATE/'data'; shutil.rmtree(str(data),ignore_errors=True); shutil.copytree(str(backup_dir/'data'),str(data))
-    if (backup_dir/'migrations').exists():
-        migrations=STATE/'migrations'; shutil.rmtree(str(migrations),ignore_errors=True); shutil.copytree(str(backup_dir/'migrations'),str(migrations))
+    cfg=env_file(app_env); kind=cfg.get('DATABASE_KIND','sqlite')
+    if kind=='sqlite':
+        data=STATE/'data'; shutil.rmtree(str(data),ignore_errors=True)
+        if (backup_dir/'data').exists(): shutil.copytree(str(backup_dir/'data'),str(data))
+        else: data.mkdir(parents=True,exist_ok=True)
+    elif kind=='postgres' and (backup_dir/'postgres.dump').exists():
+        url=cfg.get('DATABASE_URL','')
+        if not url: raise RuntimeError('DATABASE_URL is required to restore PostgreSQL backup')
+        run('pg_restore','--clean','--if-exists','--no-owner','--exit-on-error','--dbname',url,str(backup_dir/'postgres.dump'))
+    migrations=STATE/'migrations'; shutil.rmtree(str(migrations),ignore_errors=True)
+    if (backup_dir/'migrations').exists(): shutil.copytree(str(backup_dir/'migrations'),str(migrations))
+    else: migrations.mkdir(parents=True,exist_ok=True)
 def acquire_lock():
     lock_dir=Path('/run/lock'); lock_dir.mkdir(parents=True,exist_ok=True)
     handle=open(str(lock_dir/'synopsis-game-update.lock'),'w')
@@ -73,16 +83,21 @@ def prune_releases(active, previous, keep):
 
 def main():
     lock=acquire_lock()
-    ap=argparse.ArgumentParser(); ap.add_argument('archive'); ap.add_argument('--sha256'); ap.add_argument('--no-start',action='store_true'); a=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument('archive'); ap.add_argument('--sha256'); ap.add_argument('--no-start',action='store_true'); ap.add_argument('--allow-downgrade',action='store_true'); a=ap.parse_args()
     archive=Path(a.archive).resolve()
     if a.sha256 and sha256(archive)!=a.sha256.lower(): raise SystemExit('SHA-256 mismatch')
     ROOT.mkdir(parents=True,exist_ok=True); (ROOT/'releases').mkdir(exist_ok=True); ETC.mkdir(parents=True,exist_ok=True); STATE.mkdir(parents=True,exist_ok=True)
+    current=ROOT/'current'; old=current.resolve() if current.exists() else None
     with tempfile.TemporaryDirectory(prefix='synopsis-release-') as td:
         stage=Path(td); safe_extract(archive,stage); dirs=[p for p in stage.iterdir() if p.is_dir()]; src=dirs[0] if len(dirs)==1 else stage
         version=(src/'VERSION').read_text().strip(); dest=ROOT/'releases'/version
+        if old and old.name==version:
+            print('Synopsis Game %s is already active' % version); return 0
+        old_version=semver(old.name) if old else None; new_version=semver(version)
+        if old_version and new_version and new_version<old_version and not a.allow_downgrade:
+            raise SystemExit('refusing downgrade %s -> %s without --allow-downgrade' % (old.name,version))
         if dest.exists(): shutil.rmtree(str(dest))
         shutil.copytree(str(src),str(dest),symlinks=True)
-    current=ROOT/'current'; old=current.resolve() if current.exists() else None
     app_env=ETC/'app.env'; old_cfg=env_file(app_env)
     dep_env=os.environ.copy(); dep_env['CONFIG_FILE']=str(app_env)
     run('/bin/bash',str(dest/'deploy/scripts/ensure-host-deps.sh'),env=dep_env)
@@ -92,6 +107,7 @@ def main():
         backup=run('/bin/bash',str(dest/'deploy/scripts/backup.sh'),capture=True,check=True,env=backup_env).stdout.strip().splitlines()
     except Exception:
         if old: run('systemctl','restart','synopsis-game.service',check=False)
+        if not old or dest!=old: shutil.rmtree(str(dest),ignore_errors=True)
         raise
     backup_dir=Path(backup[-1]) if backup else None
     merged=ETC/'.app.env.new'
@@ -114,6 +130,7 @@ def main():
             render=old/'deploy/scripts/render-web-config.sh'
             if render.exists(): run('/bin/bash',str(render),check=False)
             run('systemctl','restart','synopsis-game.service',check=False)
+        if not old or dest!=old: shutil.rmtree(str(dest),ignore_errors=True)
         raise
     print('Updated Synopsis Game to %s' % version)
     lock.close()
