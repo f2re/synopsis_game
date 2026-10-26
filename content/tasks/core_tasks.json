@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2.0",
+  "schema_version": "0.3.0",
   "tasks": [
     {
       "id": "kn01_temp_001",
@@ -117,21 +117,66 @@
           {"id": "slot_04", "x": 500, "y": 500, "kind": "wind"}
         ]
       },
-      "answer": {
-        "kind": "station_plot",
-        "placements": {
-          "obs_t": "slot_01",
-          "obs_td": "slot_02",
-          "obs_p": "slot_03",
-          "obs_wind": "slot_04"
-        }
-      },
+      "answer": {"kind": "station_plot", "placements": {"obs_t": "slot_01", "obs_td": "slot_02", "obs_p": "slot_03", "obs_wind": "slot_04"}},
       "sources": [
         {"source_id": "WMO_485_2024_RU", "locator": "пп. 2.1.8.4.2.1–2.1.8.4.2.2: стандартные символы и модели; отсылка к ВМО-№ 306, том I.1, добавление IV"},
         {"source_id": "ZVEREV_1977", "locator": "раздел о приземных синоптических картах и схеме нанесения; страница уточняется при независимой методической приёмке"}
       ],
       "explanation": "В базовой станционной модели температура T располагается слева сверху от кружка станции, точка росы Td — слева снизу, давление p — справа сверху. Знак ветра начинается в центре станции и ориентирован в сторону, откуда дует ветер. Текущий профиль является учебным черновиком и до публикации проходит независимую проверку российской синоптической школой.",
       "principle_tags": ["station_plot", "surface_chart", "temperature", "dew_point", "pressure", "wind"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    },
+    {
+      "id": "station_board_three_001",
+      "topic": "surface_station_board",
+      "skills": ["station_plot_temperature", "station_plot_dewpoint"],
+      "type": "stationBoard",
+      "difficulty": 3,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "authored_training",
+      "question": "Нанесите температуру T и точку росы Td на три станции общего планшона.",
+      "payload": {
+        "profile": "RUS_SURFACE_STATION_V1",
+        "canvas": {"width": 1000, "height": 1000},
+        "stations": [
+          {"id": "st_a", "name": "Станция А", "x": 230, "y": 280},
+          {"id": "st_b", "name": "Станция Б", "x": 510, "y": 560},
+          {"id": "st_c", "name": "Станция В", "x": 790, "y": 300}
+        ],
+        "observations": [
+          {"id": "a_t", "stationId": "st_a", "label": "Станция А · T", "value": "+12,4 °C", "display": "12,4"},
+          {"id": "a_td", "stationId": "st_a", "label": "Станция А · Td", "value": "+7,9 °C", "display": "7,9"},
+          {"id": "b_t", "stationId": "st_b", "label": "Станция Б · T", "value": "+8,1 °C", "display": "8,1"},
+          {"id": "b_td", "stationId": "st_b", "label": "Станция Б · Td", "value": "+6,8 °C", "display": "6,8"},
+          {"id": "c_t", "stationId": "st_c", "label": "Станция В · T", "value": "+4,0 °C", "display": "4,0"},
+          {"id": "c_td", "stationId": "st_c", "label": "Станция В · Td", "value": "+1,5 °C", "display": "1,5"}
+        ],
+        "slots": [
+          {"id": "a_nw", "stationId": "st_a", "x": 155, "y": 220, "kind": "text"},
+          {"id": "a_sw", "stationId": "st_a", "x": 155, "y": 340, "kind": "text"},
+          {"id": "b_nw", "stationId": "st_b", "x": 435, "y": 500, "kind": "text"},
+          {"id": "b_sw", "stationId": "st_b", "x": 435, "y": 620, "kind": "text"},
+          {"id": "c_nw", "stationId": "st_c", "x": 715, "y": 240, "kind": "text"},
+          {"id": "c_sw", "stationId": "st_c", "x": 715, "y": 360, "kind": "text"}
+        ]
+      },
+      "answer": {
+        "kind": "station_board",
+        "placements": {
+          "a_t": "a_nw",
+          "a_td": "a_sw",
+          "b_t": "b_nw",
+          "b_td": "b_sw",
+          "c_t": "c_nw",
+          "c_td": "c_sw"
+        }
+      },
+      "sources": [
+        {"source_id": "WMO_485_2024_RU", "locator": "пп. 2.1.8.4.2.1–2.1.8.4.2.2: применение стандартных моделей при нанесении данных"},
+        {"source_id": "ZVEREV_1977", "locator": "приземные синоптические карты; страница уточняется при независимой методической приёмке"}
+      ],
+      "explanation": "На общем планшоне каждая станция сохраняет одну и ту же локальную схему нанесения: T располагается слева сверху, Td — слева снизу от кружка соответствующей станции. Глобальные координаты станций заданы в нормированном пространстве 1000×1000 и не являются эталоном метеорологического ответа.",
+      "principle_tags": ["station_board", "station_plot", "surface_chart", "temperature", "dew_point"],
       "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
     }
   ]
