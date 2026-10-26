@@ -71,3 +71,45 @@ test('repeated wrong code produces temporary lockout', async () => {
     );
   });
 });
+
+test('batch create users from list with auto-generated and custom codes', async () => {
+  await withService(async (service) => {
+    await service.bootstrapAdmin('Администратор', '1234');
+    const adminLogin = await service.login(service.listRoster('administrators')[0].id, '1234', '127.0.0.1');
+
+    const result = await service.batchCreateUsers(adminLogin.token, {
+      groupId: 'СИН-2026',
+      roles: ['student'],
+      users: [
+        { displayName: 'Иванов Иван Иванович' },
+        { displayName: 'Петрова Анна Сергеевна', initialCode: '7788' },
+        { displayName: 'Сидоров Алексей Дмитриевич' },
+      ],
+    });
+
+    assert.equal(result.count, 3);
+    assert.equal(result.groupId, 'СИН-2026');
+    assert.equal(result.created[1].displayName, 'Петрова Анна Сергеевна');
+    assert.equal(result.created[1].initialCode, '7788');
+    assert.ok(result.created[0].initialCode.length >= 4);
+
+    const roster = service.listRoster('СИН-2026');
+    assert.equal(roster.length, 3);
+
+    // Verify created student can log in with initialCode
+    const student1 = result.created[0];
+    const login1 = await service.login(student1.id, student1.initialCode, '127.0.0.3');
+    assert.equal(login1.user.displayName, 'Иванов Иван Иванович');
+    assert.equal(login1.user.groupId, 'СИН-2026');
+
+    const login2 = await service.login(result.created[1].id, '7788', '127.0.0.4');
+    assert.equal(login2.user.displayName, 'Петрова Анна Сергеевна');
+
+    // Reject empty batch
+    await assert.rejects(
+      () => service.batchCreateUsers(adminLogin.token, { groupId: 'СИН-2026', users: [] }),
+      (err: unknown) => err instanceof IdentityError && err.code === 'empty_batch',
+    );
+  });
+});
+

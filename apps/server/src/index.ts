@@ -2,11 +2,16 @@ import fs from 'node:fs';
 import os from 'node:os';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { resolve } from 'node:path';
-import { IdentityError, IdentityService, type CreateUserInput } from './modules/identity/identityService.js';
+import {
+  IdentityError,
+  IdentityService,
+  type BatchCreateUsersInput,
+  type CreateUserInput,
+} from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
 
 const HOST = process.env.API_BIND ?? '127.0.0.1';
-const PORT = Number(process.env.API_PORT ?? process.env.SYNOPSIS_SERVER_PORT ?? 4174);
+const PORT = Number(process.env.API_PORT ?? process.env.SYNOPSIS_SERVER_PORT ?? 8787);
 const STORE_PATH = process.env.SYNOPSIS_IDENTITY_STORE ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/identity.json' : resolve(process.cwd(), '.local/identity.json'));
 const SECURITY_PROFILE = process.env.SYNOPSIS_SECURITY_PROFILE === 'trusted' ? 'trusted' : 'public';
@@ -138,6 +143,22 @@ const server = createServer(async (request, response) => {
         initialCode: String(body.initialCode ?? ''),
       };
       sendJson(response, 201, { user: await identity.createUser(bearer(request), input) });
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/admin/users/batch') {
+      const body = await readJson(request);
+      const input: BatchCreateUsersInput = {
+        groupId: String(body.groupId ?? ''),
+        roles: Array.isArray(body.roles) ? body.roles as BatchCreateUsersInput['roles'] : undefined,
+        users: Array.isArray(body.users)
+          ? (body.users as Array<Record<string, unknown>>).map((u) => ({
+              displayName: String(u.displayName ?? ''),
+              initialCode: typeof u.initialCode === 'string' && u.initialCode.trim().length > 0 ? u.initialCode.trim() : undefined,
+            }))
+          : [],
+      };
+      const result = await identity.batchCreateUsers(bearer(request), input);
+      sendJson(response, 201, result);
       return;
     }
     const statusMatch = path.match(/^\/api\/admin\/users\/([^/]+)\/status$/);
