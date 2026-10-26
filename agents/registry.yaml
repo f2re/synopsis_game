@@ -54,7 +54,7 @@ agents:
     preferred_provider: antigravity-gemini
     fallback_provider: claude-code
     owns: [art-direction, palette, composition, visual-tokens, world-location-visual-policy]
-    reviews: [WORLD, AVATAR, UX, ENGINE, ASSET, Arena-TV-visuals]
+    reviews: [WORLD, AVATAR, UX, ENGINE, ASSET, SPRITE, ART-BATCH, Arena-TV-visuals]
     role_file: agents/roles/art-director.md
 
   - id: pixel-asset-designer
@@ -62,8 +62,17 @@ agents:
     preferred_provider: antigravity-gemini
     fallback_provider: codex
     owns: [editable-sprites, characters, props, tiles, interactables]
-    reviewers: [art-director, pixel-asset-pipeline-engineer, web-performance-engineer]
+    reviewers: [pixel-art-quality-reviewer, art-director, pixel-asset-pipeline-engineer, web-performance-engineer]
     role_file: agents/roles/pixel-asset-designer.md
+
+  - id: pixel-art-quality-reviewer
+    title: Independent Pixel-art Quality Reviewer
+    preferred_provider: codex
+    fallback_provider: antigravity-gemini
+    owns: [pixel-grid-validation, frame-consistency, palette-discipline, sprite-family-completeness]
+    reviews: [SPRITE, ASSET, ART-BATCH, WORLD, AVATAR]
+    cannot_approve_own_work: true
+    role_file: agents/roles/pixel-art-quality-reviewer.md
 
   - id: pixel-asset-pipeline-engineer
     title: Pixel Asset Pipeline Engineer
@@ -86,7 +95,7 @@ agents:
     preferred_provider: codex
     fallback_provider: antigravity-gemini
     owns: [WORLD]
-    reviewers: [art-director, game-runtime-webgl-engineer, web-performance-engineer, ux-accessibility-reviewer]
+    reviewers: [pixel-art-quality-reviewer, art-director, game-runtime-webgl-engineer, web-performance-engineer, ux-accessibility-reviewer]
     role_file: agents/roles/living-world-engineer.md
 
   - id: audio-ambient-designer
@@ -118,7 +127,7 @@ agents:
     preferred_provider: codex
     fallback_provider: claude-code
     owns: [IDENTITY, AVATAR, rewards]
-    reviewers: [security-privacy-reviewer, art-director, ux-accessibility-reviewer]
+    reviewers: [security-privacy-reviewer, pixel-art-quality-reviewer, art-director, ux-accessibility-reviewer]
     role_file: agents/roles/identity-avatar-engineer.md
 
   - id: gameplay-balance-designer
@@ -157,7 +166,7 @@ acceptance_gates:
   meteorology:
     required: [meteo-methodologist-ru, meteo-verifier]
   art:
-    required: [art-director]
+    required: [pixel-art-quality-reviewer, art-director]
   game_runtime:
     required: [game-runtime-webgl-engineer, web-performance-engineer]
   asset_pipeline:

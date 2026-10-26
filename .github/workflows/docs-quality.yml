@@ -26,6 +26,12 @@ jobs:
       - name: Проверить каноническую архитектуру первого рабочего среза
         run: python tools/validate_architecture.py
 
+      - name: Проверить каноническое название и старые упоминания
+        run: python tools/validate_brand.py
+
+      - name: Проверить пиксельные кандидаты
+        run: python tools/validate_pixel_art.py
+
       - name: Подготовить Node.js
         uses: actions/setup-node@v4
         with:

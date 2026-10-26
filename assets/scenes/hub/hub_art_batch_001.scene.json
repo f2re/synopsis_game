@@ -1,0 +1,15 @@
+{
+  "id": "scene.hub.art-batch-001",
+  "logicalSize": {"width": 480, "height": 270},
+  "layers": [
+    {"id": "L0-L2.background", "asset": "hub.background.l0-l2", "z": 0},
+    {"id": "L2-L4.ground", "asset": "hub.ground.l2-l4", "z": 20},
+    {"id": "L3.architecture", "asset": "hub.architecture.l3", "z": 30},
+    {"id": "L3.archive", "asset": "archive.facade.base", "x": 30, "y": 138, "z": 31},
+    {"id": "L4.decor", "asset": "hub.decor.l4", "z": 40},
+    {"id": "L5.fauna.squirrel", "asset": "fauna.squirrel.family", "x": 52, "y": 207, "z": 50, "seeded": true},
+    {"id": "L5.fauna.bird", "asset": "fauna.bird.fly", "z": 51, "seeded": true},
+    {"id": "L7.ui", "runtime": "Phaser/React semantic labels and buttons; no baked text"}
+  ],
+  "compositeReference": "assets/source/environment/hub/candidates/hub_scene_v2.png"
+}

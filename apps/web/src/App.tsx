@@ -1,10 +1,11 @@
+import { GAME_MARK, GAME_TITLE } from './brand';
 import { WorldCanvas } from './game/WorldCanvas';
 
 function ArenaTvPlaceholder() {
   return (
     <main className="app-shell">
       <section className="prototype-card prototype-placeholder" aria-labelledby="arena-title">
-        <span className="prototype-kicker">Режим большого экрана</span>
+        <span className="prototype-kicker">{GAME_MARK} · режим большого экрана</span>
         <h1 id="arena-title">Arena TV</h1>
         <p>Маршрут закреплён архитектурой. Зрительский экран будет подключён после первого игрового среза.</p>
       </section>
@@ -22,8 +23,8 @@ export function App() {
       <section className="prototype-card" aria-labelledby="prototype-title">
         <header className="prototype-header">
           <div>
-            <span className="prototype-kicker">Прототип 0.1</span>
-            <h1 id="prototype-title">Живой кампус</h1>
+            <span className="prototype-kicker">Прототип 0.1 · {GAME_MARK}</span>
+            <h1 id="prototype-title">{GAME_TITLE}</h1>
           </div>
           <div className="prototype-status" aria-label="Состояние первого среза">
             <span className="status-dot" aria-hidden="true" />
