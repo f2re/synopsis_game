@@ -43,6 +43,7 @@ export interface TaskOption { id: number; label: string; }
 export interface TaskStep { id: number; label: string; }
 export interface StationPlotObservation {
   id: string;
+  stationId?: string;
   label: string;
   value: string;
   display?: string;
@@ -50,6 +51,7 @@ export interface StationPlotObservation {
 }
 export interface StationPlotSlot {
   id: string;
+  stationId?: string;
   x: number;
   y: number;
   kind: 'text' | 'wind' | string;
@@ -58,6 +60,19 @@ export interface StationPlotPayload {
   profile?: string;
   station?: { id?: string; name?: string } | null;
   canvas?: { width: number; height: number };
+  observations: StationPlotObservation[];
+  slots: StationPlotSlot[];
+}
+export interface StationBoardStation {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+}
+export interface StationBoardPayload {
+  profile?: string;
+  canvas: { width: number; height: number };
+  stations: StationBoardStation[];
   observations: StationPlotObservation[];
   slots: StationPlotSlot[];
 }
@@ -74,8 +89,19 @@ export interface ShiftTask {
   type: string;
   difficulty: number;
   question: string;
-  response: { kind: 'numeric' | 'choice' | 'sequence' | 'stationPlot' | string; unit?: string | null };
-  payload?: { group?: string; encoded?: string; options?: TaskOption[]; steps?: TaskStep[] } & Partial<StationPlotPayload>;
+  response: { kind: 'numeric' | 'choice' | 'sequence' | 'stationPlot' | 'stationBoard' | string; unit?: string | null };
+  payload?: {
+    group?: string;
+    encoded?: string;
+    options?: TaskOption[];
+    steps?: TaskStep[];
+    profile?: string;
+    station?: { id?: string; name?: string } | null;
+    stations?: StationBoardStation[];
+    canvas?: { width: number; height: number };
+    observations?: StationPlotObservation[];
+    slots?: StationPlotSlot[];
+  };
 }
 export interface ShiftProgress { answered: number; correct: number; current: number; total: number; }
 export interface ShiftStartResponse {

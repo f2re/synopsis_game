@@ -29,9 +29,7 @@ test('последовательность проверяется через с�
 
 test('stationPlot не раскрывает соответствие и проверяет каждый компонент отдельно', () => {
   const definition = {
-    id: 'sp1',
-    type: 'stationPlot',
-    question: 'Нанесите данные',
+    id: 'sp1', type: 'stationPlot', question: 'Нанесите данные',
     payload: {
       profile: 'RUS_SURFACE_STATION_V1',
       observations: [
@@ -48,15 +46,41 @@ test('stationPlot не раскрывает соответствие и пров
   const built = createTaskInstance(definition, { seed: 1, instanceId: 'i1', contentPack: 'p@1' });
   assert.equal(assertPublicTaskSafe(built.publicTask), true);
   assert.equal(JSON.stringify(built.publicTask).includes('"obs_t":"slot_01"'), false);
-
-  const wrong = validateTaskAnswer(definition, built.validationContext, {
-    placements: { obs_t: 'slot_02', obs_td: 'slot_01' },
-  });
+  const wrong = validateTaskAnswer(definition, built.validationContext, { placements: { obs_t: 'slot_02', obs_td: 'slot_01' } });
   assert.equal(wrong.correct, false);
   assert.equal(wrong.details.components.every((item) => item.correct === false), true);
-
-  const correct = validateTaskAnswer(definition, built.validationContext, {
-    placements: { obs_t: 'slot_01', obs_td: 'slot_02' },
-  });
+  const correct = validateTaskAnswer(definition, built.validationContext, { placements: { obs_t: 'slot_01', obs_td: 'slot_02' } });
   assert.equal(correct.correct, true);
+});
+
+test('stationBoard хранит несколько станций в едином пространстве и не раскрывает эталон', () => {
+  const definition = {
+    id: 'sb1', type: 'stationBoard', question: 'Три станции',
+    payload: {
+      canvas: { width: 1000, height: 1000 },
+      stations: [
+        { id: 's1', name: 'A', x: 220, y: 280 },
+        { id: 's2', name: 'B', x: 520, y: 520 },
+        { id: 's3', name: 'C', x: 790, y: 300 },
+      ],
+      observations: [
+        { id: 's1_t', stationId: 's1', label: 'T A', value: '12,4', display: '12,4' },
+        { id: 's2_t', stationId: 's2', label: 'T B', value: '8,1', display: '8,1' },
+        { id: 's3_t', stationId: 's3', label: 'T C', value: '4,0', display: '4,0' },
+      ],
+      slots: [
+        { id: 's1_nw', stationId: 's1', x: 155, y: 215, kind: 'text' },
+        { id: 's2_nw', stationId: 's2', x: 455, y: 455, kind: 'text' },
+        { id: 's3_nw', stationId: 's3', x: 725, y: 235, kind: 'text' },
+      ],
+    },
+    answer: { kind: 'station_board', placements: { s1_t: 's1_nw', s2_t: 's2_nw', s3_t: 's3_nw' } },
+  };
+  const built = createTaskInstance(definition, { seed: 2, instanceId: 'i2', contentPack: 'p@1' });
+  assert.equal(built.publicTask.response.kind, 'stationBoard');
+  assert.equal(built.publicTask.payload.stations.length, 3);
+  assert.equal(JSON.stringify(built.publicTask).includes('"s1_t":"s1_nw"'), false);
+  assert.equal(assertPublicTaskSafe(built.publicTask), true);
+  const result = validateTaskAnswer(definition, built.validationContext, { placements: { s1_t: 's1_nw', s2_t: 's2_nw', s3_t: 's3_nw' } });
+  assert.equal(result.correct, true);
 });
