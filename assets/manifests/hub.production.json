@@ -1,22 +1,59 @@
 {
-  "schema": "asset-manifest/v1",
+  "schema": "asset-manifest/v2",
   "scene": "hub",
-  "status": "production",
+  "status": "art-review-reopened",
+  "contract": "packages/contracts/hub-main-screen.contract.json",
   "assets": [
     {
       "id": "hub.master.approved",
-      "kind": "scene-base",
+      "kind": "art-reference",
       "source": "image-gen-1(20261025-183207).png",
+      "repositoryTarget": "assets/source/environment/hub/master/hub_master_approved.png",
       "sourceSha256": "3efc212bdcd7eaaacac119d20cbd89f83ab62d3d9761aafd5abdacae5660a340",
+      "sourceWidth": 1672,
+      "sourceHeight": 941,
+      "sourceBytes": 2953225,
+      "policy": "immutable-composition-reference"
+    },
+    {
+      "id": "hub.runtime.legacy-960",
+      "kind": "deprecated-scene-fallback",
       "runtimeModule": "packages/world-engine/src/assets/hub/masterAsset.ts",
       "runtimeWidth": 960,
       "runtimeHeight": 540,
       "runtimeFormat": "webp",
       "runtimeSha256": "a1ac9abc8a4bc0e428040ef96f0f7c0a9117b0c3967b72c3b881782d0c8dfd08",
       "runtimeBytes": 62434,
-      "origin": [0, 0],
-      "scalePolicy": "cover",
-      "reducedMotionFallback": "same-static-base"
+      "deprecated": true,
+      "reason": "Fails the native-resolution/fullscreen fidelity contract and visibly degrades the approved master when stretched to browser size."
+    },
+    {
+      "id": "hub.runtime.native-q90-candidate",
+      "kind": "candidate-high-fidelity-fallback",
+      "source": "approved master, native 1672x941",
+      "runtimeWidth": 1672,
+      "runtimeHeight": 941,
+      "runtimeFormat": "webp",
+      "runtimeQuality": 90,
+      "runtimeSha256": "5b95c10588577d987cbf885606e1af98166d3bd905a09911931326e4222f428f",
+      "runtimeBytes": 542536,
+      "measuredPsnrDb": 32.3335,
+      "measuredMaePerChannel": 3.6334,
+      "status": "awaiting-repository-import-and-art-review",
+      "note": "Temporary visual fallback only; it still contains the approved master's baked UI and does not replace the required clean environment plate."
+    },
+    {
+      "id": "hub.lighting.stack",
+      "kind": "runtime-lighting-contract",
+      "source": "packages/world-engine/src/scenes/hub/timeOfDay.ts",
+      "states": ["day", "noon", "twilight", "night"],
+      "requiredMasks": [
+        "hub.mask.environment",
+        "hub.mask.sky",
+        "hub.mask.window_light",
+        "hub.mask.lamp_glow"
+      ],
+      "uiExcluded": true
     },
     {
       "id": "hub.interaction.semantic-zones",
@@ -27,10 +64,10 @@
       "pointerFeedback": "gold-outline"
     },
     {
-      "id": "hub.account.menu",
+      "id": "hub.ui.runtime",
       "kind": "runtime-ui",
-      "runtimeModule": "apps/web/src/App.tsx",
-      "trigger": ["hub.profile", "hub.settings"]
+      "contains": ["profile", "settings", "top-status", "location-labels", "bottom-nav", "primary-cta", "notifications"],
+      "mustNotBeBakedIntoEnvironmentPlate": true
     }
   ]
 }
