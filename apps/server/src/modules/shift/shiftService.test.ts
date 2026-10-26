@@ -162,7 +162,7 @@ test('dependencySequence формируется из методического 
     const task = reached.task;
     assert.equal(task.definitionId, 'primary_analysis_dependencies_001');
     assert.equal(task.response.kind, 'dependencySequence');
-    assert.equal(JSON.stringify(task).includes('dependencies'), false);
+    assert.equal(Object.prototype.hasOwnProperty.call(task.payload ?? {}, 'dependencies'), false);
     const steps = task.payload?.steps as Array<{ id: number; label: string }>;
     assert.equal(steps.length, 8);
 
