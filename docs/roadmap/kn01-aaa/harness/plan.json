@@ -1,0 +1,2062 @@
+{
+  "plan_id": "KN01-AAA",
+  "version": 1,
+  "created": "2026-10-26",
+  "spec_root": "docs/roadmap/kn01-aaa/",
+  "evidence_root": "docs/roadmap/kn01-aaa/evidence/",
+  "statuses": [
+    "todo",
+    "in_progress",
+    "review",
+    "done",
+    "blocked"
+  ],
+  "waves": {
+    "0": "Бейзлайн и инфраструктура проверки",
+    "1": "Фундамент: методика, дизайн, библия, контракты",
+    "2": "Производство данных и ассетов",
+    "3": "Интеграция экранов и сцен",
+    "4": "Полировка",
+    "5": "Приёмка и выпуск"
+  },
+  "tasks": [
+    {
+      "id": "W0-01",
+      "wave": 0,
+      "title": "Бейзлайн: скриншоты и метрики текущей сборки",
+      "owner": "integration-release-engineer",
+      "reviewers": [
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/01_AUDIT.md",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W0-01/baseline.md"
+      ],
+      "acceptance": [
+        "Скриншоты всех доступных экранов в 1920×1080, 1366×768, 844×390, 390×844",
+        "Замер кадров/с хаба (p50/p95) на настольном и мобильном профиле",
+        "Размер JS-сборки и суммарный вес растров хаба",
+        "Каждый дефект A-01…D-04 из аудита подтверждён или опровергнут с доказательством"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "metrics",
+        "report"
+      ],
+      "skills": [
+        "gstack",
+        "verification-loop",
+        "built-in-browser"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W0-02",
+      "wave": 0,
+      "title": "Восстановить полноразмерные эталоны design/pixel-art",
+      "owner": "art-director",
+      "reviewers": [
+        "pixel-art-quality-reviewer"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#9-эталоны",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W0-02/references.md"
+      ],
+      "acceptance": [
+        "Найдены полноразмерные оригиналы 01–06 или зафиксировано их отсутствие",
+        "Если оригиналов нет — эталоном объявляются ключевые кадры W1-06, миниатюры помечены как устаревшие",
+        "README в design/pixel-art обновлён"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W0-03",
+      "wave": 0,
+      "title": "Детерминированный тестовый ростер и сид для e2e",
+      "owner": "identity-avatar-engineer",
+      "reviewers": [
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/01_AUDIT.md",
+      "deliverables": [
+        "apps/server/src/modules/identity/testRoster.ts",
+        "docs/roadmap/kn01-aaa/evidence/W0-03/handoff.md"
+      ],
+      "acceptance": [
+        "Тестовый ростер создаётся только при SYNOPSIS_SECURITY_PROFILE=trusted и явном флаге тестового режима",
+        "Тестовые коды берутся из файла примера, не из исходного кода, и не логируются",
+        "e2e может войти, начать смену и выйти; в профиле public ростер не создаётся (тест)"
+      ],
+      "evidence_required": [
+        "test-log",
+        "report"
+      ],
+      "skills": [
+        "tdd-workflow",
+        "security-review"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W0-04",
+      "wave": 0,
+      "title": "Подключить валидатор харнесса к проверкам CI",
+      "owner": "integration-release-engineer",
+      "reviewers": [
+        "orchestrator"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/README.md#3-харнесс-как-отмечается-и-подтверждается-каждый-пункт",
+      "deliverables": [
+        ".github/workflows/docs-quality.yml",
+        "tools/validate_harness_plan.py"
+      ],
+      "acceptance": [
+        "Шаг python tools/validate_harness_plan.py выполняется в docs-quality",
+        "Нарушение правил статуса роняет проверку",
+        "--report и --next работают локально"
+      ],
+      "evidence_required": [
+        "ci-log"
+      ],
+      "skills": [
+        "verification-loop"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-01",
+      "wave": 1,
+      "title": "Методика: область уровня КН-01 и правила дешифрирования с источниками",
+      "owner": "meteo-methodologist-ru",
+      "reviewers": [
+        "meteo-verifier"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#3-учебная-область-уровня-предложение-для-w1-01",
+      "deliverables": [
+        "docs/meteorology/KN01_LEVEL1_RULES.md",
+        "content/method-profiles/RUS_SURFACE_STATION_V1.json"
+      ],
+      "acceptance": [
+        "Утверждён перечень групп уровня 1 (или изменён с обоснованием)",
+        "Для каждой группы: правило, единицы, допуски ввода, особые случаи, source_id и locator",
+        "Список обязательных граничных случаев для генератора",
+        "meteo-verifier независимо воспроизвёл ≥ 30 примеров без ошибок"
+      ],
+      "evidence_required": [
+        "report",
+        "fixtures"
+      ],
+      "skills": [
+        "russian-synoptic-acceptance"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-02",
+      "wave": 1,
+      "title": "Таксономия ошибок КН-01 и тексты разбора",
+      "owner": "meteo-methodologist-ru",
+      "reviewers": [
+        "meteo-verifier",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W1-01"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#41-диагностические-неверные-варианты",
+      "deliverables": [
+        "content/error-codes/kn01_level1.json",
+        "docs/meteorology/KN01_ERROR_TAXONOMY.md"
+      ],
+      "acceptance": [
+        "Каждый код причины имеет определение, правило порождения неверного варианта и текст разбора 1–2 предложения",
+        "Тексты называют принцип, без восклицаний, с «ё» и «ёлочками»",
+        "Тексты проверены на читаемость 16 px PixCyrillic в ширине бланка"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "russian-synoptic-acceptance",
+        "design:ux-copy"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-03",
+      "wave": 1,
+      "title": "Дизайн уровня: смены С1–С5, допуск, режимы, кривая сложности",
+      "owner": "gameplay-balance-designer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "integration-release-engineer"
+      ],
+      "depends_on": [
+        "W1-01"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md",
+      "deliverables": [
+        "content/levels/kn01_level1.json",
+        "docs/game-design/KN01_LEVEL1_DESIGN.md"
+      ],
+      "acceptance": [
+        "Каждая смена: слоты заданий, сложность, ожидаемое время 6–8 мин, награда",
+        "Порядок С2–С4 свободный после С1; допуск после С1–С5",
+        "Режимы «С наставником», «Самостоятельно», «Блиц» описаны с условиями доступа",
+        "Схема данных соответствует контрактам W1-12"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "design:user-research"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-04",
+      "wave": 1,
+      "title": "Модель освоения, пороги допуска и разблокировка (сервер — источник истины)",
+      "owner": "gameplay-balance-designer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "integration-release-engineer"
+      ],
+      "depends_on": [
+        "W1-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#10-освоение-допуск-и-разблокировка",
+      "deliverables": [
+        "content/balance/kn01_level1_progression.json",
+        "docs/game-design/KN01_PROGRESSION_MODEL.md"
+      ],
+      "acceptance": [
+        "Формула освоения с коэффициентами режимов и затуханием, примеры расчёта",
+        "Пороги допуска заданы в профиле курса, не в клиенте",
+        "Моделирование 3 типов игроков (сильный, средний, слабый): число смен до допуска 5–9"
+      ],
+      "evidence_required": [
+        "report",
+        "simulation"
+      ],
+      "skills": [],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-05",
+      "wave": 1,
+      "title": "Сценарий наставника и все тексты уровня",
+      "owner": "gameplay-balance-designer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W1-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s05-брифинг-наставника",
+      "deliverables": [
+        "content/dialogue/kn01_level1.json"
+      ],
+      "acceptance": [
+        "Брифинг, реплики смен, реакции на верно/неверно/серию, итоги, разблокировка",
+        "Тон: спокойный, тёплый, профессиональный; нет военной риторики и имитации реальных организаций",
+        "Все метеорологические термины проверены методистом",
+        "Каждая реплика ≤ 120 символов"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "design:ux-copy"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-06",
+      "wave": 1,
+      "title": "Арт-библия v2: мастер-палитра, масштабные семейства, свет, ключевые кадры",
+      "owner": "art-director",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W0-02"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md",
+      "deliverables": [
+        "assets/source/palettes/master_26063_v2.gpl",
+        "design/tokens/pixel-art-theme.yaml",
+        "design/pixel-art/keyframes/README.md"
+      ],
+      "acceptance": [
+        "Палитра ≤ 64 цвета, рампы по ролям, проверка контраста интерфейсных пар ≥ 4,5:1",
+        "Ключевые кадры 480×270: титул, хаб ночь, хаб день, пост в задании, разбор ошибки, итог, разблокировка",
+        "Горизонт Северо-Запада, без гор",
+        "Метеорологические цвета не пересекаются с палитрой мира"
+      ],
+      "evidence_required": [
+        "images",
+        "report"
+      ],
+      "skills": [
+        "pixel-art-direction",
+        "design:design-critique"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-07",
+      "wave": 1,
+      "title": "Типографика v2: кегли по нативной сетке, единые шрифты в React и Phaser",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "art-director",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#6-типографика-v2",
+      "deliverables": [
+        "tools/validate_fonts.py",
+        "docs/design/PIXEL_ART_STYLE_GUIDE.md",
+        "assets/fonts/FONT_PROVENANCE.md"
+      ],
+      "acceptance": [
+        "validate_fonts проверяет кегли CSS/TSX/Phaser на кратность нативной сетке",
+        "Нет monospace/Inter/system-ui как основной гарнитуры",
+        "Решение о шрифте для мелких кириллических подписей принято и записано",
+        "Скриншоты текста при коэффициенте устройства 1; 1,25; 1,5; 2"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "validator-log"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-08",
+      "wave": 1,
+      "title": "Единый источник токенов: YAML → CSS-переменные и TS-константы для Phaser",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "art-director",
+        "integration-release-engineer"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#2-мастер-палитра-предложение-56-цветов",
+      "deliverables": [
+        "tools/assets/scripts/generate-tokens.mjs",
+        "apps/web/src/theme/tokens.css",
+        "packages/world-engine/src/theme/tokens.ts"
+      ],
+      "acceptance": [
+        "Сгенерированные файлы помечены как генерируемые и детерминированы",
+        "Проверка запрещает шестнадцатеричные цвета вне файлов токенов в apps/web/src и packages/world-engine/src",
+        "Метеорологические токены вынесены в отдельный набор --meteo-*"
+      ],
+      "evidence_required": [
+        "validator-log"
+      ],
+      "skills": [
+        "pixel-asset-pipeline"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-09",
+      "wave": 1,
+      "title": "Бюджеты производительности и профили плотности уровня",
+      "owner": "web-performance-engineer",
+      "reviewers": [
+        "game-runtime-webgl-engineer"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/02_VISION_AND_PILLARS.md#37-производительность",
+      "deliverables": [
+        "docs/testing/KN01_PERFORMANCE_BUDGETS.md"
+      ],
+      "acceptance": [
+        "Бюджеты кадров/с, памяти текстур, веса загрузки для 3 классов устройств и проектора",
+        "Профили hub-rich, study-calm, battle-focus, reduced-motion, low-power с перечнем отключаемого",
+        "Методика замера воспроизводима скриптом"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "performance-optimizer"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-10",
+      "wave": 1,
+      "title": "Звуковая карта уровня: события, громкости, дакинг, перечень новых звуков",
+      "owner": "audio-ambient-designer",
+      "reviewers": [
+        "art-director",
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#7-звуковая-карта-уровня",
+      "deliverables": [
+        "docs/design/KN01_SOUND_MAP.md"
+      ],
+      "acceptance": [
+        "Каждое событие интерфейса и мира имеет звук или явное «без звука»",
+        "Для каждого нового звука: способ создания (процедурный/лицензия), длительность, вариации",
+        "Громкости и дакинг согласованы с AUDIO_SYSTEM_26063"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "ambient-audio"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-11",
+      "wave": 1,
+      "title": "Поток и вайрфреймы экранов S00–S21 в 4 раскладках",
+      "owner": "ux-accessibility-reviewer",
+      "reviewers": [
+        "art-director",
+        "gameplay-balance-designer"
+      ],
+      "depends_on": [
+        "W1-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md",
+      "deliverables": [
+        "design/wireframes/kn01/README.md"
+      ],
+      "acceptance": [
+        "Вайрфрейм каждого экрана для 1920×1080, 1366×768, 844×390, проектора",
+        "Тест трёх секунд на вайрфреймах с ≥ 3 людьми, результаты записаны",
+        "Порядок фокуса клавиатуры для каждого экрана"
+      ],
+      "evidence_required": [
+        "images",
+        "report"
+      ],
+      "skills": [
+        "design:user-research",
+        "design:accessibility-review"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W1-12",
+      "wave": 1,
+      "title": "Контракты данных уровня: LevelDefinition, ShiftDefinition, TaskTemplate, ProgressionState, события",
+      "owner": "orchestrator",
+      "reviewers": [
+        "integration-release-engineer",
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [
+        "W1-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#12-данные-и-контракты-для-w1-12",
+      "deliverables": [
+        "packages/contracts/src/level.ts",
+        "packages/contracts/src/progression.ts",
+        "content/schemas/level.schema.json"
+      ],
+      "acceptance": [
+        "Ни одна клиентская схема не содержит эталон ответа",
+        "Схема проверяется validate_content_contracts.py",
+        "События progression.unlocked, progression.reward_granted, shift.completed описаны с полями"
+      ],
+      "evidence_required": [
+        "validator-log",
+        "report"
+      ],
+      "skills": [
+        "architect",
+        "security-review"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-01",
+      "wave": 2,
+      "title": "Кодек КН-01: раздел 0, Nddff/00fff, 4PPPP и тесты по фикстурам методиста",
+      "owner": "live-kn01-engineer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "meteo-verifier",
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [
+        "W1-01"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#3-учебная-область-уровня-предложение-для-w1-01",
+      "deliverables": [
+        "packages/kn01-codec/src/index.js",
+        "packages/kn01-codec/src/index.d.ts",
+        "packages/kn01-codec/test/level1.test.js"
+      ],
+      "acceptance": [
+        "Все группы уровня декодируются и кодируются; encode(decode(x)) == x на всех фикстурах",
+        "Некорректный ввод отклоняется с кодом ошибки, без исключений наружу",
+        "Покрытие тестами модуля ≥ 90%",
+        "Версия набора правил увеличена"
+      ],
+      "evidence_required": [
+        "test-log",
+        "coverage"
+      ],
+      "skills": [
+        "live-kn01",
+        "tdd-workflow"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-02",
+      "wave": 2,
+      "title": "Генератор заданий по шаблонам с диагностическими неверными вариантами",
+      "owner": "live-kn01-engineer",
+      "reviewers": [
+        "meteo-verifier",
+        "gameplay-balance-designer"
+      ],
+      "depends_on": [
+        "W2-01",
+        "W1-02",
+        "W1-12"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#42-генерация-заданий",
+      "deliverables": [
+        "packages/content-engine/src/generator/kn01.js",
+        "packages/content-engine/test/generator.test.js"
+      ],
+      "acceptance": [
+        "Детерминизм: один сид — идентичный набор заданий (тест)",
+        "Каждый неверный вариант несёт код причины из W1-02",
+        "Все обязательные граничные случаи W1-01 встречаются в 1000 сгенерированных экземплярах",
+        "Ни один неверный вариант не совпадает с правильным"
+      ],
+      "evidence_required": [
+        "test-log"
+      ],
+      "skills": [
+        "tdd-workflow"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-03",
+      "wave": 2,
+      "title": "Банк реальных телеграмм уровня с происхождением (первая — станция 26063)",
+      "owner": "live-kn01-engineer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "meteo-verifier",
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [
+        "W2-01"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#1-фантазия-уровня",
+      "deliverables": [
+        "content/telegrams/kn01_level1_bank.json",
+        "content/sources/sources.json"
+      ],
+      "acceptance": [
+        "≥ 40 телеграмм, каждая с источником, датой, лицензией и снимком данных",
+        "Все прошли разбор кодеком и контроль качества",
+        "Нет персональных данных; лицензия допускает учебное использование"
+      ],
+      "evidence_required": [
+        "report",
+        "validator-log"
+      ],
+      "skills": [
+        "live-kn01"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-04",
+      "wave": 2,
+      "title": "Учебный пакет уровня: смены С1–С5 и допуск, объяснения, источники",
+      "owner": "meteo-methodologist-ru",
+      "reviewers": [
+        "meteo-verifier"
+      ],
+      "depends_on": [
+        "W2-02",
+        "W2-03",
+        "W1-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#5-структура-смены",
+      "deliverables": [
+        "content/packs/kn01_level1.json",
+        "content/tasks/kn01_level1_templates.json"
+      ],
+      "acceptance": [
+        "Каждый слот каждой смены заполнен шаблоном или запросом к банку",
+        "≥ 120 различных экземпляров на уровне",
+        "Каждый шаблон имеет source_id",
+        "validate_repo и validate_content_contracts без ошибок"
+      ],
+      "evidence_required": [
+        "validator-log",
+        "report"
+      ],
+      "skills": [
+        "russian-synoptic-acceptance"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-05",
+      "wave": 2,
+      "title": "Серверная прогрессия: освоение, сводка смены, журнал ошибок, награды, разблокировка",
+      "owner": "identity-avatar-engineer",
+      "reviewers": [
+        "security-privacy-reviewer",
+        "integration-release-engineer"
+      ],
+      "depends_on": [
+        "W1-04",
+        "W1-12"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#10-освоение-допуск-и-разблокировка",
+      "deliverables": [
+        "apps/server/src/modules/progression/progressionService.ts",
+        "apps/server/src/modules/progression/progressionService.test.ts"
+      ],
+      "acceptance": [
+        "API: состояние прогрессии, сводка смены, журнал ошибок, «повторить похожее»",
+        "Разблокировка cartography и archive только после допуска (тест)",
+        "Награды выдаются идемпотентно",
+        "Покрытие ≥ 80%"
+      ],
+      "evidence_required": [
+        "test-log",
+        "coverage"
+      ],
+      "skills": [
+        "tdd-workflow",
+        "backend-patterns"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-06",
+      "wave": 2,
+      "title": "Режимы смены на сервере: наставник, самостоятельно, блиц; учёт справочника",
+      "owner": "realtime-arena-engineer",
+      "reviewers": [
+        "security-privacy-reviewer",
+        "integration-release-engineer"
+      ],
+      "depends_on": [
+        "W2-05"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#6-режимы-смены-выбор-игрока",
+      "deliverables": [
+        "apps/server/src/modules/shift/shiftModes.ts",
+        "apps/server/src/modules/shift/shiftModes.test.ts"
+      ],
+      "acceptance": [
+        "Таймер блица считается на сервере",
+        "Открытие справочника фиксируется и влияет на освоение",
+        "Недоступный режим отклоняется сервером"
+      ],
+      "evidence_required": [
+        "test-log"
+      ],
+      "skills": [
+        "tdd-workflow"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-10",
+      "wave": 2,
+      "title": "Хаб: перерисовка слоёв L0–L10 на сетке 480×270, все фазы суток",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#1-слои-хаба-480270",
+      "deliverables": [
+        "assets/source/environment/hub/v3/README.md",
+        "assets/manifests/hub.layers.v3.json"
+      ],
+      "acceptance": [
+        "Каждый слой — отдельный источник, палитра сцены ≤ 64",
+        "6 фаз суток для L0 и маски окон",
+        "Горизонт: залив, низкий город, лес; ни одной горы",
+        "validate_pixel_art без ошибок"
+      ],
+      "evidence_required": [
+        "images",
+        "validator-log"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-11",
+      "wave": 2,
+      "title": "Состояния зданий: закрыто, доступно, активно, только что открыто",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W2-10"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#4-свет-и-подсветки",
+      "deliverables": [
+        "assets/manifests/hub.building-states.v3.json"
+      ],
+      "acceptance": [
+        "Для 6 зданий: маски окон, контуры наведения 1 пиксель, замок, маячок, кадры открытия",
+        "Состояния различимы без цвета"
+      ],
+      "evidence_required": [
+        "images"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-12",
+      "wave": 2,
+      "title": "Интерьер «Кодовый пост» и анимированные предметы",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#5-сцена-кодовый-пост-480270-m2",
+      "deliverables": [
+        "assets/manifests/room.codepost.json"
+      ],
+      "acceptance": [
+        "Комната 480×270 в семействе M2",
+        "Телетайп, барограф, часы, лампа, окно с фазами — по таблице кадров",
+        "Зоны совмещения ленты и бланка размечены в манифесте"
+      ],
+      "evidence_required": [
+        "images",
+        "video"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-13",
+      "wave": 2,
+      "title": "Фауна: синица, воробьи, чайка, кряква, белка, кот Барограф, голуби, снегирь",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#3-животные",
+      "deliverables": [
+        "assets/manifests/fauna.level1.json"
+      ],
+      "acceptance": [
+        "Все состояния и кадры по таблице §3, стабильные точки опоры",
+        "Семейства M1 и M2 для синицы, белки и кота",
+        "Цвета — из мастер-палитры"
+      ],
+      "evidence_required": [
+        "images",
+        "video"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-14",
+      "wave": 2,
+      "title": "NPC: наставник (портрет 6 выражений, фигура), техник, лаборантка",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#4-персонажи-npc",
+      "deliverables": [
+        "assets/manifests/npc.level1.json"
+      ],
+      "acceptance": [
+        "Портрет M3 с 6 выражениями и анимацией кивка",
+        "Фигуры M1 с idle/walk и профессиональными циклами"
+      ],
+      "evidence_required": [
+        "images",
+        "video"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-15",
+      "wave": 2,
+      "title": "Аватар игрока в семействах M1 и M2, совместимый с гардеробом",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#4-персонажи-npc",
+      "deliverables": [
+        "assets/manifests/avatar.level1.json"
+      ],
+      "acceptance": [
+        "Слои одежды совпадают по кадрам и точкам опоры",
+        "Состояния idle, walk, work_table, think, celebrate, mistake"
+      ],
+      "evidence_required": [
+        "images",
+        "video"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-16",
+      "wave": 2,
+      "title": "Интерфейсный набор v2: панели, бланки, лента, кнопки, клавиатура, штампы, лампы, иконки",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W1-06",
+        "W1-07"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#7-интерфейсный-набор-v2",
+      "deliverables": [
+        "assets/manifests/ui.kit.v3.json"
+      ],
+      "acceptance": [
+        "Все элементы таблицы §7 во всех состояниях, 9-slice без искажения углов",
+        "Контраст текста на фоне ≥ 4,5:1",
+        "Состояния различимы без цвета"
+      ],
+      "evidence_required": [
+        "images"
+      ],
+      "skills": [
+        "frontend-design",
+        "design:design-system"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-17",
+      "wave": 2,
+      "title": "Знак «26063», эмблема станции, экран загрузки",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "art-director",
+        "pixel-art-quality-reviewer"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s01-титульный-экран",
+      "deliverables": [
+        "assets/manifests/brand.mark.v3.json"
+      ],
+      "acceptance": [
+        "Леттеринг 26063 на сетке, без масштабирования вниз",
+        "Эмблема 64×64 и 32×32 нарисованы отдельно, не уменьшены",
+        "validate_brand без ошибок"
+      ],
+      "evidence_required": [
+        "images",
+        "validator-log"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-18",
+      "wave": 2,
+      "title": "Награды уровня: карандаш, значки, лампа дежурного, жетон, свидетельство",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-06",
+        "W1-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#11-награды-уровня-только-оформление",
+      "deliverables": [
+        "assets/manifests/rewards.level1.json"
+      ],
+      "acceptance": [
+        "Иконки 32×32 и предметы в семействе M2",
+        "Свидетельство без имитации реальных организаций"
+      ],
+      "evidence_required": [
+        "images"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-19",
+      "wave": 2,
+      "title": "Эффекты: штамп, обводка карандашом, перелёт значения, лампы, погода за окном",
+      "owner": "pixel-asset-designer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W1-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#6-каталог-анимаций-интерфейса-и-отклика",
+      "deliverables": [
+        "assets/manifests/effects.level1.json"
+      ],
+      "acceptance": [
+        "Кадры по каталогу A-01…A-20",
+        "Варианты для уменьшенной анимации",
+        "Частицы погоды ≤ 150 одновременно"
+      ],
+      "evidence_required": [
+        "images",
+        "video"
+      ],
+      "skills": [
+        "pixel-art-direction"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-20",
+      "wave": 2,
+      "title": "Новые звуки уровня с происхождением",
+      "owner": "audio-ambient-designer",
+      "reviewers": [
+        "art-director",
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [
+        "W1-10"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#7-звуковая-карта-уровня",
+      "deliverables": [
+        "assets/manifests/audio.collection.json"
+      ],
+      "acceptance": [
+        "Все звуки из W1-10 созданы",
+        "Каждый имеет источник, лицензию, контрольную сумму",
+        "validate_audio без ошибок"
+      ],
+      "evidence_required": [
+        "validator-log",
+        "audio"
+      ],
+      "skills": [
+        "ambient-audio"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W2-21",
+      "wave": 2,
+      "title": "Конвейер: манифесты, атласы, семантические ID всех новых ассетов",
+      "owner": "pixel-asset-pipeline-engineer",
+      "reviewers": [
+        "integration-release-engineer",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W2-10",
+        "W2-12",
+        "W2-13",
+        "W2-14",
+        "W2-16"
+      ],
+      "spec": "docs/design/PIXEL_ASSET_PIPELINE.md",
+      "deliverables": [
+        "assets/generated/README.md",
+        "tools/assets/scripts/build-level1.mjs"
+      ],
+      "acceptance": [
+        "Сборка воспроизводима (две сборки — одинаковые хэши)",
+        "Рабочий контур не ссылается на файлы вне assets/generated",
+        "Мастер-картинка hub_master_night исключена из рабочего контура"
+      ],
+      "evidence_required": [
+        "build-log"
+      ],
+      "skills": [
+        "pixel-asset-pipeline"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-01",
+      "wave": 3,
+      "title": "Phaser: новая сцена хаба на слоях, фазы суток, шрифты, модули ≤ 400 строк",
+      "owner": "game-runtime-webgl-engineer",
+      "reviewers": [
+        "web-performance-engineer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W2-21",
+        "W1-07",
+        "W1-08"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#1-слои-хаба-480270",
+      "deliverables": [
+        "packages/world-engine/src/scenes/hub/HubScene.ts"
+      ],
+      "acceptance": [
+        "Целое увеличение и рамка-паспарту на всех раскладках, включая 800×600",
+        "Фаза суток из world_location и демонстрационное ускорение",
+        "Ни одного литерала цвета и гарнитуры вне токенов",
+        "Состояния зданий приходят от сервера через мост"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "metrics"
+      ],
+      "skills": [
+        "phaser-webgl-runtime"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-02",
+      "wave": 3,
+      "title": "Живой мир хаба: расписания, фауна, NPC, реакции, находки, профили плотности",
+      "owner": "living-world-engineer",
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "art-director",
+        "game-runtime-webgl-engineer",
+        "web-performance-engineer",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W3-01",
+        "W2-13",
+        "W2-14"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#2-фоновые-циклы-хаба-14",
+      "deliverables": [
+        "packages/world-engine/src/world/hubSchedule.ts"
+      ],
+      "acceptance": [
+        "≥ 14 циклов, одновременно заметных ≤ 3",
+        "Каждое животное реагирует на нажатие",
+        "Находки фиксируются на сервере",
+        "Поведение воспроизводимо по сиду (тест)"
+      ],
+      "evidence_required": [
+        "video",
+        "test-log"
+      ],
+      "skills": [
+        "living-world-browser"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-03",
+      "wave": 3,
+      "title": "Сцена «Кодовый пост» и мост событий React↔Phaser",
+      "owner": "game-runtime-webgl-engineer",
+      "reviewers": [
+        "web-performance-engineer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W2-12",
+        "W2-13",
+        "W2-14",
+        "W2-15"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#5-сцена-кодовый-пост-480270-m2",
+      "deliverables": [
+        "packages/world-engine/src/scenes/codepost/CodePostScene.ts",
+        "apps/web/src/game/worldBridge.ts"
+      ],
+      "acceptance": [
+        "События: печать ленты, штамп, серия, ошибка, наставник, кот — без покадровых обновлений React",
+        "Профиль study-calm во время задания",
+        "Пауза и потеря контекста обрабатываются"
+      ],
+      "evidence_required": [
+        "video",
+        "test-log"
+      ],
+      "skills": [
+        "phaser-webgl-runtime"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-04",
+      "wave": 3,
+      "title": "React-дизайн-система v2 и страница-витрина компонентов (только в разработке)",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "art-director",
+        "ux-accessibility-reviewer",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W2-16",
+        "W1-08"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#7-интерфейсный-набор-v2",
+      "deliverables": [
+        "apps/web/src/features/ui/index.ts",
+        "apps/web/src/dev/UiShowcase.tsx"
+      ],
+      "acceptance": [
+        "Компоненты: Panel, PaperForm, Tape, Button, KeyPad, ChoiceCard, Stamp, StreakLamps, MentorPortrait, SpeechBubble, Dialog, DigitAnatomy",
+        "У каждого все состояния и фокус клавиатуры",
+        "Витрина недоступна в рабочей сборке"
+      ],
+      "evidence_required": [
+        "screenshots"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-05",
+      "wave": 3,
+      "title": "Экраны S00–S03: загрузка, титул, журнал допуска, код",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "security-privacy-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W3-04",
+        "W2-17",
+        "W0-03"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s00-загрузка",
+      "deliverables": [
+        "apps/web/src/features/boot/BootScreen.tsx",
+        "apps/web/src/features/title/TitleScreen.tsx",
+        "apps/web/src/features/identity/LoginJournal.tsx"
+      ],
+      "acceptance": [
+        "Иерархия бренда §8 соблюдена",
+        "Нет нативных select",
+        "Блокировка и попытки — с сервера",
+        "Пустой ростер объяснён"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "test-log"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-06",
+      "wave": 3,
+      "title": "Онбординг S04–S05: выдача формы и брифинг наставника",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "art-director",
+        "gameplay-balance-designer"
+      ],
+      "depends_on": [
+        "W3-04",
+        "W2-15",
+        "W1-05"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s04-выдача-формы-первый-вход",
+      "deliverables": [
+        "apps/web/src/features/onboarding/BriefingScreen.tsx",
+        "apps/web/src/features/avatar/AvatarEditor.tsx"
+      ],
+      "acceptance": [
+        "AvatarEditor разбит на модули ≤ 400 строк",
+        "Брифинг пропускается",
+        "Реплики из данных уровня"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "video"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-07",
+      "wave": 3,
+      "title": "Хаб-интерфейс S06–S08: главная кнопка, досье, карта уровня, выбор режима",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W3-01",
+        "W3-04",
+        "W2-05"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s06-хаб-центр-26063",
+      "deliverables": [
+        "apps/web/src/features/hub/HubOverlay.tsx",
+        "apps/web/src/features/hub/LevelMap.tsx",
+        "apps/web/src/features/hub/ModeSelect.tsx"
+      ],
+      "acceptance": [
+        "Одна главная кнопка с подписью следующей цели",
+        "Полная табличка только у текущей цели",
+        "Обучающая подсветка при первом входе",
+        "Тест трёх секунд пройден"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "report"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-08",
+      "wave": 3,
+      "title": "Рабочее место S09–S12: все типы заданий уровня и отклик",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "meteo-methodologist-ru",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W3-03",
+        "W3-04",
+        "W2-04",
+        "W2-06"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s10-рабочее-место-кодовый-пост",
+      "deliverables": [
+        "apps/web/src/features/shift/ShiftWorkspace.tsx",
+        "apps/web/src/features/shift/tasks/index.ts",
+        "apps/web/src/features/shift/feedback/DigitAnatomy.tsx"
+      ],
+      "acceptance": [
+        "identify, decode, anatomy, encode, sequence (перетаскивание + клавиатура), findError, fullTelegram",
+        "Отклик ≤ 100 мс; штамп, перелёт в мини-схему, разбор по цифрам",
+        "Методист подтвердил корректность отображения кодов и разбора на 20 примерах",
+        "В сети нет эталона до проверки"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "video",
+        "test-log"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-09",
+      "wave": 3,
+      "title": "Справочник КН-01 S11",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "meteo-verifier",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W3-04",
+        "W1-01"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s11-справочник-кн-01",
+      "deliverables": [
+        "apps/web/src/features/codebook/Codebook.tsx",
+        "content/codebook/kn01_level1.json"
+      ],
+      "acceptance": [
+        "Страницы из утверждённых правил с source_id",
+        "Использование фиксируется сервером",
+        "В допуске недоступен"
+      ],
+      "evidence_required": [
+        "screenshots"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-10",
+      "wave": 3,
+      "title": "Итоги, награды, свидетельство и разблокировка: S13, S14, S21, S15",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "art-director",
+        "gameplay-balance-designer"
+      ],
+      "depends_on": [
+        "W3-08",
+        "W2-05",
+        "W2-18"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s13-сводка-смены",
+      "deliverables": [
+        "apps/web/src/features/results/ShiftSummary.tsx",
+        "apps/web/src/features/results/RewardReveal.tsx",
+        "apps/web/src/features/results/Certificate.tsx",
+        "packages/world-engine/src/scenes/hub/unlockSequence.ts"
+      ],
+      "acceptance": [
+        "Сводка показывается и при прерванной смене",
+        "Разблокировка пропускается и имеет вариант уменьшенной анимации",
+        "Данные только с сервера"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "video"
+      ],
+      "skills": [
+        "frontend-design",
+        "phaser-webgl-runtime"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-11",
+      "wave": 3,
+      "title": "Журнал ошибок, настройки, находки, пауза, ошибки связи: S16–S20",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W3-04",
+        "W2-05"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#s16-журнал-ошибок",
+      "deliverables": [
+        "apps/web/src/features/errors/ErrorJournal.tsx",
+        "apps/web/src/features/settings/Settings.tsx",
+        "apps/web/src/features/discoveries/Discoveries.tsx"
+      ],
+      "acceptance": [
+        "«Повторить похожее» создаёт мини-смену",
+        "Настройки сохраняются в профиле",
+        "Обрыв связи не теряет ответ"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "test-log"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-12",
+      "wave": 3,
+      "title": "Подключение звуков уровня и дакинг",
+      "owner": "audio-ambient-designer",
+      "reviewers": [
+        "web-performance-engineer",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W2-20",
+        "W3-08"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#7-звуковая-карта-уровня",
+      "deliverables": [
+        "packages/world-engine/src/audio/WorldAudioManager.ts"
+      ],
+      "acceptance": [
+        "Каждое событие карты звука воспроизводится",
+        "Дакинг −6 дБ в задании",
+        "WorldAudioManager разбит на модули ≤ 800 строк",
+        "Звук стартует только после жеста пользователя"
+      ],
+      "evidence_required": [
+        "video",
+        "test-log"
+      ],
+      "skills": [
+        "ambient-audio"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-13",
+      "wave": 3,
+      "title": "Адаптация: телефон, ноутбук, проектор",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W3-05",
+        "W3-07",
+        "W3-08",
+        "W3-10"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W3-13/layouts.md"
+      ],
+      "acceptance": [
+        "Все экраны в 4 раскладках без горизонтальной прокрутки",
+        "Цели касания ≥ 44 CSS-пикселя",
+        "Проектор читается с 3 м (проверка человеком)"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "report"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W3-14",
+      "wave": 3,
+      "title": "Рефакторинг стилей: модули по фичам на токенах, удаление жёстких цветов",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "integration-release-engineer",
+        "art-director"
+      ],
+      "depends_on": [
+        "W1-08",
+        "W3-04"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/01_AUDIT.md#2-интерфейс-и-типографика",
+      "deliverables": [
+        "apps/web/src/styles.css"
+      ],
+      "acceptance": [
+        "styles.css ≤ 400 строк (только база)",
+        "0 шестнадцатеричных цветов вне токенов (проверка W1-08)",
+        "Визуальная регрессия не показывает непреднамеренных изменений"
+      ],
+      "evidence_required": [
+        "validator-log",
+        "screenshots"
+      ],
+      "skills": [
+        "frontend-design",
+        "refactor-clean"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W4-01",
+      "wave": 4,
+      "title": "Полировка анимаций по каталогу A-01…A-20 и варианты уменьшенной анимации",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W3-08",
+        "W3-10",
+        "W2-19"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/06_WORLD_ANIMATION_AUDIO.md#6-каталог-анимаций-интерфейса-и-отклика",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W4-01/animation-audit.md"
+      ],
+      "acceptance": [
+        "Каждая анимация совпадает с таблицей по длительности ±10%",
+        "prefers-reduced-motion и настройка работают",
+        "Нет тряски камеры и эффектов поверх цифр, кроме разрешённых"
+      ],
+      "evidence_required": [
+        "video",
+        "report"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W4-02",
+      "wave": 4,
+      "title": "Свет и подсветки мира и интерфейса по таблице состояний",
+      "owner": "game-runtime-webgl-engineer",
+      "reviewers": [
+        "art-director",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W3-02",
+        "W3-07"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md#4-свет-и-подсветки",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W4-02/highlight-audit.md"
+      ],
+      "acceptance": [
+        "Наведение, нажатие, фокус, выбрано, доступно, закрыто, только что открыто — для всех зданий и животных",
+        "Клик по зданию всегда даёт видимый отклик (исправление A-08)",
+        "Свечение — спрайтами, без размытия"
+      ],
+      "evidence_required": [
+        "video",
+        "screenshots"
+      ],
+      "skills": [
+        "phaser-webgl-runtime"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W4-03",
+      "wave": 4,
+      "title": "Доступность уровня",
+      "owner": "ui-pixel-designer",
+      "reviewers": [
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W3-13"
+      ],
+      "spec": "docs/testing/QUALITY_GATES.md",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W4-03/a11y-report.md"
+      ],
+      "acceptance": [
+        "Полное прохождение уровня только клавиатурой",
+        "Экранный чтец озвучивает задание, варианты и результат",
+        "Контраст ≥ 4,5:1, цвет не единственный канал",
+        "Размер текста ×1,5 без поломки раскладки"
+      ],
+      "evidence_required": [
+        "report",
+        "test-log"
+      ],
+      "skills": [
+        "design:accessibility-review"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W4-04",
+      "wave": 4,
+      "title": "Производительность и деградация по бюджетам W1-09",
+      "owner": "game-runtime-webgl-engineer",
+      "reviewers": [
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W3-02",
+        "W3-03",
+        "W1-09"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/02_VISION_AND_PILLARS.md#37-производительность",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W4-04/perf-report.md"
+      ],
+      "acceptance": [
+        "Все бюджеты W1-09 выполнены на эталонных устройствах",
+        "Автоматическое включение low-power",
+        "Восстановление после потери контекста WebGL"
+      ],
+      "evidence_required": [
+        "metrics",
+        "report"
+      ],
+      "skills": [
+        "phaser-webgl-runtime",
+        "performance-optimizer"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W4-05",
+      "wave": 4,
+      "title": "Вычитка всех строк уровня",
+      "owner": "gameplay-balance-designer",
+      "reviewers": [
+        "meteo-methodologist-ru",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W3-05",
+        "W3-06",
+        "W3-07",
+        "W3-08",
+        "W3-10",
+        "W3-11"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/03_LEVEL_KN01_DESIGN.md#83-принципы-текста",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W4-05/copy-audit.md"
+      ],
+      "acceptance": [
+        "Ноль ошибок «ё», «ёлочки», тире, минус, неразрывные пробелы",
+        "Термины совпадают с глоссарием методиста",
+        "Нет восклицаний в отклике на ошибку"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "design:ux-copy"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W5-01",
+      "wave": 5,
+      "title": "E2E: путь новичка от титула до допуска и разблокировки",
+      "owner": "integration-release-engineer",
+      "reviewers": [
+        "security-privacy-reviewer"
+      ],
+      "depends_on": [
+        "W3-10",
+        "W3-11"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md#поток-уровня",
+      "deliverables": [
+        "apps/web/e2e/kn01-level1.spec.ts"
+      ],
+      "acceptance": [
+        "Тест проходит С1–С5, допуск, разблокировку",
+        "Перехват сети подтверждает отсутствие эталонов до проверки",
+        "Тест стабилен 20 запусков подряд"
+      ],
+      "evidence_required": [
+        "test-log",
+        "video"
+      ],
+      "skills": [
+        "e2e-testing",
+        "e2e"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W5-02",
+      "wave": 5,
+      "title": "Визуальная регрессия: все экраны × 4 раскладки × 3 фазы суток",
+      "owner": "integration-release-engineer",
+      "reviewers": [
+        "art-director"
+      ],
+      "depends_on": [
+        "W4-01",
+        "W4-02"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/05_SCREENS.md",
+      "deliverables": [
+        "apps/web/e2e/visual/kn01-level1.visual.spec.ts"
+      ],
+      "acceptance": [
+        "Эталонные снимки утверждены art-director",
+        "Порог расхождения задан и обоснован"
+      ],
+      "evidence_required": [
+        "screenshots",
+        "test-log"
+      ],
+      "skills": [
+        "e2e-testing"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W5-03",
+      "wave": 5,
+      "title": "Плейтест: 5 студентов, 2 преподавателя, 2 гостя",
+      "owner": "ux-accessibility-reviewer",
+      "reviewers": [
+        "gameplay-balance-designer",
+        "integration-release-engineer"
+      ],
+      "depends_on": [
+        "W4-01",
+        "W4-03",
+        "W4-05"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/02_VISION_AND_PILLARS.md#36-восприятие",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W5-03/playtest-report.md"
+      ],
+      "acceptance": [
+        "Тест трёх секунд ≥ 4/5 на каждом экране",
+        "SUS ≥ 75",
+        "≥ 70% хотят ещё одну смену",
+        "Время до первого учебного действия новичка ≤ 60 с",
+        "Все найденные проблемы заведены как задачи или закрыты"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "design:user-research"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W5-04",
+      "wave": 5,
+      "title": "Двойная методическая приёмка пакета уровня",
+      "owner": "meteo-methodologist-ru",
+      "reviewers": [
+        "meteo-verifier"
+      ],
+      "depends_on": [
+        "W2-04",
+        "W3-08",
+        "W3-09"
+      ],
+      "spec": "docs/09_SOURCE_POLICY.md",
+      "deliverables": [
+        "content/packs/kn01_level1.json"
+      ],
+      "acceptance": [
+        "review.methodical и review.independent_verification = passed",
+        "publication_allowed = true",
+        "Расхождения методиста и проверяющего — ноль или выделены в профиль"
+      ],
+      "evidence_required": [
+        "report"
+      ],
+      "skills": [
+        "russian-synoptic-acceptance"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W5-05",
+      "wave": 5,
+      "title": "Финальная художественная приёмка «уровень крупной студии»",
+      "owner": "integration-release-engineer",
+      "reviewers": [
+        "art-director",
+        "pixel-art-quality-reviewer",
+        "ux-accessibility-reviewer"
+      ],
+      "depends_on": [
+        "W5-02",
+        "W5-03",
+        "W4-04"
+      ],
+      "spec": "docs/roadmap/kn01-aaa/02_VISION_AND_PILLARS.md#3-измеримое-определение-готовности-проверяется-в-w5-05",
+      "deliverables": [
+        "docs/roadmap/kn01-aaa/evidence/W5-05/aaa-checklist.md"
+      ],
+      "acceptance": [
+        "Все пункты §3 видения отмечены с доказательством",
+        "Ни одного открытого дефекта P0/P1 из аудита"
+      ],
+      "evidence_required": [
+        "report",
+        "screenshots",
+        "video"
+      ],
+      "skills": [
+        "verification-loop"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    },
+    {
+      "id": "W5-06",
+      "wave": 5,
+      "title": "Релизные ворота уровня КН-01",
+      "owner": "integration-release-engineer",
+      "reviewers": [
+        "security-privacy-reviewer",
+        "web-performance-engineer"
+      ],
+      "depends_on": [
+        "W5-01",
+        "W5-04",
+        "W5-05"
+      ],
+      "spec": "docs/deployment/DEPLOYMENT_AND_UPDATES.md",
+      "deliverables": [
+        "CHANGELOG.md"
+      ],
+      "acceptance": [
+        "Все задачи плана в статусе done",
+        "Все валидаторы и тесты зелёные",
+        "Сборка выпуска проверена скриптами релиза"
+      ],
+      "evidence_required": [
+        "ci-log",
+        "report"
+      ],
+      "skills": [
+        "verification-loop"
+      ],
+      "status": "todo",
+      "evidence": [],
+      "verified_by": [],
+      "notes": ""
+    }
+  ]
+}
