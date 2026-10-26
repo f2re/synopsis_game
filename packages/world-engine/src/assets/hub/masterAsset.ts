@@ -13,6 +13,8 @@ export const HUB_MASTER_ORIGINAL_HEIGHT = 941;
 export const HUB_MASTER_ORIGINAL_SHA256 =
   '3efc212bdcd7eaaacac119d20cbd89f83ab62d3d9761aafd5abdacae5660a340';
 export const HUB_MASTER_STATIC_URL = '/hub/hub_master_approved.png';
+export const HUB_MASTER_NIGHT_TEXTURE_KEY = 'hub-master-night';
+export const HUB_MASTER_NIGHT_STATIC_URL = '/hub/hub_master_night.png';
 
 const encoded = [part01, part02, part03, part04, part05, part06].join('');
 
