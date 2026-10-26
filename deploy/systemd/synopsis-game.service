@@ -10,7 +10,7 @@ Group=synopsis-game
 WorkingDirectory=/opt/synopsis-game/current/server
 EnvironmentFile=-/etc/synopsis-game/app.env
 Environment=SYNOPSIS_VERSION_FILE=/opt/synopsis-game/current/VERSION
-ExecStart=/opt/synopsis-game/current/runtime/node/bin/node /opt/synopsis-game/current/server/server.mjs
+ExecStart=/opt/synopsis-game/current/runtime/node/bin/node /opt/synopsis-game/current/server/index.js
 Restart=on-failure
 RestartSec=3
 TimeoutStopSec=15
