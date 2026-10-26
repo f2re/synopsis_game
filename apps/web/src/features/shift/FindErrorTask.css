@@ -1,0 +1,57 @@
+.find-error-workspace {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+.find-error-rule {
+  display: grid;
+  gap: 3px;
+  padding: 12px 14px;
+  border: 1px solid rgba(216,181,91,.28);
+  border-radius: 12px;
+  background: rgba(216,181,91,.08);
+  color: #b7c6cb;
+  font-size: 12px;
+}
+.find-error-rule strong { color: #e6d8a8; }
+.find-error-svg {
+  width: 100%;
+  max-height: 620px;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  background: #e9ece7;
+}
+.find-error-paper { fill: #f7f5ea; stroke: #c9c6b7; stroke-width: 3; }
+.find-error-guide { fill: none; stroke: #b4bdba; stroke-width: 5; stroke-dasharray: 18 14; opacity: .42; }
+.find-error-guide.secondary { opacity: .26; }
+.find-error-station { cursor: pointer; outline: none; }
+.find-error-hit { fill: transparent; stroke: transparent; stroke-width: 5; }
+.find-error-center { fill: #fdfcf5; stroke: #273941; stroke-width: 7; }
+.find-error-dot { fill: #273941; }
+.find-error-value { fill: #24353d; font: 700 25px/1 system-ui, sans-serif; }
+.find-error-name { fill: #45545b; font: 700 19px/1 system-ui, sans-serif; }
+.find-error-station:hover .find-error-hit,
+.find-error-station:focus .find-error-hit,
+.find-error-station.is-selected .find-error-hit {
+  fill: rgba(46,115,150,.08);
+  stroke: #2e7396;
+}
+.find-error-station.is-selected .find-error-center { stroke: #2e7396; }
+.find-error-station.is-correct .find-error-hit { fill: rgba(77,153,95,.12); stroke: #4d995f; }
+.find-error-station.is-correct .find-error-center { stroke: #4d995f; }
+.find-error-station.is-wrong .find-error-hit { fill: rgba(186,73,67,.12); stroke: #ba4943; }
+.find-error-station.is-wrong .find-error-center { stroke: #ba4943; }
+.find-error-legend {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: #91a7b1;
+  font-size: 12px;
+}
+.find-error-legend b { color: #dce7e7; }
+.find-error-legend strong { margin-left: auto; color: #e4ecea; }
+@media (max-width: 620px) {
+  .find-error-legend { display: grid; gap: 5px; }
+  .find-error-legend strong { margin-left: 0; }
+}
