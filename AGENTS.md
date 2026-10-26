@@ -12,8 +12,10 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 6. Live KN-01 data are untrusted input and must pass versioned parsing, QC and snapshotting before gameplay.
 7. No public self-registration. Roster and access rules follow `docs/accounts/ROSTER_LOGIN_AND_ACCESS.md`.
 8. Pixel-art direction follows `docs/design/PIXEL_ART_STYLE_GUIDE.md` and `docs/design/LIVING_WORLD_SYSTEM.md`.
-9. Phaser 4 is the accepted browser runtime for the living pixel world. React remains the application/UI shell; professional meteorological geometry remains in the separate SVG/Canvas `map-engine` unless a later ADR explicitly changes this boundary.
+9. Phaser 4 is the accepted browser runtime for the living pixel world. React remains the application/UI shell; professional meteorological geometry stays in `apps/web/src/features/map` on SVG/Canvas.
 10. Production graphics follow `docs/design/PIXEL_ASSET_PIPELINE.md`: editable source and manifests are authoritative; `assets/generated` is build output and must never be hand-edited.
+11. Foundation/MVP topology is exactly `apps/web`, `apps/server` plus `packages/kn01-codec`, `packages/content-engine`, `packages/game-rules`, `packages/world-engine`, and `packages/contracts`. A new app or package boundary requires a new ADR first.
+12. Arena TV is the read-only `/arena-tv` route of `apps/web`; do not recreate `apps/display` or `apps/spectator` during Foundation/MVP.
 
 ## Mandatory source documents
 
@@ -22,10 +24,36 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 - `docs/09_SOURCE_POLICY.md`
 - `docs/architecture/README.md`
 - `docs/architecture/GAME_RUNTIME_AND_ASSETS.md`
+- `docs/decisions/ADR-0005-mvp-modular-monolith-boundaries.md`
 - `docs/design/PIXEL_ASSET_PIPELINE.md`
 - `docs/testing/QUALITY_GATES.md`
 - `config/art-toolchain.yaml` for accepted runtime/art tooling
 - domain-specific docs referenced by `agents/registry.yaml`
+
+## Architecture boundary
+
+Foundation/MVP physical topology:
+
+```text
+apps/
+  web/
+  server/
+packages/
+  kn01-codec/
+  content-engine/
+  game-rules/
+  world-engine/
+  contracts/
+```
+
+`identity`, `live-ingest`, `realtime`, `broadcast`, `replay`, and `rewards` remain internal modules of `apps/server` until an ADR demonstrates a stable reusable boundary and independent consumers. Meteorological map rendering remains an `apps/web` feature, not a separate package at this stage.
+
+Run both repository validators before handoff:
+
+```bash
+python tools/validate_repo.py
+python tools/validate_architecture.py
+```
 
 ## Agent routing
 
