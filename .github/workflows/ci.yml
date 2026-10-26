@@ -22,22 +22,31 @@ jobs:
           python tools/validate_architecture.py
           python tools/validate_deployment.py
           python tools/test_deployment.py
+          python tools/validate_brand.py
+          python tools/validate_pixel_art.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
           python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py
-      - name: Собрать клиент
+      - name: Собрать приложение и проверить identity
         run: |
-          pnpm bootstrap:web
+          pnpm bootstrap
           pnpm typecheck
+          pnpm test:server
           pnpm build
-      - name: Проверить сервер
+      - name: Сохранить серверный lockfile до фиксации
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-server-lockfile
+          path: apps/server/pnpm-lock.yaml
+      - name: Проверить production-сервер
         run: |
-          node apps/server/server.mjs >/tmp/synopsis-server.log 2>&1 &
+          SYNOPSIS_IDENTITY_STORE=/tmp/synopsis-identity-ci.json API_BIND=127.0.0.1 API_PORT=4174 node apps/server/dist/index.js >/tmp/synopsis-server.log 2>&1 &
           pid=$!
           trap 'kill $pid 2>/dev/null || true' EXIT
           for i in {1..20}; do curl -fsS http://127.0.0.1:4174/ready && break || sleep 0.5; done
           curl -fsS http://127.0.0.1:4174/health
+          curl -fsS http://127.0.0.1:4174/api/identity/groups
       - name: Собрать и проверить кандидат Linux-релиза
         env:
           NODE_VERSION: '22.23.4'
