@@ -23,7 +23,11 @@ export class ArchiveScene extends Phaser.Scene {
     this.drawRoom();
     this.drawActions();
     bindLogicalViewport(this);
-    worldAudio.playAmbientBed('audio.ambient.archive-room');
+    worldAudio.playArchiveAmbient(1500);
+
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      worldAudio.stopAmbient(1000);
+    });
   }
 
   private drawRoom(): void {

@@ -1,8 +1,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@synopsis/world-engine': path.resolve(__dirname, '../../packages/world-engine/src/index.ts'),
+      'phaser': path.resolve(__dirname, 'node_modules/.pnpm/phaser@4.2.1/node_modules/phaser'),
+    },
+  },
   optimizeDeps: {
     exclude: ['@synopsis/world-engine'],
   },

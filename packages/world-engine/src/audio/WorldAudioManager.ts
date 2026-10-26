@@ -119,6 +119,81 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
     loop: true,
   },
 
+  // --- Ландшафтные события побережья (Скрип сосен, порывы ветра, морской гудок) ---
+  'audio.ambient.pine-creak-01': {
+    id: 'audio.ambient.pine-creak-01',
+    url: '/audio/ambient/amb_pine_creak_01.wav',
+    compressedUrl: '/audio/ambient/amb_pine_creak_01.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.65,
+    loop: false,
+  },
+  'audio.ambient.pine-creak-02': {
+    id: 'audio.ambient.pine-creak-02',
+    url: '/audio/ambient/amb_pine_creak_02.wav',
+    compressedUrl: '/audio/ambient/amb_pine_creak_02.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.60,
+    loop: false,
+  },
+  'audio.ambient.pine-creak-03': {
+    id: 'audio.ambient.pine-creak-03',
+    url: '/audio/ambient/amb_pine_creak_03.wav',
+    compressedUrl: '/audio/ambient/amb_pine_creak_03.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.65,
+    loop: false,
+  },
+  'audio.ambient.pine-creak': {
+    id: 'audio.ambient.pine-creak',
+    url: '/audio/ambient/amb_pine_creak.wav',
+    compressedUrl: '/audio/ambient/amb_pine_creak.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.65,
+    loop: false,
+    variations: [
+      'audio.ambient.pine-creak-01',
+      'audio.ambient.pine-creak-02',
+      'audio.ambient.pine-creak-03',
+    ],
+  },
+  'audio.ambient.wind-gust-01': {
+    id: 'audio.ambient.wind-gust-01',
+    url: '/audio/ambient/amb_wind_gust_01.wav',
+    compressedUrl: '/audio/ambient/amb_wind_gust_01.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.55,
+    loop: false,
+  },
+  'audio.ambient.wind-gust-02': {
+    id: 'audio.ambient.wind-gust-02',
+    url: '/audio/ambient/amb_wind_gust_02.wav',
+    compressedUrl: '/audio/ambient/amb_wind_gust_02.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.50,
+    loop: false,
+  },
+  'audio.ambient.wind-gust': {
+    id: 'audio.ambient.wind-gust',
+    url: '/audio/ambient/amb_wind_gust.wav',
+    compressedUrl: '/audio/ambient/amb_wind_gust.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.55,
+    loop: false,
+    variations: [
+      'audio.ambient.wind-gust-01',
+      'audio.ambient.wind-gust-02',
+    ],
+  },
+  'audio.ambient.foghorn-distant': {
+    id: 'audio.ambient.foghorn-distant',
+    url: '/audio/ambient/amb_foghorn_distant.wav',
+    compressedUrl: '/audio/ambient/amb_foghorn_distant.ogg',
+    channel: 'ambient',
+    defaultVolume: 0.40,
+    loop: false,
+  },
+
   // --- Фауна Северо-Запада (Аутентичные полевые записи + ShuffleBag) ---
   'audio.fauna.tit-chirp-01': {
     id: 'audio.fauna.tit-chirp-01',
@@ -192,7 +267,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
     url: '/audio/fauna/fauna_gull_distant_01.wav',
     compressedUrl: '/audio/fauna/fauna_gull_distant_01.ogg',
     channel: 'effects',
-    defaultVolume: 0.55,
+    defaultVolume: 0.35,
     loop: false,
   },
   'audio.fauna.gull-distant-02': {
@@ -200,7 +275,15 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
     url: '/audio/fauna/fauna_gull_distant_02.wav',
     compressedUrl: '/audio/fauna/fauna_gull_distant_02.ogg',
     channel: 'effects',
-    defaultVolume: 0.55,
+    defaultVolume: 0.35,
+    loop: false,
+  },
+  'audio.fauna.gull-distant-03': {
+    id: 'audio.fauna.gull-distant-03',
+    url: '/audio/fauna/fauna_gull_distant_03.wav',
+    compressedUrl: '/audio/fauna/fauna_gull_distant_03.ogg',
+    channel: 'effects',
+    defaultVolume: 0.35,
     loop: false,
   },
   'audio.fauna.gull-distant': {
@@ -208,12 +291,31 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
     url: '/audio/fauna/fauna_gull_distant.wav',
     compressedUrl: '/audio/fauna/fauna_gull_distant.ogg',
     channel: 'effects',
-    defaultVolume: 0.55,
+    defaultVolume: 0.35,
     loop: false,
     variations: [
       'audio.fauna.gull-distant-01',
       'audio.fauna.gull-distant-02',
+      'audio.fauna.gull-distant-03',
     ],
+  },
+
+  'audio.fauna.woodpecker-drum': {
+    id: 'audio.fauna.woodpecker-drum',
+    url: '/audio/fauna/fauna_woodpecker_drum.wav',
+    compressedUrl: '/audio/fauna/fauna_woodpecker_drum.ogg',
+    channel: 'effects',
+    defaultVolume: 0.60,
+    loop: false,
+  },
+
+  'audio.fauna.crow-distant': {
+    id: 'audio.fauna.crow-distant',
+    url: '/audio/fauna/fauna_crow_distant.wav',
+    compressedUrl: '/audio/fauna/fauna_crow_distant.ogg',
+    channel: 'effects',
+    defaultVolume: 0.45,
+    loop: false,
   },
 
   'audio.fauna.squirrel-scurry': {
@@ -221,7 +323,7 @@ export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
     url: '/audio/fauna/fauna_squirrel_scurry.wav',
     compressedUrl: '/audio/fauna/fauna_squirrel_scurry.ogg',
     channel: 'effects',
-    defaultVolume: 0.50,
+    defaultVolume: 0.65,
     loop: false,
   },
 
@@ -389,9 +491,10 @@ export class WorldAudioManager {
   private lfoAnimationId: number | null = null;
   private lfoStartTime = 0;
 
-  // Планировщик фауны
+  // Планировщики живого мира
   private faunaTimer: number | null = null;
-  private faunaShuffleBags: Map<string, ShuffleBag<string>> = new Map();
+  private landscapeTimer: number | null = null;
+  private atmosphereShuffleBags: Map<string, ShuffleBag<string>> = new Map();
 
   // Настройки пользователя
   private volumes: Record<AudioChannel, number> = {
@@ -417,10 +520,10 @@ export class WorldAudioManager {
   }
 
   /**
-   * Инициализирует колоды без повторений для птиц и фауны.
+   * Инициализирует колоды без повторений для птиц, фауны и ландшафтных событий.
    */
   private initShuffleBags(): void {
-    this.faunaShuffleBags.set(
+    this.atmosphereShuffleBags.set(
       'tit',
       new ShuffleBag([
         'audio.fauna.tit-chirp-01',
@@ -428,23 +531,46 @@ export class WorldAudioManager {
         'audio.fauna.tit-chirp-03',
       ])
     );
-    this.faunaShuffleBags.set(
+    this.atmosphereShuffleBags.set(
       'finch',
       new ShuffleBag([
         'audio.fauna.finch-trill-01',
         'audio.fauna.finch-trill-02',
       ])
     );
-    this.faunaShuffleBags.set(
+    this.atmosphereShuffleBags.set(
       'gull',
       new ShuffleBag([
         'audio.fauna.gull-distant-01',
         'audio.fauna.gull-distant-02',
+        'audio.fauna.gull-distant-03',
       ])
     );
-    this.faunaShuffleBags.set(
+    // Пул фауны: синицы, зяблики, дятел, ворона, белка, и лишь изредка чайка
+    this.atmosphereShuffleBags.set(
       'fauna_all',
-      new ShuffleBag(['tit', 'finch', 'gull', 'squirrel'])
+      new ShuffleBag(['tit', 'finch', 'woodpecker', 'crow', 'squirrel', 'gull'])
+    );
+
+    // Ландшафтные события: скрип сосен, порывы ветра в кронах, далёкий морской гудок
+    this.atmosphereShuffleBags.set(
+      'pine_creak',
+      new ShuffleBag([
+        'audio.ambient.pine-creak-01',
+        'audio.ambient.pine-creak-02',
+        'audio.ambient.pine-creak-03',
+      ])
+    );
+    this.atmosphereShuffleBags.set(
+      'wind_gust',
+      new ShuffleBag([
+        'audio.ambient.wind-gust-01',
+        'audio.ambient.wind-gust-02',
+      ])
+    );
+    this.atmosphereShuffleBags.set(
+      'landscape_all',
+      new ShuffleBag(['pine_creak', 'pine_creak', 'wind_gust', 'wind_gust', 'foghorn'])
     );
   }
 
@@ -534,7 +660,14 @@ export class WorldAudioManager {
     const unlock = () => {
       const ctx = this.getAudioContext();
       if (ctx && ctx.state === 'suspended') {
-        ctx.resume().catch(() => {});
+        ctx.resume().then(() => {
+          // Мягкий подъём громкости мастер-шины при разблокировке контекста в браузере
+          const now = ctx.currentTime;
+          if (this.masterGain && !this.muted) {
+            this.masterGain.gain.setValueAtTime(0.001, now);
+            this.masterGain.gain.setTargetAtTime(this.volumes.master, now, 0.4);
+          }
+        }).catch(() => {});
       }
       window.removeEventListener('pointerdown', unlock);
       window.removeEventListener('keydown', unlock);
@@ -794,7 +927,7 @@ export class WorldAudioManager {
    * Слой 2: прибой Финского залива (19.1 с);
    * Слой 3 (опционально): мягкий дождь (23.7 с).
    */
-  public playHubOutdoorAmbient(hasRain = false, fadeDurationMs = 1500): void {
+  public playHubOutdoorAmbient(hasRain = false, fadeDurationMs = 2000): void {
     this.addAmbientLayer('audio.ambient.wind-trees', 0.45, 0.0, fadeDurationMs);
     this.addAmbientLayer('audio.ambient.water-shore', 0.40, Math.PI / 2, fadeDurationMs);
     if (hasRain) {
@@ -804,14 +937,14 @@ export class WorldAudioManager {
     }
     this.removeAmbientLayer('audio.ambient.archive-room', fadeDurationMs);
     this.removeAmbientLayer('audio.ambient.night-air', fadeDurationMs);
-    this.startFaunaSchedule();
+    this.startHubAtmosphereSchedule();
   }
 
   /**
    * Запускает тихий интерьерный эмбиент (архив / кабинет синоптика).
    */
   public playArchiveAmbient(fadeDurationMs = 1500): void {
-    this.stopFaunaSchedule();
+    this.stopHubAtmosphereSchedule();
     this.removeAmbientLayer('audio.ambient.wind-trees', fadeDurationMs);
     this.removeAmbientLayer('audio.ambient.water-shore', fadeDurationMs);
     this.removeAmbientLayer('audio.ambient.rain-soft', fadeDurationMs);
@@ -837,7 +970,7 @@ export class WorldAudioManager {
     soundId: string,
     targetVolume: number,
     phaseOffset = 0.0,
-    fadeDurationMs = 1500
+    fadeDurationMs = 2000
   ): void {
     const existing = this.activeAmbientLayers.get(soundId);
     if (existing) {
@@ -859,7 +992,7 @@ export class WorldAudioManager {
     }
 
     const gainNode = ctx.createGain();
-    gainNode.gain.setValueAtTime(0.001, ctx.currentTime);
+    gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
     if (this.ambientBus) {
       gainNode.connect(this.ambientBus);
     } else {
@@ -887,7 +1020,8 @@ export class WorldAudioManager {
         source.start(ctx.currentTime);
         layerRecord.sourceNode = source;
 
-        // Плавный fade-in
+        // Плавный и мягкий fade-in без щелчков
+        gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
         gainNode.gain.setTargetAtTime(
           targetVolume,
           ctx.currentTime,
@@ -902,22 +1036,22 @@ export class WorldAudioManager {
   /**
    * Плавно останавливает и удаляет конкретный эмбиент-слой.
    */
-  public removeAmbientLayer(soundId: string, fadeDurationMs = 1200): void {
+  public removeAmbientLayer(soundId: string, fadeDurationMs = 1500): void {
     const layer = this.activeAmbientLayers.get(soundId);
     if (!layer) return;
 
     this.activeAmbientLayers.delete(soundId);
     const ctx = this.audioCtx;
 
-    if (ctx) {
+    if (ctx && layer.gainNode) {
       layer.gainNode.gain.setTargetAtTime(0.0001, ctx.currentTime, fadeDurationMs / 3000);
       setTimeout(() => {
         try {
           layer.sourceNode?.stop();
           layer.sourceNode?.disconnect();
-          layer.gainNode.disconnect();
+          layer.gainNode?.disconnect();
         } catch {}
-      }, fadeDurationMs + 100);
+      }, fadeDurationMs + 150);
     }
 
     if (layer.fallbackElement) {
@@ -928,7 +1062,7 @@ export class WorldAudioManager {
   /**
    * Совместимость с предыдущим API.
    */
-  public playAmbientBed(soundId: string, fadeDurationMs = 1200): void {
+  public playAmbientBed(soundId: string, fadeDurationMs = 1500): void {
     for (const id of Array.from(this.activeAmbientLayers.keys())) {
       if (id !== soundId) {
         this.removeAmbientLayer(id, fadeDurationMs);
@@ -938,7 +1072,7 @@ export class WorldAudioManager {
     this.addAmbientLayer(soundId, def?.defaultVolume ?? 0.4, 0.0, fadeDurationMs);
   }
 
-  public stopAmbient(fadeDurationMs = 800): void {
+  public stopAmbient(fadeDurationMs = 1000): void {
     for (const id of Array.from(this.activeAmbientLayers.keys())) {
       this.removeAmbientLayer(id, fadeDurationMs);
     }
@@ -998,60 +1132,137 @@ export class WorldAudioManager {
   }
 
   // ---------------------------------------------------------------------------
-  // Пуассоновский планировщик фауны (Poisson Stochastic Scheduler)
+  // Пуассоновский планировщик живого мира (Landscape & Fauna Schedulers)
   // ---------------------------------------------------------------------------
 
   /**
-   * Запускает органичное расписание голосов птиц и фауны.
-   * Интервалы рассчитываются по закону экспоненциального распределения (Пуассоновский процесс):
-   * delay = cooldown + (-ln(1 - U) * meanInterval)
-   * Это исключает механическую цикличность и создаёт живой звуковой мир.
+   * Запускает многослойное генеративное расписание живого мира:
+   * 1. Ландшафтный поток: скрип сосен, порывы ветра в кронах, далёкий морской гудок;
+   * 2. Фаунистический поток: голоса птиц Северо-Запада, дятел, белка, редкие чайки.
+   *
+   * Каждый поток рассчитывается по закону Пуассона (экспоненциальное распределение
+   * со случайными интервалами и рефрактерным периодом cooldown).
+   * Звуки из колод без повторений (ShuffleBag) гарантируют отсутствие монотонности.
    */
-  public startFaunaSchedule(): void {
-    if (this.faunaTimer !== null) return;
+  public startHubAtmosphereSchedule(): void {
+    this.stopHubAtmosphereSchedule();
 
-    const scheduleNext = () => {
-      // Cooldown 10 с + экспоненциальная случайная величина со средним 16 с (итого 12 - 40 с)
+    // 1. Поток ландшафтных звуков (скрип сосен, порывы ветра, туманный гудок)
+    // Cooldown 14 с + экспоненциальная случайная задержка (16 - 45 с)
+    const scheduleNextLandscape = () => {
       const u = Math.random();
-      const exponentialDelay = -Math.log(1.0 - Math.min(0.96, u)) * 16.0;
-      const delayMs = (10.0 + exponentialDelay) * 1000.0;
+      const exponentialDelay = -Math.log(1.0 - Math.min(0.95, u)) * 18.0;
+      const delayMs = (14.0 + exponentialDelay) * 1000.0;
+
+      this.landscapeTimer = window.setTimeout(() => {
+        if (!this.muted && !this.reducedSensory) {
+          this.triggerRandomLandscape();
+        }
+        scheduleNextLandscape();
+      }, delayMs);
+    };
+
+    // 2. Поток фауны (птицы, дятел, белка, редкие парящие чайки)
+    // Cooldown 18 с + экспоненциальная случайная задержка (20 - 55 с)
+    const scheduleNextFauna = () => {
+      const u = Math.random();
+      const exponentialDelay = -Math.log(1.0 - Math.min(0.95, u)) * 22.0;
+      const delayMs = (18.0 + exponentialDelay) * 1000.0;
 
       this.faunaTimer = window.setTimeout(() => {
         if (!this.muted && !this.reducedSensory) {
           this.triggerRandomFauna();
         }
-        scheduleNext();
+        scheduleNextFauna();
       }, delayMs);
     };
 
-    scheduleNext();
+    scheduleNextLandscape();
+    scheduleNextFauna();
   }
 
-  public stopFaunaSchedule(): void {
+  public stopHubAtmosphereSchedule(): void {
+    if (this.landscapeTimer !== null) {
+      clearTimeout(this.landscapeTimer);
+      this.landscapeTimer = null;
+    }
     if (this.faunaTimer !== null) {
       clearTimeout(this.faunaTimer);
       this.faunaTimer = null;
     }
   }
 
+  // Обратная совместимость для startFaunaSchedule / stopFaunaSchedule
+  public startFaunaSchedule(): void {
+    this.startHubAtmosphereSchedule();
+  }
+
+  public stopFaunaSchedule(): void {
+    this.stopHubAtmosphereSchedule();
+  }
+
   /**
-   * Выбирает голос птицы из колоды без повторений и воспроизводит его.
+   * Выбирает и воспроизводит случайное ландшафтное событие (скрип сосны, порыв ветра, гудок).
+   */
+  public triggerRandomLandscape(): void {
+    const pool = this.atmosphereShuffleBags.get('landscape_all');
+    if (!pool) return;
+
+    const category = pool.draw();
+    if (category === 'pine_creak') {
+      const bag = this.atmosphereShuffleBags.get('pine_creak');
+      const soundId = bag ? bag.draw() : 'audio.ambient.pine-creak-01';
+      // Скрип сосны в роще: реалистичное пространственное панорамирование
+      const pan = (Math.random() - 0.5) * 0.9;
+      this.play(soundId, { allowVariance: true, pan, volume: 0.95 });
+    } else if (category === 'wind_gust') {
+      const bag = this.atmosphereShuffleBags.get('wind_gust');
+      const soundId = bag ? bag.draw() : 'audio.ambient.wind-gust-01';
+      const pan = (Math.random() - 0.5) * 0.7;
+      this.play(soundId, { allowVariance: true, pan, volume: 0.90 });
+    } else if (category === 'foghorn') {
+      // Далёкий морской сигнал маяка на фарватере залива
+      const pan = (Math.random() > 0.5 ? 1 : -1) * (0.4 + Math.random() * 0.4);
+      this.play('audio.ambient.foghorn-distant', { allowVariance: false, pan, volume: 0.75 });
+    }
+  }
+
+  /**
+   * Выбирает голос птицы или фауны из колоды без повторений и воспроизводит его.
    */
   public triggerRandomFauna(): void {
-    const categoryBag = this.faunaShuffleBags.get('fauna_all');
+    const categoryBag = this.atmosphereShuffleBags.get('fauna_all');
     if (!categoryBag) return;
 
     const selectedCategory = categoryBag.draw();
     if (selectedCategory === 'squirrel') {
-      this.play('audio.fauna.squirrel-scurry', { allowVariance: true });
+      const pan = (Math.random() - 0.5) * 0.8;
+      this.play('audio.fauna.squirrel-scurry', { allowVariance: true, pan });
+      return;
+    }
+    if (selectedCategory === 'woodpecker') {
+      const pan = (Math.random() - 0.5) * 0.7;
+      this.play('audio.fauna.woodpecker-drum', { allowVariance: true, pan });
+      return;
+    }
+    if (selectedCategory === 'crow') {
+      const pan = (Math.random() - 0.5) * 0.8;
+      this.play('audio.fauna.crow-distant', { allowVariance: true, pan });
       return;
     }
 
-    const speciesBag = this.faunaShuffleBags.get(selectedCategory);
+    const speciesBag = this.atmosphereShuffleBags.get(selectedCategory);
     if (!speciesBag) return;
 
     const soundId = speciesBag.draw();
-    this.play(soundId, { allowVariance: true });
+    if (selectedCategory === 'gull') {
+      // Чайка парит вдалеке над заливом: широкая панорама и мягкая громкость, не заглушающая лес
+      const pan = (Math.random() - 0.5) * 1.4;
+      this.play(soundId, { allowVariance: true, pan, volume: 0.80 });
+    } else {
+      const pan = (Math.random() - 0.5) * 0.9;
+      this.play(soundId, { allowVariance: true, pan });
+    }
   }
 }
 

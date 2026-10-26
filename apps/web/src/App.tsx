@@ -14,7 +14,14 @@ function navigate(path: string): void {
 }
 
 function LoadingScreen({ text = 'Загрузка…' }: { text?: string }) {
-  return <main className="app-shell"><section className="panel compact-panel"><p>{text}</p></section></main>;
+  return (
+    <main className="app-shell">
+      <section className="panel compact-panel" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+        <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 48, height: 48 }} />
+        <p>{text}</p>
+      </section>
+    </main>
+  );
 }
 
 function ArenaTvPlaceholder() {

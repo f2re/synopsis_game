@@ -110,9 +110,27 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     else onExit();
   }
 
-  if (loading) return <main className="shift-shell"><section className="shift-loading">Готовим учебную смену…</section></main>;
+  if (loading) {
+    return (
+      <main className="shift-shell">
+        <section className="shift-loading" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
+          <p>Готовим учебную смену…</p>
+        </section>
+      </main>
+    );
+  }
   if (error && !task) {
-    return <main className="shift-shell"><section className="shift-loading"><strong>Смена не запущена</strong><p>{error}</p><button className="secondary-button" onClick={onExit}>Вернуться в центр</button></section></main>;
+    return (
+      <main className="shift-shell">
+        <section className="shift-loading" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
+          <strong>Смена не запущена</strong>
+          <p>{error}</p>
+          <button className="secondary-button" onClick={onExit} style={{ marginTop: 8 }}>Вернуться в центр</button>
+        </section>
+      </main>
+    );
   }
   if (!task) return null;
 
@@ -126,9 +144,17 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
   return (
     <main className="shift-shell">
       <header className="shift-topbar">
-        <div>
-          <span className="shift-kicker">{GAME_MARK} · учебная смена</span>
-          <strong>{dependencySequence ? 'Первичный анализ' : findError ? 'Контроль наблюдений' : stationBoard ? 'Учебный планшон' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <img
+            src="/ui/ui_station_crest_badge_v2.png"
+            alt="26063"
+            className="overlay-crest"
+            style={{ width: 36, height: 36, flexShrink: 0 }}
+          />
+          <div>
+            <span className="shift-kicker">{GAME_MARK} · учебная смена</span>
+            <strong>{dependencySequence ? 'Первичный анализ' : findError ? 'Контроль наблюдений' : stationBoard ? 'Учебный планшет' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
+          </div>
         </div>
         <div className="shift-progress" aria-label={`Выполнено ${progress.answered} из ${progress.total}`}>
           <span>{progress.current}/{progress.total}</span>

@@ -3,6 +3,7 @@ import { worldAudio } from '../../audio/WorldAudioManager';
 import {
   HUB_MASTER_HEIGHT,
   HUB_MASTER_RUNTIME_DATA_URI,
+  HUB_MASTER_STATIC_URL,
   HUB_MASTER_TEXTURE_KEY,
   HUB_MASTER_WIDTH,
 } from '../../assets/hub/masterAsset';
@@ -26,26 +27,47 @@ export class HubScene extends Phaser.Scene {
 
   preload(): void {
     if (!this.textures.exists(HUB_MASTER_TEXTURE_KEY)) {
-      this.load.image(HUB_MASTER_TEXTURE_KEY, HUB_MASTER_RUNTIME_DATA_URI);
+      this.load.image(HUB_MASTER_TEXTURE_KEY, HUB_MASTER_STATIC_URL);
     }
   }
 
   create(): void {
     this.cameras.main.setBackgroundColor('#07162c');
 
-    this.add
+    const hubBg = this.add
       .image(0, 0, HUB_MASTER_TEXTURE_KEY)
       .setOrigin(0, 0)
       .setDisplaySize(HUB_MASTER_WIDTH, HUB_MASTER_HEIGHT);
 
+    // If static asset failed or texture is missing, fall back to base64 WebP without CORS taint
+    if (!this.textures.exists(HUB_MASTER_TEXTURE_KEY) || this.textures.get(HUB_MASTER_TEXTURE_KEY).key === '__MISSING') {
+      const img = new Image();
+      img.onload = () => {
+        if (!this.textures.exists(HUB_MASTER_TEXTURE_KEY) || this.textures.get(HUB_MASTER_TEXTURE_KEY).key === '__MISSING') {
+          this.textures.addImage(HUB_MASTER_TEXTURE_KEY, img);
+          hubBg.setTexture(HUB_MASTER_TEXTURE_KEY);
+        }
+      };
+      img.src = HUB_MASTER_RUNTIME_DATA_URI;
+    }
+
     this.createSemanticHotspots();
     bindLogicalViewport(this, HUB_MASTER_WIDTH, HUB_MASTER_HEIGHT);
 
-    worldAudio.playAmbientBed('audio.ambient.wind-trees');
-    worldAudio.startFaunaSchedule();
+    worldAudio.playHubOutdoorAmbient(false, 2000);
 
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      worldAudio.stopFaunaSchedule();
+    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
+      worldAudio.stopHubAtmosphereSchedule();
+      worldAudio.stopAmbient(1200);
+    });
+
+    this.events.on(Phaser.Scenes.Events.SLEEP, () => {
+      worldAudio.stopHubAtmosphereSchedule();
+      worldAudio.stopAmbient(1000);
+    });
+
+    this.events.on(Phaser.Scenes.Events.WAKE, () => {
+      worldAudio.playHubOutdoorAmbient(false, 1800);
     });
   }
 

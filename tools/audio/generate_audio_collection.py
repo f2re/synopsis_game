@@ -268,8 +268,257 @@ def synth_squirrel_scurry() -> list[float]:
             idx = step_idx + j
             if idx < num_samples:
                 env = math.exp(-j / (burst_len * 0.35))
-                res[idx] += hp.process(bp.process(wn.sample())) * env * 12000.0
+                res[idx] += hp.process(bp.process(wn.sample())) * env * 26000.0
     return res
+
+
+def synth_pine_creak_01(duration: float = 2.8) -> list[float]:
+    """Глубокий протяжный скрип ствола вековой сосны (Scots pine) на ветру."""
+    rng = random.Random(2606341)
+    n = int(duration * SAMPLE_RATE)
+    samples = [0.0] * n
+    t = 0.25
+    cluster_timings = []
+    while t < duration - 0.35:
+        prog = (t - 0.25) / (duration - 0.6)
+        density = math.exp(-((prog - 0.55) ** 2) / 0.08)
+        dt = 0.012 + (1.0 - density) * 0.065 + rng.uniform(-0.005, 0.005)
+        amp = 0.35 + 0.65 * density * rng.uniform(0.7, 1.3)
+        cluster_timings.append((t, amp, density))
+        t += max(0.008, dt)
+
+    for click_t, click_amp, dens in cluster_timings:
+        idx = int(click_t * SAMPLE_RATE)
+        f1 = 185.0 + dens * 25.0 + rng.uniform(-5, 5)
+        f2 = 420.0 + dens * 45.0 + rng.uniform(-10, 10)
+        f3 = 920.0 + rng.uniform(-30, 30)
+        f4 = 2300.0 + rng.uniform(-80, 80)
+        decay = 0.018 + dens * 0.015
+        click_samples = int(decay * 5.0 * SAMPLE_RATE)
+        for j in range(click_samples):
+            if idx + j >= n:
+                break
+            tj = j / SAMPLE_RATE
+            env = math.exp(-tj / decay)
+            bark = rng.uniform(-1, 1) if j < int(0.003 * SAMPLE_RATE) else 0.0
+            tone = (
+                0.48 * math.sin(2.0 * math.pi * f1 * tj)
+                + 0.32 * math.sin(2.0 * math.pi * f2 * tj)
+                + 0.14 * math.sin(2.0 * math.pi * f3 * tj)
+                + 0.06 * math.sin(2.0 * math.pi * f4 * tj)
+            )
+            samples[idx + j] += (tone + bark * 0.35) * env * click_amp * 16000.0
+
+    fade = int(0.12 * SAMPLE_RATE)
+    for i in range(fade):
+        samples[i] *= i / fade
+        samples[-1 - i] *= i / fade
+    return samples
+
+
+def synth_pine_creak_02(duration: float = 1.9) -> list[float]:
+    """Сухой скрип сосновых ветвей и коры на порыве ветра."""
+    rng = random.Random(2606342)
+    n = int(duration * SAMPLE_RATE)
+    samples = [0.0] * n
+    t = 0.20
+    cluster_timings = []
+    while t < duration - 0.25:
+        prog = (t - 0.20) / (duration - 0.45)
+        density = math.exp(-((prog - 0.50) ** 2) / 0.06)
+        dt = 0.010 + (1.0 - density) * 0.050 + rng.uniform(-0.004, 0.004)
+        amp = 0.4 + 0.6 * density * rng.uniform(0.7, 1.2)
+        cluster_timings.append((t, amp, density))
+        t += max(0.007, dt)
+
+    for click_t, click_amp, dens in cluster_timings:
+        idx = int(click_t * SAMPLE_RATE)
+        f1 = 280.0 + dens * 35.0 + rng.uniform(-8, 8)
+        f2 = 640.0 + dens * 55.0 + rng.uniform(-15, 15)
+        f3 = 1350.0 + rng.uniform(-40, 40)
+        f4 = 3100.0 + rng.uniform(-90, 90)
+        decay = 0.012 + dens * 0.012
+        click_samples = int(decay * 5.0 * SAMPLE_RATE)
+        for j in range(click_samples):
+            if idx + j >= n:
+                break
+            tj = j / SAMPLE_RATE
+            env = math.exp(-tj / decay)
+            bark = rng.uniform(-1, 1) if j < int(0.002 * SAMPLE_RATE) else 0.0
+            tone = (
+                0.35 * math.sin(2.0 * math.pi * f1 * tj)
+                + 0.35 * math.sin(2.0 * math.pi * f2 * tj)
+                + 0.20 * math.sin(2.0 * math.pi * f3 * tj)
+                + 0.10 * math.sin(2.0 * math.pi * f4 * tj)
+            )
+            samples[idx + j] += (tone + bark * 0.4) * env * click_amp * 15000.0
+
+    fade = int(0.10 * SAMPLE_RATE)
+    for i in range(fade):
+        samples[i] *= i / fade
+        samples[-1 - i] *= i / fade
+    return samples
+
+
+def synth_pine_creak_03(duration: float = 2.5) -> list[float]:
+    """Двойной резонансный вздох древесины (наклон сосны и возврат)."""
+    rng = random.Random(2606343)
+    n = int(duration * SAMPLE_RATE)
+    samples = [0.0] * n
+    timings = []
+    t = 0.25
+    while t < 1.05:
+        prog = (t - 0.25) / 0.80
+        dens = math.exp(-((prog - 0.6) ** 2) / 0.07)
+        dt = 0.014 + (1.0 - dens) * 0.06
+        timings.append((t, 0.4 + 0.6 * dens, dens, 1.0))
+        t += max(0.009, dt)
+
+    t = 1.35
+    while t < 2.25:
+        prog = (t - 1.35) / 0.90
+        dens = math.exp(-((prog - 0.4) ** 2) / 0.08)
+        dt = 0.016 + (1.0 - dens) * 0.07
+        timings.append((t, 0.35 + 0.55 * dens, dens, 0.94))
+        t += max(0.010, dt)
+
+    for click_t, click_amp, dens, pitch_mult in timings:
+        idx = int(click_t * SAMPLE_RATE)
+        f1 = (205.0 + dens * 30.0 + rng.uniform(-6, 6)) * pitch_mult
+        f2 = (460.0 + dens * 40.0 + rng.uniform(-12, 12)) * pitch_mult
+        f3 = (1050.0 + rng.uniform(-35, 35)) * pitch_mult
+        decay = 0.015 + dens * 0.014
+        click_samples = int(decay * 5.0 * SAMPLE_RATE)
+        for j in range(click_samples):
+            if idx + j >= n:
+                break
+            tj = j / SAMPLE_RATE
+            env = math.exp(-tj / decay)
+            bark = rng.uniform(-1, 1) if j < int(0.0025 * SAMPLE_RATE) else 0.0
+            tone = (
+                0.45 * math.sin(2.0 * math.pi * f1 * tj)
+                + 0.33 * math.sin(2.0 * math.pi * f2 * tj)
+                + 0.16 * math.sin(2.0 * math.pi * f3 * tj)
+                + 0.06 * math.sin(2.0 * math.pi * 2500.0 * tj)
+            )
+            samples[idx + j] += (tone + bark * 0.3) * env * click_amp * 16000.0
+
+    fade = int(0.12 * SAMPLE_RATE)
+    for i in range(fade):
+        samples[i] *= i / fade
+        samples[-1 - i] *= i / fade
+    return samples
+
+
+def synth_wind_gust_01(duration: float = 3.6) -> list[float]:
+    """Нарастающий порыв ветра в хвое и кронах сосен."""
+    rng = random.Random(2606344)
+    n = int(duration * SAMPLE_RATE)
+    pn = PinkNoise(rng)
+    bp1 = Biquad("bandpass", 420.0, 1.2)
+    bp2 = Biquad("bandpass", 1600.0, 2.0)
+    samples = []
+    for i in range(n):
+        t = i / SAMPLE_RATE
+        env = math.sin((t / duration) * math.pi) ** 1.8
+        raw = pn.sample()
+        body = bp1.process(raw)
+        needles = bp2.process(rng.uniform(-1, 1)) * 0.25
+        samples.append((body + needles) * env * 75000.0)
+    return samples
+
+
+def synth_wind_gust_02(duration: float = 2.8) -> list[float]:
+    """Короткий прибрежный шквал со стороны залива."""
+    rng = random.Random(2606345)
+    n = int(duration * SAMPLE_RATE)
+    pn = PinkNoise(rng)
+    bp1 = Biquad("bandpass", 340.0, 1.0)
+    bp2 = Biquad("bandpass", 1100.0, 1.8)
+    samples = []
+    for i in range(n):
+        t = i / SAMPLE_RATE
+        env = math.sin((t / duration) * math.pi) ** 1.6
+        raw = pn.sample()
+        samples.append((bp1.process(raw) + bp2.process(rng.uniform(-1, 1)) * 0.18) * env * 70000.0)
+    return samples
+
+
+def synth_foghorn_distant(duration: float = 3.2) -> list[float]:
+    """Глухой далёкий морской гудок в тумане над Финским заливом."""
+    n = int(duration * SAMPLE_RATE)
+    lp = Biquad("lowpass", 380.0, 0.9)
+    samples = []
+    f1, f2 = 116.0, 145.0
+    for i in range(n):
+        t = i / SAMPLE_RATE
+        if t < 0.8:
+            env = (t / 0.8) ** 2
+        elif t < 2.0:
+            env = 1.0
+        else:
+            env = math.exp(-(t - 2.0) / 0.55)
+        val = (
+            0.60 * math.sin(2.0 * math.pi * f1 * t)
+            + 0.35 * math.sin(2.0 * math.pi * f2 * t)
+            + 0.15 * math.sin(2.0 * math.pi * (f1 * 2) * t)
+        )
+        samples.append(lp.process(val * env) * 16000.0)
+    return samples
+
+
+def synth_woodpecker_drum(duration: float = 1.35) -> list[float]:
+    """Большой пёстрый дятел (Dendrocopos major) — сухая дробь по сосне в кампусе."""
+    rng = random.Random(2606346)
+    n = int(duration * SAMPLE_RATE)
+    samples = [0.0] * n
+    t = 0.18
+    dt = 0.054
+    w0_1 = 2.0 * math.pi * 520.0 / SAMPLE_RATE
+    w0_2 = 2.0 * math.pi * 1400.0 / SAMPLE_RATE
+    for k in range(16):
+        idx = int(t * SAMPLE_RATE)
+        tap_len = int(0.035 * SAMPLE_RATE)
+        tap_amp = 0.70 + 0.30 * math.sin((k / 16.0) * math.pi)
+        for j in range(tap_len):
+            if idx + j >= n:
+                break
+            tj = j / SAMPLE_RATE
+            tone = (
+                0.60 * math.sin(w0_1 * j) * math.exp(-tj / 0.012)
+                + 0.35 * math.sin(w0_2 * j) * math.exp(-tj / 0.006)
+            )
+            click = (rng.uniform(-1, 1) if j < int(0.002 * SAMPLE_RATE) else 0.0) * 0.4
+            samples[idx + j] += (tone + click) * tap_amp * 18000.0
+        t += dt
+        dt *= 0.985
+    return samples
+
+
+def synth_crow_distant(duration: float = 1.75) -> list[float]:
+    """Одиночный далёкий зов сосновой вороны/ворона («крук») над кампусом."""
+    n = int(duration * SAMPLE_RATE)
+    lp = Biquad("lowpass", 2100.0, 1.0)
+    samples = [0.0] * n
+    calls = [(0.20, 0.45), (0.85, 0.50)]
+    for start_t, call_dur in calls:
+        idx = int(start_t * SAMPLE_RATE)
+        call_n = int(call_dur * SAMPLE_RATE)
+        f0 = 295.0
+        for j in range(call_n):
+            if idx + j >= n:
+                break
+            tj = j / SAMPLE_RATE
+            am = 0.75 + 0.25 * math.sin(2.0 * math.pi * 42.0 * tj)
+            env = math.sin((tj / call_dur) * math.pi) ** 1.3
+            val = (
+                0.50 * math.sin(2.0 * math.pi * f0 * tj)
+                + 0.35 * math.sin(2.0 * math.pi * (f0 * 2) * tj)
+                + 0.25 * math.sin(2.0 * math.pi * (f0 * 3) * tj)
+                + 0.15 * math.sin(2.0 * math.pi * (f0 * 4) * tj)
+            )
+            samples[idx + j] += lp.process(val * am * env) * 15000.0
+    return samples
 
 
 def synth_barograph_tick() -> list[float]:
@@ -710,7 +959,7 @@ def build_hybrid_collection() -> None:
             "start": 5.0,
             "len": 29.3,
             "crossfade": 1.5,
-            "gain": 1.7,
+            "gain": 6.5,
             "default_volume": 0.45,
             "target_lufs": -24,
             "author": "Gravity Sound (https://www.gravitysound.studio/)",
@@ -782,6 +1031,7 @@ def build_hybrid_collection() -> None:
             "subpath": "ambient/amb_archive_room_bed",
             "type": "synth",
             "synth": synth_archive_room_bed,
+            "loop": True,
             "default_volume": 0.35,
             "target_lufs": -28,
             "author": "26063 audio-ambient-designer (in-tree procedural engine)",
@@ -802,8 +1052,135 @@ def build_hybrid_collection() -> None:
             "subpath": "ambient/amb_night_air_bed",
             "type": "synth",
             "synth": synth_night_air_bed,
+            "loop": True,
             "default_volume": 0.35,
             "target_lufs": -28,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer"],
+            },
+        },
+        {
+            "id": "audio.ambient.pine-creak-01",
+            "title": "Скрип сосны — протяжный резонансный скрип ствола",
+            "description": "Протяжный глубокий скрип ствола вековой сосны от раскачивания ветром (2.8 с).",
+            "category": "ambient",
+            "layer": "wind/trees/water bed",
+            "subpath": "ambient/amb_pine_creak_01",
+            "type": "synth",
+            "synth": synth_pine_creak_01,
+            "loop": False,
+            "default_volume": 0.65,
+            "target_lufs": -18,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer", "art-director"],
+            },
+        },
+        {
+            "id": "audio.ambient.pine-creak-02",
+            "title": "Скрип сосны — сухой скрип ветвей и коры",
+            "description": "Сухой поскрип сосновых сучьев на прибрежном порыве ветра (1.9 с).",
+            "category": "ambient",
+            "layer": "wind/trees/water bed",
+            "subpath": "ambient/amb_pine_creak_02",
+            "type": "synth",
+            "synth": synth_pine_creak_02,
+            "loop": False,
+            "default_volume": 0.60,
+            "target_lufs": -19,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer", "art-director"],
+            },
+        },
+        {
+            "id": "audio.ambient.pine-creak-03",
+            "title": "Скрип сосны — двойной вздох древесины",
+            "description": "Двойной резонансный скрип: наклон старой сосны и плавный возврат (2.5 с).",
+            "category": "ambient",
+            "layer": "wind/trees/water bed",
+            "subpath": "ambient/amb_pine_creak_03",
+            "type": "synth",
+            "synth": synth_pine_creak_03,
+            "loop": False,
+            "default_volume": 0.65,
+            "target_lufs": -18,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer", "art-director"],
+            },
+        },
+        {
+            "id": "audio.ambient.wind-gust-01",
+            "title": "Порыв ветра в кронах сосен",
+            "description": "Мягкий нарастающий и плавно спадающий порыв ветра сквозь сосновую хвою (3.6 с).",
+            "category": "ambient",
+            "layer": "wind/trees/water bed",
+            "subpath": "ambient/amb_wind_gust_01",
+            "type": "synth",
+            "synth": synth_wind_gust_01,
+            "loop": False,
+            "default_volume": 0.55,
+            "target_lufs": -20,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer"],
+            },
+        },
+        {
+            "id": "audio.ambient.wind-gust-02",
+            "title": "Прибрежный морской бриз",
+            "description": "Короткий свежий порыв ветра со стороны Финского залива (2.8 с).",
+            "category": "ambient",
+            "layer": "wind/trees/water bed",
+            "subpath": "ambient/amb_wind_gust_02",
+            "type": "synth",
+            "synth": synth_wind_gust_02,
+            "loop": False,
+            "default_volume": 0.50,
+            "target_lufs": -21,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer"],
+            },
+        },
+        {
+            "id": "audio.ambient.foghorn-distant",
+            "title": "Далёкий морской гудок в тумане",
+            "description": "Глухой низкий сигнал маяка или судна на фарватере Финского залива (3.2 с).",
+            "category": "ambient",
+            "layer": "wind/trees/water bed",
+            "subpath": "ambient/amb_foghorn_distant",
+            "type": "synth",
+            "synth": synth_foghorn_distant,
+            "loop": False,
+            "default_volume": 0.40,
+            "target_lufs": -22,
             "author": "26063 audio-ambient-designer (in-tree procedural engine)",
             "license": "CC0-1.0",
             "provenance": {
@@ -948,9 +1325,9 @@ def build_hybrid_collection() -> None:
             "src": CACHE_DIR / "gull.ogg",
             "start": 4.75,
             "len": 2.15,
-            "gain": 1.5,
-            "default_volume": 0.55,
-            "target_lufs": -20,
+            "gain": 0.85,
+            "default_volume": 0.35,
+            "target_lufs": -24,
             "author": "British Library Sound Archive (W1CDR0001389)",
             "license": "CC0-1.0",
             "provenance": {
@@ -972,9 +1349,9 @@ def build_hybrid_collection() -> None:
             "src": CACHE_DIR / "gull.ogg",
             "start": 8.20,
             "len": 2.30,
-            "gain": 2.2,
-            "default_volume": 0.55,
-            "target_lufs": -20,
+            "gain": 1.2,
+            "default_volume": 0.35,
+            "target_lufs": -24,
             "author": "British Library Sound Archive (W1CDR0001389)",
             "license": "CC0-1.0",
             "provenance": {
@@ -982,6 +1359,72 @@ def build_hybrid_collection() -> None:
                 "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kittiwake_(Rissa_tridactyla)_(W1CDR0001389_BD30).ogg",
                 "originalWork": "British Library Kittiwake recording",
                 "rightsClearance": "CC0-1.0 Public Domain dedication",
+                "verifiedBy": ["audio-ambient-designer"],
+            },
+        },
+        {
+            "id": "audio.fauna.gull-distant-03",
+            "title": "Чайка (Laridae / Rissa) — мягкий парящий зов",
+            "description": "Мягкий далёкий позывной парящей чайки над водами Финского залива (2.20 с).",
+            "category": "fauna",
+            "layer": "fauna/living world",
+            "subpath": "fauna/fauna_gull_distant_03",
+            "type": "field_slice",
+            "src": CACHE_DIR / "gull.ogg",
+            "start": 20.30,
+            "len": 2.20,
+            "gain": 1.0,
+            "default_volume": 0.35,
+            "target_lufs": -24,
+            "author": "British Library Sound Archive (W1CDR0001389)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "field-recording-slice",
+                "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kittiwake_(Rissa_tridactyla)_(W1CDR0001389_BD30).ogg",
+                "originalWork": "British Library Kittiwake recording",
+                "rightsClearance": "CC0-1.0 Public Domain dedication",
+                "verifiedBy": ["audio-ambient-designer"],
+            },
+        },
+        {
+            "id": "audio.fauna.woodpecker-drum",
+            "title": "Большой пёстрый дятел (Dendrocopos major) — сухая дробь",
+            "description": "Характерная быстрая барабанная дробь дятла по сухой сосне в парке кампуса (1.35 с).",
+            "category": "fauna",
+            "layer": "fauna/living world",
+            "subpath": "fauna/fauna_woodpecker_drum",
+            "type": "synth",
+            "synth": synth_woodpecker_drum,
+            "loop": False,
+            "default_volume": 0.60,
+            "target_lufs": -18,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
+                "verifiedBy": ["audio-ambient-designer"],
+            },
+        },
+        {
+            "id": "audio.fauna.crow-distant",
+            "title": "Серая ворона (Corvus cornix) — далёкий крук",
+            "description": "Одиночный спокойный зов вороны на вершине высокой прибрежной сосны (1.75 с).",
+            "category": "fauna",
+            "layer": "fauna/living world",
+            "subpath": "fauna/fauna_crow_distant",
+            "type": "synth",
+            "synth": synth_crow_distant,
+            "loop": False,
+            "default_volume": 0.45,
+            "target_lufs": -20,
+            "author": "26063 audio-ambient-designer (in-tree procedural engine)",
+            "license": "CC0-1.0",
+            "provenance": {
+                "sourceType": "authored-procedural-synth",
+                "generatorScript": "tools/audio/generate_audio_collection.py",
+                "rightsClearance": "Fully owned repository procedural code",
                 "verifiedBy": ["audio-ambient-designer"],
             },
         },
@@ -994,8 +1437,9 @@ def build_hybrid_collection() -> None:
             "subpath": "fauna/fauna_squirrel_scurry",
             "type": "synth",
             "synth": synth_squirrel_scurry,
-            "default_volume": 0.50,
-            "target_lufs": -22,
+            "loop": False,
+            "default_volume": 0.65,
+            "target_lufs": -19,
             "author": "26063 audio-ambient-designer",
             "license": "CC0-1.0",
             "provenance": {
@@ -1277,7 +1721,7 @@ def build_hybrid_collection() -> None:
         elif item["type"] == "synth":
             samples = item["synth"]()
             save_wav(src_wav_path, samples)
-            is_loop = item.get("category") == "ambient"
+            is_loop = item.get("loop", False)
         else:
             raise ValueError(f"Unknown item type: {item['type']}")
 
@@ -1335,13 +1779,15 @@ def build_hybrid_collection() -> None:
             "provenance": provenance,
         })
 
-    # Создание файлов обратной совместимости для старых ID фауны
+    # Создание файлов обратной совместимости для старых и композитных ID
     alias_map = [
-        ("fauna/fauna_tit_chirp", "fauna/fauna_tit_chirp_01", "audio.fauna.tit-chirp"),
-        ("fauna/fauna_finch_trill", "fauna/fauna_finch_trill_01", "audio.fauna.finch-trill"),
-        ("fauna/fauna_gull_distant", "fauna/fauna_gull_distant_01", "audio.fauna.gull-distant"),
+        ("ambient/amb_pine_creak", "ambient/amb_pine_creak_01", "audio.ambient.pine-creak", "ambient", "wind/trees/water bed", "Алиас эмбиента: audio.ambient.pine-creak", "CC0-1.0"),
+        ("ambient/amb_wind_gust", "ambient/amb_wind_gust_01", "audio.ambient.wind-gust", "ambient", "wind/trees/water bed", "Алиас эмбиента: audio.ambient.wind-gust", "CC0-1.0"),
+        ("fauna/fauna_tit_chirp", "fauna/fauna_tit_chirp_01", "audio.fauna.tit-chirp", "fauna", "fauna/living world", "Алиас фауны: audio.fauna.tit-chirp", "CC-BY-SA-3.0"),
+        ("fauna/fauna_finch_trill", "fauna/fauna_finch_trill_01", "audio.fauna.finch-trill", "fauna", "fauna/living world", "Алиас фауны: audio.fauna.finch-trill", "CC-BY-SA-3.0"),
+        ("fauna/fauna_gull_distant", "fauna/fauna_gull_distant_01", "audio.fauna.gull-distant", "fauna", "fauna/living world", "Алиас фауны: audio.fauna.gull-distant", "CC0-1.0"),
     ]
-    for target_sub, source_sub, alias_id in alias_map:
+    for target_sub, source_sub, alias_id, alias_cat, alias_layer, alias_title, alias_license in alias_map:
         for ext in (".wav", ".ogg"):
             s_file = SOURCE_AUDIO_DIR / f"{source_sub}{ext}"
             d_file = SOURCE_AUDIO_DIR / f"{target_sub}{ext}"
@@ -1356,10 +1802,10 @@ def build_hybrid_collection() -> None:
 
         manifest_entries.append({
             "id": alias_id,
-            "title": f"Алиас фауны: {alias_id}",
+            "title": alias_title,
             "description": f"Псевдоним совместимости, ссылающийся на вариант 01.",
-            "category": "fauna",
-            "layer": "fauna/living world",
+            "category": alias_cat,
+            "layer": alias_layer,
             "path": f"assets/source/audio/{target_sub}.wav",
             "runtimeUrl": f"/audio/{target_sub}.wav",
             "compressedPath": f"assets/source/audio/{target_sub}.ogg",
@@ -1376,7 +1822,7 @@ def build_hybrid_collection() -> None:
             "targetLufs": -18,
             "defaultVolume": 0.60,
             "author": "26063 Audio Pipeline Alias",
-            "license": "CC-BY-SA-3.0",
+            "license": alias_license,
             "provenance": {
                 "sourceType": "compatibility-alias",
                 "targetAsset": f"{source_sub}.wav",

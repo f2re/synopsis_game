@@ -1,5 +1,22 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { api, ApiError, type AdminUser, type RosterUser, type SessionUser, type UserRole } from '../../api';
+import { PixelSwitch } from '../ui/PixelSwitch';
+
+function highlightMatch(text: string, query: string) {
+  const trimmed = query.trim();
+  if (!trimmed) return text;
+  const lowerText = text.toLowerCase();
+  const lowerQuery = trimmed.toLowerCase();
+  const index = lowerText.indexOf(lowerQuery);
+  if (index === -1) return text;
+  return (
+    <>
+      {text.slice(0, index)}
+      <mark className="search-highlight">{text.slice(index, index + trimmed.length)}</mark>
+      {text.slice(index + trimmed.length)}
+    </>
+  );
+}
 
 export function LoginScreen({
   onLogin,
@@ -71,7 +88,6 @@ export function LoginScreen({
       </div>
       <span className="prototype-kicker">26063 · Вход пользователя</span>
       <h1 id="login-title">Вход в систему</h1>
-      <div className="ui-compass-divider" aria-hidden="true" />
       <p className="muted">Выберите свою учебную группу и свой профиль для входа в кампус.</p>
 
       <form className="form-stack" onSubmit={submit}>
@@ -189,7 +205,7 @@ export function AdminLoginScreen({
       <section className="panel login-panel" aria-labelledby="admin-login-title">
         <div className="login-header-row">
           <div className="brand-mark" aria-hidden="true">
-            <img src="/ui/icons/instrument_radar.png" alt="" className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            <img src="/ui/ui_station_crest_badge_v2.png" alt="" className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             <span className="brand-mark-fallback">⚙</span>
           </div>
           <button type="button" className="ghost-button login-close-button" onClick={onBack} aria-label="Назад" title="Вернуться на главную">
@@ -198,7 +214,6 @@ export function AdminLoginScreen({
         </div>
         <span className="prototype-kicker">26063 · Служебный раздел</span>
         <h1 id="admin-login-title">Вход администратора</h1>
-        <div className="ui-compass-divider" aria-hidden="true" />
         <p className="muted">Управление учебными группами, пользователями и кодами доступа.</p>
 
         {currentUser && !currentUser.roles.includes('admin') && (
@@ -277,7 +292,15 @@ export function SetCodeModal({
   return (
     <div className="modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <section className="panel compact-panel" aria-labelledby="set-code-title">
-        <h2 id="set-code-title">{hasCode ? 'Смена персонального кода' : 'Установка персонального кода'}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+          <img
+            src="/ui/ui_station_crest_badge_v2.png"
+            alt="26063"
+            className="overlay-crest"
+            style={{ width: 32, height: 32, flexShrink: 0 }}
+          />
+          <h2 id="set-code-title" style={{ margin: 0 }}>{hasCode ? 'Смена персонального кода' : 'Установка персонального кода'}</h2>
+        </div>
         <p className="muted tiny">
           {hasCode
             ? 'Введите текущий код и задайте новый код для входа в систему.'
@@ -401,6 +424,15 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
   const currentGroupUsers = useMemo(() => {
     return studentUsers.filter((u) => u.groupId === selectedGroup);
   }, [studentUsers, selectedGroup]);
+
+  // Сводка по текущей группе
+  const activeCount = useMemo(() => {
+    return currentGroupUsers.filter((u) => u.status === 'active').length;
+  }, [currentGroupUsers]);
+
+  const codeSetCount = useMemo(() => {
+    return currentGroupUsers.filter((u) => u.codeSet).length;
+  }, [currentGroupUsers]);
 
   // Фильтрация по поиску
   const filteredUsers = useMemo(() => {
@@ -532,11 +564,20 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
     <main className="app-shell admin-shell">
       <section className="panel admin-panel" aria-labelledby="admin-title">
         <header className="screen-header">
-          <div>
-            <span className="prototype-kicker">26063 · Панель управления</span>
-            <h1 id="admin-title">Учебные группы и доступ</h1>
-            <div className="ui-compass-divider" aria-hidden="true" />
-            <p className="muted tiny">Создавайте группы, добавляйте учащихся по ФИО и управляйте доступом.</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <img
+              src="/ui/ui_station_crest_badge_v2.png"
+              alt="26063"
+              className="overlay-crest"
+              style={{ width: 40, height: 40, flexShrink: 0 }}
+            />
+            <div>
+              <span className="prototype-kicker">26063 · Панель управления</span>
+              <h1 id="admin-title">Учебные группы и доступ</h1>
+              <p className="muted tiny" style={{ margin: '3px 0 0' }}>
+                Создавайте группы, добавляйте учащихся по ФИО и управляйте доступом.
+              </p>
+            </div>
           </div>
           <div className="row-actions">
             <button className="ghost-button" onClick={() => setAdminCodeModalOpen(true)}>
@@ -708,72 +749,123 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                   )}
                 </div>
 
-                {/* Поиск и список пользователей */}
+                {/* Журнал группы (Roster Ledger Table) */}
                 <div>
-                  {currentGroupUsers.length >= 3 && (
-                    <div className="search-input-box" style={{ marginBottom: 12 }}>
+                  <div className="roster-toolbar">
+                    <div className="roster-search-box">
                       <span className="search-icon" aria-hidden="true">🔍</span>
                       <input
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Поиск по ФИО в этой группе…"
+                        placeholder="Поиск по ФИО в группе…"
                         maxLength={60}
+                        aria-label="Поиск по ФИО в текущей группе"
                       />
+                      {searchQuery && (
+                        <button
+                          type="button"
+                          className="search-clear-btn"
+                          onClick={() => setSearchQuery('')}
+                          aria-label="Очистить поиск"
+                          title="Очистить поиск"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                    <div className="roster-stats">
+                      <span>Всего: <strong>{currentGroupUsers.length}</strong></span>
+                      <span className="roster-stats-sep">•</span>
+                      <span>Активных: <strong style={{ color: 'var(--ui-success)' }}>{activeCount}</strong></span>
+                      <span className="roster-stats-sep">•</span>
+                      <span>С кодом: <strong>{codeSetCount}</strong></span>
+                    </div>
+                  </div>
+
+                  {filteredUsers.length === 0 ? (
+                    <div className="empty-state">
+                      {currentGroupUsers.length === 0 ? (
+                        <>
+                          <strong>В группе «{selectedGroup}» пока никого нет</strong>
+                          <p>Введите ФИО выше или переключитесь на «Импорт списком».</p>
+                        </>
+                      ) : (
+                        <>
+                          <strong>По запросу «{searchQuery}» никто не найден</strong>
+                          <p>Проверьте правильность написания ФИО или сбросьте строку поиска.</p>
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            style={{ minHeight: 30, padding: '4px 12px', fontSize: '0.8rem', marginTop: 10 }}
+                            onClick={() => setSearchQuery('')}
+                          >
+                            Сбросить поиск
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="roster-table-container" role="region" aria-label={`Журнал группы ${selectedGroup}`}>
+                      <table className="roster-table">
+                        <thead>
+                          <tr>
+                            <th className="col-num">№</th>
+                            <th className="col-name">ФИО учащегося</th>
+                            <th className="col-status">Статус</th>
+                            <th className="col-code">Код доступа</th>
+                            <th className="col-actions">Действия</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredUsers.map((user, index) => (
+                            <tr
+                              key={user.id}
+                              className={`roster-row ${user.status === 'disabled' ? 'is-disabled' : ''}`}
+                            >
+                              <td className="col-num">{String(index + 1).padStart(2, '0')}</td>
+                              <td className="col-name">
+                                <span className="user-name-text">
+                                  {highlightMatch(user.displayName, searchQuery)}
+                                </span>
+                              </td>
+                              <td className="col-status">
+                                <span className={`roster-badge ${user.status}`}>
+                                  <span className={`status-dot ${user.status === 'active' ? 'green' : 'gray'}`} aria-hidden="true">
+                                    {user.status === 'active' ? '●' : '○'}
+                                  </span>
+                                  {user.status === 'active' ? 'Активен' : 'Отключён'}
+                                </span>
+                              </td>
+                              <td className="col-code">
+                                <span className={`roster-badge ${user.codeSet ? 'code-set' : 'code-unset'}`}>
+                                  {user.codeSet ? '🔑 Задан' : '— Не задан'}
+                                </span>
+                              </td>
+                              <td className="col-actions">
+                                <div className="roster-actions-wrap">
+                                  <button
+                                    type="button"
+                                    className="table-btn-reset"
+                                    onClick={() => setResetTarget(user)}
+                                    title="Сбросить код, чтобы учащийся снова мог войти без кода"
+                                  >
+                                    ↺ Сброс
+                                  </button>
+                                  <div title={user.status === 'active' ? 'Отключить доступ' : 'Включить доступ'}>
+                                    <PixelSwitch
+                                      checked={user.status === 'active'}
+                                      onChange={() => void toggleStatus(user)}
+                                      ariaLabel={user.status === 'active' ? `Отключить ${user.displayName}` : `Включить ${user.displayName}`}
+                                    />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
-
-                  <div className="student-list" aria-label={`Список группы ${selectedGroup}`}>
-                    {filteredUsers.length === 0 && (
-                      <div className="empty-state">
-                        {currentGroupUsers.length === 0 ? (
-                          <>
-                            <strong>В группе «{selectedGroup}» пока никого нет</strong>
-                            <p>Введите ФИО выше или переключитесь на «Импорт списком».</p>
-                          </>
-                        ) : (
-                          <>
-                            <strong>По запросу «{searchQuery}» никто не найден</strong>
-                            <p>Проверьте правильность написания ФИО.</p>
-                          </>
-                        )}
-                      </div>
-                    )}
-
-                    {filteredUsers.map((user, index) => (
-                      <article
-                        key={user.id}
-                        className={`student-card ${user.status === 'disabled' ? 'is-disabled' : ''}`}
-                      >
-                        <div className="student-info">
-                          <span className="student-index">#{index + 1}</span>
-                          <span className="student-name">{user.displayName}</span>
-                          <span className={`status-chip ${user.status}`}>
-                            {user.status === 'active' ? 'Активен' : 'Отключён'}
-                          </span>
-                          <span className={`code-chip ${user.codeSet ? 'code-set' : 'code-not-set'}`}>
-                            {user.codeSet ? 'Код задан' : 'Первый вход без кода'}
-                          </span>
-                        </div>
-                        <div className="row-actions">
-                          <button
-                            className="ghost-button"
-                            type="button"
-                            onClick={() => setResetTarget(user)}
-                            title="Сбросить код, чтобы учащийся снова мог войти без кода"
-                          >
-                            Сбросить код
-                          </button>
-                          <button
-                            className={user.status === 'active' ? 'danger-button' : 'secondary-button'}
-                            type="button"
-                            onClick={() => void toggleStatus(user)}
-                          >
-                            {user.status === 'active' ? 'Отключить' : 'Включить'}
-                          </button>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
                 </div>
               </>
             ) : (
