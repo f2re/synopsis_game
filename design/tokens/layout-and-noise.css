@@ -1,0 +1,17 @@
+.synoptic-film-grain { pointer-events: none; opacity: var(--noise-film-grain-hub); }
+.synoptic-ambient-vignette { pointer-events: none; }
+.synoptic-top-capsule { position: sticky; top: 0; z-index: 60; }
+.synoptic-hub-stage { min-height: 100dvh; overflow: hidden; }
+.synoptic-task-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
+.synoptic-task-stage { min-width: 0; min-height: calc(100dvh * var(--layout-task-canvas-share)); }
+.synoptic-chart-paper { background: var(--meteo-chart-paper); }
+
+[data-sensory-mode="reduced"] .synoptic-film-grain,
+[data-sensory-mode="reduced"] .synoptic-ambient-vignette {
+  display: none;
+  opacity: 0;
+}
+
+@media (min-width: 900px) {
+  .synoptic-task-grid { grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr); }
+}
