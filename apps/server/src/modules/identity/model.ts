@@ -63,6 +63,7 @@ export interface UserRecord {
   loginCodeHash: string;
   avatar: AvatarProfile;
   createdAt: string;
+  codeSet?: boolean;
   disabledAt?: string;
   lastLoginAt?: string;
   failedAttempts: number;
@@ -82,6 +83,7 @@ export interface SessionUser {
   status: UserStatus;
   avatar: AvatarProfile;
   createdAt: string;
+  codeSet?: boolean;
   lastLoginAt?: string;
 }
 
@@ -99,6 +101,7 @@ export function toSessionUser(user: UserRecord): SessionUser {
     status: user.status,
     avatar: { ...user.avatar },
     createdAt: user.createdAt,
+    codeSet: Boolean(user.codeSet),
     lastLoginAt: user.lastLoginAt,
   };
 }
