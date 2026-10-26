@@ -34,11 +34,6 @@ jobs:
           pnpm typecheck
           pnpm test:server
           pnpm build
-      - name: Сохранить серверный lockfile до фиксации
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-server-lockfile
-          path: apps/server/pnpm-lock.yaml
       - name: Проверить production-сервер
         run: |
           SYNOPSIS_IDENTITY_STORE=/tmp/synopsis-identity-ci.json API_BIND=127.0.0.1 API_PORT=4174 node apps/server/dist/index.js >/tmp/synopsis-server.log 2>&1 &
