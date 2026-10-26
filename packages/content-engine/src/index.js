@@ -20,13 +20,46 @@ function shuffledIndices(length, seed) {
 }
 
 function responseDescriptor(definition) {
-  if (definition.answer?.kind === 'numeric') {
-    return { kind: 'numeric', unit: definition.answer.unit ?? null };
-  }
+  if (definition.answer?.kind === 'numeric') return { kind: 'numeric', unit: definition.answer.unit ?? null };
   if (definition.answer?.kind === 'choice_index') return { kind: 'choice' };
   if (definition.type === 'sequence') return { kind: 'sequence' };
   if (definition.type === 'stationPlot' && definition.answer?.kind === 'station_plot') return { kind: 'stationPlot' };
+  if (definition.type === 'stationBoard' && definition.answer?.kind === 'station_board') return { kind: 'stationBoard' };
   return { kind: definition.type };
+}
+
+function validatePlacementDefinition(definition, expectedKind, typeName) {
+  const observations = definition.payload?.observations;
+  const slots = definition.payload?.slots;
+  const placements = definition.answer?.placements;
+  if (!Array.isArray(observations) || !Array.isArray(slots) || definition.answer?.kind !== expectedKind || !placements || typeof placements !== 'object') {
+    throw new Error(`Некорректное задание ${typeName}: ${definition.id}`);
+  }
+  const observationIds = new Set(observations.map((item) => item?.id));
+  const slotIds = new Set(slots.map((item) => item?.id));
+  for (const [observationId, slotId] of Object.entries(placements)) {
+    if (!observationIds.has(observationId) || !slotIds.has(slotId)) {
+      throw new Error(`Некорректное соответствие ${typeName} ${definition.id}: ${observationId} -> ${slotId}`);
+    }
+  }
+  return { observations, slots };
+}
+
+function placementResult(definition, submitted) {
+  const expected = definition.answer?.placements ?? {};
+  const placements = submitted && typeof submitted === 'object' && submitted.placements && typeof submitted.placements === 'object'
+    ? submitted.placements
+    : {};
+  const components = Object.entries(expected).map(([observationId, expectedSlotId]) => {
+    const submittedSlotId = placements[observationId] ?? null;
+    return { observationId, submittedSlotId, expectedSlotId, correct: submittedSlotId === expectedSlotId };
+  });
+  return {
+    correct: components.length > 0 && components.every((item) => item.correct),
+    normalizedAnswer: { placements: { ...placements } },
+    correctAnswer: { placements: { ...expected } },
+    details: { components },
+  };
 }
 
 export function createTaskInstance(definition, options) {
@@ -51,41 +84,21 @@ export function createTaskInstance(definition, options) {
 
   if (definition.type === 'choice') {
     const optionsList = definition.payload?.options;
-    if (!Array.isArray(optionsList) || definition.answer?.kind !== 'choice_index') {
-      throw new Error(`Некорректное задание choice: ${definition.id}`);
-    }
+    if (!Array.isArray(optionsList) || definition.answer?.kind !== 'choice_index') throw new Error(`Некорректное задание choice: ${definition.id}`);
     const canonicalByPublic = shuffledIndices(optionsList.length, seed);
-    publicTask.payload = {
-      options: canonicalByPublic.map((canonicalIndex, publicIndex) => ({ id: publicIndex, label: optionsList[canonicalIndex] })),
-    };
+    publicTask.payload = { options: canonicalByPublic.map((canonicalIndex, publicIndex) => ({ id: publicIndex, label: optionsList[canonicalIndex] })) };
     return { publicTask, validationContext: { kind: 'choice', canonicalByPublic } };
   }
 
   if (definition.type === 'sequence') {
-    if (!Array.isArray(definition.steps) || !Array.isArray(definition.correct_order)) {
-      throw new Error(`Некорректное задание sequence: ${definition.id}`);
-    }
+    if (!Array.isArray(definition.steps) || !Array.isArray(definition.correct_order)) throw new Error(`Некорректное задание sequence: ${definition.id}`);
     const canonicalByPublic = shuffledIndices(definition.steps.length, seed);
-    publicTask.payload = {
-      steps: canonicalByPublic.map((canonicalIndex, publicIndex) => ({ id: publicIndex, label: definition.steps[canonicalIndex] })),
-    };
+    publicTask.payload = { steps: canonicalByPublic.map((canonicalIndex, publicIndex) => ({ id: publicIndex, label: definition.steps[canonicalIndex] })) };
     return { publicTask, validationContext: { kind: 'sequence', canonicalByPublic } };
   }
 
   if (definition.type === 'stationPlot') {
-    const observations = definition.payload?.observations;
-    const slots = definition.payload?.slots;
-    const placements = definition.answer?.placements;
-    if (!Array.isArray(observations) || !Array.isArray(slots) || definition.answer?.kind !== 'station_plot' || !placements || typeof placements !== 'object') {
-      throw new Error(`Некорректное задание stationPlot: ${definition.id}`);
-    }
-    const observationIds = new Set(observations.map((item) => item?.id));
-    const slotIds = new Set(slots.map((item) => item?.id));
-    for (const [observationId, slotId] of Object.entries(placements)) {
-      if (!observationIds.has(observationId) || !slotIds.has(slotId)) {
-        throw new Error(`Некорректное соответствие stationPlot ${definition.id}: ${observationId} -> ${slotId}`);
-      }
-    }
+    const { observations, slots } = validatePlacementDefinition(definition, 'station_plot', 'stationPlot');
     publicTask.payload = {
       profile: definition.payload?.profile ?? null,
       station: structuredClone(definition.payload?.station ?? null),
@@ -94,6 +107,25 @@ export function createTaskInstance(definition, options) {
       canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
     };
     return { publicTask, validationContext: { kind: 'stationPlot' } };
+  }
+
+  if (definition.type === 'stationBoard') {
+    const { observations, slots } = validatePlacementDefinition(definition, 'station_board', 'stationBoard');
+    const stations = definition.payload?.stations;
+    if (!Array.isArray(stations) || stations.length < 2) throw new Error(`stationBoard ${definition.id} требует несколько станций`);
+    const stationIds = new Set(stations.map((item) => item?.id));
+    if (stationIds.size !== stations.length || stationIds.has(undefined)) throw new Error(`stationBoard ${definition.id}: station.id должны быть уникальными`);
+    for (const item of [...observations, ...slots]) {
+      if (!stationIds.has(item?.stationId)) throw new Error(`stationBoard ${definition.id}: неизвестная stationId ${item?.stationId}`);
+    }
+    publicTask.payload = {
+      profile: definition.payload?.profile ?? null,
+      stations: structuredClone(stations),
+      observations: structuredClone(observations),
+      slots: structuredClone(slots),
+      canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
+    };
+    return { publicTask, validationContext: { kind: 'stationBoard' } };
   }
 
   throw new Error(`Тип задания ${definition.type} пока не поддерживается первым рабочим срезом`);
@@ -109,9 +141,7 @@ function numericResult(definition, submitted) {
 }
 
 export function validateTaskAnswer(definition, validationContext, submitted) {
-  if (definition.type === 'decode' || definition.type === 'numeric') {
-    return numericResult(definition, submitted);
-  }
+  if (definition.type === 'decode' || definition.type === 'numeric') return numericResult(definition, submitted);
 
   if (definition.type === 'choice') {
     const publicIndex = Number(submitted?.choiceIndex);
@@ -129,34 +159,10 @@ export function validateTaskAnswer(definition, validationContext, submitted) {
     const canonicalOrder = order.map((publicIndex) => validationContext?.canonicalByPublic?.[publicIndex]);
     const expected = definition.correct_order.map(Number);
     const correct = canonicalOrder.length === expected.length && canonicalOrder.every((value, index) => value === expected[index]);
-    return {
-      correct,
-      normalizedAnswer: order,
-      correctAnswer: expected.map((canonicalIndex) => definition.steps[canonicalIndex]),
-    };
+    return { correct, normalizedAnswer: order, correctAnswer: expected.map((canonicalIndex) => definition.steps[canonicalIndex]) };
   }
 
-  if (definition.type === 'stationPlot') {
-    const expected = definition.answer?.placements ?? {};
-    const placements = submitted && typeof submitted === 'object' && submitted.placements && typeof submitted.placements === 'object'
-      ? submitted.placements
-      : {};
-    const components = Object.entries(expected).map(([observationId, expectedSlotId]) => {
-      const submittedSlotId = placements[observationId] ?? null;
-      return {
-        observationId,
-        submittedSlotId,
-        expectedSlotId,
-        correct: submittedSlotId === expectedSlotId,
-      };
-    });
-    return {
-      correct: components.length > 0 && components.every((item) => item.correct),
-      normalizedAnswer: { placements: { ...placements } },
-      correctAnswer: { placements: { ...expected } },
-      details: { components },
-    };
-  }
+  if (definition.type === 'stationPlot' || definition.type === 'stationBoard') return placementResult(definition, submitted);
 
   throw new Error(`Проверка типа ${definition.type} пока не поддерживается`);
 }
