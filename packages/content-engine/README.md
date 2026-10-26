@@ -1,5 +1,7 @@
 # @synopsis/content-engine
 
-Transforms validated definitions and data snapshots into server-canonical tasks, public `TaskInstance` payloads and server-side answer validation.
+Чистый движок формирования публичных экземпляров учебных заданий и серверной проверки ответов.
 
-Sequence/options shuffling is deterministic from the round seed. Correct answers and reverse permutations never leave the authoritative server boundary.
+Первый рабочий срез поддерживает `decode`, `numeric`, `choice` и `sequence`. Варианты и шаги перемешиваются детерминированно по зерну. Правильный ответ, канонический порядок и обратное соответствие не входят в публичный `TaskInstance`.
+
+Пакет не выполняет сетевой или файловый ввод-вывод и не зависит от React, Phaser, состояния матча или базы данных.

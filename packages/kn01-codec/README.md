@@ -1,5 +1,7 @@
 # @synopsis/kn01-codec
 
-Pure versioned KN-01 codec: parse, encode and QC helpers keyed by an explicit `kn01_ruleset_id`.
+Чистый версионируемый кодек КН-01 без сетевого и файлового ввода-вывода.
 
-No network/file I/O, React, Phaser, match state or database access belongs here.
+Первый рабочий поднабор поддерживает `1snTTT`, `2snTdTdTd`, `3PoPoPoPo` и `5appp` с явным набором правил `KN01_RU_ROSHYDROMET_2012_V1`. Реализованы дешифрирование, кодирование, проверка группы, разбор поддерживаемых групп телеграммы и тесты обратного преобразования.
+
+Расширение на остальные разделы выполняется только после предметной приёмки источника и тестовых примеров.
