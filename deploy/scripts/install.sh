@@ -3,17 +3,25 @@ set -euo pipefail
 if [[ ${EUID:-$(id -u)} -ne 0 ]]; then echo "Запустите от root." >&2; exit 1; fi
 RELEASE_ARCHIVE=${1:-}
 if [[ -z "$RELEASE_ARCHIVE" || ! -f "$RELEASE_ARCHIVE" ]]; then echo "Использование: $0 <release.tar.gz>" >&2; exit 2; fi
+EXPECTED=""
 if [[ -f "$RELEASE_ARCHIVE.sha256" ]]; then
   EXPECTED=$(awk 'NR==1{print $1}' "$RELEASE_ARCHIVE.sha256")
   ACTUAL=$(sha256sum "$RELEASE_ARCHIVE" | awk '{print $1}')
   [[ "$ACTUAL" == "$EXPECTED" ]] || { echo "SHA-256 релиза не совпадает" >&2; exit 3; }
 fi
+
+# Повторный запуск установщика на уже управляемой системе всегда идёт через
+# штатный транзакционный обновлятор с резервным копированием и откатом.
+if [[ -f /opt/synopsis-game/current/deploy/scripts/update.py ]]; then
+  args=("$RELEASE_ARCHIVE")
+  [[ -n "$EXPECTED" ]] && args+=(--sha256 "$EXPECTED")
+  exec /usr/bin/python3 /opt/synopsis-game/current/deploy/scripts/update.py "${args[@]}"
+fi
+
 if [[ -r /etc/os-release ]]; then . /etc/os-release; fi
-IS_DEBIAN=0
 if [[ ${ID:-} == "astra" || ${ID_LIKE:-} == *debian* ]]; then
-  IS_DEBIAN=1
   apt-get update
-  apt-get install -y ca-certificates curl python3 tar xz-utils
+  DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates curl python3 tar xz-utils
 fi
 getent group synopsis-game >/dev/null || groupadd --system synopsis-game
 id synopsis-game >/dev/null 2>&1 || useradd --system --gid synopsis-game --home-dir /var/lib/synopsis-game --shell /usr/sbin/nologin synopsis-game
@@ -51,19 +59,16 @@ PY
 VERSION=$(basename "$DEST")
 ln -sfn "$DEST" /opt/synopsis-game/current
 DEFAULTS=/opt/synopsis-game/current/deploy/config/defaults.env
-if [[ ! -f /etc/synopsis-game/app.env ]]; then install -m 0640 -o root -g synopsis-game "$DEFAULTS" /etc/synopsis-game/app.env; fi
-CONFIG_FILE=/etc/synopsis-game/app.env DEFAULTS_FILE="$DEFAULTS" /bin/bash /opt/synopsis-game/current/deploy/scripts/configure.sh
-WEB_SERVER=$(sed -n 's/^WEB_SERVER=//p' /etc/synopsis-game/app.env | tail -n1)
-DATABASE_KIND=$(sed -n 's/^DATABASE_KIND=//p' /etc/synopsis-game/app.env | tail -n1)
-if [[ "$IS_DEBIAN" == 1 ]]; then
-  case "$WEB_SERVER" in
-    nginx) apt-get install -y nginx ;;
-    apache) apt-get install -y apache2 ;;
-    none) : ;;
-    *) echo "WEB_SERVER должен быть nginx/apache/none" >&2; exit 2 ;;
-  esac
-  if [[ "$DATABASE_KIND" == postgres ]]; then apt-get install -y postgresql-client; fi
+if [[ ! -f /etc/synopsis-game/app.env ]]; then
+  install -m 0640 -o root -g synopsis-game "$DEFAULTS" /etc/synopsis-game/app.env
+else
+  /usr/bin/python3 /opt/synopsis-game/current/deploy/scripts/config_merge.py \
+    --defaults "$DEFAULTS" --current /etc/synopsis-game/app.env --output /etc/synopsis-game/.app.env.new
+  install -m 0640 -o root -g synopsis-game /etc/synopsis-game/.app.env.new /etc/synopsis-game/app.env
+  rm -f /etc/synopsis-game/.app.env.new
 fi
+CONFIG_FILE=/etc/synopsis-game/app.env DEFAULTS_FILE="$DEFAULTS" /bin/bash /opt/synopsis-game/current/deploy/scripts/configure.sh
+CONFIG_FILE=/etc/synopsis-game/app.env /bin/bash /opt/synopsis-game/current/deploy/scripts/ensure-host-deps.sh
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game.service /etc/systemd/system/synopsis-game.service
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game-update.service /etc/systemd/system/synopsis-game-update.service
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game-update.timer /etc/systemd/system/synopsis-game-update.timer
