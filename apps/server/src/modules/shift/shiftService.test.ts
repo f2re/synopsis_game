@@ -61,6 +61,14 @@ async function reachStationPlot(service: ShiftService, userId: string) {
   return { shiftId, task: result.nextTask! };
 }
 
+async function reachThreeBoard(service: ShiftService, userId: string) {
+  const reached = await reachStationPlot(service, userId);
+  const stationPlotResult = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
+    placements: { obs_t: 'slot_01', obs_td: 'slot_02', obs_p: 'slot_03', obs_wind: 'slot_04' },
+  });
+  return { shiftId: reached.shiftId, task: stationPlotResult.nextTask! };
+}
+
 test('stationPlot не раскрывает эталон и переводит к планшону на три станции', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
@@ -74,20 +82,17 @@ test('stationPlot не раскрывает эталон и переводит �
     });
     assert.equal(result.feedback.correct, true);
     assert.equal(result.completed, false);
-    assert.equal(result.nextTask?.type, 'stationBoard');
+    assert.equal(result.nextTask?.definitionId, 'station_board_three_001');
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
-test('трёхстанционный планшон скрывает эталон и проверяет позиции по каждой станции', async () => {
+test('трёхстанционный планшон скрывает эталон и переводит к плотному планшону', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
     await service.init();
-    const reached = await reachStationPlot(service, 'student-4');
-    const stationPlotResult = await service.submitAnswer('student-4', reached.shiftId, reached.task.instanceId, {
-      placements: { obs_t: 'slot_01', obs_td: 'slot_02', obs_p: 'slot_03', obs_wind: 'slot_04' },
-    });
-    const board = stationPlotResult.nextTask!;
+    const reached = await reachThreeBoard(service, 'student-4');
+    const board = reached.task;
     assert.equal(board.response.kind, 'stationBoard');
     assert.equal((board.payload?.stations as unknown[]).length, 3);
     assert.equal(JSON.stringify(board).includes('"a_t":"a_nw"'), false);
@@ -95,13 +100,46 @@ test('трёхстанционный планшон скрывает этало�
     const result = await service.submitAnswer('student-4', reached.shiftId, board.instanceId, {
       placements: {
         a_t: 'a_nw', a_td: 'a_sw',
-        b_t: 'b_sw', b_td: 'b_nw',
+        b_t: 'b_nw', b_td: 'b_sw',
         c_t: 'c_nw', c_td: 'c_sw',
+      },
+    });
+    assert.equal(result.feedback.correct, true);
+    assert.equal(result.completed, false);
+    assert.equal(result.nextTask?.definitionId, 'station_board_eight_001');
+    assert.equal((result.nextTask?.payload?.stations as unknown[]).length, 8);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('планшон на восемь станций загружается из отдельного файла и не раскрывает эталон', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
+  try {
+    const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
+    await service.init();
+    const reached = await reachThreeBoard(service, 'student-5');
+    const threeResult = await service.submitAnswer('student-5', reached.shiftId, reached.task.instanceId, {
+      placements: {
+        a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw',
+      },
+    });
+    const board = threeResult.nextTask!;
+    assert.equal(board.definitionId, 'station_board_eight_001');
+    assert.equal(board.response.kind, 'stationBoard');
+    assert.equal((board.payload?.stations as unknown[]).length, 8);
+    assert.equal((board.payload?.observations as unknown[]).length, 16);
+    assert.equal(JSON.stringify(board).includes('"a8_t":"a8_nw"'), false);
+
+    const result = await service.submitAnswer('student-5', reached.shiftId, board.instanceId, {
+      placements: {
+        a8_t: 'a8_nw', a8_td: 'a8_sw', b8_t: 'b8_nw', b8_td: 'b8_sw',
+        c8_t: 'c8_nw', c8_td: 'c8_sw', d8_t: 'd8_nw', d8_td: 'd8_sw',
+        e8_t: 'e8_nw', e8_td: 'e8_sw', f8_t: 'f8_nw', f8_td: 'f8_sw',
+        g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_sw', h8_td: 'h8_nw',
       },
     });
     assert.equal(result.feedback.correct, false);
     const components = (result.feedback.details as { components: Array<{ correct: boolean }> }).components;
-    assert.equal(components.filter((component) => component.correct).length, 4);
+    assert.equal(components.filter((component) => component.correct).length, 14);
     assert.equal(result.completed, true);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
