@@ -37,6 +37,8 @@ def restore_backup(backup_dir: Path | None, app_env: Path):
     cfg=env_file(app_env)
     if cfg.get('DATABASE_KIND','sqlite')=='sqlite' and (backup_dir/'data').exists():
         data=STATE/'data'; shutil.rmtree(data,ignore_errors=True); shutil.copytree(backup_dir/'data',data)
+    if (backup_dir/'migrations').exists():
+        migrations=STATE/'migrations'; shutil.rmtree(migrations,ignore_errors=True); shutil.copytree(backup_dir/'migrations',migrations)
 
 def main()->int:
     ap=argparse.ArgumentParser(); ap.add_argument('archive'); ap.add_argument('--sha256'); ap.add_argument('--no-start',action='store_true'); a=ap.parse_args()
