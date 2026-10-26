@@ -39,9 +39,10 @@ Mandatory sources before designing or modifying UI components:
 
 5. **Pixel Typography & Cyrillic Integration:**
    - Author and enforce pixel typography across all UI components, buttons, tabs, headers, dialogs, badges, and forms.
-   - Mandatory use of project-hosted fonts via CSS tokens: `--font-pixel-ui` (`PixCyrillic`), `--font-pixel-display` (`PressStart2P`), `--font-pixel-dense` (`PixCyrillic-Dense`), and `--font-pixel-mono` (`PressStart2P`). Never introduce unapproved generic vector fonts (Inter, Roboto, Arial) into the game UI shell.
-   - Enforce crisp pixel rendering rules: `-webkit-font-smoothing: none; font-smooth: never; text-rendering: pixelated;`.
-   - Strictly follow integer scale multiples (8px, 12px, 16px, 20px, 24px, 32px) and line-heights (`1.2`–`1.35`) ensuring full Cyrillic readability with no clipping of ascenders/descenders (`щ`, `ц`, `р`, `д`, `б`, `ё`).
+   - Mandatory use of project-hosted fonts via CSS tokens: `--font-pixel-ui` (`PixCyrillic`), `--font-pixel-display` (`PixCyrillic`), `--font-pixel-dense` (`PixCyrillic-Dense`), and `--font-pixel-mono` (`PressStart2P`). Never introduce unapproved generic vector fonts (Inter, Roboto, Arial) into the game UI shell.
+   - Enforce comfortable, readable scales: body text 14-16px, headings 18-28px, notes not smaller than 13px. Prohibit microscopic or crushed text sizes.
+   - Ensure soft, readable text rendering (`-webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;`) preventing rough 1-bit jaggies and staircase noise on dark backgrounds.
+   - Strictly follow line-heights (`1.35`–`1.45`) ensuring full Cyrillic readability with no clipping of ascenders/descenders (`щ`, `ц`, `р`, `д`, `б`, `ё`).
    - All text and button content must be verified with Russian strings before requesting review.
 
 6. **Visual Quality & Accessibility:**

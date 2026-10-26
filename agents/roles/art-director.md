@@ -73,7 +73,8 @@ The first art gate is `pixel-art-quality-reviewer`: pixel grid, frame consistenc
 The Art Director then rejects work that:
 
 - conflicts with `docs/BRAND_AND_LORE_26063.md`;
-- uses generic vector or blurred non-pixel fonts in UI, HUD or screens instead of approved project pixel fonts (`PressStart2P`, `PixCyrillic`, `PixCyrillic-Dense`);
+- uses generic vector fonts in UI instead of approved cozy pixel fonts (`PixCyrillic`), or misapplies crude 8-bit arcade fonts (`PressStart2P`) to primary Russian text headers and buttons;
+- introduces microscopic (<12px) unreadable text or rough, jagged unhinted rendering;
 - introduces unvetted or unlocalized fonts lacking full Russian Cyrillic support (`Ё`/`ё`, punctuation, numbers);
 - violates pixel grid integer scaling for typography or distorts font glyph proportions;
 - becomes dashboard-first or obscures the active task;

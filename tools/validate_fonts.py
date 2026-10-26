@@ -104,7 +104,7 @@ def validate_css_and_tokens() -> list[str]:
         if token not in css_content:
             errors.append(f"В styles.css отсутствует CSS-токен '{token}'")
 
-    for rule in ["-webkit-font-smoothing: none", "text-rendering: pixelated"]:
+    for rule in ["-webkit-font-smoothing:", "text-rendering:"]:
         if rule not in css_content:
             errors.append(f"В styles.css отсутствует обязательное правило рендеринга '{rule}'")
 

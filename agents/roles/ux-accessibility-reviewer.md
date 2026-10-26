@@ -13,9 +13,9 @@ Checks:
 - mobile uses one-task focus and adequate touch targets;
 - projector view is readable from several meters;
 - keyboard/focus path works;
-- Cyrillic pixel typography is crisp, legible and properly sized across desktop, mobile and projector;
+- Cyrillic pixel typography is crisp, legible and comfortably sized (>=14px for body, >=13px for notes, 18-28px for titles) across desktop, mobile and projector;
 - Russian characters with ascenders/descenders (`щ`, `ц`, `д`, `р`, `б`, `ё`) have sufficient line height and padding, with zero text clipping or overlapping;
-- Font smoothing/blurring is disabled (`-webkit-font-smoothing: none; font-smooth: never; text-rendering: pixelated;`), eliminating fuzzy edges on dark panels;
+- Pixel typography uses antialiased smoothing (`-webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;`), preventing rough 1-bit jaggies and eye strain;
 - Contrast ratios between pixel text and backgrounds meet accessibility standards;
 - No fallback to blurry generic fonts occurs; local project fonts (`PixCyrillic`, `PressStart2P`) load reliably without external CDN dependence;
 - color is never the only information carrier;
