@@ -19,10 +19,27 @@
 .shift-topbar > div:first-child { display: grid; gap: 2px; }
 .shift-kicker { color: #9db6c7; font-size: .72rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
 .shift-topbar strong { font-size: 1rem; }
+.shift-progress-box { width: 100%; max-width: 360px; }
 .shift-progress { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; color: #bdd0d9; font-size: .82rem; }
 .shift-progress > div { height: 7px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.13); }
 .shift-progress i { display: block; height: 100%; background: #edc76a; border-radius: inherit; transition: width .22s ease; }
-.shift-exit { border: 1px solid rgba(225,237,238,.22); border-radius: 9px; padding: 8px 12px; color: #edf3f1; background: rgba(255,255,255,.07); }
+.shift-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(225,237,238,.22);
+  border-radius: 6px;
+  padding: 6px 14px;
+  color: #edf3f1;
+  background: rgba(255,255,255,.07);
+  box-shadow: var(--pixel-bevel-btn-out);
+  cursor: pointer;
+  font-family: var(--font-pixel-ui);
+  font-size: 13px;
+  transition: background .12s ease;
+}
+.shift-exit:hover { background: rgba(255,255,255,.14); border-color: rgba(225,237,238,.35); }
+.shift-exit:active { transform: translateY(1px); box-shadow: var(--pixel-bevel-btn-in); }
 .shift-stage {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -34,6 +51,7 @@
   align-items: start;
 }
 .shift-context { padding: 18px 4px; color: #adbfca; line-height: 1.55; }
+.shift-context-topic-badge { display: inline-flex; align-items: center; gap: 6px; color: #7f9aad; text-transform: uppercase; letter-spacing: .1em; font-size: .68rem; font-weight: 800; margin-bottom: 4px; }
 .shift-context > span { color: #7f9aad; text-transform: uppercase; letter-spacing: .1em; font-size: .68rem; font-weight: 800; }
 .shift-context > strong { display: block; margin-top: 5px; color: #edf3ef; font-size: 1.05rem; }
 .shift-context p { font-size: .87rem; }
@@ -46,6 +64,7 @@
   box-shadow: 0 28px 80px rgba(0,0,0,.26), inset 0 1px rgba(255,255,255,.035);
 }
 .shift-card-meta { display: flex; justify-content: space-between; gap: 16px; color: #829dac; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; }
+.shift-card-meta-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(179, 209, 211, 0.14); }
 .shift-card h1 { max-width: 660px; margin: 16px 0 24px; color: #f4f0df; font-size: clamp(1.45rem, 3vw, 2.2rem); line-height: 1.18; }
 .kn01-code {
   margin: 16px 0 8px;
@@ -82,7 +101,7 @@
 .shift-feedback { margin-top: 24px; padding: 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(4,17,27,.34); }
 .shift-feedback.is-correct { border-color: rgba(117,183,126,.46); }
 .shift-feedback.is-wrong { border-color: rgba(213,132,116,.48); }
-.shift-feedback-title { margin-bottom: 10px; font-weight: 900; font-size: 1.1rem; }
+.shift-feedback-title { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-weight: 900; font-size: 1.1rem; }
 .shift-feedback.is-correct .shift-feedback-title { color: #9ed5a4; }
 .shift-feedback.is-wrong .shift-feedback-title { color: #e9aa9f; }
 .shift-feedback p { color: #c7d4d5; line-height: 1.5; }

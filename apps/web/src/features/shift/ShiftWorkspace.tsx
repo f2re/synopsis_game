@@ -9,6 +9,7 @@ import {
   type TaskStep,
 } from '../../api';
 import { GAME_MARK } from '../../brand';
+import { PixelIcon, PixelProgressBar } from '../ui';
 import { FindErrorTask } from './FindErrorTask';
 import { StationBoardTask } from './StationBoardTask';
 import { StationPlotTask } from './StationPlotTask';
@@ -145,10 +146,10 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     <main className="shift-shell">
       <header className="shift-topbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img
-            src="/ui/ui_station_crest_badge_v2.png"
-            alt="26063"
-            className="overlay-crest"
+          <PixelIcon
+            name="kn01"
+            size="md"
+            className="shift-topbar-icon"
             style={{ width: 36, height: 36, flexShrink: 0 }}
           />
           <div>
@@ -156,16 +157,28 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
             <strong>{dependencySequence ? 'Первичный анализ' : findError ? 'Контроль наблюдений' : stationBoard ? 'Учебный планшет' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
           </div>
         </div>
-        <div className="shift-progress" aria-label={`Выполнено ${progress.answered} из ${progress.total}`}>
-          <span>{progress.current}/{progress.total}</span>
-          <div><i style={{ width: `${progress.total ? (progress.answered / progress.total) * 100 : 0}%` }} /></div>
+        <div className="shift-progress-box">
+          <PixelProgressBar
+            value={progress.answered}
+            max={progress.total}
+            variant="teal"
+            size="sm"
+            stepText={`Задание ${progress.current} из ${progress.total}`}
+            showPercent
+          />
         </div>
-        <button className="shift-exit" onClick={onExit}>В центр</button>
+        <button type="button" className="shift-exit" onClick={onExit}>
+          <PixelIcon name="logout" size="sm" />
+          <span>В центр</span>
+        </button>
       </header>
 
       <section className="shift-stage" aria-live="polite">
         <aside className="shift-context">
-          <span>Тема</span>
+          <div className="shift-context-topic-badge">
+            <PixelIcon name={stationTask ? 'cartography' : dependencySequence ? 'trend' : 'doc'} size="sm" />
+            <span>Тема</span>
+          </div>
           <strong>{dependencySequence ? 'Конструктор зависимостей анализа' : findError ? 'Критика и физический контроль' : stationBoard ? 'Планшет приземных наблюдений' : stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
           <p>{dependencySequence
             ? 'Здесь нет единственной правильной линейной цепочки. Расположите операции так, чтобы соблюдались обязательные зависимости методического профиля.'
@@ -180,7 +193,16 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
         </aside>
 
         <article className={`shift-card ${wideTask ? 'shift-card-wide' : ''}`}>
-          <div className="shift-card-meta"><span>Задание {progress.current}</span><span>Сложность {task.difficulty}</span></div>
+          <div className="shift-card-meta">
+            <span className="shift-card-meta-pill">
+              <PixelIcon name="doc" size="sm" />
+              <span>Задание {progress.current}</span>
+            </span>
+            <span className="shift-card-meta-pill">
+              <PixelIcon name="trend" size="sm" />
+              <span>Сложность {task.difficulty}</span>
+            </span>
+          </div>
           <h1>{task.question}</h1>
 
           {task.payload?.encoded && <div className="kn01-code" aria-label={`Кодовая группа ${task.payload.encoded}`}>{task.payload.encoded}</div>}
@@ -210,7 +232,10 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
 
           {feedback ? (
             <section className={`shift-feedback ${feedback.feedback.correct ? 'is-correct' : 'is-wrong'}`}>
-              <div className="shift-feedback-title">{feedback.feedback.correct ? 'Верно' : 'Нужно исправить принцип'}</div>
+              <div className="shift-feedback-title">
+                <PixelIcon name={feedback.feedback.correct ? 'trophy' : 'alert'} size="sm" />
+                <span>{feedback.feedback.correct ? 'Верно' : 'Нужно исправить принцип'}</span>
+              </div>
               {!feedback.feedback.correct && !stationTask && !findError && !dependencySequence && <p><strong>Правильный ответ:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>}
               {!feedback.feedback.correct && stationTask && <p>Красным отмечено ошибочное размещение, жёлтым — нормативная позиция для пропущенного или неверно размещённого элемента.</p>}
               {!feedback.feedback.correct && findError && <p><strong>Физическое нарушение:</strong> станция {correctAnswerText(feedback.feedback.correctAnswer)}. На планшоне она отмечена зелёным, ваш выбор — красным.</p>}
