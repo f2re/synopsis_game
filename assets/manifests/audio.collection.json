@@ -1,0 +1,728 @@
+{
+  "$schema": "audio-collection/v1",
+  "title": "26063: Позывной «Синоптик» — Аудиоколлекция живого мира",
+  "version": "1.0.0",
+  "generatedAt": "2026-10-26T14:20:00Z",
+  "totalAssets": 24,
+  "license": "CC0-1.0",
+  "soundTiers": {
+    "taskFeedback": {
+      "loudness": "-14 to -10 LUFS",
+      "priority": 1,
+      "description": "Звуковой отклик на учебные действия и экзамены"
+    },
+    "interaction": {
+      "loudness": "-18 to -14 LUFS",
+      "priority": 2,
+      "description": "Отклик на нажатия приборов, дверей, лампы, радара"
+    },
+    "ambientBeds": {
+      "loudness": "-28 to -22 LUFS",
+      "priority": 3,
+      "description": "Фоновый ветер, вода, тишина комнат и ночной воздух"
+    }
+  },
+  "accessibility": {
+    "sensoryReduction": "Поддерживается мягкий профиль: понижение громкости транзиентов и отключение резких частот",
+    "muteOption": "Поддерживается раздельное и общее отключение каналов",
+    "nonExclusiveAudio": "Звук никогда не является единственным источником обязательной учебной информации"
+  },
+  "assets": [
+    {
+      "id": "audio.ambient.wind-trees",
+      "title": "Прибрежный ветер и шелест крон",
+      "description": "Эмбиент-петля: спокойный ветер Финского залива с порывами и шелестом сосновых ветвей.",
+      "category": "ambient",
+      "layer": "wind/trees/water/city bed",
+      "path": "assets/source/audio/ambient/amb_wind_trees_bed.wav",
+      "runtimeUrl": "/audio/ambient/amb_wind_trees_bed.wav",
+      "sha256": "f08f1ae685e939ae5d71692159f3ec4483885a010a46a213a64ed99f25fe0f46",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 12.0,
+      "loop": true,
+      "targetLufs": -24,
+      "defaultVolume": 0.45,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.ambient.water-shore",
+      "title": "Плеск воды у набережной кампуса",
+      "description": "Эмбиент-петля: мягкий прибой залива о гранитную набережную и причал метеостанции.",
+      "category": "ambient",
+      "layer": "wind/trees/water/city bed",
+      "path": "assets/source/audio/ambient/amb_water_shore_bed.wav",
+      "runtimeUrl": "/audio/ambient/amb_water_shore_bed.wav",
+      "sha256": "2dd794dbb52d35faa064360ce3831a232af62576443fe05f2ffcf4fa51849976",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 12.0,
+      "loop": true,
+      "targetLufs": -26,
+      "defaultVolume": 0.4,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.ambient.archive-room",
+      "title": "Акустика помещения Архива",
+      "description": "Эмбиент-петля: тёплая тишина комнаты с деревянными каталогами и далёким тиканьем барографа.",
+      "category": "ambient",
+      "layer": "indoor room tone and equipment clicks",
+      "path": "assets/source/audio/ambient/amb_archive_room_bed.wav",
+      "runtimeUrl": "/audio/ambient/amb_archive_room_bed.wav",
+      "sha256": "63c1a8297ac59a4d2528cdf95f46d8b3ef0f6347d92282dc43dd292c9eb24d30",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 12.0,
+      "loop": true,
+      "targetLufs": -28,
+      "defaultVolume": 0.35,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.ambient.night-air",
+      "title": "Ночная прохлада и шорох ветра",
+      "description": "Эмбиент-петля: глубокая ночная тишина Балтики с едва слышным цикадным тоном.",
+      "category": "ambient",
+      "layer": "wind/trees/water/city bed",
+      "path": "assets/source/audio/ambient/amb_night_air_bed.wav",
+      "runtimeUrl": "/audio/ambient/amb_night_air_bed.wav",
+      "sha256": "c6345143d63639b08b61b48d9c2e60acb96cdf24fece58fa15ebc8cd98b93bc3",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 12.0,
+      "loop": true,
+      "targetLufs": -26,
+      "defaultVolume": 0.35,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.fauna.tit-chirp",
+      "title": "Голос большой синицы",
+      "description": "Короткий мелодичный двойной посвист синицы на ветвях или ограждении центра.",
+      "category": "fauna",
+      "layer": "day/night/season bird variants",
+      "path": "assets/source/audio/fauna/fauna_tit_chirp.wav",
+      "runtimeUrl": "/audio/fauna/fauna_tit_chirp.wav",
+      "sha256": "a6e23b1d620db10cd404b4e569c1e98c6197615a708c23e00b0124af2428c63c",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.6,
+      "loop": false,
+      "targetLufs": -18,
+      "defaultVolume": 0.65,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.fauna.gull-distant",
+      "title": "Далёкий крик балтийской чайки",
+      "description": "Одиночный протяжный крик чайки на горизонте над заливом.",
+      "category": "fauna",
+      "layer": "day/night/season bird variants",
+      "path": "assets/source/audio/fauna/fauna_gull_distant.wav",
+      "runtimeUrl": "/audio/fauna/fauna_gull_distant.wav",
+      "sha256": "883127e5992544cc30d00bbeca40ca9ce08e820d0df1459be7925b8638f78524",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.4,
+      "loop": false,
+      "targetLufs": -20,
+      "defaultVolume": 0.55,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.fauna.finch-trill",
+      "title": "Переливчатая трель зяблика",
+      "description": "Дневная лесная трель зяблика в зелёном дворе кампуса.",
+      "category": "fauna",
+      "layer": "day/night/season bird variants",
+      "path": "assets/source/audio/fauna/fauna_finch_trill.wav",
+      "runtimeUrl": "/audio/fauna/fauna_finch_trill.wav",
+      "sha256": "1e46f827b219fb3728e1bbee4fe9a11162d78f9835741f85dbae8c227ffbbba6",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.0,
+      "loop": false,
+      "targetLufs": -19,
+      "defaultVolume": 0.6,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.fauna.squirrel-scurry",
+      "title": "Шорох белки по коре сосны",
+      "description": "Тактильный шорох коготков белки, перебегающей по дереву к дуплу.",
+      "category": "fauna",
+      "layer": "day/night/season bird variants",
+      "path": "assets/source/audio/fauna/fauna_squirrel_scurry.wav",
+      "runtimeUrl": "/audio/fauna/fauna_squirrel_scurry.wav",
+      "sha256": "ff51cc2e99160c3d547b7c261c48126336be704e69ff6c7a2b62cd6332f745bc",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.65,
+      "loop": false,
+      "targetLufs": -21,
+      "defaultVolume": 0.5,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.equip.barograph-tick",
+      "title": "Шаг анкера самописца-барографа",
+      "description": "Характерный прецизионный сухой щелчок часового механизма метеорологического регистратора давления.",
+      "category": "equipment",
+      "layer": "indoor room tone and equipment clicks",
+      "path": "assets/source/audio/equipment/equip_barograph_tick.wav",
+      "runtimeUrl": "/audio/equipment/equip_barograph_tick.wav",
+      "sha256": "f529e48388e45c4f0f284d48efc7453f28254e024bd5840dd80be2f9c6cd0de0",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.22,
+      "loop": false,
+      "targetLufs": -18,
+      "defaultVolume": 0.7,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.equip.clockwork-hum",
+      "title": "Ход настенных астрономических часов",
+      "description": "Тихое латунное движение и размеренный полусекундный шаг маятника.",
+      "category": "equipment",
+      "layer": "indoor room tone and equipment clicks",
+      "path": "assets/source/audio/equipment/equip_clockwork_hum.wav",
+      "runtimeUrl": "/audio/equipment/equip_clockwork_hum.wav",
+      "sha256": "b5d57baebe516a592f8f11b50e53f14647b987757e6e27bd8e318b53c7c24c21",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 2.0,
+      "loop": false,
+      "targetLufs": -22,
+      "defaultVolume": 0.5,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.equip.lamp-switch",
+      "title": "Тумблер настольной архивной лампы",
+      "description": "Пружинный щелчок карболитового поворотного выключателя освещения рабочего стола.",
+      "category": "equipment",
+      "layer": "indoor room tone and equipment clicks",
+      "path": "assets/source/audio/equipment/equip_lamp_switch.wav",
+      "runtimeUrl": "/audio/equipment/equip_lamp_switch.wav",
+      "sha256": "0cc46bb555636971c977bdc5317a59400a612e4a5f48bda47a24fd04cb9d8a26",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.35,
+      "loop": false,
+      "targetLufs": -14,
+      "defaultVolume": 0.75,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.equip.paper-turn",
+      "title": "Шелест синоптической карты",
+      "description": "Тактильный шорох переворота плотного ватмана бланка приземного анализа.",
+      "category": "equipment",
+      "layer": "indoor room tone and equipment clicks",
+      "path": "assets/source/audio/equipment/equip_paper_turn.wav",
+      "runtimeUrl": "/audio/equipment/equip_paper_turn.wav",
+      "sha256": "e7aece7f2a456f9c0153fda9bec480d35ba8bfd447b88439d119003220c8781e",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.65,
+      "loop": false,
+      "targetLufs": -19,
+      "defaultVolume": 0.65,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.equip.teletype-chatter",
+      "title": "Печать метеосводки телетайпом",
+      "description": "Серия ударов служебного буквопечатающего аппарата приёма телеграмм КН-01.",
+      "category": "equipment",
+      "layer": "indoor room tone and equipment clicks",
+      "path": "assets/source/audio/equipment/equip_teletype_chatter.wav",
+      "runtimeUrl": "/audio/equipment/equip_teletype_chatter.wav",
+      "sha256": "224daaff94f4578082502888822d6930bbb1d10c8b23ce25b342a87c84a1af39",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.3,
+      "loop": false,
+      "targetLufs": -17,
+      "defaultVolume": 0.6,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.interact.radar-pulse",
+      "title": "Оборот антенны радиолокатора МРЛ",
+      "description": "Низкий гул сервопривода и прохождение радиолуча метеорологического локатора.",
+      "category": "interact",
+      "layer": "radar/antenna/balloon/world interaction cues",
+      "path": "assets/source/audio/interact/interact_radar_pulse.wav",
+      "runtimeUrl": "/audio/interact/interact_radar_pulse.wav",
+      "sha256": "8d219cba7969d071a8be40b8145bf0082491b1b038ad9c6ffec30b6366c726ed",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 2.4,
+      "loop": false,
+      "targetLufs": -16,
+      "defaultVolume": 0.7,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.interact.balloon-release",
+      "title": "Старт аэрологического шара-пилота",
+      "description": "Пневматический шелест наполнения и аэродинамический свист уходящего в облака зонда.",
+      "category": "interact",
+      "layer": "radar/antenna/balloon/world interaction cues",
+      "path": "assets/source/audio/interact/interact_balloon_release.wav",
+      "runtimeUrl": "/audio/interact/interact_balloon_release.wav",
+      "sha256": "66767902cc2cef9ae7ee7d7e4c66ade922d70f823175988b2e618d491ac49440",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.8,
+      "loop": false,
+      "targetLufs": -18,
+      "defaultVolume": 0.65,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.interact.anemometer-spin",
+      "title": "Вращение чашечного анемометра",
+      "description": "Лёгкий металлический шелест раскручивающихся на ветру полусферических чашек прибора.",
+      "category": "interact",
+      "layer": "radar/antenna/balloon/world interaction cues",
+      "path": "assets/source/audio/interact/interact_anemometer_spin.wav",
+      "runtimeUrl": "/audio/interact/interact_anemometer_spin.wav",
+      "sha256": "31077a4024d58e25094e03d1d54c07ad18f2b67546ffccbfcbbe7d581dd9dc06",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.3,
+      "loop": false,
+      "targetLufs": -18,
+      "defaultVolume": 0.65,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.interact.door-latch",
+      "title": "Деревянная защёлка двери Архива",
+      "description": "Звук открывания или закрывания массивной деревянной филёнчатой двери центра.",
+      "category": "interact",
+      "layer": "radar/antenna/balloon/world interaction cues",
+      "path": "assets/source/audio/interact/interact_door_latch.wav",
+      "runtimeUrl": "/audio/interact/interact_door_latch.wav",
+      "sha256": "5729236ca1b79711f585d7341d534d0547c338ff7fd89be2286c8ade27a3c70e",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.4,
+      "loop": false,
+      "targetLufs": -15,
+      "defaultVolume": 0.75,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.ui.click-soft",
+      "title": "Тактильный клик кнопки",
+      "description": "Мягкий не раздражающий щелчок при нажатии на интерактивные кнопки интерфейса.",
+      "category": "ui",
+      "layer": "reduced-sensory/mute profile",
+      "path": "assets/source/audio/feedback/ui_click_soft.wav",
+      "runtimeUrl": "/audio/feedback/ui_click_soft.wav",
+      "sha256": "2c918e3b36184b32fbef7ae4c7dd224cf9993cd01fef3f1f2e503ac3cd0974f8",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.075,
+      "loop": false,
+      "targetLufs": -12,
+      "defaultVolume": 0.8,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.ui.hover-subtle",
+      "title": "Микро-отклик наведения курсора",
+      "description": "Едва заметный высокочастотный тик при фокусе на доступном объекте кампуса.",
+      "category": "ui",
+      "layer": "reduced-sensory/mute profile",
+      "path": "assets/source/audio/feedback/ui_hover_subtle.wav",
+      "runtimeUrl": "/audio/feedback/ui_hover_subtle.wav",
+      "sha256": "84b029be8a72e4b428b5d8086f8ea65e7ed0ee14e76782bb7088a223d221b1cf",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.04,
+      "loop": false,
+      "targetLufs": -22,
+      "defaultVolume": 0.5,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.feedback.synoptic-chime",
+      "title": "Трезвучие правильного прогноза",
+      "description": "Благородный латунный колокольный аккорд при верном решении учебной задачи или КН-01.",
+      "category": "feedback",
+      "layer": "subtle Blitz/Duel feedback stings",
+      "path": "assets/source/audio/feedback/feedback_synoptic_chime.wav",
+      "runtimeUrl": "/audio/feedback/feedback_synoptic_chime.wav",
+      "sha256": "8acff17c302f4aeca969d2707376d9501083d851dce693ea7795a1f93e6ef6d4",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.3,
+      "loop": false,
+      "targetLufs": -10,
+      "defaultVolume": 0.85,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.feedback.mistake-thud",
+      "title": "Мягкий глухой стук при ошибке",
+      "description": "Низкий деревянный стук при неверном ответе или блокировке действия (без неприятных резких тонов).",
+      "category": "feedback",
+      "layer": "subtle Blitz/Duel feedback stings",
+      "path": "assets/source/audio/feedback/feedback_mistake_thud.wav",
+      "runtimeUrl": "/audio/feedback/feedback_mistake_thud.wav",
+      "sha256": "dbfc862fe7b2c0d52db74f0f4796890f48f5a9f1b347c96b3b37fc2c389fa8d3",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.35,
+      "loop": false,
+      "targetLufs": -14,
+      "defaultVolume": 0.75,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.arena.round-start",
+      "title": "Сигнал начала турнирного раунда",
+      "description": "Двухтоновый винтажный латунный гонг, открывающий соревновательный раунд в Арене.",
+      "category": "arena",
+      "layer": "tournament/arena transitions",
+      "path": "assets/source/audio/feedback/arena_round_start.wav",
+      "runtimeUrl": "/audio/feedback/arena_round_start.wav",
+      "sha256": "a586d80d3faa15b45e9f04aa9ab871e3ed52e6ee0ecd15e2dd550fc3996342b4",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 1.1,
+      "loop": false,
+      "targetLufs": -11,
+      "defaultVolume": 0.85,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.arena.countdown-tick",
+      "title": "Тик секундомера блиц-раунда",
+      "description": "Чёткий релейный шаг хронометра при последних секундах ответа в блице.",
+      "category": "arena",
+      "layer": "tournament/arena transitions",
+      "path": "assets/source/audio/feedback/arena_countdown_tick.wav",
+      "runtimeUrl": "/audio/feedback/arena_countdown_tick.wav",
+      "sha256": "4d76bfe1f0e08faf834a44dd9b110e84d0300f1be57d9eb76675ec5588424008",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 0.12,
+      "loop": false,
+      "targetLufs": -13,
+      "defaultVolume": 0.75,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    },
+    {
+      "id": "audio.lore.callsign-26063",
+      "title": "Радиопозывной Морзе «26063»",
+      "description": "Исторически выверенный радиосигнал Морзе (..--- -.... ----- -.... ...--) в эфирных шумах.",
+      "category": "lore",
+      "layer": "rare-event sounds",
+      "path": "assets/source/audio/lore/lore_callsign_26063.wav",
+      "runtimeUrl": "/audio/lore/lore_callsign_26063.wav",
+      "sha256": "7a31799ee6a2f7600877b42a41fe298fd0d8af35e278e4ae55150ef4ac6d6296",
+      "format": "wav",
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "durationSeconds": 5.4,
+      "loop": false,
+      "targetLufs": -16,
+      "defaultVolume": 0.7,
+      "author": "26063 audio-ambient-designer (in-tree procedural synthesis engine)",
+      "license": "CC0-1.0",
+      "provenance": {
+        "sourceType": "authored-procedural-synth",
+        "generatorScript": "tools/audio/generate_audio_collection.py",
+        "rightsClearance": "Fully owned repository procedural code, zero external proprietary dependencies",
+        "verifiedBy": [
+          "audio-ambient-designer",
+          "security-privacy-reviewer"
+        ]
+      }
+    }
+  ]
+}

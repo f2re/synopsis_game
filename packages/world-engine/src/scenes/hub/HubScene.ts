@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { worldAudio } from '../../audio/WorldAudioManager';
 import {
   HUB_MASTER_HEIGHT,
   HUB_MASTER_RUNTIME_DATA_URI,
@@ -39,6 +40,13 @@ export class HubScene extends Phaser.Scene {
 
     this.createSemanticHotspots();
     bindLogicalViewport(this, HUB_MASTER_WIDTH, HUB_MASTER_HEIGHT);
+
+    worldAudio.playAmbientBed('audio.ambient.wind-trees');
+    worldAudio.startFaunaSchedule();
+
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      worldAudio.stopFaunaSchedule();
+    });
   }
 
   private createSemanticHotspots(): void {
@@ -180,6 +188,7 @@ export class HubScene extends Phaser.Scene {
     hitArea.setData('semanticId', hotspot.id);
 
     hitArea.on('pointerover', () => {
+      worldAudio.play('audio.ui.hover-subtle');
       hitArea.setFillStyle(0xffd56a, 0.035).setStrokeStyle(2, 0xffd56a, 0.9);
     });
 
@@ -187,7 +196,18 @@ export class HubScene extends Phaser.Scene {
       hitArea.setFillStyle(0xffffff, 0.001).setStrokeStyle(2, 0xffd56a, 0);
     });
 
-    hitArea.on('pointerdown', hotspot.action);
+    hitArea.on('pointerdown', () => {
+      if (hotspot.id.includes('radar')) {
+        worldAudio.play('audio.interact.radar-pulse');
+      } else if (hotspot.id.includes('aerology')) {
+        worldAudio.play('audio.interact.balloon-release');
+      } else if (hotspot.id.includes('archive')) {
+        worldAudio.play('audio.interact.door-latch');
+      } else {
+        worldAudio.play('audio.ui.click-soft');
+      }
+      hotspot.action();
+    });
   }
 
   private startShift(): void {

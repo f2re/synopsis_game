@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { worldAudio } from '../../audio/WorldAudioManager';
 import { bindLogicalViewport } from '../../runtime/fitLogicalViewport';
 import { createPixelButton } from '../ui/createPixelButton';
 import {
@@ -22,6 +23,7 @@ export class ArchiveScene extends Phaser.Scene {
     this.drawRoom();
     this.drawActions();
     bindLogicalViewport(this);
+    worldAudio.playAmbientBed('audio.ambient.archive-room');
   }
 
   private drawRoom(): void {
@@ -112,11 +114,15 @@ export class ArchiveScene extends Phaser.Scene {
       height: 24,
       label: 'Вернуться в центр',
       state: 'secondary',
-      onClick: () => this.scene.start('hub'),
+      onClick: () => {
+        worldAudio.play('audio.interact.door-latch');
+        this.scene.start('hub');
+      },
     });
   }
 
   private showNotice(message: string): void {
+    worldAudio.play('audio.ui.click-soft');
     this.notice?.destroy(true);
 
     const background = this.add
