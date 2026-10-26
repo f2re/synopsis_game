@@ -1,0 +1,85 @@
+{
+  "schema_version": "0.1.0",
+  "tasks": [
+    {
+      "id": "station_board_eight_001",
+      "topic": "surface_station_board",
+      "skills": ["station_plot_temperature", "station_plot_dewpoint"],
+      "type": "stationBoard",
+      "difficulty": 4,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "authored_training",
+      "question": "Нанесите температуру T и точку росы Td на восемь станций учебного планшона.",
+      "payload": {
+        "profile": "RUS_SURFACE_STATION_V1",
+        "canvas": {"width": 1000, "height": 1000},
+        "stations": [
+          {"id": "st_a8", "name": "А", "x": 145, "y": 260},
+          {"id": "st_b8", "name": "Б", "x": 385, "y": 220},
+          {"id": "st_c8", "name": "В", "x": 625, "y": 275},
+          {"id": "st_d8", "name": "Г", "x": 865, "y": 235},
+          {"id": "st_e8", "name": "Д", "x": 165, "y": 710},
+          {"id": "st_f8", "name": "Е", "x": 405, "y": 665},
+          {"id": "st_g8", "name": "Ж", "x": 645, "y": 725},
+          {"id": "st_h8", "name": "З", "x": 865, "y": 680}
+        ],
+        "observations": [
+          {"id": "a8_t", "stationId": "st_a8", "label": "А · T", "value": "+14,2 °C", "display": "14,2"},
+          {"id": "a8_td", "stationId": "st_a8", "label": "А · Td", "value": "+8,6 °C", "display": "8,6"},
+          {"id": "b8_t", "stationId": "st_b8", "label": "Б · T", "value": "+11,5 °C", "display": "11,5"},
+          {"id": "b8_td", "stationId": "st_b8", "label": "Б · Td", "value": "+9,1 °C", "display": "9,1"},
+          {"id": "c8_t", "stationId": "st_c8", "label": "В · T", "value": "+7,3 °C", "display": "7,3"},
+          {"id": "c8_td", "stationId": "st_c8", "label": "В · Td", "value": "+5,0 °C", "display": "5,0"},
+          {"id": "d8_t", "stationId": "st_d8", "label": "Г · T", "value": "+3,8 °C", "display": "3,8"},
+          {"id": "d8_td", "stationId": "st_d8", "label": "Г · Td", "value": "+1,2 °C", "display": "1,2"},
+          {"id": "e8_t", "stationId": "st_e8", "label": "Д · T", "value": "+16,0 °C", "display": "16,0"},
+          {"id": "e8_td", "stationId": "st_e8", "label": "Д · Td", "value": "+10,4 °C", "display": "10,4"},
+          {"id": "f8_t", "stationId": "st_f8", "label": "Е · T", "value": "+12,7 °C", "display": "12,7"},
+          {"id": "f8_td", "stationId": "st_f8", "label": "Е · Td", "value": "+11,8 °C", "display": "11,8"},
+          {"id": "g8_t", "stationId": "st_g8", "label": "Ж · T", "value": "+6,4 °C", "display": "6,4"},
+          {"id": "g8_td", "stationId": "st_g8", "label": "Ж · Td", "value": "+2,9 °C", "display": "2,9"},
+          {"id": "h8_t", "stationId": "st_h8", "label": "З · T", "value": "+1,6 °C", "display": "1,6"},
+          {"id": "h8_td", "stationId": "st_h8", "label": "З · Td", "value": "−1,3 °C", "display": "−1,3"}
+        ],
+        "slots": [
+          {"id": "a8_nw", "stationId": "st_a8", "x": 75, "y": 205, "kind": "text"},
+          {"id": "a8_sw", "stationId": "st_a8", "x": 75, "y": 315, "kind": "text"},
+          {"id": "b8_nw", "stationId": "st_b8", "x": 315, "y": 165, "kind": "text"},
+          {"id": "b8_sw", "stationId": "st_b8", "x": 315, "y": 275, "kind": "text"},
+          {"id": "c8_nw", "stationId": "st_c8", "x": 555, "y": 220, "kind": "text"},
+          {"id": "c8_sw", "stationId": "st_c8", "x": 555, "y": 330, "kind": "text"},
+          {"id": "d8_nw", "stationId": "st_d8", "x": 795, "y": 180, "kind": "text"},
+          {"id": "d8_sw", "stationId": "st_d8", "x": 795, "y": 290, "kind": "text"},
+          {"id": "e8_nw", "stationId": "st_e8", "x": 95, "y": 655, "kind": "text"},
+          {"id": "e8_sw", "stationId": "st_e8", "x": 95, "y": 765, "kind": "text"},
+          {"id": "f8_nw", "stationId": "st_f8", "x": 335, "y": 610, "kind": "text"},
+          {"id": "f8_sw", "stationId": "st_f8", "x": 335, "y": 720, "kind": "text"},
+          {"id": "g8_nw", "stationId": "st_g8", "x": 575, "y": 670, "kind": "text"},
+          {"id": "g8_sw", "stationId": "st_g8", "x": 575, "y": 780, "kind": "text"},
+          {"id": "h8_nw", "stationId": "st_h8", "x": 795, "y": 625, "kind": "text"},
+          {"id": "h8_sw", "stationId": "st_h8", "x": 795, "y": 735, "kind": "text"}
+        ]
+      },
+      "answer": {
+        "kind": "station_board",
+        "placements": {
+          "a8_t": "a8_nw", "a8_td": "a8_sw",
+          "b8_t": "b8_nw", "b8_td": "b8_sw",
+          "c8_t": "c8_nw", "c8_td": "c8_sw",
+          "d8_t": "d8_nw", "d8_td": "d8_sw",
+          "e8_t": "e8_nw", "e8_td": "e8_sw",
+          "f8_t": "f8_nw", "f8_td": "f8_sw",
+          "g8_t": "g8_nw", "g8_td": "g8_sw",
+          "h8_t": "h8_nw", "h8_td": "h8_sw"
+        }
+      },
+      "sources": [
+        {"source_id": "WMO_485_2024_RU", "locator": "пп. 2.1.8.4.2.1–2.1.8.4.2.2: применение стандартных моделей при нанесении данных"},
+        {"source_id": "ZVEREV_1977", "locator": "приземные синоптические карты; страница уточняется при независимой методической приёмке"}
+      ],
+      "explanation": "Для всех восьми станций используется одна и та же локальная схема: температура T располагается слева сверху, точка росы Td — слева снизу. Увеличение числа станций тренирует устойчивое чтение и нанесение модели без изменения метеорологической семантики.",
+      "principle_tags": ["station_board", "station_plot", "surface_chart", "temperature", "dew_point", "density_training"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    }
+  ]
+}

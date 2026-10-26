@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TASKS_PATH = ROOT / "content" / "tasks" / "core_tasks.json"
+TASKS_ROOT = ROOT / "content" / "tasks"
 
 
 def validate_placements(identifier: str, payload: dict, answer: dict, expected_kind: str, type_name: str, errors: list[str]):
@@ -43,11 +43,36 @@ def validate_placements(identifier: str, payload: dict, answer: dict, expected_k
     return observations, slots, placements
 
 
-def main() -> int:
-    data = json.loads(TASKS_PATH.read_text(encoding="utf-8"))
-    errors: list[str] = []
+def load_tasks(errors: list[str]) -> list[dict]:
+    tasks: list[dict] = []
+    seen: set[str] = set()
+    files = sorted(TASKS_ROOT.glob("*.json"))
+    if not files:
+        errors.append("content/tasks не содержит JSON-файлов")
+        return tasks
+    for path in files:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        module_tasks = data.get("tasks")
+        if not isinstance(module_tasks, list):
+            errors.append(f"{path.name}: отсутствует массив tasks")
+            continue
+        for task in module_tasks:
+            identifier = task.get("id") if isinstance(task, dict) else None
+            if not identifier:
+                errors.append(f"{path.name}: задание без id")
+                continue
+            if identifier in seen:
+                errors.append(f"дублирующийся id задания: {identifier}")
+            seen.add(identifier)
+            tasks.append(task)
+    return tasks
 
-    for task in data.get("tasks", []):
+
+def main() -> int:
+    errors: list[str] = []
+    tasks = load_tasks(errors)
+
+    for task in tasks:
         identifier = task.get("id", "<без id>")
         task_type = task.get("type")
         answer = task.get("answer") if isinstance(task.get("answer"), dict) else {}
@@ -96,6 +121,8 @@ def main() -> int:
                 errors.append(f"{identifier}: station.id должны быть уникальными и непустыми")
             if identifier == "station_board_three_001" and len(stations) != 3:
                 errors.append(f"{identifier}: этап трёх станций должен содержать ровно 3 станции")
+            if identifier == "station_board_eight_001" and not 7 <= len(stations) <= 10:
+                errors.append(f"{identifier}: плотный этап должен содержать от 7 до 10 станций")
             for station in stations:
                 if not isinstance(station, dict):
                     continue
@@ -119,7 +146,7 @@ def main() -> int:
             print(f" - {error}")
         return 1
 
-    print("Контракты учебных заданий согласованы.")
+    print(f"Контракты учебных заданий согласованы: {len(tasks)} заданий в {len(list(TASKS_ROOT.glob('*.json')))} файлах.")
     return 0
 
 

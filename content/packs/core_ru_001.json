@@ -1,6 +1,6 @@
 {
   "id": "core_ru_001",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "method_profile": "RUS_CLASSIC_TRAINING_V1",
   "balance_profile": "ranked_s1_v3",
   "status": "draft",
@@ -11,7 +11,8 @@
     "kn01_tendency_001",
     "kn01_section1_order_001",
     "station_plot_basic_001",
-    "station_board_three_001"
+    "station_board_three_001",
+    "station_board_eight_001"
   ],
   "created_at": "2026-10-25T19:40:00Z",
   "review": {
@@ -22,5 +23,5 @@
     "technical": "passed",
     "publication_allowed": false
   },
-  "notes": "Пакет 0.3.0 развивает stationPlot до учебного планшона из трёх станций в нормированном пространстве 1000×1000. Пакет остаётся черновиком и не используется в рейтинговом режиме до независимой методической приёмки."
+  "notes": "Пакет 0.4.0 добавляет плотный учебный планшон из восьми станций и модульную загрузку файлов content/tasks/*.json. Пакет остаётся черновиком и не используется в рейтинговом режиме до независимой методической приёмки."
 }

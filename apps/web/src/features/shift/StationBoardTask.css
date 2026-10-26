@@ -21,6 +21,10 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
+.station-board-workspace.is-dense .station-board-observations {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
 .station-board-observations button {
   display: grid;
   gap: 3px;
@@ -32,8 +36,13 @@
   background: rgba(255,255,255,.04);
   text-align: left;
 }
+.station-board-workspace.is-dense .station-board-observations button {
+  min-height: 48px;
+  padding: 7px 9px;
+}
 .station-board-observations button span { color: #91a7b1; font-size: 11px; }
 .station-board-observations button strong { font-size: 14px; }
+.station-board-workspace.is-dense .station-board-observations button strong { font-size: 13px; }
 .station-board-observations button.is-selected { border-color: #d8b55b; background: rgba(216,181,91,.1); }
 .station-board-observations button.is-placed { box-shadow: inset 3px 0 #6f9a78; }
 
@@ -50,9 +59,11 @@
 .station-board-station circle { fill: #fdfcf5; stroke: #273941; stroke-width: 7; }
 .station-board-station .station-board-dot { fill: #273941; stroke: none; }
 .station-board-station text { fill: #45545b; font: 700 23px/1 system-ui, sans-serif; }
+.station-board-workspace.is-dense .station-board-station text { font-size: 19px; }
 .station-board-slot { cursor: pointer; }
 .station-board-slot rect { fill: rgba(255,255,255,.62); stroke: #819096; stroke-width: 3; stroke-dasharray: 9 7; }
 .station-board-slot text { fill: #24353d; font: 700 27px/1 system-ui, sans-serif; pointer-events: none; }
+.station-board-workspace.is-dense .station-board-slot text { font-size: 23px; }
 .station-board-slot:hover rect, .station-board-slot:focus rect { fill: #edf5f7; stroke: #2e7396; }
 .station-board-slot.is-filled rect { fill: #fffdf6; stroke-dasharray: none; }
 .station-board-slot.is-correct rect { fill: #e4f2e6; stroke: #4d995f; }
@@ -61,11 +72,16 @@
 .station-board-selected { color: #9fb3bd; font-size: 12px; }
 .station-board-selected strong { color: #e7ece8; }
 
+@media (max-width: 900px) {
+  .station-board-workspace.is-dense .station-board-observations { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 @media (max-width: 760px) {
   .station-board-toolbar { display: grid; }
   .station-board-toolbar p { text-align: left; }
-  .station-board-observations { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .station-board-observations,
+  .station-board-workspace.is-dense .station-board-observations { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 480px) {
-  .station-board-observations { grid-template-columns: 1fr; }
+  .station-board-observations,
+  .station-board-workspace.is-dense .station-board-observations { grid-template-columns: 1fr; }
 }

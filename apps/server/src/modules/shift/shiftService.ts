@@ -1,5 +1,5 @@
 import { randomInt, randomUUID } from 'node:crypto';
-import { appendFile, mkdir, readFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import {
   assertPublicTaskSafe,
@@ -54,14 +54,19 @@ export class ShiftService {
   constructor(private readonly options: ShiftServiceOptions) {}
 
   async init(): Promise<void> {
-    const [taskFile, pack, sourceFile] = await Promise.all([
-      this.readJson<{ tasks: TaskDefinition[] }>(join(this.options.contentRoot, 'tasks/core_tasks.json')),
+    const [taskFiles, pack, sourceFile] = await Promise.all([
+      this.readTaskFiles(),
       this.readJson<ContentPack>(join(this.options.contentRoot, 'packs/core_ru_001.json')),
       this.readJson<{ sources: SourceRecord[] }>(join(this.options.contentRoot, 'sources/sources.json')),
     ]);
 
     this.tasks.clear();
-    for (const task of taskFile.tasks) this.tasks.set(task.id, task);
+    for (const taskFile of taskFiles) {
+      for (const task of taskFile.tasks) {
+        if (this.tasks.has(task.id)) throw new Error(`Дублирующийся id задания: ${task.id}`);
+        this.tasks.set(task.id, task);
+      }
+    }
     this.sources.clear();
     for (const source of sourceFile.sources) this.sources.set(source.id, source);
     this.pack = pack;
@@ -229,6 +234,15 @@ export class ShiftService {
   private async appendAttempt(record: Record<string, unknown>): Promise<void> {
     await mkdir(dirname(this.options.attemptLogPath), { recursive: true });
     await appendFile(this.options.attemptLogPath, `${JSON.stringify(record)}\n`, { encoding: 'utf8', mode: 0o600 });
+  }
+
+  private async readTaskFiles(): Promise<Array<{ tasks: TaskDefinition[] }>> {
+    const taskRoot = join(this.options.contentRoot, 'tasks');
+    const files = (await readdir(taskRoot))
+      .filter((name) => name.endsWith('.json'))
+      .sort();
+    if (files.length === 0) throw new Error('Каталог content/tasks не содержит JSON-файлов заданий');
+    return Promise.all(files.map((name) => this.readJson<{ tasks: TaskDefinition[] }>(join(taskRoot, name))));
   }
 
   private async readJson<T>(path: string): Promise<T> {

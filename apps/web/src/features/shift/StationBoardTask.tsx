@@ -48,18 +48,19 @@ export function StationBoardTask({ payload, placements, onChange, disabled = fal
   }
 
   const placed = Object.keys(placements).length;
+  const dense = payload.stations.length >= 7;
 
   return (
-    <div className="station-board-workspace">
+    <div className={`station-board-workspace ${dense ? 'is-dense' : ''}`}>
       <div className="station-board-toolbar">
         <div>
-          <span>Планшет 1000×1000</span>
+          <span>Планшет 1000×1000 · {payload.stations.length} станций</span>
           <strong>Размещено {placed}/{payload.observations.length}</strong>
         </div>
         <p>Выберите значение и укажите его позицию около нужной станции.</p>
       </div>
 
-      <div className="station-board-observations" aria-label="Наблюдения трёх станций">
+      <div className="station-board-observations" aria-label={`Наблюдения ${payload.stations.length} станций`}>
         {payload.observations.map((observation) => (
           <button
             key={observation.id}
@@ -81,15 +82,17 @@ export function StationBoardTask({ payload, placements, onChange, disabled = fal
 
         {payload.stations.map((station) => (
           <g key={station.id} className="station-board-station">
-            <circle cx={station.x} cy={station.y} r="43" />
-            <circle className="station-board-dot" cx={station.x} cy={station.y} r="6" />
-            <text x={station.x} y={station.y + 82} textAnchor="middle">{station.name}</text>
+            <circle cx={station.x} cy={station.y} r={dense ? 34 : 43} />
+            <circle className="station-board-dot" cx={station.x} cy={station.y} r={dense ? 5 : 6} />
+            <text x={station.x} y={station.y + (dense ? 100 : 118)} textAnchor="middle">{station.name}</text>
           </g>
         ))}
 
         {payload.slots.map((slot) => {
           const observation = assignedObservation(payload.observations, placements, slot.id);
           const status = slotStatus(slot, results);
+          const width = dense ? 102 : 116;
+          const height = dense ? 54 : 62;
           return (
             <g
               key={slot.id}
@@ -100,8 +103,8 @@ export function StationBoardTask({ payload, placements, onChange, disabled = fal
               onClick={() => assign(slot.id)}
               onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') assign(slot.id); }}
             >
-              <rect x={slot.x - 58} y={slot.y - 31} width="116" height="62" rx="12" />
-              <text x={slot.x} y={slot.y + 10} textAnchor="middle">
+              <rect x={slot.x - width / 2} y={slot.y - height / 2} width={width} height={height} rx="12" />
+              <text x={slot.x} y={slot.y + 9} textAnchor="middle">
                 {observation ? observationText(observation) : '···'}
               </text>
             </g>
