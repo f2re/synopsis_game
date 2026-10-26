@@ -73,26 +73,23 @@ export class HubScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor('#030914');
 
-    // Background setup
-    const initialTexture = this.textures.exists(HUB_MASTER_NIGHT_TEXTURE_KEY)
+    // Background setup: start in Night mode with the master 6-facility composite
+    const initialTexture = this.isNightMode && this.textures.exists(HUB_MASTER_NIGHT_TEXTURE_KEY)
       ? HUB_MASTER_NIGHT_TEXTURE_KEY
-      : HUB_MASTER_TEXTURE_KEY;
+      : (this.textures.exists(HUB_MASTER_NIGHT_TEXTURE_KEY) ? HUB_MASTER_NIGHT_TEXTURE_KEY : HUB_MASTER_TEXTURE_KEY);
 
     this.hubBg = this.add
       .image(0, 0, initialTexture)
       .setOrigin(0, 0)
       .setDisplaySize(HUB_MASTER_WIDTH, HUB_MASTER_HEIGHT);
 
-    // Fallback if decoding
-    if (!this.textures.exists(initialTexture) || this.textures.get(initialTexture).key === '__MISSING') {
-      const img = new Image();
-      img.onload = () => {
-        if (!this.textures.exists(initialTexture) || this.textures.get(initialTexture).key === '__MISSING') {
-          this.textures.addImage(initialTexture, img);
-          this.hubBg.setTexture(initialTexture);
+    // If night texture was still in transit when create() fired, apply it as soon as loaded
+    if (this.isNightMode && initialTexture !== HUB_MASTER_NIGHT_TEXTURE_KEY) {
+      this.load.once(`filecomplete-image-${HUB_MASTER_NIGHT_TEXTURE_KEY}`, () => {
+        if (this.hubBg && this.isNightMode) {
+          this.hubBg.setTexture(HUB_MASTER_NIGHT_TEXTURE_KEY);
         }
-      };
-      img.src = HUB_MASTER_RUNTIME_DATA_URI;
+      });
     }
 
     this.setupAtmosphericVfx();
@@ -184,67 +181,21 @@ export class HubScene extends Phaser.Scene {
 
   private setupInteractiveCamera(): void {
     const camera = this.cameras.main;
-    const canvas = this.game.canvas;
 
-    let isPointerDown = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let camStartX = 0;
-    let camStartY = 0;
-    let isDragging = false;
+    // Stable centered viewport - no dragging into voids!
+    camera.centerOn(HUB_MASTER_WIDTH / 2, HUB_MASTER_HEIGHT / 2);
 
-    // Bounds margin: allows panning around 960x540
-    const marginX = 140;
-    const marginY = 90;
-    camera.setBounds(-marginX, -marginY, HUB_MASTER_WIDTH + marginX * 2, HUB_MASTER_HEIGHT + marginY * 2);
-
-    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      if (pointer.button === 0 && !this.activeModal) {
-        isPointerDown = true;
-        isDragging = false;
-        dragStartX = pointer.x;
-        dragStartY = pointer.y;
-        camStartX = camera.scrollX;
-        camStartY = camera.scrollY;
-      }
-    });
-
-    this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-      if (!isPointerDown || this.activeModal) return;
-      const dx = (pointer.x - dragStartX) / camera.zoom;
-      const dy = (pointer.y - dragStartY) / camera.zoom;
-      if (!isDragging && Math.hypot(pointer.x - dragStartX, pointer.y - dragStartY) > 5) {
-        isDragging = true;
-        if (canvas) canvas.style.cursor = 'grabbing';
-        this.hideHint();
-      }
-      if (isDragging) {
-        camera.scrollX = camStartX - dx;
-        camera.scrollY = camStartY - dy;
-      }
-    });
-
-    const endDrag = () => {
-      if (isPointerDown) {
-        isPointerDown = false;
-        isDragging = false;
-        if (canvas) canvas.style.cursor = 'default';
-      }
-    };
-
-    this.input.on('pointerup', endDrag);
-    this.input.on('pointerupoutside', endDrag);
-
-    // Mouse wheel zoom
+    // Mouse wheel zoom: always centered on campus, never exposes black borders
     this.input.on('wheel', (_pointer: Phaser.Input.Pointer, _gameObjects: any, _deltaX: number, deltaY: number) => {
       if (this.activeModal) return;
-      const zoomFactor = deltaY > 0 ? 0.92 : 1.08;
-      const minZoom = this.baseZoom * 0.75;
-      const maxZoom = this.baseZoom * 2.8;
+      const zoomFactor = deltaY > 0 ? 0.94 : 1.06;
+      const minZoom = this.baseZoom;
+      const maxZoom = this.baseZoom * 2.2;
       const newZoom = Phaser.Math.Clamp(camera.zoom * zoomFactor, minZoom, maxZoom);
 
       if (Math.abs(newZoom - camera.zoom) > 0.001) {
         camera.setZoom(newZoom);
+        camera.centerOn(HUB_MASTER_WIDTH / 2, HUB_MASTER_HEIGHT / 2);
         this.hideHint();
       }
     });
@@ -255,7 +206,7 @@ export class HubScene extends Phaser.Scene {
     this.tweens.add({
       targets: camera,
       zoom: this.baseZoom,
-      duration: 350,
+      duration: 300,
       ease: 'Cubic.easeOut',
     });
     camera.centerOn(HUB_MASTER_WIDTH / 2, HUB_MASTER_HEIGHT / 2);
@@ -327,7 +278,8 @@ export class HubScene extends Phaser.Scene {
     zoomInBg.on('pointerout', () => zoomInBg.setFillStyle(0x07182c, 0.92));
     zoomInBg.on('pointerdown', () => {
       const camera = this.cameras.main;
-      camera.setZoom(Phaser.Math.Clamp(camera.zoom * 1.2, this.baseZoom * 0.75, this.baseZoom * 2.8));
+      camera.setZoom(Phaser.Math.Clamp(camera.zoom * 1.2, this.baseZoom, this.baseZoom * 2.2));
+      camera.centerOn(HUB_MASTER_WIDTH / 2, HUB_MASTER_HEIGHT / 2);
       worldAudio.play('audio.ui.click-soft');
       this.hideHint();
     });
@@ -350,7 +302,8 @@ export class HubScene extends Phaser.Scene {
     zoomOutBg.on('pointerout', () => zoomOutBg.setFillStyle(0x07182c, 0.92));
     zoomOutBg.on('pointerdown', () => {
       const camera = this.cameras.main;
-      camera.setZoom(Phaser.Math.Clamp(camera.zoom / 1.2, this.baseZoom * 0.75, this.baseZoom * 2.8));
+      camera.setZoom(Phaser.Math.Clamp(camera.zoom / 1.2, this.baseZoom, this.baseZoom * 2.2));
+      camera.centerOn(HUB_MASTER_WIDTH / 2, HUB_MASTER_HEIGHT / 2);
       worldAudio.play('audio.ui.click-soft');
       this.hideHint();
     });
@@ -514,6 +467,10 @@ export class HubScene extends Phaser.Scene {
       width: number;
       height: number;
       outlineKey: string;
+      zoneX: number;
+      zoneY: number;
+      zoneWidth: number;
+      zoneHeight: number;
     }[] = [
       {
         id: 'hub.location.radar',
@@ -526,6 +483,10 @@ export class HubScene extends Phaser.Scene {
         width: 229,
         height: 170,
         outlineKey: 'outline-radar',
+        zoneX: 150,
+        zoneY: 165,
+        zoneWidth: 200,
+        zoneHeight: 150,
       },
       {
         id: 'hub.location.cartography',
@@ -538,6 +499,10 @@ export class HubScene extends Phaser.Scene {
         width: 218,
         height: 158,
         outlineKey: 'outline-cartography',
+        zoneX: 175,
+        zoneY: 275,
+        zoneWidth: 190,
+        zoneHeight: 140,
       },
       {
         id: 'hub.location.synoptic-center',
@@ -550,6 +515,10 @@ export class HubScene extends Phaser.Scene {
         width: 287,
         height: 214,
         outlineKey: 'outline-synoptic',
+        zoneX: 478,
+        zoneY: 285,
+        zoneWidth: 260,
+        zoneHeight: 170,
       },
       {
         id: 'hub.location.archive',
@@ -562,6 +531,10 @@ export class HubScene extends Phaser.Scene {
         width: 212,
         height: 160,
         outlineKey: 'outline-archive',
+        zoneX: 655,
+        zoneY: 292,
+        zoneWidth: 180,
+        zoneHeight: 140,
       },
       {
         id: 'hub.location.aerology',
@@ -574,6 +547,10 @@ export class HubScene extends Phaser.Scene {
         width: 218,
         height: 162,
         outlineKey: 'outline-aerology',
+        zoneX: 782,
+        zoneY: 178,
+        zoneWidth: 190,
+        zoneHeight: 150,
       },
       {
         id: 'hub.location.tournament-hall',
@@ -586,6 +563,10 @@ export class HubScene extends Phaser.Scene {
         width: 223,
         height: 168,
         outlineKey: 'outline-tournament',
+        zoneX: 840,
+        zoneY: 290,
+        zoneWidth: 190,
+        zoneHeight: 150,
       },
     ];
 
@@ -605,24 +586,20 @@ export class HubScene extends Phaser.Scene {
     width: number;
     height: number;
     outlineKey: string;
+    zoneX: number;
+    zoneY: number;
+    zoneWidth: number;
+    zoneHeight: number;
   }): void {
+    // 1. Golden contour outline sprite (starts hidden)
     const outline = this.add
       .image(bld.x, bld.y, bld.outlineKey)
       .setOrigin(0, 0)
       .setDepth(25)
       .setAlpha(0);
 
-    outline.setData('semanticId', bld.id);
-
-    // Pixel-perfect input detection directly on the golden contour outline
-    outline.setInteractive({
-      pixelPerfect: true,
-      alphaTolerance: 10,
-      useHandCursor: true,
-    });
-
-    // Floating stylish badge above building
-    const badgeX = bld.x + bld.width / 2;
+    // 2. Floating stylish badge above building
+    const badgeX = bld.zoneX;
     const badgeY = Math.max(34, bld.y - 12);
 
     const badgeBg = this.add
@@ -652,13 +629,19 @@ export class HubScene extends Phaser.Scene {
       .setAlpha(0)
       .setVisible(false);
 
-    let downX = 0;
-    let downY = 0;
+    // 3. Reliable, non-blocking Interactive Zone
+    const zone = this.add
+      .zone(bld.zoneX, bld.zoneY, bld.zoneWidth, bld.zoneHeight)
+      .setOrigin(0.5, 0.5)
+      .setDepth(50);
 
-    outline.on('pointerover', () => {
+    zone.setData('semanticId', bld.id);
+    zone.setInteractive({ useHandCursor: true });
+
+    zone.on('pointerover', () => {
       worldAudio.play('audio.ui.hover-subtle');
 
-      // 1. Organic glowing contour fade-in + gentle breathing pulse
+      // Organic glowing contour fade-in + gentle breathing pulse
       this.tweens.killTweensOf(outline);
       this.tweens.add({
         targets: outline,
@@ -677,7 +660,7 @@ export class HubScene extends Phaser.Scene {
         },
       });
 
-      // 2. Floating badge reveal
+      // Floating badge reveal
       badge.setVisible(true);
       badge.setPosition(badgeX, badgeY);
       this.tweens.killTweensOf(badge);
@@ -690,7 +673,7 @@ export class HubScene extends Phaser.Scene {
       });
     });
 
-    outline.on('pointerout', () => {
+    zone.on('pointerout', () => {
       // Fade out outline contour
       this.tweens.killTweensOf(outline);
       this.tweens.add({
@@ -712,18 +695,9 @@ export class HubScene extends Phaser.Scene {
       });
     });
 
-    outline.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      downX = pointer.x;
-      downY = pointer.y;
-    });
+    zone.on('pointerup', () => {
+      if (this.activeModal) return;
 
-    outline.on('pointerup', (pointer: Phaser.Input.Pointer) => {
-      // Ignore if user was dragging / panning the camera
-      if (Math.hypot(pointer.x - downX, pointer.y - downY) > 6) {
-        return;
-      }
-
-      // Audio cue based on building
       if (bld.id.includes('radar')) {
         worldAudio.play('audio.interact.radar-pulse');
       } else if (bld.id.includes('aerology')) {
