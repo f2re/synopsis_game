@@ -18,9 +18,6 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
     height: WORLD_LOGICAL_HEIGHT,
     transparent: options.transparent ?? false,
     backgroundColor: '#8ec9e5',
-    pixelArt: true,
-    antialias: false,
-    roundPixels: true,
     render: {
       antialias: false,
       pixelArt: true,
