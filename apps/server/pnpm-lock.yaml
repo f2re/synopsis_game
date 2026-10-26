@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@synopsis/content-engine':
+        specifier: file:../../packages/content-engine
+        version: file:../../packages/content-engine
+      '@synopsis/kn01-codec':
+        specifier: file:../../packages/kn01-codec
+        version: file:../../packages/kn01-codec
     devDependencies:
       '@types/node':
         specifier: ^22.10.0
@@ -16,6 +23,12 @@ importers:
         version: 5.9.3
 
 packages:
+
+  '@synopsis/content-engine@file:../../packages/content-engine':
+    resolution: {directory: ../../packages/content-engine, type: directory}
+
+  '@synopsis/kn01-codec@file:../../packages/kn01-codec':
+    resolution: {directory: ../../packages/kn01-codec, type: directory}
 
   '@types/node@22.20.5':
     resolution: {integrity: sha512-U2+DNr+wSjpsTS/wZGYHq7GcwfuSmKiKvoPvK22zwTlRhU91yOniN4qRR5KhIjvif7ysw/dz/hKmfDH0Ris4aA==}
@@ -29,6 +42,10 @@ packages:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
 snapshots:
+
+  '@synopsis/content-engine@file:../../packages/content-engine': {}
+
+  '@synopsis/kn01-codec@file:../../packages/kn01-codec': {}
 
   '@types/node@22.20.5':
     dependencies:
