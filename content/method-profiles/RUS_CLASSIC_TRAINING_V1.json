@@ -1,6 +1,6 @@
 {
   "id": "RUS_CLASSIC_TRAINING_V1",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "Российская классическая школа — учебный профиль v1",
   "status": "draft",
   "language": "ru",
@@ -21,6 +21,42 @@
     "use_previous_terms": true,
     "vertical_coordination_required": true,
     "kn01_ruleset_source": "ROSHYDROMET_KN01_2013"
+  },
+  "dependency_graphs": {
+    "primary_analysis_draft_v1": {
+      "status": "draft",
+      "operations": [
+        {"id": "qc_observations", "label": "Провести критику и физический контроль исходных наблюдений"},
+        {"id": "review_previous", "label": "Сопоставить текущий срок с предыдущим сроком и историей процесса"},
+        {"id": "pressure_field", "label": "Проанализировать поле давления и провести изобары"},
+        {"id": "pressure_systems", "label": "Выделить центры В/Н и основные барические образования"},
+        {"id": "pressure_tendency", "label": "Проанализировать барическую тенденцию и области П/Р"},
+        {"id": "weather_signs", "label": "Проанализировать явления погоды, облачность и другие признаки воздушных масс"},
+        {"id": "front_analysis", "label": "Выполнить комплексный фронтологический анализ по совокупности признаков"},
+        {"id": "consistency_check", "label": "Проверить согласованность итогового анализа с полями и предыдущим сроком"}
+      ],
+      "dependencies": [
+        ["qc_observations", "pressure_field"],
+        ["qc_observations", "pressure_tendency"],
+        ["qc_observations", "weather_signs"],
+        ["pressure_field", "pressure_systems"],
+        ["pressure_field", "front_analysis"],
+        ["pressure_tendency", "front_analysis"],
+        ["weather_signs", "front_analysis"],
+        ["review_previous", "front_analysis"],
+        ["pressure_systems", "consistency_check"],
+        ["pressure_tendency", "consistency_check"],
+        ["weather_signs", "consistency_check"],
+        ["front_analysis", "consistency_check"],
+        ["review_previous", "consistency_check"]
+      ],
+      "review": {
+        "methodical": "pending",
+        "independent_verification": "pending",
+        "publication_allowed": false
+      },
+      "notes": "Это граф частичного порядка, а не утверждение единственной линейной последовательности. Независимые операции могут переставляться. Конкретные зависимости до публикации должны быть приняты методологом российской синоптической школы и независимым метеорологическим верификатором."
+    }
   },
   "review": {
     "methodical": "pending",
