@@ -13,7 +13,12 @@ docker run --rm \
     apt-get update >/dev/null
     DEBIAN_FRONTEND=noninteractive apt-get install -y python3 ca-certificates >/dev/null
     python3 --version
-    python3 -m py_compile /release/deploy/scripts/*.py
+    python3 - <<"PY"
+from pathlib import Path
+for path in sorted(Path("/release/deploy/scripts").glob("*.py")):
+    compile(path.read_bytes(), str(path), "exec")
+    print("syntax OK:", path.name)
+PY
     for f in /release/deploy/scripts/*.sh; do bash -n "$f"; done
     /release/runtime/node/bin/node --version
     API_BIND=127.0.0.1 API_PORT=4174 /release/runtime/node/bin/node /release/server/server.mjs >/tmp/server.log 2>&1 &
