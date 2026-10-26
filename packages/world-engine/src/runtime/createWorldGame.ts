@@ -22,7 +22,6 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
     height: initialHeight,
     transparent: options.transparent ?? false,
     backgroundColor: '#08152f',
-    resolution: Math.min(window.devicePixelRatio || 1, 2),
     render: {
       antialias: false,
       pixelArt: true,
