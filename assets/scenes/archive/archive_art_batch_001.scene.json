@@ -1,0 +1,11 @@
+{
+  "id": "scene.archive.art-batch-001",
+  "logicalSize": {"width": 480, "height": 270},
+  "layers": [
+    {"id": "L2.room-shell", "asset": "archive.room.shell.l2", "z": 20},
+    {"id": "L3.furniture", "asset": "archive.furniture.l3", "z": 30},
+    {"id": "L4.props", "asset": "archive.props.l4", "z": 40},
+    {"id": "L7.ui", "runtime": "Phaser semantic buttons and text"}
+  ],
+  "compositeReference": "assets/source/environment/archive/candidates/archive_interior_scene_v2.png"
+}
