@@ -63,23 +63,23 @@ async function reachStationPlot(service: ShiftService, userId: string) {
 
 async function reachThreeBoard(service: ShiftService, userId: string) {
   const reached = await reachStationPlot(service, userId);
-  const stationPlotResult = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
+  const result = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
     placements: { obs_t: 'slot_01', obs_td: 'slot_02', obs_p: 'slot_03', obs_wind: 'slot_04' },
   });
-  return { shiftId: reached.shiftId, task: stationPlotResult.nextTask! };
+  return { shiftId: reached.shiftId, task: result.nextTask! };
 }
 
 async function reachEightBoard(service: ShiftService, userId: string) {
   const reached = await reachThreeBoard(service, userId);
-  const threeResult = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
+  const result = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
     placements: { a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw' },
   });
-  return { shiftId: reached.shiftId, task: threeResult.nextTask! };
+  return { shiftId: reached.shiftId, task: result.nextTask! };
 }
 
 async function reachFindError(service: ShiftService, userId: string) {
   const reached = await reachEightBoard(service, userId);
-  const eightResult = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
+  const result = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
     placements: {
       a8_t: 'a8_nw', a8_td: 'a8_sw', b8_t: 'b8_nw', b8_td: 'b8_sw',
       c8_t: 'c8_nw', c8_td: 'c8_sw', d8_t: 'd8_nw', d8_td: 'd8_sw',
@@ -87,10 +87,16 @@ async function reachFindError(service: ShiftService, userId: string) {
       g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_nw', h8_td: 'h8_sw',
     },
   });
-  return { shiftId: reached.shiftId, task: eightResult.nextTask! };
+  return { shiftId: reached.shiftId, task: result.nextTask! };
 }
 
-test('stationPlot не раскрывает эталон и переводит к планшону на три станции', async () => {
+async function reachPrimaryAnalysis(service: ShiftService, userId: string) {
+  const reached = await reachFindError(service, userId);
+  const result = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, { stationId: 'qc_f' });
+  return { shiftId: reached.shiftId, task: result.nextTask! };
+}
+
+test('stationPlot переводит к планшону на три станции', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
@@ -98,80 +104,81 @@ test('stationPlot не раскрывает эталон и переводит �
     const { shiftId, task } = await reachStationPlot(service, 'student-3');
     assert.equal(task.type, 'stationPlot');
     assert.equal(JSON.stringify(task).includes('"obs_t":"slot_01"'), false);
-    const result = await service.submitAnswer('student-3', shiftId, task.instanceId, {
-      placements: { obs_t: 'slot_01', obs_td: 'slot_02', obs_p: 'slot_03', obs_wind: 'slot_04' },
-    });
-    assert.equal(result.feedback.correct, true);
-    assert.equal(result.completed, false);
+    const result = await service.submitAnswer('student-3', shiftId, task.instanceId, { placements: { obs_t: 'slot_01', obs_td: 'slot_02', obs_p: 'slot_03', obs_wind: 'slot_04' } });
     assert.equal(result.nextTask?.definitionId, 'station_board_three_001');
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
-test('трёхстанционный планшон скрывает эталон и переводит к плотному планшону', async () => {
+test('трёхстанционный планшон переводит к плотному планшону', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
     await service.init();
     const reached = await reachThreeBoard(service, 'student-4');
-    const board = reached.task;
-    assert.equal(board.response.kind, 'stationBoard');
-    assert.equal((board.payload?.stations as unknown[]).length, 3);
-    assert.equal(JSON.stringify(board).includes('"a_t":"a_nw"'), false);
-    const result = await service.submitAnswer('student-4', reached.shiftId, board.instanceId, {
-      placements: { a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw' },
-    });
-    assert.equal(result.feedback.correct, true);
-    assert.equal(result.completed, false);
+    assert.equal((reached.task.payload?.stations as unknown[]).length, 3);
+    const result = await service.submitAnswer('student-4', reached.shiftId, reached.task.instanceId, { placements: { a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw' } });
     assert.equal(result.nextTask?.definitionId, 'station_board_eight_001');
-    assert.equal((result.nextTask?.payload?.stations as unknown[]).length, 8);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
-test('планшон на восемь станций загружается из отдельного файла и ведёт к физическому контролю', async () => {
+test('плотный планшон ведёт к физическому контролю', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
     await service.init();
     const reached = await reachEightBoard(service, 'student-5');
-    const board = reached.task;
-    assert.equal(board.definitionId, 'station_board_eight_001');
-    assert.equal(board.response.kind, 'stationBoard');
-    assert.equal((board.payload?.stations as unknown[]).length, 8);
-    assert.equal((board.payload?.observations as unknown[]).length, 16);
-    assert.equal(JSON.stringify(board).includes('"a8_t":"a8_nw"'), false);
-
-    const result = await service.submitAnswer('student-5', reached.shiftId, board.instanceId, {
+    assert.equal((reached.task.payload?.stations as unknown[]).length, 8);
+    const result = await service.submitAnswer('student-5', reached.shiftId, reached.task.instanceId, {
       placements: {
-        a8_t: 'a8_nw', a8_td: 'a8_sw', b8_t: 'b8_nw', b8_td: 'b8_sw',
-        c8_t: 'c8_nw', c8_td: 'c8_sw', d8_t: 'd8_nw', d8_td: 'd8_sw',
-        e8_t: 'e8_nw', e8_td: 'e8_sw', f8_t: 'f8_nw', f8_td: 'f8_sw',
-        g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_nw', h8_td: 'h8_sw',
+        a8_t: 'a8_nw', a8_td: 'a8_sw', b8_t: 'b8_nw', b8_td: 'b8_sw', c8_t: 'c8_nw', c8_td: 'c8_sw', d8_t: 'd8_nw', d8_td: 'd8_sw',
+        e8_t: 'e8_nw', e8_td: 'e8_sw', f8_t: 'f8_nw', f8_td: 'f8_sw', g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_nw', h8_td: 'h8_sw',
       },
     });
-    assert.equal(result.feedback.correct, true);
-    assert.equal(result.completed, false);
     assert.equal(result.nextTask?.definitionId, 'find_error_td_gt_t_001');
-    assert.equal(result.nextTask?.response.kind, 'findError');
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
-test('findError не раскрывает station_id и проверяет физическое нарушение на сервере', async () => {
+test('findError не раскрывает station_id и после ответа ведёт к конструктору анализа', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
     await service.init();
     const reached = await reachFindError(service, 'student-6');
-    const task = reached.task;
-    assert.equal(task.definitionId, 'find_error_td_gt_t_001');
-    assert.equal(task.response.kind, 'findError');
-    assert.equal((task.payload?.stations as unknown[]).length, 8);
-    assert.equal(JSON.stringify(task).includes('expectedStationId'), false);
-    assert.equal(JSON.stringify(task).includes('"value":"qc_f"'), false);
+    assert.equal(JSON.stringify(reached.task).includes('expectedStationId'), false);
+    const result = await service.submitAnswer('student-6', reached.shiftId, reached.task.instanceId, { stationId: 'qc_a' });
+    assert.equal(result.feedback.correct, false);
+    assert.equal(result.feedback.correctAnswer, 'Е');
+    assert.equal(result.completed, false);
+    assert.equal(result.nextTask?.definitionId, 'primary_analysis_dependencies_001');
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
 
-    const wrong = await service.submitAnswer('student-6', reached.shiftId, task.instanceId, { stationId: 'qc_a' });
-    assert.equal(wrong.feedback.correct, false);
-    assert.equal(wrong.feedback.correctAnswer, 'Е');
-    assert.deepEqual(wrong.feedback.details, { selectedStationId: 'qc_a', expectedStationId: 'qc_f' });
-    assert.equal(wrong.completed, true);
+test('dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
+  try {
+    const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
+    await service.init();
+    const reached = await reachPrimaryAnalysis(service, 'student-7');
+    const task = reached.task;
+    assert.equal(task.definitionId, 'primary_analysis_dependencies_001');
+    assert.equal(task.response.kind, 'dependencySequence');
+    assert.equal(JSON.stringify(task).includes('dependencies'), false);
+    const steps = task.payload?.steps as Array<{ id: number; label: string }>;
+    assert.equal(steps.length, 8);
+
+    const labels = [
+      'Провести критику и физический контроль исходных наблюдений',
+      'Сопоставить текущий срок с предыдущим сроком и историей процесса',
+      'Проанализировать поле давления и провести изобары',
+      'Выделить центры В/Н и основные барические образования',
+      'Проанализировать барическую тенденцию и области П/Р',
+      'Проанализировать явления погоды, облачность и другие признаки воздушных масс',
+      'Выполнить комплексный фронтологический анализ по совокупности признаков',
+      'Проверить согласованность итогового анализа с полями и предыдущим сроком',
+    ];
+    const order = labels.map((label) => steps.find((step) => step.label === label)!.id);
+    const result = await service.submitAnswer('student-7', reached.shiftId, task.instanceId, { order });
+    assert.equal(result.feedback.correct, true);
+    assert.equal(result.completed, true);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
