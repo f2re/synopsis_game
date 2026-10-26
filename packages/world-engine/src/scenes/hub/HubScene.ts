@@ -24,16 +24,6 @@ interface FacilityDossier {
   onSecondaryAction?: () => void;
 }
 
-interface HubHotspot {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  title: string;
-  action: () => void;
-}
-
 export class HubScene extends Phaser.Scene {
   private hubBg!: Phaser.GameObjects.Image;
   private isNightMode = true;
@@ -60,10 +50,19 @@ export class HubScene extends Phaser.Scene {
 
     // High-resolution building textures
     this.load.image('bld-radar', '/hub/buildings/hub_radar_night.png');
-    this.load.image('bld-aerology', '/hub/buildings/hub_aerology_night.png');
-    this.load.image('bld-synoptic', '/hub/buildings/hub_synoptic_center_night.png');
+    this.load.image('bld-cartography', '/hub/buildings/hub_cartography_night.png');
+    this.load.image('bld-synoptic', '/hub/buildings/hub_synoptic_night.png');
     this.load.image('bld-archive', '/hub/buildings/hub_archive_night.png');
-    this.load.image('bld-tournament', '/hub/buildings/hub_tournament_hall_night.png');
+    this.load.image('bld-aerology', '/hub/buildings/hub_aerology_night.png');
+    this.load.image('bld-tournament', '/hub/buildings/hub_tournament_night.png');
+
+    // Contour glow outlines
+    this.load.image('outline-radar', '/hub/outlines/outline_radar.png');
+    this.load.image('outline-cartography', '/hub/outlines/outline_cartography.png');
+    this.load.image('outline-synoptic', '/hub/outlines/outline_synoptic.png');
+    this.load.image('outline-archive', '/hub/outlines/outline_archive.png');
+    this.load.image('outline-aerology', '/hub/outlines/outline_aerology.png');
+    this.load.image('outline-tournament', '/hub/outlines/outline_tournament.png');
 
     // UI badges
     this.load.image('badge-seal', '/ui/badges/ui_badge_station_seal.png');
@@ -97,7 +96,7 @@ export class HubScene extends Phaser.Scene {
     }
 
     this.setupAtmosphericVfx();
-    this.createSemanticHotspots();
+    this.createBuildingInteractives();
     this.setupInteractiveCamera();
     this.setupHud();
     this.setupStationTelemetry();
@@ -138,8 +137,8 @@ export class HubScene extends Phaser.Scene {
 
   private setupAtmosphericVfx(): void {
     // 1. Radar mast red obstruction beacon
-    const radarBeacon = this.add.circle(138, 103, 3.5, 0xff2222, 0.95).setDepth(20);
-    const radarGlow = this.add.circle(138, 103, 8, 0xff3333, 0.35).setDepth(19);
+    const radarBeacon = this.add.circle(137, 90, 3.5, 0xff2222, 0.95).setDepth(20);
+    const radarGlow = this.add.circle(137, 90, 8, 0xff3333, 0.35).setDepth(19);
 
     this.tweens.add({
       targets: [radarBeacon, radarGlow],
@@ -152,8 +151,8 @@ export class HubScene extends Phaser.Scene {
     });
 
     // 2. Aerology mast beacon
-    const aeroBeacon = this.add.circle(780, 115, 3, 0xff4422, 0.9).setDepth(20);
-    const aeroGlow = this.add.circle(780, 115, 7, 0xff5533, 0.3).setDepth(19);
+    const aeroBeacon = this.add.circle(759, 100, 3, 0xff4422, 0.9).setDepth(20);
+    const aeroGlow = this.add.circle(759, 100, 7, 0xff5533, 0.3).setDepth(19);
 
     this.tweens.add({
       targets: [aeroBeacon, aeroGlow],
@@ -373,9 +372,30 @@ export class HubScene extends Phaser.Scene {
     centerBg.on('pointerout', () => centerBg.setFillStyle(0x07182c, 0.92));
     centerBg.on('pointerdown', () => this.resetCameraView());
 
-    // 5. Hint banner at the bottom
+    // 5. Menu / Profile toggle [👤 Профиль]
+    const menuBg = this.add
+      .rectangle(260, 24, 82, 32, 0x07182c, 0.92)
+      .setStrokeStyle(1.5, 0xf1c75b, 0.85)
+      .setInteractive({ useHandCursor: true });
+    const menuText = this.add
+      .text(260, 24, '👤 Профиль', {
+        fontFamily: 'monospace, monospace',
+        fontSize: '11px',
+        fontStyle: 'bold',
+        color: '#f7f4e7',
+      })
+      .setOrigin(0.5);
+
+    menuBg.on('pointerover', () => menuBg.setFillStyle(0x132a48, 0.96));
+    menuBg.on('pointerout', () => menuBg.setFillStyle(0x07182c, 0.92));
+    menuBg.on('pointerdown', () => {
+      worldAudio.play('audio.ui.click-soft');
+      this.dispatchUiEvent('hub:session-menu');
+    });
+
+    // 6. Hint banner at the bottom
     this.hintText = this.add
-      .text(0, 0, '✢ Перетаскивание — зажмите ЛКМ • ⚲ Масштаб — колёсико мыши • Клик на здание — формуляр объекта', {
+      .text(0, 0, '✢ Перемещение — зажмите ЛКМ • ⚲ Масштаб — колёсико мыши • Наведите на объект для контурного фокуса', {
         fontFamily: 'Inter, system-ui, sans-serif',
         fontSize: '11px',
         color: '#dfcf9d',
@@ -386,7 +406,7 @@ export class HubScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(450);
 
-    hud.add([timePill, zoomInBg, zoomInText, zoomOutBg, zoomOutText, centerBg, centerText]);
+    hud.add([timePill, zoomInBg, zoomInText, zoomOutBg, zoomOutText, centerBg, centerText, menuBg, menuText]);
     this.hudContainer = hud;
 
     this.repositionHud();
@@ -482,207 +502,239 @@ export class HubScene extends Phaser.Scene {
     this.telemetryContainer.setPosition(vpW / 2, vpH - 18);
   }
 
-  private createSemanticHotspots(): void {
-    const hotspots: HubHotspot[] = [
-      {
-        id: 'hub.profile',
-        x: 40,
-        y: 27,
-        width: 54,
-        height: 48,
-        title: 'Профиль синоптика',
-        action: () => this.dispatchUiEvent('hub:session-menu'),
-      },
-      {
-        id: 'hub.settings',
-        x: 927,
-        y: 27,
-        width: 44,
-        height: 44,
-        title: 'Настройки',
-        action: () => this.dispatchUiEvent('hub:session-menu'),
-      },
+  private createBuildingInteractives(): void {
+    const buildings: {
+      id: string;
+      dossierId: string;
+      name: string;
+      badgeTitle: string;
+      badgeSub: string;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      outlineKey: string;
+    }[] = [
       {
         id: 'hub.location.radar',
-        x: 155,
-        y: 165,
-        width: 140,
-        height: 100,
-        title: 'ДМРЛ-С • Радарный комплекс',
-        action: () => this.openFacilityDossier('radar'),
+        dossierId: 'radar',
+        name: 'Радарный комплекс ДМРЛ-С',
+        badgeTitle: 'РАДАРНЫЙ КОМПЛЕКС ДМРЛ-С',
+        badgeSub: '● ДЕЖУРНОЕ СКАНИРОВАНИЕ 250 КМ',
+        x: 40,
+        y: 80,
+        width: 229,
+        height: 170,
+        outlineKey: 'outline-radar',
       },
       {
-        id: 'hub.location.maps-analysis',
-        x: 150,
-        y: 250,
-        width: 130,
-        height: 70,
-        title: 'Картографический класс',
-        action: () => this.openFacilityDossier('synoptic-center'),
-      },
-      {
-        id: 'hub.location.aerology',
-        x: 786,
-        y: 179,
-        width: 140,
-        height: 100,
-        title: 'Аэрологический павильон',
-        action: () => this.openFacilityDossier('aerology'),
-      },
-      {
-        id: 'hub.location.archive',
-        x: 657,
-        y: 292,
-        width: 130,
-        height: 90,
-        title: 'Научный архив',
-        action: () => this.openFacilityDossier('archive'),
-      },
-      {
-        id: 'hub.location.tournament-hall',
-        x: 841,
-        y: 274,
-        width: 130,
-        height: 90,
-        title: 'Турнирный зал',
-        action: () => this.openFacilityDossier('tournament-hall'),
+        id: 'hub.location.cartography',
+        dossierId: 'cartography',
+        name: 'Картографический класс',
+        badgeTitle: 'КАРТОГРАФИЧЕСКИЙ КЛАСС',
+        badgeSub: '● СИНОПТИЧЕСКИЙ АНАЛИЗ КАРТ',
+        x: 68,
+        y: 195,
+        width: 218,
+        height: 158,
+        outlineKey: 'outline-cartography',
       },
       {
         id: 'hub.location.synoptic-center',
-        x: 480,
-        y: 236,
-        width: 180,
-        height: 80,
-        title: 'Оперативный зал анализа',
-        action: () => this.openFacilityDossier('synoptic-center'),
+        dossierId: 'synoptic-center',
+        name: 'Оперативный зал синоптического анализа',
+        badgeTitle: 'ОПЕРАТИВНЫЙ ЗАЛ АНАЛИЗА',
+        badgeSub: '● ДЕЖУРНАЯ СМЕНА СИНОПТИКА',
+        x: 335,
+        y: 172,
+        width: 287,
+        height: 214,
+        outlineKey: 'outline-synoptic',
       },
       {
-        id: 'hub.nav.blitz',
-        x: 67,
-        y: 501,
-        width: 108,
-        height: 56,
-        title: 'Блиц-дешифровка',
-        action: () => this.showNotice('Блиц-соревнования: синхронная дешифровка сводок КН-01 SYNOP на скорость.'),
+        id: 'hub.location.archive',
+        dossierId: 'archive',
+        name: 'Научно-исторический архив',
+        badgeTitle: 'НАУЧНЫЙ АРХИВ',
+        badgeSub: '● ФОНД НАБЛЮДЕНИЙ И ПЛАНШЕТОВ',
+        x: 551,
+        y: 212,
+        width: 212,
+        height: 160,
+        outlineKey: 'outline-archive',
       },
       {
-        id: 'hub.nav.duel',
-        x: 178,
-        y: 501,
-        width: 108,
-        height: 56,
-        title: 'Дуэль наблюдателей',
-        action: () => this.showNotice('Синоптическая дуэль 1 на 1: соревнование в выявлении физических ошибок на планшоне.'),
+        id: 'hub.location.aerology',
+        dossierId: 'aerology',
+        name: 'Аэрологический павильон',
+        badgeTitle: 'АЭРОЛОГИЧЕСКИЙ ПАВИЛЬОН',
+        badgeSub: '● ЗОНДИРОВАНИЕ АТМОСФЕРЫ',
+        x: 677,
+        y: 97,
+        width: 218,
+        height: 162,
+        outlineKey: 'outline-aerology',
       },
       {
-        id: 'hub.nav.start-shift',
-        x: 427,
-        y: 500,
-        width: 275,
-        height: 70,
-        title: 'Дежурная смена',
-        action: () => this.startShift(),
-      },
-      {
-        id: 'hub.nav.inventory',
-        x: 602,
-        y: 501,
-        width: 98,
-        height: 56,
-        title: 'Приборный инвентарь',
-        action: () => this.showNotice('Инвентарь наблюдателя: барограф М-22, психрометр МВ-4М, анеморумбометр М-63М.'),
-      },
-      {
-        id: 'hub.nav.tournament',
-        x: 705,
-        y: 501,
-        width: 98,
-        height: 56,
-        title: 'Турнирная таблица',
-        action: () => this.openFacilityDossier('tournament-hall'),
-      },
-      {
-        id: 'hub.nav.archive',
-        x: 807,
-        y: 501,
-        width: 96,
-        height: 56,
-        title: 'Архив',
-        action: () => this.openFacilityDossier('archive'),
-      },
-      {
-        id: 'hub.nav.tasks',
-        x: 910,
-        y: 501,
-        width: 92,
-        height: 56,
-        title: 'Рабочие задания',
-        action: () => this.startShift(),
+        id: 'hub.location.tournament-hall',
+        dossierId: 'tournament-hall',
+        name: 'Турнирный зал дуэлей',
+        badgeTitle: 'ТУРНИРНЫЙ ЗАЛ СИНОПТИКОВ',
+        badgeSub: '● КВАЛИФИКАЦИОННАЯ АРЕНА',
+        x: 729,
+        y: 206,
+        width: 223,
+        height: 168,
+        outlineKey: 'outline-tournament',
       },
     ];
 
-    for (const hotspot of hotspots) {
-      this.createHotspot(hotspot);
+    for (const bld of buildings) {
+      this.createBuildingContour(bld);
     }
   }
 
-  private createHotspot(hotspot: HubHotspot): void {
+  private createBuildingContour(bld: {
+    id: string;
+    dossierId: string;
+    name: string;
+    badgeTitle: string;
+    badgeSub: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    outlineKey: string;
+  }): void {
+    const outline = this.add
+      .image(bld.x, bld.y, bld.outlineKey)
+      .setOrigin(0, 0)
+      .setDepth(25)
+      .setAlpha(0);
+
+    outline.setData('semanticId', bld.id);
+
+    // Pixel-perfect input detection directly on the golden contour outline
+    outline.setInteractive({
+      pixelPerfect: true,
+      alphaTolerance: 10,
+      useHandCursor: true,
+    });
+
+    // Floating stylish badge above building
+    const badgeX = bld.x + bld.width / 2;
+    const badgeY = Math.max(34, bld.y - 12);
+
+    const badgeBg = this.add
+      .rectangle(0, 0, 214, 40, 0x07182c, 0.95)
+      .setStrokeStyle(1.5, 0xf1c75b, 0.95);
+
+    const badgeTitle = this.add
+      .text(0, -9, bld.badgeTitle, {
+        fontFamily: 'monospace, monospace',
+        fontSize: '10px',
+        fontStyle: 'bold',
+        color: '#f1c75b',
+      })
+      .setOrigin(0.5);
+
+    const badgeSub = this.add
+      .text(0, 8, bld.badgeSub, {
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSize: '8.5px',
+        color: '#bed1e3',
+      })
+      .setOrigin(0.5);
+
+    const badge = this.add
+      .container(badgeX, badgeY, [badgeBg, badgeTitle, badgeSub])
+      .setDepth(150)
+      .setAlpha(0)
+      .setVisible(false);
+
     let downX = 0;
     let downY = 0;
 
-    const hitArea = this.add
-      .rectangle(hotspot.x, hotspot.y, hotspot.width, hotspot.height, 0xffffff, 0.001)
-      .setDepth(50)
-      .setStrokeStyle(2, 0xffd56a, 0)
-      .setInteractive({ useHandCursor: true });
-
-    hitArea.setData('semanticId', hotspot.id);
-
-    // Hover tooltip
-    const tooltip = this.add
-      .text(hotspot.x, hotspot.y - hotspot.height / 2 - 10, hotspot.title, {
-        fontFamily: 'Inter, monospace, sans-serif',
-        fontSize: '10px',
-        color: '#f9f6e6',
-        backgroundColor: '#07182cf0',
-        padding: { x: 6, y: 3 },
-      })
-      .setOrigin(0.5, 1)
-      .setDepth(60)
-      .setVisible(false);
-
-    hitArea.on('pointerover', () => {
+    outline.on('pointerover', () => {
       worldAudio.play('audio.ui.hover-subtle');
-      hitArea.setFillStyle(0xffd56a, 0.04).setStrokeStyle(2, 0xffd56a, 0.95);
-      tooltip.setVisible(true);
+
+      // 1. Organic glowing contour fade-in + gentle breathing pulse
+      this.tweens.killTweensOf(outline);
+      this.tweens.add({
+        targets: outline,
+        alpha: 1,
+        duration: 160,
+        ease: 'Cubic.easeOut',
+        onComplete: () => {
+          this.tweens.add({
+            targets: outline,
+            alpha: 0.82,
+            duration: 800,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut',
+          });
+        },
+      });
+
+      // 2. Floating badge reveal
+      badge.setVisible(true);
+      badge.setPosition(badgeX, badgeY);
+      this.tweens.killTweensOf(badge);
+      this.tweens.add({
+        targets: badge,
+        alpha: 1,
+        y: badgeY - 6,
+        duration: 180,
+        ease: 'Back.easeOut',
+      });
     });
 
-    hitArea.on('pointerout', () => {
-      hitArea.setFillStyle(0xffffff, 0.001).setStrokeStyle(2, 0xffd56a, 0);
-      tooltip.setVisible(false);
+    outline.on('pointerout', () => {
+      // Fade out outline contour
+      this.tweens.killTweensOf(outline);
+      this.tweens.add({
+        targets: outline,
+        alpha: 0,
+        duration: 200,
+        ease: 'Cubic.easeIn',
+      });
+
+      // Fade out badge
+      this.tweens.killTweensOf(badge);
+      this.tweens.add({
+        targets: badge,
+        alpha: 0,
+        y: badgeY,
+        duration: 160,
+        ease: 'Cubic.easeIn',
+        onComplete: () => badge.setVisible(false),
+      });
     });
 
-    hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+    outline.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       downX = pointer.x;
       downY = pointer.y;
     });
 
-    hitArea.on('pointerup', (pointer: Phaser.Input.Pointer) => {
-      tooltip.setVisible(false);
-      // Ignore if dragging
+    outline.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+      // Ignore if user was dragging / panning the camera
       if (Math.hypot(pointer.x - downX, pointer.y - downY) > 6) {
         return;
       }
-      if (hotspot.id.includes('radar')) {
+
+      // Audio cue based on building
+      if (bld.id.includes('radar')) {
         worldAudio.play('audio.interact.radar-pulse');
-      } else if (hotspot.id.includes('aerology')) {
+      } else if (bld.id.includes('aerology')) {
         worldAudio.play('audio.interact.balloon-release');
-      } else if (hotspot.id.includes('archive')) {
+      } else if (bld.id.includes('archive')) {
         worldAudio.play('audio.interact.door-latch');
       } else {
         worldAudio.play('audio.ui.click-soft');
       }
-      hotspot.action();
+
+      this.openFacilityDossier(bld.dossierId);
     });
   }
 
@@ -709,6 +761,22 @@ export class HubScene extends Phaser.Scene {
           worldAudio.play('audio.interact.radar-pulse');
           this.showNotice('ДМРЛ-С: сформирован эхо-профиль радиуса 250 км. Опасных конвективных явлений не обнаружено.');
         },
+      },
+      cartography: {
+        id: 'cartography',
+        title: 'КАРТОГРАФИЧЕСКИЙ КЛАСС И АНАЛИЗ ПОГОДЫ',
+        subtitle: 'Учебный полигон синоптической картографии и нанесения метеорологических планшетов',
+        status: '● УЧЕБНО-ОПЕРАТИВНЫЙ РЕЖИМ',
+        statusColor: '#5db489',
+        textureKey: 'bld-cartography',
+        specs: [
+          { label: 'Картографическая проекция:', value: 'Полярная стереографическая проекция (М 1:2 500 000, 1:5 000 000)' },
+          { label: 'Станционные модели:', value: 'Кольцевая синоптическая схема КН-01 SYNOP (РД 52.27.759-2011)' },
+          { label: 'Аналитические дисциплины:', value: 'Барический анализ, поле давления, приведение изобар, фронтогенез' },
+          { label: 'Оперативный статус:', value: 'Аттестационный тренажер наблюдателей и дежурных инженеров-синоптиков' },
+        ],
+        primaryActionLabel: 'ПЕРЕЙТИ К АНАЛИЗУ КАРТ →',
+        onPrimaryAction: () => this.startShift(),
       },
       'synoptic-center': {
         id: 'synoptic-center',
