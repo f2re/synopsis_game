@@ -21,6 +21,7 @@ jobs:
           python tools/validate_repo.py
           python tools/validate_architecture.py
           python tools/validate_deployment.py
+          python tools/test_deployment.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
@@ -43,3 +44,36 @@ jobs:
         run: |
           bash scripts/release/build-release.sh 0.0.0-ci
           bash scripts/release/validate-release.sh dist-release/synopsis-game-0.0.0-ci-linux-x64.tar.gz
+      - name: Проверить кандидат на Astra Linux 1.7
+        run: |
+          rm -rf /tmp/synopsis-astra-release
+          mkdir -p /tmp/synopsis-astra-release
+          tar -xzf dist-release/synopsis-game-0.0.0-ci-linux-x64.tar.gz --strip-components=1 -C /tmp/synopsis-astra-release
+          docker run --rm \
+            -v /tmp/synopsis-astra-release:/release:ro \
+            registry.astralinux.ru/library/astra/ubi17:1.7.5 \
+            /bin/bash -lc '
+              set -euo pipefail
+              python3 --version
+              python3 -m py_compile /release/deploy/scripts/*.py
+              for f in /release/deploy/scripts/*.sh; do bash -n "$f"; done
+              /release/runtime/node/bin/node --version
+              API_BIND=127.0.0.1 API_PORT=4174 /release/runtime/node/bin/node /release/server/server.mjs >/tmp/server.log 2>&1 &
+              pid=$!
+              trap "kill $pid 2>/dev/null || true" EXIT
+              python3 - <<"PY"
+import time
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
+for _ in range(20):
+    try:
+        if urlopen("http://127.0.0.1:4174/ready", timeout=1).getcode() == 200:
+            break
+    except Exception:
+        time.sleep(0.25)
+else:
+    raise SystemExit("Astra Linux health check failed")
+PY
+            '
