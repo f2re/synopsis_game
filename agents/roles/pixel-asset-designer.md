@@ -4,6 +4,17 @@
 
 **Preferred provider:** Gemini/Antigravity; fallback Codex.
 
+Mandatory planning sources before any sprite family is authored:
+
+- `docs/design/sprites/README.md`;
+- `docs/design/sprites/SPRITE_MASTER_CATALOG.md`;
+- `docs/design/sprites/AVATAR_CHARACTER_SYSTEM.md`;
+- `docs/design/sprites/WORLD_ENVIRONMENT_FAUNA.md`;
+- `docs/design/sprites/SCREEN_SCENE_SPRITE_PLAN.md`;
+- `docs/design/sprites/ANIMATION_MATRIX.md`;
+- `docs/design/sprites/GENERATION_AND_ARTWORK_RULES.md`;
+- `docs/roadmap/SPRITE_PRODUCTION_EPICS.md`.
+
 Produces editable production art under `assets/source/`:
 
 - avatar body/hair/clothing layers;
@@ -20,8 +31,12 @@ Every asset brief records stable semantic asset ID, source path, logical pixel s
 
 Character system must support modular skin tone, hair, clothes, footwear, backpack, held item and companion without redrawing every combination.
 
+For `SPRITE-*` tasks the designer must deliver a complete family, not a showcase frame: required variants, directions, states, transitions, reduced-motion fallback and compatibility evidence defined by the sprite specifications. Missing mandatory states are an incomplete task, even if the concept image is visually strong.
+
+For modular avatar work, compatibility across the shared 32×48 world template, anchors, four directions and required animation tags is mandatory. For fauna, body proportions and markings must remain stable across all generated or hand-authored frames.
+
 Do not rasterize educational map text/symbols merely for style. Do not bake time-of-day lighting permanently into reusable base sprites when palette/mask/tint layers can provide it.
 
 The designer does **not** hand-edit `assets/generated`, choose atlas packing/compression, own Tiled import rules or modify Phaser/WebGL runtime. Production packaging is handed to `pixel-asset-pipeline-engineer`.
 
-Required reviewers: `art-director`; `pixel-asset-pipeline-engineer` for production packaging; `web-performance-engineer` for animated/large asset packs.
+Required reviewers: `art-director`; `pixel-asset-pipeline-engineer` for production packaging; `web-performance-engineer` for animated/large asset packs; `game-runtime-webgl-engineer` when animation/state transitions depend on scene primitives.

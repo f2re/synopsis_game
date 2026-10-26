@@ -39,9 +39,11 @@
 | Дизайн | [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md) | зафиксированное художественное направление, персонажи и инвентарь |
 | Дизайн | [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md) | Aseprite/Pixelorama → манифесты → sprite-tools → Tiled → AssetPack → Phaser |
 | Дизайн | [Система живого мира](design/LIVING_WORLD_SYSTEM.md) | время суток, фоновая анимация, птицы, животные и интерактивные объекты |
+| Дизайн | [План производства спрайтов](design/sprites/README.md) | полный каталог спрайтов, персонаж, сцены, фауна, анимации и правила создания |
 | Планирование | [Перечень задач первого рабочего среза](roadmap/MVP_BACKLOG.md) | исполнимые задачи начальной реализации |
 | Планирование | [Основополагающие задачи](roadmap/FOUNDATION_EPICS.md) | живой мир, КН-01, арена, пользователи и персонаж |
 | Планирование | [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md) | ENGINE/ASSET-задачи и независимые проверки |
+| Планирование | [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md) | последовательность `SPRITE-001…017`, исполнители и приёмка |
 | Идеи | [Реестр идей](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия в план |
 | Решения | [Архитектурные решения](decisions/README.md) | почему приняты сквозные и труднообратимые решения |
 | Проверка | [Критерии качества](testing/QUALITY_GATES.md) | условия готовности задачи и требования перед объединением изменений |
@@ -58,7 +60,7 @@ docs/
 ├── realtime/          # сетевые матчи и автономный большой экран
 ├── accounts/          # пользователи, вход, роли, приватность
 ├── ux/                # экраны, интерфейс и адаптивность
-├── design/            # визуальный язык, пиксельная графика, живой мир
+├── design/            # визуальный язык, пиксельная графика, живой мир и план спрайтов
 ├── roadmap/           # задачи реализации
 ├── ideas/             # идеи, эксперименты и гипотезы
 ├── decisions/         # архитектурные и продуктовые решения
@@ -68,7 +70,7 @@ docs/
 
 Названия каталогов сохраняются как технические пути. В обычном тексте используются русские термины.
 
-Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md). Производственные редактируемые ресурсы хранятся в [`assets/source/`](../assets/source/README.md), сцены — в `assets/scenes/`, манифесты — в `assets/manifests/`, производные игровые файлы — в `assets/generated/`.
+Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md). Производственные редактируемые ресурсы хранятся в [`assets/source/`](../assets/source/README.md), сцены — в `assets/scenes/`, манифесты — в `assets/manifests/`, производные игровые файлы — в `assets/generated/`. Полный план того, что необходимо нарисовать и анимировать, находится в [`design/sprites/`](design/sprites/README.md).
 
 ## 3. Что где редактировать
 
@@ -82,6 +84,8 @@ docs/
 - Изменение **архитектуры** → `architecture/` и архитектурное решение.
 - Рабочий контур Phaser/WebGL → `architecture/GAME_RUNTIME_AND_ASSETS.md`, `packages/world-engine/` и роль `game-runtime-webgl-engineer`.
 - Исходная пиксельная графика → `assets/source/` и `design/PIXEL_ART_STYLE_GUIDE.md`.
+- Полный перечень спрайтов, анимаций, экранов, персонажей и фауны → `design/sprites/`.
+- Очередь изготовления спрайтов и их владельцы → `roadmap/SPRITE_PRODUCTION_EPICS.md`.
 - Манифесты ресурсов, sprite-tools/AssetPack и сборка → `assets/manifests/`, `tools/assets/` и роль `pixel-asset-pipeline-engineer`.
 - Новое **задание или сценарий** → `content/AUTHORING_GUIDE.md` и каталог `content/` в корне проекта.
 - Актуальные КН-01 и входные потоки данных → `content/LIVE_KN01_PIPELINE.md`.
@@ -161,12 +165,14 @@ docs/
 10. [Карта экранов](ux/SCREEN_MAP.md)
 11. [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md)
 12. [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md)
-13. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
-14. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
-15. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
-16. [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md)
-17. [Критерии качества](testing/QUALITY_GATES.md)
-18. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
+13. [План производства спрайтов](design/sprites/README.md)
+14. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
+15. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
+16. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
+17. [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md)
+18. [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md)
+19. [Критерии качества](testing/QUALITY_GATES.md)
+20. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
 
 ## 8. Золотое правило документации
 
