@@ -1,5 +1,26 @@
 # apps/web
 
-Canonical Foundation/MVP browser client: React + TypeScript, Phaser 4 for the living pixel world, and SVG/Canvas for professional synoptic geometry.
+Канонический браузерный клиент первого рабочего среза: React + TypeScript, Phaser 4 для живого пиксельного мира и SVG/Canvas для профессиональной синоптической геометрии.
 
-`Arena TV` is the `/arena-tv` route of this application and uses the read-only `display` role. Do not create a separate `apps/display` or `apps/spectator` application without a new ADR.
+`Arena TV` остаётся маршрутом `/arena-tv` этого приложения и использует только режим чтения. Отдельное приложение для зрительского режима без нового ADR не создаётся.
+
+## Первый запускаемый срез
+
+Главный мир → Архив → возврат в главный мир. Остальные локации показывают условия открытия.
+
+До исправления отдельного художественного конвейера веб-прототип устанавливается изолированно от остальных рабочих пакетов:
+
+```bash
+corepack enable
+pnpm bootstrap:web
+pnpm dev
+```
+
+Проверки:
+
+```bash
+pnpm typecheck
+pnpm build
+```
+
+`tools/assets` остаётся отдельным рабочим контуром. Проблема воспроизводимой установки `sprite-tools` отслеживается в `ASSET-007`; она не должна блокировать первый запуск приложения.

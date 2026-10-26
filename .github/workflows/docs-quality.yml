@@ -25,3 +25,20 @@ jobs:
 
       - name: Проверить каноническую архитектуру первого рабочего среза
         run: python tools/validate_architecture.py
+
+      - name: Подготовить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Включить Corepack
+        run: corepack enable
+
+      - name: Установить зависимости браузерного прототипа
+        run: pnpm -C apps/web install --ignore-workspace --no-frozen-lockfile
+
+      - name: Проверить TypeScript браузерного прототипа
+        run: pnpm -C apps/web typecheck
+
+      - name: Собрать браузерный прототип
+        run: pnpm -C apps/web build
