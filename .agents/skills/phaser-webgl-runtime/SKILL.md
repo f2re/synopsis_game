@@ -1,3 +1,8 @@
+---
+name: phaser-webgl-runtime
+description: Phaser and WebGL runtime procedures for ENGINE-* tasks, packages/world-engine, Phaser scenes, WebGL rendering and React integration.
+---
+
 # Skill — Phaser/WebGL runtime
 
 Use for `ENGINE-*`, `packages/world-engine`, Phaser scenes, WebGL rendering and React integration.

@@ -1,3 +1,8 @@
+---
+name: ambient-audio
+description: Ambient audio production procedures for hub ambience, fauna, indoor equipment, interaction cues, Blitz/Duel feedback and Arena TV transitions.
+---
+
 # Skill — Ambient Audio Production
 
 Use for hub ambience, fauna, indoor equipment, interaction cues, Blitz/Duel feedback and Arena TV transitions.
