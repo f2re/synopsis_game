@@ -141,16 +141,16 @@ export const api = {
     return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true);
   },
   async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress }> {
-    return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true);
+    return request<{ task: ShiftTask; progress: ShiftProgress }>(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true);
   },
   async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown): Promise<ShiftAnswerResponse> {
-    return request(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, {
+    return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, {
       method: 'POST',
       body: JSON.stringify({ shiftId, answer }),
     }, true);
   },
   async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }> {
-    return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true);
+    return request<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }>(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true);
   },
   async adminUsers(): Promise<AdminUser[]> {
     return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users;
@@ -160,6 +160,16 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(input),
     }, true)).user;
+  },
+  async batchCreateUsers(input: {
+    groupId: string;
+    roles?: UserRole[];
+    users: Array<{ displayName: string; initialCode?: string }>;
+  }): Promise<{ groupId: string; count: number; created: Array<AdminUser & { initialCode: string }> }> {
+    return request('/api/admin/users/batch', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }, true);
   },
   async setUserStatus(userId: string, status: UserStatus): Promise<AdminUser> {
     return (await request<{ user: AdminUser }>(`/api/admin/users/${encodeURIComponent(userId)}/status`, {

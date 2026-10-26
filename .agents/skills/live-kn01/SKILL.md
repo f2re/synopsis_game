@@ -1,3 +1,8 @@
+---
+name: live-kn01
+description: Live KN-01 pipeline procedures for real-station ingest, codec, QC, task generation and answer validation.
+---
+
 # Skill — Live KN-01 Pipeline
 
 Use for real-station ingest, codec, QC, task generation and answer validation.

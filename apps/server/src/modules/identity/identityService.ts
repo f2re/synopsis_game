@@ -53,6 +53,27 @@ export interface CreateUserInput {
   initialCode: string;
 }
 
+export interface BatchCreateUserItem {
+  displayName: string;
+  initialCode?: string;
+}
+
+export interface BatchCreateUsersInput {
+  groupId: string;
+  roles?: UserRole[];
+  users: BatchCreateUserItem[];
+}
+
+export interface BatchCreateResultItem extends AdminUser {
+  initialCode: string;
+}
+
+export interface BatchCreateResult {
+  groupId: string;
+  count: number;
+  created: BatchCreateResultItem[];
+}
+
 function normalizeText(value: unknown, field: string, maxLength: number): string {
   if (typeof value !== 'string') {
     throw new IdentityError(400, `Поле ${field} обязательно`, 'invalid_input');
@@ -232,6 +253,55 @@ export class IdentityService {
     this.state.users.push(user);
     await this.persist();
     return toAdminUser(user);
+  }
+
+  async batchCreateUsers(token: string, input: BatchCreateUsersInput): Promise<BatchCreateResult> {
+    this.requireAdmin(token);
+    const groupId = normalizeText(input.groupId, 'groupId', 64);
+    const roles = Array.isArray(input.roles) && input.roles.length > 0
+      ? normalizeRoles(input.roles)
+      : ['student' as UserRole];
+
+    if (!Array.isArray(input.users) || input.users.length === 0) {
+      throw new IdentityError(400, 'Список пользователей для импорта пуст', 'empty_batch');
+    }
+
+    if (input.users.length > 500) {
+      throw new IdentityError(400, 'Превышен лимит импорта за один раз (максимум 500 записей)', 'batch_too_large');
+    }
+
+    const created: BatchCreateResultItem[] = [];
+    for (const item of input.users) {
+      const rawName = typeof item?.displayName === 'string' ? item.displayName.trim() : '';
+      if (!rawName) continue;
+      const initialCode = (typeof item.initialCode === 'string' && item.initialCode.trim().length > 0)
+        ? item.initialCode.trim()
+        : String(Math.floor(100000 + Math.random() * 900000));
+
+      const user = await this.buildUser({
+        displayName: rawName,
+        groupId,
+        roles,
+        initialCode,
+      });
+
+      this.state.users.push(user);
+      created.push({
+        ...toAdminUser(user),
+        initialCode,
+      });
+    }
+
+    if (created.length === 0) {
+      throw new IdentityError(400, 'Не найдено корректных записей для добавления', 'no_valid_users');
+    }
+
+    await this.persist();
+    return {
+      groupId,
+      count: created.length,
+      created,
+    };
   }
 
   async setUserStatus(token: string, userId: string, status: UserStatus): Promise<AdminUser> {

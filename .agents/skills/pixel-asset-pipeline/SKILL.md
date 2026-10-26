@@ -1,3 +1,8 @@
+---
+name: pixel-asset-pipeline
+description: Pixel asset pipeline procedures for ASSET-* tasks, sprite validation, atlases, Tiled scenes and generated runtime assets.
+---
+
 # Skill — Pixel asset pipeline
 
 Use for `ASSET-*`, sprite validation, atlases, Tiled scenes and generated runtime assets.

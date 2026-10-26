@@ -1,3 +1,8 @@
+---
+name: living-world-browser
+description: Living world procedures for time-of-day, seasons, ambient animation, fauna, interactables and responsive or performance work in the browser.
+---
+
 # Skill — Living World in Browser
 
 Use for time-of-day, seasons, ambient animation, fauna, interactables and responsive/performance work.

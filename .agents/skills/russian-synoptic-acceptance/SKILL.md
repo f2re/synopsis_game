@@ -1,3 +1,8 @@
+---
+name: russian-synoptic-acceptance
+description: Acceptance procedures when a task changes meteorological truth, terminology, answer validation or feedback under Russian synoptic school standards.
+---
+
 # Skill — Russian Synoptic Acceptance
 
 Use when a task changes meteorological truth, terminology, answer validation or feedback.

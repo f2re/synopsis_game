@@ -1,3 +1,8 @@
+---
+name: pixel-art-direction
+description: Pixel-art direction and asset production procedures for screens, characters, props, world layers, inventory and effects.
+---
+
 # Skill — Pixel-art Direction & Asset Production
 
 Use for screens, characters, props, world layers, inventory and effects.
