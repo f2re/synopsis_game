@@ -1,6 +1,6 @@
 # Gemini / Antigravity project context
 
-Read `AGENTS.md`, `agents/registry.yaml` and the selected role card before work.
+Read `AGENTS.md`, `agents/registry.yaml`, `config/art-toolchain.yaml` and the selected role card before work. Architecture is canonical in `docs/architecture/README.md`, `ADR-0004` and `ADR-0005`.
 
 Antigravity workspace automation lives in `.agents/`:
 
@@ -10,12 +10,17 @@ Antigravity workspace automation lives in `.agents/`:
 
 Recommended Gemini/Antigravity roles:
 
-- `art-director` — owns visual coherence, palette, composition, world/time visual rules;
-- `pixel-asset-designer` — sprites, tiles, props, characters, interactive objects and asset manifests;
+- `art-director` — visual coherence, palette, composition and world/time visual rules;
+- `pixel-asset-designer` — editable sprites, tiles, props, characters and interactives;
+- `pixel-asset-pipeline-engineer` — manifests, deterministic generation and packing;
+- `game-runtime-webgl-engineer` — Phaser 4/WebGL integration and React↔Phaser boundary;
+- `living-world-engineer` — ambient schedules and world-state behaviour;
 - `meteo-verifier` — independent second-pass meteorological verification;
 - `audio-ambient-designer` — ambience concepts, sound event map and source/licensing manifest;
 - `ux-accessibility-reviewer` — visual inspection across desktop/mobile/projector.
 
-The visual world is not a static background. Use layered authored assets, deterministic/pseudorandom ambient schedules, time-of-day/season profiles and reusable animation primitives. The world-location configuration is data, not a hardcoded personal location.
+The visual world is not a static background. Use layered authored assets, deterministic/pseudorandom ambient schedules, time-of-day/season profiles and reusable animation primitives. Production art follows `assets/README.md` and `docs/design/PIXEL_ASSET_PIPELINE.md`; generated assets are not hand-edited.
+
+Phaser owns the living pixel world. Synoptic working maps, station plots and isolines remain SVG/Canvas inside `apps/web/src/features/map` so meteorological geometry and readability are not coupled to sprite rendering.
 
 Never change meteorological symbol colors for cosmetic reasons. Never accept a factual meteorological answer without a method profile/source trail when the task is destined for Ranked/Exam.
