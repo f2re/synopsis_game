@@ -1,0 +1,74 @@
+{
+  "schema": "hub-ui-sprites/v1",
+  "scene": "hub",
+  "policy": {
+    "textBakedIntoSprites": false,
+    "allUiExcludedFromWorldLighting": true,
+    "panelsUseNineSlice": true,
+    "iconsUseIndependentSprites": true,
+    "semanticIdsRemainStable": true
+  },
+  "families": {
+    "chrome": [
+      {"id":"hub.ui.top-status.frame","kind":"nine-slice","states":["default","compact"]},
+      {"id":"hub.ui.profile.avatar-frame","kind":"sprite","states":["default","hover","active"]},
+      {"id":"hub.ui.status.chip","kind":"nine-slice","states":["neutral","success","warning","error","observer"]},
+      {"id":"hub.ui.location-label.frame","kind":"nine-slice","states":["available","locked","active","hover"]},
+      {"id":"hub.ui.bottom-nav.slot","kind":"nine-slice","states":["default","hover","active","locked"]},
+      {"id":"hub.ui.primary-cta.frame","kind":"nine-slice","states":["default","hover","pressed","disabled"]},
+      {"id":"hub.ui.secondary-button.frame","kind":"nine-slice","states":["default","hover","pressed","disabled"]},
+      {"id":"hub.ui.notification.frame","kind":"nine-slice","states":["neutral","success","warning","error"]}
+    ],
+    "locationState": [
+      {"id":"hub.ui.location-state.available","kind":"sprite"},
+      {"id":"hub.ui.location-state.locked","kind":"sprite"},
+      {"id":"hub.ui.location-state.active","kind":"sprite"}
+    ],
+    "icons": [
+      "hub.ui.icon.profile",
+      "hub.ui.icon.settings",
+      "hub.ui.icon.code",
+      "hub.ui.icon.logout",
+      "hub.ui.icon.observer",
+      "hub.ui.icon.blitz",
+      "hub.ui.icon.duel",
+      "hub.ui.icon.start-shift",
+      "hub.ui.icon.inventory",
+      "hub.ui.icon.tournament",
+      "hub.ui.icon.archive",
+      "hub.ui.icon.tasks"
+    ]
+  },
+  "semanticBindings": {
+    "hub.profile":"hub.ui.icon.profile",
+    "hub.settings":"hub.ui.icon.settings",
+    "hub.location.radar":"hub.ui.location-label.frame",
+    "hub.location.maps-analysis":"hub.ui.location-label.frame",
+    "hub.location.aerology":"hub.ui.location-label.frame",
+    "hub.location.archive":"hub.ui.location-label.frame",
+    "hub.location.tournament-hall":"hub.ui.location-label.frame",
+    "hub.location.synoptic-center":"hub.ui.location-label.frame",
+    "hub.nav.blitz":"hub.ui.icon.blitz",
+    "hub.nav.duel":"hub.ui.icon.duel",
+    "hub.nav.start-shift":"hub.ui.icon.start-shift",
+    "hub.nav.inventory":"hub.ui.icon.inventory",
+    "hub.nav.tournament":"hub.ui.icon.tournament",
+    "hub.nav.archive":"hub.ui.icon.archive",
+    "hub.nav.tasks":"hub.ui.icon.tasks"
+  },
+  "responsive": {
+    "coordinateModel":"normalized-anchor-plus-safe-area",
+    "textAndHitAreas":"runtime-layout",
+    "chromeScaling":"nine-slice-no-uniform-stretch",
+    "iconScaling":"integer-or-nearest-approved-size-step",
+    "breakpoints":[
+      {"name":"wide","minAspect":1.55,"topStatus":"top-right","bottomNav":"bottom-center-row","locationLabels":"world-anchored"},
+      {"name":"classic","minAspect":1.15,"maxAspect":1.55,"topStatus":"top-right-compact","bottomNav":"bottom-center-row","locationLabels":"world-anchored-with-collision-avoidance"},
+      {"name":"portrait","maxAspect":1.15,"topStatus":"top-safe-area-compact","bottomNav":"bottom-safe-area-two-row-or-scroll","locationLabels":"world-anchored-priority-collapse"}
+    ],
+    "safeAreaInsets":true,
+    "locationLabelPolicy":"labels follow building anchors; labels may offset to avoid overlap but never bake into background",
+    "bottomNavPolicy":"nav belongs to viewport UI, not world coordinates",
+    "topStatusPolicy":"status/profile belongs to viewport UI, not world coordinates"
+  }
+}
