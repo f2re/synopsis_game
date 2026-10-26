@@ -10,6 +10,8 @@ docker run --rm \
   "$IMAGE" \
   /bin/bash -lc '
     set -euo pipefail
+    apt-get update >/dev/null
+    DEBIAN_FRONTEND=noninteractive apt-get install -y python3 ca-certificates >/dev/null
     python3 --version
     python3 -m py_compile /release/deploy/scripts/*.py
     for f in /release/deploy/scripts/*.sh; do bash -n "$f"; done
