@@ -1,0 +1,23 @@
+<VirtualHost *:80>
+    ServerName __SERVER_NAME__
+    DocumentRoot /opt/synopsis-game/current/web
+
+    <Directory /opt/synopsis-game/current/web>
+        Options -Indexes +FollowSymLinks
+        AllowOverride None
+        FallbackResource /index.html
+    </Directory>
+
+    <Location />
+        __ACCESS_REQUIRE__
+    </Location>
+
+    ProxyPreserveHost On
+    ProxyPass        /api/ http://127.0.0.1:__API_PORT__/api/
+    ProxyPassReverse /api/ http://127.0.0.1:__API_PORT__/api/
+    ProxyPass        /ws/  ws://127.0.0.1:__API_PORT__/ws/
+    ProxyPassReverse /ws/  ws://127.0.0.1:__API_PORT__/ws/
+
+    ErrorLog ${APACHE_LOG_DIR}/synopsis-game-error.log
+    CustomLog ${APACHE_LOG_DIR}/synopsis-game-access.log combined
+</VirtualHost>

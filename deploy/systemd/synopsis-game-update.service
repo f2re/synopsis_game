@@ -1,0 +1,11 @@
+[Unit]
+Description=Check and install Synopsis Game updates
+After=network-online.target synopsis-game.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/synopsis-game/current/deploy/scripts/check-update.py
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
