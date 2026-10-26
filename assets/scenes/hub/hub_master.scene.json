@@ -1,0 +1,40 @@
+{
+  "schema": "hub-scene/v1",
+  "id": "hub.master.approved",
+  "master": {
+    "sourceName": "image-gen-1(20261025-183207).png",
+    "width": 1672,
+    "height": 941,
+    "sha256": "3efc212bdcd7eaaacac119d20cbd89f83ab62d3d9761aafd5abdacae5660a340",
+    "policy": "immutable-approved-composition"
+  },
+  "runtimeBase": {
+    "module": "packages/world-engine/src/assets/hub/masterAsset.ts",
+    "width": 960,
+    "height": 540,
+    "format": "webp-data-uri",
+    "sha256": "a1ac9abc8a4bc0e428040ef96f0f7c0a9117b0c3967b72c3b881782d0c8dfd08",
+    "renderMode": "cover"
+  },
+  "layers": [
+    { "id": "L0-L6", "role": "approved_static_master", "status": "production" },
+    { "id": "L7", "role": "runtime_interaction_and_account_ui", "status": "production" }
+  ],
+  "hotspots": [
+    { "id": "hub.profile", "rect": [13, 3, 54, 48], "action": "hub:session-menu" },
+    { "id": "hub.settings", "rect": [905, 5, 44, 44], "action": "hub:session-menu" },
+    { "id": "hub.location.radar", "rect": [101, 115, 126, 43], "state": "locked", "action": "notice" },
+    { "id": "hub.location.maps-analysis", "rect": [75, 211, 150, 43], "state": "locked", "action": "notice" },
+    { "id": "hub.location.aerology", "rect": [669, 147, 146, 44], "state": "locked", "action": "notice" },
+    { "id": "hub.location.archive", "rect": [554, 263, 132, 43], "state": "available", "action": "scene:archive" },
+    { "id": "hub.location.tournament-hall", "rect": [749, 268, 154, 43], "state": "locked", "action": "notice" },
+    { "id": "hub.location.synoptic-center", "rect": [346, 177, 198, 42], "state": "active", "action": "hub:start-shift" },
+    { "id": "hub.nav.blitz", "rect": [13, 473, 108, 56], "action": "notice" },
+    { "id": "hub.nav.duel", "rect": [124, 473, 108, 56], "action": "notice" },
+    { "id": "hub.nav.start-shift", "rect": [290, 465, 275, 70], "action": "hub:start-shift" },
+    { "id": "hub.nav.inventory", "rect": [553, 473, 98, 56], "action": "notice" },
+    { "id": "hub.nav.tournament", "rect": [656, 473, 98, 56], "action": "notice" },
+    { "id": "hub.nav.archive", "rect": [759, 473, 96, 56], "action": "scene:archive" },
+    { "id": "hub.nav.tasks", "rect": [864, 473, 92, 56], "action": "notice" }
+  ]
+}
