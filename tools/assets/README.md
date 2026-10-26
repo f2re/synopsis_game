@@ -2,6 +2,12 @@
 
 Engineering home for reproducible conversion of editable art into browser-ready assets.
 
+```text
+tools/assets/
+├── config/       # versioned sprite-tools / AssetPack configuration
+└── scripts/      # deterministic validation/generation wrappers
+```
+
 Canonical flow:
 
 `assets/source` → manifest validation → sprite-tools validation/metadata/transforms → Tiled scene references → AssetPack packing/optimisation → `assets/generated`.
