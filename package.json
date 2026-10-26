@@ -3,8 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "workspaces": ["apps/*", "packages/*", "tools/*"],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "assets:check": "pnpm --filter @synopsis/assets-pipeline assets:check",
-    "assets:build": "pnpm --filter @synopsis/assets-pipeline assets:build"
+    "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check"
   }
 }

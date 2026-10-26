@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "assets:check": "sprite-tools --help",
-    "assets:build": "assetpack"
+    "toolchain:check": "sprite-tools --help && assetpack --help"
   },
   "devDependencies": {
     "@assetpack/core": "1.7.0",
