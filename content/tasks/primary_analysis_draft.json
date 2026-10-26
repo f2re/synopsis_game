@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1.0",
+  "tasks": [
+    {
+      "id": "primary_analysis_dependencies_001",
+      "topic": "primary_synoptic_analysis",
+      "skills": ["primary_analysis_dependencies"],
+      "type": "dependencySequence",
+      "difficulty": 4,
+      "method_profile": "RUS_CLASSIC_TRAINING_V1",
+      "dependency_graph": "primary_analysis_draft_v1",
+      "data_origin": "authored_training",
+      "question": "Соберите допустимый порядок операций первичного синоптического анализа. Несколько порядков могут быть правильными, если не нарушены методические зависимости.",
+      "sources": [
+        {"source_id": "ZVEREV_1977", "locator": "разделы о анализе приземных синоптических карт и фронтологическом анализе; точные локаторы уточняются при методической приёмке"}
+      ],
+      "explanation": "Первичный анализ не сводится к единственной жёсткой линейной последовательности. Часть операций допускает перестановку, но результат должен соблюдать причинно-методические зависимости: данные должны быть проверены до их использования, фронтология должна опираться на совокупность проанализированных признаков, а итоговая схема — быть согласована с предыдущим сроком и полями.",
+      "principle_tags": ["primary_analysis", "partial_order", "previous_term", "front_analysis", "consistency_check"],
+      "review": {
+        "source_checked": false,
+        "method_reviewed": false,
+        "publication_allowed": false
+      }
+    }
+  ]
+}

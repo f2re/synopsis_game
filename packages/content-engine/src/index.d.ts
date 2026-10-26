@@ -1,11 +1,13 @@
 export interface TaskDefinition {
   id: string;
-  type: 'decode' | 'numeric' | 'choice' | 'sequence' | 'stationPlot' | 'stationBoard' | 'findError' | string;
+  type: 'decode' | 'numeric' | 'choice' | 'sequence' | 'dependencySequence' | 'stationPlot' | 'stationBoard' | 'findError' | string;
   difficulty?: number;
   question: string;
   payload?: Record<string, unknown> & { options?: string[] };
   steps?: string[];
   correct_order?: number[];
+  dependencies?: Array<[number, number]>;
+  dependency_graph?: string;
   answer?: {
     kind: string;
     value?: unknown;

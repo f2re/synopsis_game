@@ -77,10 +77,13 @@ export interface StationPlotComponentResult {
   expectedSlotId: string;
   correct: boolean;
 }
+export interface DependencyViolation { before: string; after: string; }
 export interface ShiftFeedbackDetails {
   components?: StationPlotComponentResult[];
   selectedStationId?: string;
   expectedStationId?: string;
+  violations?: DependencyViolation[];
+  multipleOrdersAllowed?: boolean;
 }
 export interface ShiftTask {
   instanceId: string;
@@ -89,7 +92,7 @@ export interface ShiftTask {
   type: string;
   difficulty: number;
   question: string;
-  response: { kind: 'numeric' | 'choice' | 'sequence' | 'stationPlot' | 'stationBoard' | 'findError' | string; unit?: string | null };
+  response: { kind: 'numeric' | 'choice' | 'sequence' | 'dependencySequence' | 'stationPlot' | 'stationBoard' | 'findError' | string; unit?: string | null };
   payload?: {
     group?: string;
     encoded?: string;

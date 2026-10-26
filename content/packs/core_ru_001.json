@@ -1,6 +1,6 @@
 {
   "id": "core_ru_001",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "method_profile": "RUS_CLASSIC_TRAINING_V1",
   "balance_profile": "ranked_s1_v3",
   "status": "draft",
@@ -13,7 +13,8 @@
     "station_plot_basic_001",
     "station_board_three_001",
     "station_board_eight_001",
-    "find_error_td_gt_t_001"
+    "find_error_td_gt_t_001",
+    "primary_analysis_dependencies_001"
   ],
   "created_at": "2026-10-25T19:40:00Z",
   "review": {
@@ -24,5 +25,5 @@
     "technical": "passed",
     "publication_allowed": false
   },
-  "notes": "Пакет 0.5.0 добавляет первый физический контроль наблюдений findError по условию Td ≤ T. Новый источник/локатор и формулировка правила требуют двойной метеорологической приёмки, поэтому source_check возвращён в pending; рейтинговый режим запрещён."
+  "notes": "Пакет 0.6.0 добавляет draft-конструктор первичного анализа с частичным порядком из методического профиля. Несколько последовательностей могут быть корректными; конкретный граф зависимостей не допускается к публикации до двойной предметной приёмки."
 }

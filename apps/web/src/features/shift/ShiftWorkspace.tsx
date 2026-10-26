@@ -64,7 +64,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     if (!task || feedback || submitting) return false;
     if (task.response.kind === 'numeric') return numeric.trim() !== '' && Number.isFinite(normalizedNumber(numeric));
     if (task.response.kind === 'choice') return choiceIndex !== null;
-    if (task.response.kind === 'sequence') return steps.length > 0;
+    if (task.response.kind === 'sequence' || task.response.kind === 'dependencySequence') return steps.length > 0;
     if (task.response.kind === 'stationPlot' || task.response.kind === 'stationBoard') {
       const required = task.payload?.observations?.length ?? 0;
       return required > 0 && Object.keys(placements).length === required;
@@ -91,7 +91,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       let answer: unknown;
       if (task.response.kind === 'numeric') answer = { value: normalizedNumber(numeric) };
       else if (task.response.kind === 'choice') answer = { choiceIndex };
-      else if (task.response.kind === 'sequence') answer = { order: steps.map((step) => step.id) };
+      else if (task.response.kind === 'sequence' || task.response.kind === 'dependencySequence') answer = { order: steps.map((step) => step.id) };
       else if (task.response.kind === 'findError') answer = { stationId: selectedStationId };
       else answer = { placements };
       const result = await api.submitTaskAnswer(shiftId, task.instanceId, answer);
@@ -119,15 +119,16 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
   const stationPlot = task.response.kind === 'stationPlot';
   const stationBoard = task.response.kind === 'stationBoard';
   const findError = task.response.kind === 'findError';
+  const dependencySequence = task.response.kind === 'dependencySequence';
   const stationTask = stationPlot || stationBoard;
-  const wideTask = stationTask || findError;
+  const wideTask = stationTask || findError || dependencySequence;
 
   return (
     <main className="shift-shell">
       <header className="shift-topbar">
         <div>
           <span className="shift-kicker">{GAME_MARK} · учебная смена</span>
-          <strong>{findError ? 'Контроль наблюдений' : stationBoard ? 'Учебный планшон' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
+          <strong>{dependencySequence ? 'Первичный анализ' : findError ? 'Контроль наблюдений' : stationBoard ? 'Учебный планшон' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
         </div>
         <div className="shift-progress" aria-label={`Выполнено ${progress.answered} из ${progress.total}`}>
           <span>{progress.current}/{progress.total}</span>
@@ -139,14 +140,16 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       <section className="shift-stage" aria-live="polite">
         <aside className="shift-context">
           <span>Тема</span>
-          <strong>{findError ? 'Критика и физический контроль' : stationBoard ? 'Планшет приземных наблюдений' : stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
-          <p>{findError
-            ? 'Проверьте согласованность уже нанесённых наблюдений. Выберите станцию, в которой нарушено заданное физическое условие.'
-            : stationBoard
-              ? 'Работайте сразу с несколькими станциями на едином листе. Координаты станций и моделей нормированы и не зависят от размера экрана.'
-              : stationPlot
-                ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
-                : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
+          <strong>{dependencySequence ? 'Конструктор зависимостей анализа' : findError ? 'Критика и физический контроль' : stationBoard ? 'Планшет приземных наблюдений' : stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
+          <p>{dependencySequence
+            ? 'Здесь нет единственной правильной линейной цепочки. Расположите операции так, чтобы соблюдались обязательные зависимости методического профиля.'
+            : findError
+              ? 'Проверьте согласованность уже нанесённых наблюдений. Выберите станцию, в которой нарушено заданное физическое условие.'
+              : stationBoard
+                ? 'Работайте сразу с несколькими станциями на едином листе. Координаты станций и моделей нормированы и не зависят от размера экрана.'
+                : stationPlot
+                  ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
+                  : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
           {contentStatus !== 'published' && <div className="shift-draft">Учебный пакет проходит независимую методическую приёмку. Рейтинговый режим отключён.</div>}
         </aside>
 
@@ -167,42 +170,36 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
             </div>
           )}
 
-          {!feedback && task.response.kind === 'sequence' && (
-            <div className="shift-sequence" aria-label="Порядок групп">
+          {!feedback && (task.response.kind === 'sequence' || dependencySequence) && (
+            <div className="shift-sequence" aria-label={dependencySequence ? 'Порядок операций анализа' : 'Порядок групп'}>
               {steps.map((step, index) => <div key={step.id} className="shift-sequence-row"><b>{index + 1}</b><code>{step.label}</code><div><button type="button" onClick={() => moveStep(index, -1)} disabled={index === 0} aria-label={`Поднять ${step.label}`}>↑</button><button type="button" onClick={() => moveStep(index, 1)} disabled={index === steps.length - 1} aria-label={`Опустить ${step.label}`}>↓</button></div></div>)}
             </div>
           )}
 
-          {stationPlot && task.payload?.observations && task.payload?.slots && (
-            <StationPlotTask payload={task.payload as StationPlotPayload} placements={placements} onChange={setPlacements} disabled={Boolean(feedback)} results={feedback?.feedback.details?.components} />
-          )}
-          {stationBoard && task.payload?.observations && task.payload?.slots && task.payload?.stations && task.payload?.canvas && (
-            <StationBoardTask payload={task.payload as StationBoardPayload} placements={placements} onChange={setPlacements} disabled={Boolean(feedback)} results={feedback?.feedback.details?.components} />
-          )}
-          {findError && task.payload?.observations && task.payload?.stations && task.payload?.canvas && (
-            <FindErrorTask
-              payload={task.payload as FindErrorPayload}
-              selectedStationId={selectedStationId}
-              onSelect={setSelectedStationId}
-              disabled={Boolean(feedback)}
-              feedback={feedback?.feedback.details}
-            />
-          )}
+          {stationPlot && task.payload?.observations && task.payload?.slots && <StationPlotTask payload={task.payload as StationPlotPayload} placements={placements} onChange={setPlacements} disabled={Boolean(feedback)} results={feedback?.feedback.details?.components} />}
+          {stationBoard && task.payload?.observations && task.payload?.slots && task.payload?.stations && task.payload?.canvas && <StationBoardTask payload={task.payload as StationBoardPayload} placements={placements} onChange={setPlacements} disabled={Boolean(feedback)} results={feedback?.feedback.details?.components} />}
+          {findError && task.payload?.observations && task.payload?.stations && task.payload?.canvas && <FindErrorTask payload={task.payload as FindErrorPayload} selectedStationId={selectedStationId} onSelect={setSelectedStationId} disabled={Boolean(feedback)} feedback={feedback?.feedback.details} />}
 
           {error && <div className="shift-error" role="alert">{error}</div>}
 
           {feedback ? (
             <section className={`shift-feedback ${feedback.feedback.correct ? 'is-correct' : 'is-wrong'}`}>
               <div className="shift-feedback-title">{feedback.feedback.correct ? 'Верно' : 'Нужно исправить принцип'}</div>
-              {!feedback.feedback.correct && !stationTask && !findError && <p><strong>Правильный ответ:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>}
+              {!feedback.feedback.correct && !stationTask && !findError && !dependencySequence && <p><strong>Правильный ответ:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>}
               {!feedback.feedback.correct && stationTask && <p>Красным отмечено ошибочное размещение, жёлтым — нормативная позиция для пропущенного или неверно размещённого элемента.</p>}
               {!feedback.feedback.correct && findError && <p><strong>Физическое нарушение:</strong> станция {correctAnswerText(feedback.feedback.correctAnswer)}. На планшоне она отмечена зелёным, ваш выбор — красным.</p>}
-              <p>{feedback.feedback.explanation}</p>
-              {feedback.feedback.principleTags.length > 0 && (
-                <div className="shift-principles" aria-label="Проверяемые принципы">
-                  {feedback.feedback.principleTags.map((tag) => <span key={tag}>{tag}</span>)}
+              {dependencySequence && !feedback.feedback.correct && (
+                <div>
+                  <p><strong>Нарушенные зависимости:</strong></p>
+                  <ul>
+                    {(feedback.feedback.details?.violations ?? []).map((item) => <li key={`${item.before}-${item.after}`}><strong>{item.before}</strong> должно быть раньше «{item.after}».</li>)}
+                  </ul>
+                  <p><strong>Один из допустимых порядков:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>
                 </div>
               )}
+              {dependencySequence && feedback.feedback.correct && <p>Порядок допустим. Другие линейные порядки также могут быть правильными, если сохраняют все обязательные зависимости.</p>}
+              <p>{feedback.feedback.explanation}</p>
+              {feedback.feedback.principleTags.length > 0 && <div className="shift-principles" aria-label="Проверяемые принципы">{feedback.feedback.principleTags.map((tag) => <span key={tag}>{tag}</span>)}</div>}
               {feedback.feedback.sources.map((source) => <div className="shift-source" key={`${source.sourceId}-${source.locator}`}><strong>{source.title}</strong><span>{source.locator}</span></div>)}
               <button className="shift-primary" type="button" onClick={advance}>{feedback.completed ? `Завершить смену · ${feedback.progress.correct}/${feedback.progress.total}` : 'Следующее задание'}</button>
             </section>
