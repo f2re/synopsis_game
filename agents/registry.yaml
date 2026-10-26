@@ -8,9 +8,13 @@ policy:
   provider_neutral_acceptance: true
 
 providers:
-  antigravity-gemini: {entrypoint: GEMINI.md, native_workspace: .agents/}
-  claude-code: {entrypoint: CLAUDE.md}
-  codex: {entrypoint: AGENTS.md}
+  antigravity-gemini:
+    entrypoint: GEMINI.md
+    native_workspace: .agents/
+  claude-code:
+    entrypoint: CLAUDE.md
+  codex:
+    entrypoint: AGENTS.md
 
 agents:
   - id: orchestrator
@@ -18,7 +22,9 @@ agents:
     preferred_provider: claude-code
     fallback_provider: codex
     owns: [ENG, cross-domain-planning, handoff, dependency-order]
+    cannot_approve: [meteorology, art, security]
     role_file: agents/roles/orchestrator.md
+
   - id: meteo-methodologist-ru
     title: Russian Synoptic Meteorology Methodologist
     preferred_provider: claude-code
@@ -26,6 +32,7 @@ agents:
     owns: [METH, terminology, method-profiles, source-interpretation, explanations]
     reviews: [CONTENT, KN01-LIVE, MAP, frontology, AT-OT, PESM]
     role_file: agents/roles/meteo-methodologist-ru.md
+
   - id: meteo-verifier
     title: Independent Meteorological Verifier
     preferred_provider: antigravity-gemini
@@ -33,6 +40,7 @@ agents:
     owns: [independent-answer-verification, ambiguity-detection]
     reviews: [METH, CONTENT, KN01-LIVE, MAP]
     role_file: agents/roles/meteo-verifier.md
+
   - id: live-kn01-engineer
     title: Live KN-01 Data & Codec Engineer
     preferred_provider: codex
@@ -40,6 +48,7 @@ agents:
     owns: [KN01-LIVE]
     reviewers: [meteo-methodologist-ru, meteo-verifier, security-privacy-reviewer]
     role_file: agents/roles/live-kn01-engineer.md
+
   - id: art-director
     title: Pixel-art Art Director
     preferred_provider: antigravity-gemini
@@ -47,6 +56,7 @@ agents:
     owns: [art-direction, palette, composition, visual-tokens, world-location-visual-policy]
     reviews: [WORLD, AVATAR, UX, ENGINE, ASSET, Arena-TV-visuals]
     role_file: agents/roles/art-director.md
+
   - id: pixel-asset-designer
     title: Pixel Asset & Character Designer
     preferred_provider: antigravity-gemini
@@ -54,6 +64,7 @@ agents:
     owns: [editable-sprites, characters, props, tiles, interactables]
     reviewers: [art-director, pixel-asset-pipeline-engineer, web-performance-engineer]
     role_file: agents/roles/pixel-asset-designer.md
+
   - id: pixel-asset-pipeline-engineer
     title: Pixel Asset Pipeline Engineer
     preferred_provider: codex
@@ -61,6 +72,7 @@ agents:
     owns: [ASSET, asset-manifests, sprite-tools, assetpack, tiled-contract, generated-assets]
     reviewers: [integration-release-engineer, web-performance-engineer, art-director]
     role_file: agents/roles/pixel-asset-pipeline-engineer.md
+
   - id: game-runtime-webgl-engineer
     title: Phaser & WebGL Runtime Engineer
     preferred_provider: codex
@@ -68,56 +80,71 @@ agents:
     owns: [ENGINE, phaser-runtime, webgl-rendering, react-game-bridge, renderer-diagnostics]
     reviewers: [web-performance-engineer, integration-release-engineer, art-director]
     role_file: agents/roles/game-runtime-webgl-engineer.md
+
   - id: living-world-engineer
-    title: Living World & Ambient Behaviour Engineer
+    title: Living World & Ambient Animation Engineer
     preferred_provider: codex
     fallback_provider: antigravity-gemini
     owns: [WORLD]
     reviewers: [art-director, game-runtime-webgl-engineer, web-performance-engineer, ux-accessibility-reviewer]
     role_file: agents/roles/living-world-engineer.md
+
   - id: audio-ambient-designer
     title: Ambient Audio & Soundscape Designer
     preferred_provider: claude-code
     fallback_provider: antigravity-gemini
     owns: [audio-events, soundscape, asset-license-manifest]
+    reviewers: [art-director, security-privacy-reviewer]
     role_file: agents/roles/audio-ambient-designer.md
+
   - id: web-performance-engineer
-    title: Browser Rendering & Performance Reviewer
+    title: Browser Rendering & Performance Engineer
     preferred_provider: codex
     fallback_provider: claude-code
-    owns: [performance-budgets, animation-profiling, low-power-policy]
+    owns: [browser-runtime, responsive-rendering, performance-budgets, animation-profiling, low-power-policy]
     reviews: [ENGINE, ASSET, WORLD, AVATAR, TASK, MAP, Arena-TV-visuals]
     role_file: agents/roles/web-performance-engineer.md
+
   - id: realtime-arena-engineer
     title: Realtime PvP & Autonomous Arena Engineer
     preferred_provider: codex
     fallback_provider: claude-code
     owns: [NET, MODE, ARENA, CLASSROOM]
+    reviewers: [security-privacy-reviewer, integration-release-engineer]
     role_file: agents/roles/realtime-arena-engineer.md
+
   - id: identity-avatar-engineer
     title: Identity, Roster, Avatar & Rewards Engineer
     preferred_provider: codex
     fallback_provider: claude-code
     owns: [IDENTITY, AVATAR, rewards]
+    reviewers: [security-privacy-reviewer, art-director, ux-accessibility-reviewer]
     role_file: agents/roles/identity-avatar-engineer.md
+
   - id: gameplay-balance-designer
     title: Gameplay & Balance Designer
     preferred_provider: claude-code
     fallback_provider: codex
     owns: [GAME, reward-economy, battle-loop, difficulty-policy]
+    reviewers: [meteo-methodologist-ru, integration-release-engineer]
     role_file: agents/roles/gameplay-balance-designer.md
+
   - id: ux-accessibility-reviewer
     title: UX, Responsive & Accessibility Reviewer
     preferred_provider: claude-code
     fallback_provider: antigravity-gemini
     owns: [UX, accessibility, reduced-motion, projector-readability]
+    reviews: [TASK, WORLD, AVATAR, ARENA, ENGINE]
     role_file: agents/roles/ux-accessibility-reviewer.md
+
   - id: security-privacy-reviewer
     title: Security & Privacy Reviewer
     preferred_provider: claude-code
     fallback_provider: codex
     owns: [security-gates, auth-threat-model, privacy, feed-hardening]
+    reviews: [IDENTITY, KN01-LIVE, NET, ARENA, audio-third-party-sources]
     role_file: agents/roles/security-privacy-reviewer.md
+
   - id: integration-release-engineer
     title: Integration, QA & Release Engineer
     preferred_provider: codex
@@ -127,10 +154,17 @@ agents:
     role_file: agents/roles/integration-release-engineer.md
 
 acceptance_gates:
-  meteorology: {required: [meteo-methodologist-ru, meteo-verifier]}
-  art: {required: [art-director]}
-  game_runtime: {required: [game-runtime-webgl-engineer, web-performance-engineer]}
-  asset_pipeline: {required: [pixel-asset-pipeline-engineer, integration-release-engineer]}
-  animation_performance: {required: [web-performance-engineer]}
-  security: {required: [security-privacy-reviewer]}
-  release: {required: [integration-release-engineer]}
+  meteorology:
+    required: [meteo-methodologist-ru, meteo-verifier]
+  art:
+    required: [art-director]
+  game_runtime:
+    required: [game-runtime-webgl-engineer, web-performance-engineer]
+  asset_pipeline:
+    required: [pixel-asset-pipeline-engineer, integration-release-engineer]
+  animation_performance:
+    required: [web-performance-engineer]
+  security:
+    required: [security-privacy-reviewer]
+  release:
+    required: [integration-release-engineer]

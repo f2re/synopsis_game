@@ -1,25 +1,45 @@
 # Foundation task ownership
 
-Canonical task definitions live in `docs/roadmap/FOUNDATION_EPICS.md`. This file assigns implementation ownership and independent acceptance.
+Canonical foundation task definitions live in `docs/roadmap/FOUNDATION_EPICS.md`. Phaser/WebGL and asset-pipeline definitions live in `docs/roadmap/PIXEL_RUNTIME_EPICS.md`. This file assigns implementation ownership and independent acceptance.
+
+## ENGINE — Phaser/WebGL runtime
+
+| Task | Owner | Required review |
+|---|---|---|
+| ENGINE-001 Phaser package/runtime scaffold | `game-runtime-webgl-engineer` | `web-performance-engineer`, `integration-release-engineer` |
+| ENGINE-002 React↔Phaser mount/lifecycle bridge | `game-runtime-webgl-engineer` | `web-performance-engineer`, `ux-accessibility-reviewer` |
+| ENGINE-003 Pixel sampling/scaling/camera | `game-runtime-webgl-engineer` | `art-director`, `web-performance-engineer` |
+| ENGINE-004 Scene/layer/tween/animation primitives | `game-runtime-webgl-engineer` | `living-world-engineer`, `web-performance-engineer` |
+| ENGINE-005 Filters/shaders/particles | `game-runtime-webgl-engineer` | `art-director`, `web-performance-engineer` |
+
+## ASSET — pixel-art production pipeline
+
+| Task | Owner | Required review |
+|---|---|---|
+| ASSET-001 Source tree/naming/manifest contract | `pixel-asset-pipeline-engineer` | `pixel-asset-designer`, `art-director` |
+| ASSET-002 sprite-tools validation/metadata | `pixel-asset-pipeline-engineer` | `integration-release-engineer` |
+| ASSET-003 AssetPack atlas/optimisation | `pixel-asset-pipeline-engineer` | `web-performance-engineer`, `integration-release-engineer` |
+| ASSET-004 Tiled scene contract | `pixel-asset-pipeline-engineer` | `game-runtime-webgl-engineer`, `living-world-engineer`, `art-director` |
+| ASSET-005 Provenance/reproducibility | `pixel-asset-pipeline-engineer` | `integration-release-engineer` |
+| ASSET-006 Visual/runtime regression fixtures | `integration-release-engineer` | `art-director`, `web-performance-engineer` |
 
 ## WORLD — Living World
 
 | Task | Owner | Required review |
 |---|---|---|
-| WORLD-001 Time-of-day | `living-world-engineer` | `art-director`, `web-performance-engineer` |
-| WORLD-002 Ambient layers | `living-world-engineer` | `art-director`, `web-performance-engineer`, `ux-accessibility-reviewer` |
-| WORLD-003 Interactables | `living-world-engineer` | `art-director`, `web-performance-engineer`, `ux-accessibility-reviewer` |
+| WORLD-001 Time-of-day | `living-world-engineer` | `art-director`, `game-runtime-webgl-engineer`, `web-performance-engineer` |
+| WORLD-002 Ambient layers | `living-world-engineer` | `art-director`, `game-runtime-webgl-engineer`, `web-performance-engineer`, `ux-accessibility-reviewer` |
+| WORLD-003 Interactables | `living-world-engineer` | `art-director`, `game-runtime-webgl-engineer`, `web-performance-engineer`, `ux-accessibility-reviewer` |
 | WORLD-004 Discoveries | `living-world-engineer` | `gameplay-balance-designer`, `art-director` |
-| WORLD-005 Reduced motion | `web-performance-engineer` | `ux-accessibility-reviewer`, `living-world-engineer` |
+| WORLD-005 Reduced motion | `web-performance-engineer` | `ux-accessibility-reviewer`, `living-world-engineer`, `game-runtime-webgl-engineer` |
 
-Asset sub-tasks for WORLD are produced by `pixel-asset-designer`; sound sub-tasks by `audio-ambient-designer`.
+Asset sub-tasks for WORLD are authored by `pixel-asset-designer` and packaged by `pixel-asset-pipeline-engineer`; sound sub-tasks by `audio-ambient-designer`.
 
 ## KN01-LIVE — Real observation pipeline
 
 All `KN01-LIVE-001…007` are implemented by `live-kn01-engineer`.
 
 Required gates:
-
 - `meteo-methodologist-ru` — ruleset/methodology acceptance;
 - `meteo-verifier` — independent expected-result verification;
 - `security-privacy-reviewer` — untrusted ingress/feed boundaries;
@@ -33,7 +53,7 @@ Required gates:
 | ARENA-002 Tournament progression | `realtime-arena-engineer` | `gameplay-balance-designer`, `integration-release-engineer` |
 | ARENA-003 Broadcast selector | `realtime-arena-engineer` | `integration-release-engineer`, `ux-accessibility-reviewer` |
 | ARENA-004 Arena TV | `realtime-arena-engineer` | `art-director`, `web-performance-engineer`, `security-privacy-reviewer` |
-| ARENA-005 Attract mode | `living-world-engineer` | `art-director`, `realtime-arena-engineer`, `web-performance-engineer` |
+| ARENA-005 Attract mode | `living-world-engineer` | `art-director`, `realtime-arena-engineer`, `game-runtime-webgl-engineer`, `web-performance-engineer` |
 | ARENA-006 Highlight engine | `realtime-arena-engineer` | `gameplay-balance-designer`, `art-director` |
 | ARENA-007 Watchdog/fallback | `integration-release-engineer` | `realtime-arena-engineer`, `web-performance-engineer` |
 
@@ -54,10 +74,10 @@ Required gates:
 |---|---|---|---|
 | AVATAR-001 Avatar schema | `identity-avatar-engineer` | `pixel-asset-designer` | `art-director`, `ux-accessibility-reviewer` |
 | AVATAR-002 First-login creator | `identity-avatar-engineer` | `pixel-asset-designer` | `art-director`, `ux-accessibility-reviewer` |
-| AVATAR-003 Starter styles | `pixel-asset-designer` | — | `art-director`, `identity-avatar-engineer` |
+| AVATAR-003 Starter styles | `pixel-asset-designer` | `pixel-asset-pipeline-engineer` | `art-director`, `identity-avatar-engineer` |
 | AVATAR-004 Cosmetic inventory | `identity-avatar-engineer` | `pixel-asset-designer` | `art-director`, `gameplay-balance-designer` |
-| AVATAR-005 Pencil collection | `pixel-asset-designer` | — | `art-director`, `meteo-methodologist-ru` for terminology only |
-| AVATAR-006 Companions | `pixel-asset-designer` | `living-world-engineer` | `art-director`, `web-performance-engineer` |
+| AVATAR-005 Pencil collection | `pixel-asset-designer` | `pixel-asset-pipeline-engineer` | `art-director`, `meteo-methodologist-ru` for terminology only |
+| AVATAR-006 Companions | `pixel-asset-designer` | `living-world-engineer` | `art-director`, `pixel-asset-pipeline-engineer`, `web-performance-engineer` |
 | AVATAR-007 Reward hooks | `gameplay-balance-designer` | `identity-avatar-engineer` | `integration-release-engineer` |
 
 ## Existing MVP epics
