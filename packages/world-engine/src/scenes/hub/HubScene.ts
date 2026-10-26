@@ -16,6 +16,8 @@ interface FacilityDossier {
   subtitle: string;
   status: string;
   statusColor: string;
+  isLocked?: boolean;
+  unlockRequirement?: string;
   textureKey: string;
   specs: { label: string; value: string }[];
   primaryActionLabel?: string;
@@ -406,11 +408,11 @@ export class HubScene extends Phaser.Scene {
 
     // Quick shift button
     const shiftBtnBg = this.add
-      .rectangle(345, 0, 108, 20, 0x244336, 0.95)
+      .rectangle(345, 0, 118, 20, 0x244336, 0.95)
       .setStrokeStyle(1, 0x5db489, 0.9)
       .setInteractive({ useHandCursor: true });
     const shiftBtnText = this.add
-      .text(345, 0, 'СМЕНА СИНОПТИКА →', {
+      .text(345, 0, 'СМЕНА: КОД КН-01 →', {
         fontFamily: 'monospace, monospace',
         fontSize: '9px',
         fontStyle: 'bold',
@@ -462,6 +464,7 @@ export class HubScene extends Phaser.Scene {
       name: string;
       badgeTitle: string;
       badgeSub: string;
+      state: 'available' | 'locked';
       x: number;
       y: number;
       width: number;
@@ -471,45 +474,17 @@ export class HubScene extends Phaser.Scene {
       zoneY: number;
       zoneWidth: number;
       zoneHeight: number;
+      signX: number;
+      signY: number;
+      signWidth: number;
     }[] = [
-      {
-        id: 'hub.location.radar',
-        dossierId: 'radar',
-        name: 'Радарный комплекс ДМРЛ-С',
-        badgeTitle: 'РАДАРНЫЙ КОМПЛЕКС ДМРЛ-С',
-        badgeSub: '● ДЕЖУРНОЕ СКАНИРОВАНИЕ 250 КМ',
-        x: 40,
-        y: 80,
-        width: 229,
-        height: 170,
-        outlineKey: 'outline-radar',
-        zoneX: 150,
-        zoneY: 165,
-        zoneWidth: 200,
-        zoneHeight: 150,
-      },
-      {
-        id: 'hub.location.cartography',
-        dossierId: 'cartography',
-        name: 'Картографический класс',
-        badgeTitle: 'КАРТОГРАФИЧЕСКИЙ КЛАСС',
-        badgeSub: '● СИНОПТИЧЕСКИЙ АНАЛИЗ КАРТ',
-        x: 68,
-        y: 195,
-        width: 218,
-        height: 158,
-        outlineKey: 'outline-cartography',
-        zoneX: 175,
-        zoneY: 275,
-        zoneWidth: 190,
-        zoneHeight: 140,
-      },
       {
         id: 'hub.location.synoptic-center',
         dossierId: 'synoptic-center',
-        name: 'Оперативный зал синоптического анализа',
-        badgeTitle: 'ОПЕРАТИВНЫЙ ЗАЛ АНАЛИЗА',
-        badgeSub: '● ДЕЖУРНАЯ СМЕНА СИНОПТИКА',
+        name: 'Оперативный зал анализа',
+        badgeTitle: '✦ ОПЕРАТИВНЫЙ ЗАЛ · КН-01',
+        badgeSub: '● ДОСТУПНО · ДЕЖУРНАЯ СМЕНА',
+        state: 'available',
         x: 335,
         y: 172,
         width: 287,
@@ -519,13 +494,57 @@ export class HubScene extends Phaser.Scene {
         zoneY: 285,
         zoneWidth: 260,
         zoneHeight: 170,
+        signX: 478,
+        signY: 188,
+        signWidth: 228,
+      },
+      {
+        id: 'hub.location.cartography',
+        dossierId: 'cartography',
+        name: 'Картографический класс',
+        badgeTitle: '🔒 КАРТОГРАФИЧЕСКИЙ КЛАСС',
+        badgeSub: 'Требуется: сдать код КН-01',
+        state: 'locked',
+        x: 68,
+        y: 195,
+        width: 218,
+        height: 158,
+        outlineKey: 'outline-cartography',
+        zoneX: 175,
+        zoneY: 275,
+        zoneWidth: 190,
+        zoneHeight: 140,
+        signX: 175,
+        signY: 202,
+        signWidth: 204,
+      },
+      {
+        id: 'hub.location.radar',
+        dossierId: 'radar',
+        name: 'Радарный комплекс ДМРЛ-С',
+        badgeTitle: '🔒 РАДАРНЫЙ КОМПЛЕКС ДМРЛ-С',
+        badgeSub: 'Требуется: уровень 2 (Радар)',
+        state: 'locked',
+        x: 40,
+        y: 80,
+        width: 229,
+        height: 170,
+        outlineKey: 'outline-radar',
+        zoneX: 150,
+        zoneY: 165,
+        zoneWidth: 200,
+        zoneHeight: 150,
+        signX: 150,
+        signY: 96,
+        signWidth: 204,
       },
       {
         id: 'hub.location.archive',
         dossierId: 'archive',
         name: 'Научно-исторический архив',
-        badgeTitle: 'НАУЧНЫЙ АРХИВ',
-        badgeSub: '● ФОНД НАБЛЮДЕНИЙ И ПЛАНШЕТОВ',
+        badgeTitle: '🔒 НАУЧНЫЙ АРХИВ',
+        badgeSub: 'Требуется: сдать код КН-01',
+        state: 'locked',
         x: 551,
         y: 212,
         width: 212,
@@ -535,13 +554,17 @@ export class HubScene extends Phaser.Scene {
         zoneY: 292,
         zoneWidth: 180,
         zoneHeight: 140,
+        signX: 655,
+        signY: 226,
+        signWidth: 194,
       },
       {
         id: 'hub.location.aerology',
         dossierId: 'aerology',
         name: 'Аэрологический павильон',
-        badgeTitle: 'АЭРОЛОГИЧЕСКИЙ ПАВИЛЬОН',
-        badgeSub: '● ЗОНДИРОВАНИЕ АТМОСФЕРЫ',
+        badgeTitle: '🔒 АЭРОЛОГИЧЕСКИЙ ПАВИЛЬОН',
+        badgeSub: 'Требуется: уровень 3 (Зонд)',
+        state: 'locked',
         x: 677,
         y: 97,
         width: 218,
@@ -551,13 +574,17 @@ export class HubScene extends Phaser.Scene {
         zoneY: 178,
         zoneWidth: 190,
         zoneHeight: 150,
+        signX: 782,
+        signY: 114,
+        signWidth: 200,
       },
       {
         id: 'hub.location.tournament-hall',
         dossierId: 'tournament-hall',
         name: 'Турнирный зал дуэлей',
-        badgeTitle: 'ТУРНИРНЫЙ ЗАЛ СИНОПТИКОВ',
-        badgeSub: '● КВАЛИФИКАЦИОННАЯ АРЕНА',
+        badgeTitle: '🔒 ТУРНИРНЫЙ ЗАЛ ДУЭЛЕЙ',
+        badgeSub: 'Требуется: зачёт по коду КН-01',
+        state: 'locked',
         x: 729,
         y: 206,
         width: 223,
@@ -567,6 +594,9 @@ export class HubScene extends Phaser.Scene {
         zoneY: 290,
         zoneWidth: 190,
         zoneHeight: 150,
+        signX: 840,
+        signY: 226,
+        signWidth: 204,
       },
     ];
 
@@ -581,6 +611,7 @@ export class HubScene extends Phaser.Scene {
     name: string;
     badgeTitle: string;
     badgeSub: string;
+    state: 'available' | 'locked';
     x: number;
     y: number;
     width: number;
@@ -590,7 +621,12 @@ export class HubScene extends Phaser.Scene {
     zoneY: number;
     zoneWidth: number;
     zoneHeight: number;
+    signX: number;
+    signY: number;
+    signWidth: number;
   }): void {
+    const isAvailable = bld.state === 'available';
+
     // 1. Golden contour outline sprite (starts hidden)
     const outline = this.add
       .image(bld.x, bld.y, bld.outlineKey)
@@ -598,36 +634,61 @@ export class HubScene extends Phaser.Scene {
       .setDepth(25)
       .setAlpha(0);
 
-    // 2. Floating stylish badge above building
-    const badgeX = bld.zoneX;
-    const badgeY = Math.max(34, bld.y - 12);
+    // 2. Permanent architectural nameplate (always visible on campus)
+    const sign = this.add.container(bld.signX, bld.signY).setDepth(45);
+    const signW = bld.signWidth;
+    const signH = 34;
 
-    const badgeBg = this.add
-      .rectangle(0, 0, 214, 40, 0x07182c, 0.95)
-      .setStrokeStyle(1.5, 0xf1c75b, 0.95);
+    const signBg = this.add
+      .rectangle(0, 0, signW, signH, isAvailable ? 0x07182cf8 : 0x061424ee, 0.95)
+      .setStrokeStyle(isAvailable ? 1.5 : 1, isAvailable ? 0xf1c75b : 0x3d5c7c, 0.95);
 
-    const badgeTitle = this.add
-      .text(0, -9, bld.badgeTitle, {
+    // Status pip
+    const pipColor = isAvailable ? 0x5db489 : 0xe0a96d;
+    const pip = this.add.circle(-signW / 2 + 13, 0, 3.5, pipColor, 1);
+
+    if (isAvailable) {
+      this.tweens.add({
+        targets: pip,
+        alpha: 0.35,
+        scale: 0.75,
+        duration: 800,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+    }
+
+    const titleText = this.add
+      .text(-signW / 2 + 24, -7, bld.badgeTitle, {
         fontFamily: 'monospace, monospace',
-        fontSize: '10px',
+        fontSize: isAvailable ? '10px' : '9px',
         fontStyle: 'bold',
-        color: '#f1c75b',
+        color: isAvailable ? '#ffd56a' : '#d2e2f0',
       })
-      .setOrigin(0.5);
+      .setOrigin(0, 0.5);
 
-    const badgeSub = this.add
-      .text(0, 8, bld.badgeSub, {
+    const subText = this.add
+      .text(-signW / 2 + 24, 7, bld.badgeSub, {
         fontFamily: 'Inter, system-ui, sans-serif',
-        fontSize: '8.5px',
-        color: '#bed1e3',
+        fontSize: '8px',
+        color: isAvailable ? '#75cbb0' : '#f5b665',
       })
-      .setOrigin(0.5);
+      .setOrigin(0, 0.5);
 
-    const badge = this.add
-      .container(badgeX, badgeY, [badgeBg, badgeTitle, badgeSub])
-      .setDepth(150)
-      .setAlpha(0)
-      .setVisible(false);
+    sign.add([signBg, pip, titleText, subText]);
+
+    // Active facility breathing aura on border
+    if (isAvailable) {
+      this.tweens.add({
+        targets: signBg,
+        strokeAlpha: 0.5,
+        duration: 1000,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+    }
 
     // 3. Reliable, non-blocking Interactive Zone
     const zone = this.add
@@ -641,7 +702,7 @@ export class HubScene extends Phaser.Scene {
     zone.on('pointerover', () => {
       worldAudio.play('audio.ui.hover-subtle');
 
-      // Organic glowing contour fade-in + gentle breathing pulse
+      // 1. Organic glowing contour fade-in + gentle breathing pulse
       this.tweens.killTweensOf(outline);
       this.tweens.add({
         targets: outline,
@@ -660,17 +721,18 @@ export class HubScene extends Phaser.Scene {
         },
       });
 
-      // Floating badge reveal
-      badge.setVisible(true);
-      badge.setPosition(badgeX, badgeY);
-      this.tweens.killTweensOf(badge);
+      // 2. Nameplate highlight scale and glow
+      this.tweens.killTweensOf(sign);
       this.tweens.add({
-        targets: badge,
-        alpha: 1,
-        y: badgeY - 6,
-        duration: 180,
+        targets: sign,
+        scale: 1.06,
+        duration: 150,
         ease: 'Back.easeOut',
       });
+      if (!isAvailable) {
+        signBg.setStrokeStyle(1.5, 0xf1c75b, 1);
+        signBg.setFillStyle(0x0a1e35, 0.98);
+      }
     });
 
     zone.on('pointerout', () => {
@@ -683,16 +745,18 @@ export class HubScene extends Phaser.Scene {
         ease: 'Cubic.easeIn',
       });
 
-      // Fade out badge
-      this.tweens.killTweensOf(badge);
+      // Return nameplate to normal scale
+      this.tweens.killTweensOf(sign);
       this.tweens.add({
-        targets: badge,
-        alpha: 0,
-        y: badgeY,
-        duration: 160,
+        targets: sign,
+        scale: 1.0,
+        duration: 150,
         ease: 'Cubic.easeIn',
-        onComplete: () => badge.setVisible(false),
       });
+      if (!isAvailable) {
+        signBg.setStrokeStyle(1, 0x3d5c7c, 0.9);
+        signBg.setFillStyle(0x061424ee, 0.95);
+      }
     });
 
     zone.on('pointerup', () => {
@@ -720,8 +784,10 @@ export class HubScene extends Phaser.Scene {
         id: 'radar',
         title: 'РАДАРНЫЙ КОМПЛЕКС ДМРЛ-С',
         subtitle: 'Доплеровский двухполяризационный метеорологический радиолокатор',
-        status: '● АКТИВЕН · ДЕЖУРНОЕ СКАНИРОВАНИЕ',
-        statusColor: '#5db489',
+        status: '🔒 ДОСТУП ЗАБЛОКИРОВАН · 2 УРОВЕНЬ',
+        statusColor: '#e0a96d',
+        isLocked: true,
+        unlockRequirement: 'Доплеровский локатор C-диапазона доступен со 2-го уровня квалификации после завершения первой смены по коду КН-01.',
         textureKey: 'bld-radar',
         specs: [
           { label: 'Диапазон волн:', value: 'C-band (5.6 ГГц), двойная поляризация (Dual-Pol)' },
@@ -730,18 +796,17 @@ export class HubScene extends Phaser.Scene {
           { label: 'Измеряемые поля:', value: 'Z (отражаемость), V (скорость), W (турбулентность), ZDR, KDP' },
           { label: 'Назначение:', value: 'Обнаружение конвективных шквалов, града, гроз и интенсивных ливней' },
         ],
-        primaryActionLabel: 'ИМПУЛЬС ЛОКАТОРА',
-        onPrimaryAction: () => {
-          worldAudio.play('audio.interact.radar-pulse');
-          this.showNotice('ДМРЛ-С: сформирован эхо-профиль радиуса 250 км. Опасных конвективных явлений не обнаружено.');
-        },
+        primaryActionLabel: 'НАЧАТЬ С ДЕШИФРОВКИ КН-01 →',
+        onPrimaryAction: () => this.startShift(),
       },
       cartography: {
         id: 'cartography',
         title: 'КАРТОГРАФИЧЕСКИЙ КЛАСС И АНАЛИЗ ПОГОДЫ',
         subtitle: 'Учебный полигон синоптической картографии и нанесения метеорологических планшетов',
-        status: '● УЧЕБНО-ОПЕРАТИВНЫЙ РЕЖИМ',
-        statusColor: '#5db489',
+        status: '🔒 ДОСТУП ЗАБЛОКИРОВАН · ТРЕБУЕТСЯ КН-01',
+        statusColor: '#e0a96d',
+        isLocked: true,
+        unlockRequirement: 'Для работы с кольцевыми картами погоды и нанесения планшетов необходимо подтвердить навык базовой дешифровки сводок КН-01.',
         textureKey: 'bld-cartography',
         specs: [
           { label: 'Картографическая проекция:', value: 'Полярная стереографическая проекция (М 1:2 500 000, 1:5 000 000)' },
@@ -749,31 +814,34 @@ export class HubScene extends Phaser.Scene {
           { label: 'Аналитические дисциплины:', value: 'Барический анализ, поле давления, приведение изобар, фронтогенез' },
           { label: 'Оперативный статус:', value: 'Аттестационный тренажер наблюдателей и дежурных инженеров-синоптиков' },
         ],
-        primaryActionLabel: 'ПЕРЕЙТИ К АНАЛИЗУ КАРТ →',
+        primaryActionLabel: 'НАЧАТЬ С ДЕШИФРОВКИ КН-01 →',
         onPrimaryAction: () => this.startShift(),
       },
       'synoptic-center': {
         id: 'synoptic-center',
         title: 'ОПЕРАТИВНЫЙ ЗАЛ СИНОПТИЧЕСКОГО АНАЛИЗА',
         subtitle: 'Центральный рабочий терминал дежурной смены станции 26063',
-        status: '● ДЕЖУРНАЯ СМЕНА ОТКРЫТА',
-        statusColor: '#f1c75b',
+        status: '● ДЕЖУРНАЯ СМЕНА ОТКРЫТА · ДОСТУП РАЗРЕШЁН',
+        statusColor: '#5db489',
+        isLocked: false,
         textureKey: 'bld-synoptic',
         specs: [
           { label: 'Телеграфная сеть:', value: 'Приём сводок КН-01 SYNOP каждые 3 ч (00, 03, 06… UTC)' },
-          { label: 'Картографический комплекс:', value: 'Кольцевые карты погоды М 1:2 500 000, АТ-850, АТ-500' },
+          { label: 'Учебная задача:', value: 'Первичная дешифровка сводки КН-01 (температура, точка росы, давление станции, барическая тенденция)' },
           { label: 'Методический профиль:', value: 'Российская синоптическая школа (РД 52.27.759-2011)' },
           { label: 'Оперативные задачи:', value: 'Дешифровка КН-01, барический анализ, проведение изобар, фронтогенез' },
         ],
-        primaryActionLabel: 'ПРИСТУПИТЬ К СМЕНЕ →',
+        primaryActionLabel: 'ПРИСТУПИТЬ К СМЕНЕ КН-01 →',
         onPrimaryAction: () => this.startShift(),
       },
       aerology: {
         id: 'aerology',
         title: 'АЭРОЛОГИЧЕСКИЙ ПАВИЛЬОН',
         subtitle: 'Лаборатория зондирования свободной атмосферы',
-        status: '● ПОДГОТОВКА ЗОНДА К СРОКУ 00 UTC',
-        statusColor: '#f1c75b',
+        status: '🔒 ДОСТУП ЗАБЛОКИРОВАН · 3 УРОВЕНЬ',
+        statusColor: '#e0a96d',
+        isLocked: true,
+        unlockRequirement: 'Лаборатория зондирования свободной атмосферы доступна с 3-го уровня допуска после освоения приземного синоптического анализа.',
         textureKey: 'bld-aerology',
         specs: [
           { label: 'Комплекс аппаратуры:', value: 'Радиозонд АК-2, водородная газогенераторная станция' },
@@ -781,47 +849,42 @@ export class HubScene extends Phaser.Scene {
           { label: 'Высота подъёма:', value: 'до 32 000 м (нижняя и средняя стратосфера)' },
           { label: 'Аэрологическая диаграмма:', value: 'Расчёт уровней конденсации, конвекции и энергии неустойчивости' },
         ],
-        primaryActionLabel: 'ВЫПУСК РАДИОЗОНДА',
-        onPrimaryAction: () => {
-          worldAudio.play('audio.interact.balloon-release');
-          this.showNotice('Зонд АК-2 запущен: высота подъёма 28.4 км, тропопауза на уровне 220 гПа (-56.2°C).');
-        },
+        primaryActionLabel: 'НАЧАТЬ С ДЕШИФРОВКИ КН-01 →',
+        onPrimaryAction: () => this.startShift(),
       },
       archive: {
         id: 'archive',
         title: 'НАУЧНО-ИСТОРИЧЕСКИЙ АРХИВ',
         subtitle: 'Хранилище приземных журналов и исторических синоптических планшетов',
-        status: '● ФОНД ОТКРЫТ ДЛЯ ИССЛЕДОВАНИЙ',
-        statusColor: '#5db489',
+        status: '🔒 ДОСТУП ЗАБЛОКИРОВАН · ТРЕБУЕТСЯ КН-01',
+        statusColor: '#e0a96d',
+        isLocked: true,
+        unlockRequirement: 'Доступ к научно-историческим фондам и журналам наблюдений открывается после завершения первой дежурной смены по коду КН-01.',
         textureKey: 'bld-archive',
         specs: [
           { label: 'Фонд наблюдений:', value: 'Журналы погоды КМ-1 с 1950 года, микрофиши, карты погоды' },
           { label: 'Эталонные архивы:', value: 'Исторические ураганы, наводнения Санкт-Петербурга, блокирующие антициклоны' },
           { label: 'Учебные планшеты:', value: 'Интерактивные тренировочные схемы нанесения станций' },
         ],
-        primaryActionLabel: 'ВОЙТИ В АРХИВ →',
-        onPrimaryAction: () => {
-          this.closeModal();
-          this.scene.start('archive');
-        },
+        primaryActionLabel: 'НАЧАТЬ С ДЕШИФРОВКИ КН-01 →',
+        onPrimaryAction: () => this.startShift(),
       },
       'tournament-hall': {
         id: 'tournament-hall',
         title: 'ТУРНИРНЫЙ ЗАЛ СИНОПТИЧЕСКИХ ДУЭЛЕЙ',
         subtitle: 'Арена соревнований, квалификационных зачётов и блиц-дешифровки',
-        status: '● КВАЛИФИКАЦИОННЫЙ РЕЖИМ',
-        statusColor: '#75a6e8',
+        status: '🔒 ДОСТУП ЗАБЛОКИРОВАН · ЗАЧЁТ КН-01',
+        statusColor: '#e0a96d',
+        isLocked: true,
+        unlockRequirement: 'Арена турниров и синоптических дуэлей открывается для квалифицированных наблюдателей после сдачи стартового экзамена по коду КН-01.',
         textureKey: 'bld-tournament',
         specs: [
           { label: 'Дисциплины:', value: 'Синхронный блиц КН-01, поиск ошибок нанесения, барический анализ' },
           { label: 'Рейтинговая шкала:', value: 'Квалификация наблюдателя 1-3 класса, звание старшего синоптика' },
           { label: 'Проверка ответов:', value: 'Строгая серверная авторитетность без раскрытия эталона' },
         ],
-        primaryActionLabel: 'РЕГЛАМЕНТ АРЕНЫ',
-        onPrimaryAction: () => {
-          worldAudio.play('audio.ui.click-soft');
-          this.showNotice('Арена соревнований доступна со 2-го уровня допуска после сдачи дежурной смены.');
-        },
+        primaryActionLabel: 'НАЧАТЬ С ДЕШИФРОВКИ КН-01 →',
+        onPrimaryAction: () => this.startShift(),
       },
     };
 
@@ -944,22 +1007,53 @@ export class HubScene extends Phaser.Scene {
       specsContainer,
     ];
 
+    // Unlock requirement callout box if locked
+    if (dossier.isLocked && dossier.unlockRequirement) {
+      const lockBoxW = cardW - 280;
+      const lockBoxBg = this.add
+        .rectangle(cardW / 2 - lockBoxW / 2 - 20, cardH / 2 - 82, lockBoxW, 46, 0x221508, 0.96)
+        .setStrokeStyle(1.5, 0xe0a96d, 0.95);
+
+      const lockTitle = this.add
+        .text(-cardW / 2 + 270, cardH / 2 - 99, '🔒 ТРЕБОВАНИЕ ДЛЯ РАЗБЛОКИРОВКИ:', {
+          fontFamily: 'monospace, monospace',
+          fontSize: '9px',
+          fontStyle: 'bold',
+          color: '#f1c75b',
+        });
+
+      const lockDesc = this.add
+        .text(-cardW / 2 + 270, cardH / 2 - 84, dossier.unlockRequirement, {
+          fontFamily: 'Inter, system-ui, sans-serif',
+          fontSize: '9px',
+          color: '#f9ecd0',
+          wordWrap: { width: lockBoxW - 20 },
+        });
+
+      elements.push(lockBoxBg, lockTitle, lockDesc);
+    }
+
     if (dossier.primaryActionLabel && dossier.onPrimaryAction) {
+      const isLocked = dossier.isLocked;
+      const btnBgColor = isLocked ? 0x3d240d : 0x1c4d36;
+      const btnHoverColor = isLocked ? 0x5a3514 : 0x276b4a;
+      const btnStrokeColor = isLocked ? 0xf1a545 : 0x5db489;
+
       const btnBg = this.add
-        .rectangle(0, cardH / 2 - 32, 240, 34, 0x1c4d36, 1)
-        .setStrokeStyle(1.5, 0x5db489)
+        .rectangle(0, cardH / 2 - 32, 270, 34, btnBgColor, 1)
+        .setStrokeStyle(1.5, btnStrokeColor)
         .setInteractive({ useHandCursor: true });
       const btnText = this.add
         .text(0, cardH / 2 - 32, dossier.primaryActionLabel, {
           fontFamily: 'monospace, monospace',
-          fontSize: '12px',
+          fontSize: '11px',
           fontStyle: 'bold',
           color: '#e6faef',
         })
         .setOrigin(0.5);
 
-      btnBg.on('pointerover', () => btnBg.setFillStyle(0x276b4a, 1));
-      btnBg.on('pointerout', () => btnBg.setFillStyle(0x1c4d36, 1));
+      btnBg.on('pointerover', () => btnBg.setFillStyle(btnHoverColor, 1));
+      btnBg.on('pointerout', () => btnBg.setFillStyle(btnBgColor, 1));
       btnBg.on('pointerdown', () => {
         this.closeModal();
         dossier.onPrimaryAction?.();
