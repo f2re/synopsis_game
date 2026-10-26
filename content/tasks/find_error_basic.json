@@ -1,0 +1,55 @@
+{
+  "schema_version": "0.1.0",
+  "tasks": [
+    {
+      "id": "find_error_td_gt_t_001",
+      "topic": "observation_quality_control",
+      "skills": ["observation_qc_t_td"],
+      "type": "findError",
+      "difficulty": 3,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "question": "Найдите станцию, где нарушено физическое условие Td ≤ T.",
+      "payload": {
+        "profile": "RUS_SURFACE_STATION_V1",
+        "rule": "Для одной и той же воздушной массы и одного срока точка росы Td не должна превышать температуру воздуха T. В этом учебном наборе нарушение сделано заведомо крупным и не связано с округлением.",
+        "canvas": {"width": 1000, "height": 1000},
+        "stations": [
+          {"id": "qc_a", "name": "А", "x": 145, "y": 260},
+          {"id": "qc_b", "name": "Б", "x": 385, "y": 220},
+          {"id": "qc_c", "name": "В", "x": 625, "y": 275},
+          {"id": "qc_d", "name": "Г", "x": 865, "y": 235},
+          {"id": "qc_e", "name": "Д", "x": 165, "y": 710},
+          {"id": "qc_f", "name": "Е", "x": 405, "y": 665},
+          {"id": "qc_g", "name": "Ж", "x": 645, "y": 725},
+          {"id": "qc_h", "name": "З", "x": 865, "y": 680}
+        ],
+        "observations": [
+          {"id": "qc_a_t", "stationId": "qc_a", "field": "T", "label": "А · T", "value": "+14,2 °C", "display": "14,2", "numericValue": 14.2},
+          {"id": "qc_a_td", "stationId": "qc_a", "field": "Td", "label": "А · Td", "value": "+8,6 °C", "display": "8,6", "numericValue": 8.6},
+          {"id": "qc_b_t", "stationId": "qc_b", "field": "T", "label": "Б · T", "value": "+11,5 °C", "display": "11,5", "numericValue": 11.5},
+          {"id": "qc_b_td", "stationId": "qc_b", "field": "Td", "label": "Б · Td", "value": "+9,1 °C", "display": "9,1", "numericValue": 9.1},
+          {"id": "qc_c_t", "stationId": "qc_c", "field": "T", "label": "В · T", "value": "+7,3 °C", "display": "7,3", "numericValue": 7.3},
+          {"id": "qc_c_td", "stationId": "qc_c", "field": "Td", "label": "В · Td", "value": "+5,0 °C", "display": "5,0", "numericValue": 5.0},
+          {"id": "qc_d_t", "stationId": "qc_d", "field": "T", "label": "Г · T", "value": "+3,8 °C", "display": "3,8", "numericValue": 3.8},
+          {"id": "qc_d_td", "stationId": "qc_d", "field": "Td", "label": "Г · Td", "value": "+1,2 °C", "display": "1,2", "numericValue": 1.2},
+          {"id": "qc_e_t", "stationId": "qc_e", "field": "T", "label": "Д · T", "value": "+16,0 °C", "display": "16,0", "numericValue": 16.0},
+          {"id": "qc_e_td", "stationId": "qc_e", "field": "Td", "label": "Д · Td", "value": "+10,4 °C", "display": "10,4", "numericValue": 10.4},
+          {"id": "qc_f_t", "stationId": "qc_f", "field": "T", "label": "Е · T", "value": "+7,0 °C", "display": "7,0", "numericValue": 7.0},
+          {"id": "qc_f_td", "stationId": "qc_f", "field": "Td", "label": "Е · Td", "value": "+11,2 °C", "display": "11,2", "numericValue": 11.2},
+          {"id": "qc_g_t", "stationId": "qc_g", "field": "T", "label": "Ж · T", "value": "+6,4 °C", "display": "6,4", "numericValue": 6.4},
+          {"id": "qc_g_td", "stationId": "qc_g", "field": "Td", "label": "Ж · Td", "value": "+2,9 °C", "display": "2,9", "numericValue": 2.9},
+          {"id": "qc_h_t", "stationId": "qc_h", "field": "T", "label": "З · T", "value": "+1,6 °C", "display": "1,6", "numericValue": 1.6},
+          {"id": "qc_h_td", "stationId": "qc_h", "field": "Td", "label": "З · Td", "value": "−1,3 °C", "display": "−1,3", "numericValue": -1.3}
+        ]
+      },
+      "answer": {"kind": "station_id", "value": "qc_f"},
+      "sources": [
+        {"source_id": "ZVEREV_1977", "locator": "раздел о характеристиках влажности воздуха; точный локатор уточняется при независимой методической приёмке"}
+      ],
+      "explanation": "У станции Е указано T = +7,0 °C и Td = +11,2 °C. Точка росы не может быть выше фактической температуры воздуха для одного и того же состояния воздушной массы: при охлаждении насыщение достигается не выше исходной температуры. Разница 4,2 °C введена намеренно, чтобы исключить пограничный случай измерительной погрешности или округления.",
+      "principle_tags": ["observation_qc", "temperature", "dew_point", "physical_consistency"],
+      "review": {"source_checked": false, "method_reviewed": false, "publication_allowed": false}
+    }
+  ]
+}
