@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.3.0",
+  "schema_version": "0.4.0",
   "skills": [
     {
       "id": "kn01_temperature_decode",
@@ -50,6 +50,11 @@
       "id": "observation_qc_t_td",
       "module_id": "MET-03",
       "name": "Физический контроль согласованности температуры воздуха T и точки росы Td"
+    },
+    {
+      "id": "primary_analysis_dependencies",
+      "module_id": "MET-04",
+      "name": "Зависимости операций первичного синоптического анализа"
     }
   ]
 }
