@@ -10,7 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@synopsis/world-engine": "workspace:*",
+    "@synopsis/world-engine": "file:../../packages/world-engine",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
