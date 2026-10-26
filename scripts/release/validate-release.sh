@@ -8,7 +8,7 @@ test -f "$ROOT/VERSION"
 test -f "$ROOT/manifest.json"
 test -x "$ROOT/runtime/node/bin/node"
 test -f "$ROOT/web/index.html"
-test -f "$ROOT/server/server.mjs"
+test -f "$ROOT/server/index.js"
 test -f "$ROOT/deploy/scripts/update.py"
 python3 - "$ROOT" <<'PY'
 import hashlib, json, sys
@@ -21,12 +21,14 @@ for rel, expected in manifest.get('files',{}).items():
     if actual!=expected: raise SystemExit('manifest SHA mismatch: %s' % rel)
 print('Manifest hashes OK:',len(manifest.get('files',{})))
 PY
-"$ROOT/runtime/node/bin/node" "$ROOT/server/server.mjs" >"$TMP/server.log" 2>&1 & PID=$!
+SYNOPSIS_VERSION_FILE="$ROOT/VERSION" SYNOPSIS_IDENTITY_STORE="$TMP/identity.json" API_BIND=127.0.0.1 API_PORT=4174 \
+  "$ROOT/runtime/node/bin/node" "$ROOT/server/index.js" >"$TMP/server.log" 2>&1 & PID=$!
 trap 'kill $PID 2>/dev/null || true; rm -rf "$TMP"' EXIT
 for _ in $(seq 1 20); do
   if curl -fsS http://127.0.0.1:4174/ready >/dev/null; then break; fi
   sleep 0.25
 done
 curl -fsS http://127.0.0.1:4174/ready >/dev/null
+curl -fsS http://127.0.0.1:4174/api/identity/groups >/dev/null
 kill "$PID"; wait "$PID" 2>/dev/null || true
 echo "Release archive OK: $ARCHIVE"

@@ -1,7 +1,7 @@
 {
   "name": "synopsis-game",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packageManager": "pnpm@10.34.8",
   "workspaces": ["apps/*", "packages/*", "tools/*"],
   "engines": {
@@ -9,9 +9,14 @@
   },
   "scripts": {
     "bootstrap:web": "pnpm -C apps/web install --ignore-workspace --frozen-lockfile",
+    "bootstrap:server": "pnpm -C apps/server install --ignore-workspace --frozen-lockfile",
+    "bootstrap": "pnpm bootstrap:server && pnpm bootstrap:web",
     "dev": "pnpm -C apps/web dev",
-    "build": "pnpm -C apps/web build",
-    "typecheck": "pnpm -C apps/web typecheck",
+    "dev:web": "pnpm -C apps/web dev",
+    "dev:server": "pnpm -C apps/server dev",
+    "build": "pnpm -C apps/server build && pnpm -C apps/web build",
+    "typecheck": "pnpm -C apps/server typecheck && pnpm -C apps/web typecheck",
+    "test:server": "pnpm -C apps/server test",
     "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check",
     "world:typecheck": "pnpm --filter @synopsis/world-engine typecheck"
   }
