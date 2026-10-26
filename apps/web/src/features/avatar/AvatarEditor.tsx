@@ -522,6 +522,10 @@ export function AvatarEditor({
                 </button>
               </div>
 
+              <span className="stage-shortcut-hint">
+                ← / → или A / D — поворот • Пробел — шаг
+              </span>
+
               {/* Animation Cadence Toggles */}
               <div className="stage-anim-bar">
                 <span className="stage-anim-label">Режим:</span>

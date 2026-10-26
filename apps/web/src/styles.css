@@ -1105,6 +1105,13 @@ button:focus-visible, .primary-button:focus-visible, .secondary-button:focus-vis
   box-shadow: 0 0 8px rgba(242, 199, 92, 0.4);
 }
 
+.stage-shortcut-hint {
+  font-size: 10px;
+  color: #6d8a84;
+  margin-top: 6px;
+  text-align: center;
+}
+
 /* Переключатель режима анимации */
 .stage-anim-bar {
   display: flex;
