@@ -1,0 +1,197 @@
+.station-plot-workspace {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(320px, 1.7fr);
+  gap: 20px;
+  margin-top: 18px;
+}
+
+.station-observations {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.station-observation {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  text-align: left;
+  border: 1px solid rgba(69, 89, 107, 0.3);
+  border-radius: 12px;
+  background: rgba(248, 251, 252, 0.92);
+  color: #20303d;
+  cursor: pointer;
+}
+
+.station-observation span {
+  font-size: 12px;
+  color: #60727f;
+}
+
+.station-observation strong {
+  font-size: 15px;
+}
+
+.station-observation.is-selected {
+  outline: 2px solid rgba(46, 115, 150, 0.38);
+  border-color: #2e7396;
+}
+
+.station-observation.is-placed {
+  background: rgba(235, 245, 238, 0.95);
+}
+
+.station-observation i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(53, 72, 84, 0.08);
+  font-style: normal;
+}
+
+.station-plot-panel {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(69, 89, 107, 0.24);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(252, 253, 252, 0.98), rgba(239, 244, 245, 0.98));
+}
+
+.station-plot-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #6b7a83;
+}
+
+.station-plot-caption strong {
+  color: #263842;
+  font-size: 14px;
+}
+
+.station-plot-svg {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background:
+    linear-gradient(rgba(72, 98, 111, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(72, 98, 111, 0.06) 1px, transparent 1px),
+    #fbfcfb;
+  background-size: 50px 50px;
+}
+
+.station-center {
+  fill: #fff;
+  stroke: #2d3d46;
+  stroke-width: 9;
+}
+
+.station-center-dot {
+  fill: #2d3d46;
+}
+
+.station-slot {
+  cursor: pointer;
+}
+
+.station-slot-hit {
+  fill: rgba(77, 112, 130, 0.03);
+  stroke: rgba(77, 112, 130, 0.35);
+  stroke-width: 4;
+  stroke-dasharray: 14 10;
+  transition: fill 120ms ease, stroke 120ms ease;
+}
+
+.station-slot:hover .station-slot-hit,
+.station-slot:focus .station-slot-hit {
+  fill: rgba(46, 115, 150, 0.08);
+  stroke: #2e7396;
+}
+
+.station-slot.is-filled .station-slot-hit {
+  fill: rgba(255, 255, 255, 0.84);
+  stroke-dasharray: none;
+}
+
+.station-slot.is-correct .station-slot-hit {
+  fill: rgba(77, 153, 95, 0.12);
+  stroke: #4d995f;
+}
+
+.station-slot.is-wrong .station-slot-hit {
+  fill: rgba(186, 73, 67, 0.1);
+  stroke: #ba4943;
+}
+
+.station-slot.is-expected .station-slot-hit {
+  fill: rgba(200, 151, 47, 0.12);
+  stroke: #c8972f;
+}
+
+.station-slot-text {
+  fill: #1f3039;
+  font: 700 46px/1 system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.wind-hit {
+  fill: transparent;
+}
+
+.station-wind-line {
+  stroke: #273941;
+  stroke-width: 10;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.station-wind-end {
+  fill: #273941;
+  pointer-events: none;
+}
+
+.station-wind-speed {
+  fill: #263842;
+  font: 700 32px/1 system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.station-plot-hint {
+  margin: 8px 4px 0;
+  color: #677984;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .station-plot-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .station-observations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .station-plot-svg {
+    max-height: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .station-observations {
+    grid-template-columns: 1fr;
+  }
+}
