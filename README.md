@@ -70,14 +70,14 @@
 - [Руководство по пиксельной графике](docs/design/PIXEL_ART_STYLE_GUIDE.md)
 - [Конвейер пиксельной графики](docs/design/PIXEL_ASSET_PIPELINE.md)
 - [Система живого мира](docs/design/LIVING_WORLD_SYSTEM.md)
-- [Phaser/WebGL runtime и ресурсы](docs/architecture/GAME_RUNTIME_AND_ASSETS.md)
+- [Phaser/WebGL: рабочий контур и ресурсы](docs/architecture/GAME_RUNTIME_AND_ASSETS.md)
 - [Эталонные экраны](design/pixel-art/README.md)
 
 ### Зафиксированный графический стек
 
 Живой игровой мир работает в **Phaser 4 / WebGL**, встроенном внутрь React-приложения. Phaser отвечает за сцены, спрайты, камеры, tweens, частицы, фильтры/шейдеры и покадровый цикл. React остаётся оболочкой приложения и обычного интерфейса. Профессиональная метеорологическая карта остаётся отдельным `map-engine` на SVG/Canvas.
 
-Пиксельный production pipeline:
+Производственный конвейер пиксельной графики:
 
 ```text
 Aseprite / Pixelorama
@@ -95,7 +95,7 @@ assets/generated
 Phaser / WebGL
 ```
 
-Версии инструментов фиксируются в [`config/art-toolchain.yaml`](config/art-toolchain.yaml). Сгенерированные атласы и runtime-ресурсы вручную не исправляются: меняется исходник или конвейер, затем выполняется повторная сборка.
+Версии инструментов фиксируются в [`config/art-toolchain.yaml`](config/art-toolchain.yaml). Сгенерированные атласы и игровые ресурсы вручную не исправляются: меняется исходник или конвейер, затем выполняется повторная сборка.
 
 ---
 
@@ -275,7 +275,7 @@ packages/
 ├── game-rules/          # игровые правила
 ├── realtime-protocol/   # сетевой протокол
 ├── broadcast-selector/  # выбор сцены большого экрана
-├── world-engine/        # Phaser 4 / WebGL runtime живого мира
+├── world-engine/        # Phaser 4 / WebGL, живой мир
 ├── identity/            # пользователи и сессии
 ├── rewards/             # достижения и предметы
 ├── map-engine/          # профессиональная карта SVG/Canvas
@@ -288,12 +288,12 @@ assets/
 ├── manifests/           # ID, pivots, animation tags, provenance
 └── generated/           # сборочные атласы/текстуры/JSON
 
-tools/assets/            # sprite-tools + AssetPack pipeline
+tools/assets/            # sprite-tools + AssetPack
 ```
 
 Ключевое правило: **метеорологическое знание, приём данных, игровой баланс, пользователи, визуальный мир и сетевое взаимодействие разделены на самостоятельные модули**. Phaser не становится источником предметной логики или правильного ответа.
 
-Подробнее: [Архитектура проекта](docs/architecture/README.md) и [игровой runtime и ресурсы](docs/architecture/GAME_RUNTIME_AND_ASSETS.md).
+Подробнее: [Архитектура проекта](docs/architecture/README.md) и [игровой рабочий контур и ресурсы](docs/architecture/GAME_RUNTIME_AND_ASSETS.md).
 
 ---
 
@@ -319,7 +319,7 @@ tools/assets/            # sprite-tools + AssetPack pipeline
 - [`AGENTS.md`](AGENTS.md) — общий договор работы агентов;
 - [`agents/registry.yaml`](agents/registry.yaml) — реестр ролей и ответственности;
 - [`agents/tasks/FOUNDATION_OWNERSHIP.md`](agents/tasks/FOUNDATION_OWNERSHIP.md) — распределение текущих задач;
-- [`docs/roadmap/PIXEL_RUNTIME_EPICS.md`](docs/roadmap/PIXEL_RUNTIME_EPICS.md) — задачи Phaser/WebGL и asset pipeline;
+- [`docs/roadmap/PIXEL_RUNTIME_EPICS.md`](docs/roadmap/PIXEL_RUNTIME_EPICS.md) — задачи Phaser/WebGL и конвейера ресурсов;
 - [`docs/agents/MULTI_AGENT_DEVELOPMENT.md`](docs/agents/MULTI_AGENT_DEVELOPMENT.md) — описание системы;
 - [`ADR-0003`](docs/decisions/ADR-0003-multi-agent-development-governance.md) — многоагентное управление;
 - [`ADR-0004`](docs/decisions/ADR-0004-phaser-webgl-pixel-asset-pipeline.md) — Phaser/WebGL и производственный конвейер графики.
@@ -388,7 +388,7 @@ tools/assets/            # sprite-tools + AssetPack pipeline
 ## Текущее состояние
 
 **Сейчас:** архитектура Phaser/WebGL и производственный конвейер пиксельной графики зафиксированы; проект остаётся на этапе подготовки первого рабочего среза.  
-**Следующий этап:** реализовать `ENGINE-001…005` и `ASSET-001…006`, затем первый работающий живой центр поверх этого runtime вместе с закрытым списком пользователей, КН-01, автономным матчем 1×1 и большим экраном.  
+**Следующий этап:** реализовать `ENGINE-001…005` и `ASSET-001…006`, затем первый работающий живой центр поверх этого рабочего контура вместе с закрытым списком пользователей, КН-01, автономным матчем 1×1 и большим экраном.  
 **Лицензия:** пока не выбрана.
 
 ---
