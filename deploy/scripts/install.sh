@@ -54,6 +54,7 @@ DEFAULTS=/opt/synopsis-game/current/deploy/config/defaults.env
 if [[ ! -f /etc/synopsis-game/app.env ]]; then install -m 0640 -o root -g synopsis-game "$DEFAULTS" /etc/synopsis-game/app.env; fi
 CONFIG_FILE=/etc/synopsis-game/app.env DEFAULTS_FILE="$DEFAULTS" /bin/bash /opt/synopsis-game/current/deploy/scripts/configure.sh
 WEB_SERVER=$(sed -n 's/^WEB_SERVER=//p' /etc/synopsis-game/app.env | tail -n1)
+DATABASE_KIND=$(sed -n 's/^DATABASE_KIND=//p' /etc/synopsis-game/app.env | tail -n1)
 if [[ "$IS_DEBIAN" == 1 ]]; then
   case "$WEB_SERVER" in
     nginx) apt-get install -y nginx ;;
@@ -61,6 +62,7 @@ if [[ "$IS_DEBIAN" == 1 ]]; then
     none) : ;;
     *) echo "WEB_SERVER должен быть nginx/apache/none" >&2; exit 2 ;;
   esac
+  if [[ "$DATABASE_KIND" == postgres ]]; then apt-get install -y postgresql-client; fi
 fi
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game.service /etc/systemd/system/synopsis-game.service
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game-update.service /etc/systemd/system/synopsis-game-update.service
