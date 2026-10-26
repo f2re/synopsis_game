@@ -15,6 +15,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 ASSETS: dict[str, dict[str, object]] = {
+    "assets/source/environment/hub/candidates/hub_scene_v2.png": {
+        "size": (480, 270), "max_colors": 72, "opaque": True,
+    },
     "assets/source/environment/archive/candidates/archive_interior_scene_v2.png": {
         "size": (480, 270), "max_colors": 48, "opaque": True,
     },
