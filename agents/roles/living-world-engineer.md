@@ -1,21 +1,13 @@
 # Agent: living-world-engineer
 
-**Mission:** implement the layered living hub: time/season state, parallax, ambient loops, interactables and discoveries.
+**Mission:** implement the state and behaviour of the layered living hub: time/season state, parallax intent, ambient schedules, interactables and discoveries.
 
 **Preferred provider:** Codex; fallback Gemini/Antigravity.
 
-Owns `WORLD-*` and future `world-engine` code.
+Owns `WORLD-*` semantics and world-state logic. Uses primitives supplied by `game-runtime-webgl-engineer`; does not own Phaser renderer internals.
 
-Requirements:
+Requirements: derive phase from configured location/date/time; deterministic/pseudorandom event schedules from seed/state; layer model L0–L8; density profiles `hub-rich`, `study-calm`, `battle-focus`, `projector-attract`, `reduced-motion`; discrete state machines for fauna/NPC/interactables; persistence across navigation/reconnect; no decorative state may modify task observations.
 
-- phase state derived from configurable world location/date/time;
-- deterministic/pseudorandom event schedules from seed/state, not per-frame server traffic;
-- layer system for sky/clouds/distant city/campus/vegetation/NPC/animals/interactables;
-- density profiles `hub-rich`, `study-calm`, `battle-focus`, `projector-attract`, `reduced-motion`;
-- click/tap interactions for birds, squirrel, radar, balloon, archive window, globe/fountain and future discoverables;
-- graceful persistence across navigation/reconnect;
-- no decorative state may modify task observations.
+Assets come from the validated pipeline and semantic asset IDs, never hardcoded generated atlas coordinates.
 
-Implementation should prefer sprites, transforms, Canvas/SVG and masks over giant animated video backgrounds.
-
-Required reviewers: `art-director`, `web-performance-engineer`, `ux-accessibility-reviewer`.
+Required reviewers: `art-director`, `game-runtime-webgl-engineer`, `web-performance-engineer`, `ux-accessibility-reviewer`.

@@ -1,81 +1,42 @@
 # AGENTS.md — Synoptic Center multi-agent operating contract
 
-This repository is developed as a coordinated multi-agent project. Read this file before editing anything, then read `agents/registry.yaml` and the role card for the task you are performing.
+Read this file, `agents/registry.yaml`, the role card and task-specific docs before editing.
 
 ## Product invariants
-
-1. The game follows the Russian synoptic meteorology school and versioned method profiles. Never invent a meteorological answer from general model knowledge when a source-backed rule is required.
+1. Russian synoptic meteorology and versioned source-backed method profiles define educational truth.
 2. Educational truth, game balance, UI, realtime protocol and visual style are separate layers.
-3. The server is authoritative for answers, match state, rating and rewards.
-4. Ranked must not become pay/grind-to-win.
-5. The hub is a living layered world; the active task remains visually dominant during learning.
-6. Live KN-01 data are untrusted input and must pass versioned parsing, QC and snapshotting before gameplay.
-7. No public self-registration. Roster and access rules follow `docs/accounts/ROSTER_LOGIN_AND_ACCESS.md`.
-8. Pixel-art direction follows `docs/design/PIXEL_ART_STYLE_GUIDE.md` and `docs/design/LIVING_WORLD_SYSTEM.md`.
+3. Server is authoritative for answers, match state, rating and rewards.
+4. The hub is a layered living world; the active task remains visually dominant.
+5. Pixel-art direction follows `docs/design/PIXEL_ART_STYLE_GUIDE.md`; production assets follow `docs/design/PIXEL_ASSET_PIPELINE.md`.
+6. Phaser 4 is the accepted browser game runtime for the living world; React remains the application/UI shell and `map-engine` remains a separate professional SVG/Canvas subsystem.
+7. Generated assets are build products and must never be hand-edited.
+8. No public self-registration; live KN-01 input is untrusted and versioned/QC-gated.
 
-## Mandatory source documents
-
+## Mandatory sources
 - `docs/00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md`
 - `docs/01_RUSSIAN_SYNOPIC_SCHOOL.md`
 - `docs/09_SOURCE_POLICY.md`
 - `docs/architecture/README.md`
+- `docs/architecture/GAME_RUNTIME_AND_ASSETS.md`
+- `docs/design/PIXEL_ASSET_PIPELINE.md`
 - `docs/testing/QUALITY_GATES.md`
-- domain-specific docs referenced by `agents/registry.yaml`
+- `config/art-toolchain.yaml` for visual/runtime tooling
 
-## Agent routing
+## Routing and review
+`agents/registry.yaml` is the role source of truth. One task has one implementation owner; self-approval is forbidden. Meteorology requires methodologist + verifier. Visual changes require Art Director. Phaser/WebGL changes are owned by `game-runtime-webgl-engineer` and independently reviewed by Web Performance. Asset-build changes are owned by `pixel-asset-pipeline-engineer`. Release acceptance belongs to Integration & Release.
 
-Use `agents/registry.yaml` as the source of truth for role ownership. One task has one implementation owner and one or more independent reviewers.
+## Pixel/runtime ownership
+- `pixel-asset-designer`: editable art only.
+- `pixel-asset-pipeline-engineer`: source→validated metadata→atlas/optimisation pipeline.
+- `game-runtime-webgl-engineer`: Phaser/WebGL runtime and React lifecycle boundary.
+- `living-world-engineer`: world behaviour/state atop runtime primitives.
+- `web-performance-engineer`: independent budgets/profiling/degradation review.
+- `art-director`: visual language and final visual acceptance.
 
-No agent may self-approve a gated change. In particular:
+Do not bypass semantic asset IDs by hardcoding generated atlas coordinates into world logic.
 
-- meteorological content requires independent methodology + verification review;
-- visual changes require Art Director review;
-- animation-heavy browser changes require Web Performance review;
-- auth/security changes require Security review;
-- release/integration is accepted by Integration & Release, not by the feature author.
-
-## Branch and handoff
-
-Recommended branch: `agent/<agent-id>/<task-id>-<slug>`.
-
-Every non-trivial handoff must state:
-
-- task ID and agent ID;
-- files changed;
-- assumptions;
-- tests/evidence;
-- unresolved risks;
-- required reviewer(s).
-
-Do not claim an agent, review or test ran unless there is an artifact, log, commit, PR review or explicit recorded result.
-
-## Meteorology acceptance
-
-For any change that alters a correct answer, terminology, sequence, symbol, KN-01 encoding/decoding, frontological rule, AT/OT interpretation or explanatory feedback:
-
-1. `meteo-methodologist-ru` establishes the source-backed interpretation and method profile.
-2. `meteo-verifier` independently reproduces/checks the result without relying on the implementer's conclusion.
-3. Machine-checkable rules are encoded in tests/fixtures where possible.
-4. Disagreement blocks Ranked/Exam publication and is recorded as a methodology issue or method-profile split.
-
-## Design acceptance
-
-The Art Director owns palette roles, composition hierarchy, sprite language, time-of-day tokens and scene coordinates/config. Professional meteorological colors are reserved and cannot be repurposed cosmetically.
-
-World time must be configurable through a `world_location` profile containing latitude, longitude and timezone. Day phase should be derived from date/time and solar state, with explicit demo overrides; never hardcode the developer's or user's physical location into assets.
-
-## Audio acceptance
-
-Ambient audio must be procedural/authored or sourced under an explicitly compatible license. Every third-party sound requires provenance: source URL, author, license, attribution requirement, local asset path and checksum. Never download or ship an asset of unknown rights.
-
-## Performance acceptance
-
-Animation and visual work must define budgets for desktop, classroom/projector and mid-range mobile. Reduced-motion is mandatory. Ambient effects may degrade gracefully but educational interaction may not.
+## Handoff
+Recommended branch: `agent/<agent-id>/<task-id>-<slug>`. Every non-trivial handoff records task/agent, files, assumptions, tests/evidence, risks and required reviewers. Do not claim a review/test ran without evidence.
 
 ## Provider adapters
-
-- Codex: this `AGENTS.md` is the repository-level instruction source.
-- Claude Code: read `CLAUDE.md`, which points to the same role registry.
-- Gemini / Antigravity: read `GEMINI.md` plus `.agents/rules/`, `.agents/workflows/` and `.agents/skills/`.
-
-Provider choice never changes acceptance criteria.
+Codex uses this file; Claude Code uses `CLAUDE.md`; Gemini/Antigravity uses `GEMINI.md` plus `.agents/`. Provider choice never changes acceptance criteria.

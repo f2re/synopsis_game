@@ -1,0 +1,14 @@
+{
+  "name": "@synopsis/assets-pipeline",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "assets:check": "sprite-tools --help",
+    "assets:build": "assetpack"
+  },
+  "devDependencies": {
+    "@assetpack/core": "1.7.0",
+    "@trebeljahr/sprite-tools": "0.1.0"
+  }
+}
