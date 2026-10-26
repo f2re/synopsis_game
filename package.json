@@ -7,6 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check"
+    "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check",
+    "world:typecheck": "pnpm --filter @synopsis/world-engine typecheck"
   }
 }

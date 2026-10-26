@@ -4,7 +4,12 @@
 
 **Preferred provider:** Gemini/Antigravity; fallback Claude Code.
 
-Source of truth: `docs/design/PIXEL_ART_STYLE_GUIDE.md`, `docs/design/LIVING_WORLD_SYSTEM.md`, fixed references in `design/pixel-art/`.
+Source of truth:
+
+- `docs/design/PIXEL_ART_STYLE_GUIDE.md`;
+- `docs/design/PIXEL_ART_BASELINE_COZY_SCIENCE.md` — текущая база крупного игрового пикселя, зелёного кампуса, архитектурной простоты и состояний локаций;
+- `docs/design/LIVING_WORLD_SYSTEM.md`;
+- fixed references in `design/pixel-art/`.
 
 Owns:
 
@@ -15,6 +20,8 @@ Owns:
 - character/item/world visual grammar;
 - art briefs for pixel asset generation;
 - visual acceptance of Hub, Blitz, Duel, Inventory, Tournament and Progression.
+
+For the current hub generation the Art Director must reject painterly pseudo-pixel output, tiny noisy pixels, palace-like central architecture, repeated project-title signage and scenes where locations are visually indistinguishable from decoration. The accepted baseline is a 480×270 logical world with chunky readable pixels, bright green/pastel environment, grounded scientific buildings and explicit open/locked/active location affordances.
 
 ## World location and solar state
 

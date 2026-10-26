@@ -1,22 +1,26 @@
-version: 1
+version: 2
 status: accepted-art-direction
 notes:
   - UI colors are separate from meteorological semantic colors.
   - Runtime may interpolate world lighting between phase tokens.
   - Accessibility variants may adjust luminance/contrast but not meteorological meaning.
+  - Hub baseline uses a 480x270 logical pixel grid and chunky readable color clusters.
 
 ui:
-  panel: "#0E1B36"
-  panel_elevated: "#14264A"
-  panel_border: "#36527D"
-  text_primary: "#F3F7FF"
-  text_secondary: "#B8C7E0"
-  primary_cta: "#F6B73C"
-  primary_cta_highlight: "#FFD978"
-  success: "#45D483"
-  warning: "#F0A646"
-  error: "#E95757"
-  focus: "#69B9FF"
+  panel: "#143F4C"
+  panel_elevated: "#1B5660"
+  panel_border: "#6F9E95"
+  text_primary: "#F7F3E8"
+  text_secondary: "#C9D9D2"
+  primary_cta: "#F2C75C"
+  primary_cta_highlight: "#FFDD83"
+  success: "#5FAF78"
+  warning: "#D89A52"
+  error: "#D65E5E"
+  focus: "#F0D476"
+  locked_panel: "#34465C"
+  disabled_panel: "#3C4857"
+  locked_text: "#C1CAD1"
 
 meteo:
   cold_front: "#2878D8"
@@ -33,65 +37,96 @@ meteo:
   note: "These values are semantic defaults; a method profile may define print/training variants. Cosmetics must not redefine them."
 
 world_base:
-  concrete: "#647087"
-  dark_stone: "#28354A"
-  vegetation_dark: "#173F3A"
-  vegetation_mid: "#2D6752"
-  warm_window: "#FFC864"
-  tungsten: "#FFB552"
-  water_dark: "#153D66"
+  sky_day: "#8EC9E5"
+  cloud_warm: "#F6F0E6"
+  mountain_far: "#9EB1CF"
+  mountain_mid: "#7F9ABC"
+  concrete: "#D7CDB5"
+  stone_mid: "#B7AA90"
+  dark_stone: "#4E5D62"
+  wood: "#8B6446"
+  wood_dark: "#5E4634"
+  vegetation_dark: "#365F4A"
+  vegetation_mid: "#5F8D5E"
+  vegetation_light: "#86AA6E"
+  blossom_pink: "#E7A4B5"
+  blossom_yellow: "#F1D06F"
+  warm_window: "#F4C56A"
+  tungsten: "#E9B35E"
+  water_dark: "#4E8BA3"
+  water_mid: "#6FB5C6"
+  water_light: "#A8D9DC"
+
+location_states:
+  available:
+    saturation_multiplier: 1.0
+    entrance_light_strength: 1.0
+    border: "#F2C75C"
+  active:
+    saturation_multiplier: 1.0
+    entrance_light_strength: 1.0
+    border: "#FFDD83"
+  locked:
+    saturation_multiplier: 0.68
+    entrance_light_strength: 0.15
+    border: "#AEB8C4"
+  disabled:
+    saturation_multiplier: 0.55
+    entrance_light_strength: 0.0
+    border: "#78818B"
 
 phases:
   dawn:
-    sky_top: "#243B72"
-    sky_horizon: "#E98A79"
-    ambient_tint: "#B58BA0"
-    shadow: "#33435F"
+    sky_top: "#6F99C8"
+    sky_horizon: "#E9A693"
+    ambient_tint: "#C6A3AA"
+    shadow: "#59697C"
     window_light_strength: 0.45
     lamp_strength: 0.20
-    stars_strength: 0.10
+    stars_strength: 0.05
   day:
-    sky_top: "#4B91C8"
-    sky_horizon: "#B9D8E8"
-    ambient_tint: "#D5E3E6"
-    shadow: "#536577"
-    window_light_strength: 0.05
+    sky_top: "#8EC9E5"
+    sky_horizon: "#D8ECF0"
+    ambient_tint: "#E7EEE8"
+    shadow: "#6F817E"
+    window_light_strength: 0.12
     lamp_strength: 0.00
     stars_strength: 0.00
   golden_hour:
-    sky_top: "#4B4C8B"
-    sky_horizon: "#F4A35F"
-    ambient_tint: "#C98F87"
-    shadow: "#3A4163"
+    sky_top: "#789AC8"
+    sky_horizon: "#F0B18B"
+    ambient_tint: "#D7AD98"
+    shadow: "#676B7F"
     window_light_strength: 0.55
     lamp_strength: 0.35
     stars_strength: 0.00
   civil_twilight:
-    sky_top: "#202C5D"
-    sky_horizon: "#A76B87"
-    ambient_tint: "#6C6689"
-    shadow: "#242D4A"
+    sky_top: "#58658F"
+    sky_horizon: "#C38FA1"
+    ambient_tint: "#87809A"
+    shadow: "#485064"
     window_light_strength: 0.80
     lamp_strength: 0.75
-    stars_strength: 0.35
+    stars_strength: 0.30
   night:
-    sky_top: "#08152F"
-    sky_horizon: "#182B50"
-    ambient_tint: "#344568"
-    shadow: "#111C32"
+    sky_top: "#263B5B"
+    sky_horizon: "#405A73"
+    ambient_tint: "#4C6070"
+    shadow: "#263642"
     window_light_strength: 1.00
     lamp_strength: 1.00
     stars_strength: 1.00
 
 fx:
-  reward_gold: "#F6B73C"
-  verified_green: "#45D483"
-  shield_cyan: "#52C4E8"
-  opponent_alert: "#EF665C"
-  combo_glow: "#FFD25A"
+  reward_gold: "#F2C75C"
+  verified_green: "#5FAF78"
+  shield_cyan: "#70BED0"
+  opponent_alert: "#D65E5E"
+  combo_glow: "#FFDD83"
 
 rules:
   - "Never use fx/opponent red to recolor a warm-front symbol."
   - "Never use decorative blue to alter cold-front geometry."
   - "World phase tokens may tint scenery; task/map semantic layers remain color-stable."
   - "Text may use non-pixel fonts when Cyrillic readability requires it."
+  - "Hub location state must be readable without relying on color alone."
