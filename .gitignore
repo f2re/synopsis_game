@@ -1,0 +1,7 @@
+node_modules/
+dist/
+apps/web/dist/
+apps/server/dist/
+apps/server/.local/
+*.log
+.DS_Store
