@@ -11,14 +11,21 @@ if [[ ${ID:-} != "astra" && ${ID_LIKE:-} != *debian* ]]; then
   exit 1
 fi
 
-packages=(ca-certificates curl python3 tar xz-utils)
+packages=()
+command -v curl >/dev/null || packages+=(curl)
+command -v python3 >/dev/null || packages+=(python3)
+command -v tar >/dev/null || packages+=(tar)
+command -v xz >/dev/null || packages+=(xz-utils)
+[[ -e /etc/ssl/certs/ca-certificates.crt ]] || packages+=(ca-certificates)
 case "$WEB_SERVER" in
-  nginx) packages+=(nginx) ;;
-  apache) packages+=(apache2) ;;
+  nginx) command -v nginx >/dev/null || packages+=(nginx) ;;
+  apache) command -v apache2ctl >/dev/null || packages+=(apache2) ;;
   none) : ;;
   *) echo "WEB_SERVER должен быть nginx, apache или none" >&2; exit 2 ;;
 esac
-if [[ "$DATABASE_KIND" == postgres ]]; then packages+=(postgresql-client); fi
+if [[ "$DATABASE_KIND" == postgres ]] && ! command -v pg_dump >/dev/null; then packages+=(postgresql-client); fi
 
-apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install -y "${packages[@]}"
+if [[ ${#packages[@]} -gt 0 ]]; then
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get install -y "${packages[@]}"
+fi
