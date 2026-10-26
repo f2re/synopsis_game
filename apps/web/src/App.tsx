@@ -24,25 +24,39 @@ function ArenaTvPlaceholder() {
 }
 
 function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
+  const [sessionMenuOpen, setSessionMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const toggleSessionMenu = () => setSessionMenuOpen((open) => !open);
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSessionMenuOpen(false);
+    };
+
+    window.addEventListener('hub:session-menu', toggleSessionMenu);
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      window.removeEventListener('hub:session-menu', toggleSessionMenu);
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, []);
+
   return (
     <main className="game-viewport" aria-label={GAME_TITLE}>
       <WorldCanvas />
-      <header className="game-user-overlay" aria-label="Профиль пользователя">
-        <div className="game-user-brand">
-          <span className="prototype-kicker">Прототип 0.2 · {GAME_MARK}</span>
-          <strong>{GAME_TITLE}</strong>
-        </div>
-        <div className="user-toolbar">
-          <AvatarPreview avatar={user.avatar} size={28} />
-          <div className="user-toolbar-name">
-            <strong>{user.displayName}</strong>
-            <span>{user.groupId}</span>
+      {sessionMenuOpen && (
+        <aside className="game-user-overlay game-session-menu" aria-label="Профиль пользователя">
+          <div className="user-toolbar">
+            <AvatarPreview avatar={user.avatar} size={32} />
+            <div className="user-toolbar-name">
+              <strong>{user.displayName}</strong>
+              <span>{user.groupId}</span>
+            </div>
+            <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
+            {user.roles.includes('admin') && <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>}
+            <button className="ghost-button" onClick={onLogout}>Выйти</button>
           </div>
-          <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
-          {user.roles.includes('admin') && <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>}
-          <button className="ghost-button" onClick={onLogout}>Выйти</button>
-        </div>
-      </header>
+        </aside>
+      )}
     </main>
   );
 }
