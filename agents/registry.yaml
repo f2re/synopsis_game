@@ -1,4 +1,4 @@
-version: 2
+version: 3
 project: synopsis_game
 policy:
   one_implementation_owner: true
@@ -62,8 +62,16 @@ agents:
     preferred_provider: antigravity-gemini
     fallback_provider: codex
     owns: [editable-sprites, characters, props, tiles, interactables]
-    reviewers: [art-director, pixel-asset-pipeline-engineer, web-performance-engineer]
+    reviewers: [pixel-art-quality-reviewer, art-director, pixel-asset-pipeline-engineer, web-performance-engineer]
     role_file: agents/roles/pixel-asset-designer.md
+
+  - id: pixel-art-quality-reviewer
+    title: Independent Pixel Art Quality Reviewer
+    preferred_provider: codex
+    fallback_provider: claude-code
+    owns: [pixel-grid, sprite-consistency, raster-validation, silhouette-and-cluster-review]
+    reviews: [SPRITE, ART-BATCH, ASSET-candidate]
+    role_file: agents/roles/pixel-art-quality-reviewer.md
 
   - id: pixel-asset-pipeline-engineer
     title: Pixel Asset Pipeline Engineer
@@ -157,7 +165,7 @@ acceptance_gates:
   meteorology:
     required: [meteo-methodologist-ru, meteo-verifier]
   art:
-    required: [art-director]
+    required: [pixel-art-quality-reviewer, art-director]
   game_runtime:
     required: [game-runtime-webgl-engineer, web-performance-engineer]
   asset_pipeline:
