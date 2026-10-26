@@ -61,7 +61,6 @@ export function AvatarEditor({ user, onSaved, onBack }: { user: SessionUser; onS
           <div>
             <span className="prototype-kicker">26063 · Персональный синоптик</span>
             <h1 id="avatar-title">Внешний вид</h1>
-            <div className="ui-compass-divider" aria-hidden="true" />
             <p className="muted">Базовые варианты доступны сразу и не дают игрового преимущества.</p>
           </div>
           <button className="secondary-button" onClick={onBack}>В центр</button>

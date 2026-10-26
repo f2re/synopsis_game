@@ -24,8 +24,7 @@ function ArenaTvPlaceholder() {
         <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 64, height: 64, marginBottom: 12 }} />
         <span>{GAME_MARK} · режим большого экрана</span>
         <h1 id="arena-title">Arena TV</h1>
-        <div className="ui-compass-divider" aria-hidden="true" />
-        <p>Публичный экран не получает список пользователей, коды входа или административные данные.</p>
+        <p style={{ marginTop: 12 }}>Публичный экран не получает список пользователей, коды входа или административные данные.</p>
         <button className="secondary-button" onClick={() => navigate('/')} style={{ marginTop: 16 }}>
           ← На главную
         </button>
