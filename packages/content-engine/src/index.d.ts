@@ -1,6 +1,6 @@
 export interface TaskDefinition {
   id: string;
-  type: 'decode' | 'numeric' | 'choice' | 'sequence' | 'stationPlot' | string;
+  type: 'decode' | 'numeric' | 'choice' | 'sequence' | 'stationPlot' | 'stationBoard' | string;
   difficulty?: number;
   question: string;
   payload?: Record<string, unknown> & { options?: string[] };
