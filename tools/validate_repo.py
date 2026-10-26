@@ -55,7 +55,7 @@ LANGUAGE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 def check_json() -> list[str]:
     errors: list[str] = []
     for path in ROOT.rglob("*.json"):
-        if ".git" in path.parts:
+        if ".git" in path.parts or "node_modules" in path.parts or ".codegraph" in path.parts:
             continue
         try:
             json.loads(path.read_text(encoding="utf-8"))
@@ -67,7 +67,7 @@ def check_json() -> list[str]:
 def check_markdown_links() -> list[str]:
     errors: list[str] = []
     for path in ROOT.rglob("*.md"):
-        if ".git" in path.parts:
+        if ".git" in path.parts or "node_modules" in path.parts or ".codegraph" in path.parts:
             continue
         text = path.read_text(encoding="utf-8")
         for target in MARKDOWN_LINK.findall(text):
