@@ -195,7 +195,7 @@ export class ShiftService {
   }
 
   private resolveSources(definition: TaskDefinition) {
-    return (definition.sources ?? []).map((reference) => ({
+    return (definition.sources ?? []).map((reference: { source_id: string; locator?: string }) => ({
       sourceId: reference.source_id,
       title: this.sources.get(reference.source_id)?.title ?? reference.source_id,
       locator: reference.locator ?? '',
