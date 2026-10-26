@@ -2,12 +2,17 @@
   "name": "synopsis-game",
   "private": true,
   "version": "0.1.0",
+  "packageManager": "pnpm@10.34.8",
   "workspaces": ["apps/*", "packages/*", "tools/*"],
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0"
   },
   "scripts": {
-    "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check",
-    "world:typecheck": "pnpm --filter @synopsis/world-engine typecheck"
+    "dev": "pnpm --filter @synopsis/web dev",
+    "build": "pnpm --filter @synopsis/web build",
+    "typecheck": "pnpm world:typecheck && pnpm web:typecheck",
+    "world:typecheck": "pnpm --filter @synopsis/world-engine typecheck",
+    "web:typecheck": "pnpm --filter @synopsis/web typecheck",
+    "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check"
   }
 }

@@ -22,3 +22,20 @@ jobs:
 
       - name: Проверить структуру репозитория, JSON и локальные ссылки
         run: python tools/validate_repo.py
+
+      - name: Подготовить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Включить Corepack
+        run: corepack enable
+
+      - name: Установить зависимости
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Проверить TypeScript
+        run: pnpm typecheck
+
+      - name: Собрать браузерный прототип
+        run: pnpm build
