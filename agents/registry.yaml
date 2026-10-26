@@ -1,4 +1,4 @@
-version: 1
+version: 2
 project: synopsis_game
 policy:
   one_implementation_owner: true
@@ -54,23 +54,39 @@ agents:
     preferred_provider: antigravity-gemini
     fallback_provider: claude-code
     owns: [art-direction, palette, composition, visual-tokens, world-location-visual-policy]
-    reviews: [WORLD, AVATAR, UX, Arena-TV-visuals]
+    reviews: [WORLD, AVATAR, UX, ENGINE, ASSET, Arena-TV-visuals]
     role_file: agents/roles/art-director.md
 
   - id: pixel-asset-designer
     title: Pixel Asset & Character Designer
     preferred_provider: antigravity-gemini
     fallback_provider: codex
-    owns: [sprites, characters, props, tiles, interactables, asset-manifests]
-    reviewers: [art-director, web-performance-engineer]
+    owns: [editable-sprites, characters, props, tiles, interactables]
+    reviewers: [art-director, pixel-asset-pipeline-engineer, web-performance-engineer]
     role_file: agents/roles/pixel-asset-designer.md
+
+  - id: pixel-asset-pipeline-engineer
+    title: Pixel Asset Pipeline Engineer
+    preferred_provider: codex
+    fallback_provider: claude-code
+    owns: [ASSET, asset-manifests, sprite-tools, assetpack, tiled-contract, generated-assets]
+    reviewers: [integration-release-engineer, web-performance-engineer, art-director]
+    role_file: agents/roles/pixel-asset-pipeline-engineer.md
+
+  - id: game-runtime-webgl-engineer
+    title: Phaser & WebGL Runtime Engineer
+    preferred_provider: codex
+    fallback_provider: claude-code
+    owns: [ENGINE, phaser-runtime, webgl-rendering, react-game-bridge, renderer-diagnostics]
+    reviewers: [web-performance-engineer, integration-release-engineer, art-director]
+    role_file: agents/roles/game-runtime-webgl-engineer.md
 
   - id: living-world-engineer
     title: Living World & Ambient Animation Engineer
     preferred_provider: codex
     fallback_provider: antigravity-gemini
     owns: [WORLD]
-    reviewers: [art-director, web-performance-engineer, ux-accessibility-reviewer]
+    reviewers: [art-director, game-runtime-webgl-engineer, web-performance-engineer, ux-accessibility-reviewer]
     role_file: agents/roles/living-world-engineer.md
 
   - id: audio-ambient-designer
@@ -85,8 +101,8 @@ agents:
     title: Browser Rendering & Performance Engineer
     preferred_provider: codex
     fallback_provider: claude-code
-    owns: [browser-runtime, responsive-rendering, performance-budgets, animation-profiling]
-    reviews: [WORLD, AVATAR, TASK, MAP, Arena-TV-visuals]
+    owns: [browser-runtime, responsive-rendering, performance-budgets, animation-profiling, low-power-policy]
+    reviews: [ENGINE, ASSET, WORLD, AVATAR, TASK, MAP, Arena-TV-visuals]
     role_file: agents/roles/web-performance-engineer.md
 
   - id: realtime-arena-engineer
@@ -118,7 +134,7 @@ agents:
     preferred_provider: claude-code
     fallback_provider: antigravity-gemini
     owns: [UX, accessibility, reduced-motion, projector-readability]
-    reviews: [TASK, WORLD, AVATAR, ARENA]
+    reviews: [TASK, WORLD, AVATAR, ARENA, ENGINE]
     role_file: agents/roles/ux-accessibility-reviewer.md
 
   - id: security-privacy-reviewer
@@ -133,7 +149,7 @@ agents:
     title: Integration, QA & Release Engineer
     preferred_provider: codex
     fallback_provider: claude-code
-    owns: [CI, E2E, integration, release-gate, replay-determinism]
+    owns: [CI, E2E, integration, release-gate, replay-determinism, build-reproducibility]
     reviews: [all-implementation-epics]
     role_file: agents/roles/integration-release-engineer.md
 
@@ -142,6 +158,10 @@ acceptance_gates:
     required: [meteo-methodologist-ru, meteo-verifier]
   art:
     required: [art-director]
+  game_runtime:
+    required: [game-runtime-webgl-engineer, web-performance-engineer]
+  asset_pipeline:
+    required: [pixel-asset-pipeline-engineer, integration-release-engineer]
   animation_performance:
     required: [web-performance-engineer]
   security:

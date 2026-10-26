@@ -12,6 +12,8 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 6. Live KN-01 data are untrusted input and must pass versioned parsing, QC and snapshotting before gameplay.
 7. No public self-registration. Roster and access rules follow `docs/accounts/ROSTER_LOGIN_AND_ACCESS.md`.
 8. Pixel-art direction follows `docs/design/PIXEL_ART_STYLE_GUIDE.md` and `docs/design/LIVING_WORLD_SYSTEM.md`.
+9. Phaser 4 is the accepted browser runtime for the living pixel world. React remains the application/UI shell; professional meteorological geometry remains in the separate SVG/Canvas `map-engine` unless a later ADR explicitly changes this boundary.
+10. Production graphics follow `docs/design/PIXEL_ASSET_PIPELINE.md`: editable source and manifests are authoritative; `assets/generated` is build output and must never be hand-edited.
 
 ## Mandatory source documents
 
@@ -19,7 +21,10 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 - `docs/01_RUSSIAN_SYNOPIC_SCHOOL.md`
 - `docs/09_SOURCE_POLICY.md`
 - `docs/architecture/README.md`
+- `docs/architecture/GAME_RUNTIME_AND_ASSETS.md`
+- `docs/design/PIXEL_ASSET_PIPELINE.md`
 - `docs/testing/QUALITY_GATES.md`
+- `config/art-toolchain.yaml` for accepted runtime/art tooling
 - domain-specific docs referenced by `agents/registry.yaml`
 
 ## Agent routing
@@ -30,9 +35,22 @@ No agent may self-approve a gated change. In particular:
 
 - meteorological content requires independent methodology + verification review;
 - visual changes require Art Director review;
+- Phaser/WebGL runtime changes are owned by `game-runtime-webgl-engineer` and require Web Performance review;
+- source-to-runtime asset pipeline changes are owned by `pixel-asset-pipeline-engineer` and require Integration & Release review;
 - animation-heavy browser changes require Web Performance review;
 - auth/security changes require Security review;
 - release/integration is accepted by Integration & Release, not by the feature author.
+
+## Pixel-art and runtime ownership
+
+- `art-director` owns palette roles, composition, scale families, scene density and final visual acceptance.
+- `pixel-asset-designer` owns editable production art in `assets/source`; it does not own packing/compression or renderer code.
+- `pixel-asset-pipeline-engineer` owns `tools/assets`, `assets/manifests`, deterministic generation, sprite-tools, AssetPack and the Tiled scene/asset-ID contract.
+- `game-runtime-webgl-engineer` owns `packages/world-engine`, Phaser/WebGL configuration, React↔Phaser lifecycle, texture sampling, cameras, tweens, filters/shaders and renderer diagnostics.
+- `living-world-engineer` owns world state, time/season behaviour, seeded ambient schedules and interactable state machines using runtime primitives; it does not own renderer internals.
+- `web-performance-engineer` independently measures and accepts browser/GPU budgets and degradation behaviour.
+
+World logic must use semantic asset IDs from manifests. Do not hardcode generated atlas coordinates into gameplay/world state.
 
 ## Branch and handoff
 
@@ -63,6 +81,18 @@ For any change that alters a correct answer, terminology, sequence, symbol, KN-0
 The Art Director owns palette roles, composition hierarchy, sprite language, time-of-day tokens and scene coordinates/config. Professional meteorological colors are reserved and cannot be repurposed cosmetically.
 
 World time must be configurable through a `world_location` profile containing latitude, longitude and timezone. Day phase should be derived from date/time and solar state, with explicit demo overrides; never hardcode the developer's or user's physical location into assets.
+
+Production art uses the canonical locations and formats in `assets/README.md` and `config/art-toolchain.yaml`. Concept/reference images under `design/pixel-art/` are references, not runtime source assets.
+
+## Game runtime acceptance
+
+Phaser/WebGL changes must preserve the React/Phaser boundary, nearest-neighbour pixel sampling where applicable, deterministic scene behaviour, pause/resume/context-loss handling and reduced-motion/low-power modes. Per-frame React state updates from the game loop are forbidden.
+
+Sprite frame cadence is independent from display cadence: movement/camera/tweens may update every rendered frame while authored pixel animation keeps intentional lower frame timing. Do not create blurred interpolated sprite frames.
+
+## Asset pipeline acceptance
+
+Every production asset must be reproducible from editable source + manifest + pinned toolchain. Preserve animation tags/durations, pivots, palette roles, scene/layer identity, interaction bounds and rights/provenance. Generated atlases/textures/metadata are never manually corrected after generation; fix source or pipeline and rebuild.
 
 ## Audio acceptance
 

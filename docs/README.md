@@ -30,15 +30,18 @@
 | Игровая механика | [Персонаж и коллекционная прогрессия](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md) | персонализация, заработанные предметы и спутники |
 | Метеорология | [Учебные модули](meteorology/CONTENT_MODULES.md) | предметная карта курса и зависимости между разделами |
 | Архитектура | [Архитектура](architecture/README.md) | границы программных модулей, приём данных, трансляция, пользователи и живой мир |
+| Архитектура | [Игровой рабочий контур и графические ресурсы](architecture/GAME_RUNTIME_AND_ASSETS.md) | граница React/Phaser, WebGL, слои мира и контракт рабочего контура |
 | Учебное содержание | [Руководство по добавлению заданий](content/AUTHORING_GUIDE.md) | как добавить новое задание или сценарий |
 | Учебное содержание | [Поток обработки актуальных КН-01](content/LIVE_KN01_PIPELINE.md) | реальные станции, входные потоки, декодирование, контроль качества и снимки данных |
 | Сетевой режим | [Автономный экран арены](realtime/AUTONOMOUS_ARENA_DISPLAY.md) | автоматический выбор матча, демонстрационный режим и большой экран |
 | Пользователи | [Список пользователей, вход и доступ](accounts/ROSTER_LOGIN_AND_ACCESS.md) | отсутствие саморегистрации, список администратора и короткий код входа |
 | Интерфейс | [Карта экранов](ux/SCREEN_MAP.md) | маршруты, экраны и визуальная иерархия |
 | Дизайн | [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md) | зафиксированное художественное направление, персонажи и инвентарь |
+| Дизайн | [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md) | Aseprite/Pixelorama → манифесты → sprite-tools → Tiled → AssetPack → Phaser |
 | Дизайн | [Система живого мира](design/LIVING_WORLD_SYSTEM.md) | время суток, фоновая анимация, птицы, животные и интерактивные объекты |
 | Планирование | [Перечень задач первого рабочего среза](roadmap/MVP_BACKLOG.md) | исполнимые задачи начальной реализации |
 | Планирование | [Основополагающие задачи](roadmap/FOUNDATION_EPICS.md) | живой мир, КН-01, арена, пользователи и персонаж |
+| Планирование | [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md) | ENGINE/ASSET-задачи и независимые проверки |
 | Идеи | [Реестр идей](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия в план |
 | Решения | [Архитектурные решения](decisions/README.md) | почему приняты сквозные и труднообратимые решения |
 | Проверка | [Критерии качества](testing/QUALITY_GATES.md) | условия готовности задачи и требования перед объединением изменений |
@@ -65,7 +68,7 @@ docs/
 
 Названия каталогов сохраняются как технические пути. В обычном тексте используются русские термины.
 
-Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md).
+Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md). Производственные редактируемые ресурсы хранятся в [`assets/source/`](../assets/source/README.md), сцены — в `assets/scenes/`, манифесты — в `assets/manifests/`, производные игровые файлы — в `assets/generated/`.
 
 ## 3. Что где редактировать
 
@@ -77,6 +80,9 @@ docs/
 - Изменение **баланса** → `02_GAMEPLAY_AND_BALANCE.md`, затем соответствующий профиль баланса.
 - Новая **сущность JSON** → `05_CONTENT_SCHEMA.md`.
 - Изменение **архитектуры** → `architecture/` и архитектурное решение.
+- Рабочий контур Phaser/WebGL → `architecture/GAME_RUNTIME_AND_ASSETS.md`, `packages/world-engine/` и роль `game-runtime-webgl-engineer`.
+- Исходная пиксельная графика → `assets/source/` и `design/PIXEL_ART_STYLE_GUIDE.md`.
+- Манифесты ресурсов, sprite-tools/AssetPack и сборка → `assets/manifests/`, `tools/assets/` и роль `pixel-asset-pipeline-engineer`.
 - Новое **задание или сценарий** → `content/AUTHORING_GUIDE.md` и каталог `content/` в корне проекта.
 - Актуальные КН-01 и входные потоки данных → `content/LIVE_KN01_PIPELINE.md`.
 - Автономная трансляция и большой экран → `realtime/AUTONOMOUS_ARENA_DISPLAY.md`.
@@ -149,15 +155,18 @@ docs/
 4. [04 — Учебное содержание](04_CONTENT_AND_TASKS.md)
 5. [Актуальные КН-01](content/LIVE_KN01_PIPELINE.md)
 6. [Архитектура](architecture/README.md)
-7. [Сетевые матчи](03_REALTIME_PVP_AND_BROADCAST.md)
-8. [Пользователи и вход](accounts/ROSTER_LOGIN_AND_ACCESS.md)
-9. [Карта экранов](ux/SCREEN_MAP.md)
-10. [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md)
-11. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
-12. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
-13. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
-14. [Критерии качества](testing/QUALITY_GATES.md)
-15. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
+7. [Игровой рабочий контур и графические ресурсы](architecture/GAME_RUNTIME_AND_ASSETS.md)
+8. [Сетевые матчи](03_REALTIME_PVP_AND_BROADCAST.md)
+9. [Пользователи и вход](accounts/ROSTER_LOGIN_AND_ACCESS.md)
+10. [Карта экранов](ux/SCREEN_MAP.md)
+11. [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md)
+12. [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md)
+13. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
+14. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
+15. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
+16. [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md)
+17. [Критерии качества](testing/QUALITY_GATES.md)
+18. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
 
 ## 8. Золотое правило документации
 
