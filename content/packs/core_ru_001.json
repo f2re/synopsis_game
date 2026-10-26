@@ -1,6 +1,6 @@
 {
   "id": "core_ru_001",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "method_profile": "RUS_CLASSIC_TRAINING_V1",
   "balance_profile": "ranked_s1_v3",
   "status": "draft",
@@ -12,16 +12,17 @@
     "kn01_section1_order_001",
     "station_plot_basic_001",
     "station_board_three_001",
-    "station_board_eight_001"
+    "station_board_eight_001",
+    "find_error_td_gt_t_001"
   ],
   "created_at": "2026-10-25T19:40:00Z",
   "review": {
-    "source_check": "passed",
+    "source_check": "pending",
     "methodical": "pending",
     "independent_verification": "pending",
     "language": "passed",
     "technical": "passed",
     "publication_allowed": false
   },
-  "notes": "Пакет 0.4.0 добавляет плотный учебный планшон из восьми станций и модульную загрузку файлов content/tasks/*.json. Пакет остаётся черновиком и не используется в рейтинговом режиме до независимой методической приёмки."
+  "notes": "Пакет 0.5.0 добавляет первый физический контроль наблюдений findError по условию Td ≤ T. Новый источник/локатор и формулировка правила требуют двойной метеорологической приёмки, поэтому source_check возвращён в pending; рейтинговый режим запрещён."
 }
