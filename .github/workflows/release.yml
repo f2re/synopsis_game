@@ -28,19 +28,23 @@ jobs:
       - name: Определить версию и необходимость выпуска
         id: v
         shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
           PUBLISH=true
           if [[ "$GITHUB_REF_TYPE" == tag ]]; then
             VERSION="${GITHUB_REF_NAME#v}"
           elif [[ "$GITHUB_EVENT_NAME" == workflow_dispatch ]]; then
-            VERSION="${{ inputs.version }}"
+            VERSION="$INPUT_VERSION"
           else
-            VERSION=$(node -p "require('./package.json').version")
+            VERSION="$PACKAGE_VERSION"
             TAG="v$VERSION"
             git fetch --tags --force
             if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then PUBLISH=false; fi
           fi
           [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]
+          [[ "$VERSION" == "$PACKAGE_VERSION" ]] || { echo "Версия выпуска $VERSION не совпадает с package.json: $PACKAGE_VERSION" >&2; exit 2; }
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "publish=$PUBLISH" >> "$GITHUB_OUTPUT"
       - name: Полная проверка
