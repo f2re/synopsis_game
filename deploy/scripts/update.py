@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, hashlib, os, shutil, subprocess, tarfile, tempfile
+import argparse, fcntl, hashlib, os, shutil, subprocess, tarfile, tempfile
 from pathlib import Path
 
 ROOT=Path('/opt/synopsis-game'); ETC=Path('/etc/synopsis-game'); STATE=Path('/var/lib/synopsis-game')
@@ -52,8 +52,27 @@ def restore_backup(backup_dir, app_env):
         data=STATE/'data'; shutil.rmtree(str(data),ignore_errors=True); shutil.copytree(str(backup_dir/'data'),str(data))
     if (backup_dir/'migrations').exists():
         migrations=STATE/'migrations'; shutil.rmtree(str(migrations),ignore_errors=True); shutil.copytree(str(backup_dir/'migrations'),str(migrations))
+def acquire_lock():
+    lock_dir=Path('/run/lock'); lock_dir.mkdir(parents=True,exist_ok=True)
+    handle=open(str(lock_dir/'synopsis-game-update.lock'),'w')
+    try: fcntl.flock(handle.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
+    except OSError: raise SystemExit('another Synopsis Game update is already running')
+    return handle
+def prune_releases(active, previous, keep):
+    try: keep=max(2,int(keep))
+    except (TypeError,ValueError): keep=3
+    protected=set([str(active.resolve())])
+    if previous and previous.exists(): protected.add(str(previous.resolve()))
+    candidates=[]
+    for path in (ROOT/'releases').iterdir():
+        if path.is_dir() and str(path.resolve()) not in protected:
+            candidates.append(path)
+    candidates.sort(key=lambda p:p.stat().st_mtime,reverse=True)
+    allowed=max(0,keep-len(protected))
+    for path in candidates[allowed:]: shutil.rmtree(str(path),ignore_errors=True)
 
 def main():
+    lock=acquire_lock()
     ap=argparse.ArgumentParser(); ap.add_argument('archive'); ap.add_argument('--sha256'); ap.add_argument('--no-start',action='store_true'); a=ap.parse_args()
     archive=Path(a.archive).resolve()
     if a.sha256 and sha256(archive)!=a.sha256.lower(): raise SystemExit('SHA-256 mismatch')
@@ -67,7 +86,11 @@ def main():
     app_env=ETC/'app.env'; old_cfg=env_file(app_env)
     backup_env=os.environ.copy(); backup_env.update(old_cfg)
     run('systemctl','stop','synopsis-game.service',check=False)
-    backup=run('/bin/bash',str(dest/'deploy/scripts/backup.sh'),capture=True,check=False,env=backup_env).stdout.strip().splitlines()
+    try:
+        backup=run('/bin/bash',str(dest/'deploy/scripts/backup.sh'),capture=True,check=True,env=backup_env).stdout.strip().splitlines()
+    except Exception:
+        if old: run('systemctl','restart','synopsis-game.service',check=False)
+        raise
     backup_dir=Path(backup[-1]) if backup else None
     merged=ETC/'.app.env.new'
     try:
@@ -80,6 +103,7 @@ def main():
         if a.no_start: return 0
         run('systemctl','restart','synopsis-game.service')
         run('/bin/bash',str(dest/'deploy/scripts/healthcheck.sh'))
+        cfg=env_file(app_env); prune_releases(dest,old,cfg.get('RELEASE_KEEP','3'))
     except Exception:
         restore_backup(backup_dir,app_env)
         if old:
@@ -90,5 +114,6 @@ def main():
             run('systemctl','restart','synopsis-game.service',check=False)
         raise
     print('Updated Synopsis Game to %s' % version)
+    lock.close()
     return 0
 if __name__=='__main__': raise SystemExit(main())
