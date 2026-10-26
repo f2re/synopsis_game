@@ -86,6 +86,8 @@
 .shift-feedback.is-correct .shift-feedback-title { color: #9ed5a4; }
 .shift-feedback.is-wrong .shift-feedback-title { color: #e9aa9f; }
 .shift-feedback p { color: #c7d4d5; line-height: 1.5; }
+.shift-principles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.shift-principles span { padding: 5px 8px; border: 1px solid rgba(157,182,199,.2); border-radius: 999px; color: #abc0c8; background: rgba(157,182,199,.07); font: 700 .68rem/1.1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .shift-source { display: grid; gap: 2px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.1); }
 .shift-source strong { color: #dce6e5; font-size: .8rem; }
 .shift-source span { color: #8da4ad; font-size: .74rem; line-height: 1.4; }

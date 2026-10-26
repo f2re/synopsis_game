@@ -69,6 +69,27 @@ async function reachThreeBoard(service: ShiftService, userId: string) {
   return { shiftId: reached.shiftId, task: stationPlotResult.nextTask! };
 }
 
+async function reachEightBoard(service: ShiftService, userId: string) {
+  const reached = await reachThreeBoard(service, userId);
+  const threeResult = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
+    placements: { a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw' },
+  });
+  return { shiftId: reached.shiftId, task: threeResult.nextTask! };
+}
+
+async function reachFindError(service: ShiftService, userId: string) {
+  const reached = await reachEightBoard(service, userId);
+  const eightResult = await service.submitAnswer(userId, reached.shiftId, reached.task.instanceId, {
+    placements: {
+      a8_t: 'a8_nw', a8_td: 'a8_sw', b8_t: 'b8_nw', b8_td: 'b8_sw',
+      c8_t: 'c8_nw', c8_td: 'c8_sw', d8_t: 'd8_nw', d8_td: 'd8_sw',
+      e8_t: 'e8_nw', e8_td: 'e8_sw', f8_t: 'f8_nw', f8_td: 'f8_sw',
+      g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_nw', h8_td: 'h8_sw',
+    },
+  });
+  return { shiftId: reached.shiftId, task: eightResult.nextTask! };
+}
+
 test('stationPlot не раскрывает эталон и переводит к планшону на три станции', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
@@ -96,13 +117,8 @@ test('трёхстанционный планшон скрывает этало�
     assert.equal(board.response.kind, 'stationBoard');
     assert.equal((board.payload?.stations as unknown[]).length, 3);
     assert.equal(JSON.stringify(board).includes('"a_t":"a_nw"'), false);
-
     const result = await service.submitAnswer('student-4', reached.shiftId, board.instanceId, {
-      placements: {
-        a_t: 'a_nw', a_td: 'a_sw',
-        b_t: 'b_nw', b_td: 'b_sw',
-        c_t: 'c_nw', c_td: 'c_sw',
-      },
+      placements: { a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw' },
     });
     assert.equal(result.feedback.correct, true);
     assert.equal(result.completed, false);
@@ -111,18 +127,13 @@ test('трёхстанционный планшон скрывает этало�
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
-test('планшон на восемь станций загружается из отдельного файла и не раскрывает эталон', async () => {
+test('планшон на восемь станций загружается из отдельного файла и ведёт к физическому контролю', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
     await service.init();
-    const reached = await reachThreeBoard(service, 'student-5');
-    const threeResult = await service.submitAnswer('student-5', reached.shiftId, reached.task.instanceId, {
-      placements: {
-        a_t: 'a_nw', a_td: 'a_sw', b_t: 'b_nw', b_td: 'b_sw', c_t: 'c_nw', c_td: 'c_sw',
-      },
-    });
-    const board = threeResult.nextTask!;
+    const reached = await reachEightBoard(service, 'student-5');
+    const board = reached.task;
     assert.equal(board.definitionId, 'station_board_eight_001');
     assert.equal(board.response.kind, 'stationBoard');
     assert.equal((board.payload?.stations as unknown[]).length, 8);
@@ -134,12 +145,33 @@ test('планшон на восемь станций загружается и�
         a8_t: 'a8_nw', a8_td: 'a8_sw', b8_t: 'b8_nw', b8_td: 'b8_sw',
         c8_t: 'c8_nw', c8_td: 'c8_sw', d8_t: 'd8_nw', d8_td: 'd8_sw',
         e8_t: 'e8_nw', e8_td: 'e8_sw', f8_t: 'f8_nw', f8_td: 'f8_sw',
-        g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_sw', h8_td: 'h8_nw',
+        g8_t: 'g8_nw', g8_td: 'g8_sw', h8_t: 'h8_nw', h8_td: 'h8_sw',
       },
     });
-    assert.equal(result.feedback.correct, false);
-    const components = (result.feedback.details as { components: Array<{ correct: boolean }> }).components;
-    assert.equal(components.filter((component) => component.correct).length, 14);
-    assert.equal(result.completed, true);
+    assert.equal(result.feedback.correct, true);
+    assert.equal(result.completed, false);
+    assert.equal(result.nextTask?.definitionId, 'find_error_td_gt_t_001');
+    assert.equal(result.nextTask?.response.kind, 'findError');
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('findError не раскрывает station_id и проверяет физическое нарушение на сервере', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
+  try {
+    const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
+    await service.init();
+    const reached = await reachFindError(service, 'student-6');
+    const task = reached.task;
+    assert.equal(task.definitionId, 'find_error_td_gt_t_001');
+    assert.equal(task.response.kind, 'findError');
+    assert.equal((task.payload?.stations as unknown[]).length, 8);
+    assert.equal(JSON.stringify(task).includes('expectedStationId'), false);
+    assert.equal(JSON.stringify(task).includes('"value":"qc_f"'), false);
+
+    const wrong = await service.submitAnswer('student-6', reached.shiftId, task.instanceId, { stationId: 'qc_a' });
+    assert.equal(wrong.feedback.correct, false);
+    assert.equal(wrong.feedback.correctAnswer, 'Е');
+    assert.deepEqual(wrong.feedback.details, { selectedStationId: 'qc_a', expectedStationId: 'qc_f' });
+    assert.equal(wrong.completed, true);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });

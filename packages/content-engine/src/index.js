@@ -25,6 +25,7 @@ function responseDescriptor(definition) {
   if (definition.type === 'sequence') return { kind: 'sequence' };
   if (definition.type === 'stationPlot' && definition.answer?.kind === 'station_plot') return { kind: 'stationPlot' };
   if (definition.type === 'stationBoard' && definition.answer?.kind === 'station_board') return { kind: 'stationBoard' };
+  if (definition.type === 'findError' && definition.answer?.kind === 'station_id') return { kind: 'findError' };
   return { kind: definition.type };
 }
 
@@ -60,6 +61,23 @@ function placementResult(definition, submitted) {
     correctAnswer: { placements: { ...expected } },
     details: { components },
   };
+}
+
+function validateFindErrorDefinition(definition) {
+  const stations = definition.payload?.stations;
+  const observations = definition.payload?.observations;
+  const expectedStationId = definition.answer?.value;
+  if (!Array.isArray(stations) || stations.length < 3 || !Array.isArray(observations) || definition.answer?.kind !== 'station_id') {
+    throw new Error(`Некорректное задание findError: ${definition.id}`);
+  }
+  const stationIds = new Set(stations.map((station) => station?.id));
+  if (stationIds.size !== stations.length || stationIds.has(undefined) || !stationIds.has(expectedStationId)) {
+    throw new Error(`findError ${definition.id}: некорректный набор станций или эталон`);
+  }
+  for (const observation of observations) {
+    if (!stationIds.has(observation?.stationId)) throw new Error(`findError ${definition.id}: неизвестная stationId ${observation?.stationId}`);
+  }
+  return { stations, observations };
 }
 
 export function createTaskInstance(definition, options) {
@@ -128,6 +146,18 @@ export function createTaskInstance(definition, options) {
     return { publicTask, validationContext: { kind: 'stationBoard' } };
   }
 
+  if (definition.type === 'findError') {
+    const { stations, observations } = validateFindErrorDefinition(definition);
+    publicTask.payload = {
+      profile: definition.payload?.profile ?? null,
+      rule: definition.payload?.rule ?? null,
+      stations: structuredClone(stations),
+      observations: structuredClone(observations),
+      canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
+    };
+    return { publicTask, validationContext: { kind: 'findError' } };
+  }
+
   throw new Error(`Тип задания ${definition.type} пока не поддерживается первым рабочим срезом`);
 }
 
@@ -164,11 +194,26 @@ export function validateTaskAnswer(definition, validationContext, submitted) {
 
   if (definition.type === 'stationPlot' || definition.type === 'stationBoard') return placementResult(definition, submitted);
 
+  if (definition.type === 'findError') {
+    const submittedStationId = typeof submitted?.stationId === 'string' ? submitted.stationId : '';
+    const expectedStationId = String(definition.answer?.value ?? '');
+    const station = definition.payload.stations.find((item) => item.id === expectedStationId);
+    return {
+      correct: submittedStationId === expectedStationId,
+      normalizedAnswer: { stationId: submittedStationId },
+      correctAnswer: station?.name ?? expectedStationId,
+      details: { selectedStationId: submittedStationId, expectedStationId },
+    };
+  }
+
   throw new Error(`Проверка типа ${definition.type} пока не поддерживается`);
 }
 
 export function assertPublicTaskSafe(publicTask) {
-  const forbidden = new Set(['answer', 'correct_order', 'correctOrder', 'canonicalByPublic', 'validationContext', 'correctPlacements']);
+  const forbidden = new Set([
+    'answer', 'correct_order', 'correctOrder', 'canonicalByPublic', 'validationContext', 'correctPlacements',
+    'correctStationId', 'expectedStationId',
+  ]);
   const visit = (value) => {
     if (!value || typeof value !== 'object') return;
     for (const [key, child] of Object.entries(value)) {

@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2.0",
+  "schema_version": "0.3.0",
   "skills": [
     {
       "id": "kn01_temperature_decode",
@@ -45,6 +45,11 @@
       "id": "station_plot_wind",
       "module_id": "MET-03",
       "name": "Нанесение направления и скорости ветра dd/ff на схему приземной станции"
+    },
+    {
+      "id": "observation_qc_t_td",
+      "module_id": "MET-03",
+      "name": "Физический контроль согласованности температуры воздуха T и точки росы Td"
     }
   ]
 }

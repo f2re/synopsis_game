@@ -43,6 +43,60 @@ def validate_placements(identifier: str, payload: dict, answer: dict, expected_k
     return observations, slots, placements
 
 
+def validate_find_error(identifier: str, payload: dict, answer: dict, errors: list[str]):
+    stations = payload.get("stations")
+    observations = payload.get("observations")
+    if answer.get("kind") != "station_id":
+        errors.append(f"{identifier}: findError требует answer.kind=station_id")
+    if not isinstance(stations, list) or len(stations) < 3:
+        errors.append(f"{identifier}: findError требует минимум три станции")
+        return
+    if not isinstance(observations, list):
+        errors.append(f"{identifier}: findError требует observations")
+        return
+    if payload.get("canvas") != {"width": 1000, "height": 1000}:
+        errors.append(f"{identifier}: findError должен использовать координатное пространство 1000×1000")
+
+    station_ids = {item.get("id") for item in stations if isinstance(item, dict)}
+    expected = answer.get("value")
+    if expected not in station_ids:
+        errors.append(f"{identifier}: эталонная station_id отсутствует в stations")
+
+    by_station: dict[str, dict[str, float]] = {}
+    for observation in observations:
+        if not isinstance(observation, dict):
+            continue
+        station_id = observation.get("stationId")
+        field = observation.get("field")
+        value = observation.get("numericValue")
+        if station_id not in station_ids:
+            errors.append(f"{identifier}: наблюдение ссылается на неизвестную stationId {station_id}")
+            continue
+        if field not in {"T", "Td"}:
+            errors.append(f"{identifier}: для первого findError допустимы только поля T и Td")
+            continue
+        if not isinstance(value, (int, float)):
+            errors.append(f"{identifier}: {station_id}/{field} требует numericValue")
+            continue
+        by_station.setdefault(station_id, {})[field] = float(value)
+
+    violations: list[str] = []
+    for station_id in station_ids:
+        fields = by_station.get(station_id, {})
+        if set(fields) != {"T", "Td"}:
+            errors.append(f"{identifier}: станция {station_id} должна иметь ровно T и Td")
+            continue
+        if fields["Td"] > fields["T"]:
+            violations.append(station_id)
+
+    if len(violations) != 1:
+        errors.append(f"{identifier}: должно быть ровно одно однозначное нарушение Td > T, найдено {len(violations)}")
+    elif violations[0] != expected:
+        errors.append(f"{identifier}: скрытый эталон {expected} не совпадает с физическим нарушением {violations[0]}")
+    elif by_station[expected]["Td"] - by_station[expected]["T"] < 2.0:
+        errors.append(f"{identifier}: учебное нарушение должно превышать 2 °C, чтобы не имитировать пограничную погрешность")
+
+
 def load_tasks(errors: list[str]) -> list[dict]:
     tasks: list[dict] = []
     seen: set[str] = set()
@@ -139,6 +193,9 @@ def main() -> int:
                 for observation_id, slot_id in placements.items():
                     if observation_station.get(observation_id) != slot_station.get(slot_id):
                         errors.append(f"{identifier}: эталон переносит {observation_id} на позицию другой станции {slot_id}")
+
+        elif task_type == "findError":
+            validate_find_error(identifier, payload, answer, errors)
 
     if errors:
         print("Проверка контрактов учебных заданий завершилась с ошибками:")
