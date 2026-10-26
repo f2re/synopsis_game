@@ -50,6 +50,37 @@ def main() -> int:
             elif sorted(order) != list(range(len(steps))):
                 errors.append(f"{identifier}: correct_order должен быть перестановкой всех шагов")
 
+        elif task_type == "stationPlot":
+            observations = payload.get("observations")
+            slots = payload.get("slots")
+            placements = answer.get("placements")
+            if answer.get("kind") != "station_plot":
+                errors.append(f"{identifier}: stationPlot требует answer.kind=station_plot")
+            if not isinstance(observations, list) or len(observations) < 2:
+                errors.append(f"{identifier}: stationPlot требует минимум два наблюдения")
+                continue
+            if not isinstance(slots, list) or len(slots) < 2:
+                errors.append(f"{identifier}: stationPlot требует минимум две позиции")
+                continue
+            if not isinstance(placements, dict):
+                errors.append(f"{identifier}: stationPlot требует answer.placements")
+                continue
+
+            observation_ids = {item.get("id") for item in observations if isinstance(item, dict)}
+            slot_ids = {item.get("id") for item in slots if isinstance(item, dict)}
+            if None in observation_ids or len(observation_ids) != len(observations):
+                errors.append(f"{identifier}: идентификаторы observations должны быть уникальными и непустыми")
+            if None in slot_ids or len(slot_ids) != len(slots):
+                errors.append(f"{identifier}: идентификаторы slots должны быть уникальными и непустыми")
+            if set(placements) != observation_ids:
+                errors.append(f"{identifier}: placements должен покрывать все observations")
+            unknown_slots = set(placements.values()) - slot_ids
+            if unknown_slots:
+                errors.append(f"{identifier}: placements содержит неизвестные slots: {sorted(unknown_slots)}")
+            canvas = payload.get("canvas")
+            if canvas != {"width": 1000, "height": 1000}:
+                errors.append(f"{identifier}: первый stationPlot должен использовать координатное пространство 1000×1000")
+
     if errors:
         print("Проверка контрактов учебных заданий завершилась с ошибками:")
         for error in errors:

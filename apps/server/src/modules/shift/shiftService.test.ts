@@ -39,13 +39,61 @@ test('задания с выбором и последовательностью
     await service.init();
     const started = service.startShift('student-2');
     let task = started.task;
-    let shiftId = started.shiftId;
+    const shiftId = started.shiftId;
     for (const value of [23.4, -5.2, 1021.8]) {
       const result = await service.submitAnswer('student-2', shiftId, task.instanceId, { value });
       task = result.nextTask!;
     }
     assert.equal(task.type, 'choice');
     assert.equal(JSON.stringify(task).includes('choice_index'), false);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('stationPlot появляется в конце смены, не раскрывает эталон и возвращает покомпонентную проверку', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-shift-'));
+  try {
+    const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
+    await service.init();
+    const started = service.startShift('student-3');
+    const shiftId = started.shiftId;
+    let task = started.task;
+
+    for (const value of [23.4, -5.2, 1021.8]) {
+      const result = await service.submitAnswer('student-3', shiftId, task.instanceId, { value });
+      task = result.nextTask!;
+    }
+
+    const choiceOptions = task.payload?.options as Array<{ id: number; label: string }>;
+    const correctChoice = choiceOptions.find((option) => option.label.startsWith('Равномерное падение давления'))!;
+    let result = await service.submitAnswer('student-3', shiftId, task.instanceId, { choiceIndex: correctChoice.id });
+    task = result.nextTask!;
+
+    const sequenceSteps = task.payload?.steps as Array<{ id: number; label: string }>;
+    const expectedLabels = ['iRixhVV', 'Nddff', '1snTTT', '2snTdTdTd', '3PoPoPoPo', '4PPPP или 4a3hhh', '5appp'];
+    const order = expectedLabels.map((label) => sequenceSteps.find((step) => step.label === label)!.id);
+    result = await service.submitAnswer('student-3', shiftId, task.instanceId, { order });
+    task = result.nextTask!;
+
+    assert.equal(task.type, 'stationPlot');
+    assert.equal(task.response.kind, 'stationPlot');
+    assert.equal(JSON.stringify(task).includes('"obs_t":"slot_01"'), false);
+    assert.equal((task.payload?.observations as unknown[]).length, 4);
+    assert.equal((task.payload?.slots as unknown[]).length, 4);
+
+    const wrong = await service.submitAnswer('student-3', shiftId, task.instanceId, {
+      placements: {
+        obs_t: 'slot_02',
+        obs_td: 'slot_01',
+        obs_p: 'slot_03',
+        obs_wind: 'slot_04',
+      },
+    });
+    assert.equal(wrong.feedback.correct, false);
+    const components = (wrong.feedback.details as { components: Array<{ correct: boolean }> }).components;
+    assert.equal(components.filter((component) => component.correct).length, 2);
+    assert.equal(wrong.completed, true);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

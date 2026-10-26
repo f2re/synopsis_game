@@ -1,12 +1,18 @@
 export interface TaskDefinition {
   id: string;
-  type: 'decode' | 'numeric' | 'choice' | 'sequence' | string;
+  type: 'decode' | 'numeric' | 'choice' | 'sequence' | 'stationPlot' | string;
   difficulty?: number;
   question: string;
   payload?: Record<string, unknown> & { options?: string[] };
   steps?: string[];
   correct_order?: number[];
-  answer?: { kind: string; value: unknown; unit?: string; tolerance?: number };
+  answer?: {
+    kind: string;
+    value?: unknown;
+    unit?: string;
+    tolerance?: number;
+    placements?: Record<string, string>;
+  };
   explanation?: string;
   principle_tags?: string[];
   sources?: Array<{ source_id: string; locator?: string }>;
@@ -22,7 +28,12 @@ export interface PublicTaskInstance {
   response: { kind: string; unit?: string | null };
   payload?: Record<string, unknown>;
 }
-export interface ValidationResult { correct: boolean; normalizedAnswer: unknown; correctAnswer: unknown; }
+export interface ValidationResult {
+  correct: boolean;
+  normalizedAnswer: unknown;
+  correctAnswer: unknown;
+  details?: Record<string, unknown>;
+}
 export function createTaskInstance(definition: TaskDefinition, options: { seed: number; instanceId: string; contentPack: string }): { publicTask: PublicTaskInstance; validationContext: Record<string, unknown> };
 export function validateTaskAnswer(definition: TaskDefinition, validationContext: Record<string, unknown>, submitted: unknown): ValidationResult;
 export function assertPublicTaskSafe(publicTask: PublicTaskInstance): true;

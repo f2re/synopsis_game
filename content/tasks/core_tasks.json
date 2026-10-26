@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "tasks": [
     {
       "id": "kn01_temp_001",
@@ -89,6 +89,49 @@
       "sources": [{"source_id": "ROSHYDROMET_KN01_2013", "locator": "схема кода, раздел 1; с. 6 файла PDF"}],
       "explanation": "Кодовые группы в сводке должны располагаться в порядке, заданном схемой КН-01. Отсутствующая по правилам группа может не передаваться, но порядок присутствующих групп не меняется.",
       "principle_tags": ["code_structure", "group_order"],
+      "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
+    },
+    {
+      "id": "station_plot_basic_001",
+      "topic": "surface_station_plot",
+      "skills": ["station_plot_temperature", "station_plot_dewpoint", "station_plot_pressure", "station_plot_wind"],
+      "type": "stationPlot",
+      "difficulty": 2,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "authored_training",
+      "question": "Нанесите четыре базовых элемента наблюдения на схему приземной станции.",
+      "payload": {
+        "profile": "RUS_SURFACE_STATION_V1",
+        "canvas": {"width": 1000, "height": 1000},
+        "station": {"id": "TRAINING-001", "name": "Учебная станция"},
+        "observations": [
+          {"id": "obs_t", "label": "Температура воздуха T", "value": "+12,4 °C", "display": "12,4"},
+          {"id": "obs_td", "label": "Точка росы Td", "value": "+7,9 °C", "display": "7,9"},
+          {"id": "obs_p", "label": "Давление, приведённое к уровню моря p", "value": "1016,2 гПа", "display": "162"},
+          {"id": "obs_wind", "label": "Ветер dd/ff", "value": "240°, 8 м/с", "wind": {"directionDeg": 240, "speedMs": 8}}
+        ],
+        "slots": [
+          {"id": "slot_01", "x": 300, "y": 300, "kind": "text"},
+          {"id": "slot_02", "x": 300, "y": 700, "kind": "text"},
+          {"id": "slot_03", "x": 700, "y": 300, "kind": "text"},
+          {"id": "slot_04", "x": 500, "y": 500, "kind": "wind"}
+        ]
+      },
+      "answer": {
+        "kind": "station_plot",
+        "placements": {
+          "obs_t": "slot_01",
+          "obs_td": "slot_02",
+          "obs_p": "slot_03",
+          "obs_wind": "slot_04"
+        }
+      },
+      "sources": [
+        {"source_id": "WMO_485_2024_RU", "locator": "пп. 2.1.8.4.2.1–2.1.8.4.2.2: стандартные символы и модели; отсылка к ВМО-№ 306, том I.1, добавление IV"},
+        {"source_id": "ZVEREV_1977", "locator": "раздел о приземных синоптических картах и схеме нанесения; страница уточняется при независимой методической приёмке"}
+      ],
+      "explanation": "В базовой станционной модели температура T располагается слева сверху от кружка станции, точка росы Td — слева снизу, давление p — справа сверху. Знак ветра начинается в центре станции и ориентирован в сторону, откуда дует ветер. Текущий профиль является учебным черновиком и до публикации проходит независимую проверку российской синоптической школой.",
+      "principle_tags": ["station_plot", "surface_chart", "temperature", "dew_point", "pressure", "wind"],
       "review": {"source_checked": true, "method_reviewed": false, "publication_allowed": false}
     }
   ]

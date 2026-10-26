@@ -1,0 +1,21 @@
+{
+  "id": "RUS_SURFACE_STATION_V1",
+  "version": "0.1.0",
+  "name": "Российская учебная схема нанесения приземной станции v1",
+  "status": "draft",
+  "base_profile": "RUS_CLASSIC_TRAINING_V1",
+  "coordinate_space": {"width": 1000, "height": 1000},
+  "elements": {
+    "T": {"position": "north_west", "x": 300, "y": 300},
+    "Td": {"position": "south_west", "x": 300, "y": 700},
+    "p": {"position": "north_east", "x": 700, "y": 300},
+    "dd_ff": {"position": "station_center", "x": 500, "y": 500}
+  },
+  "sources": ["ZVEREV_1977", "WMO_485_2024_RU"],
+  "review": {
+    "methodical": "pending",
+    "independent_verification": "pending",
+    "publication_allowed": false
+  },
+  "notes": "Первый исполняемый профиль содержит только T, Td, p и dd/ff. Перед публикацией позиции и графическое представление ветрового знака должны пройти независимую метеорологическую приёмку; дальнейшее расширение: N/Nh, ww, W1/W2, CL/CM/CH и барическая тенденция."
+}

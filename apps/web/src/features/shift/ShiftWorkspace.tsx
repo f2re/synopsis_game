@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { api, type ShiftAnswerResponse, type ShiftTask, type TaskStep } from '../../api';
+import { api, type ShiftAnswerResponse, type ShiftTask, type StationPlotPayload, type TaskStep } from '../../api';
 import { GAME_MARK } from '../../brand';
+import { StationPlotTask } from './StationPlotTask';
 import './ShiftWorkspace.css';
 
 function normalizedNumber(value: string): number {
@@ -21,6 +22,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
   const [numeric, setNumeric] = useState('');
   const [choiceIndex, setChoiceIndex] = useState<number | null>(null);
   const [steps, setSteps] = useState<TaskStep[]>([]);
+  const [placements, setPlacements] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<ShiftAnswerResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -45,6 +47,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     setNumeric('');
     setChoiceIndex(null);
     setSteps(task?.payload?.steps ? [...task.payload.steps] : []);
+    setPlacements({});
     setFeedback(null);
   }, [task?.instanceId]);
 
@@ -53,8 +56,12 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
     if (task.response.kind === 'numeric') return numeric.trim() !== '' && Number.isFinite(normalizedNumber(numeric));
     if (task.response.kind === 'choice') return choiceIndex !== null;
     if (task.response.kind === 'sequence') return steps.length > 0;
+    if (task.response.kind === 'stationPlot') {
+      const required = task.payload?.observations?.length ?? 0;
+      return required > 0 && Object.keys(placements).length === required;
+    }
     return false;
-  }, [choiceIndex, feedback, numeric, steps.length, submitting, task]);
+  }, [choiceIndex, feedback, numeric, placements, steps.length, submitting, task]);
 
   function moveStep(index: number, direction: -1 | 1) {
     const target = index + direction;
@@ -74,7 +81,8 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       let answer: unknown;
       if (task.response.kind === 'numeric') answer = { value: normalizedNumber(numeric) };
       else if (task.response.kind === 'choice') answer = { choiceIndex };
-      else answer = { order: steps.map((step) => step.id) };
+      else if (task.response.kind === 'sequence') answer = { order: steps.map((step) => step.id) };
+      else answer = { placements };
       const result = await api.submitTaskAnswer(shiftId, task.instanceId, answer);
       setFeedback(result);
       setProgress(result.progress);
@@ -109,12 +117,14 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
 
   if (!task) return null;
 
+  const stationPlot = task.response.kind === 'stationPlot';
+
   return (
     <main className="shift-shell">
       <header className="shift-topbar">
         <div>
           <span className="shift-kicker">{GAME_MARK} · учебная смена</span>
-          <strong>КН-01 SYNOP</strong>
+          <strong>{stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
         </div>
         <div className="shift-progress" aria-label={`Выполнено ${progress.answered} из ${progress.total}`}>
           <span>{progress.current}/{progress.total}</span>
@@ -126,12 +136,14 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       <section className="shift-stage" aria-live="polite">
         <aside className="shift-context">
           <span>Тема</span>
-          <strong>Дешифрирование КН-01</strong>
-          <p>Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.</p>
+          <strong>{stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
+          <p>{stationPlot
+            ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
+            : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
           {contentStatus !== 'published' && <div className="shift-draft">Учебный пакет проходит независимую методическую приёмку. Рейтинговый режим отключён.</div>}
         </aside>
 
-        <article className="shift-card">
+        <article className={`shift-card ${stationPlot ? 'shift-card-wide' : ''}`}>
           <div className="shift-card-meta">
             <span>Задание {progress.current}</span>
             <span>Сложность {task.difficulty}</span>
@@ -191,13 +203,26 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
             </div>
           )}
 
+          {task.response.kind === 'stationPlot' && task.payload?.observations && task.payload?.slots && (
+            <StationPlotTask
+              payload={task.payload as StationPlotPayload}
+              placements={placements}
+              onChange={setPlacements}
+              disabled={Boolean(feedback)}
+              results={feedback?.feedback.details?.components}
+            />
+          )}
+
           {error && <div className="shift-error" role="alert">{error}</div>}
 
           {feedback ? (
             <section className={`shift-feedback ${feedback.feedback.correct ? 'is-correct' : 'is-wrong'}`}>
               <div className="shift-feedback-title">{feedback.feedback.correct ? 'Верно' : 'Нужно исправить принцип'}</div>
-              {!feedback.feedback.correct && (
+              {!feedback.feedback.correct && task.response.kind !== 'stationPlot' && (
                 <p><strong>Правильный ответ:</strong> {correctAnswerText(feedback.feedback.correctAnswer)}</p>
+              )}
+              {!feedback.feedback.correct && task.response.kind === 'stationPlot' && (
+                <p>Красным отмечено ошибочное размещение, жёлтым — позиция, куда этот элемент должен быть перенесён.</p>
               )}
               <p>{feedback.feedback.explanation}</p>
               {feedback.feedback.sources.map((source) => (

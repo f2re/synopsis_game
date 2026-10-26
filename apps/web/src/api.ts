@@ -39,6 +39,32 @@ export interface RosterUser {
 
 export interface TaskOption { id: number; label: string; }
 export interface TaskStep { id: number; label: string; }
+export interface StationPlotObservation {
+  id: string;
+  label: string;
+  value: string;
+  display?: string;
+  wind?: { directionDeg: number; speedMs: number };
+}
+export interface StationPlotSlot {
+  id: string;
+  x: number;
+  y: number;
+  kind: 'text' | 'wind' | string;
+}
+export interface StationPlotPayload {
+  profile?: string;
+  station?: { id?: string; name?: string } | null;
+  canvas?: { width: number; height: number };
+  observations: StationPlotObservation[];
+  slots: StationPlotSlot[];
+}
+export interface StationPlotComponentResult {
+  observationId: string;
+  submittedSlotId: string | null;
+  expectedSlotId: string;
+  correct: boolean;
+}
 export interface ShiftTask {
   instanceId: string;
   definitionId: string;
@@ -46,8 +72,8 @@ export interface ShiftTask {
   type: string;
   difficulty: number;
   question: string;
-  response: { kind: 'numeric' | 'choice' | 'sequence' | string; unit?: string | null };
-  payload?: { group?: string; encoded?: string; options?: TaskOption[]; steps?: TaskStep[] };
+  response: { kind: 'numeric' | 'choice' | 'sequence' | 'stationPlot' | string; unit?: string | null };
+  payload?: { group?: string; encoded?: string; options?: TaskOption[]; steps?: TaskStep[] } & Partial<StationPlotPayload>;
 }
 export interface ShiftProgress { answered: number; correct: number; current: number; total: number; }
 export interface ShiftStartResponse {
@@ -62,6 +88,7 @@ export interface ShiftAnswerResponse {
   feedback: {
     correct: boolean;
     correctAnswer: unknown;
+    details?: { components?: StationPlotComponentResult[] } | null;
     explanation: string;
     principleTags: string[];
     sources: Array<{ sourceId: string; title: string; locator: string }>;
