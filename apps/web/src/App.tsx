@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, getSessionToken, setSessionToken, type SessionUser } from './api';
+import { GAME_MARK, GAME_TITLE } from './brand';
 import { AvatarEditor } from './features/avatar/AvatarEditor';
 import { AvatarPreview } from './features/avatar/AvatarPreview';
 import { AdminScreen, LoginScreen } from './features/identity/IdentityScreens';
@@ -14,7 +15,7 @@ function ArenaTvPlaceholder() {
   return (
     <main className="app-shell">
       <section className="prototype-card prototype-placeholder" aria-labelledby="arena-title">
-        <span className="prototype-kicker">Режим большого экрана</span>
+        <span className="prototype-kicker">{GAME_MARK} · режим большого экрана</span>
         <h1 id="arena-title">Arena TV</h1>
         <p>Публичный экран не получает список пользователей, коды входа или административные данные.</p>
       </section>
@@ -28,8 +29,8 @@ function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
       <section className="prototype-card" aria-labelledby="prototype-title">
         <header className="prototype-header app-user-header">
           <div>
-            <span className="prototype-kicker">Прототип 0.2</span>
-            <h1 id="prototype-title">Живой кампус</h1>
+            <span className="prototype-kicker">Прототип 0.2 · {GAME_MARK}</span>
+            <h1 id="prototype-title">{GAME_TITLE}</h1>
           </div>
           <div className="user-toolbar">
             <AvatarPreview avatar={user.avatar} size={28} />
@@ -47,7 +48,7 @@ function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
 
         <footer className="prototype-footer">
           <p>Архив доступен. Остальные локации показывают условия открытия.</p>
-          <p className="prototype-help">Профиль и внешний вид теперь сохраняются для текущего пользователя.</p>
+          <p className="prototype-help">Профиль и внешний вид сохраняются для текущего пользователя.</p>
         </footer>
       </section>
     </main>
