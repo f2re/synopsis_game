@@ -301,6 +301,19 @@ def check_required_files() -> list[str]:
     return [f"missing required file: {name}" for name in required if not (ROOT / name).exists()]
 
 
+def check_pixel_fonts() -> list[str]:
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import validate_fonts
+        errs: list[str] = []
+        errs.extend(validate_fonts.validate_files())
+        errs.extend(validate_fonts.validate_cyrillic_coverage())
+        errs.extend(validate_fonts.validate_css_and_tokens())
+        return errs
+    except Exception as exc:  # noqa: BLE001
+        return [f"font validation error: {exc}"]
+
+
 def main() -> int:
     errors: list[str] = []
     errors.extend(check_required_files())
@@ -309,6 +322,7 @@ def main() -> int:
     errors.extend(check_duplicate_catalog_ids())
     errors.extend(check_documentation_language())
     errors.extend(check_content_integrity())
+    errors.extend(check_pixel_fonts())
 
     if errors:
         print("Проверка репозитория завершилась с ошибками:")

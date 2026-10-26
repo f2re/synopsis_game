@@ -16,6 +16,7 @@ Owns:
 
 - composition hierarchy and scene density;
 - palette roles/design tokens;
+- pixel-typography-policy, font-pairing, Cyrillic typographic style guide;
 - sprite shape language and scale families;
 - lighting/time-of-day/season art states;
 - character/item/world visual grammar;
@@ -72,6 +73,9 @@ The first art gate is `pixel-art-quality-reviewer`: pixel grid, frame consistenc
 The Art Director then rejects work that:
 
 - conflicts with `docs/BRAND_AND_LORE_26063.md`;
+- uses generic vector or blurred non-pixel fonts in UI, HUD or screens instead of approved project pixel fonts (`PressStart2P`, `PixCyrillic`, `PixCyrillic-Dense`);
+- introduces unvetted or unlocalized fonts lacking full Russian Cyrillic support (`Ё`/`ё`, punctuation, numbers);
+- violates pixel grid integer scaling for typography or distorts font glyph proportions;
 - becomes dashboard-first or obscures the active task;
 - uses giant prerendered scenes where reusable layers are expected;
 - recolors meteorological semantics;

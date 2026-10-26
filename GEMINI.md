@@ -10,7 +10,8 @@ Antigravity workspace automation lives in `.agents/`:
 
 Recommended Gemini/Antigravity roles:
 
-- `art-director` — visual coherence, palette, composition and world/time visual rules;
+- `art-director` — visual coherence, palette, composition, pixel typography policy and world/time visual rules;
+- `ui-pixel-designer` — pixel UI design system, windows, buttons, controls and Cyrillic pixel typography integration;
 - `pixel-asset-designer` — editable sprites, tiles, props, characters and interactives;
 - `pixel-asset-pipeline-engineer` — manifests, deterministic generation and packing;
 - `game-runtime-webgl-engineer` — Phaser 4/WebGL integration and React↔Phaser boundary;

@@ -37,9 +37,16 @@ Mandatory sources before designing or modifying UI components:
    - Tab switching: crisp content fade or slide.
    - Respect `prefers-reduced-motion: reduce`: disable non-essential motion, keep instant state changes.
 
-5. **Visual Quality & Accessibility:**
+5. **Pixel Typography & Cyrillic Integration:**
+   - Author and enforce pixel typography across all UI components, buttons, tabs, headers, dialogs, badges, and forms.
+   - Mandatory use of project-hosted fonts via CSS tokens: `--font-pixel-ui` (`PixCyrillic`), `--font-pixel-display` (`PressStart2P`), `--font-pixel-dense` (`PixCyrillic-Dense`), and `--font-pixel-mono` (`PressStart2P`). Never introduce unapproved generic vector fonts (Inter, Roboto, Arial) into the game UI shell.
+   - Enforce crisp pixel rendering rules: `-webkit-font-smoothing: none; font-smooth: never; text-rendering: pixelated;`.
+   - Strictly follow integer scale multiples (8px, 12px, 16px, 20px, 24px, 32px) and line-heights (`1.2`–`1.35`) ensuring full Cyrillic readability with no clipping of ascenders/descenders (`щ`, `ц`, `р`, `д`, `б`, `ё`).
+   - All text and button content must be verified with Russian strings before requesting review.
+
+6. **Visual Quality & Accessibility:**
    - Strict contrast ratios for text on dark atmospheric backgrounds.
    - Crisp rendering (`image-rendering: pixelated; image-rendering: crisp-edges;`).
    - High readability in classroom/projector environments and responsive mobile viewports.
 
-Required reviewers: `art-director` for visual brand alignment; `ux-accessibility-reviewer` for contrast and keyboard accessibility; `web-performance-engineer` for smooth frame rate.
+Required reviewers: `art-director` for visual brand and typographic alignment; `ux-accessibility-reviewer` for contrast, Cyrillic legibility and keyboard accessibility; `web-performance-engineer` for smooth frame rate.

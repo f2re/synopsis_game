@@ -68,13 +68,13 @@ export class ArchiveScene extends Phaser.Scene {
     g.fillStyle(0xa9b6c8, 1).fillRect(333, 55, 13, 7);
 
     this.add.text(16, 17, 'Архив', {
-      fontFamily: 'monospace',
+      fontFamily: 'PixCyrillic, monospace',
       fontSize: '12px',
       color: '#263640',
     });
 
     this.add.text(16, 31, 'Тихое рабочее помещение: каталоги, карты и архивные ситуации', {
-      fontFamily: 'monospace',
+      fontFamily: 'PixCyrillic, monospace',
       fontSize: '6px',
       color: '#5b655f',
     });
@@ -134,7 +134,7 @@ export class ArchiveScene extends Phaser.Scene {
       .setStrokeStyle(1, 0xe1c86b);
     const text = this.add
       .text(240, 191, message, {
-        fontFamily: 'monospace',
+        fontFamily: 'PixCyrillic, monospace',
         fontSize: '7px',
         color: '#f6f1e5',
         align: 'center',

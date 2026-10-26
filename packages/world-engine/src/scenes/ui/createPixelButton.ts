@@ -45,7 +45,7 @@ export function createPixelButton(
 
   const label = scene.add
     .text(0, 0, options.label, {
-      fontFamily: 'monospace',
+      fontFamily: 'PixCyrillic, monospace',
       fontSize: options.height >= 24 ? '10px' : '8px',
       color: options.state === 'primary' ? COLORS.textDark : COLORS.textLight,
       align: 'center',

@@ -22,6 +22,40 @@ ui:
   disabled_panel: "#3C4857"
   locked_text: "#C1CAD1"
 
+typography:
+  display_font: "PressStart2P"
+  ui_font: "PixCyrillic"
+  dense_font: "PixCyrillic-Dense"
+  mono_font: "PressStart2P"
+  fallback_font: "monospace"
+  rendering:
+    font_smooth: "never"
+    webkit_font_smoothing: "none"
+    text_rendering: "pixelated"
+  scales:
+    display:
+      hero: "32px"
+      h1: "24px"
+      h2: "16px"
+      kicker: "8px"
+      badge: "8px"
+    ui:
+      title: "20px"
+      button: "16px"
+      body: "16px"
+      subtext: "12px"
+      caption: "8px"
+    line_height:
+      tight: 1.15
+      normal: 1.3
+      relaxed: 1.5
+  cyrillic_requirements:
+    full_alphabet: true
+    yo_support: true
+    numbers_and_punctuation: true
+    meteo_symbols: true
+    no_blurry_antialiasing: true
+
 meteo:
   cold_front: "#2878D8"
   warm_front: "#E44747"

@@ -53,7 +53,7 @@ agents:
     title: Pixel-art Art Director
     preferred_provider: antigravity-gemini
     fallback_provider: claude-code
-    owns: [art-direction, palette, composition, visual-tokens, world-location-visual-policy]
+    owns: [art-direction, palette, composition, visual-tokens, pixel-typography-policy, world-location-visual-policy]
     reviews: [WORLD, AVATAR, UX, ENGINE, ASSET, SPRITE, ART-BATCH, Arena-TV-visuals]
     role_file: agents/roles/art-director.md
 
@@ -142,7 +142,7 @@ agents:
     title: UX, Responsive & Accessibility Reviewer
     preferred_provider: claude-code
     fallback_provider: antigravity-gemini
-    owns: [UX, accessibility, reduced-motion, projector-readability]
+    owns: [UX, accessibility, reduced-motion, pixel-font-legibility, projector-readability]
     reviews: [TASK, WORLD, AVATAR, ARENA, ENGINE]
     role_file: agents/roles/ux-accessibility-reviewer.md
 
@@ -166,7 +166,7 @@ agents:
     title: Pixel UI & Design System Designer
     preferred_provider: antigravity-gemini
     fallback_provider: claude-code
-    owns: [UI, design-system, windows, buttons, controls, micro-animations, pixel-frames]
+    owns: [UI, design-system, pixel-typography, windows, buttons, controls, micro-animations, pixel-frames]
     reviewers: [art-director, ux-accessibility-reviewer, web-performance-engineer]
     role_file: agents/roles/ui-pixel-designer.md
 

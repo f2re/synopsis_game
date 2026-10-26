@@ -227,7 +227,7 @@ export class HubScene extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
     this.timeButtonText = this.add
       .text(0, 0, this.isNightMode ? '🌙 Ночь' : '☀️ День', {
-        fontFamily: 'monospace, monospace',
+        fontFamily: 'PixCyrillic, monospace',
         fontSize: '12px',
         fontStyle: 'bold',
         color: '#f7f4e7',
@@ -306,7 +306,7 @@ export class HubScene extends Phaser.Scene {
     // 5. Hint banner at the bottom
     this.hintText = this.add
       .text(0, 0, '✢ Перетаскивание — зажмите ЛКМ • ⚲ Масштаб — колёсико мыши', {
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: 'PixCyrillic, monospace',
         fontSize: '11px',
         color: '#dfcf9d',
         backgroundColor: '#07162cee',
@@ -539,9 +539,8 @@ export class HubScene extends Phaser.Scene {
       .setStrokeStyle(2, 0xf1c75b, 0.95);
     const text = this.add
       .text(HUB_MASTER_WIDTH / 2, 443, message, {
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: 'PixCyrillic, monospace',
         fontSize: '14px',
-        fontStyle: '600',
         color: '#fff4ce',
         align: 'center',
         wordWrap: { width: 490 },

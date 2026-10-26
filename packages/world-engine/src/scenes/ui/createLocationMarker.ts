@@ -27,7 +27,7 @@ export function createLocationMarker(
 
   const title = scene.add
     .text(-48, -8, location.title, {
-      fontFamily: 'monospace',
+      fontFamily: 'PixCyrillic, monospace',
       fontSize: '8px',
       color: '#f6f4e9',
       wordWrap: { width: 86 },
@@ -36,7 +36,7 @@ export function createLocationMarker(
 
   const subtitle = scene.add
     .text(-48, 8, locked ? (location.unlockHint ?? 'Заблокировано') : location.subtitle, {
-      fontFamily: 'monospace',
+      fontFamily: 'PixCyrillic, monospace',
       fontSize: '6px',
       color: locked ? '#c1cad1' : '#eddc9d',
       wordWrap: { width: 90 },

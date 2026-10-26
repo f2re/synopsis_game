@@ -58,6 +58,7 @@ python tools/validate_repo.py
 python tools/validate_architecture.py
 python tools/validate_brand.py
 python tools/validate_pixel_art.py
+python tools/validate_fonts.py
 ```
 
 ## Agent routing
@@ -77,7 +78,8 @@ No agent may self-approve a gated change. In particular:
 
 ## Pixel-art and runtime ownership
 
-- `art-director` owns palette roles, composition, scale families, scene density, brand/lore visual coherence and final visual acceptance.
+- `art-director` owns palette roles, composition, scale families, scene density, brand/lore visual coherence, pixel typography policy and final visual acceptance.
+- `ui-pixel-designer` owns the pixel UI design system, pixel typography integration (`PixCyrillic`, `PressStart2P`), window frames, buttons, tabs, controls and micro-animations.
 - `pixel-asset-designer` owns editable production art in `assets/source`; it does not own packing/compression, renderer code or its own acceptance.
 - `pixel-art-quality-reviewer` independently owns technical pixel-art acceptance: logical grid, cluster discipline, frame/pivot consistency, palette/alpha discipline and raster production fitness.
 - `pixel-asset-pipeline-engineer` owns `tools/assets`, `assets/manifests`, deterministic generation, sprite-tools, AssetPack and the Tiled scene/asset-ID contract.
