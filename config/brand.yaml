@@ -1,0 +1,16 @@
+version: 1
+project: synopsis_game
+canonical_title: "26063: Позывной «Синоптик»"
+short_marks:
+  - "26063"
+  - "Позывной «Синоптик»"
+  - "26063 · Синоптик"
+lore_anchor:
+  wmo_station_index: "26063"
+  region: "Санкт-Петербург / Северо-Запад России"
+  policy: "Документальная опора для вымышленного мира; не утверждать буквальное воспроизведение реальной станции."
+visual_policy:
+  bake_title_into_backgrounds: false
+  base_hub_geography: "низкий северо-западный горизонт, вода, облачность, региональная растительность"
+  forbidden_base_hub_geography:
+    - "доминирующий альпийский горный горизонт"
