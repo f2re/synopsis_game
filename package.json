@@ -8,11 +8,11 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "dev": "pnpm --filter @synopsis/web dev",
-    "build": "pnpm --filter @synopsis/web build",
-    "typecheck": "pnpm world:typecheck && pnpm web:typecheck",
+    "bootstrap:web": "pnpm --dir apps/web install --ignore-workspace",
+    "dev": "pnpm --dir apps/web dev",
+    "build": "pnpm --dir apps/web build",
+    "typecheck": "pnpm --dir apps/web typecheck",
     "world:typecheck": "pnpm --filter @synopsis/world-engine typecheck",
-    "web:typecheck": "pnpm --filter @synopsis/web typecheck",
     "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check"
   }
 }
