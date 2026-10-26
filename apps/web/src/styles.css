@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #18373b;
-  background: #dfe9df;
+  color: #f7f4e7;
+  background: #08152f;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -13,91 +13,32 @@
 html,
 body,
 #root {
-  min-width: 320px;
-  min-height: 100%;
+  width: 100%;
+  height: 100%;
   margin: 0;
-}
-
-body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(255, 248, 221, 0.9), transparent 34rem),
-    linear-gradient(180deg, #d9ecdf 0%, #c8ddd6 100%);
-}
-
-.app-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: clamp(14px, 3vw, 36px);
-}
-
-.prototype-card {
-  width: min(1180px, 100%);
-  border: 1px solid rgba(42, 91, 86, 0.22);
-  border-radius: 22px;
-  background: rgba(247, 244, 230, 0.88);
-  box-shadow: 0 20px 70px rgba(42, 71, 64, 0.18);
   overflow: hidden;
 }
 
-.prototype-header,
-.prototype-footer,
-.prototype-placeholder {
-  padding: 16px clamp(16px, 3vw, 28px);
+body {
+  min-width: 320px;
+  min-height: 100dvh;
+  background: #08152f;
 }
 
-.prototype-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 16px;
-  border-bottom: 1px solid rgba(42, 91, 86, 0.15);
-}
-
-.prototype-kicker {
-  display: inline-block;
-  margin-bottom: 4px;
-  color: #52766c;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.prototype-header h1,
-.prototype-placeholder h1 {
-  margin: 0;
-  font-size: clamp(1.2rem, 2vw, 1.75rem);
-}
-
-.prototype-placeholder p {
-  margin: 10px 0 0;
-  color: #42625d;
-}
-
-.prototype-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #355b57;
-  font-size: 0.92rem;
-  font-weight: 650;
-  white-space: nowrap;
-}
-
-.status-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #6eaa72;
-  box-shadow: 0 0 0 4px rgba(110, 170, 114, 0.15);
+.game-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: #08152f;
 }
 
 .world-canvas-host {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #8ec9e5;
+  height: 100%;
   overflow: hidden;
   outline: none;
   touch-action: manipulation;
@@ -105,52 +46,39 @@ body {
 
 .world-canvas-host canvas {
   display: block;
-  max-width: 100%;
-  margin: 0 auto;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-.prototype-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  color: #42625d;
-  border-top: 1px solid rgba(42, 91, 86, 0.15);
-  font-size: 0.86rem;
-  line-height: 1.45;
-}
-
-.prototype-footer p {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none;
+  max-height: none;
   margin: 0;
 }
 
-.prototype-help {
-  text-align: right;
-  color: #6f6751;
+.arena-tv-placeholder {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background: #08152f;
 }
 
-@media (max-width: 700px) {
-  .app-shell {
-    padding: 0;
-  }
+.arena-tv-placeholder section {
+  max-width: 720px;
+}
 
-  .prototype-card {
-    border-radius: 0;
-    min-height: 100vh;
-  }
+.arena-tv-placeholder span {
+  color: #9fb8c9;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
-  .prototype-header {
-    align-items: center;
-  }
+.arena-tv-placeholder h1 {
+  margin: 8px 0 0;
+}
 
-  .prototype-footer {
-    display: grid;
-  }
-
-  .prototype-help {
-    text-align: left;
-  }
+.arena-tv-placeholder p {
+  color: #c8d3dc;
 }
 
 @media (prefers-reduced-motion: reduce) {
