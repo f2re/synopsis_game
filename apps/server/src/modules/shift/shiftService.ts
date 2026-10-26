@@ -131,7 +131,7 @@ export class ShiftService {
       feedback: {
         correct: validation.correct,
         correctAnswer: validation.correctAnswer,
-        details: validation.details ?? null,
+        details: (validation as unknown as { details?: unknown }).details ?? null,
         explanation: current.definition.explanation ?? '',
         principleTags: current.definition.principle_tags ?? [],
         sources: this.resolveSources(current.definition),
