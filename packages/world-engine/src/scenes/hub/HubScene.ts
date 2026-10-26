@@ -138,8 +138,8 @@ export class HubScene extends Phaser.Scene {
 
   private setupAtmosphericVfx(): void {
     // 1. Radar mast red obstruction beacon
-    const radarBeacon = this.add.circle(216, 78, 3.5, 0xff2222, 0.95).setDepth(20);
-    const radarGlow = this.add.circle(216, 78, 8, 0xff3333, 0.35).setDepth(19);
+    const radarBeacon = this.add.circle(138, 103, 3.5, 0xff2222, 0.95).setDepth(20);
+    const radarGlow = this.add.circle(138, 103, 8, 0xff3333, 0.35).setDepth(19);
 
     this.tweens.add({
       targets: [radarBeacon, radarGlow],
@@ -152,8 +152,8 @@ export class HubScene extends Phaser.Scene {
     });
 
     // 2. Aerology mast beacon
-    const aeroBeacon = this.add.circle(778, 94, 3, 0xff4422, 0.9).setDepth(20);
-    const aeroGlow = this.add.circle(778, 94, 7, 0xff5533, 0.3).setDepth(19);
+    const aeroBeacon = this.add.circle(780, 115, 3, 0xff4422, 0.9).setDepth(20);
+    const aeroGlow = this.add.circle(780, 115, 7, 0xff5533, 0.3).setDepth(19);
 
     this.tweens.add({
       targets: [aeroBeacon, aeroGlow],
@@ -504,55 +504,55 @@ export class HubScene extends Phaser.Scene {
       },
       {
         id: 'hub.location.radar',
-        x: 164,
-        y: 136,
-        width: 126,
-        height: 43,
+        x: 155,
+        y: 165,
+        width: 140,
+        height: 100,
         title: 'ДМРЛ-С • Радарный комплекс',
         action: () => this.openFacilityDossier('radar'),
       },
       {
         id: 'hub.location.maps-analysis',
         x: 150,
-        y: 232,
-        width: 150,
-        height: 43,
+        y: 250,
+        width: 130,
+        height: 70,
         title: 'Картографический класс',
         action: () => this.openFacilityDossier('synoptic-center'),
       },
       {
         id: 'hub.location.aerology',
-        x: 742,
-        y: 169,
-        width: 146,
-        height: 44,
+        x: 786,
+        y: 179,
+        width: 140,
+        height: 100,
         title: 'Аэрологический павильон',
         action: () => this.openFacilityDossier('aerology'),
       },
       {
         id: 'hub.location.archive',
-        x: 620,
-        y: 284,
-        width: 132,
-        height: 43,
+        x: 657,
+        y: 292,
+        width: 130,
+        height: 90,
         title: 'Научный архив',
         action: () => this.openFacilityDossier('archive'),
       },
       {
         id: 'hub.location.tournament-hall',
-        x: 826,
-        y: 289,
-        width: 154,
-        height: 43,
+        x: 841,
+        y: 274,
+        width: 130,
+        height: 90,
         title: 'Турнирный зал',
         action: () => this.openFacilityDossier('tournament-hall'),
       },
       {
         id: 'hub.location.synoptic-center',
-        x: 445,
-        y: 198,
-        width: 198,
-        height: 42,
+        x: 480,
+        y: 236,
+        width: 180,
+        height: 80,
         title: 'Оперативный зал анализа',
         action: () => this.openFacilityDossier('synoptic-center'),
       },
