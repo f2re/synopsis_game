@@ -456,6 +456,56 @@ export function AvatarPreview({
       fill(ctx, beanBase, 9, headY - 3, 14, 6);
       fill(ctx, beanLine, 8, headY + 1, 16, 3); // rolled rim
       fill(ctx, '#8b70a3', 9, headY + 2, 14, 1);
+    } else if (avatar.headwear === 'headwear.scarf') {
+      const scBase = '#8a3333';
+      const scDark = '#5c1f1f';
+      const scLight = '#b84d4d';
+      const scFringe = '#f0e6d2';
+      const flutter = animFrame % 2 === 1 ? 1 : 0;
+
+      if (direction === 'down') {
+        fill(ctx, scDark, 10, 15 + bounceY, 12, 4);
+        fill(ctx, scBase, 11, 15 + bounceY, 10, 3);
+        fill(ctx, scLight, 12, 16 + bounceY, 8, 1);
+        fill(ctx, scDark, 11, 18 + bounceY, 4, 9 + flutter);
+        fill(ctx, scBase, 12, 18 + bounceY, 2, 8 + flutter);
+        fill(ctx, scFringe, 11, 27 + bounceY + flutter, 4, 2);
+      } else if (direction === 'up') {
+        fill(ctx, scDark, 10, 15 + bounceY, 12, 4);
+        fill(ctx, scBase, 11, 15 + bounceY, 10, 3);
+        fill(ctx, scLight, 12, 16 + bounceY, 8, 1);
+      } else {
+        const scX = direction === 'right' ? 12 : 11;
+        fill(ctx, scDark, scX - 1, 15 + bounceY, 8, 4);
+        fill(ctx, scBase, scX, 15 + bounceY, 6, 3);
+        fill(ctx, scDark, scX + 1, 18 + bounceY, 3, 8 + flutter);
+        fill(ctx, scFringe, scX + 1, 26 + bounceY + flutter, 3, 2);
+      }
+    } else if (avatar.headwear === 'headwear.goggles') {
+      const gogBrass = '#d4af37';
+      const gogDark = '#2d1e18';
+      const gogLens = '#1d6e7a';
+      const gogGlint = '#ffffff';
+
+      if (direction === 'down') {
+        fill(ctx, gogDark, 8, headY + 1, 16, 2);
+        fill(ctx, gogBrass, 11, headY, 4, 4);
+        fill(ctx, gogLens, 12, headY + 1, 2, 2);
+        fill(ctx, gogGlint, 12, headY + 1, 1, 1);
+        fill(ctx, gogBrass, 17, headY, 4, 4);
+        fill(ctx, gogLens, 18, headY + 1, 2, 2);
+        fill(ctx, gogGlint, 18, headY + 1, 1, 1);
+        fill(ctx, gogBrass, 15, headY + 1, 2, 2);
+      } else if (direction === 'up') {
+        fill(ctx, gogDark, 8, headY + 1, 16, 2);
+        fill(ctx, '#9c8c74', 15, headY, 2, 3);
+      } else {
+        const gogX = direction === 'right' ? 17 : 9;
+        fill(ctx, gogDark, 10, headY + 1, 12, 2);
+        fill(ctx, gogBrass, gogX, headY, 5, 4);
+        fill(ctx, gogLens, gogX + 1, headY + 1, 3, 2);
+        fill(ctx, gogGlint, gogX + 1, headY + 1, 1, 1);
+      }
     }
 
     // 10. HELD ITEM

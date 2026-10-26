@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { api, type AvatarProfile, type SessionUser } from '../../api';
 import { AvatarPreview, type AvatarDirection, type AvatarAnimation } from './AvatarPreview';
 import { worldAudio } from '@synopsis/world-engine';
@@ -83,9 +83,9 @@ const STYLE_PRESETS: StylePreset[] = [
     id: 'preset.cozy',
     name: 'Кампусный уют',
     icon: '☕',
-    desc: 'Скандинавский вязаный свитер, джинсы, кроссовки и ручная синичка',
+    desc: 'Скандинавский вязаный свитер, тёплый шарф, джинсы, кроссовки и ручная синичка',
     avatar: {
-      headwear: 'headwear.beanie',
+      headwear: 'headwear.scarf',
       top: 'top.sweater',
       bottom: 'bottom.jeans',
       footwear: 'footwear.sneakers',
@@ -111,6 +111,22 @@ const STYLE_PRESETS: StylePreset[] = [
       companion: 'companion.squirrel',
     },
   },
+  {
+    id: 'preset.polar',
+    name: 'Полярная метель',
+    icon: '❄️',
+    desc: 'Защитные очки, полевая штормовка, карго, берцы и походный ранец',
+    avatar: {
+      headwear: 'headwear.goggles',
+      top: 'top.field-jacket',
+      bottom: 'bottom.field-trousers',
+      footwear: 'footwear.boots',
+      backpack: 'backpack.field',
+      heldItem: 'held.tablet',
+      badge: 'badge.meteo',
+      companion: 'companion.squirrel',
+    },
+  },
 ];
 
 const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
@@ -127,11 +143,11 @@ const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
     { id: 'haircolor.auburn', name: 'Медный рыжий', color: '#a1482d', desc: 'Яркий осенний кленовый тон' },
   ],
   hair: [
-    { id: 'hair.short', name: 'Короткая классика', icon: '✂️', desc: 'Аккуратная стрижка офицера-наблюдателя' },
-    { id: 'hair.wave', name: 'Балтийские волны', icon: '〰️', desc: 'Мягкие пряди с естественной укладкой' },
-    { id: 'hair.bob', name: 'Каре синоптика', icon: '💇', desc: 'Чёткий графичный силуэт до линии плеч' },
-    { id: 'hair.curl', name: 'Объёмные кудри', icon: '🌀', desc: 'Пружинистые спирали, обрамляющие лицо' },
-    { id: 'hair.long', name: 'Длинные пряди', icon: '✨', desc: 'Свободно ниспадающие за плечи волосы' },
+    { id: 'hair.short', name: 'Короткая классика', image: '/assets/items/hair_short.png', desc: 'Аккуратная стрижка офицера-наблюдателя' },
+    { id: 'hair.wave', name: 'Балтийские волны', image: '/assets/items/hair_wave.png', desc: 'Мягкие пряди с естественной укладкой' },
+    { id: 'hair.bob', name: 'Каре синоптика', image: '/assets/items/hair_bob.png', desc: 'Чёткий графичный силуэт до линии плеч' },
+    { id: 'hair.curl', name: 'Объёмные кудри', image: '/assets/items/hair_curl.png', desc: 'Пружинистые спирали, обрамляющие лицо' },
+    { id: 'hair.long', name: 'Длинные пряди', image: '/assets/items/hair_long.png', desc: 'Свободно ниспадающие за плечи волосы' },
   ],
   headwear: [
     { id: 'headwear.none', name: 'Без убора', icon: '🚫', desc: 'Открытая аккуратная причёска' },
@@ -148,6 +164,20 @@ const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
       image: '/assets/items/headwear_beanie.png',
       styleTag: 'Уютный',
       desc: 'Шерстяная шапка крупной вязки с отворотом от морского ветра',
+    },
+    {
+      id: 'headwear.scarf',
+      name: 'Балтийский шарф',
+      image: '/assets/items/headwear_scarf.png',
+      styleTag: 'Уютный',
+      desc: 'Плотный шерстяной шарф крупной вязки с бахромой от балтийских ветров',
+    },
+    {
+      id: 'headwear.goggles',
+      name: 'Защитные очки',
+      image: '/assets/items/headwear_goggles.png',
+      styleTag: 'Полевой',
+      desc: 'Авиационные поляризационные очки от снежной слепоты и штормовой пыли',
     },
   ],
   top: [
@@ -325,6 +355,49 @@ export function AvatarEditor({
   const [animation, setAnimation] = useState<AvatarAnimation>('idle');
   const [status, setStatus] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const ROTATION_CLOCKWISE: Record<AvatarDirection, AvatarDirection> = {
+      down: 'right',
+      right: 'up',
+      up: 'left',
+      left: 'down',
+    };
+    const ROTATION_COUNTER: Record<AvatarDirection, AvatarDirection> = {
+      down: 'left',
+      left: 'up',
+      up: 'right',
+      right: 'down',
+    };
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+        e.preventDefault();
+        setDirection((prev) => ROTATION_CLOCKWISE[prev]);
+        try { worldAudio.play('audio.ui.click-soft'); } catch {}
+      } else if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+        e.preventDefault();
+        setDirection((prev) => ROTATION_COUNTER[prev]);
+        try { worldAudio.play('audio.ui.click-soft'); } catch {}
+      } else if (e.code === 'Space') {
+        e.preventDefault();
+        setAnimation((prev) => (prev === 'walk' ? 'idle' : 'walk'));
+        try { worldAudio.play('audio.ui.click-soft'); } catch {}
+      } else if (e.code === 'KeyE') {
+        e.preventDefault();
+        setAnimation('inspect');
+        try { worldAudio.play('audio.feedback.synoptic-chime'); } catch {}
+        window.setTimeout(() => setAnimation('idle'), 1200);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   function playUiSound(soundId: string) {
     try {
@@ -694,7 +767,11 @@ export function AvatarEditor({
                         onClick={() => updateOption('hair', item.id)}
                       >
                         <div className="item-card-preview">
-                          <span className="item-card-emoji">{item.icon}</span>
+                          {item.image ? (
+                            <img src={item.image} alt={item.name} className="item-card-image" />
+                          ) : (
+                            <span className="item-card-emoji">{item.icon}</span>
+                          )}
                         </div>
                         <div className="item-card-info">
                           <strong className="item-card-name">{item.name}</strong>

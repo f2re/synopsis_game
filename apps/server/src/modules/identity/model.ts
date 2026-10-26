@@ -15,7 +15,7 @@ export const AVATAR_OPTIONS = {
   skinTone: ['skin.light', 'skin.warm', 'skin.medium', 'skin.deep'],
   hair: ['hair.short', 'hair.wave', 'hair.bob', 'hair.curl', 'hair.long'],
   hairColor: ['haircolor.brown', 'haircolor.black', 'haircolor.blond', 'haircolor.auburn'],
-  headwear: ['headwear.none', 'headwear.cap', 'headwear.beanie'],
+  headwear: ['headwear.none', 'headwear.cap', 'headwear.beanie', 'headwear.scarf', 'headwear.goggles'],
   top: ['top.center-jacket', 'top.field-jacket', 'top.hoodie', 'top.sweater', 'top.shirt'],
   bottom: ['bottom.dark-trousers', 'bottom.field-trousers', 'bottom.jeans'],
   footwear: ['footwear.sneakers', 'footwear.boots', 'footwear.shoes'],
