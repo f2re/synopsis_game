@@ -23,10 +23,47 @@ function responseDescriptor(definition) {
   if (definition.answer?.kind === 'numeric') return { kind: 'numeric', unit: definition.answer.unit ?? null };
   if (definition.answer?.kind === 'choice_index') return { kind: 'choice' };
   if (definition.type === 'sequence') return { kind: 'sequence' };
+  if (definition.type === 'dependencySequence') return { kind: 'dependencySequence' };
   if (definition.type === 'stationPlot' && definition.answer?.kind === 'station_plot') return { kind: 'stationPlot' };
   if (definition.type === 'stationBoard' && definition.answer?.kind === 'station_board') return { kind: 'stationBoard' };
   if (definition.type === 'findError' && definition.answer?.kind === 'station_id') return { kind: 'findError' };
   return { kind: definition.type };
+}
+
+function validateDependencySequenceDefinition(definition) {
+  if (!Array.isArray(definition.steps) || definition.steps.length < 2 || !Array.isArray(definition.dependencies)) {
+    throw new Error(`Некорректное задание dependencySequence: ${definition.id}`);
+  }
+  const n = definition.steps.length;
+  const edges = definition.dependencies.map((edge) => {
+    if (!Array.isArray(edge) || edge.length !== 2) throw new Error(`Некорректная зависимость ${definition.id}`);
+    const before = Number(edge[0]);
+    const after = Number(edge[1]);
+    if (!Number.isInteger(before) || !Number.isInteger(after) || before < 0 || after < 0 || before >= n || after >= n || before === after) {
+      throw new Error(`dependencySequence ${definition.id}: индекс зависимости вне диапазона`);
+    }
+    return [before, after];
+  });
+
+  const indegree = Array(n).fill(0);
+  const outgoing = Array.from({ length: n }, () => []);
+  for (const [before, after] of edges) {
+    indegree[after] += 1;
+    outgoing[before].push(after);
+  }
+  const queue = indegree.map((degree, index) => degree === 0 ? index : -1).filter((index) => index >= 0);
+  const example = [];
+  while (queue.length) {
+    queue.sort((a, b) => a - b);
+    const current = queue.shift();
+    example.push(current);
+    for (const next of outgoing[current]) {
+      indegree[next] -= 1;
+      if (indegree[next] === 0) queue.push(next);
+    }
+  }
+  if (example.length !== n) throw new Error(`dependencySequence ${definition.id}: граф зависимостей содержит цикл`);
+  return { edges, example };
 }
 
 function validatePlacementDefinition(definition, expectedKind, typeName) {
@@ -48,9 +85,7 @@ function validatePlacementDefinition(definition, expectedKind, typeName) {
 
 function placementResult(definition, submitted) {
   const expected = definition.answer?.placements ?? {};
-  const placements = submitted && typeof submitted === 'object' && submitted.placements && typeof submitted.placements === 'object'
-    ? submitted.placements
-    : {};
+  const placements = submitted && typeof submitted === 'object' && submitted.placements && typeof submitted.placements === 'object' ? submitted.placements : {};
   const components = Object.entries(expected).map(([observationId, expectedSlotId]) => {
     const submittedSlotId = placements[observationId] ?? null;
     return { observationId, submittedSlotId, expectedSlotId, correct: submittedSlotId === expectedSlotId };
@@ -81,9 +116,7 @@ function validateFindErrorDefinition(definition) {
 }
 
 export function createTaskInstance(definition, options) {
-  if (!definition?.id || !options?.instanceId || !options?.contentPack) {
-    throw new Error('Для формирования TaskInstance нужны definition.id, instanceId и contentPack');
-  }
+  if (!definition?.id || !options?.instanceId || !options?.contentPack) throw new Error('Для формирования TaskInstance нужны definition.id, instanceId и contentPack');
   const seed = Number(options.seed ?? 0);
   const publicTask = {
     instanceId: options.instanceId,
@@ -115,15 +148,16 @@ export function createTaskInstance(definition, options) {
     return { publicTask, validationContext: { kind: 'sequence', canonicalByPublic } };
   }
 
+  if (definition.type === 'dependencySequence') {
+    const { edges, example } = validateDependencySequenceDefinition(definition);
+    const canonicalByPublic = shuffledIndices(definition.steps.length, seed);
+    publicTask.payload = { steps: canonicalByPublic.map((canonicalIndex, publicIndex) => ({ id: publicIndex, label: definition.steps[canonicalIndex] })) };
+    return { publicTask, validationContext: { kind: 'dependencySequence', canonicalByPublic, edges, example } };
+  }
+
   if (definition.type === 'stationPlot') {
     const { observations, slots } = validatePlacementDefinition(definition, 'station_plot', 'stationPlot');
-    publicTask.payload = {
-      profile: definition.payload?.profile ?? null,
-      station: structuredClone(definition.payload?.station ?? null),
-      observations: structuredClone(observations),
-      slots: structuredClone(slots),
-      canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
-    };
+    publicTask.payload = { profile: definition.payload?.profile ?? null, station: structuredClone(definition.payload?.station ?? null), observations: structuredClone(observations), slots: structuredClone(slots), canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }) };
     return { publicTask, validationContext: { kind: 'stationPlot' } };
   }
 
@@ -133,28 +167,14 @@ export function createTaskInstance(definition, options) {
     if (!Array.isArray(stations) || stations.length < 2) throw new Error(`stationBoard ${definition.id} требует несколько станций`);
     const stationIds = new Set(stations.map((item) => item?.id));
     if (stationIds.size !== stations.length || stationIds.has(undefined)) throw new Error(`stationBoard ${definition.id}: station.id должны быть уникальными`);
-    for (const item of [...observations, ...slots]) {
-      if (!stationIds.has(item?.stationId)) throw new Error(`stationBoard ${definition.id}: неизвестная stationId ${item?.stationId}`);
-    }
-    publicTask.payload = {
-      profile: definition.payload?.profile ?? null,
-      stations: structuredClone(stations),
-      observations: structuredClone(observations),
-      slots: structuredClone(slots),
-      canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
-    };
+    for (const item of [...observations, ...slots]) if (!stationIds.has(item?.stationId)) throw new Error(`stationBoard ${definition.id}: неизвестная stationId ${item?.stationId}`);
+    publicTask.payload = { profile: definition.payload?.profile ?? null, stations: structuredClone(stations), observations: structuredClone(observations), slots: structuredClone(slots), canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }) };
     return { publicTask, validationContext: { kind: 'stationBoard' } };
   }
 
   if (definition.type === 'findError') {
     const { stations, observations } = validateFindErrorDefinition(definition);
-    publicTask.payload = {
-      profile: definition.payload?.profile ?? null,
-      rule: definition.payload?.rule ?? null,
-      stations: structuredClone(stations),
-      observations: structuredClone(observations),
-      canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }),
-    };
+    publicTask.payload = { profile: definition.payload?.profile ?? null, rule: definition.payload?.rule ?? null, stations: structuredClone(stations), observations: structuredClone(observations), canvas: structuredClone(definition.payload?.canvas ?? { width: 1000, height: 1000 }) };
     return { publicTask, validationContext: { kind: 'findError' } };
   }
 
@@ -177,11 +197,7 @@ export function validateTaskAnswer(definition, validationContext, submitted) {
     const publicIndex = Number(submitted?.choiceIndex);
     const canonicalIndex = validationContext?.canonicalByPublic?.[publicIndex];
     const expected = Number(definition.answer?.value);
-    return {
-      correct: Number.isInteger(publicIndex) && canonicalIndex === expected,
-      normalizedAnswer: publicIndex,
-      correctAnswer: definition.payload.options[expected],
-    };
+    return { correct: Number.isInteger(publicIndex) && canonicalIndex === expected, normalizedAnswer: publicIndex, correctAnswer: definition.payload.options[expected] };
   }
 
   if (definition.type === 'sequence') {
@@ -192,28 +208,37 @@ export function validateTaskAnswer(definition, validationContext, submitted) {
     return { correct, normalizedAnswer: order, correctAnswer: expected.map((canonicalIndex) => definition.steps[canonicalIndex]) };
   }
 
+  if (definition.type === 'dependencySequence') {
+    const order = Array.isArray(submitted?.order) ? submitted.order.map(Number) : [];
+    const canonicalOrder = order.map((publicIndex) => validationContext?.canonicalByPublic?.[publicIndex]);
+    const positions = new Map(canonicalOrder.map((canonicalIndex, position) => [canonicalIndex, position]));
+    const complete = canonicalOrder.length === definition.steps.length && new Set(canonicalOrder).size === definition.steps.length && canonicalOrder.every((value) => Number.isInteger(value));
+    const violations = validationContext.edges.filter(([before, after]) => !complete || positions.get(before) >= positions.get(after));
+    return {
+      correct: complete && violations.length === 0,
+      normalizedAnswer: order,
+      correctAnswer: validationContext.example.map((canonicalIndex) => definition.steps[canonicalIndex]),
+      details: {
+        violations: violations.map(([before, after]) => ({ before: definition.steps[before], after: definition.steps[after] })),
+        multipleOrdersAllowed: true,
+      },
+    };
+  }
+
   if (definition.type === 'stationPlot' || definition.type === 'stationBoard') return placementResult(definition, submitted);
 
   if (definition.type === 'findError') {
     const submittedStationId = typeof submitted?.stationId === 'string' ? submitted.stationId : '';
     const expectedStationId = String(definition.answer?.value ?? '');
     const station = definition.payload.stations.find((item) => item.id === expectedStationId);
-    return {
-      correct: submittedStationId === expectedStationId,
-      normalizedAnswer: { stationId: submittedStationId },
-      correctAnswer: station?.name ?? expectedStationId,
-      details: { selectedStationId: submittedStationId, expectedStationId },
-    };
+    return { correct: submittedStationId === expectedStationId, normalizedAnswer: { stationId: submittedStationId }, correctAnswer: station?.name ?? expectedStationId, details: { selectedStationId: submittedStationId, expectedStationId } };
   }
 
   throw new Error(`Проверка типа ${definition.type} пока не поддерживается`);
 }
 
 export function assertPublicTaskSafe(publicTask) {
-  const forbidden = new Set([
-    'answer', 'correct_order', 'correctOrder', 'canonicalByPublic', 'validationContext', 'correctPlacements',
-    'correctStationId', 'expectedStationId',
-  ]);
+  const forbidden = new Set(['answer', 'correct_order', 'correctOrder', 'dependencies', 'canonicalByPublic', 'validationContext', 'correctPlacements', 'correctStationId', 'expectedStationId']);
   const visit = (value) => {
     if (!value || typeof value !== 'object') return;
     for (const [key, child] of Object.entries(value)) {
