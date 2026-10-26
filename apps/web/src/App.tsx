@@ -51,7 +51,7 @@ function Home({
   onLogout: () => void;
   onOpenSetCode: () => void;
 }) {
-  const [sessionMenuOpen, setSessionMenuOpen] = useState(true);
+  const [sessionMenuOpen, setSessionMenuOpen] = useState(false);
 
   useEffect(() => {
     const toggleSessionMenu = () => setSessionMenuOpen((open) => !open);
@@ -73,36 +73,58 @@ function Home({
   return (
     <main className="game-viewport" aria-label={GAME_TITLE}>
       <Suspense fallback={null}><WorldCanvas /></Suspense>
-      {sessionMenuOpen && (
-        user ? (
-          <aside className="game-user-overlay game-session-menu" aria-label="Профиль пользователя">
-            <div className="user-toolbar">
-              <AvatarPreview avatar={user.avatar} size={32} />
-              <div className="user-toolbar-name">
+      <aside className={`game-user-overlay ${sessionMenuOpen ? 'is-open' : 'is-collapsed'}`} aria-label={user ? 'Профиль пользователя' : 'Статус наблюдателя'}>
+        {user ? (
+          <>
+            <button
+              type="button"
+              className="game-user-chip"
+              aria-expanded={sessionMenuOpen}
+              onClick={() => setSessionMenuOpen((open) => !open)}
+            >
+              <AvatarPreview avatar={user.avatar} size={28} />
+              <span className="game-user-chip-copy">
                 <strong>{user.displayName}</strong>
-                <span>{user.groupId}</span>
+                <small>{user.groupId}</small>
+              </span>
+              <span className="game-user-chip-caret" aria-hidden="true">{sessionMenuOpen ? '▴' : '▾'}</span>
+            </button>
+            {sessionMenuOpen && (
+              <div className="game-session-popover">
+                <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
+                <button className="ghost-button" onClick={onOpenSetCode}>
+                  {user.codeSet ? 'Сменить код' : 'Задать код'}
+                </button>
+                {user.roles.includes('admin') && (
+                  <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>
+                )}
+                <button className="ghost-button" onClick={onLogout}>Выйти</button>
               </div>
-              <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
-              <button className="ghost-button" onClick={onOpenSetCode}>
-                {user.codeSet ? 'Сменить код' : 'Задать код'}
-              </button>
-              {user.roles.includes('admin') && (
-                <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>
-              )}
-              <button className="ghost-button" onClick={onLogout}>Выйти</button>
-            </div>
-          </aside>
+            )}
+          </>
         ) : (
-          <aside className="game-user-overlay" aria-label="Статус наблюдателя">
-            <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" />
-            <div className="game-user-brand">
-              <span className="prototype-kicker">{GAME_MARK} · {GAME_CALLSIGN}</span>
-              <span className="observer-chip">👁 Режим наблюдателя</span>
-            </div>
-            <button className="primary-button" onClick={onLoginClick}>Войти</button>
-          </aside>
-        )
-      )}
+          <>
+            <button
+              type="button"
+              className="game-user-chip game-observer-chip"
+              aria-expanded={sessionMenuOpen}
+              onClick={() => setSessionMenuOpen((open) => !open)}
+            >
+              <img src="/ui/ui_station_crest_badge_v2.png" alt="" className="game-user-chip-crest" />
+              <span className="game-user-chip-copy">
+                <strong>{GAME_MARK} · {GAME_CALLSIGN}</strong>
+                <small>Режим наблюдателя</small>
+              </span>
+              <span className="game-user-chip-caret" aria-hidden="true">{sessionMenuOpen ? '▴' : '▾'}</span>
+            </button>
+            {sessionMenuOpen && (
+              <div className="game-session-popover">
+                <button className="primary-button" onClick={onLoginClick}>Войти</button>
+              </div>
+            )}
+          </>
+        )}
+      </aside>
     </main>
   );
 }
