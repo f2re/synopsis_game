@@ -1,19 +1,19 @@
-# ADR-0004: Phaser 4, WebGL runtime and pixel-asset pipeline
+# ADR-0004: Phaser 4, WebGL-контур и конвейер пиксельных ресурсов
 
-**Status:** accepted
+**Статус:** принято
 
-## Decision
+## Решение
 
-The browser game runtime for the living world is Phaser 4, pinned initially to `4.2.1`, embedded inside the React application. Phaser owns world rendering/game-loop concerns; React owns ordinary application UI. The meteorological `map-engine` remains separate on SVG/Canvas and is not migrated into Phaser merely for visual consistency.
+Рабочий контур живого мира в браузере строится на Phaser 4, первоначально зафиксированном на версии `4.2.1`, и встраивается внутрь React-приложения. Phaser отвечает за отрисовку мира и игровой цикл; React — за обычный интерфейс приложения. Профессиональный метеорологический `map-engine` остаётся отдельным SVG/Canvas-модулем и не переносится в Phaser только ради визуального единообразия.
 
-Production pixel assets use Aseprite as the primary editor, Pixelorama as an open-source alternative, Tiled JSON as the canonical world-scene format, `@trebeljahr/sprite-tools` for sprite inspection/metadata/transforms and PixiJS AssetPack for web optimisation. Exact accepted versions and upgrade policy live in `config/art-toolchain.yaml`.
+Для производственной пиксельной графики основным редактором является Aseprite, свободной альтернативой — Pixelorama, каноническим форматом сцен — Tiled JSON, средствами проверки/преобразования спрайтов — `@trebeljahr/sprite-tools`, а средством браузерной оптимизации — PixiJS AssetPack. Точные версии и политика обновления хранятся в `config/art-toolchain.yaml`.
 
-## Boundaries
+## Границы ответственности
 
-`pixel-asset-designer` creates source art. `pixel-asset-pipeline-engineer` owns deterministic transformation/packing. `game-runtime-webgl-engineer` owns Phaser/WebGL runtime integration. `living-world-engineer` owns world state and ambient behaviour. `web-performance-engineer` independently reviews budgets and degradation.
+`pixel-asset-designer` создаёт редактируемые исходники. `pixel-asset-pipeline-engineer` владеет воспроизводимым преобразованием и упаковкой. `game-runtime-webgl-engineer` владеет интеграцией Phaser/WebGL. `living-world-engineer` владеет состоянием мира и фоновым поведением. `web-performance-engineer` независимо проверяет бюджеты и деградацию.
 
-Generated assets are never manually edited. A Phaser major upgrade requires explicit review/ADR because rendering semantics and APIs may change.
+Производные ресурсы не редактируются вручную. Переход на новую основную версию Phaser требует явного архитектурного пересмотра, поскольку могут измениться интерфейсы и свойства отрисовки.
 
-## Consequences
+## Последствия
 
-We gain a reproducible source→atlas→runtime path, a clear renderer owner, and a stable separation between decorative game rendering and professional meteorological geometry. We accept an additional asset-build step and explicit tool version management.
+Получаем воспроизводимый путь «исходник → атлас → Phaser», отдельного владельца графического контура и устойчивое разделение декоративной игровой отрисовки и профессиональной метеорологической геометрии. Цена решения — дополнительный этап сборки ресурсов и необходимость явно управлять версиями инструментов.

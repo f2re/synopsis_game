@@ -1,8 +1,8 @@
-# Игровой runtime, WebGL и графические ресурсы
+# Игровой рабочий контур, WebGL и графические ресурсы
 
 **Статус:** принято
 
-## Runtime boundary
+## Граница рабочих контуров
 
 ```text
 React application
@@ -13,15 +13,15 @@ React application
         └── Phaser 4 / WebGL
 ```
 
-Phaser is not the application shell. It is the game-world renderer and animation runtime.
+Phaser не является оболочкой всего приложения. Он отвечает за отрисовку и анимацию живого игрового мира; обычный интерфейс остаётся в React.
 
-## World rendering layers
+## Слои отрисовки мира
 
 `L0 sky/stars → L1 clouds/sun/moon → L2 distant terrain/city → L3 campus architecture → L4 vegetation/lights/flags → L5 NPC/fauna → L6 interactables → L7 DOM/UI boundary → L8 short feedback FX`.
 
-`world-engine` receives world state and deterministic seeds. Frame-level animation remains local. Server state never streams every bird coordinate each frame.
+`world-engine` получает состояние мира и детерминированные зерна событий. Покадровая анимация выполняется локально. Сервер не передаёт координату каждой птицы на каждом кадре.
 
-## Asset flow
+## Поток графических ресурсов
 
 ```text
 Aseprite / Pixelorama
@@ -36,27 +36,27 @@ AssetPack optimisation
         ↓
 assets/generated
         ↓
-Phaser loader/runtime
+Phaser loader
 ```
 
-## Pixel rendering contract
+## Контракт пиксельной отрисовки
 
-- nearest-neighbour sampling for pixel textures;
-- no accidental smoothing during resize;
-- sprite animation cadence is independent from display FPS;
-- movement/tween/camera may run at display cadence while sprite frames remain intentionally low-frequency;
-- avoid giant prerendered full-screen backgrounds when reusable layers/masks work;
-- no uncontrolled per-frame React state;
-- shaders/filters are allowed only when they preserve pixel readability and performance budgets;
-- reduced-motion and low-power profiles are first-class runtime modes.
+- для пиксельных текстур используется выборка ближайшего соседа;
+- случайное сглаживание при масштабировании запрещено;
+- частота смены кадров спрайта не зависит от частоты обновления экрана;
+- движение, tween и камера могут обновляться с частотой экрана, а нарисованные кадры сохраняют намеренно более низкий ритм;
+- огромные заранее отрисованные полноэкранные фоны не используются там, где достаточно переиспользуемых слоёв и масок;
+- покадровое состояние не передаётся через React;
+- шейдеры и фильтры допустимы только при сохранении пиксельной читаемости и бюджета производительности;
+- режимы уменьшенной анимации и пониженной нагрузки являются обязательной частью рабочего контура.
 
-## File ownership
+## Владение файлами
 
-- `assets/source`: editable art source;
-- `assets/scenes`: Tiled world/room sources;
-- `assets/manifests`: semantic metadata/provenance;
-- `assets/generated`: build output;
-- `tools/assets`: transformation/validation tooling;
-- `packages/world-engine`: Phaser/WebGL runtime.
+- `assets/source` — редактируемые исходники;
+- `assets/scenes` — исходники сцен Tiled;
+- `assets/manifests` — семантические метаданные и происхождение;
+- `assets/generated` — результат сборки;
+- `tools/assets` — средства преобразования и проверки;
+- `packages/world-engine` — Phaser/WebGL-контур живого мира.
 
-See ADR-0004 and `docs/design/PIXEL_ASSET_PIPELINE.md`.
+Связанные материалы: решение по Phaser/WebGL в каталоге `docs/decisions/` и `docs/design/PIXEL_ASSET_PIPELINE.md`.
