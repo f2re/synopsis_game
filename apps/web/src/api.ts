@@ -37,6 +37,41 @@ export interface RosterUser {
   groupId: string;
 }
 
+export interface TaskOption { id: number; label: string; }
+export interface TaskStep { id: number; label: string; }
+export interface ShiftTask {
+  instanceId: string;
+  definitionId: string;
+  contentPack: string;
+  type: string;
+  difficulty: number;
+  question: string;
+  response: { kind: 'numeric' | 'choice' | 'sequence' | string; unit?: string | null };
+  payload?: { group?: string; encoded?: string; options?: TaskOption[]; steps?: TaskStep[] };
+}
+export interface ShiftProgress { answered: number; correct: number; current: number; total: number; }
+export interface ShiftStartResponse {
+  shiftId: string;
+  mode: string;
+  contentPack: string;
+  contentStatus: string;
+  task: ShiftTask;
+  progress: ShiftProgress;
+}
+export interface ShiftAnswerResponse {
+  feedback: {
+    correct: boolean;
+    correctAnswer: unknown;
+    explanation: string;
+    principleTags: string[];
+    sources: Array<{ sourceId: string; title: string; locator: string }>;
+  };
+  answered: number;
+  completed: boolean;
+  nextTask: ShiftTask | null;
+  progress: ShiftProgress;
+}
+
 const TOKEN_KEY = 'synopsis.session.token';
 
 export class ApiError extends Error {
@@ -101,6 +136,21 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify({ avatar }),
     }, true)).user;
+  },
+  async startShift(): Promise<ShiftStartResponse> {
+    return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true);
+  },
+  async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress }> {
+    return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true);
+  },
+  async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown): Promise<ShiftAnswerResponse> {
+    return request(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, {
+      method: 'POST',
+      body: JSON.stringify({ shiftId, answer }),
+    }, true);
+  },
+  async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }> {
+    return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true);
   },
   async adminUsers(): Promise<AdminUser[]> {
     return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users;

@@ -1,14 +1,20 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { api, getSessionToken, setSessionToken, type SessionUser } from './api';
 import { GAME_MARK, GAME_TITLE } from './brand';
 import { AvatarEditor } from './features/avatar/AvatarEditor';
 import { AvatarPreview } from './features/avatar/AvatarPreview';
 import { AdminScreen, LoginScreen } from './features/identity/IdentityScreens';
-import { WorldCanvas } from './game/WorldCanvas';
+
+const WorldCanvas = lazy(() => import('./game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
+const ShiftWorkspace = lazy(() => import('./features/shift/ShiftWorkspace').then((module) => ({ default: module.ShiftWorkspace })));
 
 function navigate(path: string): void {
   window.history.pushState({}, '', path);
   window.dispatchEvent(new PopStateEvent('popstate'));
+}
+
+function LoadingScreen({ text = 'Загрузка…' }: { text?: string }) {
+  return <main className="app-shell"><section className="panel compact-panel"><p>{text}</p></section></main>;
 }
 
 function ArenaTvPlaceholder() {
@@ -28,21 +34,24 @@ function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
 
   useEffect(() => {
     const toggleSessionMenu = () => setSessionMenuOpen((open) => !open);
+    const startShift = () => navigate('/shift');
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setSessionMenuOpen(false);
     };
 
     window.addEventListener('hub:session-menu', toggleSessionMenu);
+    window.addEventListener('hub:start-shift', startShift);
     window.addEventListener('keydown', closeOnEscape);
     return () => {
       window.removeEventListener('hub:session-menu', toggleSessionMenu);
+      window.removeEventListener('hub:start-shift', startShift);
       window.removeEventListener('keydown', closeOnEscape);
     };
   }, []);
 
   return (
     <main className="game-viewport" aria-label={GAME_TITLE}>
-      <WorldCanvas />
+      <Suspense fallback={null}><WorldCanvas /></Suspense>
       {sessionMenuOpen && (
         <aside className="game-user-overlay game-session-menu" aria-label="Профиль пользователя">
           <div className="user-toolbar">
@@ -89,9 +98,7 @@ export function App() {
 
   if (path === '/arena-tv') return <ArenaTvPlaceholder />;
 
-  if (booting) {
-    return <main className="app-shell"><section className="panel compact-panel"><p>Проверяем сессию…</p></section></main>;
-  }
+  if (booting) return <LoadingScreen text="Проверяем сессию…" />;
 
   if (!user) {
     return <LoginScreen onLogin={(loggedIn) => { setUser(loggedIn); navigate('/'); }} />;
@@ -109,6 +116,10 @@ export function App() {
 
   if (path === '/profile/avatar') {
     return <AvatarEditor user={user} onSaved={setUser} onBack={() => navigate('/')} />;
+  }
+
+  if (path === '/shift') {
+    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><ShiftWorkspace onExit={() => navigate('/')} /></Suspense>;
   }
 
   return <Home user={user} onLogout={() => void logout()} />;
