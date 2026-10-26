@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 import argparse, hashlib, json, os, sqlite3, subprocess
 from pathlib import Path
 
 STATE_DIR = Path('/var/lib/synopsis-game/migrations')
 STATE_FILE = STATE_DIR / 'applied.json'
 
-def digest(path: Path) -> str:
+def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
-def read_env(path: Path) -> dict[str,str]:
+def read_env(path):
     out={}
     if path.exists():
         for line in path.read_text(encoding='utf-8').splitlines():
@@ -17,11 +16,11 @@ def read_env(path: Path) -> dict[str,str]:
                 k,v=line.split('=',1); out[k]=v
     return out
 
-def sqlite_path(url: str) -> Path:
+def sqlite_path(url):
     if not url.startswith('file:'): raise RuntimeError('SQLite DATABASE_URL must start with file:')
     return Path(url[5:])
 
-def main() -> int:
+def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--release', required=True)
     ap.add_argument('--config', default='/etc/synopsis-game/app.env')
@@ -35,20 +34,21 @@ def main() -> int:
     for m in migrations:
         h=digest(m)
         if m.name in applied:
-            if applied[m.name] != h: raise RuntimeError(f'applied migration changed: {m.name}')
+            if applied[m.name] != h: raise RuntimeError('applied migration changed: %s' % m.name)
             continue
-        print(f'Applying migration {m.name}')
+        print('Applying migration %s' % m.name)
         if args.dry_run: continue
-        env=os.environ.copy(); env.update(cfg); env['SYNOPSIS_MIGRATION']=m.name
+        child_env=os.environ.copy(); child_env.update(cfg); child_env['SYNOPSIS_MIGRATION']=m.name
         if m.suffix=='.sql':
             if kind=='sqlite':
                 db=sqlite_path(url); db.parent.mkdir(parents=True, exist_ok=True)
-                with sqlite3.connect(db) as con: con.executescript(m.read_text(encoding='utf-8'))
+                script='BEGIN IMMEDIATE;\n'+m.read_text(encoding='utf-8')+'\nCOMMIT;\n'
+                with sqlite3.connect(str(db)) as con: con.executescript(script)
             elif kind=='postgres':
-                subprocess.run(['psql', url, '-v', 'ON_ERROR_STOP=1', '-f', str(m)], env=env, check=True)
-            else: raise RuntimeError(f'unsupported DB kind: {kind}')
-        elif m.suffix=='.py': subprocess.run(['/usr/bin/python3', str(m)], env=env, check=True)
-        elif m.suffix=='.sh': subprocess.run(['/bin/bash', str(m)], env=env, check=True)
+                subprocess.run(['psql', url, '-v', 'ON_ERROR_STOP=1', '-1', '-f', str(m)], env=child_env, check=True)
+            else: raise RuntimeError('unsupported DB kind: %s' % kind)
+        elif m.suffix=='.py': subprocess.run(['/usr/bin/python3', str(m)], env=child_env, check=True)
+        elif m.suffix=='.sh': subprocess.run(['/bin/bash', str(m)], env=child_env, check=True)
         else: continue
         applied[m.name]=h
         tmp=STATE_FILE.with_suffix('.tmp'); tmp.write_text(json.dumps(applied,indent=2)+'\n'); tmp.replace(STATE_FILE)
