@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-VERSION=${1:?version required, e.g. 0.1.0}
+VERSION=${1:?version required, e.g. 0.2.0}
 NODE_VERSION=${NODE_VERSION:-22.23.4}
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 OUT=${OUT_DIR:-$ROOT/dist-release}
@@ -8,11 +8,12 @@ PKG="$OUT/synopsis-game-$VERSION"
 rm -rf "$PKG"; mkdir -p "$PKG"/{web,server,runtime/node,deploy}
 
 cd "$ROOT"
-pnpm bootstrap:web
+pnpm bootstrap
 pnpm typecheck
+pnpm test:server
 pnpm build
 cp -a apps/web/dist/. "$PKG/web/"
-cp apps/server/server.mjs "$PKG/server/server.mjs"
+cp -a apps/server/dist/. "$PKG/server/"
 cp -a deploy/. "$PKG/deploy/"
 printf '%s\n' "$VERSION" > "$PKG/VERSION"
 
