@@ -1,0 +1,25 @@
+:root {
+  --ui-canvas-bg: #091224;
+  --ui-panel: #0e1b36;
+  --ui-panel-elevated: #14264a;
+  --ui-text-primary: #f3f7ff;
+  --ui-text-secondary: #b8c7e0;
+  --ui-focus: #69b9ff;
+  --meteo-cold-front: #2878d8;
+  --meteo-warm-front: #e44747;
+  --meteo-occlusion: #8a54c5;
+  --meteo-map-lift-precip: rgba(69, 212, 131, 0.24);
+  --meteo-chart-paper: #101e38;
+  --noise-film-grain-hub: 0.035;
+  --noise-film-grain-battle: 0.018;
+  --noise-chart-paper: 0.04;
+  --layout-task-canvas-share: 0.72;
+  --motion-fast: 140ms;
+  --motion-standard: 240ms;
+}
+
+[data-world-phase="dawn"] { --world-sky-top: #243b72; --world-sky-horizon: #e98a79; }
+[data-world-phase="day"] { --world-sky-top: #4b91c8; --world-sky-horizon: #b9d8e8; }
+[data-world-phase="golden_hour"] { --world-sky-top: #4b4c8b; --world-sky-horizon: #f4a35f; }
+[data-world-phase="civil_twilight"] { --world-sky-top: #202c5d; --world-sky-horizon: #a76b87; }
+[data-world-phase="night"] { --world-sky-top: #08152f; --world-sky-horizon: #182b50; }

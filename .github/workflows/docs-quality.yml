@@ -22,3 +22,6 @@ jobs:
 
       - name: Проверить структуру репозитория, JSON и локальные ссылки
         run: python tools/validate_repo.py
+
+      - name: Проверить каноническую архитектуру первого рабочего среза
+        run: python tools/validate_architecture.py
