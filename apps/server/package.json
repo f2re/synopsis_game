@@ -1,0 +1,21 @@
+{
+  "name": "@synopsis/server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@10.34.8",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "rm -rf dist && tsc -p tsconfig.json && node --test dist/modules/identity/*.test.js",
+    "start": "node dist/index.js",
+    "dev": "pnpm build && node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "5.9.3"
+  }
+}

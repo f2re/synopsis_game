@@ -34,11 +34,20 @@ jobs:
       - name: Включить Corepack
         run: corepack enable
 
-      - name: Установить зависимости браузерного прототипа
+      - name: Установить зависимости сервера
+        run: pnpm -C apps/server install --ignore-workspace --no-frozen-lockfile
+
+      - name: Проверить серверный TypeScript
+        run: pnpm -C apps/server typecheck
+
+      - name: Запустить тесты identity
+        run: pnpm -C apps/server test
+
+      - name: Установить зависимости браузерного приложения
         run: pnpm -C apps/web install --ignore-workspace --no-frozen-lockfile
 
-      - name: Проверить TypeScript браузерного прототипа
+      - name: Проверить браузерный TypeScript
         run: pnpm -C apps/web typecheck
 
-      - name: Собрать браузерный прототип
+      - name: Собрать браузерное приложение
         run: pnpm -C apps/web build
