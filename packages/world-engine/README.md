@@ -21,7 +21,7 @@ Rules:
 - Phaser is embedded as a canvas/runtime inside the browser application; React remains responsible for ordinary UI.
 - No per-frame React state updates from the game loop.
 - Pixel textures use nearest-neighbour sampling and integer-aligned presentation where required.
-- `map-engine` remains a separate SVG/Canvas domain for professional meteorological geometry.
+- Professional meteorological geometry stays in `apps/web/src/features/map` on SVG/Canvas; it is not a separate MVP package.
 - Runtime scenes consume semantic asset IDs, not generated atlas coordinates.
 - Renderer changes require `game-runtime-webgl-engineer` ownership and `web-performance-engineer` review.
 
@@ -37,4 +37,4 @@ The package now contains a 480×270 prototype Hub and Archive flow:
 
 Run `pnpm world:typecheck` from the repository root after installing the pinned workspace dependencies.
 
-See `docs/architecture/GAME_RUNTIME_AND_ASSETS.md` and `docs/design/locations/ARCHIVE_VERTICAL_SLICE.md`.
+See `docs/architecture/GAME_RUNTIME_AND_ASSETS.md`, `docs/design/locations/ARCHIVE_VERTICAL_SLICE.md` and `docs/decisions/ADR-0005-mvp-modular-monolith-boundaries.md`.
