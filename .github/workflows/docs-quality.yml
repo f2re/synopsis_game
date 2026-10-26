@@ -31,8 +31,8 @@ jobs:
       - name: Включить Corepack
         run: corepack enable
 
-      - name: Установить зависимости
-        run: pnpm install --no-frozen-lockfile
+      - name: Установить зависимости браузерного прототипа
+        run: pnpm --filter @synopsis/web... install --no-frozen-lockfile
 
       - name: Проверить TypeScript
         run: pnpm typecheck
