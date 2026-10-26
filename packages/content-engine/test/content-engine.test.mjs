@@ -26,3 +26,37 @@ test('последовательность проверяется через с�
   assert.equal(validateTaskAnswer(definition, built.validationContext, { order }).correct, true);
   assert.equal(assertPublicTaskSafe(built.publicTask), true);
 });
+
+test('stationPlot не раскрывает соответствие и проверяет каждый компонент отдельно', () => {
+  const definition = {
+    id: 'sp1',
+    type: 'stationPlot',
+    question: 'Нанесите данные',
+    payload: {
+      profile: 'RUS_SURFACE_STATION_V1',
+      observations: [
+        { id: 'obs_t', label: 'Температура', value: '+12,4 °C', display: '12,4' },
+        { id: 'obs_td', label: 'Точка росы', value: '+7,9 °C', display: '7,9' },
+      ],
+      slots: [
+        { id: 'slot_01', x: 300, y: 300, kind: 'text' },
+        { id: 'slot_02', x: 300, y: 700, kind: 'text' },
+      ],
+    },
+    answer: { kind: 'station_plot', placements: { obs_t: 'slot_01', obs_td: 'slot_02' } },
+  };
+  const built = createTaskInstance(definition, { seed: 1, instanceId: 'i1', contentPack: 'p@1' });
+  assert.equal(assertPublicTaskSafe(built.publicTask), true);
+  assert.equal(JSON.stringify(built.publicTask).includes('"obs_t":"slot_01"'), false);
+
+  const wrong = validateTaskAnswer(definition, built.validationContext, {
+    placements: { obs_t: 'slot_02', obs_td: 'slot_01' },
+  });
+  assert.equal(wrong.correct, false);
+  assert.equal(wrong.details.components.every((item) => item.correct === false), true);
+
+  const correct = validateTaskAnswer(definition, built.validationContext, {
+    placements: { obs_t: 'slot_01', obs_td: 'slot_02' },
+  });
+  assert.equal(correct.correct, true);
+});
