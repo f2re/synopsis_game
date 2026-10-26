@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "skills": [
     {
       "id": "kn01_temperature_decode",
@@ -25,6 +25,26 @@
       "id": "kn01_group_order",
       "module_id": "MET-02",
       "name": "Порядок кодовых групп раздела 1 КН-01 SYNOP"
+    },
+    {
+      "id": "station_plot_temperature",
+      "module_id": "MET-03",
+      "name": "Положение температуры воздуха T на схеме приземной станции"
+    },
+    {
+      "id": "station_plot_dewpoint",
+      "module_id": "MET-03",
+      "name": "Положение точки росы Td на схеме приземной станции"
+    },
+    {
+      "id": "station_plot_pressure",
+      "module_id": "MET-03",
+      "name": "Положение атмосферного давления p на схеме приземной станции"
+    },
+    {
+      "id": "station_plot_wind",
+      "module_id": "MET-03",
+      "name": "Нанесение направления и скорости ветра dd/ff на схему приземной станции"
     }
   ]
 }
