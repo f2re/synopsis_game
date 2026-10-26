@@ -13,9 +13,9 @@ function navigate(path: string): void {
 
 function ArenaTvPlaceholder() {
   return (
-    <main className="app-shell">
-      <section className="prototype-card prototype-placeholder" aria-labelledby="arena-title">
-        <span className="prototype-kicker">{GAME_MARK} · режим большого экрана</span>
+    <main className="arena-tv-placeholder" aria-labelledby="arena-title">
+      <section>
+        <span>{GAME_MARK} · режим большого экрана</span>
         <h1 id="arena-title">Arena TV</h1>
         <p>Публичный экран не получает список пользователей, коды входа или административные данные.</p>
       </section>
@@ -25,32 +25,24 @@ function ArenaTvPlaceholder() {
 
 function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
   return (
-    <main className="app-shell">
-      <section className="prototype-card" aria-labelledby="prototype-title">
-        <header className="prototype-header app-user-header">
-          <div>
-            <span className="prototype-kicker">Прототип 0.2 · {GAME_MARK}</span>
-            <h1 id="prototype-title">{GAME_TITLE}</h1>
+    <main className="game-viewport" aria-label={GAME_TITLE}>
+      <WorldCanvas />
+      <header className="game-user-overlay" aria-label="Профиль пользователя">
+        <div className="game-user-brand">
+          <span className="prototype-kicker">Прототип 0.2 · {GAME_MARK}</span>
+          <strong>{GAME_TITLE}</strong>
+        </div>
+        <div className="user-toolbar">
+          <AvatarPreview avatar={user.avatar} size={28} />
+          <div className="user-toolbar-name">
+            <strong>{user.displayName}</strong>
+            <span>{user.groupId}</span>
           </div>
-          <div className="user-toolbar">
-            <AvatarPreview avatar={user.avatar} size={28} />
-            <div className="user-toolbar-name">
-              <strong>{user.displayName}</strong>
-              <span>{user.groupId}</span>
-            </div>
-            <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
-            {user.roles.includes('admin') && <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>}
-            <button className="ghost-button" onClick={onLogout}>Выйти</button>
-          </div>
-        </header>
-
-        <WorldCanvas />
-
-        <footer className="prototype-footer">
-          <p>Архив доступен. Остальные локации показывают условия открытия.</p>
-          <p className="prototype-help">Профиль и внешний вид сохраняются для текущего пользователя.</p>
-        </footer>
-      </section>
+          <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
+          {user.roles.includes('admin') && <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>}
+          <button className="ghost-button" onClick={onLogout}>Выйти</button>
+        </div>
+      </header>
     </main>
   );
 }
