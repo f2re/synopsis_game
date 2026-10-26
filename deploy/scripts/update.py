@@ -84,6 +84,8 @@ def main():
         shutil.copytree(str(src),str(dest),symlinks=True)
     current=ROOT/'current'; old=current.resolve() if current.exists() else None
     app_env=ETC/'app.env'; old_cfg=env_file(app_env)
+    dep_env=os.environ.copy(); dep_env['CONFIG_FILE']=str(app_env)
+    run('/bin/bash',str(dest/'deploy/scripts/ensure-host-deps.sh'),env=dep_env)
     backup_env=os.environ.copy(); backup_env.update(old_cfg)
     run('systemctl','stop','synopsis-game.service',check=False)
     try:
