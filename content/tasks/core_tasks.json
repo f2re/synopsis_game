@@ -53,7 +53,7 @@
       "id": "kn01_tendency_001",
       "topic": "kn01",
       "skills": ["kn01_pressure_tendency_decode"],
-      "type": "multiChoice",
+      "type": "choice",
       "difficulty": 2,
       "method_profile": "RUS_CLASSIC_TRAINING_V1",
       "data_origin": "authored_training",

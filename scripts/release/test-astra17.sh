@@ -21,11 +21,15 @@ for path in sorted(Path("/release/deploy/scripts").glob("*.py")):
 PY
     for f in /release/deploy/scripts/*.sh; do bash -n "$f"; done
     /release/runtime/node/bin/node --version
-    SYNOPSIS_VERSION_FILE=/release/VERSION SYNOPSIS_IDENTITY_STORE=/tmp/identity.json API_BIND=127.0.0.1 API_PORT=4174 \
+    SYNOPSIS_VERSION_FILE=/release/VERSION \
+    SYNOPSIS_IDENTITY_STORE=/tmp/identity.json \
+    SYNOPSIS_CONTENT_ROOT=/release/content \
+    SYNOPSIS_ATTEMPT_LOG=/tmp/attempts.jsonl \
+    API_BIND=127.0.0.1 API_PORT=4174 \
       /release/runtime/node/bin/node /release/server/index.js >/tmp/server.log 2>&1 &
     pid=$!
     trap "kill $pid 2>/dev/null || true" EXIT
-    python3 - <<"PY"
+    if ! python3 - <<"PY"
 import json, time
 try:
     from urllib.request import urlopen
@@ -44,5 +48,9 @@ if response.getcode()!=200:
     raise SystemExit("Astra Linux identity API check failed")
 json.loads(response.read().decode("utf-8"))
 PY
+    then
+      cat /tmp/server.log >&2 || true
+      exit 1
+    fi
   '
 echo "Astra Linux 1.7 compatibility check passed: $ARCHIVE"

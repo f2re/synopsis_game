@@ -16,7 +16,7 @@
     "dev:server": "pnpm -C apps/server dev",
     "build": "pnpm -C apps/server build && pnpm -C apps/web build",
     "typecheck": "pnpm -C apps/server typecheck && pnpm -C apps/web typecheck",
-    "test:server": "pnpm -C apps/server test",
+    "test:server": "pnpm -C packages/kn01-codec test && pnpm -C packages/content-engine test && pnpm -C apps/server test",
     "assets:toolchain:check": "pnpm --filter @synopsis/assets-pipeline toolchain:check",
     "world:typecheck": "pnpm --filter @synopsis/world-engine typecheck"
   }

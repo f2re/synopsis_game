@@ -19,6 +19,7 @@ jobs:
       - name: Проверить Python-валидаторы
         run: |
           python tools/validate_repo.py
+          python tools/validate_content_contracts.py
           python tools/validate_architecture.py
           python tools/validate_deployment.py
           python tools/test_deployment.py
@@ -28,7 +29,7 @@ jobs:
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
           python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py
-      - name: Собрать приложение и проверить identity
+      - name: Собрать приложение и проверить identity и первую смену
         run: |
           pnpm bootstrap
           pnpm typecheck

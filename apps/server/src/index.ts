@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   IdentityError,
   IdentityService,
@@ -9,12 +10,18 @@ import {
   type CreateUserInput,
 } from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
+import { ShiftError, ShiftService } from './modules/shift/shiftService.js';
 
 const HOST = process.env.API_BIND ?? '127.0.0.1';
 const PORT = Number(process.env.API_PORT ?? process.env.SYNOPSIS_SERVER_PORT ?? 8787);
 const STORE_PATH = process.env.SYNOPSIS_IDENTITY_STORE ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/identity.json' : resolve(process.cwd(), '.local/identity.json'));
 const SECURITY_PROFILE = process.env.SYNOPSIS_SECURITY_PROFILE === 'trusted' ? 'trusted' : 'public';
+const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
+const CONTENT_ROOT = process.env.SYNOPSIS_CONTENT_ROOT ??
+  (process.env.SYNOPSIS_VERSION_FILE ? '/opt/synopsis-game/current/content' : resolve(MODULE_DIR, '../../../content'));
+const ATTEMPT_LOG_PATH = process.env.SYNOPSIS_ATTEMPT_LOG ??
+  (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/attempts.jsonl' : resolve(MODULE_DIR, '../.local/attempts.jsonl'));
 const startedAt = new Date().toISOString();
 const version = process.env.SYNOPSIS_VERSION ?? (() => {
   try {
@@ -26,6 +33,8 @@ const version = process.env.SYNOPSIS_VERSION ?? (() => {
 
 const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE });
 await identity.init();
+const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH });
+await shifts.init();
 
 const bootstrapCode = process.env.SYNOPSIS_BOOTSTRAP_ADMIN_CODE;
 if (bootstrapCode) {
@@ -130,6 +139,37 @@ const server = createServer(async (request, response) => {
       sendJson(response, 200, { user: await identity.updateAvatar(bearer(request), body.avatar) });
       return;
     }
+
+    if (request.method === 'POST' && path === '/api/shifts') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 201, shifts.startShift(user.id));
+      return;
+    }
+    const shiftTaskMatch = path.match(/^\/api\/shifts\/([^/]+)\/task$/);
+    if (request.method === 'GET' && shiftTaskMatch) {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, shifts.getCurrentTask(user.id, decodeURIComponent(shiftTaskMatch[1])));
+      return;
+    }
+    const taskAnswerMatch = path.match(/^\/api\/tasks\/([^/]+)\/answer$/);
+    if (request.method === 'POST' && taskAnswerMatch) {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      sendJson(response, 200, await shifts.submitAnswer(
+        user.id,
+        String(body.shiftId ?? ''),
+        decodeURIComponent(taskAnswerMatch[1]),
+        body.answer,
+      ));
+      return;
+    }
+    const shiftResultMatch = path.match(/^\/api\/shifts\/([^/]+)\/result$/);
+    if (request.method === 'GET' && shiftResultMatch) {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, shifts.getResult(user.id, decodeURIComponent(shiftResultMatch[1])));
+      return;
+    }
+
     if (request.method === 'GET' && path === '/api/admin/users') {
       sendJson(response, 200, { users: identity.listUsers(bearer(request)) });
       return;
@@ -178,7 +218,7 @@ const server = createServer(async (request, response) => {
     }
     sendJson(response, 404, { error: 'Маршрут не найден', code: 'not_found' });
   } catch (error) {
-    if (error instanceof IdentityError) {
+    if (error instanceof IdentityError || error instanceof ShiftError) {
       sendJson(response, error.status, { error: error.message, code: error.code });
       return;
     }
@@ -191,6 +231,7 @@ server.listen(PORT, HOST, () => {
   console.info(`Synopsis server ${version}: http://${HOST}:${PORT}`);
   console.info(`Identity store: ${STORE_PATH}`);
   console.info(`Security profile: ${SECURITY_PROFILE}`);
+  console.info(`Content root: ${CONTENT_ROOT}`);
 });
 
 function shutdown(signal: string): void {

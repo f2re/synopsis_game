@@ -10,9 +10,13 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "rm -rf dist && tsc -p tsconfig.json && node --test dist/modules/identity/*.test.js",
+    "test": "rm -rf dist && tsc -p tsconfig.json && node --test dist/modules/identity/*.test.js dist/modules/shift/*.test.js",
     "start": "node dist/index.js",
     "dev": "pnpm build && node dist/index.js"
+  },
+  "dependencies": {
+    "@synopsis/content-engine": "file:../../packages/content-engine",
+    "@synopsis/kn01-codec": "file:../../packages/kn01-codec"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
