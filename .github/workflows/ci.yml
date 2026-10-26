@@ -1,0 +1,39 @@
+name: Сборка и интеграционные проверки
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+      - name: Проверить Python-валидаторы
+        run: |
+          python tools/validate_repo.py
+          python tools/validate_architecture.py
+          python tools/validate_deployment.py
+      - name: Проверить скрипты развёртывания
+        run: |
+          bash -n deploy/scripts/*.sh scripts/release/*.sh
+          python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py
+      - name: Собрать клиент
+        run: |
+          pnpm bootstrap:web
+          pnpm typecheck
+          pnpm build
+      - name: Проверить сервер
+        run: |
+          node apps/server/server.mjs >/tmp/synopsis-server.log 2>&1 &
+          pid=$!
+          trap 'kill $pid 2>/dev/null || true' EXIT
+          for i in {1..20}; do curl -fsS http://127.0.0.1:4174/ready && break || sleep 0.5; done
+          curl -fsS http://127.0.0.1:4174/health

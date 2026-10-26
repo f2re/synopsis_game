@@ -1,0 +1,12 @@
+[Unit]
+Description=Periodic Synopsis Game update check
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=6h
+RandomizedDelaySec=20min
+Persistent=true
+Unit=synopsis-game-update.service
+
+[Install]
+WantedBy=timers.target
