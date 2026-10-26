@@ -36,12 +36,15 @@ jobs:
           python tools/validate_repo.py
           python tools/validate_architecture.py
           python tools/validate_deployment.py
+          python tools/test_deployment.py
           bash -n deploy/scripts/*.sh scripts/release/*.sh
-          python -m py_compile deploy/scripts/*.py scripts/release/*.py
+          python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py
       - name: Собрать релизный пакет
         run: bash scripts/release/build-release.sh "${{ steps.v.outputs.version }}"
       - name: Проверить релизный пакет
         run: bash scripts/release/validate-release.sh "dist-release/synopsis-game-${{ steps.v.outputs.version }}-linux-x64.tar.gz"
+      - name: Проверить релиз на Astra Linux 1.7
+        run: bash scripts/release/test-astra17.sh "dist-release/synopsis-game-${{ steps.v.outputs.version }}-linux-x64.tar.gz"
       - uses: actions/upload-artifact@v4
         with:
           name: synopsis-game-${{ steps.v.outputs.version }}-linux-x64
