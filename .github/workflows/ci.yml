@@ -31,6 +31,11 @@ jobs:
           pnpm bootstrap:web
           pnpm typecheck
           pnpm build
+      - name: Сохранить сформированный lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-web-lockfile
+          path: apps/web/pnpm-lock.yaml
       - name: Проверить сервер
         run: |
           node apps/server/server.mjs >/tmp/synopsis-server.log 2>&1 &
