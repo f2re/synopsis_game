@@ -1,9 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { api, getSessionToken, setSessionToken, type SessionUser } from './api';
-import { GAME_MARK, GAME_TITLE } from './brand';
+import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from './brand';
 import { AvatarEditor } from './features/avatar/AvatarEditor';
 import { AvatarPreview } from './features/avatar/AvatarPreview';
-import { AdminScreen, LoginScreen } from './features/identity/IdentityScreens';
+import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
 
 const WorldCanvas = lazy(() => import('./game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
 const ShiftWorkspace = lazy(() => import('./features/shift/ShiftWorkspace').then((module) => ({ default: module.ShiftWorkspace })));
@@ -24,13 +24,26 @@ function ArenaTvPlaceholder() {
         <span>{GAME_MARK} · режим большого экрана</span>
         <h1 id="arena-title">Arena TV</h1>
         <p>Публичный экран не получает список пользователей, коды входа или административные данные.</p>
+        <button className="secondary-button" onClick={() => navigate('/')} style={{ marginTop: 16 }}>
+          ← На главную
+        </button>
       </section>
     </main>
   );
 }
 
-function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
-  const [sessionMenuOpen, setSessionMenuOpen] = useState(false);
+function Home({
+  user,
+  onLoginClick,
+  onLogout,
+  onOpenSetCode,
+}: {
+  user: SessionUser | null;
+  onLoginClick: () => void;
+  onLogout: () => void;
+  onOpenSetCode: () => void;
+}) {
+  const [sessionMenuOpen, setSessionMenuOpen] = useState(true);
 
   useEffect(() => {
     const toggleSessionMenu = () => setSessionMenuOpen((open) => !open);
@@ -53,18 +66,33 @@ function Home({ user, onLogout }: { user: SessionUser; onLogout: () => void }) {
     <main className="game-viewport" aria-label={GAME_TITLE}>
       <Suspense fallback={null}><WorldCanvas /></Suspense>
       {sessionMenuOpen && (
-        <aside className="game-user-overlay game-session-menu" aria-label="Профиль пользователя">
-          <div className="user-toolbar">
-            <AvatarPreview avatar={user.avatar} size={32} />
-            <div className="user-toolbar-name">
-              <strong>{user.displayName}</strong>
-              <span>{user.groupId}</span>
+        user ? (
+          <aside className="game-user-overlay game-session-menu" aria-label="Профиль пользователя">
+            <div className="user-toolbar">
+              <AvatarPreview avatar={user.avatar} size={32} />
+              <div className="user-toolbar-name">
+                <strong>{user.displayName}</strong>
+                <span>{user.groupId}</span>
+              </div>
+              <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
+              <button className="ghost-button" onClick={onOpenSetCode}>
+                {user.codeSet ? 'Сменить код' : 'Задать код'}
+              </button>
+              {user.roles.includes('admin') && (
+                <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>
+              )}
+              <button className="ghost-button" onClick={onLogout}>Выйти</button>
             </div>
-            <button className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
-            {user.roles.includes('admin') && <button className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>}
-            <button className="ghost-button" onClick={onLogout}>Выйти</button>
-          </div>
-        </aside>
+          </aside>
+        ) : (
+          <aside className="game-user-overlay" aria-label="Статус наблюдателя">
+            <div className="game-user-brand">
+              <span className="prototype-kicker">{GAME_MARK} · {GAME_CALLSIGN}</span>
+              <span className="observer-chip">👁 Режим наблюдателя</span>
+            </div>
+            <button className="primary-button" onClick={onLoginClick}>Войти</button>
+          </aside>
+        )
       )}
     </main>
   );
@@ -74,6 +102,8 @@ export function App() {
   const [path, setPath] = useState(window.location.pathname);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [booting, setBooting] = useState(true);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [setCodeModalOpen, setSetCodeModalOpen] = useState(false);
 
   useEffect(() => {
     const onPopState = () => setPath(window.location.pathname);
@@ -100,10 +130,6 @@ export function App() {
 
   if (booting) return <LoadingScreen text="Проверяем сессию…" />;
 
-  if (!user) {
-    return <LoginScreen onLogin={(loggedIn) => { setUser(loggedIn); navigate('/'); }} />;
-  }
-
   async function logout() {
     await api.logout();
     setUser(null);
@@ -111,16 +137,58 @@ export function App() {
   }
 
   if (path === '/admin') {
-    return <AdminScreen currentUser={user} onBack={() => navigate('/')} />;
+    if (user?.roles.includes('admin')) {
+      return <AdminScreen currentUser={user} onBack={() => navigate('/')} />;
+    }
+    return (
+      <AdminLoginScreen
+        currentUser={user}
+        onLogin={(adminUser) => {
+          setUser(adminUser);
+          navigate('/admin');
+        }}
+        onBack={() => navigate('/')}
+      />
+    );
   }
 
   if (path === '/profile/avatar') {
-    return <AvatarEditor user={user} onSaved={setUser} onBack={() => navigate('/')} />;
+    if (user) {
+      return <AvatarEditor user={user} onSaved={setUser} onBack={() => navigate('/')} />;
+    }
+    navigate('/');
+    return null;
   }
 
   if (path === '/shift') {
     return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><ShiftWorkspace onExit={() => navigate('/')} /></Suspense>;
   }
 
-  return <Home user={user} onLogout={() => void logout()} />;
+  return (
+    <>
+      <Home
+        user={user}
+        onLoginClick={() => setLoginModalOpen(true)}
+        onLogout={() => void logout()}
+        onOpenSetCode={() => setSetCodeModalOpen(true)}
+      />
+      {loginModalOpen && (
+        <LoginScreen
+          onLogin={(loggedIn) => {
+            setUser(loggedIn);
+            setLoginModalOpen(false);
+          }}
+          onClose={() => setLoginModalOpen(false)}
+          isModal
+        />
+      )}
+      {setCodeModalOpen && user && (
+        <SetCodeModal
+          user={user}
+          onSuccess={setUser}
+          onClose={() => setSetCodeModalOpen(false)}
+        />
+      )}
+    </>
+  );
 }

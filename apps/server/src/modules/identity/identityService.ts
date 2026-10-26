@@ -50,7 +50,8 @@ export interface CreateUserInput {
   displayName: string;
   groupId: string;
   roles: UserRole[];
-  initialCode: string;
+  initialCode?: string;
+  codeSet?: boolean;
 }
 
 export interface BatchCreateUserItem {
@@ -142,6 +143,11 @@ export class IdentityService {
         throw new Error('unsupported identity store');
       }
       this.state = parsed;
+      for (const user of this.state.users) {
+        if (user.roles.includes('admin') && user.codeSet === undefined) {
+          user.codeSet = true;
+        }
+      }
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
       await this.persist();
@@ -160,6 +166,7 @@ export class IdentityService {
       groupId: 'administrators',
       roles: ['admin'],
       initialCode: code,
+      codeSet: true,
     });
     this.state.users.push(user);
     await this.persist();
@@ -167,15 +174,23 @@ export class IdentityService {
   }
 
   listGroups(): string[] {
-    return [...new Set(this.state.users.filter((u) => u.status === 'active').map((u) => u.groupId))]
-      .sort((a, b) => a.localeCompare(b, 'ru'));
+    return [...new Set(
+      this.state.users
+        .filter((u) => u.status === 'active' && !u.roles.includes('admin') && !u.roles.includes('display'))
+        .map((u) => u.groupId),
+    )].sort((a, b) => a.localeCompare(b, 'ru'));
   }
 
-  listRoster(groupId: string): Array<Pick<SessionUser, 'id' | 'displayName' | 'groupId'>> {
+  listRoster(groupId: string): Array<Pick<SessionUser, 'id' | 'displayName' | 'groupId'> & { hasCode: boolean }> {
     return this.state.users
-      .filter((user) => user.status === 'active' && user.groupId === groupId && !user.roles.includes('display'))
+      .filter((user) => user.status === 'active' && user.groupId === groupId && !user.roles.includes('display') && !user.roles.includes('admin'))
       .sort((a, b) => a.displayName.localeCompare(b.displayName, 'ru'))
-      .map((user) => ({ id: user.id, displayName: user.displayName, groupId: user.groupId }));
+      .map((user) => ({
+        id: user.id,
+        displayName: user.displayName,
+        groupId: user.groupId,
+        hasCode: Boolean(user.codeSet),
+      }));
   }
 
   async login(userId: string, code: string, ip: string): Promise<{ token: string; user: SessionUser }> {
@@ -194,20 +209,38 @@ export class IdentityService {
       throw new IdentityError(429, 'Профиль временно заблокирован после ошибок входа', 'temporarily_locked');
     }
 
-    const ok = await verifyCode(code, user.loginCodeSalt, user.loginCodeHash);
-    if (!ok) {
-      user.failedAttempts += 1;
-      const nextIp = ipAttempt ?? { count: 0, lockedUntil: 0 };
-      nextIp.count += 1;
-      if (user.failedAttempts >= this.maxAttempts || nextIp.count >= this.maxAttempts) {
-        const lockedUntil = now + this.lockMs;
-        user.lockedUntil = new Date(lockedUntil).toISOString();
-        nextIp.lockedUntil = lockedUntil;
-        nextIp.count = 0;
+    const trimmedCode = typeof code === 'string' ? code.trim() : '';
+
+    if (!user.codeSet) {
+      // Первый вход: код вводить не требуется!
+      if (trimmedCode) {
+        // Если код был введен при первом входе, сохраняем его
+        this.validateLoginCode(trimmedCode);
+        const verifier = await createVerifier(trimmedCode);
+        user.loginCodeSalt = verifier.salt;
+        user.loginCodeHash = verifier.hash;
+        user.codeSet = true;
       }
-      this.ipAttempts.set(ipKey, nextIp);
-      await this.persist();
-      throw new IdentityError(401, 'Неверный код входа', 'invalid_code');
+    } else {
+      // Пользователь уже задал код ранее: обязательная проверка
+      if (!trimmedCode) {
+        throw new IdentityError(400, 'Введите персональный код', 'code_required');
+      }
+      const ok = await verifyCode(trimmedCode, user.loginCodeSalt, user.loginCodeHash);
+      if (!ok) {
+        user.failedAttempts += 1;
+        const nextIp = ipAttempt ?? { count: 0, lockedUntil: 0 };
+        nextIp.count += 1;
+        if (user.failedAttempts >= this.maxAttempts || nextIp.count >= this.maxAttempts) {
+          const lockedUntil = now + this.lockMs;
+          user.lockedUntil = new Date(lockedUntil).toISOString();
+          nextIp.lockedUntil = lockedUntil;
+          nextIp.count = 0;
+        }
+        this.ipAttempts.set(ipKey, nextIp);
+        await this.persist();
+        throw new IdentityError(401, 'Неверный код входа', 'invalid_code');
+      }
     }
 
     user.failedAttempts = 0;
@@ -218,6 +251,76 @@ export class IdentityService {
     this.sessions.set(token, { userId: user.id, expiresAt: now + this.sessionTtlMs });
     await this.persist();
     return { token, user: toSessionUser(user) };
+  }
+
+  async adminLogin(code: string, ip: string): Promise<{ token: string; user: SessionUser }> {
+    const trimmedCode = typeof code === 'string' ? code.trim() : '';
+    if (!trimmedCode) {
+      throw new IdentityError(400, 'Введите код администратора', 'code_required');
+    }
+
+    const now = Date.now();
+    const ipKey = `${ip}:admin`;
+    const ipAttempt = this.ipAttempts.get(ipKey);
+    if (ipAttempt && ipAttempt.lockedUntil > now) {
+      throw new IdentityError(429, 'Слишком много попыток. Повторите вход позже', 'temporarily_locked');
+    }
+
+    const admins = this.state.users.filter((u) => u.status === 'active' && u.roles.includes('admin'));
+    if (admins.length === 0) {
+      throw new IdentityError(404, 'Администратор не найден', 'no_admin');
+    }
+
+    for (const admin of admins) {
+      const ok = await verifyCode(trimmedCode, admin.loginCodeSalt, admin.loginCodeHash);
+      if (ok) {
+        admin.failedAttempts = 0;
+        delete admin.lockedUntil;
+        this.ipAttempts.delete(ipKey);
+        admin.lastLoginAt = new Date().toISOString();
+        const token = randomBytes(32).toString('base64url');
+        this.sessions.set(token, { userId: admin.id, expiresAt: now + this.sessionTtlMs });
+        await this.persist();
+        return { token, user: toSessionUser(admin) };
+      }
+    }
+
+    const nextIp = ipAttempt ?? { count: 0, lockedUntil: 0 };
+    nextIp.count += 1;
+    if (nextIp.count >= this.maxAttempts) {
+      const lockedUntil = now + this.lockMs;
+      nextIp.lockedUntil = lockedUntil;
+      nextIp.count = 0;
+    }
+    this.ipAttempts.set(ipKey, nextIp);
+    await this.persist();
+    throw new IdentityError(401, 'Неверный код администратора', 'invalid_code');
+  }
+
+  async setUserCode(token: string, newCode: string, currentCode?: string): Promise<SessionUser> {
+    const user = this.requireSession(token);
+    const trimmedNew = typeof newCode === 'string' ? newCode.trim() : '';
+    this.validateLoginCode(trimmedNew);
+
+    if (user.codeSet) {
+      const trimmedCurrent = typeof currentCode === 'string' ? currentCode.trim() : '';
+      if (!trimmedCurrent) {
+        throw new IdentityError(400, 'Введите текущий код для подтверждения', 'current_code_required');
+      }
+      const ok = await verifyCode(trimmedCurrent, user.loginCodeSalt, user.loginCodeHash);
+      if (!ok) {
+        throw new IdentityError(401, 'Неверный текущий код', 'invalid_code');
+      }
+    }
+
+    const verifier = await createVerifier(trimmedNew);
+    user.loginCodeSalt = verifier.salt;
+    user.loginCodeHash = verifier.hash;
+    user.codeSet = true;
+    user.failedAttempts = 0;
+    delete user.lockedUntil;
+    await this.persist();
+    return toSessionUser(user);
   }
 
   logout(token: string): void {
@@ -328,13 +431,19 @@ export class IdentityService {
     return toAdminUser(user);
   }
 
-  async resetCode(token: string, userId: string, code: string): Promise<void> {
+  async resetCode(token: string, userId: string, code?: string): Promise<void> {
     this.requireAdmin(token);
-    this.validateLoginCode(code);
     const user = this.findUser(userId);
-    const verifier = await createVerifier(code);
-    user.loginCodeSalt = verifier.salt;
-    user.loginCodeHash = verifier.hash;
+    const trimmed = typeof code === 'string' ? code.trim() : '';
+    if (trimmed) {
+      this.validateLoginCode(trimmed);
+      const verifier = await createVerifier(trimmed);
+      user.loginCodeSalt = verifier.salt;
+      user.loginCodeHash = verifier.hash;
+      user.codeSet = true;
+    } else {
+      user.codeSet = false;
+    }
     user.failedAttempts = 0;
     delete user.lockedUntil;
     for (const [sessionToken, session] of this.sessions) {
@@ -351,8 +460,11 @@ export class IdentityService {
     const displayName = normalizeText(input.displayName, 'displayName', 80);
     const groupId = normalizeText(input.groupId, 'groupId', 64);
     const roles = normalizeRoles(input.roles);
-    this.validateLoginCode(input.initialCode);
-    const verifier = await createVerifier(input.initialCode);
+    const initialCode = (typeof input.initialCode === 'string' && input.initialCode.trim().length > 0)
+      ? input.initialCode.trim()
+      : String(Math.floor(100000 + Math.random() * 900000));
+    this.validateLoginCode(initialCode);
+    const verifier = await createVerifier(initialCode);
     return {
       id: randomUUID(),
       displayName,
@@ -363,6 +475,7 @@ export class IdentityService {
       loginCodeHash: verifier.hash,
       avatar: { ...DEFAULT_AVATAR },
       createdAt: new Date().toISOString(),
+      codeSet: Boolean(input.codeSet),
       failedAttempts: 0,
     };
   }

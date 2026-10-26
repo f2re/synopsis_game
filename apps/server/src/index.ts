@@ -121,6 +121,22 @@ const server = createServer(async (request, response) => {
       sendJson(response, 200, await identity.login(String(body.userId ?? ''), String(body.code ?? ''), clientIp(request)));
       return;
     }
+    if (request.method === 'POST' && path === '/api/admin/login') {
+      const body = await readJson(request);
+      sendJson(response, 200, await identity.adminLogin(String(body.code ?? ''), clientIp(request)));
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/identity/set-code') {
+      const body = await readJson(request);
+      sendJson(response, 200, {
+        user: await identity.setUserCode(
+          bearer(request),
+          String(body.newCode ?? ''),
+          body.currentCode ? String(body.currentCode) : undefined,
+        ),
+      });
+      return;
+    }
     if (request.method === 'POST' && path === '/api/identity/logout') {
       identity.logout(bearer(request));
       sendJson(response, 200, { ok: true });
@@ -212,7 +228,7 @@ const server = createServer(async (request, response) => {
     const resetMatch = path.match(/^\/api\/admin\/users\/([^/]+)\/reset-code$/);
     if (request.method === 'POST' && resetMatch) {
       const body = await readJson(request);
-      await identity.resetCode(bearer(request), resetMatch[1], String(body.code ?? ''));
+      await identity.resetCode(bearer(request), resetMatch[1], body.code ? String(body.code) : undefined);
       sendJson(response, 200, { ok: true });
       return;
     }

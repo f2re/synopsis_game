@@ -23,6 +23,7 @@ export interface SessionUser {
   status: UserStatus;
   avatar: AvatarProfile;
   createdAt: string;
+  codeSet?: boolean;
   lastLoginAt?: string;
 }
 
@@ -35,6 +36,7 @@ export interface RosterUser {
   id: string;
   displayName: string;
   groupId: string;
+  hasCode?: boolean;
 }
 
 export interface TaskOption { id: number; label: string; }
@@ -148,6 +150,20 @@ export const api = {
     setSessionToken(result.token);
     return result.user;
   },
+  async adminLogin(code: string): Promise<SessionUser> {
+    const result = await request<{ token: string; user: SessionUser }>('/api/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+    setSessionToken(result.token);
+    return result.user;
+  },
+  async setCode(newCode: string, currentCode?: string): Promise<SessionUser> {
+    return (await request<{ user: SessionUser }>('/api/identity/set-code', {
+      method: 'POST',
+      body: JSON.stringify({ newCode, currentCode }),
+    }, true)).user;
+  },
   async logout(): Promise<void> {
     try {
       await request('/api/identity/logout', { method: 'POST' }, true);
@@ -204,7 +220,7 @@ export const api = {
       body: JSON.stringify({ status }),
     }, true)).user;
   },
-  async resetCode(userId: string, code: string): Promise<void> {
+  async resetCode(userId: string, code?: string): Promise<void> {
     await request(`/api/admin/users/${encodeURIComponent(userId)}/reset-code`, {
       method: 'POST',
       body: JSON.stringify({ code }),
