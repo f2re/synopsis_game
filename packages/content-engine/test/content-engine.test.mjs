@@ -84,3 +84,38 @@ test('stationBoard хранит несколько станций в едино�
   const result = validateTaskAnswer(definition, built.validationContext, { placements: { s1_t: 's1_nw', s2_t: 's2_nw', s3_t: 's3_nw' } });
   assert.equal(result.correct, true);
 });
+
+test('findError скрывает эталон станции и проверяет правильный и ошибочный выбор', () => {
+  const definition = {
+    id: 'fe1', type: 'findError', question: 'Найдите нарушение Td ≤ T',
+    payload: {
+      canvas: { width: 1000, height: 1000 },
+      rule: 'Td не должна превышать T.',
+      stations: [
+        { id: 'a', name: 'А', x: 200, y: 300 },
+        { id: 'b', name: 'Б', x: 500, y: 300 },
+        { id: 'c', name: 'В', x: 800, y: 300 },
+      ],
+      observations: [
+        { id: 'a_t', stationId: 'a', field: 'T', value: '+10,0 °C', numericValue: 10 },
+        { id: 'a_td', stationId: 'a', field: 'Td', value: '+6,0 °C', numericValue: 6 },
+        { id: 'b_t', stationId: 'b', field: 'T', value: '+4,0 °C', numericValue: 4 },
+        { id: 'b_td', stationId: 'b', field: 'Td', value: '+8,0 °C', numericValue: 8 },
+        { id: 'c_t', stationId: 'c', field: 'T', value: '+2,0 °C', numericValue: 2 },
+        { id: 'c_td', stationId: 'c', field: 'Td', value: '−1,0 °C', numericValue: -1 },
+      ],
+    },
+    answer: { kind: 'station_id', value: 'b' },
+  };
+  const built = createTaskInstance(definition, { seed: 3, instanceId: 'i3', contentPack: 'p@1' });
+  assert.equal(built.publicTask.response.kind, 'findError');
+  assert.equal(assertPublicTaskSafe(built.publicTask), true);
+  assert.equal('answer' in built.publicTask, false);
+  assert.equal(JSON.stringify(built.publicTask).includes('expectedStationId'), false);
+  const wrong = validateTaskAnswer(definition, built.validationContext, { stationId: 'a' });
+  assert.equal(wrong.correct, false);
+  assert.equal(wrong.correctAnswer, 'Б');
+  const correct = validateTaskAnswer(definition, built.validationContext, { stationId: 'b' });
+  assert.equal(correct.correct, true);
+  assert.equal(correct.details.expectedStationId, 'b');
+});
