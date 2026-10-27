@@ -27,6 +27,7 @@ from core.asset_classes import (
     get_generation_profile,
 )
 from core.lore_registry import WORLD_LORE_CONTEXT, get_lore_for_asset
+from core.sheet_layouts import AVATAR_BASE_SUBJECT, layout_for
 
 STYLE_LOCK_BASE = (
     "Pixel-art illustration for a modern high-quality game (visual direction: Eastward, Sea of Stars, A Short Hike). "
@@ -268,21 +269,38 @@ def compile_generation_prompts(
     # 5. World Characters and Companions
     elif asset_class in (CLASS_CHARACTER_SPRITE, CLASS_WORLD_CHARACTER):
         pos_parts.append(STYLE_LOCK_BASE)
-        pos_parts.append(WORLD_LORE_CONTEXT)
         neg_parts.append(NEG_PORTRAIT_SPECIFIC)
 
-        char_data = lore_info.get("data", {})
-        appearance = char_data.get("appearance", "Adult staff member, meteorological campus.")
-        pos_parts.append(f"Subject: {appearance}")
-        if correction:
-            pos_parts.append(f"Correction emphasis: {correction}")
+        frame = asset_spec.get("frame")
+        if frame and layout_for(asset_id):
+            # One pose of a sprite sheet: the row pose arrives as the correction text.
+            # No scene lore here: it makes the model paint a building above the character.
+            frame_w, frame_h = frame
+            neg_parts.append("building, house, landscape, scenery, trees, water, horizon, background objects, multiple characters")
+            pos_parts.append(f"Subject: {AVATAR_BASE_SUBJECT}")
+            if correction:
+                pos_parts.append(f"Pose: {correction}.")
+            pos_parts.append(
+                f"Framing contract: A single {frame_w}x{frame_h} pixel sprite frame of a sprite sheet, "
+                f"one character only, full body, feet grounded near the bottom, same scale and anchor in every frame, "
+                f"clear silhouette, centered on neutral dark matte (#1E2430). Clean pixel clusters, no props or furniture."
+            )
+            metadata["framing"] = "sprite_sheet_frame"
+            metadata["frame_size"] = [frame_w, frame_h]
+        else:
+            pos_parts.append(WORLD_LORE_CONTEXT)
+            char_data = lore_info.get("data", {})
+            appearance = char_data.get("appearance", "Adult staff member, meteorological campus.")
+            pos_parts.append(f"Subject: {appearance}")
+            if correction:
+                pos_parts.append(f"Correction emphasis: {correction}")
 
-        pos_parts.append(
-            f"Framing contract: Full-body gameplay sprite, logical size {target_w}x{target_h} pixels. "
-            f"Clear silhouette, adult proportions, grounded feet, centered on neutral dark matte (#1E2430). "
-            f"Clean pixel clusters, recognizable clothing and equipment."
-        )
-        metadata["framing"] = "world_sprite_character"
+            pos_parts.append(
+                f"Framing contract: Full-body gameplay sprite, logical size {target_w}x{target_h} pixels. "
+                f"Clear silhouette, adult proportions, grounded feet, centered on neutral dark matte (#1E2430). "
+                f"Clean pixel clusters, recognizable clothing and equipment."
+            )
+            metadata["framing"] = "world_sprite_character"
 
     elif asset_class == CLASS_COMPANION_SPRITE:
         pos_parts.append(STYLE_LOCK_BASE)

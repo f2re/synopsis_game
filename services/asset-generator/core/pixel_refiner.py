@@ -5,10 +5,21 @@ from pathlib import Path
 from typing import Any
 from PIL import Image
 
-from core.asset_classes import PALETTE_CONTRACTS, classify_asset, get_generation_profile
+from core.asset_classes import (
+    CLASS_LARGE_SCENE,
+    CLASS_UI_FRAME,
+    CLASS_UI_ICON,
+    PALETTE_CONTRACTS,
+    classify_asset,
+    get_generation_profile,
+)
 
 CHROMA = (255, 0, 255)
 CHROMA_TOLERANCE = 65
+# Classes that must end up as flat fills on a small palette, never as blended greys.
+FLAT_FILL_CLASSES = frozenset({CLASS_UI_ICON, CLASS_UI_FRAME})
+# Classes that keep smooth gradients but must still respect the profile's colour ceiling.
+PALETTE_CAP_CLASSES = frozenset({CLASS_LARGE_SCENE})
 
 
 def is_chroma(rgb: tuple[int, int, int]) -> bool:
@@ -134,6 +145,45 @@ def edge_aware_downsample(
     return out
 
 
+def quantize_flat_palette(image: Image.Image, max_colors: int) -> Image.Image:
+    """Reduces a high-res RGBA image to at most ``max_colors`` flat colours, keeping alpha.
+
+    Run this before downsampling: anti-aliased edge pixels collapse into the
+    neighbouring fills, so the later per-cell vote cannot pick a blended grey.
+    """
+    rgba = image.convert("RGBA")
+    alpha = rgba.getchannel("A").point(lambda a: 255 if a >= 128 else 0)
+    quantized = rgba.quantize(colors=max_colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
+    flat = quantized.convert("RGBA")
+    flat.putalpha(alpha)
+    return flat
+
+
+def cap_palette(image: Image.Image, max_colors: int) -> Image.Image:
+    """Limits an opaque image to ``max_colors`` without dithering, preserving gradients as fine bands."""
+    capped = image.convert("RGB").quantize(
+        colors=max_colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE
+    ).convert("RGBA")
+    capped.putalpha(image.getchannel("A"))
+    return capped
+
+
+def fit_to_logical_grid(image: Image.Image, target_w: int, target_h: int, pad: int = 2) -> Image.Image:
+    """Crops to the opaque content and re-centres it on a canvas of the target aspect.
+
+    The canvas is sized so the content fills the logical grid minus ``pad`` pixels
+    per side, which stops small icons from being downsampled with wide empty margins.
+    """
+    box = image.getchannel("A").point(lambda a: 255 if a >= 128 else 0).getbbox()
+    if box is None:
+        return image
+    content = image.crop(box)
+    unit = max(content.width / max(target_w - 2 * pad, 1), content.height / max(target_h - 2 * pad, 1))
+    canvas = Image.new("RGBA", (round(target_w * unit), round(target_h * unit)), (0, 0, 0, 0))
+    canvas.paste(content, ((canvas.width - content.width) // 2, (canvas.height - content.height) // 2))
+    return canvas
+
+
 def cleanup_isolated_noise_pixels(img: Image.Image) -> Image.Image:
     """Eliminates orphaned 1x1 noise pixels without eroding intentional outlines."""
     w, h = img.size
@@ -190,9 +240,20 @@ def refine_pixel_candidate(
 
     # Preserve fine details rather than replacing each logical pixel by the
     # most common source colour. Classes requiring hard pixels use nearest.
-    sampling = (Image.Resampling.NEAREST if pixel_policy.get("antiAliasInFinal") == "forbidden"
-                else Image.Resampling.LANCZOS)
-    refined = img.resize((target_w, target_h), sampling)
+    flat_fill = asset_class in FLAT_FILL_CLASSES
+    if flat_fill:
+        # Flat fills: quantise first, then take the dominant (outline-biased)
+        # colour per logical pixel. LANCZOS here would blend white and black
+        # into grey and blow the 12-32 colour range.
+        flat_cap = int(profile.get("palette", {}).get("targetColors", [12, 32])[-1])
+        fitted = fit_to_logical_grid(quantize_flat_palette(img, flat_cap), target_w, target_h)
+        refined = edge_aware_downsample(fitted, target_w, target_h)
+    else:
+        sampling = (Image.Resampling.NEAREST if pixel_policy.get("antiAliasInFinal") == "forbidden"
+                    else Image.Resampling.LANCZOS)
+        refined = img.resize((target_w, target_h), sampling)
+        if asset_class in PALETTE_CAP_CLASSES:
+            refined = cap_palette(refined, int(palette_policy.get("targetColors", [96, 192])[-1]))
 
     # Runtime sprites need binary alpha. Do not remove isolated pixels: an
     # eye, clock hand or thin line can intentionally occupy a single pixel.

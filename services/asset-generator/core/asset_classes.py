@@ -482,7 +482,15 @@ def classify_asset(asset_id: str, asset_spec: dict[str, Any] | None = None) -> s
         or "MENTOR-M1" in aid
         or "MENTOR-M2" in aid
     ):
-        if "SHEET" in aid or "WALK" in aid or (size[0] > 0 and size[0] <= 64):
+        # A sheet with a per-frame size (or an avatar base) is a gameplay sprite sheet,
+        # never a bust portrait, whatever its overall canvas height.
+        if (
+            spec.get("frame")
+            or aid.startswith("AVATAR-BASE")
+            or "SHEET" in aid
+            or "WALK" in aid
+            or (size[0] > 0 and size[0] <= 64)
+        ):
             return CLASS_WORLD_CHARACTER
         if size[1] >= 200:
             return CLASS_DIALOGUE_PORTRAIT
