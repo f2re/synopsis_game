@@ -84,11 +84,24 @@ mcp = MCPServer(
     instructions=SERVER_INSTRUCTIONS.strip()
 )
 
-SPEC_PATH = REPO_ROOT / CONFIG["paths"]["spec_path"]
-PALETTES_DIR = REPO_ROOT / "assets/source/palettes"
-CANDIDATES_DIR = Path(CONFIG["paths"]["candidates_dir"])
+# Fallback paths allowing standalone execution or execution within synopsis_game monorepo
+SPEC_PATH = (
+    REPO_ROOT / CONFIG["paths"]["spec_path"]
+    if (REPO_ROOT / CONFIG["paths"]["spec_path"]).is_file()
+    else ROOT_DIR / "specs/kn01_level1.image-spec.json"
+)
+PALETTES_DIR = (
+    REPO_ROOT / "assets/source/palettes"
+    if (REPO_ROOT / "assets/source/palettes").is_dir()
+    else ROOT_DIR / "palettes"
+)
+CANDIDATES_DIR = Path(CONFIG["paths"].get("candidates_dir", str(ROOT_DIR / "output/candidates")))
 CANDIDATES_DIR.mkdir(parents=True, exist_ok=True)
-WORK_DIR = REPO_ROOT / "assets/work"
+WORK_DIR = (
+    REPO_ROOT / "assets/work"
+    if (REPO_ROOT / "assets").is_dir()
+    else ROOT_DIR / "assets/work"
+)
 WORK_DIR.mkdir(parents=True, exist_ok=True)
 
 comfy = ComfyClient(base_url=CONFIG["comfyui"]["base_url"])

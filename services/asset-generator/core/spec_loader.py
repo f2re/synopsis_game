@@ -85,7 +85,11 @@ def get_asset_by_id(spec: dict[str, Any], asset_id: str) -> dict[str, Any]:
     # 4. Fallback search in assets/manifests
     manifest_dirs = [
         Path(__file__).resolve().parents[3] / "assets/manifests",
-        Path("/home/user/synopsis-ai/synopsis_game/assets/manifests")
+        Path(__file__).resolve().parents[1] / "specs/manifests",
+        Path(__file__).resolve().parents[1] / "manifests",
+        Path("/home/user/synopsis-ai/synopsis_game/assets/manifests"),
+        Path("/home/user/synopsis-ai/specs/manifests"),
+        Path("/home/user/synopsis-ai/manifests"),
     ]
     for mdir in manifest_dirs:
         if mdir.is_dir():
