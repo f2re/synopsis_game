@@ -20,6 +20,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Установить Python-зависимости проверок
+        run: python -m pip install --disable-pip-version-check fonttools
+
       - name: Проверить структуру репозитория, JSON и локальные ссылки
         run: python tools/validate_repo.py
 
@@ -29,8 +32,10 @@ jobs:
       - name: Проверить каноническое название и старые упоминания
         run: python tools/validate_brand.py
 
-      - name: Проверить пиксельные кандидаты
-        run: python tools/validate_pixel_art.py
+      - name: Проверить технические контракты графики
+        run: |
+          python tools/assets/check_asset_contract.py
+          python tools/assets/check_generation_profiles.py
 
       - name: Подготовить Node.js
         uses: actions/setup-node@v4
