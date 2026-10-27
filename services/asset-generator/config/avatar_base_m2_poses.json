@@ -1,0 +1,22 @@
+{
+  "asset": "AVATAR-BASE-M2",
+  "note": "One reference pose per sheet row. erase boxes are fractions (x0, y0, x1, y1) of the raw image and remove chairs the generator drew despite 'no chair'.",
+  "rows": {
+    "idle_front": {"source": "candidate-23.png", "kind": "idle", "target_height": 44},
+    "walk_side": {"source": "candidate-27.png", "kind": "walk", "target_height": 44},
+    "typing_seated": {
+      "source": "candidate-29.png",
+      "kind": "typing",
+      "target_height": 38,
+      "erase": [[0.15, 0.50, 0.215, 0.80], [0.15, 0.79, 0.45, 0.95]]
+    },
+    "thinking": {"source": "candidate-32.png", "kind": "thinking", "target_height": 44},
+    "celebrate_seated": {"source": "candidate-35.png", "kind": "celebrate", "target_height": 40},
+    "disappointed": {
+      "source": "candidate-38.png",
+      "kind": "disappointed",
+      "target_height": 38,
+      "erase": [[0.20, 0.62, 0.26, 0.95], [0.73, 0.68, 0.78, 0.95]]
+    }
+  }
+}

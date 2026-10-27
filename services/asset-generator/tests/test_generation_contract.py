@@ -144,6 +144,12 @@ class PipelineContractTests(unittest.TestCase):
             self.assertNotIn(word, pos)
         for word in ("building", "landscape", "scenery"):
             self.assertIn(word, neg)
+        # A flat chroma backdrop and no floor shadow keep the cut-out reliable: dark legs
+        # on a dark slate backdrop cannot be separated by colour.
+        self.assertIn("#FF00FF", pos)
+        self.assertNotIn("#1E2430", pos)
+        for word in ("shadow", "floor", "gradient"):
+            self.assertIn(word, neg)
 
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:

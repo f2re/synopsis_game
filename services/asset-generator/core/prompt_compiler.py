@@ -276,14 +276,18 @@ def compile_generation_prompts(
             # One pose of a sprite sheet: the row pose arrives as the correction text.
             # No scene lore here: it makes the model paint a building above the character.
             frame_w, frame_h = frame
-            neg_parts.append("building, house, landscape, scenery, trees, water, horizon, background objects, multiple characters")
+            neg_parts.append(
+                "building, house, landscape, scenery, trees, water, horizon, background objects, multiple characters, "
+                "shadow, ground shadow, floor, gradient background, vignette, chair"
+            )
             pos_parts.append(f"Subject: {AVATAR_BASE_SUBJECT}")
             if correction:
                 pos_parts.append(f"Pose: {correction}.")
             pos_parts.append(
                 f"Framing contract: A single {frame_w}x{frame_h} pixel sprite frame of a sprite sheet, "
                 f"one character only, full body, feet grounded near the bottom, same scale and anchor in every frame, "
-                f"clear silhouette, centered on neutral dark matte (#1E2430). Clean pixel clusters, no props or furniture."
+                f"clear silhouette, centered on a solid flat uniform magenta (#FF00FF) background with nothing else on it. "
+                f"Clean pixel clusters, no props or furniture, no ground shadow."
             )
             metadata["framing"] = "sprite_sheet_frame"
             metadata["frame_size"] = [frame_w, frame_h]

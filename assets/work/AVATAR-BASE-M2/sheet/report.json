@@ -1,0 +1,24 @@
+{
+  "size": [
+    192,
+    288
+  ],
+  "expected_size": [
+    192,
+    288
+  ],
+  "opaque_colors": 13,
+  "off_palette": [],
+  "alphas": [
+    0,
+    255
+  ],
+  "rows": {
+    "idle_front": 4,
+    "walk_side": 6,
+    "typing_seated": 6,
+    "thinking": 4,
+    "celebrate_seated": 6,
+    "disappointed": 4
+  }
+}
