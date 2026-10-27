@@ -219,6 +219,64 @@ class PipelineContractTests(unittest.TestCase):
         for word in ("building", "house", "water", "landscape"):
             self.assertIn(word, tree_neg)
 
+    def test_magenta_gradient_backdrop_is_cut_out_and_sprite_palette_is_capped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Image.new("RGB", (576, 800))
+            draw = ImageDraw.Draw(source)
+            for x in range(576):  # purple-to-pink backdrop, like the generator's chroma matte
+                t = x / 575
+                draw.line((x, 0, x, 799), fill=(round(195 + 40 * t), round(10 + 40 * t), round(215 - 70 * t)))
+            draw.rectangle((250, 100, 330, 760), fill=(235, 228, 214))  # birch-like trunk
+            for k in range(60):  # many leaf shades
+                shade = (30 + 3 * k, 110 + 2 * k, 40 + k)
+                draw.ellipse((150 + 4 * k, 120 + 6 * k, 260 + 4 * k, 200 + 6 * k), fill=shade)
+            output = Path(tmp) / "tree.png"
+            result = refine_pixel_candidate(
+                source, {"id": "HUB-L9-FG-BIRCH", "size": [144, 200], "alpha": "transparent"}, [], output)
+            image = Image.open(output).convert("RGBA")
+            self.assertEqual(image.size, (144, 200))
+            self.assertEqual(image.getpixel((0, 0))[3], 0)
+            self.assertEqual(image.getpixel((143, 199))[3], 0)
+            opaque = [p[:3] for p in image.getdata() if p[3] == 255]
+            self.assertGreater(len(opaque), 400)
+            self.assertTrue(result["is_binary_alpha"])
+            self.assertLessEqual(len(set(opaque)), 80)  # vegetation soft max
+            magenta = [c for c in set(opaque) if min(c[0], c[2]) >= 90 and c[1] <= 0.62 * min(c[0], c[2])]
+            self.assertEqual(magenta, [])
+
+    def test_chroma_cutout_works_when_only_the_top_edge_is_backdrop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # A ground layer: magenta above, terrain filling the sides and the bottom of the frame.
+            source = Image.new("RGB", (640, 360), (110, 120, 100))
+            draw = ImageDraw.Draw(source)
+            for x in range(640):
+                draw.line((x, 0, x, 160), fill=(round(200 + 30 * x / 639), 20, round(210 - 60 * x / 639)))
+            for y in range(161, 360):
+                draw.line((0, y, 639, y), fill=(90 + y // 5, 100 + y // 6, 80 + y // 9))
+            output = Path(tmp) / "ground.png"
+            refine_pixel_candidate(
+                source, {"id": "HUB-L6-GROUND", "size": [480, 270], "alpha": "transparent"}, [], output)
+            image = Image.open(output).convert("RGBA")
+            self.assertEqual(image.getpixel((240, 4))[3], 0)
+            self.assertEqual(image.getpixel((240, 260))[3], 255)
+            self.assertEqual(image.getpixel((4, 260))[3], 255)
+
+    def test_building_sprite_palette_is_capped_to_the_profile(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Image.new("RGB", (512, 384), (30, 36, 48))
+            draw = ImageDraw.Draw(source)
+            for y in range(120, 340):  # a brick wall with a vertical shading ramp: hundreds of colours
+                draw.line((80, y, 430, y), fill=(120 + (y - 120) // 3, 60 + (y - 120) // 5, 40 + (y - 120) // 9))
+            draw.polygon([(60, 120), (450, 120), (400, 50), (110, 50)], fill=(70, 60, 66))
+            output = Path(tmp) / "building.png"
+            result = refine_pixel_candidate(
+                source, {"id": "BLD-ARCHIVE-DAY", "size": [88, 64], "alpha": "transparent"}, [], output)
+            image = Image.open(output).convert("RGBA")
+            opaque = {p[:3] for p in image.getdata() if p[3] == 255}
+            self.assertLessEqual(len(opaque), 96)
+            self.assertGreater(len(opaque), 12)
+            self.assertTrue(result["within_color_limit"])
+
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
             storage = WorkStorage("ICON-JOURNAL", Path(tmp))

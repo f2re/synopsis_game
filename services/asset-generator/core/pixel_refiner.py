@@ -3,12 +3,17 @@ from __future__ import annotations
 from collections import Counter, deque
 from pathlib import Path
 from typing import Any
-from PIL import Image
+from PIL import Image, ImageFilter
 
 from core.asset_classes import (
+    CLASS_ARCHITECTURE_LANDMARK,
+    CLASS_ARCHITECTURE_SMALL,
+    CLASS_INTERACTIVE_OBJECT,
     CLASS_LARGE_SCENE,
+    CLASS_PROP_SPRITE,
     CLASS_UI_FRAME,
     CLASS_UI_ICON,
+    CLASS_VEGETATION_SPRITE,
     PALETTE_CONTRACTS,
     classify_asset,
     get_generation_profile,
@@ -19,7 +24,19 @@ CHROMA_TOLERANCE = 65
 # Classes that must end up as flat fills on a small palette, never as blended greys.
 FLAT_FILL_CLASSES = frozenset({CLASS_UI_ICON, CLASS_UI_FRAME})
 # Classes that keep smooth gradients but must still respect the profile's colour ceiling.
-PALETTE_CAP_CLASSES = frozenset({CLASS_LARGE_SCENE})
+PALETTE_CAP_CLASSES = frozenset({
+    CLASS_LARGE_SCENE,
+    CLASS_ARCHITECTURE_LANDMARK,
+    CLASS_ARCHITECTURE_SMALL,
+    CLASS_PROP_SPRITE,
+    CLASS_INTERACTIVE_OBJECT,
+    CLASS_VEGETATION_SPRITE,
+})
+# A magenta chroma backdrop may carry a gradient and a floor shadow; hue, not distance, finds it.
+CHROMA_MIN_CHANNEL = 90
+CHROMA_GREEN_RATIO = 0.62
+CHROMA_BORDER_SHARE = 0.6
+CHROMA_FRINGE_KERNEL = 5
 
 
 def is_chroma(rgb: tuple[int, int, int]) -> bool:
@@ -35,9 +52,39 @@ def nearest_palette_color(
     return min(palette, key=lambda p: 2 * (p[0] - r) ** 2 + 4 * (p[1] - g) ** 2 + 3 * (p[2] - b) ** 2)
 
 
+def is_chroma_hue(rgb: tuple[int, int, int]) -> bool:
+    """True for magenta-ish colours: green far below both red and blue, at any brightness."""
+    r, g, b = rgb
+    return min(r, b) >= CHROMA_MIN_CHANNEL and g <= CHROMA_GREEN_RATIO * min(r, b)
+
+
+def _remove_chroma_backdrop(img: Image.Image) -> Image.Image | None:
+    """Cuts out a magenta chroma backdrop, or returns None when the borders are not one."""
+    w, h = img.size
+    px = img.load()
+    edges = (
+        [px[x, 0] for x in range(w)],
+        [px[x, h - 1] for x in range(w)],
+        [px[0, y] for y in range(h)],
+        [px[w - 1, y] for y in range(h)],
+    )
+    # One edge is enough: a ground layer is magenta only above and filled elsewhere.
+    if not any(sum(is_chroma_hue(c[:3]) for c in edge) >= CHROMA_BORDER_SHARE * len(edge) for edge in edges):
+        return None
+    alpha = Image.new("L", img.size, 255)
+    alpha.putdata([0 if is_chroma_hue(c[:3]) or c[3] < 128 else 255 for c in img.getdata()])
+    # The generator blends the backdrop into edges; eroding the cut-out hides that pink fringe.
+    out = img.copy()
+    out.putalpha(alpha.filter(ImageFilter.MinFilter(CHROMA_FRINGE_KERNEL)))
+    return out
+
+
 def remove_neutral_background(image: Image.Image, tolerance: int = 35) -> Image.Image:
-    """Removes solid or near-uniform backdrop by flood-filling from outer image borders."""
+    """Removes a chroma backdrop by hue, else a solid or near-uniform one by flood-filling from the borders."""
     img = image.convert("RGBA")
+    keyed = _remove_chroma_backdrop(img)
+    if keyed is not None:
+        return keyed
     w, h = img.size
     pixels = img.load()
 
@@ -160,11 +207,19 @@ def quantize_flat_palette(image: Image.Image, max_colors: int) -> Image.Image:
 
 
 def cap_palette(image: Image.Image, max_colors: int) -> Image.Image:
-    """Limits an opaque image to ``max_colors`` without dithering, preserving gradients as fine bands."""
-    capped = image.convert("RGB").quantize(
-        colors=max_colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE
-    ).convert("RGBA")
-    capped.putalpha(image.getchannel("A"))
+    """Limits an image to ``max_colors`` without dithering, fitting the palette to opaque pixels only.
+
+    Transparent pixels would otherwise add a black cluster that steals palette slots.
+    """
+    rgba = image.convert("RGBA")
+    solid = [px[:3] for px in rgba.getdata() if px[3] >= 128]
+    if not solid:
+        return rgba
+    strip = Image.new("RGB", (len(solid), 1))
+    strip.putdata(solid)
+    palette = strip.quantize(colors=max_colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    capped = rgba.convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE).convert("RGBA")
+    capped.putalpha(rgba.getchannel("A"))
     return capped
 
 
