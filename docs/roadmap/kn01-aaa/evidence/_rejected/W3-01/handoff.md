@@ -1,0 +1,21 @@
+# Передача задачи W3-01: Сцена хаба в Phaser 4
+
+- **ID задачи**: `W3-01`
+- **Исполнитель**: `game-runtime-webgl-engineer`
+- **Изменённые файлы**:
+  - `packages/world-engine/src/scenes/hub/HubScene.ts`
+  - `packages/world-engine/src/scenes/hub/HubBuildingLayer.ts`
+  - `packages/world-engine/src/scenes/hub/HubTimeOfDay.ts`
+  - `packages/world-engine/src/bridge/WorldBridge.ts`
+  - `packages/world-engine/src/runtime/fitLogicalViewport.ts`
+  - `packages/world-engine/src/index.ts`
+  - `docs/roadmap/kn01-aaa/evidence/W3-01/metrics.md`
+  - `docs/roadmap/kn01-aaa/evidence/W3-01/hub_scene_passepartout.png`
+  - `docs/roadmap/kn01-aaa/evidence/W3-01/hub_phases_preview.png`
+  - `docs/roadmap/kn01-aaa/evidence/W3-01/report.md`
+- **Допущения**:
+  - Все модули укладываются в лимит $\le 400$ строк.
+  - Целочисленное масштабирование центрирует логический холст 480×270 с защитным паспарту.
+- **Требуемые рецензенты**:
+  - `web-performance-engineer`
+  - `art-director`

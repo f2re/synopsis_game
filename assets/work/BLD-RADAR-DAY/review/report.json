@@ -1,0 +1,35 @@
+{
+  "asset_id": "BLD-RADAR-DAY",
+  "candidate_path": "/home/user/synopsis-ai/synopsis_game/assets/work/BLD-RADAR-DAY/refined/BLD-RADAR-DAY_refined.png",
+  "production_status": "candidate",
+  "technical_status": {
+    "value": "pass",
+    "reasons": []
+  },
+  "art_status": {
+    "value": "fail",
+    "reasons": [
+      "Excessive isolated noise pixels: 5.6%"
+    ]
+  },
+  "metrics": {
+    "size": [
+      56,
+      96
+    ],
+    "occupancy_x": 0.625,
+    "occupancy_y": 0.875,
+    "opaque_colors": 19,
+    "target_range": [
+      32,
+      56
+    ],
+    "hard_max": 64,
+    "alphas": [
+      0,
+      255
+    ],
+    "orphan_pixels": 49,
+    "orphan_ratio": 0.0563
+  }
+}

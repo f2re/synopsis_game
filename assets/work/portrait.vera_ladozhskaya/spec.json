@@ -1,0 +1,14 @@
+{
+  "id": "portrait.vera_ladozhskaya",
+  "path": "assets/source/characters/npc/portrait_vera_ladozhskaya.png",
+  "size": [
+    128,
+    128
+  ],
+  "frame": null,
+  "alpha": "transparent",
+  "max_colors": 24,
+  "people": true,
+  "class": "portrait",
+  "palette_role": "people"
+}

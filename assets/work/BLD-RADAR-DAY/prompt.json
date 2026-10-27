@@ -1,0 +1,13 @@
+{
+  "positive_prompt": "<26063_pixel_style> STYLE LOCK: modern high-quality master pixel art (reference feel: Eastward, Sea of Stars, A Short Hike). Crisp hard-edged square pixels on a strict logical pixel grid, deliberate clusters of 2+ pixels, no anti-aliasing blur, no photographic texture, no 3D-render look. Ordered 2x2 dithering where needed. Light from upper-left. Outlines are a darker shade of the local colour, never pure black. Setting: 26063: Позывной «Синоптик». A fictional cozy scientific meteorological campus on the shore of the Gulf of Finland near St. Petersburg, North-West Russia (59.9° N). Late 20th century academic atmosphere: flat horizon, Baltic water, birch and pine, granite embankments, weathered ochre and terracotta brick facades, warm amber windows, authentic Russian synoptic meteorological instruments. Strictly no alpine mountains, no palm trees, no futuristic sci-fi or fantasy elements. Subject: Doppler Meteorological Radar (ДМРЛ) tower complex. A tall technical meteorological structure: a large spherical white geodesic radome dome housing the radar scanner mounted atop a sturdy technical lattice/steel observation tower with external maintenance ladders and railings, sitting on a weathered single-story ochre brick/concrete equipment pavilion annex at the base. Single isolated structure, high contrast clear silhouette, Baltic scientific campus context. Framing contract: Single isolated architectural structure landmark, orthographic frontal/isometric view. Canvas resolution 56x96 pixels. Structure occupies 70% to 85% of canvas width. Strong crisp technical silhouette, high contrast against a clean neutral dark slate background (#1E2430). No wide landscape, no distracting foliage blocking the building structure.",
+  "negative_prompt": "blurry, anti-aliased, smooth airbrushed gradient, painterly oil painting, 3d render, photo, noise, jpeg artifacts, text, letters, numbers, logo, watermark, signature, chromatic aberration, bloom, lens flare, distortion, generic residential cottage, country house, suburban villa, fantasy observatory, church dome, sci-fi antenna, palace, alpine mountains, palm trees, wide landscape, forest clutter, messy trees blocking structure, multiple scattered buildings",
+  "metadata": {
+    "asset_class": "architecture",
+    "lore_key": "radar",
+    "target_size": [
+      56,
+      96
+    ],
+    "framing": "architecture_landmark"
+  }
+}

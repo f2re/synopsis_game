@@ -10,6 +10,43 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TASKS_ROOT = ROOT / "content" / "tasks"
 PROFILES_ROOT = ROOT / "content" / "method-profiles"
+LEVELS_ROOT = ROOT / "content" / "levels"
+SCHEMAS_ROOT = ROOT / "content" / "schemas"
+
+FORBIDDEN_CLIENT_KEYS = {"answer", "correctAnswer", "solution", "expected", "secret"}
+
+
+def validate_levels(errors: list[str]) -> int:
+    schema_path = SCHEMAS_ROOT / "level.schema.json"
+    if schema_path.exists():
+        try:
+            json.loads(schema_path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            errors.append(f"level.schema.json: синтаксическая ошибка JSON: {exc}")
+            return 0
+    levels = sorted(LEVELS_ROOT.glob("*.json")) if LEVELS_ROOT.exists() else []
+    for path in levels:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            errors.append(f"{path.name}: синтаксическая ошибка JSON: {exc}")
+            continue
+        for req in ("schema_version", "level_id", "title", "description", "method_profile", "shifts", "game_modes"):
+            if req not in data:
+                errors.append(f"{path.name}: отсутствует обязательное поле {req}")
+        # Проверка безопасности: клиентская схема уровня никогда не содержит ответов
+        raw_text = path.read_text(encoding="utf-8")
+        for key in FORBIDDEN_CLIENT_KEYS:
+            if f'"{key}"' in raw_text:
+                errors.append(f"{path.name}: утечка ответа: обнаружен запрещённый ключ \"{key}\"")
+        for shift in data.get("shifts", []):
+            if not isinstance(shift, dict):
+                continue
+            for slot in shift.get("task_slots", []):
+                for key in FORBIDDEN_CLIENT_KEYS:
+                    if key in slot:
+                        errors.append(f"{path.name} / {shift.get('id')}: обнаружен ключ ответа \"{key}\" в task_slot")
+    return len(levels)
 
 
 def validate_dag(identifier: str, operations: list[dict], dependencies: list, errors: list[str]) -> None:
@@ -172,11 +209,13 @@ def main() -> int:
                     if obs_station.get(obs_id) != slot_station.get(slot_id): errors.append(f"{identifier}: {obs_id} перенесён на другую станцию")
         elif task_type == "findError": validate_find_error(identifier, payload, answer, errors)
 
+    levels_count = validate_levels(errors)
+
     if errors:
         print("Проверка контрактов учебных заданий завершилась с ошибками:")
         for error in errors: print(f" - {error}")
         return 1
-    print(f"Контракты согласованы: {len(tasks)} заданий, {len(profiles)} методических профилей.")
+    print(f"Контракты согласованы: {len(tasks)} заданий, {len(profiles)} методических профилей, {levels_count} уровней.")
     return 0
 
 

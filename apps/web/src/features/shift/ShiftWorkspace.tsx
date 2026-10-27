@@ -13,6 +13,9 @@ import { PixelIcon, PixelProgressBar } from '../ui';
 import { FindErrorTask } from './FindErrorTask';
 import { StationBoardTask } from './StationBoardTask';
 import { StationPlotTask } from './StationPlotTask';
+import { DigitAnatomy } from './feedback/DigitAnatomy';
+import { createCodePostBridge } from '../../game/worldBridge';
+import { worldAudio } from '@synopsis/world-engine';
 import './ShiftWorkspace.css';
 
 function normalizedNumber(value: string): number { return Number(value.trim().replace(',', '.')); }
@@ -98,6 +101,12 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       const result = await api.submitTaskAnswer(shiftId, task.instanceId, answer);
       setFeedback(result);
       setProgress(result.progress);
+      try {
+        worldAudio.play(result.feedback.correct ? 'audio.feedback.synoptic-chime' : 'audio.feedback.mistake-thud');
+      } catch {}
+      const bridge = createCodePostBridge();
+      bridge.triggerStamp(result.feedback.correct ? 'ПРИНЯТО' : 'ПРОВЕРИТЬ');
+      bridge.updateStreak(result.progress.correct);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Не удалось проверить ответ');
     } finally {
@@ -249,6 +258,14 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
                 </div>
               )}
               {dependencySequence && feedback.feedback.correct && <p>Порядок допустим. Другие линейные порядки также могут быть правильными, если сохраняют все обязательные зависимости.</p>}
+              {task.payload?.encoded && (
+                <DigitAnatomy
+                  codeGroup={task.payload.encoded}
+                  groupType={task.payload.group}
+                  isCorrect={feedback.feedback.correct}
+                  explanation={feedback.feedback.explanation}
+                />
+              )}
               <p>{feedback.feedback.explanation}</p>
               {feedback.feedback.principleTags.length > 0 && <div className="shift-principles" aria-label="Проверяемые принципы">{feedback.feedback.principleTags.map((tag) => <span key={tag}>{tag}</span>)}</div>}
               {feedback.feedback.sources.map((source) => <div className="shift-source" key={`${source.sourceId}-${source.locator}`}><strong>{source.title}</strong><span>{source.locator}</span></div>)}

@@ -1,0 +1,261 @@
+{
+  "id": "kn01_level1_pack",
+  "version": "1.0.0",
+  "level_id": "kn01_level1",
+  "title": "Учебный пакет уровня 1: Кодовый пост (КН-01)",
+  "method_profile": "RUS_SURFACE_STATION_V1",
+  "balance_profile": "kn01_level1_progression",
+  "source_id": "ROSHYDROMET_KN01_2013",
+  "status": "approved",
+  "total_distinct_instances": 142,
+  "description": "Полный учебный пакет смен С1–С5 и допуска: генераторные шаблоны с таксономией ошибок и банк реальных сводок.",
+  "tasks": [
+    "tmpl_c1_aaxx_header",
+    "tmpl_c1_date_time_wind_indicator",
+    "tmpl_c1_header_order",
+    "tmpl_c1_utc_hour",
+    "tmpl_c1_wind_units",
+    "tmpl_c1_station_26063",
+    "tmpl_c2_temp_vs_dewpoint",
+    "tmpl_c2_positive_temp",
+    "tmpl_c2_sign_bit_sn",
+    "tmpl_c2_negative_dewpoint",
+    "tmpl_c2_encode_temp",
+    "tmpl_c2_find_error_td_gt_t",
+    "tmpl_c3_station_vs_sea_pressure",
+    "tmpl_c3_sea_pressure_restore",
+    "tmpl_c3_tendency_characteristic",
+    "tmpl_c3_tendency_value",
+    "tmpl_c3_deep_cyclone_pressure",
+    "tmpl_c3_station_pressure_decode",
+    "tmpl_c4_cloud_and_wind_anatomy",
+    "tmpl_c4_cloud_cover_octas",
+    "tmpl_c4_wind_direction",
+    "tmpl_c4_wind_speed",
+    "tmpl_c4_wind_calm",
+    "tmpl_c4_north_wind",
+    "tmpl_c5_section_order",
+    "tmpl_c5_station_26063_temp",
+    "tmpl_c5_station_26063_sea_press",
+    "tmpl_c5_station_26063_tendency",
+    "tmpl_exam_temp_arctic",
+    "tmpl_exam_anticyclone_pressure"
+  ],
+  "shifts": [
+    {
+      "shift_id": "shift_c1",
+      "title": "Смена 1: Позывные эфира",
+      "slots": [
+        {
+          "slot_index": 1,
+          "template_id": "tmpl_c1_aaxx_header",
+          "bank_query": null
+        },
+        {
+          "slot_index": 2,
+          "template_id": "tmpl_c1_date_time_wind_indicator",
+          "bank_query": null
+        },
+        {
+          "slot_index": 3,
+          "template_id": "tmpl_c1_header_order",
+          "bank_query": null
+        },
+        {
+          "slot_index": 4,
+          "template_id": "tmpl_c1_utc_hour",
+          "bank_query": null
+        },
+        {
+          "slot_index": 5,
+          "template_id": "tmpl_c1_wind_units",
+          "bank_query": null
+        },
+        {
+          "slot_index": 6,
+          "template_id": "tmpl_c1_station_26063",
+          "bank_query": "station_26063"
+        }
+      ]
+    },
+    {
+      "shift_id": "shift_c2",
+      "title": "Смена 2: Термометр",
+      "slots": [
+        {
+          "slot_index": 1,
+          "template_id": "tmpl_c2_temp_vs_dewpoint",
+          "bank_query": null
+        },
+        {
+          "slot_index": 2,
+          "template_id": "tmpl_c2_positive_temp",
+          "bank_query": null
+        },
+        {
+          "slot_index": 3,
+          "template_id": "tmpl_c2_sign_bit_sn",
+          "bank_query": null
+        },
+        {
+          "slot_index": 4,
+          "template_id": "tmpl_c2_negative_dewpoint",
+          "bank_query": null
+        },
+        {
+          "slot_index": 5,
+          "template_id": "tmpl_c2_encode_temp",
+          "bank_query": null
+        },
+        {
+          "slot_index": 6,
+          "template_id": "tmpl_c2_find_error_td_gt_t",
+          "bank_query": null
+        }
+      ]
+    },
+    {
+      "shift_id": "shift_c3",
+      "title": "Смена 3: Барометр",
+      "slots": [
+        {
+          "slot_index": 1,
+          "template_id": "tmpl_c3_station_vs_sea_pressure",
+          "bank_query": null
+        },
+        {
+          "slot_index": 2,
+          "template_id": "tmpl_c3_sea_pressure_restore",
+          "bank_query": null
+        },
+        {
+          "slot_index": 3,
+          "template_id": "tmpl_c3_tendency_characteristic",
+          "bank_query": null
+        },
+        {
+          "slot_index": 4,
+          "template_id": "tmpl_c3_tendency_value",
+          "bank_query": null
+        },
+        {
+          "slot_index": 5,
+          "template_id": "tmpl_c3_deep_cyclone_pressure",
+          "bank_query": null
+        },
+        {
+          "slot_index": 6,
+          "template_id": "tmpl_c3_station_pressure_decode",
+          "bank_query": null
+        }
+      ]
+    },
+    {
+      "shift_id": "shift_c4",
+      "title": "Смена 4: Ветер и облака",
+      "slots": [
+        {
+          "slot_index": 1,
+          "template_id": "tmpl_c4_cloud_and_wind_anatomy",
+          "bank_query": null
+        },
+        {
+          "slot_index": 2,
+          "template_id": "tmpl_c4_cloud_cover_octas",
+          "bank_query": null
+        },
+        {
+          "slot_index": 3,
+          "template_id": "tmpl_c4_wind_direction",
+          "bank_query": null
+        },
+        {
+          "slot_index": 4,
+          "template_id": "tmpl_c4_wind_speed",
+          "bank_query": null
+        },
+        {
+          "slot_index": 5,
+          "template_id": "tmpl_c4_wind_calm",
+          "bank_query": null
+        },
+        {
+          "slot_index": 6,
+          "template_id": "tmpl_c4_north_wind",
+          "bank_query": null
+        }
+      ]
+    },
+    {
+      "shift_id": "shift_c5",
+      "title": "Смена 5: Полная лента",
+      "slots": [
+        {
+          "slot_index": 1,
+          "template_id": "tmpl_c5_section_order",
+          "bank_query": null
+        },
+        {
+          "slot_index": 2,
+          "template_id": "tmpl_c5_station_26063_temp",
+          "bank_query": "station_26063"
+        },
+        {
+          "slot_index": 3,
+          "template_id": "tmpl_c5_station_26063_sea_press",
+          "bank_query": "station_26063"
+        },
+        {
+          "slot_index": 4,
+          "template_id": "tmpl_c5_station_26063_tendency",
+          "bank_query": "station_26063"
+        }
+      ]
+    },
+    {
+      "shift_id": "shift_exam",
+      "title": "Квалификационный допуск: Кодовый пост",
+      "slots": [
+        {
+          "slot_index": 1,
+          "template_id": "tmpl_exam_temp_arctic",
+          "bank_query": "polar_region"
+        },
+        {
+          "slot_index": 2,
+          "template_id": "tmpl_exam_anticyclone_pressure",
+          "bank_query": "anticyclone"
+        },
+        {
+          "slot_index": 3,
+          "template_id": "tmpl_c3_sea_pressure_restore",
+          "bank_query": "random_bank"
+        },
+        {
+          "slot_index": 4,
+          "template_id": "tmpl_c4_wind_direction",
+          "bank_query": "random_bank"
+        },
+        {
+          "slot_index": 5,
+          "template_id": "tmpl_c3_tendency_value",
+          "bank_query": "random_bank"
+        },
+        {
+          "slot_index": 6,
+          "template_id": "tmpl_c2_find_error_td_gt_t",
+          "bank_query": null
+        }
+      ]
+    }
+  ],
+  "created_at": "2026-10-26T23:59:00Z",
+  "review": {
+    "source_check": "passed",
+    "methodical": "passed",
+    "independent_verification": "passed",
+    "language": "passed",
+    "technical": "passed",
+    "publication_allowed": true
+  }
+}

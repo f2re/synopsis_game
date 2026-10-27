@@ -1,0 +1,549 @@
+/* apps/web/src/features/identity/identity.css - Identity, Login & Roster Ledger */
+
+.identity-shell {
+  min-height: 100vh;
+  position: relative;
+  background-color: #07162c;
+  background-image:
+    linear-gradient(rgba(7, 22, 44, 0.72), rgba(7, 22, 44, 0.88)),
+    url('/ui/ui_login_terminal_backdrop_v1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* =====================================================================
+   Аутентичные пиксельные панели и приборные корпуса
+   Чистые двойные/тройные рамки, фаски и векторные угловые заклепки
+   ===================================================================== */
+.panel, .prototype-card {
+  position: relative;
+  border: 2px solid var(--ui-panel-border);
+  border-radius: 4px;
+  background: var(--ui-panel);
+  color: var(--ui-text-primary);
+  box-shadow:
+    var(--pixel-bevel-out),
+    var(--pixel-shadow-panel);
+  image-rendering: pixelated;
+}
+
+/* Внутренняя фрезерованная окантовка металлического шасси */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(111, 158, 149, 0.22);
+  border-radius: 2px;
+  pointer-events: none;
+  box-shadow: inset 1px 1px 0 0 rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* Аутентичные угловые латунные винты/заклёпки (без растяжения PNG) */
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    radial-gradient(circle at 9px 9px, #ffffff 0px, var(--ui-primary-cta) 1.5px, #071624 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 9px) 9px, #ffffff 0px, var(--ui-primary-cta) 1.5px, #071624 2.5px, transparent 3.5px),
+    radial-gradient(circle at 9px calc(100% - 9px), #ffffff 0px, var(--ui-primary-cta) 1.5px, #071624 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 9px) calc(100% - 9px), #ffffff 0px, var(--ui-primary-cta) 1.5px, #071624 2.5px, transparent 3.5px);
+  background-repeat: no-repeat;
+  opacity: 0.82;
+}
+
+.panel > * {
+  position: relative;
+  z-index: 3;
+}
+
+.panel.no-rivets::after, .prototype-card::after {
+  display: none;
+}
+
+.pixel-divider-groove {
+  width: 100%;
+  height: 2px;
+  background: #092027;
+  border-bottom: 1px solid rgba(111, 158, 149, 0.25);
+  margin: 12px 0;
+}
+
+/* Миниатюрный герб станции в оверлее */
+.overlay-crest {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.prototype-card {
+  width: min(1180px, 100%);
+  overflow: hidden;
+}
+
+.compact-panel {
+  width: min(520px, 100%);
+  padding: 28px;
+}
+
+.login-panel {
+  width: min(460px, 100%);
+  padding: clamp(24px, 5vw, 40px);
+  position: relative;
+}
+
+.login-panel h1, .screen-header h1, .admin-create h2, .reset-modal h2 {
+  margin: 0;
+  color: var(--ui-text-primary);
+  font-family: var(--font-pixel-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+
+/* =====================================================================
+   Модальные окна и анимации входа
+   ===================================================================== */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-backdrop, .login-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 3vw, 28px);
+  background: rgba(5, 15, 30, 0.84);
+  backdrop-filter: blur(6px);
+  z-index: 50;
+  animation: backdropFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reset-modal,
+.batch-result-modal,
+.modal-window,
+.login-modal-backdrop .login-panel {
+  animation: modalPopIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: center center;
+  max-width: 100%;
+}
+
+.batch-result-modal {
+  width: min(680px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  overflow: hidden;
+}
+.batch-result-scroll {
+  overflow-y: auto;
+  max-height: 380px;
+  border: 2px solid #28545e;
+  border-radius: 4px;
+  margin: 14px 0;
+  background: #092027;
+  box-shadow: var(--pixel-bevel-in);
+}
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  text-align: left;
+}
+.result-table th, .result-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #234f59;
+}
+.result-table th {
+  background: #0f3238;
+  font-weight: 800;
+  color: var(--ui-text-primary);
+  position: sticky;
+  top: 0;
+}
+.result-table code {
+  background: #25404d;
+  color: var(--ui-primary-cta);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 800;
+  font-family: var(--font-pixel-mono);
+  border: 1px solid var(--ui-panel-border);
+}
+.user-list { display: grid; gap: 10px; }
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 4px;
+  background: #0c2832;
+  border: 2px solid #234f59;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.08);
+}
+.user-row.is-disabled { opacity: .6; background: #16242c; border-color: #293844; }
+.user-meta { margin: 3px 0 7px; color: var(--ui-text-secondary); font-size: .8rem; }
+.status-chip {
+  display: inline-block;
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.status-chip.active { background: rgba(95, 175, 120, 0.25); color: #8ce4a7; border: 1px solid var(--ui-success); }
+.status-chip.disabled { background: rgba(60, 72, 87, 0.4); color: var(--ui-locked-text); border: 1px solid #78818b; }
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+.reset-modal {
+  width: min(410px, 100%);
+  padding: 24px;
+}
+/* =====================================================================
+   Журнал группы (Roster Ledger Table)
+   ===================================================================== */
+.roster-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.roster-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+.roster-search-box input {
+  padding-left: 34px;
+  padding-right: 32px;
+  min-height: 38px;
+  font-size: 0.88rem;
+}
+.roster-search-box .search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ui-text-secondary);
+  pointer-events: none;
+  font-size: 0.88rem;
+}
+.search-clear-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--ui-text-secondary);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+  font-size: 0.82rem;
+  padding: 0;
+  cursor: pointer;
+}
+.search-clear-btn:hover {
+  color: var(--ui-text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.roster-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--ui-text-secondary);
+  background: #092027;
+  padding: 6px 12px;
+  border: 1px solid #234f59;
+  border-radius: 4px;
+  box-shadow: var(--pixel-bevel-in);
+}
+.roster-stats-sep {
+  opacity: 0.4;
+}
+
+.roster-table-container {
+  max-height: 480px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 2px solid #234f59;
+  border-radius: 4px;
+  background: #092027;
+  box-shadow: var(--pixel-bevel-in);
+}
+
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.roster-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #0c2832;
+  border-bottom: 2px solid var(--ui-panel-border);
+  color: var(--ui-text-secondary);
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 800;
+  padding: 10px 12px;
+  white-space: nowrap;
+}
+
+.roster-table tbody td {
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(35, 79, 89, 0.6);
+  vertical-align: middle;
+}
+
+.roster-row {
+  transition: background-color 0.1s ease;
+}
+.roster-row:nth-child(even) {
+  background: #0a222c;
+}
+.roster-row:nth-child(odd) {
+  background: #081d26;
+}
+.roster-row:hover {
+  background: #123744 !important;
+}
+.roster-row.is-disabled {
+  opacity: 0.6;
+}
+.roster-row.is-disabled .user-name-text {
+  color: var(--ui-locked-text);
+}
+
+.col-num {
+  width: 48px;
+  text-align: center;
+  color: #558089;
+  font-weight: 800;
+  font-size: 0.82rem;
+  font-family: var(--font-pixel-mono);
+}
+.col-name {
+  min-width: 180px;
+  font-weight: 700;
+  color: var(--ui-text-primary);
+}
+.col-status {
+  width: 130px;
+  text-align: center;
+}
+.col-code {
+  width: 140px;
+  text-align: center;
+}
+.col-actions {
+  width: 180px;
+  text-align: right;
+}
+
+.roster-actions-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.table-btn-reset {
+  min-height: 28px;
+  padding: 3px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  border: 1px solid #366068;
+  background: rgba(27, 86, 96, 0.5);
+  color: var(--ui-text-primary);
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.35);
+  transition: transform 0.06s ease, background-color 0.1s ease;
+  white-space: nowrap;
+}
+.table-btn-reset:hover {
+  background: rgba(35, 106, 118, 0.85);
+  border-color: var(--ui-panel-border);
+}
+.table-btn-reset:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.35);
+}
+
+.roster-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.roster-badge.active {
+  background: rgba(95, 175, 120, 0.18);
+  color: #92ebb0;
+  border-color: rgba(95, 175, 120, 0.6);
+}
+.roster-badge.disabled {
+  background: rgba(60, 72, 87, 0.35);
+  color: var(--ui-locked-text);
+  border-color: #556270;
+}
+.roster-badge.code-set {
+  background: rgba(242, 199, 92, 0.18);
+  color: var(--ui-primary-cta-highlight);
+  border-color: rgba(242, 199, 92, 0.5);
+}
+.roster-badge.code-unset {
+  background: rgba(43, 114, 126, 0.2);
+  color: #9fe2ec;
+  border-color: #3b8896;
+}
+
+.status-dot {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+.status-dot.green {
+  color: var(--ui-success);
+}
+.status-dot.gray {
+  color: #78818b;
+}
+
+.search-highlight {
+  background: rgba(242, 199, 92, 0.35);
+  color: var(--ui-primary-cta-highlight);
+  border-bottom: 1px solid var(--ui-primary-cta);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  background: #092027;
+  border: 2px dashed #234f59;
+  border-radius: 4px;
+  color: var(--ui-text-secondary);
+}
+.empty-state p {
+  margin: 8px 0 0;
+  font-size: 0.88rem;
+}
+
+.observer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(39, 80, 83, 0.7);
+  color: #c9ebd8;
+  border: 1px solid rgba(111, 158, 149, 0.4);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.login-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.login-close-button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 1.1rem;
+}
+.login-first-time-box {
+  display: grid;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: rgba(9, 32, 39, 0.85);
+  border: 1px solid rgba(111, 158, 149, 0.35);
+  box-shadow: var(--pixel-bevel-in);
+}
+.login-actions-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.arena-tv-placeholder {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  color: #f7f4e7;
+  background: #08152f;
+}
+.arena-tv-placeholder section {
+  max-width: 720px;
+  border: 2px solid var(--ui-panel-border);
+  border-radius: 4px;
+  padding: 32px;
+  background: var(--ui-panel);
+  box-shadow: var(--pixel-bevel-out), var(--pixel-shadow-panel);
+}
+.arena-tv-placeholder span {
+  color: #86aa6e;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.arena-tv-placeholder h1 { margin: 8px 0 0; color: var(--ui-text-primary); }
+.arena-tv-placeholder p { color: var(--ui-text-secondary); }
+

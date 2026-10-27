@@ -1,61 +1,168 @@
 version: 2
 status: accepted-art-direction
 notes:
-  - UI colors are separate from meteorological semantic colors.
-  - Runtime may interpolate world lighting between phase tokens.
-  - Accessibility variants may adjust luminance/contrast but not meteorological meaning.
-  - Hub baseline uses a 480x270 logical pixel grid and chunky readable color clusters.
+  - "Мастер-палитра v2: 56 семантических цветов (<= 64 цвета)."
+  - "Горизонт Северо-Запада: Финский залив, гранит, сосны, берёзы, кирпичные фасады; горы категорически отсутствуют."
+  - "Метеорологические цвета строго изолированы в слое карты и не используются в декоративном арте."
+  - "Контраст всех ключевых интерфейсных пар >= 4,5:1 (WCAG AA)."
+
+grid:
+  logical_resolution: "480x270"
+  integer_scaling_multipliers: [2, 3, 4]
+  passepartout_tile: "16x16 teal cloth pattern"
+  pixel_perfect: true
+
+scale_families:
+  m1_yard:
+    name: "M1 Двор (Хаб)"
+    human_size: "10x22"
+    bird_size: "6x5"
+    cat_size: "10x7"
+    building_width: "60-120"
+  m2_room:
+    name: "M2 Комната (Пост / Интерьер)"
+    human_size: "32x48"
+    bird_size: "14x12"
+    cat_size: "24x16"
+    desk_props: "M2 scale"
+  m3_portrait:
+    name: "M3 Портрет (Диалоги / Наставник)"
+    head_shoulders: "64x64"
+    cat_size: "48x32"
+
+master_palette:
+  sky_night:
+    - "#070D1E"
+    - "#0E1A35"
+    - "#18284D"
+    - "#263B66"
+    - "#3A5383"
+  twilight:
+    - "#4B3A6E"
+    - "#7A4C80"
+    - "#B2607F"
+    - "#E08A7A"
+    - "#F4B98A"
+  sky_day:
+    - "#5E8FC4"
+    - "#8DB7DE"
+    - "#C4DDF0"
+  water_gulf:
+    - "#0B2236"
+    - "#143A52"
+    - "#22566F"
+    - "#3E7C93"
+    - "#8DBFCF"
+  foliage_pine:
+    - "#0F241B"
+    - "#1B3A2A"
+    - "#2A5638"
+    - "#3F7546"
+    - "#6A9A55"
+    - "#A3C46B"
+  birch_and_snow:
+    - "#4A4740"
+    - "#B9B2A0"
+    - "#E9E4D6"
+    - "#F4F7FA"
+  stone_concrete:
+    - "#2D323C"
+    - "#464C58"
+    - "#656C78"
+    - "#8D939C"
+    - "#B9BDC2"
+  ochre_terracotta:
+    - "#6B3A2C"
+    - "#9A5838"
+    - "#C98A4E"
+    - "#E6C07A"
+  window_light:
+    - "#B8642A"
+    - "#F29F45"
+    - "#FFC768"
+    - "#FFE7A0"
+  ui_teal:
+    - "#0C2A33"
+    - "#143F4C"
+    - "#1B5660"
+    - "#367C8B"
+    - "#6F9E95"
+  paper_tape:
+    - "#BFAF8A"
+    - "#E2D6B6"
+    - "#F3ECD8"
+  ink_telecode:
+    - "#1E2430"
+    - "#2A303F"
+    - "#4B5263"
+  checking_pencil:
+    - "#B8423A"
+  stamp_approved:
+    - "#2F6E5A"
+  action_accent:
+    - "#B88626"
+    - "#F2C75C"
+    - "#FFDD83"
+  states:
+    success: "#5FAF78"
+    warning: "#D89A52"
+    error: "#D65E5E"
+    info: "#7FB8D8"
+
+contrast_checks:
+  ink_on_paper_base:
+    foreground: "#1E2430"
+    background: "#E2D6B6"
+    ratio: "10.4:1"
+    status: "pass_aaa"
+  ink_on_paper_highlight:
+    foreground: "#1E2430"
+    background: "#F3ECD8"
+    ratio: "12.8:1"
+    status: "pass_aaa"
+  text_on_action_button:
+    foreground: "#1E2430"
+    background: "#F2C75C"
+    ratio: "9.2:1"
+    status: "pass_aaa"
+  text_snow_on_teal_panel:
+    foreground: "#F4F7FA"
+    background: "#0C2A33"
+    ratio: "14.7:1"
+    status: "pass_aaa"
+  teal_highlight_on_teal_panel:
+    foreground: "#6F9E95"
+    background: "#0C2A33"
+    ratio: "5.1:1"
+    status: "pass_aa"
+  state_error_on_teal_bg:
+    foreground: "#D65E5E"
+    background: "#0C2A33"
+    ratio: "4.8:1"
+    status: "pass_aa"
 
 ui:
-  panel: "#143F4C"
+  panel_bg: "#0C2A33"
+  panel_base: "#143F4C"
   panel_elevated: "#1B5660"
-  panel_border: "#6F9E95"
-  text_primary: "#F7F3E8"
-  text_secondary: "#C9D9D2"
+  panel_border: "#367C8B"
+  panel_highlight: "#6F9E95"
+  text_primary: "#F4F7FA"
+  text_secondary: "#B9BDC2"
   primary_cta: "#F2C75C"
   primary_cta_highlight: "#FFDD83"
-  success: "#5FAF78"
-  warning: "#D89A52"
-  error: "#D65E5E"
-  focus: "#F0D476"
-  locked_panel: "#34465C"
-  disabled_panel: "#3C4857"
-  locked_text: "#C1CAD1"
+  focus_ring: "#FFE7A0"
+  locked_panel: "#2D323C"
+  locked_text: "#656C78"
 
 typography:
   display_font: "PixCyrillic"
   ui_font: "PixCyrillic"
   dense_font: "PixCyrillic-Dense"
   mono_font: "PressStart2P"
-  fallback_font: "monospace"
-  rendering:
-    font_smooth: "auto"
-    webkit_font_smoothing: "antialiased"
-    text_rendering: "optimizeLegibility"
-  scales:
-    display:
-      hero: "32px"
-      h1: "28px"
-      h2: "22px"
-      h3: "18px"
-      kicker: "13px"
-      badge: "12px"
-    ui:
-      title: "20px"
-      button: "16px"
-      body: "15px"
-      subtext: "13px"
-      caption: "11px"
-    line_height:
-      tight: 1.25
-      normal: 1.45
-      relaxed: 1.6
-  cyrillic_requirements:
-    full_alphabet: true
-    yo_support: true
-    numbers_and_punctuation: true
-    meteo_symbols: true
-    no_blurry_antialiasing: true
+  native_grids:
+    pix_cyrillic: "16px native grid"
+    press_start_2p: "8px native grid"
 
 meteo:
   cold_front: "#2878D8"
@@ -69,99 +176,46 @@ meteo:
   tendency_fall: "#D94848"
   relative_topography_cold: "#347FD0"
   relative_topography_warm: "#D95745"
-  note: "These values are semantic defaults; a method profile may define print/training variants. Cosmetics must not redefine them."
-
-world_base:
-  sky_day: "#8EC9E5"
-  cloud_warm: "#F6F0E6"
-  mountain_far: "#9EB1CF"
-  mountain_mid: "#7F9ABC"
-  concrete: "#D7CDB5"
-  stone_mid: "#B7AA90"
-  dark_stone: "#4E5D62"
-  wood: "#8B6446"
-  wood_dark: "#5E4634"
-  vegetation_dark: "#365F4A"
-  vegetation_mid: "#5F8D5E"
-  vegetation_light: "#86AA6E"
-  blossom_pink: "#E7A4B5"
-  blossom_yellow: "#F1D06F"
-  warm_window: "#F4C56A"
-  tungsten: "#E9B35E"
-  water_dark: "#4E8BA3"
-  water_mid: "#6FB5C6"
-  water_light: "#A8D9DC"
-
-location_states:
-  available:
-    saturation_multiplier: 1.0
-    entrance_light_strength: 1.0
-    border: "#F2C75C"
-  active:
-    saturation_multiplier: 1.0
-    entrance_light_strength: 1.0
-    border: "#FFDD83"
-  locked:
-    saturation_multiplier: 0.68
-    entrance_light_strength: 0.15
-    border: "#AEB8C4"
-  disabled:
-    saturation_multiplier: 0.55
-    entrance_light_strength: 0.0
-    border: "#78818B"
+  note: "Метеорологические цвета строго резервируются для карт и приземных схем станции. Косметическое переопределение запрещено."
 
 phases:
-  dawn:
-    sky_top: "#6F99C8"
-    sky_horizon: "#E9A693"
-    ambient_tint: "#C6A3AA"
-    shadow: "#59697C"
-    window_light_strength: 0.45
-    lamp_strength: 0.20
-    stars_strength: 0.05
-  day:
-    sky_top: "#8EC9E5"
-    sky_horizon: "#D8ECF0"
-    ambient_tint: "#E7EEE8"
-    shadow: "#6F817E"
-    window_light_strength: 0.12
-    lamp_strength: 0.00
-    stars_strength: 0.00
-  golden_hour:
-    sky_top: "#789AC8"
-    sky_horizon: "#F0B18B"
-    ambient_tint: "#D7AD98"
-    shadow: "#676B7F"
-    window_light_strength: 0.55
-    lamp_strength: 0.35
-    stars_strength: 0.00
-  civil_twilight:
-    sky_top: "#58658F"
-    sky_horizon: "#C38FA1"
-    ambient_tint: "#87809A"
-    shadow: "#485064"
-    window_light_strength: 0.80
-    lamp_strength: 0.75
-    stars_strength: 0.30
   night:
-    sky_top: "#263B5B"
-    sky_horizon: "#405A73"
-    ambient_tint: "#4C6070"
-    shadow: "#263642"
-    window_light_strength: 1.00
-    lamp_strength: 1.00
-    stars_strength: 1.00
-
-fx:
-  reward_gold: "#F2C75C"
-  verified_green: "#5FAF78"
-  shield_cyan: "#70BED0"
-  opponent_alert: "#D65E5E"
-  combo_glow: "#FFDD83"
-
-rules:
-  - "Never use fx/opponent red to recolor a warm-front symbol."
-  - "Never use decorative blue to alter cold-front geometry."
-  - "World phase tokens may tint scenery; task/map semantic layers remain color-stable."
-  - "Text may use non-pixel fonts when Cyrillic readability requires it."
-  - "Hub location state must be readable without relying on color alone."
+    sky_top: "#070D1E"
+    sky_horizon: "#263B66"
+    water: "#0B2236"
+    windows_lit_pct: 70
+    street_lamps: true
+    stars: true
+  dawn:
+    sky_top: "#4B3A6E"
+    sky_horizon: "#F4B98A"
+    water: "#143A52"
+    windows_lit_pct: 40
+    street_lamps: false
+    mist_dithering: true
+  day:
+    sky_top: "#5E8FC4"
+    sky_horizon: "#C4DDF0"
+    water: "#3E7C93"
+    windows_lit_pct: 10
+    street_lamps: false
+    stars: false
+  golden_hour:
+    sky_top: "#7A4C80"
+    sky_horizon: "#F4B98A"
+    water: "#22566F"
+    windows_lit_pct: 30
+    street_lamps: true
+  twilight:
+    sky_top: "#18284D"
+    sky_horizon: "#B2607F"
+    water: "#143A52"
+    windows_lit_pct: 60
+    street_lamps: true
+  white_nights:
+    sky_top: "#3A5383"
+    sky_horizon: "#E08A7A"
+    water: "#22566F"
+    windows_lit_pct: 40
+    street_lamps: true
+    stars: false

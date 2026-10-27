@@ -1,0 +1,39 @@
+name: Проверка ассетов и графических контрактов
+on:
+  push:
+    paths:
+      - 'assets/source/**'
+      - 'assets/manifests/**'
+      - 'tools/assets/**'
+  pull_request:
+    paths:
+      - 'assets/source/**'
+      - 'assets/manifests/**'
+      - 'tools/assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+      - name: Проверка структуры манифестов
+        run: |
+          python tools/assets/check_asset_manifests.py
+      - name: Проверка палитр проекта
+        run: |
+          python -c "
+          from pathlib import Path
+          palettes = list(Path('assets/source/palettes').glob('*.gpl'))
+          print(f'Найдено палитр: {len(palettes)}')
+          assert len(palettes) >= 2, 'Палитры не найдены'
+          "

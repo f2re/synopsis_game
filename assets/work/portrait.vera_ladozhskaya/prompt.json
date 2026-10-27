@@ -1,0 +1,13 @@
+{
+  "positive_prompt": "<26063_pixel_style> STYLE LOCK: modern high-quality master pixel art (reference feel: Eastward, Sea of Stars, A Short Hike). Crisp hard-edged square pixels on a strict logical pixel grid, deliberate clusters of 2+ pixels, no anti-aliasing blur, no photographic texture, no 3D-render look. Ordered 2x2 dithering where needed. Light from upper-left. Outlines are a darker shade of the local colour, never pure black. Setting: 26063: Позывной «Синоптик». A fictional cozy scientific meteorological campus on the shore of the Gulf of Finland near St. Petersburg, North-West Russia (59.9° N). Late 20th century academic atmosphere: flat horizon, Baltic water, birch and pine, granite embankments, weathered ochre and terracotta brick facades, warm amber windows, authentic Russian synoptic meteorological instruments. Strictly no alpine mountains, no palm trees, no futuristic sci-fi or fantasy elements. Subject: 58-year-old senior female synoptic meteorologist. Realistic adult proportions, intelligent focused face, quiet professional confidence, subtle polite demanding squint. Silver-grey hair with darker blond streaks styled in a restrained bun. Classic thin metal rectangular reading glasses on the nose bridge. Wearing an authentic Soviet/Russian hydrometeorological service uniform or warm burgundy/navy knitted wool cardigan with a subtle brass lapel pin badge. Holding or carrying in breast pocket a classic two-tone red-and-blue synoptic pencil (сине-красный карандаш синоптика). Framing contract: 128x128 pixel portrait bust (head, neck and upper shoulders). Head height occupies 45% to 55% of canvas height. Eyes level at 40% to 45% from top. Adult realistic facial anatomy, calm demanding expression, focused gaze. Isolated character against a neutral uniform dark slate studio background (#1E2430), clean contrast for silhouette isolation. Absolutely no chibi or baby-face aesthetics.",
+  "negative_prompt": "blurry, anti-aliased, smooth airbrushed gradient, painterly oil painting, 3d render, photo, noise, jpeg artifacts, text, letters, numbers, logo, watermark, signature, chromatic aberration, bloom, lens flare, distortion, chibi, kawaii, super-deformed, baby face, toddler, young girl, anime eyes, oversized head, toy-like proportions, sticker style, emoji face, cartoonish caricature, childish, cute mascot, deformed hands, extra fingers, plastic skin, airbrush, wide background landscape",
+  "metadata": {
+    "asset_class": "portrait",
+    "lore_key": "vera_ladozhskaya",
+    "target_size": [
+      128,
+      128
+    ],
+    "framing": "portrait_bust_128"
+  }
+}

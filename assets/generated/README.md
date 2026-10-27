@@ -1,3 +1,33 @@
-# Generated runtime assets
+# Generated Runtime Assets (Скомпилированные ассеты рабочего контура)
 
-Build output only. Expected products include packed atlases, optimised PNG/WebP textures, animation JSON and build manifests. Never edit these files manually; regenerate them from `assets/source`, `assets/scenes`, `assets/manifests` and the pinned toolchain.
+## 1. Назначение каталога
+Данный каталог является **исключительно продуктом автоматической сборки** конвейера пиксельных ассетов (`tools/assets/scripts/build-level1.mjs`).
+
+> [!CAUTION]
+> Любое ручное редактирование файлов в данном каталоге строжайше запрещено. Все изменения вносятся в исходные манифесты (`assets/manifests/`) и исходники (`assets/source/`), после чего пересобираются скриптом.
+
+---
+
+## 2. Структура сгенерированных артефактов
+
+```text
+assets/generated/
+├── atlases/
+│   └── level1-atlas.json      # Текстурный атлас с детерминированной сортировкой кадров
+├── metadata/
+│   └── level1-assets.json     # Семантический реестр ассетов уровня КН-01
+└── textures/                  # Оптимизированные текстуры и срезки
+```
+
+---
+
+## 3. Воспроизводимость сборки
+Сборка гарантирует 100% криптографическую воспроизводимость (bit-for-bit reproducibility):
+- Одинаковый вход даёт идентичные SHA-256 хэши метаданных и атласов.
+- Исключены динамические метки времени и случайные порядки обхода файловой системы.
+
+---
+
+## 4. Архитектурные инварианты
+1. **Семантические идентификаторы**: Рабочий контур игры (Phaser/React) обращается к ассетам исключительно по стабильным идентификаторам (например, `hub.layer.l0`, `fauna.bird_tit`, `npc.npc_mentor_ladozhskaya`, `reward.reward_intern_pencil`), а не по физическим путям к кандидатам.
+2. **Изоляция устаревших файлов**: Устаревшие или нарушающие лор файлы (например, альпийские горы или `hub_master_night`) автоматически детектируются и исключаются из сборки.

@@ -1,0 +1,1268 @@
+{
+  "version": "1.0.0",
+  "description": "Эталонные шаблоны учебных заданий уровня 1 (КН-01) для сервера.",
+  "tasks": [
+    {
+      "id": "tmpl_c1_aaxx_header",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_section0_decode"
+      ],
+      "question": "Что обозначает опознаватель AAXX в начале метеорологической телеграммы?",
+      "payload": {
+        "prompt": "Что обозначает опознаватель AAXX в начале метеорологической телеграммы?",
+        "options": [
+          "Сводка погоды с наземной метеорологической станции",
+          "Сводка судовой метеорологической станции",
+          "Авиационная сводка погоды METAR",
+          "Штормовое предупреждение об опасном явлении"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 0, группа AAXX"
+        }
+      ],
+      "explanation": "Опознаватель AAXX указывает на сводку погоды для глобального обмена с фиксированной наземной метеорологической станции.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c1_date_time_wind_indicator",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_section0_decode"
+      ],
+      "question": "В группе срока 26181 какую информацию передаёт последняя цифра (iw = 1)?",
+      "payload": {
+        "prompt": "В группе срока 26181 какую информацию передаёт последняя цифра (iw = 1)?",
+        "options": [
+          "Скорость ветра измерена анемометром в м/с",
+          "Скорость ветра измерена в узлах",
+          "Скорость ветра оценена по флюгеру в м/с",
+          "Скорость ветра не измерялась"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 0, группа YYGGiw"
+        }
+      ],
+      "explanation": "Указатель iw=1 означает, что скорость ветра измерена анемометром в метрах в секунду.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c1_header_order",
+      "topic": "kn01",
+      "type": "sequence",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_group_order"
+      ],
+      "question": "Установите правильный нормативный порядок следования групп секции 0:",
+      "payload": {
+        "steps": [
+          "Маркер типа сводки (AAXX)",
+          "День месяца, срок UTC и указатель ветра (YYGGiw)",
+          "Международный пятизначный индекс станции (IIiii)"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2
+        ]
+      },
+      "steps": [
+        "Маркер типа сводки (AAXX)",
+        "День месяца, срок UTC и указатель ветра (YYGGiw)",
+        "Международный пятизначный индекс станции (IIiii)"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2
+      ],
+      "answer": {
+        "kind": "sequence",
+        "correct_order": [
+          0,
+          1,
+          2
+        ]
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 0, общий порядок групп"
+        }
+      ],
+      "explanation": "Раздел 0 телеграммы всегда следует в строгом порядке: AAXX, затем срок YYGGiw, затем пятизначный индекс станции IIiii.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c1_utc_hour",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_section0_decode"
+      ],
+      "question": "Укажите срок наблюдения по всемирному координированному времени (UTC) из группы 26181:",
+      "payload": {
+        "group": "YYGGiw",
+        "encoded": "26181",
+        "prompt": "Укажите срок наблюдения по всемирному координированному времени (UTC) из группы 26181:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 18,
+        "unit": "ч"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 0, группа YYGGiw"
+        }
+      ],
+      "explanation": "Группа YYGGiw: первые 2 цифры — день месяца (26), следующие 2 цифры — срок в часах по UTC (18), последняя — указатель ветра (1).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c1_wind_units",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_section0_decode"
+      ],
+      "question": "В группе 05004 указатель iw=4. В каких единицах и каким прибором измерялся ветер?",
+      "payload": {
+        "prompt": "В группе 05004 указатель iw=4. В каких единицах и каким прибором измерялся ветер?",
+        "options": [
+          "В морских узлах по измерительному прибору (анемометру)",
+          "В метрах в секунду по прибору",
+          "В метрах в секунду ориентировочно",
+          "В узлах ориентировочно"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 0, группа YYGGiw, код iw"
+        }
+      ],
+      "explanation": "Указатель iw=4 указывает на скорость ветра в морских узлах по измерительному прибору (анемометру).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c1_station_26063",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_section0_decode"
+      ],
+      "question": "Введите международный цифровой индекс станции Северо-Западного кампуса из группы 26063:",
+      "payload": {
+        "group": "IIiii",
+        "encoded": "26063",
+        "prompt": "Введите международный цифровой индекс станции Северо-Западного кампуса из группы 26063:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 26063
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 0, группа IIiii"
+        }
+      ],
+      "explanation": "Группа IIiii: 26 — номер района (Северо-Запад РФ / Санкт-Петербург), 063 — номер станции «Синоптик».",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c2_temp_vs_dewpoint",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_temperature_decode",
+        "kn01_dewpoint_decode"
+      ],
+      "question": "По какой цифре-опознавателю различаются группы температуры воздуха и точки росы?",
+      "payload": {
+        "prompt": "По какой цифре-опознавателю различаются группы температуры воздуха и точки росы?",
+        "options": [
+          "1 — температура воздуха, 2 — точка росы",
+          "0 — температура воздуха, 1 — точка росы",
+          "1 — точка росы, 2 — температура воздуха",
+          "2 — температура станции, 3 — точка росы"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группы 1snTTT и 2snTdTdTd"
+        }
+      ],
+      "explanation": "Группа температуры воздуха начинается с опознавателя 1 (1snTTT), а точка росы — с 2 (2snTdTdTd).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c2_positive_temp",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_temperature_decode"
+      ],
+      "question": "Дешифрируйте значение температуры воздуха из группы 10234:",
+      "payload": {
+        "group": "1snTTT",
+        "encoded": "10234",
+        "prompt": "Дешифрируйте значение температуры воздуха из группы 10234:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 23.4,
+        "unit": "°C"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 1snTTT"
+        }
+      ],
+      "explanation": "sn=0 означает положительную температуру (или 0 °C), три цифры 234 задают 23,4 °C.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c2_sign_bit_sn",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_temperature_decode"
+      ],
+      "question": "Какое значение кода знака sn указывает на отрицательную температуру воздуха?",
+      "payload": {
+        "prompt": "Какое значение кода знака sn указывает на отрицательную температуру воздуха?",
+        "options": [
+          "sn = 1",
+          "sn = 0",
+          "sn = 9",
+          "sn = 5"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, таблица кода sn"
+        }
+      ],
+      "explanation": "Код sn=1 указывает на отрицательную температуру воздуха (ниже нуля). sn=0 указывает на 0 °C или выше.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c2_negative_dewpoint",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_dewpoint_decode"
+      ],
+      "question": "Дешифрируйте значение точки росы из группы 21008:",
+      "payload": {
+        "group": "2snTdTdTd",
+        "encoded": "21008",
+        "prompt": "Дешифрируйте значение точки росы из группы 21008:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": -0.8,
+        "unit": "°C"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 2snTdTdTd"
+        }
+      ],
+      "explanation": "sn=1 задаёт знак минус, 008 соответствует 0,8 °C, итоговая точка росы −0,8 °C.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c2_encode_temp",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_temperature_decode"
+      ],
+      "question": "Дешифрируйте температуру воздуха из группы 11128:",
+      "payload": {
+        "group": "1snTTT",
+        "encoded": "11128",
+        "prompt": "Дешифрируйте температуру воздуха из группы 11128:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": -12.8,
+        "unit": "°C"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 1snTTT"
+        }
+      ],
+      "explanation": "11128: группа 1, знак sn=1 (минус), значение 128 = 12,8 °C, результат −12,8 °C.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c2_find_error_td_gt_t",
+      "topic": "kn01",
+      "type": "findError",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "observation_qc_t_td"
+      ],
+      "question": "Выполните синоптическое задание.",
+      "payload": {
+        "stations": [
+          {
+            "id": "station_alpha",
+            "name": "Станция 26038 (Выборг)"
+          },
+          {
+            "id": "station_beta",
+            "name": "Станция 26063 («Синоптик»)"
+          },
+          {
+            "id": "station_gamma",
+            "name": "Станция 26121 (Нарва)"
+          }
+        ],
+        "observations": [
+          {
+            "stationId": "station_alpha",
+            "field": "T",
+            "numericValue": 12
+          },
+          {
+            "stationId": "station_alpha",
+            "field": "Td",
+            "numericValue": 8
+          },
+          {
+            "stationId": "station_beta",
+            "field": "T",
+            "numericValue": 10
+          },
+          {
+            "stationId": "station_beta",
+            "field": "Td",
+            "numericValue": 14.5
+          },
+          {
+            "stationId": "station_gamma",
+            "field": "T",
+            "numericValue": 15
+          },
+          {
+            "stationId": "station_gamma",
+            "field": "Td",
+            "numericValue": 11
+          }
+        ]
+      },
+      "answer": {
+        "kind": "station_id",
+        "value": "station_beta"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "физический контроль T/Td, РД 52.04.567-2005"
+        }
+      ],
+      "explanation": "Физический закон: точка росы не может превышать температуру воздуха (Td ≤ T). На станции 26063 T=10,0 °C, а Td=14,5 °C — грубая ошибка наблюдений.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c3_station_vs_sea_pressure",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_station_pressure_decode",
+        "kn01_sea_pressure_decode"
+      ],
+      "question": "Какими постоянными опознавателями различаются группы давления на станции и на уровне моря?",
+      "payload": {
+        "prompt": "Какими постоянными опознавателями различаются группы давления на станции и на уровне моря?",
+        "options": [
+          "3 — давление на станции (PoPoPoPo), 4 — приведённое к уровню моря (PPPP)",
+          "4 — давление на станции, 5 — давление на уровне моря",
+          "2 — давление на станции, 3 — давление на уровне моря",
+          "1 — давление на станции, 4 — давление на уровне моря"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группы 3PoPoPoPo и 4PPPP"
+        }
+      ],
+      "explanation": "Опознаватель 3 обозначает давление на уровне станции (3PoPoPoPo), опознаватель 4 — приведённое к уровню моря (4PPPP).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c3_sea_pressure_restore",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_sea_pressure_decode"
+      ],
+      "question": "Восстановите полное давление на уровне моря из группы 40126 (в гПа):",
+      "payload": {
+        "group": "4PPPP",
+        "encoded": "40126",
+        "prompt": "Восстановите полное давление на уровне моря из группы 40126 (в гПа):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 1012.6,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 4PPPP, правило восстановления тысяч"
+        }
+      ],
+      "explanation": "В группе 40126 отброшена первая цифра 1 тысячи гПа: 0126 означает 1012,6 гПа (правило 500: значение < 5000 дополняется до 10000+).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c3_tendency_characteristic",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_pressure_tendency_decode"
+      ],
+      "question": "В группе 57014 код характеристики a=7. Как изменялось давление за последние 3 часа?",
+      "payload": {
+        "prompt": "В группе 57014 код характеристики a=7. Как изменялось давление за последние 3 часа?",
+        "options": [
+          "Непрерывно понижалось (падение давления)",
+          "Непрерывно повышалось (рост давления)",
+          "Давление не изменялось",
+          "Сначала повышалось, затем понижалось"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 5appp, код характеристики a"
+        }
+      ],
+      "explanation": "Код характеристики a=7 означает непрерывное понижение давления (монотонное падение) за трёхчасовой интервал.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c3_tendency_value",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_pressure_tendency_decode"
+      ],
+      "question": "Определите величину изменения давления с учётом знака характеристики из группы 57014 (в гПа):",
+      "payload": {
+        "group": "5appp",
+        "encoded": "57014",
+        "prompt": "Определите величину изменения давления с учётом знака характеристики из группы 57014 (в гПа):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": -1.4,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 5appp"
+        }
+      ],
+      "explanation": "a=7 задаёт падение давления (знак минус), ppp=014 задаёт 1,4 гПа. Результат: −1,4 гПа.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c3_deep_cyclone_pressure",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_sea_pressure_decode"
+      ],
+      "question": "Восстановите давление в центре глубокого циклона из группы 49874 (в гПа):",
+      "payload": {
+        "group": "4PPPP",
+        "encoded": "49874",
+        "prompt": "Восстановите давление в центре глубокого циклона из группы 49874 (в гПа):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 987.4,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 4PPPP, правило 500"
+        }
+      ],
+      "explanation": "При давлении глубокого циклона ниже 1000 гПа (987,4 гПа) в коде 49874 отбрасывается ведущая цифра (правило 500: значение ≥ 5000 остаётся в диапазоне 900+ гПа).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c3_station_pressure_decode",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_station_pressure_decode"
+      ],
+      "question": "Дешифрируйте давление на уровне станции из группы 30084 (в гПа):",
+      "payload": {
+        "group": "3PoPoPoPo",
+        "encoded": "30084",
+        "prompt": "Дешифрируйте давление на уровне станции из группы 30084 (в гПа):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 1008.4,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 3PoPoPoPo"
+        }
+      ],
+      "explanation": "30084: группа 3 (давление на станции), значение 0084 соответствует 1008,4 гПа.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c4_cloud_and_wind_anatomy",
+      "topic": "kn01",
+      "type": "choice",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_wind_decode",
+        "kn01_cloud_cover_decode"
+      ],
+      "question": "В группе Nddff какую величину кодируют последние две цифры (ff)?",
+      "payload": {
+        "prompt": "В группе Nddff какую величину кодируют последние две цифры (ff)?",
+        "options": [
+          "Скорость ветра в установленных единицах (м/с или узлы)",
+          "Направление ветра в десятках градусов",
+          "Количество общей облачности в октах",
+          "Максимальный порыв ветра"
+        ]
+      },
+      "answer": {
+        "kind": "choice_index",
+        "value": 0
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа Nddff"
+        }
+      ],
+      "explanation": "В группе Nddff: N — общая облачность, dd — направление ветра в десятках градусов, ff — скорость ветра.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c4_cloud_cover_octas",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_cloud_cover_decode"
+      ],
+      "question": "Укажите количество общей облачности в октах из группы 72406:",
+      "payload": {
+        "group": "Nddff",
+        "encoded": "72406",
+        "prompt": "Укажите количество общей облачности в октах из группы 72406:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 7
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа Nddff, код N"
+        }
+      ],
+      "explanation": "Первая цифра 7 означает покрытие неба облаками 7 октантов (7/8 неба).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c4_wind_direction",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_wind_decode"
+      ],
+      "question": "Укажите истинное направление ветра в градусах из группы 72406 (код dd=24):",
+      "payload": {
+        "group": "Nddff",
+        "encoded": "72406",
+        "prompt": "Укажите истинное направление ветра в градусах из группы 72406 (код dd=24):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 240,
+        "unit": "°"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа Nddff, код dd"
+        }
+      ],
+      "explanation": "Код dd=24 умножается на 10, получая истинное направление ветра 240° (юго-западный ветер).",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c4_wind_speed",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_wind_decode"
+      ],
+      "question": "Укажите скорость ветра в м/с из группы 72406:",
+      "payload": {
+        "group": "Nddff",
+        "encoded": "72406",
+        "prompt": "Укажите скорость ветра в м/с из группы 72406:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 6,
+        "unit": "м/с"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа Nddff, код ff"
+        }
+      ],
+      "explanation": "Код ff=06 задаёт скорость ветра 6 м/с.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c4_wind_calm",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_wind_decode"
+      ],
+      "question": "Дешифрируйте скорость ветра при штиле из группы 00000 (в м/с):",
+      "payload": {
+        "group": "Nddff",
+        "encoded": "00000",
+        "prompt": "Дешифрируйте скорость ветра при штиле из группы 00000 (в м/с):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 0,
+        "unit": "м/с"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа Nddff при штиле"
+        }
+      ],
+      "explanation": "Группа 00000 означает полный штиль: направление не выражено (dd=00), скорость 0 м/с.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c4_north_wind",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_wind_decode"
+      ],
+      "question": "Укажите направление строго северного ветра в градусах из группы 83612 (код dd=36):",
+      "payload": {
+        "group": "Nddff",
+        "encoded": "83612",
+        "prompt": "Укажите направление строго северного ветра в градусах из группы 83612 (код dd=36):"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 360,
+        "unit": "°"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа Nddff, северный ветер"
+        }
+      ],
+      "explanation": "Северный ветер кодируется как dd=36 (360°), так как dd=00 зарезервировано для штиля.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c5_section_order",
+      "topic": "kn01",
+      "type": "sequence",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_group_order"
+      ],
+      "question": "Установите правильную последовательность метеорологических групп в разделе 1 телеграммы КН-01:",
+      "payload": {
+        "steps": [
+          "Облачность и ветер (Nddff)",
+          "Температура воздуха (1snTTT)",
+          "Точка росы (2snTdTdTd)",
+          "Давление на уровне станции (3PoPoPoPo)",
+          "Давление на уровне моря (4PPPP)",
+          "Барическая тенденция за 3 часа (5appp)"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "steps": [
+        "Облачность и ветер (Nddff)",
+        "Температура воздуха (1snTTT)",
+        "Точка росы (2snTdTdTd)",
+        "Давление на уровне станции (3PoPoPoPo)",
+        "Давление на уровне моря (4PPPP)",
+        "Барическая тенденция за 3 часа (5appp)"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "answer": {
+        "kind": "sequence",
+        "correct_order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, общий порядок групп"
+        }
+      ],
+      "explanation": "Нормативная последовательность групп раздела 1: Nddff, 1snTTT, 2snTdTdTd, 3PoPoPoPo, 4PPPP, 5appp.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c5_station_26063_temp",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_temperature_decode"
+      ],
+      "question": "Дешифрируйте температуру воздуха станции 26063 из группы 10052:",
+      "payload": {
+        "group": "1snTTT",
+        "encoded": "10052",
+        "prompt": "Дешифрируйте температуру воздуха станции 26063 из группы 10052:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 5.2,
+        "unit": "°C"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 1snTTT станции 26063"
+        }
+      ],
+      "explanation": "10052: группа 1, положительный знак sn=0, температура 5,2 °C.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c5_station_26063_sea_press",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_sea_pressure_decode"
+      ],
+      "question": "Дешифрируйте приведённое давление станции 26063 из группы 40126:",
+      "payload": {
+        "group": "4PPPP",
+        "encoded": "40126",
+        "prompt": "Дешифрируйте приведённое давление станции 26063 из группы 40126:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 1012.6,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 4PPPP станции 26063"
+        }
+      ],
+      "explanation": "40126: группа 4, уровень моря, восстановленное значение 1012,6 гПа.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_c5_station_26063_tendency",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 1,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_pressure_tendency_decode"
+      ],
+      "question": "Дешифрируйте барическую тенденцию станции 26063 из группы 57014:",
+      "payload": {
+        "group": "5appp",
+        "encoded": "57014",
+        "prompt": "Дешифрируйте барическую тенденцию станции 26063 из группы 57014:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": -1.4,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, группа 5appp станции 26063"
+        }
+      ],
+      "explanation": "57014: группа 5, a=7 (падение), ppp=014 (1,4 гПа), барическая тенденция −1,4 гПа.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_exam_temp_arctic",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 2,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_temperature_decode"
+      ],
+      "question": "Дешифрируйте арктическую температуру из группы 11287:",
+      "payload": {
+        "group": "1snTTT",
+        "encoded": "11287",
+        "prompt": "Дешифрируйте арктическую температуру из группы 11287:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": -28.7,
+        "unit": "°C"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, экстремальные температуры Арктики"
+        }
+      ],
+      "explanation": "11287: группа 1, отрицательный знак sn=1, арктическая температура −28,7 °C.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    },
+    {
+      "id": "tmpl_exam_anticyclone_pressure",
+      "topic": "kn01",
+      "type": "decode",
+      "difficulty": 2,
+      "method_profile": "RUS_SURFACE_STATION_V1",
+      "data_origin": "synthetic_drill",
+      "skills": [
+        "kn01_sea_pressure_decode"
+      ],
+      "question": "Дешифрируйте высокое давление мощного антициклона из группы 40412:",
+      "payload": {
+        "group": "4PPPP",
+        "encoded": "40412",
+        "prompt": "Дешифрируйте высокое давление мощного антициклона из группы 40412:"
+      },
+      "answer": {
+        "kind": "numeric",
+        "value": 1041.2,
+        "unit": "гПа"
+      },
+      "sources": [
+        {
+          "source_id": "ROSHYDROMET_KN01_2013",
+          "locator": "раздел 1, высокое давление антициклона"
+        }
+      ],
+      "explanation": "40412: группа 4, мощный антициклон с давлением 1041,2 гПа.",
+      "principle_tags": [
+        "kn01_code",
+        "synoptic_level1"
+      ],
+      "review": {
+        "source_checked": true,
+        "method_reviewed": true,
+        "publication_allowed": true
+      }
+    }
+  ]
+}

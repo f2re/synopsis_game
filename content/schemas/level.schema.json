@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://synopsis.game/schemas/level.schema.json",
+  "title": "LevelDefinition",
+  "description": "Схема уровней и смен программы 26063: Позывной «Синоптик». Ни одна клиентская структура не содержит эталонов ответов.",
+  "type": "object",
+  "required": ["schema_version", "level_id", "title", "description", "method_profile", "shifts", "game_modes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "level_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "method_profile": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_]+$"
+    },
+    "shifts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "number", "title", "subtitle", "target_duration_minutes", "covered_groups", "task_slots", "reward", "unlocks"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^shift_[a-z0-9_]+$"
+          },
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "target_duration_minutes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "covered_groups": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "pass_threshold_accuracy": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "task_slots": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["position", "type", "target_concept", "difficulty"],
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["identify", "decode", "anatomy", "encode", "sequence", "findError", "fullTelegram"]
+                },
+                "target_concept": {
+                  "type": "string"
+                },
+                "difficulty": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                }
+              }
+            }
+          },
+          "reward": {
+            "type": "object",
+            "required": ["id", "name", "type", "lore"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "type": { "type": "string", "enum": ["item", "badge", "certificate", "unlock"] },
+              "lore": { "type": "string" }
+            }
+          },
+          "unlocks": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "game_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description", "handbook_allowed", "hint_after_mistake", "timer_seconds", "mastery_multiplier"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["mentor", "standard", "blitz"]
+          },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "handbook_allowed": {
+            "oneOf": [
+              { "type": "boolean" },
+              { "type": "string", "enum": ["with_penalty"] }
+            ]
+          },
+          "hint_after_mistake": { "type": "boolean" },
+          "timer_seconds": {
+            "type": ["integer", "null"]
+          },
+          "mastery_multiplier": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2
+          },
+          "mastery_multiplier_with_handbook": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2
+          },
+          "available_initially": { "type": "boolean" },
+          "available_after_shift_passed": { "type": "boolean" },
+          "unlock_prerequisite": { "type": "string" }
+        }
+      }
+    }
+  }
+}

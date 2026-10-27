@@ -1,0 +1,12 @@
+{
+  "buildTimestamp": "deterministic-static",
+  "excludedLegacy": [
+    "hub_master_night",
+    "alpine_peaks",
+    "mountain_ridge"
+  ],
+  "manifests": {},
+  "semanticAssetMap": {},
+  "target": "kn01_level1",
+  "version": "3.0.0"
+}

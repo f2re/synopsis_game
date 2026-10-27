@@ -1,0 +1,28 @@
+{
+  "asset_id": "PROP-LAMP",
+  "spec": {
+    "size": [16, 24],
+    "frame": [8, 24],
+    "alpha": "transparent",
+    "max_colors": 8
+  },
+  "calls": [
+    {
+      "seed": 26063,
+      "output": "prop_lamp__candidate-01__REJECTED.png",
+      "sha256": "a202b8d0f142e46f3a076c484e6f543f8aa042a3e5b1178839b7b57e684c1d86",
+      "mcp_validation": "PASS",
+      "review": "REJECTED",
+      "reason": "The image contains only two dark blue colors (#0E1A35, #263B66) and does not read as a lamp. MCP reported ComfyUI checkpoint z_image_turbo.safetensors missing from the available checkpoint list and used fallback."
+    },
+    {
+      "seed": 26064,
+      "output": "prop_lamp__candidate-02__REJECTED.png",
+      "sha256": "a202b8d0f142e46f3a076c484e6f543f8aa042a3e5b1178839b7b57e684c1d86",
+      "mcp_validation": "PASS",
+      "review": "REJECTED",
+      "reason": "Byte-identical fallback to candidate 01; no lamp silhouette or warm lamp colors. Do not promote to production."
+    }
+  ],
+  "next_action": "Restore a valid ComfyUI checkpoint before retrying the asset."
+}

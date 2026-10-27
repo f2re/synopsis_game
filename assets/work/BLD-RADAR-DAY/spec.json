@@ -1,0 +1,13 @@
+{
+  "id": "BLD-RADAR-DAY",
+  "task": "W2-10",
+  "path": "assets/source/environment/hub/v3/buildings/bld_radar_day.png",
+  "size": [
+    56,
+    96
+  ],
+  "frame": null,
+  "alpha": "transparent",
+  "max_colors": 28,
+  "people": false
+}

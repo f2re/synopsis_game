@@ -27,6 +27,26 @@
       "name": "Порядок кодовых групп раздела 1 КН-01 SYNOP"
     },
     {
+      "id": "kn01_section0_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование групп раздела 0 (AAXX, YYGGiw, IIiii)"
+    },
+    {
+      "id": "kn01_sea_pressure_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование давления на уровне моря в группе 4PPPP"
+    },
+    {
+      "id": "kn01_cloud_cover_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование общего количества облаков в группе Nddff"
+    },
+    {
+      "id": "kn01_wind_decode",
+      "module_id": "MET-02",
+      "name": "Дешифрирование направления и скорости ветра в группах Nddff и 00fff"
+    },
+    {
       "id": "station_plot_temperature",
       "module_id": "MET-03",
       "name": "Положение температуры воздуха T на схеме приземной станции"

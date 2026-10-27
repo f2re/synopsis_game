@@ -1,0 +1,3 @@
+✓ Записаны CSS токены в /Users/meteo/Documents/WWW/synopsis_game/apps/web/src/theme/tokens.css
+✓ Записаны TS токены в /Users/meteo/Documents/WWW/synopsis_game/packages/world-engine/src/theme/tokens.ts
+Проверка дизайн-токенов успешно завершена: CSS и TS токены согласованы с YAML.

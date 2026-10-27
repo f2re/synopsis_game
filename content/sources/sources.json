@@ -35,6 +35,17 @@
       "issuer": "Всемирная метеорологическая организация",
       "url": "https://meteoinfo.ru/images/media/books-docs/WMO/WMO-485-2023-Upd-2024_ru.pdf",
       "notes": "Пункты 2.1.8.4.2.1–2.1.8.4.2.2 требуют использовать стандартный набор символов и моделей при нанесении данных на метеорологические карты и отсылают к ВМО-№ 306, том I.1, добавление IV."
+    },
+    {
+      "id": "OGIMET_SYNOP_OPEN_DATA",
+      "type": "open_archive",
+      "title": "Архив оперативных сводок SYNOP/КН-01 глобальной сети наблюдений ВМО/Росгидромета",
+      "year": 2024,
+      "authority": "open_observational_data",
+      "issuer": "WMO Global Telecommunication System / Ogimet Mirror",
+      "url": "https://www.ogimet.com/synops.phtml.en",
+      "license": "Public Open Data for Educational and Research Purposes",
+      "notes": "Деперсонализированные открытые данные приземных метеорологических станций; используются для формирования учебного банка телеграмм уровня 1."
     }
   ]
 }

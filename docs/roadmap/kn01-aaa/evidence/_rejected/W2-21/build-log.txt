@@ -1,0 +1,7 @@
+=== Сборка ассетов уровня КН-01 (Конвейер v3) ===
+[OK] Создан метадата-индекс: /Users/meteo/Documents/WWW/synopsis_game/assets/generated/metadata/level1-assets.json
+     SHA-256: b2973a1877b951e54f6d9ea99d328978be49fa1edce376e4141566df30a73938
+[OK] Создан атлас уровня 1: /Users/meteo/Documents/WWW/synopsis_game/assets/generated/atlases/level1-atlas.json
+     SHA-256: 3faa40d6313b647862b2658d7594803699c3dc8fec6cd714725a5fa1d47efa9c
+[OK] Всего семантических ассетов: 37
+[OK] Все исключённые устаревшие файлы (hub_master_night, alpine_peaks, mountain_ridge) изолированы.

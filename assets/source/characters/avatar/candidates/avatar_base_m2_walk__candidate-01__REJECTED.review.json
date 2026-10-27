@@ -1,0 +1,30 @@
+{
+  "asset_id": "AVATAR-BASE-M2",
+  "prompt_id": "AVATAR-BASE-M2.walk.6f.seed-26065",
+  "generator": "mcp__synopsis_assets__generate_sprite_frames",
+  "seed": 26065,
+  "frames_requested": 6,
+  "remote_output": "/home/user/synopsis-ai/output/candidates/AVATAR-BASE-M2/AVATAR-BASE-M2_sheet_candidate.png",
+  "local_outputs": [
+    "assets/source/characters/avatar/candidates/avatar_base_m2_walk__candidate-01__REJECTED.png",
+    "assets/source/characters/avatar/candidates/avatar_base_m2_walk__candidate-02__REJECTED.png"
+  ],
+  "expected_sheet_size": [192, 288],
+  "actual_sheet_size": [192, 48],
+  "frame_size": [32, 48],
+  "opaque_colors": 1,
+  "validation": "REJECTED",
+  "errors": [
+    "Size mismatch: (192, 48) != (192, 288)",
+    "Only one opaque color; no readable character artwork"
+  ],
+  "repeat_check": {
+    "seed": 26066,
+    "validation": "REJECTED",
+    "actual_sheet_size": [192, 48],
+    "opaque_colors": 1,
+    "sha256": "a7e7bbb0058b04728123fa86d565db5f2d23c990e7f402f26355bbab056111c6",
+    "same_bytes_as_candidate_01": true
+  },
+  "next_action": "Repair the MCP sprite-frame generator; a different seed currently produces the exact same one-color six-cell placeholder."
+}

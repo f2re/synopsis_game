@@ -119,11 +119,64 @@ def validate_css_and_tokens() -> list[str]:
     return errors
 
 
+def validate_typography_v2() -> list[str]:
+    errors = []
+    banned_primaries = {"monospace", "inter", "system-ui", "arial", "sans-serif"}
+
+    # 1. Проверка отсутствия запрещённых первичных гарнитур в CSS
+    for css_file in (ROOT / "apps" / "web" / "src").rglob("*.css"):
+        content = css_file.read_text(encoding="utf-8")
+        for line_no, line in enumerate(content.splitlines(), 1):
+            if "font-family:" in line:
+                val = line.split("font-family:")[1].strip().rstrip(";").strip()
+                first = val.split(",")[0].strip().strip('"').strip("'").lower()
+                if first in banned_primaries:
+                    errors.append(
+                        f"{css_file.relative_to(ROOT)}:{line_no}: запрещено использовать '{first}' как основную гарнитуру"
+                    )
+
+    # 2. Проверка Phaser / TypeScript в world-engine
+    world_src = ROOT / "packages" / "world-engine" / "src"
+    if world_src.is_dir():
+        for ts_file in world_src.rglob("*.ts"):
+            content = ts_file.read_text(encoding="utf-8")
+            for line_no, line in enumerate(content.splitlines(), 1):
+                if "fontFamily" in line:
+                    val = line.split("fontFamily:")[1].strip().rstrip(",").strip().strip('"').strip("'")
+                    first = val.split(",")[0].strip().strip('"').strip("'").lower()
+                    if first in banned_primaries:
+                        errors.append(
+                            f"{ts_file.relative_to(ROOT)}:{line_no}: запрещено использовать '{first}' как основную гарнитуру в Phaser"
+                        )
+
+    # 3. Проверка фиксации решения о плотной кириллице в документации
+    style_guide = ROOT / "docs" / "design" / "PIXEL_ART_STYLE_GUIDE.md"
+    if not style_guide.is_file():
+        errors.append("Не найден документ docs/design/PIXEL_ART_STYLE_GUIDE.md")
+    else:
+        text = style_guide.read_text(encoding="utf-8")
+        if "Пиксельная типографика v2" not in text:
+            errors.append("В PIXEL_ART_STYLE_GUIDE.md отсутствует раздел 'Пиксельная типографика v2'")
+        if "Решение по мелким кириллическим подписям" not in text:
+            errors.append("В PIXEL_ART_STYLE_GUIDE.md не зафиксировано решение о шрифте мелких кириллических подписей")
+
+    provenance = ROOT / "assets" / "fonts" / "FONT_PROVENANCE.md"
+    if not provenance.is_file():
+        errors.append("Не найден документ assets/fonts/FONT_PROVENANCE.md")
+    else:
+        text = provenance.read_text(encoding="utf-8")
+        if "Решение о шрифте для мелких кириллических подписей" not in text:
+            errors.append("В FONT_PROVENANCE.md не зафиксировано решение о шрифте мелких кириллических подписей")
+
+    return errors
+
+
 def main() -> int:
     all_errors = []
     all_errors.extend(validate_files())
     all_errors.extend(validate_cyrillic_coverage())
     all_errors.extend(validate_css_and_tokens())
+    all_errors.extend(validate_typography_v2())
 
     if all_errors:
         print("Ошибки валидации пиксельных шрифтов:")

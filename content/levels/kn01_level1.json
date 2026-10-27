@@ -1,0 +1,190 @@
+{
+  "schema_version": "1.0.0",
+  "level_id": "kn01_level1",
+  "title": "Уровень 1: Кодовый пост (КН-01)",
+  "method_profile": "RUS_SURFACE_STATION_V1",
+  "description": "Первое рабочее место стажёра на станции 26063: дешифрирование и кодирование основных метеорологических групп приземной сводки КН-01 SYNOP.",
+  "shifts": [
+    {
+      "id": "shift_c1",
+      "number": 1,
+      "title": "Смена 1: Позывные эфира",
+      "subtitle": "Опознаватели сводки, срок наблюдения и станция 26063",
+      "target_duration_minutes": 6,
+      "covered_groups": ["AAXX", "YYGGiw", "IIiii"],
+      "task_slots": [
+        {"position": 1, "type": "identify", "target_concept": "aaxx_header", "difficulty": 1},
+        {"position": 2, "type": "identify", "target_concept": "date_time_wind_indicator", "difficulty": 1},
+        {"position": 3, "type": "sequence", "target_concept": "header_order", "difficulty": 2},
+        {"position": 4, "type": "decode", "target_concept": "utc_observation_hour", "difficulty": 1},
+        {"position": 5, "type": "decode", "target_concept": "wind_units_indicator", "difficulty": 2},
+        {"position": 6, "type": "decode", "target_concept": "station_index_26063", "difficulty": 1}
+      ],
+      "reward": {
+        "id": "item.pencil_kohinoor",
+        "name": "Синоптический карандаш Кохинор 2М",
+        "type": "item",
+        "lore": "Классический инструмент метеоролога для разметки бланков и карт."
+      },
+      "unlocks": ["shift_c2", "shift_c3", "shift_c4"]
+    },
+    {
+      "id": "shift_c2",
+      "number": 2,
+      "title": "Смена 2: Термометр",
+      "subtitle": "Температура воздуха, точка росы и физический контроль",
+      "target_duration_minutes": 7,
+      "covered_groups": ["1snTTT", "2snTdTdTd"],
+      "prerequisites": ["shift_c1"],
+      "task_slots": [
+        {"position": 1, "type": "identify", "target_concept": "temp_vs_dewpoint_indicator", "difficulty": 1},
+        {"position": 2, "type": "decode", "target_concept": "positive_temperature", "difficulty": 1},
+        {"position": 3, "type": "anatomy", "target_concept": "sign_bit_sn", "difficulty": 2},
+        {"position": 4, "type": "decode", "target_concept": "negative_dewpoint", "difficulty": 2},
+        {"position": 5, "type": "encode", "target_concept": "temperature_encoding", "difficulty": 2},
+        {"position": 6, "type": "findError", "target_concept": "td_greater_than_t_violation", "difficulty": 3}
+      ],
+      "reward": {
+        "id": "badge.psychrometer",
+        "name": "Значок «Аспирационный психрометр»",
+        "type": "badge",
+        "lore": "Награда за безупречный учёт температуры и влажности воздуха."
+      },
+      "unlocks": []
+    },
+    {
+      "id": "shift_c3",
+      "number": 3,
+      "title": "Смена 3: Барометр",
+      "subtitle": "Давление на станции, уровень моря и барическая тенденция",
+      "target_duration_minutes": 8,
+      "covered_groups": ["3PoPoPoPo", "4PPPP", "5appp"],
+      "prerequisites": ["shift_c1"],
+      "task_slots": [
+        {"position": 1, "type": "identify", "target_concept": "station_vs_sea_pressure", "difficulty": 1},
+        {"position": 2, "type": "decode", "target_concept": "sea_pressure_restore_thousands", "difficulty": 2},
+        {"position": 3, "type": "anatomy", "target_concept": "tendency_characteristic_a", "difficulty": 2},
+        {"position": 4, "type": "decode", "target_concept": "tendency_sign_and_value", "difficulty": 2},
+        {"position": 5, "type": "encode", "target_concept": "sea_pressure_encoding", "difficulty": 2},
+        {"position": 6, "type": "findError", "target_concept": "tendency_sign_misread", "difficulty": 3}
+      ],
+      "reward": {
+        "id": "item.desk_lamp_aneroid",
+        "name": "Настольная лампа дежурного наблюдателя",
+        "type": "item",
+        "lore": "Создаёт атмосферу ночного дежурства на метеостанции."
+      },
+      "unlocks": []
+    },
+    {
+      "id": "shift_c4",
+      "number": 4,
+      "title": "Смена 4: Ветер и облака",
+      "subtitle": "Общая облачность, истинное направление и скорость ветра",
+      "target_duration_minutes": 7,
+      "covered_groups": ["Nddff", "00fff"],
+      "prerequisites": ["shift_c1"],
+      "task_slots": [
+        {"position": 1, "type": "identify", "target_concept": "cloud_and_wind_anatomy", "difficulty": 1},
+        {"position": 2, "type": "anatomy", "target_concept": "cloud_cover_octas", "difficulty": 1},
+        {"position": 3, "type": "decode", "target_concept": "wind_direction_tens_to_degrees", "difficulty": 2},
+        {"position": 4, "type": "decode", "target_concept": "wind_speed_with_iw", "difficulty": 2},
+        {"position": 5, "type": "encode", "target_concept": "wind_calm_and_standard", "difficulty": 2},
+        {"position": 6, "type": "findError", "target_concept": "invalid_wind_direction_scale", "difficulty": 3}
+      ],
+      "reward": {
+        "id": "badge.vane_wild",
+        "name": "Жетон «Флюгер Вильда»",
+        "type": "badge",
+        "lore": "Знак уверенного владения ветровыми наблюдениями."
+      },
+      "unlocks": []
+    },
+    {
+      "id": "shift_c5",
+      "number": 5,
+      "title": "Смена 5: Полная лента",
+      "subtitle": "Сборка полной сводки погоды и перенос в мини-схему станции",
+      "target_duration_minutes": 8,
+      "covered_groups": ["AAXX", "YYGGiw", "IIiii", "Nddff", "1snTTT", "2snTdTdTd", "3PoPoPoPo", "4PPPP", "5appp"],
+      "prerequisites": ["shift_c1", "shift_c2", "shift_c3", "shift_c4"],
+      "task_slots": [
+        {"position": 1, "type": "sequence", "target_concept": "full_telegram_section_order", "difficulty": 3},
+        {"position": 2, "type": "fullTelegram", "target_concept": "station_26063_complete_form", "difficulty": 3},
+        {"position": 3, "type": "findError", "target_concept": "full_telegram_discrepancy", "difficulty": 3},
+        {"position": 4, "type": "fullTelegram", "target_concept": "adverse_weather_complete_form", "difficulty": 3}
+      ],
+      "reward": {
+        "id": "item.exam_ticket",
+        "name": "Направление на квалификационный допуск",
+        "type": "item",
+        "lore": "Документ, открывающий право сдачи экзамена на Кодовом посту."
+      },
+      "unlocks": ["shift_exam"]
+    },
+    {
+      "id": "shift_exam",
+      "number": 6,
+      "title": "Квалификационный допуск: Кодовый пост",
+      "subtitle": "Экзаменационная смена без подсказок и справочника",
+      "target_duration_minutes": 15,
+      "covered_groups": ["all_level1"],
+      "prerequisites": ["shift_c1", "shift_c2", "shift_c3", "shift_c4", "shift_c5"],
+      "pass_threshold_accuracy": 0.85,
+      "task_slots": [
+        {"position": 1, "type": "decode", "target_concept": "exam_temp", "difficulty": 2},
+        {"position": 2, "type": "decode", "target_concept": "exam_dewpoint", "difficulty": 2},
+        {"position": 3, "type": "decode", "target_concept": "exam_pressure_sea", "difficulty": 2},
+        {"position": 4, "type": "decode", "target_concept": "exam_wind_dir_speed", "difficulty": 2},
+        {"position": 5, "type": "decode", "target_concept": "exam_tendency", "difficulty": 2},
+        {"position": 6, "type": "encode", "target_concept": "exam_encode_temp", "difficulty": 3},
+        {"position": 7, "type": "encode", "target_concept": "exam_encode_pressure", "difficulty": 3},
+        {"position": 8, "type": "encode", "target_concept": "exam_encode_wind", "difficulty": 3},
+        {"position": 9, "type": "findError", "target_concept": "exam_find_error_thermo", "difficulty": 3},
+        {"position": 10, "type": "findError", "target_concept": "exam_find_error_pressure", "difficulty": 3},
+        {"position": 11, "type": "fullTelegram", "target_concept": "exam_full_telegram_1", "difficulty": 3},
+        {"position": 12, "type": "fullTelegram", "target_concept": "exam_full_telegram_2", "difficulty": 3}
+      ],
+      "reward": {
+        "id": "cert.synoptic_post_operator",
+        "name": "Свидетельство оператора кодового поста КН-01",
+        "type": "certificate",
+        "lore": "Официальный документ об освоении первичного дешифрирования приземных сводок."
+      },
+      "unlocks": ["building_cartography", "building_archive"]
+    }
+  ],
+  "game_modes": [
+    {
+      "id": "mentor",
+      "name": "С наставником",
+      "description": "Справочник открыт всегда, подсказка наставника после первой ошибки, без таймера.",
+      "handbook_allowed": true,
+      "hint_after_mistake": true,
+      "timer_seconds": null,
+      "mastery_multiplier": 0.6,
+      "available_initially": true
+    },
+    {
+      "id": "standard",
+      "name": "Самостоятельно",
+      "description": "Справочник открывается за отметку «с подсказкой», без таймера.",
+      "handbook_allowed": "with_penalty",
+      "hint_after_mistake": false,
+      "timer_seconds": null,
+      "mastery_multiplier": 1.0,
+      "mastery_multiplier_with_handbook": 0.6,
+      "available_after_shift_passed": true
+    },
+    {
+      "id": "blitz",
+      "name": "Блиц 90 с",
+      "description": "Справочник закрыт, 90 секунд на серию заданий, только для освоенных тем.",
+      "handbook_allowed": false,
+      "hint_after_mistake": false,
+      "timer_seconds": 90,
+      "mastery_multiplier": 0.8,
+      "unlock_prerequisite": "shift_c2"
+    }
+  ]
+}

@@ -28,7 +28,9 @@ test('поддерживает обратное преобразование д�
 
 test('разбирает поддерживаемые группы телеграммы и снимает завершающий знак', () => {
   const parsed = parseTelegram('AAXX 26121 10234 21052 30218 57103=', KN01_RULESET_ID);
-  assert.equal(parsed.groups.length, 4);
+  assert.equal(parsed.groups.length, 6);
+  assert.equal(parsed.groups[0]?.encoded, 'AAXX');
+  assert.equal(parsed.groups[1]?.encoded, '26121');
   assert.equal(parsed.groups.at(-1)?.encoded, '57103');
-  assert.deepEqual(parsed.unparsed, ['AAXX', '26121']);
+  assert.deepEqual(parsed.unparsed, []);
 });

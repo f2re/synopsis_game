@@ -11,6 +11,10 @@ import {
 } from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
 import { ShiftError, ShiftService } from './modules/shift/shiftService.js';
+import {
+  ProgressionError,
+  ProgressionService,
+} from './modules/progression/progressionService.js';
 
 const HOST = process.env.API_BIND ?? '127.0.0.1';
 const PORT = Number(process.env.API_PORT ?? process.env.SYNOPSIS_SERVER_PORT ?? 8787);
@@ -22,6 +26,8 @@ const CONTENT_ROOT = process.env.SYNOPSIS_CONTENT_ROOT ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/opt/synopsis-game/current/content' : resolve(MODULE_DIR, '../../../content'));
 const ATTEMPT_LOG_PATH = process.env.SYNOPSIS_ATTEMPT_LOG ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/attempts.jsonl' : resolve(MODULE_DIR, '../.local/attempts.jsonl'));
+const PROGRESSION_STORE = process.env.SYNOPSIS_PROGRESSION_STORE ??
+  (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/progression.json' : resolve(process.cwd(), '.local/progression.json'));
 const startedAt = new Date().toISOString();
 const version = process.env.SYNOPSIS_VERSION ?? (() => {
   try {
@@ -35,6 +41,8 @@ const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: S
 await identity.init();
 const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH });
 await shifts.init();
+const progression = new ProgressionService({ storePath: PROGRESSION_STORE });
+await progression.loadState();
 
 const bootstrapCode = process.env.SYNOPSIS_BOOTSTRAP_ADMIN_CODE;
 if (bootstrapCode) {
@@ -198,6 +206,44 @@ const server = createServer(async (request, response) => {
       sendJson(response, 200, { users: identity.listUsers(bearer(request)) });
       return;
     }
+    if (request.method === 'GET' && path === '/api/shifts') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, { progression: progression.getProgression(user.id) });
+      return;
+    }
+    if (request.method === 'GET' && path === '/api/progression') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, { progression: progression.getProgression(user.id) });
+      return;
+    }
+    if (request.method === 'GET' && path === '/api/progression/exam-eligibility') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, progression.checkExamEligibility(user.id));
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/progression/shift') {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      const summary = progression.completeShift(user.id, body as unknown as Parameters<typeof progression.completeShift>[1]);
+      await progression.saveState();
+      sendJson(response, 200, { summary });
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/progression/exam') {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      const result = progression.completeExam(user.id, body as unknown as Parameters<typeof progression.completeExam>[1]);
+      await progression.saveState();
+      sendJson(response, 200, { result });
+      return;
+    }
+    if (request.method === 'GET' && path === '/api/progression/errors') {
+      const user = identity.me(bearer(request));
+      const unresolvedOnly = url.searchParams.get('unresolvedOnly') === 'true';
+      sendJson(response, 200, { errors: progression.getErrorJournal(user.id, { unresolvedOnly }) });
+      return;
+    }
+
     if (request.method === 'POST' && path === '/api/admin/users') {
       const body = await readJson(request);
       const input: CreateUserInput = {
@@ -242,7 +288,7 @@ const server = createServer(async (request, response) => {
     }
     sendJson(response, 404, { error: 'Маршрут не найден', code: 'not_found' });
   } catch (error) {
-    if (error instanceof IdentityError || error instanceof ShiftError) {
+    if (error instanceof IdentityError || error instanceof ShiftError || error instanceof ProgressionError) {
       sendJson(response, error.status, { error: error.message, code: error.code });
       return;
     }

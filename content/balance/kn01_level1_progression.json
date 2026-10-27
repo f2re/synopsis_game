@@ -1,0 +1,89 @@
+{
+  "id": "kn01_level1_progression",
+  "version": "1.0.0",
+  "status": "approved",
+  "level_id": "kn01_level1",
+  "description": "Серверная модель освоения навыков, затухания и порогов допуска для уровня 1 «Кодовый пост» (КН-01).",
+  "skills": [
+    {
+      "id": "kn01.header",
+      "title": "Позывные эфира (секция 0)",
+      "groups": ["AAXX", "YYGGiw", "IIiii"],
+      "base_gain": 24.0
+    },
+    {
+      "id": "kn01.temperature",
+      "title": "Температура и точка росы",
+      "groups": ["1snTTT", "2snTdTdTd"],
+      "base_gain": 24.0
+    },
+    {
+      "id": "kn01.pressure",
+      "title": "Атмосферное давление и тенденция",
+      "groups": ["3PoPoPoPo", "4PPPP", "5appp"],
+      "base_gain": 24.0
+    },
+    {
+      "id": "kn01.wind_clouds",
+      "title": "Ветер и облачность",
+      "groups": ["Nddff", "00fff"],
+      "base_gain": 24.0
+    },
+    {
+      "id": "kn01.full_telegram",
+      "title": "Синтез и контроль сводки КН-01",
+      "groups": ["AAXX", "YYGGiw", "IIiii", "Nddff", "1snTTT", "2snTdTdTd", "3PoPoPoPo", "4PPPP", "5appp"],
+      "base_gain": 32.0
+    }
+  ],
+  "mode_multipliers": {
+    "mentor": 0.6,
+    "solo": 1.0,
+    "solo_with_handbook": 0.6,
+    "blitz": 0.8
+  },
+  "difficulty_multipliers": {
+    "1": 1.0,
+    "2": 1.25,
+    "3": 1.5
+  },
+  "mastery_parameters": {
+    "max_score": 100.0,
+    "min_score": 0.0,
+    "saturation_factor": 1.0,
+    "error_penalty_factor": 0.35,
+    "daily_decay_rate": 0.02,
+    "decay_grace_period_hours": 24,
+    "decay_floor": 40.0
+  },
+  "qualification_thresholds": {
+    "min_skill_mastery": 70.0,
+    "required_mandatory_shifts": [
+      "c1_radio_callsigns",
+      "c2_thermometer",
+      "c3_barometer",
+      "c4_wind_and_clouds",
+      "c5_full_tape"
+    ],
+    "exam": {
+      "id": "exam_post_qualification",
+      "tasks_count": 12,
+      "min_accuracy": 0.80,
+      "min_correct_tasks": 10,
+      "handbook_allowed": false,
+      "hints_allowed": false,
+      "cooldown_training_shifts_on_fail": 1
+    }
+  },
+  "unlocks_on_qualification": {
+    "locations": [
+      "cartography_class",
+      "archive_vault"
+    ],
+    "rank_title": "Техник-метеоролог",
+    "rewards": [
+      "token_code_post_26063",
+      "certificate_code_post_level1"
+    ]
+  }
+}

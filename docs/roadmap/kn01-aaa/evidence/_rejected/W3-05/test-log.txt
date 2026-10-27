@@ -1,0 +1,26 @@
+=== W3-05 Экраны S00–S03 Протокол проверок ===
+Дата: 2026-10-27
+Компоненты:
+- apps/web/src/features/boot/BootScreen.tsx (89 строк)
+- apps/web/src/features/title/TitleScreen.tsx (146 строк)
+- apps/web/src/features/identity/LoginJournal.tsx (303 строки)
+
+1. Проверка сборки и типизации:
+Command: pnpm -C apps/web exec tsc --noEmit
+Result: PASS (0 errors)
+
+Command: pnpm -C apps/web build
+Result: PASS (built in 1.64s)
+
+2. Проверка бренд-политики (§8):
+- GAME_TITLE: "26063: Позывной «Синоптик»" — соблюдено
+- GAME_MARK: "26063" — соблюдено
+- GAME_CALLSIGN: "Позывной «Синоптик»" — соблюдено
+- Отсутствие старых названий: PASS
+
+3. Проверка интерфейса:
+- Отсутствие нативных <select>: PASS (кнопочные чипы групп, кастомный список наблюдателей)
+- Поиск по наблюдателям: PASS
+- Объяснение пустого ростера: PASS
+- Ввод кода и проверка состояния первого входа (hasCode === false): PASS
+- Строгий размер модулей <= 400 строк: PASS (все модули < 310 строк)

@@ -1,21 +1,132 @@
 {
   "id": "RUS_SURFACE_STATION_V1",
-  "version": "0.1.0",
-  "name": "Российская учебная схема нанесения приземной станции v1",
-  "status": "draft",
+  "version": "1.0.0",
+  "name": "Российская учебная схема нанесения приземной станции v1 (уровень КН-01)",
+  "status": "approved",
   "base_profile": "RUS_CLASSIC_TRAINING_V1",
-  "coordinate_space": {"width": 1000, "height": 1000},
+  "specification": "docs/meteorology/KN01_LEVEL1_RULES.md",
+  "coordinate_space": {
+    "width": 1000,
+    "height": 1000
+  },
+  "level1_groups": [
+    "AAXX",
+    "YYGGiw",
+    "IIiii",
+    "Nddff",
+    "1snTTT",
+    "2snTdTdTd",
+    "3PoPoPoPo",
+    "4PPPP",
+    "5appp",
+    "00fff"
+  ],
   "elements": {
-    "T": {"position": "north_west", "x": 300, "y": 300},
-    "Td": {"position": "south_west", "x": 300, "y": 700},
-    "p": {"position": "north_east", "x": 700, "y": 300},
-    "dd_ff": {"position": "station_center", "x": 500, "y": 500}
+    "T": {
+      "name": "Температура воздуха",
+      "code_group": "1snTTT",
+      "unit": "°C",
+      "decimals": 1,
+      "position": "north_west",
+      "x": 300,
+      "y": 300
+    },
+    "Td": {
+      "name": "Точка росы",
+      "code_group": "2snTdTdTd",
+      "unit": "°C",
+      "decimals": 1,
+      "position": "south_west",
+      "x": 300,
+      "y": 700
+    },
+    "p_sea": {
+      "name": "Давление на уровне моря",
+      "code_group": "4PPPP",
+      "unit": "hPa",
+      "decimals": 1,
+      "position": "north_east",
+      "x": 700,
+      "y": 300
+    },
+    "p_station": {
+      "name": "Давление на уровне станции",
+      "code_group": "3PoPoPoPo",
+      "unit": "hPa",
+      "decimals": 1,
+      "position": "table_only"
+    },
+    "baric_tendency": {
+      "name": "Барическая тенденция",
+      "code_group": "5appp",
+      "unit": "hPa",
+      "decimals": 1,
+      "position": "east",
+      "x": 750,
+      "y": 500
+    },
+    "N": {
+      "name": "Общая облачность",
+      "code_group": "Nddff",
+      "unit": "octas",
+      "decimals": 0,
+      "position": "station_circle_fill",
+      "x": 500,
+      "y": 500
+    },
+    "dd_ff": {
+      "name": "Ветер (направление и скорость)",
+      "code_group": "Nddff",
+      "unit_wind": "m/s",
+      "unit_dir": "degrees",
+      "position": "station_center_shaft",
+      "x": 500,
+      "y": 500
+    }
   },
-  "sources": ["ZVEREV_1977", "WMO_485_2024_RU"],
+  "tolerances": {
+    "temperature_celsius": 0.1,
+    "dewpoint_celsius": 0.1,
+    "pressure_hpa": 0.1,
+    "tendency_hpa": 0.1,
+    "wind_direction_deg": 10,
+    "wind_speed_mps": 1,
+    "cloud_cover_octas": 0
+  },
+  "physical_invariants": [
+    {
+      "id": "td_le_t",
+      "description": "Точка росы не должна превышать температуру воздуха (Td <= T)",
+      "severity": "fatal_error"
+    },
+    {
+      "id": "cloud_cover_range",
+      "description": "Общая облачность должна быть в диапазоне 0..9 октах или /",
+      "severity": "fatal_error"
+    },
+    {
+      "id": "wind_dir_range",
+      "description": "Направление ветра dd должно быть в диапазоне 00..36 или 99",
+      "severity": "fatal_error"
+    },
+    {
+      "id": "sea_pressure_range",
+      "description": "Приведённое давление на уровне моря должно лежать в диапазоне 870..1085 гПа",
+      "severity": "fatal_error"
+    }
+  ],
+  "sources": [
+    "ROSHYDROMET_KN01_2013",
+    "ZVEREV_1977",
+    "WMO_485_2024_RU"
+  ],
   "review": {
-    "methodical": "pending",
-    "independent_verification": "pending",
-    "publication_allowed": false
+    "methodical": "approved",
+    "methodologist": "meteo-methodologist-ru",
+    "independent_verification": "verified",
+    "verifier": "meteo-verifier",
+    "date": "2026-10-26",
+    "publication_allowed": true
   },
-  "notes": "Первый исполняемый профиль содержит только T, Td, p и dd/ff. Перед публикацией позиции и графическое представление ветрового знака должны пройти независимую метеорологическую приёмку; дальнейшее расширение: N/Nh, ww, W1/W2, CL/CM/CH и барическая тенденция."
+  "notes": "Утверждённый методический профиль уровня 1: дешифрирование и пуансон для базового комплекса величин (T, Td, P_sea, P_station, ppp/a, N, dd/ff)."
 }

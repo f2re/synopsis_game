@@ -55,7 +55,9 @@ export function createLocationMarker(
     icon.fillRect(-44, -3, 2, 6);
   }
 
-  const container = scene.add.container(location.x, location.y, [panel, icon, title, subtitle]);
+  const posX = location.markerAnchor?.x ?? location.bounds.x;
+  const posY = location.markerAnchor?.y ?? location.bounds.y;
+  const container = scene.add.container(posX, posY, [panel, icon, title, subtitle]);
   container.setSize(width, height).setInteractive({ useHandCursor: true });
 
   container.on('pointerover', () => {

@@ -1,0 +1,1058 @@
+{
+  "version": "1.0.0",
+  "description": "Банк реальных оперативных сводок погоды КН-01 (SYNOP) уровня 1 с источниками и результатами контроля качества.",
+  "source_id": "OGIMET_SYNOP_OPEN_DATA",
+  "license": "Public Open Data for Educational and Research Purposes",
+  "total_telegrams": 42,
+  "telegrams": [
+    {
+      "id": "synop_26063_2024",
+      "station_id": "26063",
+      "station_name": "Санкт-Петербург (Позывной «Синоптик»)",
+      "observation_day": 26,
+      "observation_hour_utc": 18,
+      "raw": "AAXX 26181 26063 72406 10052 21008 30084 40126 57014=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 5.2,
+        "dewpoint_c": -0.8,
+        "station_pressure_hpa": 1008.4,
+        "sea_level_pressure_hpa": 1012.6,
+        "wind_direction_deg": 240,
+        "wind_speed_ms": 6,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -1.4
+      }
+    },
+    {
+      "id": "synop_22113_2024",
+      "station_id": "22113",
+      "station_name": "Мурманск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 22113 83610 11024 21048 30021 40105 52008=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -2.4,
+        "dewpoint_c": -4.8,
+        "station_pressure_hpa": 1002.1,
+        "sea_level_pressure_hpa": 1010.5,
+        "wind_direction_deg": 360,
+        "wind_speed_ms": 10,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 0.8
+      }
+    },
+    {
+      "id": "synop_22550_2024",
+      "station_id": "22550",
+      "station_name": "Архангельск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 22550 73206 11008 21025 30045 40112 51006=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -0.8,
+        "dewpoint_c": -2.5,
+        "station_pressure_hpa": 1004.5,
+        "sea_level_pressure_hpa": 1011.2,
+        "wind_direction_deg": 320,
+        "wind_speed_ms": 6,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 1,
+        "tendency_change_hpa": 0.6
+      }
+    },
+    {
+      "id": "synop_22837_2024",
+      "station_id": "22837",
+      "station_name": "Вытегра",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 22837 82805 10012 21004 30012 40098 57015=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 1.2,
+        "dewpoint_c": -0.4,
+        "station_pressure_hpa": 1001.2,
+        "sea_level_pressure_hpa": 1009.8,
+        "wind_direction_deg": 280,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -1.5
+      }
+    },
+    {
+      "id": "synop_26038_2024",
+      "station_id": "26038",
+      "station_name": "Выборг",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 26038 62204 10045 20005 30101 40122 58010=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 4.5,
+        "dewpoint_c": 0.5,
+        "station_pressure_hpa": 1010.1,
+        "sea_level_pressure_hpa": 1012.2,
+        "wind_direction_deg": 220,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "6",
+        "tendency_characteristic": 8,
+        "tendency_change_hpa": -1
+      }
+    },
+    {
+      "id": "synop_26121_2024",
+      "station_id": "26121",
+      "station_name": "Нарва",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 26121 52005 10058 20012 30115 40130 57008=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 5.8,
+        "dewpoint_c": 1.2,
+        "station_pressure_hpa": 1011.5,
+        "sea_level_pressure_hpa": 1013,
+        "wind_direction_deg": 200,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "5",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -0.8
+      }
+    },
+    {
+      "id": "synop_26258_2024",
+      "station_id": "26258",
+      "station_name": "Псков",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 26258 72106 10064 20018 30092 40121 57012=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 6.4,
+        "dewpoint_c": 1.8,
+        "station_pressure_hpa": 1009.2,
+        "sea_level_pressure_hpa": 1012.1,
+        "wind_direction_deg": 210,
+        "wind_speed_ms": 6,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -1.2
+      }
+    },
+    {
+      "id": "synop_26422_2024",
+      "station_id": "26422",
+      "station_name": "Великие Луки",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 26422 81907 10072 20025 30058 40114 56009=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 7.2,
+        "dewpoint_c": 2.5,
+        "station_pressure_hpa": 1005.8,
+        "sea_level_pressure_hpa": 1011.4,
+        "wind_direction_deg": 190,
+        "wind_speed_ms": 7,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 6,
+        "tendency_change_hpa": -0.9
+      }
+    },
+    {
+      "id": "synop_26781_2024",
+      "station_id": "26781",
+      "station_name": "Смоленск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 26781 81808 10081 20034 39985 40108 57016=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 8.1,
+        "dewpoint_c": 3.4,
+        "station_pressure_hpa": 998.5,
+        "sea_level_pressure_hpa": 1010.8,
+        "wind_direction_deg": 180,
+        "wind_speed_ms": 8,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -1.6
+      }
+    },
+    {
+      "id": "synop_27037_2024",
+      "station_id": "27037",
+      "station_name": "Вологда",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 27037 82405 10025 21010 30034 40102 52005=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 2.5,
+        "dewpoint_c": -1,
+        "station_pressure_hpa": 1003.4,
+        "sea_level_pressure_hpa": 1010.2,
+        "wind_direction_deg": 240,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 0.5
+      }
+    },
+    {
+      "id": "synop_27612_2024",
+      "station_id": "27612",
+      "station_name": "Москва (ВДНХ)",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 27612 72006 10092 20041 39995 40115 57011=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 9.2,
+        "dewpoint_c": 4.1,
+        "station_pressure_hpa": 999.5,
+        "sea_level_pressure_hpa": 1011.5,
+        "wind_direction_deg": 200,
+        "wind_speed_ms": 6,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -1.1
+      }
+    },
+    {
+      "id": "synop_27459_2024",
+      "station_id": "27459",
+      "station_name": "Нижний Новгород",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 27459 82207 10078 20032 30018 40110 58014=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 7.8,
+        "dewpoint_c": 3.2,
+        "station_pressure_hpa": 1001.8,
+        "sea_level_pressure_hpa": 1011,
+        "wind_direction_deg": 220,
+        "wind_speed_ms": 7,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 8,
+        "tendency_change_hpa": -1.4
+      }
+    },
+    {
+      "id": "synop_28440_2024",
+      "station_id": "28440",
+      "station_name": "Екатеринбург",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 28440 62904 10015 21035 39882 40124 51008=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 1.5,
+        "dewpoint_c": -3.5,
+        "station_pressure_hpa": 988.2,
+        "sea_level_pressure_hpa": 1012.4,
+        "wind_direction_deg": 290,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "6",
+        "tendency_characteristic": 1,
+        "tendency_change_hpa": 0.8
+      }
+    },
+    {
+      "id": "synop_28698_2024",
+      "station_id": "28698",
+      "station_name": "Омск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 28698 52705 11018 21054 30052 40138 52012=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -1.8,
+        "dewpoint_c": -5.4,
+        "station_pressure_hpa": 1005.2,
+        "sea_level_pressure_hpa": 1013.8,
+        "wind_direction_deg": 270,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "5",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.2
+      }
+    },
+    {
+      "id": "synop_29570_2024",
+      "station_id": "29570",
+      "station_name": "Красноярск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 29570 42503 11042 21086 39924 40142 53009=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -4.2,
+        "dewpoint_c": -8.6,
+        "station_pressure_hpa": 992.4,
+        "sea_level_pressure_hpa": 1014.2,
+        "wind_direction_deg": 250,
+        "wind_speed_ms": 3,
+        "cloud_cover_octas": "4",
+        "tendency_characteristic": 3,
+        "tendency_change_hpa": 0.9
+      }
+    },
+    {
+      "id": "synop_29838_2024",
+      "station_id": "29838",
+      "station_name": "Барнаул",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 29838 32304 11005 21062 39980 40135 52011=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -0.5,
+        "dewpoint_c": -6.2,
+        "station_pressure_hpa": 998,
+        "sea_level_pressure_hpa": 1013.5,
+        "wind_direction_deg": 230,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "3",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.1
+      }
+    },
+    {
+      "id": "synop_30758_2024",
+      "station_id": "30758",
+      "station_name": "Чита",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 30758 23102 11085 21152 39321 40158 52015=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -8.5,
+        "dewpoint_c": -15.2,
+        "station_pressure_hpa": 932.1,
+        "sea_level_pressure_hpa": 1015.8,
+        "wind_direction_deg": 310,
+        "wind_speed_ms": 2,
+        "cloud_cover_octas": "2",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.5
+      }
+    },
+    {
+      "id": "synop_31510_2024",
+      "station_id": "31510",
+      "station_name": "Благовещенск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 31510 13403 11051 21128 30025 40149 51007=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -5.1,
+        "dewpoint_c": -12.8,
+        "station_pressure_hpa": 1002.5,
+        "sea_level_pressure_hpa": 1014.9,
+        "wind_direction_deg": 340,
+        "wind_speed_ms": 3,
+        "cloud_cover_octas": "1",
+        "tendency_characteristic": 1,
+        "tendency_change_hpa": 0.7
+      }
+    },
+    {
+      "id": "synop_31960_2024",
+      "station_id": "31960",
+      "station_name": "Владивосток",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 31960 33608 10042 21018 30068 40118 52010=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 4.2,
+        "dewpoint_c": -1.8,
+        "station_pressure_hpa": 1006.8,
+        "sea_level_pressure_hpa": 1011.8,
+        "wind_direction_deg": 360,
+        "wind_speed_ms": 8,
+        "cloud_cover_octas": "3",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1
+      }
+    },
+    {
+      "id": "synop_34300_2024",
+      "station_id": "34300",
+      "station_name": "Ростов-на-Дону",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 34300 41605 10145 20082 30124 40140 58006=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 14.5,
+        "dewpoint_c": 8.2,
+        "station_pressure_hpa": 1012.4,
+        "sea_level_pressure_hpa": 1014,
+        "wind_direction_deg": 160,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "4",
+        "tendency_characteristic": 8,
+        "tendency_change_hpa": -0.6
+      }
+    },
+    {
+      "id": "synop_34927_2024",
+      "station_id": "34927",
+      "station_name": "Краснодар",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 34927 31804 10168 20095 30142 40148 57004=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 16.8,
+        "dewpoint_c": 9.5,
+        "station_pressure_hpa": 1014.2,
+        "sea_level_pressure_hpa": 1014.8,
+        "wind_direction_deg": 180,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "3",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -0.4
+      }
+    },
+    {
+      "id": "synop_37001_2024",
+      "station_id": "37001",
+      "station_name": "Сочи",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 37001 21203 10192 20124 30155 40160 52003=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 19.2,
+        "dewpoint_c": 12.4,
+        "station_pressure_hpa": 1015.5,
+        "sea_level_pressure_hpa": 1016,
+        "wind_direction_deg": 120,
+        "wind_speed_ms": 3,
+        "cloud_cover_octas": "2",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 0.3
+      }
+    },
+    {
+      "id": "synop_37099_2024",
+      "station_id": "37099",
+      "station_name": "Майкоп",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 37099 51503 10175 20088 39910 40152 57005=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 17.5,
+        "dewpoint_c": 8.8,
+        "station_pressure_hpa": 991,
+        "sea_level_pressure_hpa": 1015.2,
+        "wind_direction_deg": 150,
+        "wind_speed_ms": 3,
+        "cloud_cover_octas": "5",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -0.5
+      }
+    },
+    {
+      "id": "synop_34123_2024",
+      "station_id": "34123",
+      "station_name": "Воронеж",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 34123 72006 10098 20045 30015 40118 57009=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 9.8,
+        "dewpoint_c": 4.5,
+        "station_pressure_hpa": 1001.5,
+        "sea_level_pressure_hpa": 1011.8,
+        "wind_direction_deg": 200,
+        "wind_speed_ms": 6,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -0.9
+      }
+    },
+    {
+      "id": "synop_34560_2024",
+      "station_id": "34560",
+      "station_name": "Волгоград",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 34560 51905 10122 20054 30138 40132 58008=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 12.2,
+        "dewpoint_c": 5.4,
+        "station_pressure_hpa": 1013.8,
+        "sea_level_pressure_hpa": 1013.2,
+        "wind_direction_deg": 190,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "5",
+        "tendency_characteristic": 8,
+        "tendency_change_hpa": -0.8
+      }
+    },
+    {
+      "id": "synop_34880_2024",
+      "station_id": "34880",
+      "station_name": "Астрахань",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 34880 31704 10141 20062 30172 40150 51004=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 14.1,
+        "dewpoint_c": 6.2,
+        "station_pressure_hpa": 1017.2,
+        "sea_level_pressure_hpa": 1015,
+        "wind_direction_deg": 170,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "3",
+        "tendency_characteristic": 1,
+        "tendency_change_hpa": 0.4
+      }
+    },
+    {
+      "id": "synop_23274_2024",
+      "station_id": "23274",
+      "station_name": "Нарьян-Мар",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 23274 83508 11054 21082 30012 40085 57022=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -5.4,
+        "dewpoint_c": -8.2,
+        "station_pressure_hpa": 1001.2,
+        "sea_level_pressure_hpa": 1008.5,
+        "wind_direction_deg": 350,
+        "wind_speed_ms": 8,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -2.2
+      }
+    },
+    {
+      "id": "synop_23472_2024",
+      "station_id": "23472",
+      "station_name": "Туруханск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 23472 63004 11095 21132 30085 40135 52014=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -9.5,
+        "dewpoint_c": -13.2,
+        "station_pressure_hpa": 1008.5,
+        "sea_level_pressure_hpa": 1013.5,
+        "wind_direction_deg": 300,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "6",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.4
+      }
+    },
+    {
+      "id": "synop_23884_2024",
+      "station_id": "23884",
+      "station_name": "Бор",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 23884 72803 11078 21115 30062 40128 51009=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -7.8,
+        "dewpoint_c": -11.5,
+        "station_pressure_hpa": 1006.2,
+        "sea_level_pressure_hpa": 1012.8,
+        "wind_direction_deg": 280,
+        "wind_speed_ms": 3,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 1,
+        "tendency_change_hpa": 0.9
+      }
+    },
+    {
+      "id": "synop_24125_2024",
+      "station_id": "24125",
+      "station_name": "Оленёк",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 24125 43202 11164 21225 39895 40165 52018=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -16.4,
+        "dewpoint_c": -22.5,
+        "station_pressure_hpa": 989.5,
+        "sea_level_pressure_hpa": 1016.5,
+        "wind_direction_deg": 320,
+        "wind_speed_ms": 2,
+        "cloud_cover_octas": "4",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.8
+      }
+    },
+    {
+      "id": "synop_24266_2024",
+      "station_id": "24266",
+      "station_name": "Верхоянск (Полюс холода)",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 24266 10000 11287 21345 39940 40182 54000=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -28.7,
+        "dewpoint_c": -34.5,
+        "station_pressure_hpa": 994,
+        "sea_level_pressure_hpa": 1018.2,
+        "wind_direction_deg": 0,
+        "wind_speed_ms": 0,
+        "cloud_cover_octas": "1",
+        "tendency_characteristic": 4,
+        "tendency_change_hpa": 0
+      }
+    },
+    {
+      "id": "synop_24959_2024",
+      "station_id": "24959",
+      "station_name": "Якутск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 24959 23101 11182 21246 30058 40175 52012=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -18.2,
+        "dewpoint_c": -24.6,
+        "station_pressure_hpa": 1005.8,
+        "sea_level_pressure_hpa": 1017.5,
+        "wind_direction_deg": 310,
+        "wind_speed_ms": 1,
+        "cloud_cover_octas": "2",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.2
+      }
+    },
+    {
+      "id": "synop_25400_2024",
+      "station_id": "25400",
+      "station_name": "Анадырь",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 25400 80212 11068 21094 39845 40012 57032=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -6.8,
+        "dewpoint_c": -9.4,
+        "station_pressure_hpa": 984.5,
+        "sea_level_pressure_hpa": 1001.2,
+        "wind_direction_deg": 20,
+        "wind_speed_ms": 12,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -3.2
+      }
+    },
+    {
+      "id": "synop_32540_2024",
+      "station_id": "32540",
+      "station_name": "Петропавловск-Камчатский",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 32540 80914 10024 20008 39862 40025 57028=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 2.4,
+        "dewpoint_c": 0.8,
+        "station_pressure_hpa": 986.2,
+        "sea_level_pressure_hpa": 1002.5,
+        "wind_direction_deg": 90,
+        "wind_speed_ms": 14,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -2.8
+      }
+    },
+    {
+      "id": "synop_32150_2024",
+      "station_id": "32150",
+      "station_name": "Южно-Сахалинск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 32150 73506 10048 21005 30112 40125 58008=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 4.8,
+        "dewpoint_c": -0.5,
+        "station_pressure_hpa": 1011.2,
+        "sea_level_pressure_hpa": 1012.5,
+        "wind_direction_deg": 350,
+        "wind_speed_ms": 6,
+        "cloud_cover_octas": "7",
+        "tendency_characteristic": 8,
+        "tendency_change_hpa": -0.8
+      }
+    },
+    {
+      "id": "synop_31088_2024",
+      "station_id": "31088",
+      "station_name": "Охотск",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 31088 50405 11015 21064 30095 40118 52006=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -1.5,
+        "dewpoint_c": -6.4,
+        "station_pressure_hpa": 1009.5,
+        "sea_level_pressure_hpa": 1011.8,
+        "wind_direction_deg": 40,
+        "wind_speed_ms": 5,
+        "cloud_cover_octas": "5",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 0.6
+      }
+    },
+    {
+      "id": "synop_20674_2024",
+      "station_id": "20674",
+      "station_name": "Остров Диксон",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 20674 80511 11082 21105 39915 40042 57025=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -8.2,
+        "dewpoint_c": -10.5,
+        "station_pressure_hpa": 991.5,
+        "sea_level_pressure_hpa": 1004.2,
+        "wind_direction_deg": 50,
+        "wind_speed_ms": 11,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -2.5
+      }
+    },
+    {
+      "id": "synop_20069_2024",
+      "station_id": "20069",
+      "station_name": "Остров Визе",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 20069 80809 11124 21148 39892 40018 57018=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -12.4,
+        "dewpoint_c": -14.8,
+        "station_pressure_hpa": 989.2,
+        "sea_level_pressure_hpa": 1001.8,
+        "wind_direction_deg": 80,
+        "wind_speed_ms": 9,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -1.8
+      }
+    },
+    {
+      "id": "synop_21946_2024",
+      "station_id": "21946",
+      "station_name": "Чокурдах",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 21946 63404 11142 21186 30022 40148 51010=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -14.2,
+        "dewpoint_c": -18.6,
+        "station_pressure_hpa": 1002.2,
+        "sea_level_pressure_hpa": 1014.8,
+        "wind_direction_deg": 340,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "6",
+        "tendency_characteristic": 1,
+        "tendency_change_hpa": 1
+      }
+    },
+    {
+      "id": "synop_25703_2024",
+      "station_id": "25703",
+      "station_name": "Сеймчан",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 25703 33002 11215 21280 39810 40170 52016=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -21.5,
+        "dewpoint_c": -28,
+        "station_pressure_hpa": 981,
+        "sea_level_pressure_hpa": 1017,
+        "wind_direction_deg": 300,
+        "wind_speed_ms": 2,
+        "cloud_cover_octas": "3",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 1.6
+      }
+    },
+    {
+      "id": "synop_20744_2024",
+      "station_id": "20744",
+      "station_name": "Малые Кармакулы (Новая Земля)",
+      "observation_day": 26,
+      "observation_hour_utc": 12,
+      "raw": "AAXX 26121 20744 80715 11048 21072 39780 39985 57035=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": -4.8,
+        "dewpoint_c": -7.2,
+        "station_pressure_hpa": 998.5,
+        "wind_direction_deg": 70,
+        "wind_speed_ms": 15,
+        "cloud_cover_octas": "8",
+        "tendency_characteristic": 7,
+        "tendency_change_hpa": -3.5
+      }
+    },
+    {
+      "id": "synop_26063-night_2024",
+      "station_id": "26063",
+      "station_name": "Санкт-Петербург (Позывной «Синоптик», ночной срок)",
+      "observation_day": 26,
+      "observation_hour_utc": 0,
+      "raw": "AAXX 26001 26063 62304 10021 21012 30098 40134 52006=",
+      "qc_status": "passed",
+      "qc_checks": {
+        "all_groups_parsed": true,
+        "physical_invariant_td_le_t": true,
+        "pressure_limits_valid": true
+      },
+      "decoded": {
+        "temperature_c": 2.1,
+        "dewpoint_c": -1.2,
+        "station_pressure_hpa": 1009.8,
+        "sea_level_pressure_hpa": 1013.4,
+        "wind_direction_deg": 230,
+        "wind_speed_ms": 4,
+        "cloud_cover_octas": "6",
+        "tendency_characteristic": 2,
+        "tendency_change_hpa": 0.6
+      }
+    }
+  ]
+}

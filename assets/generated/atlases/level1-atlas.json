@@ -1,0 +1,459 @@
+{
+  "meta": {
+    "app": "26063-pixel-pipeline",
+    "version": "3.0.0",
+    "image": "level1-atlas.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1024,
+      "h": 1024
+    },
+    "scale": "1"
+  },
+  "frames": {
+    "avatar.level1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 384,
+        "h": 192
+      },
+      "sourceSize": {
+        "width": 384,
+        "height": 192
+      }
+    },
+    "brand.mark.v3": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    "effects.level1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 256
+      }
+    },
+    "fauna.animal_cat_barograph": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.animal_squirrel": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.bird_bullfinch": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.bird_gull": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.bird_mallard": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.bird_tit": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.birds_pigeons": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "fauna.birds_sparrows": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "hub.building-states.v3": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 96
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 96
+      }
+    },
+    "hub.layer.l0": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 32
+      }
+    },
+    "hub.layer.l10": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l2": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l3": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l4": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 32
+      }
+    },
+    "hub.layer.l5": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l6": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l7": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "hub.layer.l8": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 72,
+        "h": 14
+      },
+      "sourceSize": {
+        "width": 72,
+        "height": 14
+      }
+    },
+    "hub.layer.l9": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 64
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 64
+      }
+    },
+    "npc.npc_lab_tatyana": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "npc.npc_mentor_ladozhskaya": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "npc.npc_tech_semen": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "reward.badge_barometer": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.badge_thermometer": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.badge_weathervane": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.reward_certificate": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.reward_codepost_token": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.reward_companion_tit": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.reward_duty_lamp": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "reward.reward_intern_pencil": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "width": 32,
+        "height": 32
+      }
+    },
+    "room.codepost": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 270
+      },
+      "sourceSize": {
+        "width": 480,
+        "height": 270
+      }
+    },
+    "ui.kit.v3": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      "sourceSize": {
+        "width": 512,
+        "height": 512
+      }
+    },
+    "undefined": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "width": 256,
+        "height": 256
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+Успешно сформирован банк телеграмм: 42 сводок в /Users/meteo/Documents/WWW/synopsis_game/content/telegrams/kn01_level1_bank.json
+Первая станция банка: 26063 (Санкт-Петербург (Позывной «Синоптик»))

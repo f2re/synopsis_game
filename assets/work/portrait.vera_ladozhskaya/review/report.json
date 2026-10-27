@@ -1,0 +1,35 @@
+{
+  "asset_id": "portrait.vera_ladozhskaya",
+  "candidate_path": "/home/user/synopsis-ai/synopsis_game/assets/work/portrait.vera_ladozhskaya/refined/portrait.vera_ladozhskaya_refined.png",
+  "production_status": "candidate",
+  "technical_status": {
+    "value": "pass",
+    "reasons": []
+  },
+  "art_status": {
+    "value": "fail",
+    "reasons": [
+      "Subject horizontal occupancy too crowded: 1.00 > 0.95"
+    ]
+  },
+  "metrics": {
+    "size": [
+      128,
+      128
+    ],
+    "occupancy_x": 1.0,
+    "occupancy_y": 0.906,
+    "opaque_colors": 35,
+    "target_range": [
+      24,
+      40
+    ],
+    "hard_max": 48,
+    "alphas": [
+      0,
+      255
+    ],
+    "orphan_pixels": 255,
+    "orphan_ratio": 0.0326
+  }
+}
