@@ -1,12 +1,37 @@
 {
   "asset": "AVATAR-BASE-M2",
+  "mode": "pixel",
   "note": "One reference pose per sheet row, generated on a flat magenta backdrop. erase boxes are fractions (x0, y0, x1, y1) of the raw image and remove leftovers such as a chair.",
   "rows": {
-    "idle_front": {"source": "candidate-43.png", "kind": "idle", "target_height": 44},
-    "walk_side": {"source": "candidate-45.png", "kind": "walk", "target_height": 44},
-    "typing_seated": {"source": "candidate-50.png", "kind": "typing", "target_height": 40},
-    "thinking": {"source": "candidate-54.png", "kind": "thinking", "target_height": 44},
-    "celebrate_seated": {"source": "candidate-58.png", "kind": "celebrate", "target_height": 40},
-    "disappointed": {"source": "candidate-61.png", "kind": "disappointed", "target_height": 40}
+    "idle_front": {
+      "source": "candidate-43.png",
+      "kind": "idle",
+      "target_height": 44
+    },
+    "walk_side": {
+      "source": "candidate-45.png",
+      "kind": "walk",
+      "target_height": 44
+    },
+    "typing_seated": {
+      "source": "candidate-50.png",
+      "kind": "typing",
+      "target_height": 40
+    },
+    "thinking": {
+      "source": "candidate-54.png",
+      "kind": "thinking",
+      "target_height": 44
+    },
+    "celebrate_seated": {
+      "source": "candidate-58.png",
+      "kind": "celebrate",
+      "target_height": 40
+    },
+    "disappointed": {
+      "source": "candidate-61.png",
+      "kind": "disappointed",
+      "target_height": 40
+    }
   }
 }

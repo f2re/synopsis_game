@@ -1,0 +1,27 @@
+{
+  "asset": "AVATAR-HERO-M2",
+  "mode": "hires",
+  "size": [
+    576,
+    864
+  ],
+  "expected_size": [
+    576,
+    864
+  ],
+  "opaque_colors": 94,
+  "color_limit": 96,
+  "off_palette": [],
+  "alphas": [
+    0,
+    255
+  ],
+  "rows": {
+    "idle_front": 4,
+    "walk_side": 6,
+    "typing_seated": 6,
+    "thinking": 4,
+    "celebrate_seated": 6,
+    "disappointed": 4
+  }
+}

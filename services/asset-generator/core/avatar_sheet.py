@@ -110,10 +110,18 @@ def _chroma_mask(small: Image.Image) -> Image.Image | None:
     return mask
 
 
-def _backdrop_mask(rgb: Image.Image) -> Image.Image:
-    """255 where the backdrop is: chroma key when there is one, else a border flood fill."""
+def _backdrop_mask(rgb: Image.Image, full_res: bool = False) -> Image.Image:
+    """255 where the backdrop is: chroma key when there is one, else a border flood fill.
+
+    ``full_res`` keys the chroma per source pixel instead of on a reduced copy, which the
+    hi-res sheet needs: its outlines are thinner than a reduced mask cell.
+    """
     small = rgb.resize((max(rgb.width // MASK_DOWNSCALE, 1), max(rgb.height // MASK_DOWNSCALE, 1)), Image.NEAREST)
     chroma = _chroma_mask(small)
+    if chroma is not None and full_res:
+        mask = Image.new("L", rgb.size, 0)
+        mask.putdata([255 if _is_chroma(c) else 0 for c in rgb.getdata()])
+        return mask
     if chroma is not None:
         return chroma.resize(rgb.size, Image.NEAREST)
     w, h = small.size
@@ -332,10 +340,10 @@ def _cycle(pattern: Sequence, count: int) -> list:
     return [pattern[i % len(pattern)] for i in range(count)]
 
 
-def _idle(frame: Image.Image, count: int) -> list[Image.Image]:
+def _idle(frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
     top, bottom = _bbox(frame)[1], _bbox(frame)[3]
     body_end = top + int(0.6 * (bottom - top))
-    return [_shift_band(frame, top, body_end, 0, dy) for dy in _cycle([0, 1, 1, 0], count)]
+    return [_shift_band(frame, top, body_end, 0, dy * scale) for dy in _cycle([0, 1, 1, 0], count)]
 
 
 def _mirror_columns(frame: Image.Image, y0: int, cx: float) -> Image.Image:
@@ -349,20 +357,23 @@ def _mirror_columns(frame: Image.Image, y0: int, cx: float) -> Image.Image:
     return out
 
 
-def _row_runs(frame: Image.Image, y: int) -> list[tuple[int, int]]:
-    """Opaque horizontal runs of one row as (x0, x1_exclusive), merging 1px gaps."""
+def _row_runs(frame: Image.Image, y: int, gap: int = 1) -> list[tuple[int, int]]:
+    """Opaque horizontal runs of one row as (x0, x1_exclusive), merging gaps up to ``gap`` px."""
     xs = [x for x in range(frame.width) if frame.getpixel((x, y))[3] == 255]
     runs: list[list[int]] = []
     for x in xs:
-        if runs and x - runs[-1][1] <= 1:
+        if runs and x - runs[-1][1] <= gap:
             runs[-1][1] = x + 1
         else:
             runs.append([x, x + 1])
     return [(a, b) for a, b in runs]
 
 
-def _close_legs(frame: Image.Image, hip: int, stride: float) -> Image.Image:
-    """Moves each leg run toward the hip axis (negative stride mirrors first), keeping widths."""
+def _close_legs(frame: Image.Image, hip: int, stride: float, gap: int = 1, ramp: int = 0) -> Image.Image:
+    """Moves each leg run toward the hip axis (negative stride mirrors first), keeping widths.
+
+    ``ramp`` rows below ``hip`` ease the movement in, so hi-res legs do not tear at the hip line.
+    """
     box = frame.crop((0, hip, frame.width, frame.height)).getchannel("A").getbbox()
     if box is None:
         return frame
@@ -373,8 +384,9 @@ def _close_legs(frame: Image.Image, hip: int, stride: float) -> Image.Image:
     out.paste((0, 0, 0, 0), (0, hip, frame.width, frame.height))
     for y in range(hip, frame.height):
         edge = 0
-        for x0, x1 in _row_runs(source, y):
-            dx = round(((x0 + x1 - 1) / 2 - cx) * (amount - 1))
+        ease = 1.0 if ramp <= 0 else min((y - hip + 1) / ramp, 1.0)
+        for x0, x1 in _row_runs(source, y, gap):
+            dx = round(((x0 + x1 - 1) / 2 - cx) * (amount - 1) * ease)
             left = max(x0 + dx, edge)  # legs close up side by side but never overlap
             run = source.crop((x0, y, x1, y + 1))
             out.paste(run, (left, y), run)
@@ -382,48 +394,53 @@ def _close_legs(frame: Image.Image, hip: int, stride: float) -> Image.Image:
     return out
 
 
-def _walk(frame: Image.Image, count: int) -> list[Image.Image]:
+def _walk(frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
     _, top, _, bottom = _bbox(frame)
-    hip = top + int(0.58 * (bottom - top))
+    # Hi-res art swings the hands lower than 58% of the height: start the legs below them
+    # and ease the movement in.
+    hip = top + int((0.58 if scale == 1 else 0.64) * (bottom - top))
+    ramp = (scale - 1) * 8
     frames = []
     for stride in _cycle([1.0, 0.55, 0.22, -1.0, -0.55, -0.22], count):
-        moved = _close_legs(frame, hip, stride)
+        moved = _close_legs(frame, hip, stride, gap=scale, ramp=ramp)
         passing = abs(stride) < 0.3
-        frames.append(_shift_band(moved, 0, frame.height, 0, -1) if passing else moved)
+        frames.append(_shift_band(moved, 0, frame.height, 0, -scale) if passing else moved)
     return frames
 
 
-def _typing(frame: Image.Image, count: int) -> list[Image.Image]:
+def _typing(frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
     x0, top, x1, bottom = _bbox(frame)
     h, w = bottom - top, x1 - x0
     head_end = top + int(0.30 * h)
     hands = (top + int(0.40 * h), top + int(0.52 * h), x0 + int(0.30 * w), x0 + int(0.58 * w))
     frames = []
     for hand_dy, nod in zip(_cycle([0, 1, 0, 1, 0, 1], count), _cycle([0, 0, 0, 1, 0, 0], count)):
-        moved = _shift_band(frame, hands[0], hands[1], 0, hand_dy, hands[2], hands[3])
-        frames.append(_shift_band(moved, top, head_end, 0, nod))
+        moved = _shift_band(frame, hands[0], hands[1], 0, hand_dy * scale, hands[2], hands[3])
+        frames.append(_shift_band(moved, top, head_end, 0, nod * scale))
     return frames
 
 
-def _head_bob(frame: Image.Image, count: int, pattern: Sequence[int], head_ratio: float) -> list[Image.Image]:
+def _head_bob(
+    frame: Image.Image, count: int, pattern: Sequence[int], head_ratio: float, scale: int = 1
+) -> list[Image.Image]:
     top, bottom = _bbox(frame)[1], _bbox(frame)[3]
     head_end = top + int(head_ratio * (bottom - top))
-    return [_shift_band(frame, top, head_end, 0, dy) for dy in _cycle(pattern, count)]
+    return [_shift_band(frame, top, head_end, 0, dy * scale) for dy in _cycle(pattern, count)]
 
 
-def _thinking(frame: Image.Image, count: int) -> list[Image.Image]:
-    return _head_bob(frame, count, [0, 1, 1, 0], 0.28)
+def _thinking(frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
+    return _head_bob(frame, count, [0, 1, 1, 0], 0.28, scale)
 
 
-def _disappointed(frame: Image.Image, count: int) -> list[Image.Image]:
-    return _head_bob(frame, count, [0, 1, 2, 1], 0.35)
+def _disappointed(frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
+    return _head_bob(frame, count, [0, 1, 2, 1], 0.35, scale)
 
 
-def _celebrate(frame: Image.Image, count: int) -> list[Image.Image]:
-    return [_shift_band(frame, 0, frame.height, 0, dy) for dy in _cycle([0, -1, -2, -1, 0, 0], count)]
+def _celebrate(frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
+    return [_shift_band(frame, 0, frame.height, 0, dy * scale) for dy in _cycle([0, -1, -2, -1, 0, 0], count)]
 
 
-ANIMATIONS: dict[str, Callable[[Image.Image, int], list[Image.Image]]] = {
+ANIMATIONS: dict[str, Callable[[Image.Image, int, int], list[Image.Image]]] = {
     "idle": _idle,
     "walk": _walk,
     "typing": _typing,
@@ -433,11 +450,14 @@ ANIMATIONS: dict[str, Callable[[Image.Image, int], list[Image.Image]]] = {
 }
 
 
-def animate(kind: str, frame: Image.Image, count: int) -> list[Image.Image]:
-    """Derives ``count`` frames of an animation kind from a single base frame."""
+def animate(kind: str, frame: Image.Image, count: int, scale: int = 1) -> list[Image.Image]:
+    """Derives ``count`` frames of an animation kind from a single base frame.
+
+    ``scale`` multiplies every pixel offset, so a 3x-resolution frame moves 3x as far.
+    """
     if kind not in ANIMATIONS:
         raise ValueError(f"unknown animation kind: {kind}")
-    return ANIMATIONS[kind](frame, count)
+    return ANIMATIONS[kind](frame, count, scale)
 
 
 def assemble_sheet(

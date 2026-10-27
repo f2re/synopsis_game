@@ -1,0 +1,45 @@
+{
+  "asset": "AVATAR-HERO-M2",
+  "mode": "hires",
+  "note": "One reference pose per sheet row, generated as detailed hi-res pixel art on a magenta backdrop. target_height is in frame pixels (frame 96x144); erase boxes are fractions (x0, y0, x1, y1) of the raw image.",
+  "rows": {
+    "idle_front": {
+      "source": "candidate-25.png",
+      "kind": "idle",
+      "target_height": 128
+    },
+    "walk_side": {
+      "source": "candidate-29.png",
+      "kind": "walk",
+      "target_height": 128
+    },
+    "typing_seated": {
+      "source": "candidate-33.png",
+      "kind": "typing",
+      "target_height": 112,
+      "erase": [
+        [
+          0.56,
+          0.68,
+          0.92,
+          0.79
+        ]
+      ]
+    },
+    "thinking": {
+      "source": "candidate-37.png",
+      "kind": "thinking",
+      "target_height": 128
+    },
+    "celebrate_seated": {
+      "source": "candidate-41.png",
+      "kind": "celebrate",
+      "target_height": 116
+    },
+    "disappointed": {
+      "source": "candidate-45.png",
+      "kind": "disappointed",
+      "target_height": 112
+    }
+  }
+}
