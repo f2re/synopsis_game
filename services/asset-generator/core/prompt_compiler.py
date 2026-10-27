@@ -66,9 +66,14 @@ NEG_HIRES_PIXEL = (
 
 # Environment layers that must not inherit the campus lore: it paints a building into them.
 ENVIRONMENT_REGION = (
-    "Setting: the shore of the Gulf of Finland near Saint Petersburg, a calm blue bay, dark green spruces, white "
-    "birch and orange autumn maples, grey granite embankments, a flat horizon with a distant city skyline. "
-    "No palm trees, no sci-fi."
+    "Setting: the shore of the Gulf of Finland near Saint Petersburg, a calm blue bay, grey granite embankments, "
+    "a flat horizon. No palm trees, no sci-fi."
+)
+
+# One building at a time: the full campus lore made the model paint a diorama of the whole campus.
+ARCHITECTURE_SETTING = (
+    "Setting: classical Saint Petersburg scientific architecture on the Gulf of Finland, cream-yellow or red brick "
+    "walls, green copper roofs, small domes, warm glowing windows. No palm trees, no sci-fi."
 )
 
 NEG_LAYER_NO_BUILDINGS = (
@@ -309,8 +314,9 @@ def compile_generation_prompts(
     # 3. Architecture
     elif asset_class in (CLASS_ARCHITECTURE, CLASS_ARCHITECTURE_LANDMARK, CLASS_ARCHITECTURE_SMALL):
         pos_parts.append(STYLE_LOCK_BASE)
-        pos_parts.append(WORLD_LORE_CONTEXT)
+        pos_parts.append(ARCHITECTURE_SETTING)
         neg_parts.append(NEG_ARCHITECTURE_SPECIFIC)
+        neg_parts.append("diorama, multiple buildings, whole campus, island base, framed picture, border, panorama")
 
         arch_data = lore_info.get("data", {})
         description = arch_data.get("description", "Single architectural facility building, Baltic meteorological campus.")

@@ -289,9 +289,29 @@ class PipelineContractTests(unittest.TestCase):
             self.assertNotIn(phrase, neg)
         for phrase in ("flat vector", "low detail"):
             self.assertIn(phrase, neg)
-        # The references show a lit dusk campus with autumn trees and a city across the bay.
-        for phrase in ("glowing windows", "autumn", "spruces", "green copper roofs"):
+        for phrase in ("glowing windows", "green copper roofs"):
             self.assertIn(phrase, pos)
+        # Scenes keep the full lore: the references show a lit dusk campus with autumn trees and a city across the bay.
+        scene, _, _ = compile_generation_prompts("SCR-WARDROBE-BG", {"size": [480, 270]})
+        for phrase in ("glowing windows", "autumn", "spruces", "green copper roofs", "city skyline"):
+            self.assertIn(phrase, scene)
+
+    def test_buildings_and_ground_do_not_inherit_the_whole_campus_lore(self):
+        # The full campus lore (radar dome, pavilions, balloons, city skyline) made the model paint a diorama
+        # of the whole campus instead of one building, and forests into the empty ground layer.
+        building, building_neg, _ = compile_generation_prompts(
+            "BLD-TOURNAMENT-DAY", {"size": [112, 64]}, correction="A one-storey hall with a barrel-vault roof.")
+        self.assertIn("A one-storey hall with a barrel-vault roof.", building)
+        for word in ("radar dome", "glass pavilions", "weather balloons", "city skyline", "red brick archive"):
+            self.assertNotIn(word, building)
+        for word in ("high-resolution pixel art", "glowing windows"):
+            self.assertIn(word, building)
+        for word in ("diorama", "multiple buildings", "island"):
+            self.assertIn(word, building_neg)
+
+        ground, _, _ = compile_generation_prompts("HUB-L6-GROUND", {"size": [480, 270]}, correction="Terraces.")
+        for word in ("spruces", "maples", "birch", "forest"):
+            self.assertNotIn(word, ground)
 
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
