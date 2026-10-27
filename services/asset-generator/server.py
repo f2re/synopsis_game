@@ -779,7 +779,42 @@ async def api_get_asset_spec(request: Request):
     return JSONResponse(asset_spec(asset_id))
 
 
-app = mcp.streamable_http_app()
+_mcp_app = mcp.streamable_http_app()
+
+
+def _allowed_hostnames() -> frozenset:
+    """Hostnames the server may be reached by (LAN IP from base_url + loopback)."""
+    from urllib.parse import urlparse
+    base_host = urlparse(CONFIG["server"].get("base_url", "")).hostname
+    return frozenset({"localhost", "127.0.0.1", "::1", *(h for h in (base_host,) if h)})
+
+
+class LanHostMiddleware:
+    """Accept LAN Host headers that the SDK's DNS-rebinding guard rejects with 421.
+
+    Requests for an unknown Host get 421; allowed ones are forwarded to the MCP
+    app with Host rewritten to localhost:<port> so the SDK check passes.
+    """
+
+    def __init__(self, inner, allowed: frozenset):
+        self._inner = inner
+        self._allowed = allowed
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] not in ("http", "websocket"):
+            return await self._inner(scope, receive, send)
+        headers = dict(scope["headers"])
+        host = headers.get(b"host", b"").decode("latin-1")
+        hostname = host.rsplit(":", 1)[0].strip("[]") if host.count(":") == 1 or host.startswith("[") else host
+        if hostname not in self._allowed:
+            from starlette.responses import PlainTextResponse
+            return await PlainTextResponse("Invalid Host header", status_code=421)(scope, receive, send)
+        rewritten = [(k, v) for k, v in scope["headers"] if k != b"host"]
+        rewritten.append((b"host", f"localhost:{CONFIG['server']['port']}".encode()))
+        return await self._inner({**scope, "headers": rewritten}, receive, send)
+
+
+app = LanHostMiddleware(_mcp_app, _allowed_hostnames())
 
 if __name__ == "__main__":
     import uvicorn
