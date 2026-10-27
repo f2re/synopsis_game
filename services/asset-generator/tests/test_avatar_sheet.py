@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from core.avatar_sheet import (  # noqa: E402
     FRAME_SIZE,
+    OUTLINE_COLOR,
     PEOPLE_PALETTE,
     SHEET_SIZE,
     PoseSpec,
@@ -26,12 +27,15 @@ SKIN = (242, 201, 168)
 CHAIR = (200, 30, 30)
 
 
-def synthetic_pose(with_chair: bool = False) -> Image.Image:
+def synthetic_pose(with_chair: bool = False, with_eyes: bool = False) -> Image.Image:
     """A 672x1024 slate backdrop with a blocky adult figure; optional red 'chair' at the left."""
     raw = Image.new("RGB", (672, 1024), (34, 38, 50))
     d = ImageDraw.Draw(raw)
     d.rectangle((250, 120, 420, 260), fill=SKIN)  # head
     d.rectangle((250, 100, 420, 150), fill=(43, 33, 28))  # hair
+    if with_eyes:
+        d.rectangle((292, 188, 304, 200), fill=(45, 35, 35))  # eyes, dark brown like the generator's, a third of a pixel
+        d.rectangle((366, 188, 378, 200), fill=(45, 35, 35))
     d.rectangle((200, 260, 470, 560), fill=(180, 184, 192))  # shirt
     d.rectangle((250, 560, 420, 940), fill=(53, 56, 69))  # trousers
     d.rectangle((240, 930, 330, 970), fill=(24, 25, 32))  # shoe
@@ -85,6 +89,34 @@ class PoseFrameTests(unittest.TestCase):
         self.assertEqual(box[3], FRAME_SIZE[1] - 1)  # feet on the bottom margin
         self.assertAlmostEqual(box[3] - box[1], 44, delta=3)
 
+    def test_frame_is_wrapped_in_a_clean_one_pixel_outline(self):
+        frame = pose_to_frame(synthetic_pose(), 44)
+        w, h = frame.size
+        opaque = {(x, y) for y in range(h) for x in range(w) if frame.getpixel((x, y))[3] == 255}
+        edge = [p for p in opaque if any((p[0] + dx, p[1] + dy) not in opaque
+                                         for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
+        self.assertTrue(edge)
+        self.assertTrue(all(frame.getpixel(p)[:3] == OUTLINE_COLOR for p in edge))
+
+    def test_small_eyes_survive_the_downsample(self):
+        plain = pose_to_frame(synthetic_pose(), 44)
+        eyed = pose_to_frame(synthetic_pose(with_eyes=True), 44)
+        interior = [
+            (x, y) for y in range(eyed.height) for x in range(eyed.width)
+            if eyed.getpixel((x, y))[:3] == OUTLINE_COLOR and eyed.getpixel((x, y))[3] == 255
+            and plain.getpixel((x, y))[:3] != OUTLINE_COLOR
+        ]
+        self.assertGreaterEqual(len(interior), 2)
+
+    def test_silhouette_has_no_spurs_or_isolated_pixels(self):
+        for kind, count in (("idle", 4), ("walk", 6)):
+            for frame in animate(kind, pose_to_frame(synthetic_pose(), 44), count):
+                w, h = frame.size
+                opaque = {(x, y) for y in range(h) for x in range(w) if frame.getpixel((x, y))[3] == 255}
+                weak = [p for p in opaque if sum((p[0] + dx, p[1] + dy) in opaque
+                                                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) <= 1]
+                self.assertEqual(weak, [], kind)
+
     def test_enclosed_backdrop_gap_between_legs_stays_transparent(self):
         raw = synthetic_pose()
         d = ImageDraw.Draw(raw)
@@ -94,8 +126,10 @@ class PoseFrameTests(unittest.TestCase):
         solid = pose_to_frame(synthetic_pose(), 44)
         # Cells 15-16 lie fully inside the 50px-wide gap; 14 and 17 are only partly covered.
         gap_pixels = [(x, y) for x in (15, 16) for y in range(32, 38)]
-        self.assertTrue(any(solid.getpixel(p)[3] == 255 for p in gap_pixels))
-        self.assertTrue(all(frame.getpixel(p)[3] == 0 for p in gap_pixels))
+        body = lambda px: px[3] == 255 and px[:3] != OUTLINE_COLOR  # noqa: E731
+        self.assertTrue(any(body(solid.getpixel(p)) for p in gap_pixels))
+        # The gap may be bridged by the outline ring, but never filled with body colour.
+        self.assertFalse(any(body(frame.getpixel(p)) for p in gap_pixels))
 
     def test_chroma_gradient_backdrop_and_floor_shadow_are_removed(self):
         raw = Image.new("RGB", (672, 1024))
@@ -164,9 +198,7 @@ class AnimationTests(unittest.TestCase):
         base_legs = sum(1 for y in range(28, 48) for x in range(32) if frame.getpixel((x, y))[3] == 255)
         for index, shifted in enumerate(animate("walk", frame, 6)):
             legs = sum(1 for y in range(28, 48) for x in range(32) if shifted.getpixel((x, y))[3] == 255)
-            # Passing frames (2, 5) overlap the legs on purpose, so they may lose some mass.
-            floor = 0.65 if index in (2, 5) else 0.85
-            self.assertGreaterEqual(legs / base_legs, floor, f"frame {index} squeezed the legs")
+            self.assertGreaterEqual(legs / base_legs, 0.9, f"frame {index} squeezed or overlapped the legs")
         passing = animate("walk", frame, 6)[2]
         spread = [
             max(x for x in range(32) if passing.getpixel((x, 45))[3] == 255)
@@ -210,6 +242,20 @@ class SheetTests(unittest.TestCase):
                 filled = cell.getchannel("A").getbbox() is not None
                 self.assertEqual(filled, c < row.frames, f"row {row.key} col {c}")
         self.assertLessEqual(len(opaque_colors(sheet)), 14)
+
+    def test_every_animated_frame_has_an_unbroken_outline(self):
+        rows = layout_for("AVATAR-BASE-M2")
+        kinds = ("idle", "walk", "typing", "thinking", "celebrate", "disappointed")
+        specs = {row.key: PoseSpec(kind=kind, target_height=44) for row, kind in zip(rows, kinds)}
+        sheet = build_sheet({row.key: synthetic_pose() for row in rows}, specs)
+        for r, row in enumerate(rows):
+            for c in range(row.frames):
+                cell = sheet.crop((c * 32, r * 48, (c + 1) * 32, (r + 1) * 48))
+                opaque = {(x, y) for y in range(48) for x in range(32) if cell.getpixel((x, y))[3] == 255}
+                edge = [p for p in opaque if any((p[0] + dx, p[1] + dy) not in opaque
+                                                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
+                broken = [p for p in edge if cell.getpixel(p)[:3] != OUTLINE_COLOR]
+                self.assertEqual(broken, [], f"{row.key} frame {c}")
 
     def test_build_sheet_reports_missing_pose(self):
         rows = layout_for("AVATAR-BASE-M2")

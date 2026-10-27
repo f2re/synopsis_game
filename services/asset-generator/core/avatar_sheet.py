@@ -6,13 +6,13 @@ All functions are pure: they return new images and never touch their inputs.
 """
 from __future__ import annotations
 
-from collections import deque
+from collections import Counter, deque
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 
 from PIL import Image, ImageDraw
 
-from core.pixel_refiner import edge_aware_downsample, nearest_palette_color
+from core.pixel_refiner import nearest_palette_color
 from core.sheet_layouts import layout_for
 
 FRAME_SIZE = (32, 48)
@@ -20,22 +20,31 @@ COLUMNS = 6
 SHEET_SIZE = (FRAME_SIZE[0] * COLUMNS, FRAME_SIZE[1] * 6)
 
 # 14 colours: skin and hair are locked because game code recolours them at runtime.
+# Ramps: shirt 3, trousers 2, skin 2, hair 2; the last three serve the typing machine.
 PEOPLE_PALETTE: tuple[tuple[int, int, int], ...] = (
     (242, 201, 168),  # skin
     (217, 160, 126),  # skin shadow
     (43, 33, 28),  # hair
-    (22, 20, 28),  # outline, shoes
-    (190, 194, 202),  # shirt light
-    (150, 154, 164),  # shirt mid
-    (108, 112, 124),  # shirt shadow
-    (58, 62, 78),  # trousers
-    (38, 40, 52),  # trousers dark
+    (74, 58, 50),  # hair light
+    (22, 20, 28),  # outline, eyes, shoes
+    (200, 204, 212),  # shirt light
+    (158, 162, 174),  # shirt mid
+    (112, 116, 130),  # shirt shadow
+    (74, 78, 96),  # trousers
+    (46, 48, 64),  # trousers dark
     (181, 112, 92),  # mouth, blush
     (138, 148, 160),  # machine light
     (84, 92, 104),  # machine dark
     (150, 215, 240),  # screen
-    (246, 246, 250),  # highlight
 )
+OUTLINE_COLOR = (22, 20, 28)
+# Colours that may legitimately be single pixels (eyes, mouth) and so skip speckle smoothing.
+DETAIL_COLORS = frozenset({OUTLINE_COLOR, (181, 112, 92)})
+SUPERSAMPLE = 4
+EYE_DARK_SHARE = 0.2
+# Eyes come out dark brown, nearest to the hair colour, so both count as eye samples.
+EYE_COLORS = (OUTLINE_COLOR, PEOPLE_PALETTE[2])
+OUTLINE_WIDTH = 1
 
 BACKDROP_TOLERANCE = 40
 BACKDROP_STEP = 10
@@ -162,28 +171,142 @@ def _drop_specks(img: Image.Image, min_pixels: int = MIN_SPECK_PIXELS) -> Image.
     return out
 
 
+def _cell_vote(sample: Image.Image, frame: tuple[int, int]) -> tuple[Image.Image, dict[tuple[int, int], float]]:
+    """Collapses each SUPERSAMPLE x SUPERSAMPLE cell to its most common palette colour.
+
+    Also returns, per cell, the share of eye-coloured (outline or hair) samples: small dark details such
+    as eyes rarely win a cell vote and are restored from this afterwards.
+    """
+    fw, fh = frame
+    pixels = sample.load()
+    out = Image.new("RGBA", frame, (0, 0, 0, 0))
+    opx = out.load()
+    dark_share: dict[tuple[int, int], float] = {}
+    for cy in range(fh):
+        for cx in range(fw):
+            cell = [
+                pixels[cx * SUPERSAMPLE + dx, cy * SUPERSAMPLE + dy]
+                for dx in range(SUPERSAMPLE)
+                for dy in range(SUPERSAMPLE)
+            ]
+            solid = [c[:3] for c in cell if c[3] == 255]
+            if len(solid) * 2 < len(cell):
+                continue
+            counts = Counter(solid)
+            best = max(counts.values())
+            top = [c for c, n in counts.items() if n == best]
+            opx[cx, cy] = (*min(top, key=sum), 255)
+            dark_share[(cx, cy)] = sum(counts.get(c, 0) for c in EYE_COLORS) / len(solid)
+    return out, dark_share
+
+
+def _restore_eyes(img: Image.Image, dark_share: dict[tuple[int, int], float]) -> Image.Image:
+    """Turns a skin cell into an eye pixel when it holds enough dark samples and sits among skin."""
+    skin = {PEOPLE_PALETTE[0], PEOPLE_PALETTE[1]}
+    out = img.copy()
+    for (x, y), share in dark_share.items():
+        if share < EYE_DARK_SHARE or img.getpixel((x, y))[:3] not in skin:
+            continue
+        around = _neighbours(img, x, y)
+        if all(n and n[3] == 255 and n[:3] in skin for n in around):
+            out.putpixel((x, y), (*OUTLINE_COLOR, 255))
+    return out
+
+
+def _neighbours(img: Image.Image, x: int, y: int) -> list[tuple[int, int, int, int] | None]:
+    """The four edge neighbours of a pixel, None where they fall outside the image."""
+    w, h = img.size
+    return [
+        img.getpixel((x + dx, y + dy)) if 0 <= x + dx < w and 0 <= y + dy < h else None
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))
+    ]
+
+
+def _smooth_silhouette(img: Image.Image) -> Image.Image:
+    """Trims one-pixel spurs and fills one-pixel notches so the outline reads as a clean shape."""
+    w, h = img.size
+    trimmed = img.copy()
+    for y in range(h):
+        for x in range(w):
+            if img.getpixel((x, y))[3] == 255:
+                solid = sum(1 for n in _neighbours(img, x, y) if n and n[3] == 255)
+                if solid <= 1:
+                    trimmed.putpixel((x, y), (0, 0, 0, 0))
+    filled = trimmed.copy()
+    for y in range(h):
+        for x in range(w):
+            if trimmed.getpixel((x, y))[3] == 0:
+                solid = [n[:3] for n in _neighbours(trimmed, x, y) if n and n[3] == 255]
+                if len(solid) >= 3:
+                    filled.putpixel((x, y), (*Counter(solid).most_common(1)[0][0], 255))
+    return filled
+
+
+def _smooth_colors(img: Image.Image) -> Image.Image:
+    """Replaces speckle: a colour pixel none of whose neighbours share its colour."""
+    w, h = img.size
+    out = img.copy()
+    for y in range(h):
+        for x in range(w):
+            cur = img.getpixel((x, y))
+            if cur[3] == 0 or cur[:3] in DETAIL_COLORS:
+                continue
+            around = [n[:3] for n in _neighbours(img, x, y) if n and n[3] == 255]
+            if len(around) >= 3 and cur[:3] not in around:
+                out.putpixel((x, y), (*Counter(around).most_common(1)[0][0], 255))
+    return out
+
+
+def _add_outline(img: Image.Image) -> Image.Image:
+    """Wraps the silhouette in a one-pixel outline ring, growing it outward."""
+    w, h = img.size
+    out = img.copy()
+    for y in range(h):
+        for x in range(w):
+            if img.getpixel((x, y))[3] == 0 and any(n and n[3] == 255 for n in _neighbours(img, x, y)):
+                out.putpixel((x, y), (*OUTLINE_COLOR, 255))
+    return out
+
+
 def pose_to_frame(
     raw: Image.Image,
     target_height: int,
     erase: Sequence[tuple[float, float, float, float]] = (),
     frame: tuple[int, int] = FRAME_SIZE,
+    outline: bool = True,
 ) -> Image.Image:
-    """Cuts one raw pose out of its backdrop and fits it to a palette-locked frame."""
+    """Cuts one raw pose out of its backdrop and renders it as a clean frame.
+
+    The pose is fitted inside the frame minus the outline ring, classified to the people
+    palette at 4x supersampling, voted down to one colour per pixel, then cleaned. With
+    ``outline=False`` the ring is left off so the sprite can be animated first and wrapped
+    by ``finish_frame`` afterwards: moving pieces that already carry an outline tears it.
+    """
     rgb = raw.convert("RGB")
     cutout = rgb.convert("RGBA")
-    alpha = _backdrop_mask(rgb).point(lambda v: 0 if v else 255)
-    cutout.putalpha(alpha)
+    cutout.putalpha(_backdrop_mask(rgb).point(lambda v: 0 if v else 255))
     cutout = erase_regions(cutout, erase)
     box = cutout.getchannel("A").point(lambda a: 255 if a >= 128 else 0).getbbox()
     if box is None:
         raise ValueError("pose has no foreground after backdrop removal")
     content = cutout.crop(box)
     fw, fh = frame
-    scale = min(target_height / content.height, (fw - 2) / content.width)
-    unit = 1 / scale
-    canvas = Image.new("RGBA", (round(fw * unit), round(fh * unit)), (0, 0, 0, 0))
-    canvas.paste(content, ((canvas.width - content.width) // 2, canvas.height - round(unit) - content.height))
-    return _drop_specks(snap_to_palette(edge_aware_downsample(canvas, fw, fh)))
+    ring = 2 * OUTLINE_WIDTH
+    scale = min((target_height - ring) / content.height, (fw - ring - 2) / content.width)
+    size = (max(round(content.width * scale * SUPERSAMPLE), 1), max(round(content.height * scale * SUPERSAMPLE), 1))
+    small = snap_to_palette(content.resize(size, Image.NEAREST))
+    canvas = Image.new("RGBA", (fw * SUPERSAMPLE, fh * SUPERSAMPLE), (0, 0, 0, 0))
+    bottom = (fh - 1 - OUTLINE_WIDTH) * SUPERSAMPLE
+    canvas.paste(small, ((canvas.width - size[0]) // 2, bottom - size[1]))
+    voted, dark_share = _cell_vote(canvas, frame)
+    shape = _smooth_silhouette(voted)
+    sprite = _restore_eyes(_smooth_colors(shape), dark_share)
+    return finish_frame(sprite) if outline else sprite
+
+
+def finish_frame(sprite: Image.Image) -> Image.Image:
+    """Wraps a ring-less sprite in its outline and drops stray specks."""
+    return _drop_specks(_add_outline(sprite))
 
 
 def _bbox(frame: Image.Image) -> tuple[int, int, int, int]:
@@ -249,10 +372,13 @@ def _close_legs(frame: Image.Image, hip: int, stride: float) -> Image.Image:
     out = frame.copy()
     out.paste((0, 0, 0, 0), (0, hip, frame.width, frame.height))
     for y in range(hip, frame.height):
+        edge = 0
         for x0, x1 in _row_runs(source, y):
             dx = round(((x0 + x1 - 1) / 2 - cx) * (amount - 1))
+            left = max(x0 + dx, edge)  # legs close up side by side but never overlap
             run = source.crop((x0, y, x1, y + 1))
-            out.paste(run, (x0 + dx, y), run)
+            out.paste(run, (left, y), run)
+            edge = left + (x1 - x0)
     return out
 
 
@@ -339,6 +465,6 @@ def build_sheet(
     rows = []
     for row in layout_for(asset_id):
         spec = specs[row.key]
-        base = pose_to_frame(poses[row.key], spec.target_height, spec.erase)
-        rows.append(animate(spec.kind, base, row.frames))
+        base = pose_to_frame(poses[row.key], spec.target_height, spec.erase, outline=False)
+        rows.append([finish_frame(frame) for frame in animate(spec.kind, base, row.frames)])
     return assemble_sheet(rows)
