@@ -192,6 +192,33 @@ class PipelineContractTests(unittest.TestCase):
         # Smooth ramps are wanted here, so the base negatives against gradients must not be inherited.
         self.assertNotIn("smooth airbrushed gradient", neg)
 
+    def test_environment_layers_and_trees_do_not_inherit_the_campus_scene(self):
+        # The campus lore makes the model paint a building into layers that must stay empty.
+        layer_words = ("campus", "facade", "brick", "meteorological")
+        ground, ground_neg, meta = compile_generation_prompts(
+            "HUB-L6-GROUND", {"size": [480, 270]}, correction="Granite terraces and a paved plaza.")
+        self.assertEqual(meta["framing"], "environment_layer")
+        self.assertIn("Granite terraces and a paved plaza.", ground)
+        for word in layer_words:
+            self.assertNotIn(word, ground)
+        for word in ("building", "house", "facade"):
+            self.assertIn(word, ground_neg)
+
+        horizon, horizon_neg, _ = compile_generation_prompts(
+            "HUB-L2-HORIZON", {"size": [480, 270]}, correction="Distant low city skyline across a bay.")
+        for word in layer_words:
+            self.assertNotIn(word, horizon)
+        self.assertIn("foreground building", horizon_neg)
+
+        tree, tree_neg, tree_meta = compile_generation_prompts(
+            "HUB-L9-FG-BIRCH", {"size": [144, 200]}, correction="A birch tree on a magenta backdrop.")
+        self.assertEqual(tree_meta["framing"], "isolated_sprite")
+        self.assertIn("A birch tree on a magenta backdrop.", tree)
+        for word in layer_words:
+            self.assertNotIn(word, tree)
+        for word in ("building", "house", "water", "landscape"):
+            self.assertIn(word, tree_neg)
+
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
             storage = WorkStorage("ICON-JOURNAL", Path(tmp))

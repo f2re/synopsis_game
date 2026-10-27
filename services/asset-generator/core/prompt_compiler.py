@@ -65,6 +65,36 @@ NEG_HIRES_PIXEL = (
     "scenery, background objects, shadow, ground shadow, floor, gradient background, vignette, chair, furniture"
 )
 
+# Environment layers that must not inherit the campus lore: it paints a building into them.
+ENVIRONMENT_REGION = (
+    "Setting: the shore of the Gulf of Finland near Saint Petersburg in North-West Russia, flat horizon, "
+    "Baltic water, birch and pine, granite embankments. No alpine mountains, no palm trees, no sci-fi."
+)
+
+NEG_LAYER_NO_BUILDINGS = (
+    "building, house, facade, roof, columns, tower, palace, church, people, vehicles, text, letters, numbers, "
+    "logo, watermark, blurry, 3d render, photo"
+)
+
+NEG_ISOLATED_SPRITE = (
+    "building, house, landscape, scenery, water, sea, sky scene, horizon, background objects, multiple objects, "
+    "text, letters, numbers, logo, watermark, blurry, 3d render, photo, shadow, ground shadow"
+)
+
+LAYER_ONLY_FRAMING: dict[str, tuple[str, str]] = {
+    "GROUND": (
+        "Framing contract: a {w}x{h} ground layer seen in a slight top-down 3/4 view, only terrain and "
+        "landscaping, flat empty ground left free for buildings placed later.",
+        NEG_LAYER_NO_BUILDINGS,
+    ),
+    "HORIZON": (
+        "Framing contract: a {w}x{h} wide distant horizon layer, low contrast and far away, thin horizontal band "
+        "composition with nothing large in the foreground.",
+        NEG_LAYER_NO_BUILDINGS.replace("building, house, facade, roof, columns, tower, palace, church", "foreground building, palace"),
+    ),
+}
+
+
 @dataclass(frozen=True)
 class SheetRenderMode:
     """Prompt pieces for a sprite-sheet look other than the default pixel art."""
@@ -312,8 +342,16 @@ def compile_generation_prompts(
             return " ".join(pos_parts), ", ".join(neg_parts), metadata
         elif "WATER" in aid_u or "SEA" in aid_u:
             scene_subject = "Baltic sea water surface layer, subtle cold waves, ripples, maritime reflections."
-        elif "GROUND" in aid_u:
-            scene_subject = "Granite embankment ground layer, paved stone pathway, coastal North-West Russian vegetation."
+        elif any(key in aid_u for key in LAYER_ONLY_FRAMING):
+            key = next(k for k in LAYER_ONLY_FRAMING if k in aid_u)
+            framing, negative = LAYER_ONLY_FRAMING[key]
+            neg_parts[:] = [negative]
+            pos_parts.append(ENVIRONMENT_REGION)
+            if correction:
+                pos_parts.append(f"Subject: {correction}")
+            pos_parts.append(framing.format(w=target_w, h=target_h))
+            metadata["framing"] = "environment_layer"
+            return " ".join(pos_parts), ", ".join(neg_parts), metadata
         else:
             scene_subject = f"Expansive {target_w}x{target_h} panoramic scene of the Gulf of Finland meteorological campus."
 
@@ -411,16 +449,19 @@ def compile_generation_prompts(
         metadata["framing"] = "prop_centered"
 
     else:
-        # Terrain / Vegetation / VFX
+        # Terrain / Vegetation / VFX: an isolated sprite, so no campus lore and no scene around it.
         pos_parts.append(STYLE_LOCK_BASE)
-        pos_parts.append(WORLD_LORE_CONTEXT)
+        pos_parts.append(ENVIRONMENT_REGION)
+        neg_parts.append(NEG_ISOLATED_SPRITE)
         if asset_spec.get("prompt"):
             pos_parts.append(f"Subject: {asset_spec['prompt']}")
         if correction:
-            pos_parts.append(f"Correction emphasis: {correction}")
+            pos_parts.append(f"Subject: {correction}")
         pos_parts.append(
-            f"Orthographic projection, canvas {target_w}x{target_h} pixels, crisp pixel art on neutral background."
+            f"Orthographic projection, canvas {target_w}x{target_h} pixels, one isolated object only, "
+            "crisp pixel art on a plain uniform background."
         )
+        metadata["framing"] = "isolated_sprite"
 
     pos_prompt = " ".join(pos_parts)
     neg_prompt = ", ".join(neg_parts)
