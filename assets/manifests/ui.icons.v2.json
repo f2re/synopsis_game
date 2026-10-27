@@ -14,7 +14,7 @@
     "sha256": "a79560eadf05bfe7378f0f72ca930780e72a463a89cf46ddc9966f347b3fdf3b"
   },
   "publicBase": "/ui/icons/",
-  "count": 24,
+  "count": 25,
   "supportedScales": [
     128,
     64,
@@ -1749,6 +1749,80 @@
           ],
           "sha256": "964049eebbe2da45e9f3efe9be7cdc9113fdbbe434d1d33059aa45c7cc23b1a9"
         }
+      }
+    },
+    {
+      "id": "icon.mode.blitz",
+      "file": "icon_mode_blitz.png",
+      "name": "Режим «Блиц»",
+      "category": "progression",
+      "palette": [
+        "ui.navy",
+        "ui.blue",
+        "ui.gold",
+        "ui.skin"
+      ],
+      "description": "Секундомер со стальным корпусом, кремовым циферблатом, красной стрелкой и янтарной молнией: быстрый режим игры",
+      "uniformCanvas": {
+        "width": 128,
+        "height": 128
+      },
+      "nativeLogicalSize": [
+        32,
+        32
+      ],
+      "variants": {
+        "default": {
+          "file": "icon_mode_blitz.png",
+          "publicPath": "/ui/icons/icon_mode_blitz.png",
+          "size": [
+            128,
+            128
+          ],
+          "sha256": "ed72a5ecc928b1a3656e96eb9ff3b53f7e6353317b8b70aa6ba1ad353b676cd0"
+        },
+        "128": {
+          "file": "icon_mode_blitz_128.png",
+          "publicPath": "/ui/icons/icon_mode_blitz_128.png",
+          "size": [
+            128,
+            128
+          ],
+          "sha256": "ed72a5ecc928b1a3656e96eb9ff3b53f7e6353317b8b70aa6ba1ad353b676cd0"
+        },
+        "64": {
+          "file": "icon_mode_blitz_64.png",
+          "publicPath": "/ui/icons/icon_mode_blitz_64.png",
+          "size": [
+            64,
+            64
+          ],
+          "sha256": "71988b50991166aeab190057b3088c38627ed7320a48e11785fb31aa76e9e16a"
+        },
+        "32": {
+          "file": "icon_mode_blitz_32.png",
+          "publicPath": "/ui/icons/icon_mode_blitz_32.png",
+          "size": [
+            32,
+            32
+          ],
+          "sha256": "06798302a722fd5134f613a959f4109522c99def8fbe7005efcac59724347606"
+        },
+        "raw": {
+          "file": "icon_mode_blitz_raw.png",
+          "sourcePath": "assets/source/ui/icons/icon_mode_blitz_raw.png",
+          "size": [
+            1024,
+            1024
+          ],
+          "sha256": "9ec782f9d86ec079f8e153b1d466f3ef31601ee064af77e8a9da88217eccf5f1"
+        }
+      },
+      "provenance": {
+        "origin": "synopsis-assets MCP z_image_turbo candidate-17, refined with flat-fill ui_icon refiner",
+        "author": "claude-sonnet-5-5",
+        "artDirectorApproval": "project owner, in session 2026-10-27",
+        "mcpReviewGates": "not passed: independent pixel-art reviewer and creator_id were not recorded; approve_asset cannot promote by design"
       }
     }
   ]

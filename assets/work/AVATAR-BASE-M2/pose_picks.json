@@ -1,0 +1,72 @@
+{
+  "asset": "AVATAR-BASE-M2",
+  "generated": "2026-10-27",
+  "backend": "z_image_turbo",
+  "creator_id": "claude-sonnet-5-5",
+  "note": "Pose references only (one frame per row). Not a sprite sheet yet: needs per-frame refine to 32x48, row animation and chair removal for seated rows.",
+  "rows": [
+    {
+      "row": 1,
+      "key": "idle_front",
+      "frames": 4,
+      "pick": "candidate-23.png",
+      "alternatives": [
+        "candidate-24.png",
+        "candidate-25.png"
+      ]
+    },
+    {
+      "row": 2,
+      "key": "walk_side",
+      "frames": 6,
+      "pick": "candidate-26.png",
+      "alternatives": [
+        "candidate-27.png",
+        "candidate-28.png"
+      ]
+    },
+    {
+      "row": 3,
+      "key": "typing_seated",
+      "frames": 6,
+      "pick": "candidate-29.png",
+      "alternatives": [
+        "candidate-30.png",
+        "candidate-31.png"
+      ],
+      "issue": "chair and desk drawn despite 'no chair'; remove chair"
+    },
+    {
+      "row": 4,
+      "key": "thinking",
+      "frames": 4,
+      "pick": "candidate-32.png",
+      "alternatives": [
+        "candidate-33.png",
+        "candidate-34.png"
+      ]
+    },
+    {
+      "row": 5,
+      "key": "celebrate_seated",
+      "frames": 6,
+      "pick": "candidate-35.png",
+      "alternatives": [
+        "candidate-36.png",
+        "candidate-37.png"
+      ],
+      "issue": "face partly hidden by hair"
+    },
+    {
+      "row": 6,
+      "key": "disappointed",
+      "frames": 4,
+      "pick": "candidate-38.png",
+      "alternatives": [
+        "candidate-39.png",
+        "candidate-40.png"
+      ],
+      "issue": "chair visible behind legs; remove chair"
+    }
+  ]
+}

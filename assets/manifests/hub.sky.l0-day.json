@@ -1,0 +1,30 @@
+{
+  "$schema": "https://synopsis-game.local/schemas/asset-manifest.schema.json",
+  "id": "hub.sky.l0-day",
+  "source": "assets/source/environment/hub/sky/hub_l0_sky_day.png",
+  "kind": "environment",
+  "logicalSize": {
+    "width": 480,
+    "height": 270
+  },
+  "pivot": {
+    "x": 0,
+    "y": 0
+  },
+  "layer": "L0",
+  "paletteTokens": [
+    "world.sky.day"
+  ],
+  "generated": [],
+  "provenance": {
+    "origin": "synopsis-assets MCP z_image_turbo candidate-08 (HUB-L0-SKY-DAY), refined with large_scene palette cap",
+    "author": "claude-sonnet-5-5",
+    "license": "project-internal-generated",
+    "artDirectorApproval": "project owner, in session 2026-10-27",
+    "mcpReviewGates": "not passed: independent pixel-art reviewer not recorded; approve_asset cannot promote by design",
+    "sha256": "23ab9863b44c4944cdfd6213ab6aed38fad929f5febc0ec77f3f3e4b40527473",
+    "rawSha256": "cbb895fc7534821cae20c1771c4c1ecc33d2c66ca91cf2dd2dfcebb73077c858",
+    "opaqueColors": 192,
+    "note": "192 colours (large_scene profile 96-192); hub.layers.v3 master palette is <=64, reconcile before wiring into runtime. Does not replace hub.background.l0-l2 (composite L0+L2)."
+  }
+}
