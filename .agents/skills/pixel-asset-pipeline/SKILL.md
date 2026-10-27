@@ -1,30 +1,44 @@
 ---
 name: pixel-asset-pipeline
-description: Pixel asset pipeline procedures for ASSET-* tasks, ComfyUI/MCP candidates, atlases, Tiled scenes and runtime assets.
+description: Pixel asset pipeline procedures for ASSET-* tasks, ComfyUI/MCP candidates, portraits, sprites, atlases, Tiled scenes and runtime assets.
 ---
 
 # Skill — Pixel asset pipeline
 
-Use for `ASSET-*`, local AI generation, sprite production, manifests, atlases, Tiled scenes and generated runtime assets.
+Use for `ASSET-*`, local AI generation, portraits, sprite production, manifests, atlases, Tiled scenes and generated assets.
 
 Read:
 - `config/art-toolchain.yaml`;
+- `config/art-generation-profiles.json`;
+- `docs/design/PORTRAIT_ART_DIRECTION.md`;
 - `docs/design/LOCAL_AI_ASSET_PIPELINE_V2.md`;
 - `docs/design/PIXEL_ASSET_PIPELINE.md`;
 - `docs/design/sprites/GENERATION_SERIES_CONTRACT.md`;
 - `docs/design/sprites/PIXEL_ART_VALIDATION_WORKFLOW.md`;
-- `assets/source/CANDIDATE_POLICY.md`;
-- `agents/roles/pixel-asset-pipeline-engineer.md`.
+- `assets/source/CANDIDATE_POLICY.md`.
 
-## Mandatory generation-series contract
+## Generation-series contract
 
 - one prompt / one `asset_id` = one independent generator call = one independent output image file;
-- never combine different `asset_id` values into one generation request;
-- multi-view/multi-pose is allowed in one output only when explicitly part of that asset spec;
+- never combine different `asset_id` values in one generation request;
 - reset unrelated context between assets;
 - review composites are post-process artifacts only.
 
-## Mandatory QA split
+## Asset-class routing
+
+Before generation, choose the profile from `config/art-generation-profiles.json`.
+
+Character classes are distinct:
+
+```text
+dialogue_portrait → 256×320, fine detail
+profile_portrait  → 160×160
+world_character   → 32×48, chunky gameplay sprite
+```
+
+Never route a dialogue portrait through the world-character normalizer.
+
+## QA split
 
 Never report a graphic as accepted because width/height, alpha or color count passed.
 
@@ -36,37 +50,58 @@ technical_status: pending | pass | fail
 production_status: candidate | approved | rejected
 ```
 
-Technical validation checks manifests, logical size, pivots, frame metadata, provenance and packaging. Artistic acceptance checks silhouette, character/location identity, proportions, readability at `1×`, lore and style.
+Technical validation checks manifests, logical size, pivots, frame metadata, provenance and packaging. Artistic acceptance checks face/character identity, expression, silhouette, lore and style.
 
-The removed legacy `tools/validate_pixel_art.py` MUST NOT be recreated as a global artistic gate. Use `python tools/assets/check_asset_contract.py` for the objective repository contract.
+## Portrait policy
+
+For `dialogue_portrait`:
+
+- generate 6 candidates;
+- source master is 256×320 logical px (minimum 192×240);
+- use fine clusters and allow controlled 1–2 px facial detail;
+- target 48–96 meaningful colors, soft ceiling 128;
+- strict quantization is disabled;
+- majority downsampling is forbidden;
+- chibi/kawaii/toy-like adult characters are blocking failures;
+- refined output must preserve eyes, nose, mouth, age, hair, glasses and expression.
+
+If refined is less expressive than raw, mark `REFINEMENT_REJECTED`.
 
 ## Color policy
 
-Do not enforce `≤16 colors` for portraits or a universal tiny palette. Use class-specific palette families and ranges from `LOCAL_AI_ASSET_PIPELINE_V2.md`.
+Do not enforce a universal tiny palette.
 
 Typical final ranges:
-- portraits: 24–40;
-- 32×48 characters: 16–28;
-- architecture: 32–56;
-- 480×270 scenes: 48–96.
 
-These are guidance plus noise alarms, not artistic pass/fail thresholds. Raw candidates may contain more colors.
+- dialogue portrait: 48–96;
+- profile portrait: 36–72;
+- world character: 16–32;
+- architecture: 48–96;
+- large scene: 96–192.
 
-## Refinement
+These are guidance/noise alarms, not artistic pass/fail thresholds.
 
-Do not use destructive majority downsampling as the main pixelization method. Refinement may clean clusters/outlines, map the palette and align the logical grid, but must preserve face, age, glasses, props and major building silhouettes.
+## Technical checks
 
-If refined output is worse than raw, mark `REFINEMENT_REJECTED` and retry/refine differently.
+The removed legacy `tools/validate_pixel_art.py` MUST NOT be recreated as a global artistic gate.
+
+Use:
+
+```text
+python tools/assets/check_asset_contract.py
+python tools/assets/check_generation_profiles.py
+```
+
+The second check exists specifically to prevent regression back to tiny 128×128 coarse portraits, strict low-color quantization and majority downsampling.
 
 ## Procedure
 
-1. Load the asset spec and lore context.
-2. Select the asset-class workflow.
-3. Generate 4 candidates by default (6 for important characters).
-4. Rank/select for semantic and artistic quality.
-5. Refine only the selected candidate.
-6. Review in `1×`, with `2×/4×` previews.
-7. Record `art_status`.
-8. Run `tools/assets/check_asset_contract.py` / sprite metadata checks for technical acceptance.
-9. Promote only after both passes.
-10. Pack generated outputs reproducibly; never hand-edit `assets/generated`.
+1. Load asset spec, generation profile and lore context.
+2. Generate the profile-specific number of candidates.
+3. Rank/select for semantic and artistic quality.
+4. Refine only the selected candidate with the class-specific workflow.
+5. Compare raw/refined at native size.
+6. Record `art_status`.
+7. Run technical contract checks.
+8. Promote only after both passes.
+9. Pack generated outputs reproducibly; never hand-edit `assets/generated`.
