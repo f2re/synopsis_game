@@ -151,6 +151,25 @@ class PipelineContractTests(unittest.TestCase):
         for word in ("shadow", "floor", "gradient"):
             self.assertIn(word, neg)
 
+    def test_illustrated_avatar_prompt_is_full_colour_not_pixel_art(self):
+        from core.sheet_layouts import layout_for
+
+        spec = {"size": [768, 1152], "frame": [128, 192], "alpha": "transparent", "people": True,
+                "render": "illustrated"}
+        pose = "walking sideways, side view facing right, mid-stride"
+        pos, neg, meta = compile_generation_prompts("AVATAR-HERO-M2", spec, correction=pose)
+        self.assertEqual(meta["asset_class"], "world_character")
+        self.assertEqual(meta["framing"], "illustrated_sheet_frame")
+        self.assertEqual(meta["frame_size"], [128, 192])
+        self.assertIn(pose, pos)
+        self.assertIn("full colour", pos)
+        self.assertIn("#FF00FF", pos)
+        for banned in ("Pixel-art", "square pixels", "pixel grid", "pixel clusters", "campus"):
+            self.assertNotIn(banned, pos)
+        for word in ("pixel art", "pixelated", "shadow", "chair"):
+            self.assertIn(word, neg)
+        self.assertEqual([r.frames for r in layout_for("AVATAR-HERO-M2")], [4, 6, 6, 4, 6, 4])
+
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
             storage = WorkStorage("ICON-JOURNAL", Path(tmp))

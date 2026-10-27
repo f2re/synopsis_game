@@ -1249,6 +1249,22 @@
       "people": true
     },
     {
+      "id": "AVATAR-HERO-M2",
+      "task": "W2-15",
+      "path": "assets/source/characters/avatar/avatar_hero_m2.png",
+      "size": [
+        768,
+        1152
+      ],
+      "frame": [
+        128,
+        192
+      ],
+      "alpha": "transparent",
+      "render": "illustrated",
+      "people": true
+    },
+    {
       "id": "SCR-WARDROBE-BG",
       "task": "W2-15",
       "path": "assets/source/environment/rooms/wardrobe/wardrobe_bg.png",

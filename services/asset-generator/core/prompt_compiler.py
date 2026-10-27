@@ -27,13 +27,27 @@ from core.asset_classes import (
     get_generation_profile,
 )
 from core.lore_registry import WORLD_LORE_CONTEXT, get_lore_for_asset
-from core.sheet_layouts import AVATAR_BASE_SUBJECT, layout_for
+from core.sheet_layouts import AVATAR_BASE_SUBJECT, AVATAR_HERO_SUBJECT, layout_for
 
 STYLE_LOCK_BASE = (
     "Pixel-art illustration for a modern high-quality game (visual direction: Eastward, Sea of Stars, A Short Hike). "
     "Crisp hard-edged square pixels on a strict logical pixel grid, deliberate pixel clusters, "
     "no anti-aliasing blur, no photographic texture, no rendered three-dimensional look. "
     "Light from upper-left. Outlines are a darker shade of the local colour, never pure black."
+)
+
+STYLE_LOCK_ILLUSTRATED = (
+    "Polished 2D game character illustration, full colour, rich soft cel shading with subtle gradients and "
+    "warm and cool light balance, clean smooth anti-aliased lines, expressive detailed face, natural fabric "
+    "folds and texture, hand-painted look in the spirit of Hades and Eastward character art, smooth "
+    "continuous rendering at high resolution. Light from upper-left."
+)
+
+NEG_ILLUSTRATED = (
+    "pixel art, pixelated, low resolution, blocky, square pixels, voxel art, 8-bit, blurry, photo, 3d render, "
+    "text, letters, numbers, logo, watermark, signature, deformed hands, extra fingers, chibi, kawaii, baby face, "
+    "oversized head, toy-like proportions, multiple characters, building, landscape, scenery, background objects, "
+    "shadow, ground shadow, floor, gradient background, vignette, chair, furniture"
 )
 
 STYLE_LOCK_UI = (
@@ -268,10 +282,29 @@ def compile_generation_prompts(
 
     # 5. World Characters and Companions
     elif asset_class in (CLASS_CHARACTER_SPRITE, CLASS_WORLD_CHARACTER):
+        frame = asset_spec.get("frame")
+        if frame and layout_for(asset_id) and asset_spec.get("render") == "illustrated":
+            # Full-colour illustrated variant: no pixel-art style lock and no pixel-art negatives.
+            frame_w, frame_h = frame
+            neg_parts[:] = [NEG_ILLUSTRATED]
+            pos_parts.append(STYLE_LOCK_ILLUSTRATED)
+            pos_parts.append(f"Subject: {AVATAR_HERO_SUBJECT}")
+            if correction:
+                pos_parts.append(f"Pose: {correction}.")
+            pos_parts.append(
+                "Framing contract: a single full-body character illustration for one frame of a sprite sheet "
+                f"({frame_w}x{frame_h} aspect), one character only, feet near the bottom, same scale and "
+                "camera height in every frame, centered on a solid flat uniform magenta (#FF00FF) background "
+                "with nothing else on it, no ground shadow, no props or furniture."
+            )
+            metadata["framing"] = "illustrated_sheet_frame"
+            metadata["frame_size"] = [frame_w, frame_h]
+            pos_prompt = " ".join(pos_parts)
+            return pos_prompt, ", ".join(neg_parts), metadata
+
         pos_parts.append(STYLE_LOCK_BASE)
         neg_parts.append(NEG_PORTRAIT_SPECIFIC)
 
-        frame = asset_spec.get("frame")
         if frame and layout_for(asset_id):
             # One pose of a sprite sheet: the row pose arrives as the correction text.
             # No scene lore here: it makes the model paint a building above the character.
