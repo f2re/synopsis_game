@@ -1,10 +1,16 @@
 # Pixel-art visual references
 
-Status: `composition-reference / legacy-branding`
+Status: `legacy-thumbnail / deprecated-for-acceptance` (W0-02 audit confirmed absence of high-res originals; see `docs/roadmap/kn01-aaa/evidence/W0-02/references.md`).
 
-This directory contains the earlier visual reference screens for **26063: Позывной «Синоптик»**. They remain useful only as art-direction anchors for mood, hierarchy, density, environmental life and recurring UI language.
+This directory contains early 120×68 thumbnail references for **26063: Позывной «Синоптик»**. They serve only as historical composition and mood anchors. They **cannot** be used as acceptance standards for pixel grid, texel scale, palette, or cluster discipline.
 
-The images were created before the `26063` brand and St Petersburg / North-West lore were fixed. Any embedded old title, Alpine geography or conflicting signage is **not** canonical and must not be copied into production assets.
+Canonical visual acceptance standards are defined in:
+1. Keyframes produced under task **W1-06** (`design/pixel-art/keyframes/` at 480×270, Master Palette v2);
+2. [`docs/BRAND_AND_LORE_26063.md`](../../docs/BRAND_AND_LORE_26063.md);
+3. [`docs/design/PIXEL_ART_STYLE_GUIDE.md`](../../docs/design/PIXEL_ART_STYLE_GUIDE.md);
+4. [`docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md`](../../docs/roadmap/kn01-aaa/04_VISUAL_BIBLE.md).
+
+The thumbnail images below were created before the `26063` brand and St Petersburg / North-West lore were fixed. Any embedded old title, Alpine geography or conflicting signage is **not** canonical and must not be copied into production assets.
 
 | File | Screen | What may still be reused |
 |---|---|---|

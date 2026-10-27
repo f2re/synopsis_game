@@ -151,8 +151,25 @@ export class IdentityService {
     }
   }
 
+  getSecurityProfile(): SecurityProfile {
+    return this.securityProfile;
+  }
+
   hasAdmin(): boolean {
     return this.state.users.some((user) => user.roles.includes('admin'));
+  }
+
+  async seedDirectUser(input: CreateUserInput): Promise<AdminUser | null> {
+    const existing = this.state.users.find(
+      (u) => u.displayName === input.displayName && u.groupId === input.groupId,
+    );
+    if (existing) {
+      return toAdminUser(existing);
+    }
+    const user = await this.buildUser(input);
+    this.state.users.push(user);
+    await this.persist();
+    return toAdminUser(user);
   }
 
   async bootstrapAdmin(displayName: string, code: string): Promise<boolean> {

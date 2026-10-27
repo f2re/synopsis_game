@@ -68,6 +68,8 @@ ASSETS: dict[str, dict[str, object]] = {
     },
 }
 
+LEVEL1_SPEC = "assets/source/kn01_level1.image-spec.json"
+
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
 
@@ -190,12 +192,61 @@ def check_asset(path: Path, rules: dict[str, object]) -> tuple[list[str], dict[s
         if width % fw or height % fh:
             errors.append(f"sheet is not aligned to frame grid {frame}")
 
+    palette = rules.get("palette")
+    if palette is not None:
+        outside = sorted({rgba[:3] for rgba in colors if rgba[3] == 255 and rgba[:3] not in palette})
+        if outside:
+            sample = ", ".join("#%02X%02X%02X" % rgb for rgb in outside[:5])
+            errors.append(f"{len(outside)} colors outside the palette, e.g. {sample}")
+
     return errors, {
         "size": [width, height],
         "opaque_colors": opaque_colors,
         "alpha_values": alphas,
         "frame": list(frame) if frame else None,
     }
+
+
+def load_gpl(path: Path) -> set[tuple[int, int, int]]:
+    colors: set[tuple[int, int, int]] = set()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        parts = line.split()
+        if len(parts) >= 3 and all(p.isdigit() for p in parts[:3]):
+            colors.add((int(parts[0]), int(parts[1]), int(parts[2])))
+    return colors
+
+
+def check_level1_spec(strict: bool) -> tuple[list[str], int, int]:
+    """Проверяет изображения уровня КН-01 по реестру; отсутствующие файлы — ожидаемые."""
+    spec_path = ROOT / LEVEL1_SPEC
+    if not spec_path.exists():
+        return [], 0, 0
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    master = load_gpl(ROOT / spec["palettes"]["master"])
+    people = master | load_gpl(ROOT / spec["palettes"]["people"])
+    failures: list[str] = []
+    pending = checked = 0
+    for asset in spec["assets"]:
+        path = ROOT / asset["path"]
+        if not path.exists():
+            pending += 1
+            if strict:
+                failures.append(f"missing: {asset['path']} ({asset['id']})")
+            continue
+        rules = {
+            "size": asset["size"],
+            "max_colors": asset["max_colors"],
+            "opaque": asset["alpha"] == "opaque",
+            "frame": asset["frame"],
+            "palette": people if asset["people"] else master,
+        }
+        try:
+            errors, _ = check_asset(path, rules)
+        except Exception as exc:  # noqa: BLE001
+            errors = [str(exc)]
+        checked += 1
+        failures.extend(f"{asset['path']} ({asset['id']}): {error}" for error in errors)
+    return failures, checked, pending
 
 
 def main() -> int:
@@ -219,6 +270,9 @@ def main() -> int:
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    level1_failures, level1_checked, level1_pending = check_level1_spec("--strict" in sys.argv)
+    failures.extend(level1_failures)
+
     if failures:
         print("Проверка пиксельной графики завершилась с ошибками:")
         for failure in failures:
@@ -226,6 +280,7 @@ def main() -> int:
         return 1
 
     print(f"Проверка пиксельной графики успешно завершена: {len(ASSETS)} файлов.")
+    print(f"Уровень КН-01: проверено {level1_checked}, ожидается {level1_pending} (реестр {LEVEL1_SPEC}).")
     return 0
 
 

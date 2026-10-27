@@ -32,6 +32,9 @@ jobs:
       - name: Проверить пиксельные кандидаты
         run: python tools/validate_pixel_art.py
 
+      - name: Проверить план харнесса KN01-AAA
+        run: python tools/validate_harness_plan.py
+
       - name: Подготовить Node.js
         uses: actions/setup-node@v4
         with:

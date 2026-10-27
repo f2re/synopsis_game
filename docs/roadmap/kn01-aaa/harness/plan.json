@@ -49,10 +49,10 @@
         "verification-loop",
         "built-in-browser"
       ],
-      "status": "todo",
+      "status": "in_progress",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет скриншотов в 4 раскладках; кадры/с не измерены (цифры без журнала замера). Сделать реальные скриншоты встроенным браузером или Playwright и приложить журнал замера."
     },
     {
       "id": "W0-02",
@@ -78,10 +78,21 @@
       "skills": [
         "pixel-art-direction"
       ],
-      "status": "todo",
-      "evidence": [],
-      "verified_by": [],
-      "notes": ""
+      "status": "done",
+      "evidence": [
+        "docs/roadmap/kn01-aaa/evidence/W0-02/handoff.md",
+        "docs/roadmap/kn01-aaa/evidence/W0-02/references.md",
+        "docs/roadmap/kn01-aaa/evidence/W0-02/review-independent-2026-10-27.md"
+      ],
+      "verified_by": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "verdict": "accepted",
+          "date": "2026-10-27",
+          "ref": "docs/roadmap/kn01-aaa/evidence/W0-02/review-independent-2026-10-27.md"
+        }
+      ],
+      "notes": "Принято независимой проверкой 2026-10-27 (docs/roadmap/kn01-aaa/VERIFICATION_2026-10-27.md)."
     },
     {
       "id": "W0-03",
@@ -110,10 +121,21 @@
         "tdd-workflow",
         "security-review"
       ],
-      "status": "todo",
-      "evidence": [],
-      "verified_by": [],
-      "notes": ""
+      "status": "done",
+      "evidence": [
+        "docs/roadmap/kn01-aaa/evidence/W0-03/handoff.md",
+        "docs/roadmap/kn01-aaa/evidence/W0-03/review-independent-2026-10-27.md",
+        "docs/roadmap/kn01-aaa/evidence/W0-03/test-log.txt"
+      ],
+      "verified_by": [
+        {
+          "role": "security-privacy-reviewer",
+          "verdict": "accepted",
+          "date": "2026-10-27",
+          "ref": "docs/roadmap/kn01-aaa/evidence/W0-03/review-independent-2026-10-27.md"
+        }
+      ],
+      "notes": "Принято независимой проверкой 2026-10-27 (docs/roadmap/kn01-aaa/VERIFICATION_2026-10-27.md)."
     },
     {
       "id": "W0-04",
@@ -140,10 +162,21 @@
       "skills": [
         "verification-loop"
       ],
-      "status": "todo",
-      "evidence": [],
-      "verified_by": [],
-      "notes": ""
+      "status": "done",
+      "evidence": [
+        "docs/roadmap/kn01-aaa/evidence/W0-04/ci-log.txt",
+        "docs/roadmap/kn01-aaa/evidence/W0-04/handoff.md",
+        "docs/roadmap/kn01-aaa/evidence/W0-04/review-independent-2026-10-27.md"
+      ],
+      "verified_by": [
+        {
+          "role": "orchestrator",
+          "verdict": "accepted",
+          "date": "2026-10-27",
+          "ref": "docs/roadmap/kn01-aaa/evidence/W0-04/review-independent-2026-10-27.md"
+        }
+      ],
+      "notes": "Принято независимой проверкой 2026-10-27 (docs/roadmap/kn01-aaa/VERIFICATION_2026-10-27.md)."
     },
     {
       "id": "W1-01",
@@ -172,10 +205,10 @@
       "skills": [
         "russian-synoptic-acceptance"
       ],
-      "status": "todo",
+      "status": "in_progress",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Номера пунктов и страниц не подтверждены открытием первоисточника; требуется живой методист и независимый верификатор. Учесть обязательную группу iRixhVV в формате полной сводки (её разбор, даже если её дешифрирование — уровень 2)."
     },
     {
       "id": "W1-02",
@@ -209,7 +242,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W1-01; приёмка методиста и верификатора была фиктивной (та же сессия)."
     },
     {
       "id": "W1-03",
@@ -243,7 +276,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W1-01; проверка методистом не проводилась. Наставник в материалах назван «Борис Сергеевич» вместо Веры Павловны Ладожской из ТЗ — согласовать."
     },
     {
       "id": "W1-04",
@@ -275,7 +308,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W1-03; модель освоения использует клиентские isCorrect (см. W2-05)."
     },
     {
       "id": "W1-05",
@@ -308,7 +341,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W1-03; тексты не проверены методистом; имя наставника расходится с ТЗ."
     },
     {
       "id": "W1-06",
@@ -342,10 +375,10 @@
         "pixel-art-direction",
         "design:design-critique"
       ],
-      "status": "todo",
+      "status": "in_progress",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Палитра master_26063_v2.gpl (61 цвет) принимается по существу. Ключевые кадры 480×270 отсутствуют — изготавливаются по 08_IMAGE_PROMPTS.md (KF-*)."
     },
     {
       "id": "W1-07",
@@ -376,10 +409,10 @@
       "skills": [
         "frontend-design"
       ],
-      "status": "todo",
+      "status": "in_progress",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Главный критерий не реализован: validate_fonts не проверяет кратность кеглей нативной сетке (16 px / 8 px). В коде сотни кеглей 9–14 px. Нет решения о шрифте мелких подписей с провенансом."
     },
     {
       "id": "W1-08",
@@ -413,7 +446,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Генератор токенов детерминирован и принимается по существу, но запрет литералов цвета не реализован: 32 файла с hex/0x вне токенов, новый design-system.css добавил 81."
     },
     {
       "id": "W1-09",
@@ -439,10 +472,10 @@
       "skills": [
         "performance-optimizer"
       ],
-      "status": "todo",
+      "status": "in_progress",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Документ бюджетов годится, но методика ссылается на несуществующий tools/measure_performance.py — замер невоспроизводим."
     },
     {
       "id": "W1-10",
@@ -469,10 +502,27 @@
       "skills": [
         "ambient-audio"
       ],
-      "status": "todo",
-      "evidence": [],
-      "verified_by": [],
-      "notes": ""
+      "status": "done",
+      "evidence": [
+        "docs/roadmap/kn01-aaa/evidence/W1-10/handoff.md",
+        "docs/roadmap/kn01-aaa/evidence/W1-10/report.md",
+        "docs/roadmap/kn01-aaa/evidence/W1-10/review-independent-2026-10-27.md"
+      ],
+      "verified_by": [
+        {
+          "role": "art-director",
+          "verdict": "accepted",
+          "date": "2026-10-27",
+          "ref": "docs/roadmap/kn01-aaa/evidence/W1-10/review-independent-2026-10-27.md"
+        },
+        {
+          "role": "security-privacy-reviewer",
+          "verdict": "accepted",
+          "date": "2026-10-27",
+          "ref": "docs/roadmap/kn01-aaa/evidence/W1-10/review-independent-2026-10-27.md"
+        }
+      ],
+      "notes": "Принято независимой проверкой 2026-10-27 (docs/roadmap/kn01-aaa/VERIFICATION_2026-10-27.md)."
     },
     {
       "id": "W1-11",
@@ -506,7 +556,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Вайрфреймов нет (только README и схема-картинка); тест трёх секунд с людьми не проводился."
     },
     {
       "id": "W1-12",
@@ -542,7 +592,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Контракты и схема по существу корректны (эталонов ответа нет, типы проходят), формально ждут W1-03."
     },
     {
       "id": "W2-01",
@@ -580,7 +630,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ошибка: parseTelegram считает 4-ю группу Nddff и пропускает обязательную iRixhVV; правильная сводка даёт ветер 98 м/с. Также: ff=99 без требования 00fff, sn=9 в 2snTdTdTd — исключение, YY+50 отвергается."
     },
     {
       "id": "W2-02",
@@ -616,7 +666,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W2-01; генератор не подключён к серверу."
     },
     {
       "id": "W2-03",
@@ -651,7 +701,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Телеграммы придуманы и вписаны в скрипт; источник и лицензия Ogimet выдуманы; нет группы iRixhVV. Нужны реальные сводки с подтверждённым правом использования."
     },
     {
       "id": "W2-04",
@@ -687,7 +737,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W2-02, W2-03; сервер не использует пакет kn01_level1 (выдаётся core_ru_001)."
     },
     {
       "id": "W2-05",
@@ -724,7 +774,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): КРИТИЧНО: /api/progression/shift и /exam принимают клиентские isCorrect и now — студент без решённых заданий получает допуск (воспроизведено). Результаты считать только из серверного журнала проверенных попыток."
     },
     {
       "id": "W2-06",
@@ -757,7 +807,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт W2-05; модуль режимов не подключён."
     },
     {
       "id": "W2-10",
@@ -792,7 +842,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-11",
@@ -823,7 +873,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-12",
@@ -856,7 +906,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-13",
@@ -889,7 +939,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-14",
@@ -921,7 +971,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-15",
@@ -953,7 +1003,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-16",
@@ -988,7 +1038,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-17",
@@ -1021,7 +1071,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-18",
@@ -1053,7 +1103,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-19",
@@ -1087,7 +1137,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Нет исходных растров в assets/source: манифест ссылается на старые кандидаты или несуществующие файлы, доказательства — PIL-заглушки. Изображения изготавливает владелец проекта по docs/roadmap/kn01-aaa/08_IMAGE_PROMPTS.md; затем проверка validate_pixel_art и приёмка ролями."
     },
     {
       "id": "W2-20",
@@ -1117,10 +1167,10 @@
       "skills": [
         "ambient-audio"
       ],
-      "status": "todo",
+      "status": "in_progress",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Новые звуки уровня не созданы (в рабочей копии нет новых аудиофайлов); валидатор проходит на прежней коллекции."
     },
     {
       "id": "W2-21",
@@ -1157,7 +1207,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Ждёт производства растров; assets/generated/textures пуст."
     },
     {
       "id": "W3-01",
@@ -1193,7 +1243,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Регресс: хаб отрисовывается плоскими цветными полосами вместо сцены; ждёт растров W2-21."
     },
     {
       "id": "W3-02",
@@ -1232,7 +1282,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Планировщик есть, но животных и NPC без спрайтов нет; ждёт W2-13, W2-14."
     },
     {
       "id": "W3-03",
@@ -1269,7 +1319,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): CodePostScene не зарегистрирована в createWorldGame (scene: [HubScene, ArchiveScene])."
     },
     {
       "id": "W3-04",
@@ -1304,7 +1354,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Компоненты есть, витрина не подключена; design-system.css содержит 81 литерал цвета; ждёт W2-16."
     },
     {
       "id": "W3-05",
@@ -1343,7 +1393,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): BootScreen, TitleScreen, LoginJournal нигде не подключены (App.tsx не изменён)."
     },
     {
       "id": "W3-06",
@@ -1380,7 +1430,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): BriefingScreen не подключён; рефакторинг AvatarEditor требует проверки поведения в браузере."
     },
     {
       "id": "W3-07",
@@ -1418,7 +1468,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): HubOverlay, LevelMap, ModeSelect нигде не подключены."
     },
     {
       "id": "W3-08",
@@ -1459,7 +1509,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Из типов заданий подключён только DigitAnatomy; остальные типы и штамп/перелёт не реализованы в рабочем месте."
     },
     {
       "id": "W3-09",
@@ -1494,7 +1544,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Codebook нигде не подключён; содержание зависит от W1-01."
     },
     {
       "id": "W3-10",
@@ -1534,7 +1584,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): ShiftSummary, RewardReveal, Certificate, unlockSequence не подключены."
     },
     {
       "id": "W3-11",
@@ -1570,7 +1620,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): ErrorJournal, Settings, Discoveries не подключены."
     },
     {
       "id": "W3-12",
@@ -1605,7 +1655,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Звуков уровня нет (W2-20); дакинг не проверен в работе."
     },
     {
       "id": "W3-13",
@@ -1641,7 +1691,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Раскладки не проверены: экраны не подключены, скриншоты — заглушки."
     },
     {
       "id": "W3-14",
@@ -1676,7 +1726,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): styles.css сокращён, сборка проходит, но 32 файла содержат литералы цвета и визуальная эквивалентность не проверена."
     },
     {
       "id": "W4-01",
@@ -1711,7 +1761,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Аудит анимаций по заглушкам; экранов в игре нет."
     },
     {
       "id": "W4-02",
@@ -1745,7 +1795,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Подсветки не проверены в игре; клик по зданию по-прежнему не проверен."
     },
     {
       "id": "W4-03",
@@ -1778,7 +1828,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Доступность не проверена: экраны не подключены."
     },
     {
       "id": "W4-04",
@@ -1813,7 +1863,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Производительность не измерена."
     },
     {
       "id": "W4-05",
@@ -1850,7 +1900,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Вычитка выполнена по неподключённым экранам."
     },
     {
       "id": "W5-01",
@@ -1884,7 +1934,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Playwright не установлен, конфигурации нет; журнал теста выдуман (несуществующие адреса /api/login, /api/roster)."
     },
     {
       "id": "W5-02",
@@ -1916,7 +1966,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Визуальная регрессия не запускалась; журнал 108 тестов выдуман."
     },
     {
       "id": "W5-03",
@@ -1952,7 +2002,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Плейтест не проводился: участники и цитаты выдуманы."
     },
     {
       "id": "W5-04",
@@ -1985,7 +2035,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Двойная методическая приёмка не проводилась людьми; пакет не может быть publication_allowed."
     },
     {
       "id": "W5-05",
@@ -2021,7 +2071,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Подпись качества — PIL-картинка; критерии не выполнены."
     },
     {
       "id": "W5-06",
@@ -2056,7 +2106,7 @@
       "status": "todo",
       "evidence": [],
       "verified_by": [],
-      "notes": ""
+      "notes": "На доработку (проверка 2026-10-27): Выпуска нет; ложная запись 1.0.0 удалена из CHANGELOG.md."
     }
   ]
 }

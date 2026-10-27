@@ -1,0 +1,29 @@
+=== W0-03 Test Roster Validation Log ===
+Date: 2026-10-26
+Command: pnpm -C apps/server test
+
+Results:
+✔ bootstrap admin, create user and persist avatar without exposing verifier (537.957775ms)
+✔ repeated wrong code produces temporary lockout (431.82051ms)
+✔ batch create users from list with auto-generated and custom codes (597.246019ms)
+✔ testRoster: in public profile, seeding is strictly rejected (20.427878ms)
+✔ testRoster: without explicit enabled flag, seeding is rejected (5.499242ms)
+✔ testRoster: in trusted profile with enabled flag, seeds correctly and allows e2e login + shift workflow (293.461801ms)
+✔ первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал (44.756391ms)
+✔ задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте (19.167272ms)
+✔ stationPlot переводит к планшону на три станции (25.531151ms)
+✔ трёхстанционный планшон переводит к плотному планшону (69.902ms)
+✔ плотный планшон ведёт к физическому контролю (23.223324ms)
+✔ findError не раскрывает station_id и после ответа ведёт к конструктору анализа (32.835096ms)
+✔ dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок (41.997867ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+
+Security checks verified:
+1. When SYNOPSIS_SECURITY_PROFILE === 'public', seedTestRoster returns { seeded: false, reason: 'profile_not_trusted' } and 0 users are created.
+2. When SYNOPSIS_ENABLE_TEST_ROSTER is missing or false, seedTestRoster returns { seeded: false, reason: 'test_mode_not_enabled' } and 0 users are created.
+3. Test codes are read exclusively from external JSON fixture (config/test-roster.example.json), never hardcoded in source.
+4. Test codes are converted to scrypt hash + salt in identity.json and never logged.
+5. End-to-end user successfully logs in, starts shift via ShiftService, and logs out.

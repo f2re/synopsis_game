@@ -25,6 +25,7 @@ jobs:
           python tools/test_deployment.py
           python tools/validate_brand.py
           python tools/validate_pixel_art.py
+          python tools/validate_harness_plan.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh

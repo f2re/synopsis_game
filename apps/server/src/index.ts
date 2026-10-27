@@ -44,6 +44,14 @@ if (bootstrapCode) {
   console.warn('Администратор не создан. Для первого запуска задайте SYNOPSIS_BOOTSTRAP_ADMIN_CODE.');
 }
 
+if (process.env.SYNOPSIS_ENABLE_TEST_ROSTER === 'true' || process.env.SYNOPSIS_ENABLE_TEST_ROSTER === '1') {
+  const { seedTestRoster } = await import('./modules/identity/testRoster.js');
+  const result = await seedTestRoster(identity, { securityProfile: SECURITY_PROFILE, enabled: true });
+  if (result.seeded) {
+    console.info(`[testRoster] Загружен тестовый ростер для e2e: ${result.count} записей.`);
+  }
+}
+
 function sendJson(response: ServerResponse, status: number, payload: unknown): void {
   response.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',

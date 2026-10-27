@@ -1,0 +1,23 @@
+{
+  "description": "Пример детерминированного тестового ростера для e2e-тестирования 26063 (KN01-AAA)",
+  "version": 1,
+  "groups": [
+    {
+      "groupId": "Учебная группа КН-01",
+      "users": [
+        {
+          "displayName": "Тестовый Курсант 26063",
+          "roles": ["student"],
+          "code": "26063",
+          "codeSet": true
+        },
+        {
+          "displayName": "Дежурный Наблюдатель",
+          "roles": ["student"],
+          "code": "1234",
+          "codeSet": true
+        }
+      ]
+    }
+  ]
+}
