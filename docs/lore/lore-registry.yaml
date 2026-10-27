@@ -1,0 +1,215 @@
+version: 1
+world:
+  id: "26063"
+  title: "26063: Позывной «Синоптик»"
+  core_theme: "continuity_of_observation"
+  core_phrase: "Погода постоянно меняется, а наблюдение за ней не прерывается."
+  setting: "вымышленный учебно-исследовательский метеорологический кампус Северо-Запада России"
+  tone:
+    professional: 8
+    cozy: 8
+    nostalgic_depth: 6
+    humor: 4
+    monumental: 2
+  principles:
+    - "professional_function_before_decoration"
+    - "human_presence_in_every_inhabited_scene"
+    - "weather_as_character"
+    - "memory_of_place"
+    - "shift_as_cultural_unit"
+    - "old_and_new_meteorology_coexist"
+    - "small_stories_over_epic_plot"
+  prohibited_tones:
+    - "conspiracy"
+    - "pseudo_military_command_center"
+    - "fantasy_weather_explanations"
+    - "tourist_postcard_petersburg"
+    - "sterile_science_lab"
+
+vibe:
+  primary_contrast: "cold_large_atmosphere_vs_warm_human_workspace"
+  secondary_contrasts:
+    - "large_atmosphere_vs_small_desk"
+    - "precise_science_vs_human_habits"
+    - "old_methods_vs_modern_technology"
+    - "nature_silence_vs_working_center_clicks"
+    - "professional_seriousness_vs_dry_humor"
+  generation_order:
+    - "professional_function"
+    - "human_presence"
+    - "northwest_character"
+    - "weather_state"
+    - "pixel_style"
+  northwest_motifs:
+    - "long_twilight"
+    - "white_nights"
+    - "low_stratus"
+    - "drizzle_and_slanting_rain"
+    - "wet_stone"
+    - "lamp_reflections"
+    - "wet_snow"
+    - "pine_birch_rowan"
+    - "baltic_wind"
+    - "water_and_low_horizon"
+    - "regional_birds"
+
+inhabited_scene_contract:
+  min_human_traces: 3
+  min_story_hooks: 1
+  examples:
+    - "open_logbook"
+    - "mug"
+    - "pencil_on_map"
+    - "moved_chair"
+    - "drying_gloves"
+    - "desk_lamp_on"
+    - "labelled_archive_box"
+    - "unfinished_scheme"
+
+shift_culture:
+  phases:
+    - "arrival"
+    - "handover"
+    - "latest_terms_review"
+    - "observation_and_trend_check"
+    - "analysis"
+    - "weather_intensification"
+    - "short_human_pause"
+    - "result_documentation"
+    - "handover_to_next_shift"
+  values:
+    - "compare_terms"
+    - "do_not_trust_single_indicator"
+    - "mark_suspicious_observations"
+    - "check_temporal_consistency"
+    - "discuss_complex_cases"
+
+locations:
+  archive:
+    mood: "quiet_memory"
+    signature_materials: ["paper", "wood", "matte_metal"]
+    signature_light: "local_warm_lamps"
+    signature_sound: "paper_clock_rain"
+    core_emotion: "discovering_the_past"
+    story_role: "memory_of_place"
+  cartography:
+    mood: "focused_craft"
+    signature_materials: ["paper", "wood", "glass"]
+    signature_light: "even_work_light"
+    signature_sound: "paper_pencil_quiet_talk"
+    core_emotion: "clarity_through_work"
+    story_role: "turning_data_into_form"
+  aerology:
+    mood: "vertical_open_air"
+    signature_materials: ["metal", "fabric", "technical_plastic"]
+    signature_light: "cool_daylight"
+    signature_sound: "wind_balloon_equipment"
+    core_emotion: "contact_with_vertical_atmosphere"
+    story_role: "link_ground_to_free_atmosphere"
+  radar:
+    mood: "technical_attention"
+    signature_materials: ["metal", "glass", "screens"]
+    signature_light: "cool_technical_light"
+    signature_sound: "low_hum_rotation"
+    core_emotion: "watching_rapid_development"
+    story_role: "observe_fast_processes"
+  observatory:
+    mood: "direct_observation"
+    signature_materials: ["painted_metal", "wood", "stone"]
+    signature_light: "weather_dependent"
+    signature_sound: "wind_rain_instruments"
+    core_emotion: "go_out_and_look"
+    story_role: "contact_with_current_weather"
+  operations:
+    mood: "working_shift_heart"
+    signature_materials: ["paper", "wood", "screens", "fabric"]
+    signature_light: "mixed_local_and_work_light"
+    signature_sound: "quiet_talk_paper_equipment"
+    core_emotion: "collective_decision"
+    story_role: "current_shift"
+  tournament:
+    mood: "professional_competition"
+    signature_materials: ["wood", "boards", "screens"]
+    signature_light: "clear_neutral_light"
+    signature_sound: "short_signals_discussion"
+    core_emotion: "becoming_more_precise"
+    story_role: "training_and_competition"
+
+character_contract:
+  required_fields:
+    - "name"
+    - "role"
+    - "specialization"
+    - "experience"
+    - "strength"
+    - "blind_spot"
+    - "mentoring_style"
+    - "automation_attitude"
+    - "signature_phrase"
+    - "signature_item"
+    - "home_location"
+    - "secondary_location"
+    - "start_attitude_to_player"
+    - "trust_progression"
+    - "relationships"
+    - "history_hook"
+    - "open_thread"
+  relationship_types:
+    - "mentorship"
+    - "professional_trust"
+    - "methodological_disagreement"
+    - "long_friendship"
+    - "generation_difference"
+    - "shared_case_memory"
+    - "friendly_competition"
+    - "cross_department_dependency"
+  prohibited_archetypes:
+    - "evil_boss"
+    - "caricature_professor"
+    - "always_right_lone_genius"
+    - "bullied_newcomer"
+    - "pseudo_military_commander"
+    - "quest_dispenser_only"
+
+location_contract:
+  required_fields:
+    - "name"
+    - "professional_role"
+    - "building_generation"
+    - "history_connection"
+    - "main_people"
+    - "work_actions"
+    - "signature_material"
+    - "local_accent"
+    - "main_light"
+    - "signature_sound"
+    - "symbol_item"
+    - "human_traces"
+    - "domestic_quirk"
+    - "past_story"
+    - "open_question"
+    - "rare_event"
+    - "morning_state"
+    - "night_state"
+    - "bad_weather_state"
+    - "player_progress_change"
+
+canon_documents:
+  - "docs/BRAND_AND_LORE_26063.md"
+  - "docs/lore/00_WORLD_BIBLE_26063.md"
+  - "docs/lore/01_METEOROLOGICAL_CULTURE_AND_RITUALS.md"
+  - "docs/lore/02_CHARACTERS_AND_RELATIONSHIPS.md"
+  - "docs/lore/03_LOCATIONS_AND_ENVIRONMENTAL_STORIES.md"
+  - "docs/design/COZY_METEO_VIBE_BIBLE.md"
+  - "docs/design/PIXEL_ART_BASELINE_COZY_SCIENCE.md"
+  - "docs/design/LIVING_WORLD_SYSTEM.md"
+
+acceptance:
+  world_element_min_lore_connections: 2
+  scene_vibe_check_min_yes: 7
+  priority_order:
+    - "meteorological_truth"
+    - "methodological_contract"
+    - "world_canon"
+    - "vibe_contract"
+    - "decorative_preference"
