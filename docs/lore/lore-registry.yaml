@@ -1,215 +1,469 @@
 version: 1
+status: accepted
+canonical_title: '26063: Позывной «Синоптик»'
+provenance_policy:
+  fictional_canon_by_default:
+  - campus_timeline
+  - npc_biographies
+  - local_incidents
+  - artifact_serial_numbers
+  - internal_building_dates
+  real_world_claims_require_source: true
+  educational_claims_require_method_profile: true
+  allowed_fact_status:
+  - fictional-canon
+  - inspired
+  - needs-source
+  - verified
+  source_policy: docs/09_SOURCE_POLICY.md
+  authoring_rules: docs/lore/09_LORE_AUTHORING_RULES.md
 world:
-  id: "26063"
-  title: "26063: Позывной «Синоптик»"
-  core_theme: "continuity_of_observation"
-  core_phrase: "Погода постоянно меняется, а наблюдение за ней не прерывается."
-  setting: "вымышленный учебно-исследовательский метеорологический кампус Северо-Запада России"
-  tone:
+  id: '26063'
+  wmo_index: '26063'
+  region: Санкт-Петербург / Северо-Запад России / Берег Финского залива
+  latitude_ref: 59.9386
+  longitude_ref: 30.3141
+  timezone: Europe/Moscow
+  core_theme: continuity_of_observation
+  core_thesis_ru: Главный герой этого мира — непрерывность наблюдений. 26063 — место, где погода постоянно меняется,
+    а наблюдение за ней никогда не прерывается.
+  cozy_formula_ru: До тебя здесь работали люди. Сейчас работаешь ты. После тебя придёт следующая смена.
+  min_human_traces_per_scene: 3
+  vibe_axes:
     professional: 8
     cozy: 8
-    nostalgic_depth: 6
-    humor: 4
+    nostalgic: 6
+    playful: 4
     monumental: 2
-  principles:
-    - "professional_function_before_decoration"
-    - "human_presence_in_every_inhabited_scene"
-    - "weather_as_character"
-    - "memory_of_place"
-    - "shift_as_cultural_unit"
-    - "old_and_new_meteorology_coexist"
-    - "small_stories_over_epic_plot"
-  prohibited_tones:
-    - "conspiracy"
-    - "pseudo_military_command_center"
-    - "fantasy_weather_explanations"
-    - "tourist_postcard_petersburg"
-    - "sterile_science_lab"
+  fundamental_contrasts:
+  - холодная балтийская погода <-> тёплый человеческий свет
+  - огромная атмосфера <-> маленький рабочий стол
+  - точная наука <-> живые человеческие привычки
+  - старая классическая школа <-> современная техника
+  - тишина северной природы <-> ритмичные щелчки работающего центра
+  - профессиональная ответственность <-> спокойное душевное равновесие
+  geography_rules:
+    horizon: низкий северо-западный горизонт, акватория Финского залива, гранитная терраса
+    vegetation:
+    - сосна обыкновенная
+    - берёза повислая
+    - рябина
+    - шиповник
+    - сирень
+    - мшистый газон
+    sky_character: высокое многослойное небо, длинные сумерки, белые ночи летом, низкая слоистая облачность осенью
+    forbidden_elements:
+    - альпийские горные хребты
+    - дворцовые колоннады и гигантские купола
+    - повторяющиеся вывески с полным названием игры на каждом здании
+    - военно-бункерная секретность или постапокалипсис
+synoptic_schedule_utc:
+- term_utc: 00:00
+  local_msk: 03:00
+  phase: night
+  ritual: Ночной основной срок и ночной выпуск радиозонда; зелёная лампа в Оперативном зале
+- term_utc: 03:00
+  local_msk: 06:00
+  phase: dawn
+  ritual: Предрассветный срок; встреча рассвета на скамейке у сосен с горячей кружкой; обход Семёна
+- term_utc: 06:00
+  local_msk: 09:00
+  phase: day
+  ritual: Утренняя пересменка, разбор ночной карты у Веры Павловны, начало учебной смены
+- term_utc: 09:00
+  local_msk: '12:00'
+  phase: day
+  ritual: Полуденный срок, работа в Картографическом классе и Архиве, пятиминутка с чаем
+- term_utc: '12:00'
+  local_msk: '15:00'
+  phase: day
+  ritual: Главный дневной срок, выпуск дневного радиозонда, сверка приземной карты с АТ-850 и АТ-500
+- term_utc: '15:00'
+  local_msk: '18:00'
+  phase: golden_hour
+  ritual: Предвечерний срок, золотой час над заливом, учебные блицы и дуэли в Разборной
+- term_utc: '18:00'
+  local_msk: '21:00'
+  phase: civil_twilight
+  ritual: Вечерняя пересменка, зажигаются фонари и тёплые окна кампуса
+- term_utc: '21:00'
+  local_msk: 00:00
+  phase: night
+  ritual: Поздний вечерний срок, переход центра в тихий ночной режим, кот Паскаль уходит спать к телетайпу
+location:
+  hub:
+    official_name: Учебно-исследовательский кампус 26063
+    informal_names:
+    - Двор
+    - Площадка
+    - Кампус
+    scene_id: hub.master.approved
+    built_era: 1936-2014
+    mood: cozy_coastal_science_campus
+    materials:
+    - balt_granite
+    - warm_ochre_stucco
+    - pine_wood
+    - wet_grass
+    - white_picket_fence
+    signature_sound: audio.ambient.wind-trees + audio.ambient.water-shore
+    human_traces: 4
+    human_trace_examples:
+    - узкая протоптанная с севера дорожка к психрометрической будке
+    - забытая на скамейке у сосен синяя папка с закладкой
+    - обновлённая мелом сводка дня на уличном стенде
+    - кружка и связка ключей Семёна на столике у мастерской
+    prompt_context: 'Открытый зелёный двор метеостанции 26063 на берегу Финского залива; низкий горизонт с водой,
+      сосны и берёзы, гранитный парапет, белая метеоплощадка с будками и мачтой, тёплые окна невысоких корпусов
+      разных десятилетий; атмосфера спокойной обжитой научной школы без дворцовой парадности.
 
-vibe:
-  primary_contrast: "cold_large_atmosphere_vs_warm_human_workspace"
-  secondary_contrasts:
-    - "large_atmosphere_vs_small_desk"
-    - "precise_science_vs_human_habits"
-    - "old_methods_vs_modern_technology"
-    - "nature_silence_vs_working_center_clicks"
-    - "professional_seriousness_vs_dry_humor"
-  generation_order:
-    - "professional_function"
-    - "human_presence"
-    - "northwest_character"
-    - "weather_state"
-    - "pixel_style"
-  northwest_motifs:
-    - "long_twilight"
-    - "white_nights"
-    - "low_stratus"
-    - "drizzle_and_slanting_rain"
-    - "wet_stone"
-    - "lamp_reflections"
-    - "wet_snow"
-    - "pine_birch_rowan"
-    - "baltic_wind"
-    - "water_and_low_horizon"
-    - "regional_birds"
-
-inhabited_scene_contract:
-  min_human_traces: 3
-  min_story_hooks: 1
-  examples:
-    - "open_logbook"
-    - "mug"
-    - "pencil_on_map"
-    - "moved_chair"
-    - "drying_gloves"
-    - "desk_lamp_on"
-    - "labelled_archive_box"
-    - "unfinished_scheme"
-
-shift_culture:
-  phases:
-    - "arrival"
-    - "handover"
-    - "latest_terms_review"
-    - "observation_and_trend_check"
-    - "analysis"
-    - "weather_intensification"
-    - "short_human_pause"
-    - "result_documentation"
-    - "handover_to_next_shift"
-  values:
-    - "compare_terms"
-    - "do_not_trust_single_indicator"
-    - "mark_suspicious_observations"
-    - "check_temporal_consistency"
-    - "discuss_complex_cases"
-
-locations:
+      '
   archive:
-    mood: "quiet_memory"
-    signature_materials: ["paper", "wood", "matte_metal"]
-    signature_light: "local_warm_lamps"
-    signature_sound: "paper_clock_rain"
-    core_emotion: "discovering_the_past"
-    story_role: "memory_of_place"
-  cartography:
-    mood: "focused_craft"
-    signature_materials: ["paper", "wood", "glass"]
-    signature_light: "even_work_light"
-    signature_sound: "paper_pencil_quiet_talk"
-    core_emotion: "clarity_through_work"
-    story_role: "turning_data_into_form"
+    official_name: Архив метеоданных и отчётов
+    informal_names:
+    - Архив
+    - У Киры
+    - Книжкина будка
+    scene_id: scene.archive.art-batch-001
+    hotspot_id: hub.location.archive
+    built_era: 1946 (на фундаменте 1936 года)
+    lead_character: kira
+    mood: quiet_warm_memory
+    materials:
+    - dark_wood
+    - archive_cardboard
+    - aged_whatman_paper
+    - karelia_granite
+    - amber_glass
+    signature_sound: audio.ambient.archive-room + audio.equip.paper-turn + audio.equip.clockwork-hum
+    signature_prop: Старый недельный барограф М-22 № 0419 под стеклянным колпаком с лентой шторма 1984 года
+    human_traces: 3
+    human_trace_examples:
+    - настольная лампа слегка повёрнута к раскрытой папке с незаконченной выпиской
+    - на пробковой подставке стоит стакан чая в подстаканнике, рядом лежат очки и лупа
+    - на нижней полке стеллажа № 3 устроена лежанка кота Паскаля с биркой «Фонд 26063»
+    lore_hooks:
+    - old_logbooks_26063
+    - retired_barograph_1984
+    - pomortseva_canonical_map_1979
+    - vera_student_mistake_1978
+    prompt_context: 'Полутораэтажный тёплый корпус Архива станции 26063; снаружи каменный цоколь, охристая штукатурка,
+      деревянные рамы и полки в окнах; внутри высокие деревянные стеллажи с коробками серии 26063, рабочий стол
+      под тёплой лампой, старый барограф под колпаком, следы живой работы с картами, контраст янтарного света лампы
+      и прохладного петербургского неба за окном.
+
+      '
+  synoptic_center:
+    official_name: Оперативный синоптический зал
+    informal_names:
+    - Оперативка
+    - Наверху
+    - На кругу
+    hotspot_id: hub.location.synoptic-center
+    built_era: 1954 (обновления 1984 и 2004 годов)
+    lead_character: vera
+    mood: focused_warm_watch
+    materials:
+    - ash_wood
+    - green_desk_linoleum
+    - brass_paperweights
+    - paper_charts
+    - green_glass_lampshade
+    signature_sound: audio.equip.barograph-tick + audio.equip.teletype-chatter
+    signature_prop: Зелёная настольная лампа Веры Павловны, двухцветный карандаш «Синоптик» и часы с двумя циферблатами
+      (МСК / UTC)
+    human_traces: 4
+    human_trace_examples:
+    - углы свежего бланка карты прижаты латунными шайбами, поверх лежит красно-синий карандаш
+    - стул дежурного слегка отодвинут, на спинке висит тёплый кардиган
+    - у батареи сушатся перчатки после обхода метеоплощадки
+    - в углу на тумбе стоит электрический чайник с биркой 26063-ХЗ-14 и банка с сушками
+    lore_hooks:
+    - shift_handover_journal
+    - under_glass_5appp_note
+    - teletype_warm_cat_spot
+    prompt_context: 'Главный оперативный зал метеостанции 26063; двухэтажное здание 1950-х годов со световым фонарём;
+      внутри широкие синоптические столы с бумажными кольцевыми картами, лампа под зелёным абажуром, барограф М-22,
+      вторичные часы UTC, выгородка телетайпа и современные мониторы рядом с аналоговыми приборами; ощущение непрерывной
+      круглосуточной вахты.
+
+      '
+  maps_class:
+    official_name: Картографический класс и кабинет фронтологии
+    informal_names:
+    - Карты
+    - Планшонная
+    hotspot_id: hub.location.maps-analysis
+    unlock_condition: Уровень 2
+    built_era: '1968'
+    lead_character: vera
+    mood: bright_craft_studio
+    materials:
+    - whatman_paper
+    - tracing_vellum
+    - pine_drafting_tables
+    - graphite
+    - frosted_light_table
+    signature_sound: audio.equip.paper-turn + audio.equip.lamp-switch
+    signature_prop: Широкий стол-просвет для согласования приземных карт с калькой АТ-850 и стеклянная банка с огрызками
+      карандашей
+    human_traces: 3
+    human_trace_examples:
+    - на столе-просвете скреплена деревянными прищепками калька поверх приземного планшона
+    - рядом с линейкой оставлена стружка от ручной заточки мягкого карандаша 2М
+    - по вечерам одно крайнее окно остаётся светящимся — стажёр дочерчивает кольцевку
+    lore_hooks:
+    - jar_of_pencil_stubs
+    - finnish_gulf_fog_atlas
+    prompt_context: 'Картографический корпус 26063; старое светлое крыло с большими северными окнами, приспособленное
+      под учебный класс; здесь всегда много бумаги, тубусов, плоских ящиков для планшонов и мягкого света; по вечерам
+      одно окно остаётся включённым; у входа стоит выцветший ящик для карт; сцена передаёт спокойную рабочую обжитость,
+      а не академическую торжественность.
+
+      '
   aerology:
-    mood: "vertical_open_air"
-    signature_materials: ["metal", "fabric", "technical_plastic"]
-    signature_light: "cool_daylight"
-    signature_sound: "wind_balloon_equipment"
-    core_emotion: "contact_with_vertical_atmosphere"
-    story_role: "link_ground_to_free_atmosphere"
+    official_name: Аэрологическая лаборатория и эллинг
+    informal_names:
+    - Аэрология
+    - Шар-база
+    - Эллинг
+    hotspot_id: hub.location.aerology
+    unlock_condition: Уровень 3
+    built_era: '1974'
+    lead_character: georgy
+    mood: high_ceiling_wind_and_flight
+    materials:
+    - corrugated_concrete
+    - steel_sliding_gates
+    - white_latex_balloon
+    - canvas
+    - brass_theodolite
+    signature_sound: audio.interact.balloon-release + audio.ambient.wind-trees
+    signature_prop: Белый шар-пилот на привязи, оптический теодолит на треноге и полосатый ветроуказатель на крыше
+    human_traces: 3
+    human_trace_examples:
+    - на внутренней створке ворот мелом нанесены отметки рекордных высот подъёма зондов (>34 км)
+    - на верстаке Семёна стоит помятый стальной термос и лежат брезентовые рукавицы
+    - у входа на деревянной подставке выдерживается перед пуском подготовленный радиозонд
+    lore_hooks:
+    - returned_radiosonde_814
+    - chalk_altitude_records
+    - pascal_cat_origin_box
+    prompt_context: 'Аэрологический павильон станции 26063; высокий гулкий эллинг 1970-х годов с раздвижными воротами,
+      открытыми навстречу балтийскому ветру; внутри белая оболочка метеозонда, баллоны, теодолит, приборная мастерская
+      Семёна рядом; ощущение простора, холодного воздуха с залива и связи земли с высотой.
+
+      '
   radar:
-    mood: "technical_attention"
-    signature_materials: ["metal", "glass", "screens"]
-    signature_light: "cool_technical_light"
-    signature_sound: "low_hum_rotation"
-    core_emotion: "watching_rapid_development"
-    story_role: "observe_fast_processes"
-  observatory:
-    mood: "direct_observation"
-    signature_materials: ["painted_metal", "wood", "stone"]
-    signature_light: "weather_dependent"
-    signature_sound: "wind_rain_instruments"
-    core_emotion: "go_out_and_look"
-    story_role: "contact_with_current_weather"
-  operations:
-    mood: "working_shift_heart"
-    signature_materials: ["paper", "wood", "screens", "fabric"]
-    signature_light: "mixed_local_and_work_light"
-    signature_sound: "quiet_talk_paper_equipment"
-    core_emotion: "collective_decision"
-    story_role: "current_shift"
-  tournament:
-    mood: "professional_competition"
-    signature_materials: ["wood", "boards", "screens"]
-    signature_light: "clear_neutral_light"
-    signature_sound: "short_signals_discussion"
-    core_emotion: "becoming_more_precise"
-    story_role: "training_and_competition"
+    official_name: Радиолокационный комплекс МРЛ
+    informal_names:
+    - Радар
+    - Под куполом
+    - Точка МРЛ
+    hotspot_id: hub.location.radar
+    unlock_condition: Уровень 4
+    built_era: 1982 (модернизация 2000-х)
+    lead_character: pavel
+    mood: technical_coastal_watchtower
+    materials:
+    - white_fiberglass_radome
+    - steel_truss
+    - red_brick_base
+    - green_cathode_glow
+    signature_sound: audio.interact.radar-pulse + audio.interact.anemometer-spin
+    signature_prop: Белый геодезический купол МРЛ-5 над соснами и полукруглый пульт кругового обзора
+    human_traces: 3
+    human_trace_examples:
+    - на пульте рядом с экраном развёртки стоит большая термокружка и лежит журнал грозовых пеленгов
+    - на перилах наружного балкона сидят прикормленные чайки-моевки
+    - на тумблере обогрева аккуратно наклеена полоска малярного скотча с подписью от руки
+    lore_hooks:
+    - winter_thunderstorm_printout
+    - gulls_before_squall
+    prompt_context: 'Башня метеорологического радиолокатора МРЛ станции 26063; кирпично-стальное основание среди
+      сосен, белый сферический радиопрозрачный купол, сигнальные огни; внутри прохладный изумрудный свет экранов
+      радиоэха в сочетании с тёплой настольной лампой дежурного инженера и видом на Финский залив.
 
-character_contract:
-  required_fields:
-    - "name"
-    - "role"
-    - "specialization"
-    - "experience"
-    - "strength"
-    - "blind_spot"
-    - "mentoring_style"
-    - "automation_attitude"
-    - "signature_phrase"
-    - "signature_item"
-    - "home_location"
-    - "secondary_location"
-    - "start_attitude_to_player"
-    - "trust_progression"
-    - "relationships"
-    - "history_hook"
-    - "open_thread"
-  relationship_types:
-    - "mentorship"
-    - "professional_trust"
-    - "methodological_disagreement"
-    - "long_friendship"
-    - "generation_difference"
-    - "shared_case_memory"
-    - "friendly_competition"
-    - "cross_department_dependency"
-  prohibited_archetypes:
-    - "evil_boss"
-    - "caricature_professor"
-    - "always_right_lone_genius"
-    - "bullied_newcomer"
-    - "pseudo_military_commander"
-    - "quest_dispenser_only"
+      '
+  tournament_hall:
+    official_name: Турнирный и разборный зал
+    informal_names:
+    - Разборная
+    - Арена
+    - Большой экран
+    hotspot_id: hub.location.tournament-hall
+    unlock_condition: После базового допуска
+    built_era: 1963 (реконструкция 2014 года)
+    lead_character: artem
+    mood: collegial_synoptic_arena
+    materials:
+    - acoustic_oak_slats
+    - matte_projection_screen
+    - brass_ship_bell
+    - green_baize_desks
+    signature_sound: audio.arena.round-start + audio.arena.countdown-tick
+    signature_prop: Малый корабельный бронзовый колокол-рында и широкое табло разбора полётов (/arena-tv)
+    human_traces: 3
+    human_trace_examples:
+    - на обратной стороне меловой доски сохранён исторический счёт спора Ладожской и Корфа
+    - на втором ряду деревянных трибун лежит студенческий тубус и забытый шарф
+    - латунный ободок старого глобуса у входа отполирован до блеска ладонями студентов перед матчами
+    lore_hooks:
+    - first_duel_1980s_chalk_score
+    - baltic_sailors_ship_bell
+    prompt_context: 'Уютный лекционно-турнирный зал кампуса 26063; тёплые деревянные трибуны на три ряда, два парных
+      синоптических стола на подиуме, большое табло для демонстрации карт и бронзовый корабельный колокол; атмосфера
+      интеллигентного студенческого и профессионального состязания без киберспортивной агрессии.
 
-location_contract:
-  required_fields:
-    - "name"
-    - "professional_role"
-    - "building_generation"
-    - "history_connection"
-    - "main_people"
-    - "work_actions"
-    - "signature_material"
-    - "local_accent"
-    - "main_light"
-    - "signature_sound"
-    - "symbol_item"
-    - "human_traces"
-    - "domestic_quirk"
-    - "past_story"
-    - "open_question"
-    - "rare_event"
-    - "morning_state"
-    - "night_state"
-    - "bad_weather_state"
-    - "player_progress_change"
-
-canon_documents:
-  - "docs/BRAND_AND_LORE_26063.md"
-  - "docs/lore/00_WORLD_BIBLE_26063.md"
-  - "docs/lore/01_METEOROLOGICAL_CULTURE_AND_RITUALS.md"
-  - "docs/lore/02_CHARACTERS_AND_RELATIONSHIPS.md"
-  - "docs/lore/03_LOCATIONS_AND_ENVIRONMENTAL_STORIES.md"
-  - "docs/design/COZY_METEO_VIBE_BIBLE.md"
-  - "docs/design/PIXEL_ART_BASELINE_COZY_SCIENCE.md"
-  - "docs/design/LIVING_WORLD_SYSTEM.md"
-
-acceptance:
-  world_element_min_lore_connections: 2
-  scene_vibe_check_min_yes: 7
-  priority_order:
-    - "meteorological_truth"
-    - "methodological_contract"
-    - "world_canon"
-    - "vibe_contract"
-    - "decorative_preference"
+      '
+character:
+  vera:
+    full_name: Вера Павловна Ладожская
+    age: 58
+    role: senior_forecaster
+    title_ru: Ведущий синоптик и руководитель практики
+    sprite_archetype: npc.operational_forecaster
+    primary_location: synoptic_center
+    years_at_station: 36
+    mentor: Нина Сергеевна Поморцева
+    specialization: Приземный анализ, фронтология Северо-Запада, критика наблюдений
+    pocket_items:
+    - десятикратная складная лупа в кожаном чехле
+    - цанговый красно-синий карандаш
+    - мятные пастилки
+    desk_signature: Лампа с зелёным стеклянным абажуром, грузик из карельского мрамора, чашка с синим ободком
+    habits:
+    - приходит за 20 минут до утренней пересменки, чтобы спокойно просмотреть карту за 00:00 UTC
+    - при сомнительном фронте всегда проверяет предыдущий срок через кальку и сверяет точку росы
+    - постукивает пальцем по стеклу барографа М-22 перед началом разбора
+    speech:
+      tone: спокойный, точный, интеллигентный петербургский, с мягкой сухой иронией
+      catchphrases:
+      - Фронт по одной температуре не ставят.
+      - Изобара — это не верёвка, её нельзя бросить как попало. Покажи мне градиент.
+      - Машина считает уравнения, а подпись под штормовым предупреждением ставишь ты.
+    relationships:
+      georgy: давний уважительный спор о приоритете приземной карты и поверхности АТ-500
+      semyon: абсолютное доверие к его рукам и настроенным приборам
+      kira: вечерний чай в Архиве и поиск исторических аналогов сложных циклонов
+      player: от требовательного наставника к старшему коллеге по цеху
+  semyon:
+    full_name: Семён Петрович Круглов
+    age: 51
+    role: senior_instrument_technician
+    title_ru: Старший техник-метеоролог и мастер по приборам
+    sprite_archetype: npc.technician
+    primary_location: hub
+    years_at_station: 28
+    specialization: Метеоплощадка, самописцы М-22, анемометры МС-13, телетайп и мачтовое хозяйство
+    pocket_items:
+    - латунный ключ для завода барабанов самописцев
+    - часовая отвёртка
+    - угощение для кота Паскаля
+    desk_signature: Верстак с тисками, маслёнкой, запасными перьями для барографа и старым радиоприёмником
+    habits:
+    - первым выходит во двор в 06:30 утра проверять будки и осадкомер
+    - ворчит, если кто-то наступает на контрольный снежный покров или хлопает дверцей будки
+    - поддерживает в телетайпе тёплый резистор, чтобы коту Паскалю было тепло спать
+    speech:
+      tone: предметный, мастеровой, добродушно-ворчливый
+      catchphrases:
+      - Цифра в сводке с неба не падает — у неё всегда есть винтик, пружинка и человек, который туда посмотрел.
+      - Барограф не обманешь, он железный.
+      - Ты дверцей будки не хлопай, не в трамвае.
+    relationships:
+      vera: надёжная техническая опора оперативной смены
+      pavel: подшучивает над цифровыми экранами, но вместе чинит аппаратуру
+      pascal_cat: спас котёнка в ноябрьский шторм три года назад
+  georgy:
+    full_name: Георгий Ильич Корф
+    age: 62
+    role: head_of_aerology
+    title_ru: Заведующий аэрологической лабораторией
+    sprite_archetype: npc.aerologist
+    primary_location: aerology
+    years_at_station: 38
+    specialization: Радиозондирование, КН-04, АТ-850/700/500/300, ОТ-500/1000, ведущий поток и струйные течения
+    pocket_items:
+    - секундомер на шнурке
+    - кожаные перчатки для выпуска оболочек
+    - таблица стандартной атмосферы
+    habits:
+    - после каждого пуска шара на несколько секунд замирает с запрокинутой головой, провожая зонд в облака
+    - ведёт мелом на воротах эллинга счёт высотных рекордов выше 34 километров
+    speech:
+      tone: образный, увлечённый высотой и трёхмерной динамикой атмосферы
+      catchphrases:
+      - Земля — это только дно воздушного океана. Подними голову на пятьсот гектопаскалей!
+      - Без ведущего потока приземный циклон слеп.
+    relationships:
+      vera: тридцатилетняя дружеская дискуссия «высота против земли»
+      pavel: согласует данные верхнего ветра с высотой верхней границы радиоэха
+  kira:
+    full_name: Кира Андреевна Вяземская
+    age: 46
+    role: chief_archivist
+    title_ru: Хранительница Архива и климатолог
+    sprite_archetype: npc.archivist
+    primary_location: archive
+    years_at_station: 19
+    specialization: Исторические синоптические ситуации, вековой ряд 26063, климатология Санкт-Петербурга
+    pocket_items:
+    - связка латунных ключей от шкафов
+    - мягкая беличья кисточка
+    - карандаш М
+    habits:
+    - требует ставить кружки с чаем строго на пробковые подставки вдали от подлинных карт
+    - по пятницам устраивает для стажёров разбор «слепой карты» с закрытой датой
+    speech:
+      tone: мягкий, неторопливый, с отличной памятью на даты и почерки прошлых десятилетий
+      catchphrases:
+      - У погоды короткая злопамятность, но очень длинная биография.
+      - Посмотри на почерк этой смены — даже в шторм ни одной кляксы.
+  pavel:
+    full_name: Павел Морозов
+    age: 34
+    role: radar_engineer
+    title_ru: Старший инженер радиолокации (МРЛ) и спутникового приёма
+    sprite_archetype: npc.radar_specialist
+    primary_location: radar
+    years_at_station: 9
+    specialization: Радиоэхо МРЛ-5, кучево-дождевая облачность, грозы, шквалы, опасные явления
+    habits:
+    - ориентируется на чаек на балконе радара как на живой барометр перед шквалом с залива
+    - пьёт крепкий кофе из большой стальной термокружки у индикатора кругового обзора
+    speech:
+      tone: собранный, лаконичный, современный инженерный без англицизмов
+      catchphrases:
+      - Когда с залива идёт стена радиоэха в сорок пять децибел, у нас ровно двадцать минут.
+  polina:
+    full_name: Полина Синицына
+    age: 24
+    role: junior_forecaster_observer
+    title_ru: Младший синоптик и дежурный наблюдатель
+    sprite_archetype: npc.night_duty
+    primary_location: synoptic_center
+    years_at_station: 2
+    habits:
+    - после ночной вахты в 06:00 утра встречает рассвет на скамейке у сосен и кормит синиц
+    - всегда оставляет для следующей смены аккуратные заметки в рабочей тетради
+  artem:
+    full_name: Артём Волков
+    age: 22
+    role: trainee_rival
+    title_ru: Стажёр параллельного потока и спарринг-партнёр в Разборной
+    sprite_archetype: npc.student_tablet
+    primary_location: tournament_hall
+    years_at_station: 1
+    habits:
+    - молниеносно считает группы КН-01 в уме, но иногда торопится на проверке физической согласованности
+    - всегда готов вызвать игрока на дружеский «Блиц» или «Синоптическую дуэль»
+  pascal_cat:
+    full_name: Гектопаскаль (Паскаль)
+    role: station_cat
+    title_ru: Штатный кот метеостанции 26063
+    sprite_archetype: companion.cat
+    primary_location: archive
+    habits:
+    - спит на тёплом кожухе телетайпа или на нижней полке Архива («Фонд 26063 — Кот»)
+    - перед выходом южного циклона или резким похолоданием перебирается вплотную к батарее в Оперативном зале
