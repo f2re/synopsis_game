@@ -29,14 +29,14 @@ from core.asset_classes import (
 from core.lore_registry import WORLD_LORE_CONTEXT, get_lore_for_asset
 
 STYLE_LOCK_BASE = (
-    "STYLE LOCK: modern high-quality master pixel art (reference feel: Eastward, Sea of Stars, A Short Hike). "
-    "Crisp hard-edged square pixels on a strict logical pixel grid, deliberate clusters of 2+ pixels, "
-    "no anti-aliasing blur, no photographic texture, no 3D-render look. Ordered 2x2 dithering where needed. "
+    "Pixel-art illustration for a modern high-quality game (visual direction: Eastward, Sea of Stars, A Short Hike). "
+    "Crisp hard-edged square pixels on a strict logical pixel grid, deliberate pixel clusters, "
+    "no anti-aliasing blur, no photographic texture, no rendered three-dimensional look. "
     "Light from upper-left. Outlines are a darker shade of the local colour, never pure black."
 )
 
 STYLE_LOCK_UI = (
-    "STYLE LOCK: modern retro-game pixel art UI icon glyph (reference feel: Eastward, Celeste, Owlboy inventory/menu UI). "
+    "Modern retro-game pixel-art UI icon glyph (visual direction: Eastward, Celeste, Owlboy inventory/menu UI). "
     "Clean high-contrast isolated icon glyph centered on uniform solid dark slate matte background (#1E2430), "
     "crisp readable silhouette, bold readable contours, deliberate pixel clusters, no anti-aliasing blur, "
     "no photographic texture, no 3D-render look. Absolutely no background scenery, no buildings, no outdoor landscape."
@@ -94,9 +94,9 @@ UI_ICON_SUBJECTS: dict[str, str] = {
     "BAROMETER": "An aneroid barometer dial instrument with brass bezel and pressure pointer arrow.",
     "VANE": "A meteorological wind vane anemometer weathercock with cardinal direction arrow.",
     "CLOUD": "A stylized weather cumulus cloud icon symbol.",
-    "MODE-MENTOR": "An academic graduation mentor cap and star crest icon badge symbol.",
-    "MODE-SOLO": "A solitary observer compass silhouette badge icon symbol.",
-    "MODE-BLITZ": "A fast lightning bolt blitz speed timer challenge badge icon symbol.",
+    "MODE-MENTOR": "Two figures working together at a desk, a mentor and a student, cream and teal with a small amber accent.",
+    "MODE-SOLO": "One observer holding a pencil, cream and teal with a small amber accent.",
+    "MODE-BLITZ": "A physical stopwatch with a round dial, central hand and top crown, as a clear timed-challenge icon.",
     "ARROW-LEFT": "A crisp pixel navigation arrow pointing left.",
     "ARROW-RIGHT": "A crisp pixel navigation arrow pointing right.",
 }
@@ -106,9 +106,9 @@ def _infer_ui_subject(asset_id: str, prompt_override: str | None = None) -> str:
     if prompt_override:
         return prompt_override
     aid = asset_id.upper()
-    for key, desc in UI_ICON_SUBJECTS.items():
-        if key in aid:
-            return desc
+    name = aid.removeprefix("UI-ICON-").removeprefix("ICON-")
+    if name in UI_ICON_SUBJECTS:
+        return UI_ICON_SUBJECTS[name]
     slug = aid.replace("ICON-", "").replace("UI-", "").replace("-", " ").strip().lower()
     return f"A clean graphic pixel UI icon representing {slug}."
 
@@ -116,7 +116,7 @@ def _infer_ui_subject(asset_id: str, prompt_override: str | None = None) -> str:
 def compile_generation_prompts(
     asset_id: str,
     asset_spec: dict[str, Any],
-    style_trigger: str = "<26063_pixel_style>",
+    style_trigger: str = "",
     correction: str | None = None,
 ) -> tuple[str, str, dict[str, Any]]:
     """Compiles class-specific positive and negative prompts adhering to 26063 visual contracts."""
@@ -145,7 +145,10 @@ def compile_generation_prompts(
     # 1. UI Icons & Frames: NEVER include campus building lore context
     if asset_class in (CLASS_UI, CLASS_UI_ICON, CLASS_UI_FRAME):
         pos_parts.append(STYLE_LOCK_UI)
-        neg_parts.append(NEG_UI_SPECIFIC)
+        ui_negative = NEG_UI_SPECIFIC
+        if asset_id.upper() in ("ICON-MODE-MENTOR", "ICON-MODE-SOLO"):
+            ui_negative = ui_negative.replace("person, human face, ", "")
+        neg_parts.append(ui_negative)
 
         raw_prompt = asset_spec.get("prompt")
         subject = _infer_ui_subject(asset_id, raw_prompt)
@@ -221,11 +224,28 @@ def compile_generation_prompts(
     # 4. Large Scenes / Backgrounds
     elif asset_class == CLASS_LARGE_SCENE:
         pos_parts.append(STYLE_LOCK_BASE)
-        pos_parts.append(WORLD_LORE_CONTEXT)
 
         aid_u = asset_id.upper()
         if "SKY" in aid_u:
-            scene_subject = "Atmospheric Baltic daytime sky layer over the Gulf of Finland, subtle layered stratocumulus clouds, pale cool blue northern sky gradient, gentle maritime lighting."
+            phase = next((name for name in ("WHITENIGHT", "GOLDEN", "NIGHT", "DAWN", "DUSK", "DAY")
+                          if name in aid_u), "DAY")
+            phase_light = {
+                "DAY": "pale Baltic blue sky and cool northern maritime daylight",
+                "DAWN": "soft cool dawn with subtle peach near the horizon",
+                "GOLDEN": "low warm golden-hour light against a cool blue sky",
+                "DUSK": "muted blue-violet twilight with a warm horizon",
+                "NIGHT": "deep northern blue night sky with restrained cloud layers",
+                "WHITENIGHT": "luminous blue-violet northern white-night sky",
+            }[phase]
+            pos_parts.append(
+                f"Blank sky only, with zero writing, zero typography, zero letters or symbols. "
+                f"Reusable opaque sky layer: {phase_light}, with softly layered stratocumulus clouds. "
+                "The entire image is sky edge to edge; no land, sea, buildings, people, signs, text, digits or logos."
+            )
+            if correction:
+                pos_parts.append(f"Correction emphasis: {correction}")
+            metadata["framing"] = "isolated_sky_layer"
+            return " ".join(pos_parts), ", ".join(neg_parts), metadata
         elif "WATER" in aid_u or "SEA" in aid_u:
             scene_subject = "Baltic sea water surface layer, subtle cold waves, ripples, maritime reflections."
         elif "GROUND" in aid_u:
@@ -233,6 +253,7 @@ def compile_generation_prompts(
         else:
             scene_subject = f"Expansive {target_w}x{target_h} panoramic scene of the Gulf of Finland meteorological campus."
 
+        pos_parts.append(WORLD_LORE_CONTEXT)
         pos_parts.append(f"Subject: {scene_subject}")
         if correction:
             pos_parts.append(f"Correction emphasis: {correction}")

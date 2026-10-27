@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 from typing import Any
 from PIL import Image
 
-from core.asset_classes import OCCUPANCY_CONTRACTS, PALETTE_CONTRACTS, classify_asset
+from core.asset_classes import OCCUPANCY_CONTRACTS, PALETTE_CONTRACTS, classify_asset, get_generation_profile
+from core.pixel_refiner import remove_neutral_background
 
 
 def evaluate_asset_candidate(
@@ -26,7 +28,14 @@ def evaluate_asset_candidate(
 
     img = Image.open(image_path).convert("RGBA")
     w, h = img.size
-    pixels = img.load()
+    analysis = img.copy()
+    if is_raw:
+        analysis.thumbnail((512, 512), Image.Resampling.LANCZOS)
+        # Raw icons commonly have a solid matte; it is not the subject.
+        if asset_spec.get("alpha") == "transparent" and analysis.getextrema()[3] == (255, 255):
+            analysis = remove_neutral_background(analysis)
+    aw, ah = analysis.size
+    pixels = analysis.load()
 
     target_size = asset_spec.get("size", [w, h])
     exp_w, exp_h = target_size
@@ -38,6 +47,10 @@ def evaluate_asset_candidate(
     if not is_raw:
         if (w, h) != (exp_w, exp_h):
             tech_reasons.append(f"Size mismatch: actual {(w, h)} != expected {(exp_w, exp_h)}")
+        frame = asset_spec.get("frame")
+        if frame and (len(frame) != 2 or not all(isinstance(v, int) and v > 0 for v in frame)
+                      or w % frame[0] or h % frame[1]):
+            tech_reasons.append("Sprite sheet does not align to its frame grid")
 
         alphas = sorted({pixels[x, y][3] for y in range(h) for x in range(w)})
         if not set(alphas).issubset({0, 255}):
@@ -45,8 +58,12 @@ def evaluate_asset_candidate(
 
         opaque_pixels = [pixels[x, y][:3] for y in range(h) for x in range(w) if pixels[x, y][3] == 255]
         unique_opaque = set(opaque_pixels)
+        if asset_spec.get("alpha") == "transparent" and not opaque_pixels:
+            tech_reasons.append("Transparent asset has no opaque foreground pixels")
 
-        if palette:
+        asset_class = classify_asset(asset_spec.get("id", ""), asset_spec)
+        strict_palette = get_generation_profile(asset_class).get("palette", {}).get("strictQuantization", False)
+        if palette and strict_palette:
             pal_set = set(palette)
             outside = [c for c in unique_opaque if c not in pal_set]
             if outside:
@@ -57,7 +74,7 @@ def evaluate_asset_candidate(
         aspect_expected = exp_w / float(exp_h)
         if abs(aspect_actual - aspect_expected) > 0.25:
             art_reasons.append(f"Raw candidate aspect ratio mismatch: {w}x{h} ({aspect_actual:.2f}) vs target {exp_w}x{exp_h} ({aspect_expected:.2f})")
-        opaque_pixels = [pixels[x, y][:3] for y in range(h) for x in range(w)]
+        opaque_pixels = [pixels[x, y][:3] for y in range(ah) for x in range(aw) if pixels[x, y][3] >= 128]
         unique_opaque = set(opaque_pixels)
         alphas = [255]
 
@@ -74,15 +91,15 @@ def evaluate_asset_candidate(
             diagnostics.append(f"Diagnostic note: color count ({len(unique_opaque)}) below target minimum ({target_range[0]})")
 
     # 2. Structural & Art QA metrics
-    bbox = img.getbbox()  # (left, top, right, bottom)
+    bbox = analysis.getbbox()  # (left, top, right, bottom)
     if not bbox:
         art_reasons.append("Image is completely transparent or empty")
         occ_x = occ_y = 0.0
     else:
         bw = bbox[2] - bbox[0]
         bh = bbox[3] - bbox[1]
-        occ_x = bw / float(w)
-        occ_y = bh / float(h)
+        occ_x = bw / float(aw)
+        occ_y = bh / float(ah)
 
     contract = OCCUPANCY_CONTRACTS.get(asset_class, {})
 
@@ -99,18 +116,18 @@ def evaluate_asset_candidate(
 
         if occ_y < min_y:
             art_reasons.append(f"Subject vertical occupancy too small: {occ_y:.2f} < {min_y:.2f}")
+        elif occ_y > contract.get("max_y", 1.0):
+            art_reasons.append(f"Subject vertical occupancy too crowded: {occ_y:.2f} > {contract['max_y']:.2f}")
 
     # Orphan noise cluster count
     orphan_count = 0
-    for y in range(1, h - 1):
-        for x in range(1, w - 1):
-            cur = pixels[x, y]
-            if cur[3] == 255:
-                neighbors = [
-                    pixels[x + dx, y + dy]
+    if not is_raw:
+        for y in range(1, ah - 1):
+            for x in range(1, aw - 1):
+                if pixels[x, y][3] == 255 and all(
+                    pixels[x + dx, y + dy][3] == 0
                     for dx, dy in ((-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1))
-                ]
-                if all(n != cur for n in neighbors):
+                ):
                     orphan_count += 1
 
     orphan_ratio = orphan_count / max(1, len(opaque_pixels))
@@ -125,25 +142,28 @@ def evaluate_asset_candidate(
             art_reasons.clear()
 
     tech_pass = len(tech_reasons) == 0
-    art_pass = len(art_reasons) == 0
-
-    if tech_pass and art_pass:
-        prod_status = "approved" if asset_spec.get("auto_approve_allowed") else "technical_review"
-    elif not tech_pass:
-        prod_status = "rejected"
+    # Shape and palette heuristics cannot grant an art-director verdict.
+    if is_raw and not art_verdict_override:
+        art_status = "pending"
+    elif art_reasons:
+        art_status = "fail"
+    elif art_verdict_override and art_verdict_override.get("status") == "pass":
+        art_status = "pass"
     else:
-        prod_status = "candidate"
+        art_status = "pending"
+    prod_status = "rejected" if not tech_pass else "candidate"
 
     report = {
         "asset_id": asset_spec.get("id"),
         "candidate_path": str(image_path),
+        "sha256": hashlib.sha256(image_path.read_bytes()).hexdigest(),
         "production_status": prod_status,
         "technical_status": {
             "value": "pass" if tech_pass else "fail",
             "reasons": tech_reasons,
         },
         "art_status": {
-            "value": "pass" if art_pass else "fail",
+            "value": art_status,
             "reasons": art_reasons,
         },
         "diagnostics": diagnostics,

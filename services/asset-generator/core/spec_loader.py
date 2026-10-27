@@ -146,6 +146,6 @@ def get_palette_for_asset(asset: dict[str, Any], palette_dir: Path) -> list[tupl
     return palette
 
 
-def build_generation_prompts(asset: dict[str, Any], style_lora_trigger: str = "<26063_pixel_style>") -> tuple[str, str]:
+def build_generation_prompts(asset: dict[str, Any], style_lora_trigger: str = "") -> tuple[str, str]:
     pos, neg, _ = compile_generation_prompts(asset.get("id", ""), asset, style_trigger=style_lora_trigger)
     return pos, neg

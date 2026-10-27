@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -56,7 +57,7 @@ def generate_z_image_candidate(
     width: int = 256,
     height: int = 256,
     seed: int | None = None,
-    steps: int = 8,
+    steps: int = 9,
     negative_prompt: str = ""
 ) -> bool:
     """Generates an image candidate using Z-Image-Turbo on GPU 0 with aspect ratio preservation."""
@@ -76,16 +77,20 @@ def generate_z_image_candidate(
     if _pipeline is None:
         _pipeline = ZImagePipeline.from_pretrained(
             str(MODEL_DIR),
-            torch_dtype=torch.bfloat16
-        ).to("cuda:0")
+            torch_dtype=torch.bfloat16,
+        )
+        if os.environ.get("Z_IMAGE_CPU_OFFLOAD", "1") == "1":
+            _pipeline.enable_model_cpu_offload(gpu_id=0)
+        else:
+            _pipeline.to("cuda:0")
 
     generator = torch.Generator(device="cuda:0").manual_seed(seed_val)
 
     # Compute high-res generator scale keeping exact aspect ratio, aligned to 16px multiples.
     # For small items (e.g. 16x16, 32x32), generate raw at at least 256x256 so the diffusion
     # model has sufficient latent capacity to render intricate semantic details.
-    raw_w = max(256, min(width * 4, 1024))
-    raw_h = max(256, min(height * 4, 1024))
+    raw_w = 1024
+    raw_h = 1024
 
     # Preserve exact target aspect ratio
     target_aspect = width / float(height)
@@ -104,12 +109,11 @@ def generate_z_image_candidate(
             "generator": generator,
             "height": gen_h,
             "width": gen_w,
+            # Turbo is distilled without classifier-free guidance. Negative
+            # prompts are ignored by Diffusers at this setting; use positive
+            # composition constraints and independently review the output.
+            "guidance_scale": 0.0,
         }
-        if negative_prompt:
-            kwargs["negative_prompt"] = negative_prompt
-            kwargs["guidance_scale"] = 3.5
-        else:
-            kwargs["guidance_scale"] = 0.0
 
         image = _pipeline(**kwargs).images[0]
 
@@ -134,7 +138,7 @@ def main() -> int:
     parser.add_argument("--width", type=int, default=256, help="Logical width")
     parser.add_argument("--height", type=int, default=256, help="Logical height")
     parser.add_argument("--seed", type=int, default=26063, help="Seed")
-    parser.add_argument("--steps", type=int, default=8, help="Inference steps")
+    parser.add_argument("--steps", type=int, default=9, help="Inference scheduler steps")
     args = parser.parse_args()
 
     success = generate_z_image_candidate(

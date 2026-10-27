@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import Any
 
 WORLD_LORE_CONTEXT = (
-    "Setting: 26063: Позывной «Синоптик». A fictional cozy scientific meteorological campus on the shore "
-    "of the Gulf of Finland near St. Petersburg, North-West Russia (59.9° N). Late 20th century academic "
+    "Setting: a fictional cozy scientific meteorological campus on the shore "
+    "of the Gulf of Finland near St. Petersburg in North-West Russia. Historic academic "
     "atmosphere: flat horizon, Baltic water, birch and pine, granite embankments, weathered ochre and terracotta "
     "brick facades, warm amber windows, authentic Russian synoptic meteorological instruments. "
     "Strictly no alpine mountains, no palm trees, no futuristic sci-fi or fantasy elements."

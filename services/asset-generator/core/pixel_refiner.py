@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, deque
 from pathlib import Path
 from typing import Any
 from PIL import Image
 
-from core.asset_classes import PALETTE_CONTRACTS, classify_asset
+from core.asset_classes import PALETTE_CONTRACTS, classify_asset, get_generation_profile
 
 CHROMA = (255, 0, 255)
 CHROMA_TOLERANCE = 65
@@ -36,7 +36,7 @@ def remove_neutral_background(image: Image.Image, tolerance: int = 35) -> Image.
 
     # BFS flood-fill from border pixels
     visited = set()
-    queue = []
+    queue = deque()
 
     for x in range(w):
         for y in (0, h - 1):
@@ -52,7 +52,7 @@ def remove_neutral_background(image: Image.Image, tolerance: int = 35) -> Image.
 
     bg_mask = set()
     while queue:
-        cx, cy = queue.pop(0)
+        cx, cy = queue.popleft()
         r, g, b, a = pixels[cx, cy]
         dist = sum(abs(c - bc) for c, bc in zip((r, g, b), bg_color))
         # If matches background or is already transparent / chroma
@@ -183,28 +183,35 @@ def refine_pixel_candidate(
     if is_transparent:
         img = remove_neutral_background(img)
 
-    # 2. Edge-aware resampling
-    refined = edge_aware_downsample(img, target_w, target_h)
+    asset_class = classify_asset(target_spec.get("id", ""), target_spec)
+    profile = get_generation_profile(asset_class)
+    pixel_policy = profile.get("pixelLanguage", {})
+    palette_policy = profile.get("palette", {})
 
-    # 3. Clean stray single-pixel noise
-    refined = cleanup_isolated_noise_pixels(refined)
+    # Preserve fine details rather than replacing each logical pixel by the
+    # most common source colour. Classes requiring hard pixels use nearest.
+    sampling = (Image.Resampling.NEAREST if pixel_policy.get("antiAliasInFinal") == "forbidden"
+                else Image.Resampling.LANCZOS)
+    refined = img.resize((target_w, target_h), sampling)
 
-    # 4. Map colors to palette with feature protection
+    # Runtime sprites need binary alpha. Do not remove isolated pixels: an
+    # eye, clock hand or thin line can intentionally occupy a single pixel.
     r_pixels = refined.load()
     cache: dict[tuple[int, int, int], tuple[int, int, int]] = {}
     for y in range(target_h):
         for x in range(target_w):
             r, g, b, a = r_pixels[x, y]
-            if a < 128:
+            if a < 64:
                 r_pixels[x, y] = (0, 0, 0, 0)
                 continue
             key = (r, g, b)
-            if key not in cache:
-                cache[key] = nearest_palette_color(key, palette)
-            r_pixels[x, y] = (*cache[key], 255)
+            if palette_policy.get("strictQuantization") and palette:
+                if key not in cache:
+                    cache[key] = nearest_palette_color(key, palette)
+                key = cache[key]
+            r_pixels[x, y] = (*key, 255)
 
     # 5. Respect palette contract: target range and hard_max safeguard against noise
-    asset_class = classify_asset(target_spec.get("id", ""), target_spec)
     contract = PALETTE_CONTRACTS.get(asset_class, {})
     hard_max = contract.get("hard_max", target_spec.get("max_colors", 48))
     max_colors = max(target_spec.get("max_colors", 32), hard_max)
@@ -212,7 +219,7 @@ def refine_pixel_candidate(
     opaque_list = [r_pixels[x, y][:3] for y in range(target_h) for x in range(target_w) if r_pixels[x, y][3] == 255]
     color_counts = Counter(opaque_list)
 
-    if len(color_counts) > max_colors:
+    if palette_policy.get("strictQuantization") and len(color_counts) > max_colors:
         # Protect darkest ink outline and brightest accent
         sorted_by_luma = sorted(color_counts.keys(), key=lambda c: 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2])
         protected = {sorted_by_luma[0], sorted_by_luma[-1]}
