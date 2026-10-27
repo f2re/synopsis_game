@@ -62,6 +62,20 @@ export class WorldBridge {
     this.emit('server:demo_acceleration', accelerated);
   }
 
+  /** Принудительный сезон кампуса; `null` — вернуться к календарю станции. */
+  setSeason(season: 'spring' | 'summer' | 'autumn' | 'winter' | null): void {
+    this.emit('server:season', season);
+  }
+
+  /** Пройденные этапы маршрута (id из hubStages). Состояния зданий выводятся из них. */
+  setStageProgress(completedStageIds: string[]): void {
+    this.emit('server:stage_progress', completedStageIds);
+  }
+
+  notifySeasonChanged(season: string): void {
+    this.emit('world:season_change', season);
+  }
+
   // События из Phaser в React
   notifyBuildingClicked(buildingId: string): void {
     this.emit('world:building_click', buildingId);

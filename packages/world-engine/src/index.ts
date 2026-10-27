@@ -35,6 +35,27 @@ export {
   type BuildingConfig,
 } from './scenes/hub/HubBuildingLayer';
 export {
+  SEASON_PROFILES,
+  SEASONS_ORDER,
+  calculateSeason,
+  nextSeason,
+  type Season,
+} from './scenes/hub/HubSeason';
+export {
+  HUB_STAGES,
+  computeStageStatuses,
+  buildingStatesFromStages,
+  type HubStageDefinition,
+  type StageStatus,
+} from './scenes/hub/hubStages';
+export { HubSeasonLayer } from './scenes/hub/HubSeasonLayer';
+export { HubStageLayer } from './scenes/hub/HubStageLayer';
+export { HubEnvironmentLayer } from './scenes/hub/HubEnvironmentLayer';
+export { HubGroundDecorLayer } from './scenes/hub/HubGroundDecorLayer';
+export { HubFaunaLayer } from './scenes/hub/HubFaunaLayer';
+export { HubNpcLayer } from './scenes/hub/HubNpcLayer';
+export { HubWeatherOverlay, type WeatherMode } from './scenes/hub/HubWeatherOverlay';
+export {
   HubScheduleManager,
   HUB_AMBIENT_CYCLES,
   FINDINGS_REGISTRY,

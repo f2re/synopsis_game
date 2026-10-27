@@ -1,5 +1,5 @@
-import { WORLD_PALETTE } from '../../theme/tokens';
-import type { DayPhase } from '../../bridge/WorldBridge';
+import { WORLD_PALETTE } from '../../theme/tokens.ts';
+import type { DayPhase } from '../../bridge/WorldBridge.ts';
 
 export type { DayPhase };
 
@@ -82,10 +82,13 @@ export class HubTimeOfDay {
   private location: WorldLocation = STATION_26063_LOCATION;
   private isAcceleratedDemo = false;
   private demoTimer = 0;
+  private realTimeCheckTimer = 0;
   private readonly demoPhaseDurationMs = 5000; // 5s на фазу в демо-режиме (30s полный цикл)
 
   constructor(location: WorldLocation = STATION_26063_LOCATION) {
     this.location = location;
+    // По умолчанию рассчитываем фазу суток из реального астрономического времени локации
+    this.currentPhase = this.calculateSolarPhase(new Date());
   }
 
   getCurrentPhase(): DayPhase {
@@ -103,26 +106,62 @@ export class HubTimeOfDay {
   setAcceleratedDemo(enabled: boolean): void {
     this.isAcceleratedDemo = enabled;
     this.demoTimer = 0;
+    if (!enabled) {
+      // При выключении демо немедленно возвращаемся к реальному времени
+      this.currentPhase = this.calculateSolarPhase(new Date());
+    }
+  }
+
+  isDemoMode(): boolean {
+    return this.isAcceleratedDemo;
   }
 
   update(deltaMs: number, onPhaseChange?: (newPhase: DayPhase) => void): void {
-    if (!this.isAcceleratedDemo) return;
+    if (this.isAcceleratedDemo) {
+      this.demoTimer += deltaMs;
+      if (this.demoTimer >= this.demoPhaseDurationMs) {
+        this.demoTimer = 0;
+        const currentIndex = PHASES_ORDER.indexOf(this.currentPhase);
+        const nextIndex = (currentIndex + 1) % PHASES_ORDER.length;
+        this.currentPhase = PHASES_ORDER[nextIndex];
+        onPhaseChange?.(this.currentPhase);
+      }
+      return;
+    }
 
-    this.demoTimer += deltaMs;
-    if (this.demoTimer >= this.demoPhaseDurationMs) {
-      this.demoTimer = 0;
-      const currentIndex = PHASES_ORDER.indexOf(this.currentPhase);
-      const nextIndex = (currentIndex + 1) % PHASES_ORDER.length;
-      this.currentPhase = PHASES_ORDER[nextIndex];
-      onPhaseChange?.(this.currentPhase);
+    // В обычном режиме проверяем переход астрономической фазы каждые 30 секунд
+    this.realTimeCheckTimer += deltaMs;
+    if (this.realTimeCheckTimer >= 30000) {
+      this.realTimeCheckTimer = 0;
+      const expectedPhase = this.calculateSolarPhase(new Date());
+      if (expectedPhase !== this.currentPhase) {
+        this.currentPhase = expectedPhase;
+        onPhaseChange?.(this.currentPhase);
+      }
     }
   }
 
   calculateSolarPhase(date: Date = new Date()): DayPhase {
-    // В июне/июле в Санкт-Петербурге действуют Белые ночи
-    const month = date.getMonth(); // 0-based: 5 = June, 6 = July
-    const hours = date.getHours();
+    // Вычисляем местное астрономическое время с учётом часового пояса локации станции
+    let hours = date.getHours();
+    let month = date.getMonth();
 
+    try {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: this.location.timezone,
+        hour: 'numeric',
+        month: 'numeric',
+        hourCycle: 'h23',
+      }).formatToParts(date);
+      const hourPart = parts.find((p) => p.type === 'hour')?.value;
+      const monthPart = parts.find((p) => p.type === 'month')?.value;
+      if (hourPart !== undefined) hours = parseInt(hourPart, 10);
+      if (monthPart !== undefined) month = parseInt(monthPart, 10) - 1;
+    } catch {
+      // Резервный расчёт по локальному времени устройства
+    }
+
+    // В июне/июле (месяцы 5 и 6) в Санкт-Петербурге действуют Белые ночи
     if ((month === 5 || month === 6) && (hours >= 23 || hours <= 4)) {
       return 'white_nights';
     }

@@ -1,4 +1,4 @@
-import { worldBridge } from '../../bridge/worldBridge';
+import { worldBridge } from '../../bridge/WorldBridge';
 import { worldAudio } from '../../audio/WorldAudioManager';
 
 export interface UnlockTarget {
