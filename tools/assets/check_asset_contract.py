@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Проверка технического контракта графических asset manifests.
+"""Проверка технического контракта простых графических manifests.
 
 Checker намеренно НЕ оценивает художественное качество, число цветов,
-пиксельные кластеры или стиль. Он также не пытается валидировать
-сценовые production-manifests и коллекции предметов, у которых другая схема.
+пиксельные кластеры или стиль. В `assets/manifests/` одновременно живут
+несколько схем: простые manifests отдельных ресурсов, production manifests
+сцен и коллекции UI/items. Этот checker относится только к первой группе.
 """
 from __future__ import annotations
 
@@ -30,13 +31,17 @@ def load_json(path: Path, errors: list[str]) -> object | None:
         return None
 
 
-def is_sprite_asset_manifest(data: object) -> bool:
-    """Return True only for manifests governed by asset-manifest.schema.json.
+def is_simple_asset_manifest(data: object) -> bool:
+    """Select only single-resource manifests governed by the legacy simple shape.
 
-    The repository also contains scene production manifests, UI packs and item
-    collections under the same directory. They deliberately use other schemas.
+    Files with `schema`, `sourceSheet`, `items`, `assets` are collections or
+    production manifests and have their own contracts/checkers.
     """
-    return isinstance(data, dict) and data.get("kind") in ALLOWED_KINDS
+    if not isinstance(data, dict):
+        return False
+    if any(key in data for key in ("schema", "sourceSheet", "items", "assets")):
+        return False
+    return data.get("kind") in ALLOWED_KINDS
 
 
 def check_manifest(path: Path, data: dict[str, object], errors: list[str], warnings: list[str]) -> None:
@@ -105,7 +110,7 @@ def main() -> int:
         data = load_json(path, errors)
         if data is None:
             continue
-        if not is_sprite_asset_manifest(data):
+        if not is_simple_asset_manifest(data):
             skipped += 1
             continue
         checked += 1
@@ -120,7 +125,7 @@ def main() -> int:
             print(f" - {error}")
         return 1
 
-    print(f"Технический контракт assets: PASS ({checked} sprite-style manifests, {skipped} иных manifests пропущено).")
+    print(f"Технический контракт assets: PASS ({checked} simple manifests, {skipped} иных manifests пропущено).")
     print("Художественное качество этим checker не оценивается.")
     return 0
 
