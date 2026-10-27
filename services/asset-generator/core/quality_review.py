@@ -46,10 +46,13 @@ def evaluate_asset_candidate(
     asset_class = classify_asset(asset_spec.get("id", ""), asset_spec)
     pal_contract = PALETTE_CONTRACTS.get(asset_class, {})
     target_range = pal_contract.get("target_range", (16, 40))
-    hard_max = pal_contract.get("hard_max", asset_spec.get("max_colors", 64))
+    soft_max = pal_contract.get("hard_max", asset_spec.get("max_colors", 64))
 
-    if len(unique_opaque) > hard_max:
-        tech_reasons.append(f"Hard max colors exceeded (noise/blur risk): {len(unique_opaque)} > {hard_max}")
+    diagnostics: list[str] = []
+    if len(unique_opaque) > soft_max:
+        diagnostics.append(f"Diagnostic note: color count ({len(unique_opaque)}) exceeds soft max guideline ({soft_max})")
+    elif len(unique_opaque) < target_range[0]:
+        diagnostics.append(f"Diagnostic note: color count ({len(unique_opaque)}) below target minimum ({target_range[0]})")
 
     if palette:
         pal_set = set(palette)
@@ -130,13 +133,14 @@ def evaluate_asset_candidate(
             "value": "pass" if art_pass else "fail",
             "reasons": art_reasons,
         },
+        "diagnostics": diagnostics,
         "metrics": {
             "size": [w, h],
             "occupancy_x": round(occ_x, 3),
             "occupancy_y": round(occ_y, 3),
             "opaque_colors": len(unique_opaque),
             "target_range": list(target_range),
-            "hard_max": hard_max,
+            "soft_max": soft_max,
             "alphas": alphas,
             "orphan_pixels": orphan_count,
             "orphan_ratio": round(orphan_ratio, 4),

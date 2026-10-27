@@ -11,7 +11,15 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from mcp.server import MCPServer
 
-from core.asset_classes import OCCUPANCY_CONTRACTS, classify_asset
+from core.asset_classes import (
+    ALL_CANONICAL_CLASSES,
+    GENERATION_POLICY,
+    GENERATION_PROFILES,
+    OCCUPANCY_CONTRACTS,
+    classify_asset,
+    get_generation_profile,
+    get_profile_for_asset,
+)
 from core.character_synthesizer import generate_character_sprite_frames
 from core.comfy_client import ComfyClient
 from core.day_night_matcher import compare_silhouettes, enforce_geometry_lock
@@ -66,15 +74,28 @@ def get_active_palette(asset: dict[str, Any]) -> list[tuple[int, int, int]]:
 # --------------------------------------------------------------------------
 
 @mcp.tool()
+def list_art_profiles() -> dict[str, Any]:
+    """Lists all 14 specialized generation profiles, their workflows, color limits, and art priorities."""
+    return {
+        "version": 3,
+        "policy": GENERATION_POLICY,
+        "classes": ALL_CANONICAL_CLASSES,
+        "profiles": GENERATION_PROFILES,
+    }
+
+
+@mcp.tool()
 def asset_spec(asset_id: str) -> dict[str, Any]:
     """Returns canonical metadata, dimensions, palette constraints, occupancy contracts, and prompts for an asset."""
     spec = load_spec(SPEC_PATH)
     asset = get_asset_by_id(spec, asset_id)
     pos_prompt, neg_prompt, meta = compile_generation_prompts(asset_id, asset)
     asset_class = classify_asset(asset_id, asset)
+    profile = get_profile_for_asset(asset_id, asset)
     return {
         "asset_id": asset_id,
         "asset_class": asset_class,
+        "generation_profile": profile,
         "size": asset.get("size"),
         "alpha": asset.get("alpha"),
         "occupancy_contract": OCCUPANCY_CONTRACTS.get(asset_class, {}),
@@ -593,6 +614,12 @@ async def health(request: Request):
         "version": "2.0.0",
         "z_image_available": is_z_image_available(),
     })
+
+
+@mcp.custom_route("/api/assets/profiles", methods=["GET"])
+async def api_get_profiles(request: Request):
+    from starlette.responses import JSONResponse
+    return JSONResponse(list_art_profiles())
 
 
 @mcp.custom_route("/api/assets/spec/{asset_id}", methods=["GET"])

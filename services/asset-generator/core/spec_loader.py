@@ -128,6 +128,7 @@ def get_palette_for_asset(asset: dict[str, Any], palette_dir: Path) -> list[tupl
         "terrain": "terrain_26063_v1.gpl",
         "environment": "environment_26063_v1.gpl",
         "ui": "ui_26063_v1.gpl",
+        "effects": "environment_26063_v1.gpl",
         "master": "master_26063_v3.gpl",
     }
     fname = file_map.get(role, "master_26063_v3.gpl")
