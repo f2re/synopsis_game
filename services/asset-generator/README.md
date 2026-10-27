@@ -48,8 +48,15 @@
 Сервер: `astra-26884` (Astra Linux SE 1.8), 2× RTX 4090 24 ГБ.
 
 - **ComfyUI**: `127.0.0.1:8188` (GPU 0, изоляция через `comfy-venv`)
-- **synopsis-assets-mcp**: `0.0.0.0:9200` (Python 3.11, `mcp-venv`)
+- **synopsis-assets-mcp**: `0.0.0.0:9200` (Python 3.11, `mcp-venv`), user-юнит systemd, привязан к **GPU 1**
 - **Каталог данных**: `/home/user/synopsis-ai/`
+
+GPU 0 часто занят чужими обучениями (генерация падает с `CUDA out of memory`), поэтому
+сервис запущен с `CUDA_VISIBLE_DEVICES=1` через drop-in
+`~/.config/systemd/user/synopsis-assets-mcp.service.d/gpu.conf` (в репозитории его нет).
+Код видит эту карту как `cuda:0`. Перед запуском полезно проверить `nvidia-smi`: GPU 1 тоже
+делят с другими задачами. Смена: правка `gpu.conf`, затем `systemctl --user daemon-reload`
+и `systemctl --user restart synopsis-assets-mcp.service` (перезапуск занимает около минуты).
 
 ### Управление службами
 ```bash

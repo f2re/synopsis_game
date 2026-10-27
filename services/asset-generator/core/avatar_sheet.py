@@ -42,6 +42,11 @@ BACKDROP_STEP = 10
 # Pixels this close to the backdrop colour are backdrop even when enclosed (gap between legs).
 BACKDROP_HOLE_TOLERANCE = 8
 MASK_DOWNSCALE = 4
+# Magenta chroma backdrop: a gradient and a darker floor shadow still read as magenta because
+# green is far below both red and blue, which no skin, cloth or outline colour of the sheet is.
+CHROMA_MIN_CHANNEL = 90
+CHROMA_GREEN_RATIO = 0.62
+CHROMA_BORDER_SHARE = 0.6
 MIN_SPECK_PIXELS = 4
 
 
@@ -79,9 +84,29 @@ def erase_regions(img: Image.Image, boxes: Sequence[tuple[float, float, float, f
     return out
 
 
+def _is_chroma(rgb: tuple[int, int, int]) -> bool:
+    r, g, b = rgb
+    return min(r, b) >= CHROMA_MIN_CHANNEL and g <= CHROMA_GREEN_RATIO * min(r, b)
+
+
+def _chroma_mask(small: Image.Image) -> Image.Image | None:
+    """Mask of chroma pixels, or None when the borders are not a chroma backdrop."""
+    w, h = small.size
+    px = small.load()
+    border = [px[x, y] for x in range(w) for y in (0, h - 1)] + [px[x, y] for y in range(h) for x in (0, w - 1)]
+    if sum(_is_chroma(c) for c in border) < CHROMA_BORDER_SHARE * len(border):
+        return None
+    mask = Image.new("L", (w, h), 0)
+    mask.putdata([255 if _is_chroma(c) else 0 for c in small.getdata()])
+    return mask
+
+
 def _backdrop_mask(rgb: Image.Image) -> Image.Image:
-    """255 where the flat backdrop is, flood-filled from the borders on a reduced copy."""
+    """255 where the backdrop is: chroma key when there is one, else a border flood fill."""
     small = rgb.resize((max(rgb.width // MASK_DOWNSCALE, 1), max(rgb.height // MASK_DOWNSCALE, 1)), Image.NEAREST)
+    chroma = _chroma_mask(small)
+    if chroma is not None:
+        return chroma.resize(rgb.size, Image.NEAREST)
     w, h = small.size
     px = small.load()
     corners = [px[0, 0], px[w - 1, 0], px[0, h - 1], px[w - 1, h - 1]]
@@ -190,19 +215,44 @@ def _idle(frame: Image.Image, count: int) -> list[Image.Image]:
     return [_shift_band(frame, top, body_end, 0, dy) for dy in _cycle([0, 1, 1, 0], count)]
 
 
-def _compress_legs(frame: Image.Image, hip: int, stride: float) -> Image.Image:
-    """Squeezes (or mirrors, for negative stride) the legs horizontally around their centre."""
-    legs = frame.crop((0, hip, frame.width, frame.height))
-    box = legs.getchannel("A").getbbox()
+def _mirror_columns(frame: Image.Image, y0: int, cx: float) -> Image.Image:
+    """Mirrors the rows from ``y0`` down around the vertical axis ``cx``."""
+    out = frame.copy()
+    out.paste((0, 0, 0, 0), (0, y0, frame.width, frame.height))
+    for x in range(frame.width):
+        sx = round(2 * cx - x)
+        if 0 <= sx < frame.width:
+            out.paste(frame.crop((sx, y0, sx + 1, frame.height)), (x, y0))
+    return out
+
+
+def _row_runs(frame: Image.Image, y: int) -> list[tuple[int, int]]:
+    """Opaque horizontal runs of one row as (x0, x1_exclusive), merging 1px gaps."""
+    xs = [x for x in range(frame.width) if frame.getpixel((x, y))[3] == 255]
+    runs: list[list[int]] = []
+    for x in xs:
+        if runs and x - runs[-1][1] <= 1:
+            runs[-1][1] = x + 1
+        else:
+            runs.append([x, x + 1])
+    return [(a, b) for a, b in runs]
+
+
+def _close_legs(frame: Image.Image, hip: int, stride: float) -> Image.Image:
+    """Moves each leg run toward the hip axis (negative stride mirrors first), keeping widths."""
+    box = frame.crop((0, hip, frame.width, frame.height)).getchannel("A").getbbox()
     if box is None:
         return frame
     cx = (box[0] + box[2] - 1) / 2
+    source = _mirror_columns(frame, hip, cx) if stride < 0 else frame
+    amount = abs(stride)
     out = frame.copy()
     out.paste((0, 0, 0, 0), (0, hip, frame.width, frame.height))
-    for x in range(frame.width):
-        sx = round(cx + (x - cx) / stride)
-        if 0 <= sx < frame.width:
-            out.paste(legs.crop((sx, 0, sx + 1, legs.height)), (x, hip))
+    for y in range(hip, frame.height):
+        for x0, x1 in _row_runs(source, y):
+            dx = round(((x0 + x1 - 1) / 2 - cx) * (amount - 1))
+            run = source.crop((x0, y, x1, y + 1))
+            out.paste(run, (x0 + dx, y), run)
     return out
 
 
@@ -211,7 +261,7 @@ def _walk(frame: Image.Image, count: int) -> list[Image.Image]:
     hip = top + int(0.58 * (bottom - top))
     frames = []
     for stride in _cycle([1.0, 0.55, 0.22, -1.0, -0.55, -0.22], count):
-        moved = _compress_legs(frame, hip, stride)
+        moved = _close_legs(frame, hip, stride)
         passing = abs(stride) < 0.3
         frames.append(_shift_band(moved, 0, frame.height, 0, -1) if passing else moved)
     return frames

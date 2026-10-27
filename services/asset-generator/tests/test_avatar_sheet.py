@@ -4,7 +4,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -97,6 +97,25 @@ class PoseFrameTests(unittest.TestCase):
         self.assertTrue(any(solid.getpixel(p)[3] == 255 for p in gap_pixels))
         self.assertTrue(all(frame.getpixel(p)[3] == 0 for p in gap_pixels))
 
+    def test_chroma_gradient_backdrop_and_floor_shadow_are_removed(self):
+        raw = Image.new("RGB", (672, 1024))
+        d = ImageDraw.Draw(raw)
+        for x in range(672):  # purple-to-pink gradient like the generator's chroma backdrop
+            t = x / 671
+            d.line((x, 0, x, 1023), fill=(round(185 + 40 * t), round(7 + 33 * t), round(229 - 79 * t)))
+        d.ellipse((150, 940, 520, 1000), fill=(118, 0, 150))  # darker magenta floor shadow
+        figure = synthetic_pose()
+        backdrop = Image.new("RGB", figure.size, (34, 38, 50))
+        mask = ImageChops.difference(figure, backdrop).convert("L").point(lambda v: 255 if v > 6 else 0)
+        raw.paste(figure, (0, 0), mask)
+        frame = pose_to_frame(raw, 44)
+        reference = pose_to_frame(synthetic_pose(), 44)
+        self.assertEqual(frame.getchannel("A").getbbox(), reference.getchannel("A").getbbox())
+        mass = sum(1 for px in frame.getdata() if px[3] == 255)
+        ref_mass = sum(1 for px in reference.getdata() if px[3] == 255)
+        self.assertAlmostEqual(mass / ref_mass, 1.0, delta=0.05)
+        self.assertTrue(opaque_colors(frame) <= set(PEOPLE_PALETTE))
+
     def test_pose_to_frame_removes_chair_region(self):
         spec_erase = ((0.0, 0.65, 0.3, 0.9),)
         with_chair = pose_to_frame(synthetic_pose(with_chair=True), 44)
@@ -133,6 +152,30 @@ class AnimationTests(unittest.TestCase):
             for frame in animate(kind, self.base, count):
                 mass = sum(1 for px in frame.getdata() if px[3] == 255)
                 self.assertAlmostEqual(mass / base_mass, 1.0, delta=0.35, msg=kind)
+
+    def test_walk_keeps_both_legs_at_full_width(self):
+        # V-shaped legs, like a mid-stride side view: passing frames must close the V by
+        # moving the legs, not by squeezing them thin.
+        frame = Image.new("RGBA", FRAME_SIZE, (0, 0, 0, 0))
+        d = ImageDraw.Draw(frame)
+        d.rectangle((10, 4, 20, 26), fill=(190, 194, 202, 255))  # torso
+        d.polygon([(11, 27), (15, 27), (8, 46), (4, 46)], fill=(58, 62, 78, 255))  # back leg
+        d.polygon([(16, 27), (20, 27), (27, 46), (23, 46)], fill=(38, 40, 52, 255))  # front leg
+        base_legs = sum(1 for y in range(28, 48) for x in range(32) if frame.getpixel((x, y))[3] == 255)
+        for index, shifted in enumerate(animate("walk", frame, 6)):
+            legs = sum(1 for y in range(28, 48) for x in range(32) if shifted.getpixel((x, y))[3] == 255)
+            # Passing frames (2, 5) overlap the legs on purpose, so they may lose some mass.
+            floor = 0.65 if index in (2, 5) else 0.85
+            self.assertGreaterEqual(legs / base_legs, floor, f"frame {index} squeezed the legs")
+        passing = animate("walk", frame, 6)[2]
+        spread = [
+            max(x for x in range(32) if passing.getpixel((x, 45))[3] == 255)
+            - min(x for x in range(32) if passing.getpixel((x, 45))[3] == 255)
+        ]
+        original = max(x for x in range(32) if frame.getpixel((x, 45))[3] == 255) - min(
+            x for x in range(32) if frame.getpixel((x, 45))[3] == 255
+        )
+        self.assertLess(spread[0], original * 0.6)
 
     def test_unknown_kind_is_rejected(self):
         with self.assertRaises(ValueError):
