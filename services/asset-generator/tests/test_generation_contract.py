@@ -170,6 +170,28 @@ class PipelineContractTests(unittest.TestCase):
             self.assertIn(word, neg)
         self.assertEqual([r.frames for r in layout_for("AVATAR-HERO-M2")], [4, 6, 6, 4, 6, 4])
 
+    def test_hires_pixel_avatar_prompt_keeps_pixel_art_with_fine_detail_and_rich_colour(self):
+        spec = {"size": [576, 864], "frame": [96, 144], "alpha": "transparent", "people": True,
+                "render": "hires_pixel"}
+        pose = "standing idle, front view, relaxed arms"
+        pos, neg, meta = compile_generation_prompts("AVATAR-HERO-M2", spec, correction=pose)
+        self.assertEqual(meta["asset_class"], "world_character")
+        self.assertEqual(meta["framing"], "hires_pixel_sheet_frame")
+        self.assertEqual(meta["frame_size"], [96, 144])
+        self.assertIn(pose, pos)
+        self.assertIn("pixel-art", pos)
+        self.assertIn("high-resolution", pos)
+        self.assertIn("96x144", pos)
+        self.assertIn("#FF00FF", pos)
+        for word in ("full colour", "shading"):
+            self.assertIn(word, pos)
+        for banned in ("campus", "strict logical pixel grid", "square pixels"):
+            self.assertNotIn(banned, pos)
+        for word in ("blocky", "low resolution", "chunky pixels", "shadow", "chair", "3d render"):
+            self.assertIn(word, neg)
+        # Smooth ramps are wanted here, so the base negatives against gradients must not be inherited.
+        self.assertNotIn("smooth airbrushed gradient", neg)
+
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
             storage = WorkStorage("ICON-JOURNAL", Path(tmp))

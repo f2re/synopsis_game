@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 from core.asset_classes import (
     CLASS_ARCHITECTURE,
@@ -49,6 +50,54 @@ NEG_ILLUSTRATED = (
     "oversized head, toy-like proportions, multiple characters, building, landscape, scenery, background objects, "
     "shadow, ground shadow, floor, gradient background, vignette, chair, furniture"
 )
+
+STYLE_LOCK_HIRES_PIXEL = (
+    "Detailed high-resolution pixel-art character sprite for a modern game (visual direction: Eastward, "
+    "Sea of Stars, Octopath Traveler), fine small pixels, full colour with a rich palette and smooth "
+    "multi-step shading ramps, selective outlines in a darker shade of the local colour, expressive detailed "
+    "face with readable eyes, natural fabric folds, warm and cool light balance. Light from upper-left."
+)
+
+NEG_HIRES_PIXEL = (
+    "blocky, chunky pixels, giant pixels, low resolution, 8-bit, 16-bit console look, blurry, vector, "
+    "3d render, photo, text, letters, numbers, logo, watermark, signature, deformed hands, extra fingers, "
+    "chibi, kawaii, baby face, oversized head, toy-like proportions, multiple characters, building, landscape, "
+    "scenery, background objects, shadow, ground shadow, floor, gradient background, vignette, chair, furniture"
+)
+
+@dataclass(frozen=True)
+class SheetRenderMode:
+    """Prompt pieces for a sprite-sheet look other than the default pixel art."""
+
+    style_lock: str
+    negative: str
+    framing: str
+    framing_key: str
+
+
+_FLAT_BACKDROP = (
+    "centered on a solid flat uniform magenta (#FF00FF) background with nothing else on it, "
+    "no ground shadow, no props or furniture."
+)
+
+SHEET_RENDER_MODES: dict[str, SheetRenderMode] = {
+    "illustrated": SheetRenderMode(
+        STYLE_LOCK_ILLUSTRATED,
+        NEG_ILLUSTRATED,
+        "Framing contract: a single full-body character illustration for one frame of a sprite sheet "
+        "({w}x{h} aspect), one character only, feet near the bottom, same scale and camera height in every "
+        "frame, " + _FLAT_BACKDROP,
+        "illustrated_sheet_frame",
+    ),
+    "hires_pixel": SheetRenderMode(
+        STYLE_LOCK_HIRES_PIXEL,
+        NEG_HIRES_PIXEL,
+        "Framing contract: a single {w}x{h} pixel-art sprite frame of a sprite sheet, one character only, full "
+        "body, feet near the bottom, same scale and camera height in every frame, " + _FLAT_BACKDROP,
+        "hires_pixel_sheet_frame",
+    ),
+}
+
 
 STYLE_LOCK_UI = (
     "Modern retro-game pixel-art UI icon glyph (visual direction: Eastward, Celeste, Owlboy inventory/menu UI). "
@@ -283,24 +332,20 @@ def compile_generation_prompts(
     # 5. World Characters and Companions
     elif asset_class in (CLASS_CHARACTER_SPRITE, CLASS_WORLD_CHARACTER):
         frame = asset_spec.get("frame")
-        if frame and layout_for(asset_id) and asset_spec.get("render") == "illustrated":
-            # Full-colour illustrated variant: no pixel-art style lock and no pixel-art negatives.
+        mode = SHEET_RENDER_MODES.get(asset_spec.get("render", ""))
+        if frame and layout_for(asset_id) and mode:
+            # Non-default sheet looks (illustrated, hi-res pixel): own style lock and negatives,
+            # no scene lore, flat chroma backdrop.
             frame_w, frame_h = frame
-            neg_parts[:] = [NEG_ILLUSTRATED]
-            pos_parts.append(STYLE_LOCK_ILLUSTRATED)
+            neg_parts[:] = [mode.negative]
+            pos_parts.append(mode.style_lock)
             pos_parts.append(f"Subject: {AVATAR_HERO_SUBJECT}")
             if correction:
                 pos_parts.append(f"Pose: {correction}.")
-            pos_parts.append(
-                "Framing contract: a single full-body character illustration for one frame of a sprite sheet "
-                f"({frame_w}x{frame_h} aspect), one character only, feet near the bottom, same scale and "
-                "camera height in every frame, centered on a solid flat uniform magenta (#FF00FF) background "
-                "with nothing else on it, no ground shadow, no props or furniture."
-            )
-            metadata["framing"] = "illustrated_sheet_frame"
+            pos_parts.append(mode.framing.format(w=frame_w, h=frame_h))
+            metadata["framing"] = mode.framing_key
             metadata["frame_size"] = [frame_w, frame_h]
-            pos_prompt = " ".join(pos_parts)
-            return pos_prompt, ", ".join(neg_parts), metadata
+            return " ".join(pos_parts), ", ".join(neg_parts), metadata
 
         pos_parts.append(STYLE_LOCK_BASE)
         neg_parts.append(NEG_PORTRAIT_SPECIFIC)

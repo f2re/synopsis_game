@@ -1253,15 +1253,16 @@
       "task": "W2-15",
       "path": "assets/source/characters/avatar/avatar_hero_m2.png",
       "size": [
-        768,
-        1152
+        576,
+        864
       ],
       "frame": [
-        128,
-        192
+        96,
+        144
       ],
       "alpha": "transparent",
-      "render": "illustrated",
+      "max_colors": 96,
+      "render": "hires_pixel",
       "people": true
     },
     {
