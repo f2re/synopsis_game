@@ -16,7 +16,7 @@
 2. `pixel-asset-designer` создаёт/изменяет source.
 3. `art-director` принимает внешний вид в `1×`.
 4. `pixel-asset-pipeline-engineer` проверяет manifest/pivots/tags/frames.
-5. AssetPack собирает runtime assets.
+5. AssetPack собирает игровые ресурсы.
 6. Phaser использует semantic asset ID.
 
 Для локальной ИИ-генерации применяется отдельный контракт `LOCAL_AI_ASSET_PIPELINE_V2.md`:
