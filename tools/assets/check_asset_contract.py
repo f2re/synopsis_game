@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Проверка технического контракта графических asset manifests.
 
-Этот checker намеренно НЕ оценивает художественное качество, число цветов,
-пиксельные кластеры или стиль. Эти свойства относятся к art review.
+Checker намеренно НЕ оценивает художественное качество, число цветов,
+пиксельные кластеры или стиль. Он также не пытается валидировать
+сценовые production-manifests и коллекции предметов, у которых другая схема.
 """
 from __future__ import annotations
 
@@ -21,17 +22,24 @@ def fail(errors: list[str], path: Path, message: str) -> None:
     errors.append(f"{path.relative_to(ROOT)}: {message}")
 
 
-def check_manifest(path: Path, errors: list[str], warnings: list[str]) -> None:
+def load_json(path: Path, errors: list[str]) -> object | None:
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:  # noqa: BLE001
         fail(errors, path, f"не удалось прочитать JSON: {exc}")
-        return
+        return None
 
-    if not isinstance(data, dict):
-        fail(errors, path, "корень manifest должен быть объектом")
-        return
 
+def is_sprite_asset_manifest(data: object) -> bool:
+    """Return True only for manifests governed by asset-manifest.schema.json.
+
+    The repository also contains scene production manifests, UI packs and item
+    collections under the same directory. They deliberately use other schemas.
+    """
+    return isinstance(data, dict) and data.get("kind") in ALLOWED_KINDS
+
+
+def check_manifest(path: Path, data: dict[str, object], errors: list[str], warnings: list[str]) -> None:
     required = ("id", "source", "kind", "logicalSize", "pivot", "layer", "provenance")
     for key in required:
         if key not in data:
@@ -45,13 +53,7 @@ def check_manifest(path: Path, errors: list[str], warnings: list[str]) -> None:
     if not isinstance(source, str) or not source.startswith("assets/source/"):
         fail(errors, path, "source должен указывать внутрь assets/source/")
     elif not (ROOT / source).exists():
-        # Репозиторий исторически содержит manifests для ещё не произведённых
-        # кандидатов. Это не ломает общую сборку, но остаётся диагностикой.
         warnings.append(f"{path.relative_to(ROOT)}: source пока отсутствует: {source}")
-
-    kind = data.get("kind")
-    if kind not in ALLOWED_KINDS:
-        fail(errors, path, f"неизвестный kind: {kind!r}")
 
     logical = data.get("logicalSize")
     if not isinstance(logical, dict):
@@ -95,14 +97,19 @@ def check_manifest(path: Path, errors: list[str], warnings: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
-    manifests = [p for p in sorted(MANIFEST_DIR.glob("*.json")) if p.name not in SKIP]
+    candidates = [p for p in sorted(MANIFEST_DIR.glob("*.json")) if p.name not in SKIP]
+    checked = 0
+    skipped = 0
 
-    if not manifests:
-        print("Нет графических manifests для проверки.")
-        return 0
-
-    for path in manifests:
-        check_manifest(path, errors, warnings)
+    for path in candidates:
+        data = load_json(path, errors)
+        if data is None:
+            continue
+        if not is_sprite_asset_manifest(data):
+            skipped += 1
+            continue
+        checked += 1
+        check_manifest(path, data, errors, warnings)
 
     for warning in warnings:
         print(f"WARNING: {warning}")
@@ -113,7 +120,7 @@ def main() -> int:
             print(f" - {error}")
         return 1
 
-    print(f"Технический контракт assets: PASS ({len(manifests)} manifests).")
+    print(f"Технический контракт assets: PASS ({checked} sprite-style manifests, {skipped} иных manifests пропущено).")
     print("Художественное качество этим checker не оценивается.")
     return 0
 
