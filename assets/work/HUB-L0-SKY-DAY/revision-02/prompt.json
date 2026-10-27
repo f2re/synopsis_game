@@ -1,0 +1,24 @@
+{
+  "positive_prompt": "<26063_pixel_style> STYLE LOCK: modern high-quality master pixel art (reference feel: Eastward, Sea of Stars, A Short Hike). Crisp hard-edged square pixels on a strict logical pixel grid, deliberate clusters of 2+ pixels, no anti-aliasing blur, no photographic texture, no 3D-render look. Ordered 2x2 dithering where needed. Light from upper-left. Outlines are a darker shade of the local colour, never pure black. Setting: 26063: Позывной «Синоптик». A fictional cozy scientific meteorological campus on the shore of the Gulf of Finland near St. Petersburg, North-West Russia (59.9° N). Late 20th century academic atmosphere: flat horizon, Baltic water, birch and pine, granite embankments, weathered ochre and terracotta brick facades, warm amber windows, authentic Russian synoptic meteorological instruments. Strictly no alpine mountains, no palm trees, no futuristic sci-fi or fantasy elements. Subject: Atmospheric Baltic daytime sky layer over the Gulf of Finland, subtle layered stratocumulus clouds, pale cool blue northern sky gradient, gentle maritime lighting. Correction emphasis: This asset is the isolated L0 daytime sky layer only: a pale Baltic blue open sky with calm, layered stratocumulus cloud bands and subtle maritime daylight. Full opaque sky coverage, low cloud horizon, no buildings, no land, no water, no trees, no people, no scientific instruments, no title, no letters, no digits, no logo. Keep the layer reusable behind independently rendered campus architecture and foreground. Framing contract: Expansive 480x270 panoramic scene layer of the Gulf of Finland meteorological campus. Atmospheric depth, low Baltic horizon, weather layers, warm amber indoor lights contrasting cold exterior. Human traces, scientific activity, North-West Russian maritime climate.",
+  "negative_prompt": "blurry, anti-aliased, smooth airbrushed gradient, painterly oil painting, 3d render, photo, noise, jpeg artifacts, text, letters, numbers, logo, watermark, signature, chromatic aberration, bloom, lens flare, distortion",
+  "metadata": {
+    "asset_class": "large_scene",
+    "lore_key": null,
+    "target_size": [
+      480,
+      270
+    ],
+    "workflow": "scene_environment_v3",
+    "art_priorities": [
+      "composition",
+      "atmospheric_depth",
+      "weather",
+      "material_richness",
+      "warm_cold_contrast",
+      "human_traces",
+      "northwest_identity"
+    ],
+    "correction": "This asset is the isolated L0 daytime sky layer only: a pale Baltic blue open sky with calm, layered stratocumulus cloud bands and subtle maritime daylight. Full opaque sky coverage, low cloud horizon, no buildings, no land, no water, no trees, no people, no scientific instruments, no title, no letters, no digits, no logo. Keep the layer reusable behind independently rendered campus architecture and foreground.",
+    "framing": "large_scene_480x270"
+  }
+}

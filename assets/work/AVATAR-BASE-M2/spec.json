@@ -1,0 +1,16 @@
+{
+  "id": "AVATAR-BASE-M2",
+  "task": "W2-15",
+  "path": "assets/source/characters/avatar/avatar_base_m2.png",
+  "size": [
+    192,
+    288
+  ],
+  "frame": [
+    32,
+    48
+  ],
+  "alpha": "transparent",
+  "max_colors": 14,
+  "people": true
+}

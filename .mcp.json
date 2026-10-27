@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "synopsis-assets": {
+      "type": "http",
+      "url": "http://10.7.88.12:9200/mcp"
+    }
+  }
+}

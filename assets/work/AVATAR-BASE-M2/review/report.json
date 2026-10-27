@@ -1,0 +1,35 @@
+{
+  "asset_id": "AVATAR-BASE-M2",
+  "candidate_path": "/home/user/synopsis-ai/synopsis_game/assets/work/AVATAR-BASE-M2/refined/AVATAR-BASE-M2_refined.png",
+  "production_status": "candidate",
+  "technical_status": {
+    "value": "pass",
+    "reasons": []
+  },
+  "art_status": {
+    "value": "fail",
+    "reasons": [
+      "Subject horizontal occupancy too crowded: 0.93 > 0.80"
+    ]
+  },
+  "metrics": {
+    "size": [
+      192,
+      288
+    ],
+    "occupancy_x": 0.927,
+    "occupancy_y": 0.979,
+    "opaque_colors": 7,
+    "target_range": [
+      16,
+      28
+    ],
+    "hard_max": 32,
+    "alphas": [
+      0,
+      255
+    ],
+    "orphan_pixels": 0,
+    "orphan_ratio": 0.0
+  }
+}

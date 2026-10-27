@@ -1,0 +1,8 @@
+{
+  "asset_id": "synopsis_ref_item_radiosonde_transmitter",
+  "sha256": "1f29ad8e0600541bcca6e37234c1b1c33853d72ee4a5413018bb0f9dfd6c0777",
+  "role": "pixel-art-quality-reviewer",
+  "reviewer_id": "pixel-art-quality-reviewer",
+  "status": "pass",
+  "notes": "Verified logical grid, palette cluster discipline, frame consistency, and production fitness."
+}

@@ -1,0 +1,39 @@
+{
+  "asset_id": "ICON-JOURNAL",
+  "candidate_path": "/home/user/synopsis-ai/synopsis_game/assets/work/ICON-JOURNAL/refined/ICON-JOURNAL_refined.png",
+  "production_status": "candidate",
+  "technical_status": {
+    "value": "pass",
+    "reasons": []
+  },
+  "art_status": {
+    "value": "fail",
+    "reasons": [
+      "Refined 16x16 image loses almost all of the recognizable open-book silhouette; only a few light pixels remain.",
+      "Raw and refined differ materially; automatic art pass does not reflect native-size readability."
+    ]
+  },
+  "diagnostics": [
+    "Diagnostic note: color count (2) below target minimum (12)"
+  ],
+  "metrics": {
+    "size": [
+      16,
+      16
+    ],
+    "occupancy_x": 0.5,
+    "occupancy_y": 0.438,
+    "opaque_colors": 2,
+    "target_range": [
+      12,
+      32
+    ],
+    "soft_max": 40,
+    "alphas": [
+      0,
+      255
+    ],
+    "orphan_pixels": 0,
+    "orphan_ratio": 0.0
+  }
+}

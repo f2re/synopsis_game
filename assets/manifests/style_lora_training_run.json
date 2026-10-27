@@ -1,0 +1,16 @@
+{
+  "status": "trained_candidate",
+  "base_model": "/home/user/synopsis-ai/models/diffusers/Z-Image",
+  "trainer_sha256": "a3c801c3586983f41262253185f78c95d84791759f5faf4160a85738497bd042",
+  "dataset": {
+    "dataset_path": "/home/user/synopsis-ai/datasets/lora_learning_dataset",
+    "total_images": 45,
+    "trigger_word": "synopsis_pixel_art",
+    "manifest_sha256": "417907d94de80a1dd778b51142dc36007656b14ca50c2ea81b2e2cda743f2eb0"
+  },
+  "steps": 500,
+  "resolution": 512,
+  "seed": 26063,
+  "exit_code": 0,
+  "weights_sha256": "995cbaa771e55013bee920d09da7aff508d97ac9c5fe70372d3c038b7f1e9471"
+}

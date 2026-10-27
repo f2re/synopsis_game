@@ -1,0 +1,21 @@
+{
+  "positive_prompt": "<26063_pixel_style> STYLE LOCK: modern retro-game pixel art UI icon glyph (reference feel: Eastward, Celeste, Owlboy inventory/menu UI). Clean high-contrast isolated icon glyph centered on uniform solid dark slate matte background (#1E2430), crisp readable silhouette, bold readable contours, deliberate pixel clusters, no anti-aliasing blur, no photographic texture, no 3D-render look. Absolutely no background scenery, no buildings, no outdoor landscape. Subject: A fast lightning bolt blitz speed timer challenge badge icon symbol. Correction emphasis: The subject must be a distinct physical stopwatch, not a standalone lightning bolt: circular brass and steel stopwatch case with top crown and small cream dial, a clearly visible central hand and a restrained red timing accent. Use warm brass and cool navy/teal material ramps with crisp pixel clusters. The stopwatch must be clearly recognizable at 32x32 on a clean transparent or solid dark neutral background. No letters, digits, people, scenery, buildings, or duplicate objects. Framing contract: Single centered isolated icon glyph, canvas resolution 32x32 pixels. Bold graphic silhouette, high contrast against solid dark matte (#1E2430), absolutely no buildings or landscape.",
+  "negative_prompt": "blurry, anti-aliased, smooth airbrushed gradient, painterly oil painting, 3d render, photo, noise, jpeg artifacts, text, letters, numbers, logo, watermark, signature, chromatic aberration, bloom, lens flare, distortion, building, facade, house, campus, cottage, room, outdoor scenery, landscape, trees, mountains, sky, horizon, wide shot, person, human face, 3d render, photo, blurry, anti-aliased, messy clutter, noise",
+  "metadata": {
+    "asset_class": "ui_icon",
+    "lore_key": null,
+    "target_size": [
+      32,
+      32
+    ],
+    "workflow": "ui_icon_v3",
+    "art_priorities": [
+      "semantic_readability",
+      "shape_clarity",
+      "state_contrast",
+      "consistent_line_weight"
+    ],
+    "correction": "The subject must be a distinct physical stopwatch, not a standalone lightning bolt: circular brass and steel stopwatch case with top crown and small cream dial, a clearly visible central hand and a restrained red timing accent. Use warm brass and cool navy/teal material ramps with crisp pixel clusters. The stopwatch must be clearly recognizable at 32x32 on a clean transparent or solid dark neutral background. No letters, digits, people, scenery, buildings, or duplicate objects.",
+    "framing": "ui_icon_centered"
+  }
+}

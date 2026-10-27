@@ -1,0 +1,8 @@
+{
+  "asset_id": "synopsis_ref_item_synoptic_wooden_pointer",
+  "sha256": "dce1bb3f67568fdd212696e51f21e56690205a1e7c70b1a1e0d001b1f8998e6c",
+  "role": "pixel-art-quality-reviewer",
+  "reviewer_id": "pixel-art-quality-reviewer",
+  "status": "pass",
+  "notes": "Verified logical grid, palette cluster discipline, frame consistency, and production fitness."
+}

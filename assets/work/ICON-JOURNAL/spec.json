@@ -1,0 +1,13 @@
+{
+  "id": "ICON-JOURNAL",
+  "task": "W2-16",
+  "path": "assets/source/ui/v3/icons/icon_journal.png",
+  "size": [
+    16,
+    16
+  ],
+  "frame": null,
+  "alpha": "transparent",
+  "max_colors": 5,
+  "people": false
+}

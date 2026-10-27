@@ -25,6 +25,7 @@ TRAINER_SHA256 = "a3c801c3586983f41262253185f78c95d84791759f5faf4160a85738497bd0
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True, help="Reviewed training manifest")
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT, help="Path to repository root")
     parser.add_argument("--dataset-dir", type=Path, required=True, help="New empty imagefolder directory")
     parser.add_argument("--output-dir", type=Path, required=True, help="New output directory for the candidate LoRA")
     parser.add_argument("--base-model", type=Path, required=True, help="Local Tongyi-MAI/Z-Image base model")
@@ -43,7 +44,7 @@ def main() -> int:
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
         parser.error("output directory must be empty")
 
-    dataset = build_lora_dataset(REPO_ROOT, args.manifest, args.dataset_dir)
+    dataset = build_lora_dataset(args.repo_root, args.manifest, args.dataset_dir)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     command = [
         sys.executable, "-m", "accelerate.commands.launch", str(args.trainer),

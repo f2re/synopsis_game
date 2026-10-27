@@ -1,0 +1,1086 @@
+{
+  "version": "1.0.0",
+  "description": "Reviewed and approved training dataset for 26063 style LoRA",
+  "assets": [
+    {
+      "id": "synopsis_ref_campus_master_sheet",
+      "path": "assets/source/items/learning/Meteorological Campus Pixel Art Reference Sheet(1).png",
+      "sha256": "d29d1b84eaa3a0f8b9c4dd0309730ad5080c1bfe2e879170a1105b1c686bc4c4",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "master reference sheet for synoptic meteorological campus, featuring station buildings, radar dome, weather garden, instruments, character portraits, and color palette tokens in detailed 16-bit pixel art style",
+      "rights_evidence": "assets/reviews/synopsis_ref_campus_master_sheet-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_campus_master_sheet-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_campus_master_sheet-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_campus_courtyard_overview",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_41-1.png",
+      "sha256": "ce627eb9c4f1f8ef0a69e1e92d6c44f7d13c766a7bd12d6a73198eb617d24fed",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "campus courtyard overview with research pavilion, gravel paths, lawn, meteorological observation masts, and low cloudy sky",
+      "rights_evidence": "assets/reviews/synopsis_ref_campus_courtyard_overview-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_campus_courtyard_overview-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_campus_courtyard_overview-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_bld_weather_station_lab",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_42-2.png",
+      "sha256": "249f15f5e88ca6e94efecdaad684afd72b21549a428f1b32b83f2a57109a48ee",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "isometric meteorological station building and laboratory with sloped metal roof, brick walls, observation deck, and antenna array on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_bld_weather_station_lab-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_weather_station_lab-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_weather_station_lab-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_bld_doppler_radar_dome",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_44-3.png",
+      "sha256": "0c8771ec4ca9b3c897d8b08ae39a56f09ec669302d37cf309b11c616a4705b7a",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "isometric meteorological Doppler radar dome on lattice tower structure with walkway platform on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_bld_doppler_radar_dome-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_doppler_radar_dome-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_doppler_radar_dome-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_bld_wind_mast_anemometer",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_45-4.png",
+      "sha256": "31e100ea4139d246e4192458bb3866fabcc007185a48a130d18d60b3a52589ef",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "isometric wind measurement mast with cup anemometer, wind vane, and crossarm sensors on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_bld_wind_mast_anemometer-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_wind_mast_anemometer-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_wind_mast_anemometer-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_bld_main_observatory",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_47-5.png",
+      "sha256": "fc45c35381ea91d726c7c11f02dcae6acf83d7e4bd37cc29f50f65c450c3034d",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "isometric main meteorological observatory administrative building with large windows, entrance porch, and communications antenna on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_bld_main_observatory-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_main_observatory-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_main_observatory-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_bld_stevenson_screen_shelter",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_48-6.png",
+      "sha256": "9b8aa8ae9f5890d6705c5eb4bf1b43ccc6b9d08d618f8ccbcface262e06bbfc4",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "isometric psychrometric meteorological shelter Stevenson screen with louvered white wooden blinds on tall legs on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_bld_stevenson_screen_shelter-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_stevenson_screen_shelter-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_stevenson_screen_shelter-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_bld_aerological_pavilion",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_09_49-7.png",
+      "sha256": "db29c8e75babde6127002c49ed3a920ad175d2192b3542783d77fcf2b91aa448",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "isometric aerological launch pavilion and equipment storage hangar with arched roof and sliding doors on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_bld_aerological_pavilion-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_aerological_pavilion-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_bld_aerological_pavilion-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_jacket_dark",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_11_29-1.png",
+      "sha256": "f6609f39156b05a9c024a7a562d743fb4d40c35408d670daa8fe9bc37cdd7a27",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "meteorologist uniform pea coat jacket in navy blue wool with double breasted brass buttons and collar lapels",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_jacket_dark-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_jacket_dark-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_jacket_dark-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_blazer_slate",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_11_31-2.png",
+      "sha256": "71bba846577fbbdadc588963b4e92878a70f0bae43e87fec3f39d92b07c022d1",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "meteorologist duty uniform blazer in slate blue wool with shoulder straps and gold rank insignia",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_blazer_slate-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_blazer_slate-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_blazer_slate-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_sweater_nordic_pattern",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_11_32-3.png",
+      "sha256": "cf38ed819e080b9f85e3432a6fb89133ed119a0a9b5b61b00fb5bd9543d3f152",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "heavy knit winter wool sweater with white and blue Nordic synoptic snowflake geometric pattern",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_sweater_nordic_pattern-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_sweater_nordic_pattern-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_sweater_nordic_pattern-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_vest_waistcoat",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_11_34-4.png",
+      "sha256": "33c223d2494a9887cc98d3d0a620901bd61b3dcb961e60527e23819f88e8f04b",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "meteorological field observer insulated work vest with tool pockets and reinforced stitching",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_vest_waistcoat-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_vest_waistcoat-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_vest_waistcoat-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_parka_fur_hood",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_11_36-5.png",
+      "sha256": "3ef3701684f7922875b3865b4a34eb158de982a5c9b169a15135d3dfb3ac06fb",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "warm arctic winter parka with fur lined hood, heavy thermal insulation, and synoptic station patch",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_parka_fur_hood-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_parka_fur_hood-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_parka_fur_hood-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_trousers_navy",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_15_38-1.png",
+      "sha256": "4867a4e9bcc312ea76b043630fcbca4899196c4bce3ab28ffcd734588d18b5b1",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "meteorologist service uniform straight leg trousers in durable dark navy wool blend",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_trousers_navy-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_trousers_navy-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_trousers_navy-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_trousers_field",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_15_40-2.png",
+      "sha256": "d90e770a30d4b788a580b4336ff2d7ee43170407f448bc67bef3746a5703d483",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "meteorological outdoor field trousers with reinforced knees and weatherproof canvas fabric",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_trousers_field-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_trousers_field-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_trousers_field-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_jeans_denim",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_15_41-3.png",
+      "sha256": "250742770d95dcc413a3f9d4f700ee2bc139947e9682d4314392e5d6fd94efa7",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "casual observer sturdy denim work pants with cargo pockets for weather logbooks",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_jeans_denim-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_jeans_denim-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_jeans_denim-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_knit_winter_mittens",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_15_43-4.png",
+      "sha256": "cf4322d76f1331ee2b33f2079ac9ab0b9002d03093f82813b97d7e8be262bfd8",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "pair of warm knitted wool winter mittens with traditional winter pattern for outdoor observations",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_knit_winter_mittens-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_knit_winter_mittens-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_knit_winter_mittens-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_boots_felt_valenki",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_15_44-5.png",
+      "sha256": "25eacd75e2b7513c165554537e66616d3bdd115db00e6c02f1829f66cecfe6e9",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "traditional warm felt boots valenki with rubber galoshes for harsh subzero meteorological shifts",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_boots_felt_valenki-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_boots_felt_valenki-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_boots_felt_valenki-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_boots_rubber_rain",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_15_45-6.png",
+      "sha256": "946c3f386c2dd2de57bcdbec6f3cca438520810d1ce8096890b6449013f3ecf6",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "tall waterproof rubber rain boots in dark green for inspecting outdoor rain gauges and water reservoirs",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_boots_rubber_rain-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_boots_rubber_rain-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_boots_rubber_rain-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_uniform_peaked_cap",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_19_42-1.png",
+      "sha256": "e970391c44dcf85fe60e91a2d33e7bb6531a54ed3297583d82b0b11eabc5238e",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "meteorologist service uniform peaked cap with black visor, gold chin cord, and hydrometeorological emblem",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_uniform_peaked_cap-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_peaked_cap-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_uniform_peaked_cap-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_ushanka_fur_hat",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_19_44-2.png",
+      "sha256": "b07558febbc7bf6a79ee654601ecf7fb9cfb906487b989cd5d747e07306d2ceb",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "winter ushanka fur hat with ear flaps and wool crown for cold climate meteorological duty",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_ushanka_fur_hat-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_ushanka_fur_hat-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_ushanka_fur_hat-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_synoptic_wooden_pointer",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_19_49-3.png",
+      "sha256": "dce1bb3f67568fdd212696e51f21e56690205a1e7c70b1a1e0d001b1f8998e6c",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "classic wooden synoptic map pointer and station barometer scale ruler with calibrated millimeter markings",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_synoptic_wooden_pointer-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_synoptic_wooden_pointer-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_synoptic_wooden_pointer-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_radiosonde_transmitter",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_19_51-4.png",
+      "sha256": "1f29ad8e0600541bcca6e37234c1b1c33853d72ee4a5413018bb0f9dfd6c0777",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "atmospheric sounding radiosonde instrument package in white foam housing with trailing temperature and humidity sensors",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_radiosonde_transmitter-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_radiosonde_transmitter-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_radiosonde_transmitter-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_barograph_drum_recorder",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_19_54-5.png",
+      "sha256": "6d1985dbd6555b9dd0767e5cb63b72ec9c5c4fe5ebe1c1038a0fea9f60d66faf",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "precision mechanical aneroid barograph with rotating clockwork drum and pressure recording chart",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_barograph_drum_recorder-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_barograph_drum_recorder-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_barograph_drum_recorder-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_item_anemometer_handheld",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 18_19_56-6.png",
+      "sha256": "42a5f053ae4c8de6dc9d9fd86b9255d46461ff53fc414bceb1ea44bcd02de7ac",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "handheld cup anemometer with rotation counter dial and wooden grip for field wind speed measurements",
+      "rights_evidence": "assets/reviews/synopsis_ref_item_anemometer_handheld-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_anemometer_handheld-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_item_anemometer_handheld-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_fauna_hedgehog_autumn",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 21_36_23-1.png",
+      "sha256": "4137b7c005a6551e58639e0b1d6b20446c7ff5cf7e0168e302ea9ede5aa6d2b6",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "curled campus hedgehog with brown quills and tiny paws on fallen autumn birch leaves on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_fauna_hedgehog_autumn-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_hedgehog_autumn-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_hedgehog_autumn-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_fauna_hooded_crow",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 21_36_46-2.png",
+      "sha256": "6ab20de96fa17dbef366cfbdd950b50809c197c19d332a0bd9d902dea6badfdc",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "hooded crow with two-tone grey and black plumage perched attentively on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_fauna_hooded_crow-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_hooded_crow-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_hooded_crow-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_fauna_red_squirrel",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 21_36_51-3.png",
+      "sha256": "348657a7794d0a90e25d5d68d360667cc3555f3fb6c7371746e1bda861f559ed",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "campus red squirrel with bushy tail and tufted ears sitting upright on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_fauna_red_squirrel-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_red_squirrel-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_red_squirrel-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_fauna_hare_wildlife",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 21_36_54-4.png",
+      "sha256": "49731b301ce3bfae045bdb81b831fc4f502ab65cb66ced378da8ad0b2ba8fcfc",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "wild northern hare sitting cautiously in low profile on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_fauna_hare_wildlife-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_hare_wildlife-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_hare_wildlife-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_fauna_sparrow_perched",
+      "path": "assets/source/items/learning/Изображение ChatGPT 26 окт. 2026 г., 21_36_56-5.png",
+      "sha256": "e557e1de5b71986538c6e7ab06a06f6e6cfcf91998b08f3964ba4610e221d9e1",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "small brown house sparrow perched with folded wings on transparent background",
+      "rights_evidence": "assets/reviews/synopsis_ref_fauna_sparrow_perched-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_sparrow_perched-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_fauna_sparrow_perched-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_campus_sunset",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_56_58-1.png",
+      "sha256": "778357372e9d02b98faa5759dfd0bdde0437be535a9e1d88c9f07e7b911093d1",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of the meteorological campus at sunset, warm orange and violet sky, glowing window lights, silhouette of radar dome and water reflection",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_campus_sunset-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_sunset-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_sunset-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_campus_day_clear",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_56_59-2.png",
+      "sha256": "9b6b9753a90578febe3d0868639ed3cd5c0085ef8ea02c9ba17340c3ee310f1f",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of the meteorological campus on a crisp clear afternoon, low sun, pale blue sky, brick station buildings, weather masts, and waterfront",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_campus_day_clear-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_day_clear-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_day_clear-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_campus_overcast_stratus",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_01-3.png",
+      "sha256": "0361031815bf4e0d6c890f3197bf4dacd0173132d31b730e2fcf1bbd6e15455a",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of the meteorological campus under overcast grey altostratus sky, Baltic maritime mood, low horizon, and meteorological field masts",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_campus_overcast_stratus-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_overcast_stratus-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_overcast_stratus-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_campus_dawn_morning",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_02-4.png",
+      "sha256": "5494d902bf6fe2c01f02b3547d9b688b309570a00661f571be6c79a5b9b93fed",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of the meteorological campus at early morning dawn, soft golden light on roofs, morning mist rising over the river, and radar tower",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_campus_dawn_morning-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_dawn_morning-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_dawn_morning-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_campus_night_twilight",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_03-5.png",
+      "sha256": "54f8a102be72919ab1e2251addf193b180d6e8a6c281b9834f9217af4d450e3c",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of the meteorological campus at deep twilight night, dark indigo sky with visible stars, warm interior lighting through windows, and quiet harbor",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_campus_night_twilight-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_night_twilight-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_night_twilight-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_campus_meteo_garden",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_04-6.png",
+      "sha256": "7f872b270f22cbed87e597b9e95780bcd24cdd5c63a20c598f744967442669f9",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "detailed perspective view of the central meteorological garden, Stevenson thermometer screens, anemometer mast, rain gauge, and paved paths leading to the main hall",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_campus_meteo_garden-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_meteo_garden-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_campus_meteo_garden-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_portrait_vera_pavlovna",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_06-7.png",
+      "sha256": "bc8f9dab78fdb650e587d741158b671850cc460cac97dff707216a94c9e1443c",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "character portrait of Vera Pavlovna, chief synoptician, middle-aged woman with thoughtful expression, round spectacles, dark hair, and tailored uniform jacket",
+      "rights_evidence": "assets/reviews/synopsis_ref_portrait_vera_pavlovna-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_vera_pavlovna-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_vera_pavlovna-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_portrait_semen_petrovich",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_08-8.png",
+      "sha256": "dfdb6cc8aa244b5712e3a433827be4d673387a0bb5d1ecad23c73f64e746bd3f",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "character portrait of Semen Petrovich, senior meteorological observer, mature bearded man with weathered features, warm knitted cap, and sturdy duty collar",
+      "rights_evidence": "assets/reviews/synopsis_ref_portrait_semen_petrovich-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_semen_petrovich-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_semen_petrovich-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_portrait_technician_observer",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_09-9.png",
+      "sha256": "3f630de50ae0931b7e6463456a7fe0a37e123a9274f500b3a951e3b823a56dc9",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "character portrait of young weather technician observer with focused gaze, short hair, and pressed service shirt with shoulder insignia",
+      "rights_evidence": "assets/reviews/synopsis_ref_portrait_technician_observer-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_technician_observer-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_technician_observer-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_portrait_campus_cat",
+      "path": "assets/source/items/learning/Изображение ChatGPT 27 окт. 2026 г., 14_57_11-10.png",
+      "sha256": "5b0a5b671af4dca2ce7ab3c8ee970d4ebcdd60aae7db5fe183821bfbb81538a5",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "portrait of campus cat with calico markings resting comfortably beside meteorological instrument station with quiet intelligent gaze",
+      "rights_evidence": "assets/reviews/synopsis_ref_portrait_campus_cat-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_campus_cat-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_campus_cat-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_portrait_distinguished_meteorologist",
+      "path": "assets/source/items/learning/Pixel-Art Portrait of a Distinguished Meteorologist-1.png",
+      "sha256": "26b90a4e48896fb35da561d6568d5f392264c777c3e98d997c02a6e2d39a44e5",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "character portrait of distinguished senior meteorologist in formal uniform jacket with gold insignias, focused scientific gaze and weathered features in detailed 16-bit pixel art style",
+      "rights_evidence": "assets/reviews/synopsis_ref_portrait_distinguished_meteorologist-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_distinguished_meteorologist-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_portrait_distinguished_meteorologist-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_autumn_seaside_observatory",
+      "path": "assets/source/items/learning/Autumn Seaside Observatory Campus-2.png",
+      "sha256": "11ffd377af8a56c90f0f376d0e0929e2f26e30151dce0df0cad9eb91032716b1",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of the autumn seaside meteorological observatory campus, golden birch trees along the waterfront, observation masts, low Baltic horizon, and overcast sky",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_autumn_seaside_observatory-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_autumn_seaside_observatory-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_autumn_seaside_observatory-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_coastal_weather_campus",
+      "path": "assets/source/items/learning/Pixel-Art Coastal Weather Campus-3.png",
+      "sha256": "01bcab9809f32c3f75688adf239921b7b100ae4b14816aad155305b3ea882fdf",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic view of coastal weather station campus with radar dome, station pavilions, autumn foliage, and stone embankment reflected in calm water",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_coastal_weather_campus-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_coastal_weather_campus-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_coastal_weather_campus-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_scene_autumn_waterside_observatory",
+      "path": "assets/source/items/learning/Autumn Waterside Observatory Campus-4.png",
+      "sha256": "8b49257fb52f06c004d73c162c201ae51fac8f84e5d8f70fb612e9588163f958",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "panoramic landscape of waterside meteorological campus in autumn, layered altocumulus clouds, reflection in water, gravel paths and weather instrumentation garden",
+      "rights_evidence": "assets/reviews/synopsis_ref_scene_autumn_waterside_observatory-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_autumn_waterside_observatory-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_scene_autumn_waterside_observatory-art-director.json"
+        }
+      ]
+    },
+    {
+      "id": "synopsis_ref_profile_vera_ladozhskaya",
+      "path": "assets/source/items/learning/Pixel Art Character Profile_ Vera Ladоzhskaya-5.png",
+      "sha256": "161f386546fdc7f9d75874e1e8b6a9c9296f4a592ade6d3c697e413b1c6c6f44",
+      "license": "project-internal-production",
+      "origin": "Synoptic Game Art Department - 26063 Project References",
+      "author_id": "pixel-asset-designer",
+      "caption": "character model and profile reference sheet of Vera Ladozhskaya, chief synoptician, showing uniform variations, portrait bust expressions, and palette swatches in 16-bit pixel art style",
+      "rights_evidence": "assets/reviews/synopsis_ref_profile_vera_ladozhskaya-rights.json",
+      "reviews": [
+        {
+          "role": "pixel-art-quality-reviewer",
+          "reviewer_id": "pixel-art-quality-reviewer",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_profile_vera_ladozhskaya-pixel-art-quality-reviewer.json"
+        },
+        {
+          "role": "art-director",
+          "reviewer_id": "art-director",
+          "status": "pass",
+          "evidence": "assets/reviews/synopsis_ref_profile_vera_ladozhskaya-art-director.json"
+        }
+      ]
+    }
+  ]
+}

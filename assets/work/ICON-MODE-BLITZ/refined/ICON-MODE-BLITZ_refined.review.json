@@ -1,0 +1,36 @@
+{
+  "asset_id": "ICON-MODE-BLITZ",
+  "candidate_path": "/home/user/synopsis-ai/synopsis_game/assets/work/ICON-MODE-BLITZ/refined/ICON-MODE-BLITZ_refined.png",
+  "production_status": "technical_review",
+  "technical_status": {
+    "value": "pass",
+    "reasons": []
+  },
+  "art_status": {
+    "value": "pass",
+    "reasons": []
+  },
+  "diagnostics": [
+    "Diagnostic note: color count (1) below target minimum (12)"
+  ],
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "occupancy_x": 0.375,
+    "occupancy_y": 0.656,
+    "opaque_colors": 1,
+    "target_range": [
+      12,
+      32
+    ],
+    "soft_max": 40,
+    "alphas": [
+      0,
+      255
+    ],
+    "orphan_pixels": 0,
+    "orphan_ratio": 0.0
+  }
+}

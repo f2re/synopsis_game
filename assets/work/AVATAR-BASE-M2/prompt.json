@@ -1,0 +1,12 @@
+{
+  "positive_prompt": "<26063_pixel_style> STYLE LOCK: modern high-quality master pixel art (reference feel: Eastward, Sea of Stars, A Short Hike). Crisp hard-edged square pixels on a strict logical pixel grid, deliberate clusters of 2+ pixels, no anti-aliasing blur, no photographic texture, no 3D-render look. Ordered 2x2 dithering where needed. Light from upper-left. Outlines are a darker shade of the local colour, never pure black. Setting: 26063: Позывной «Синоптик». A fictional cozy scientific meteorological campus on the shore of the Gulf of Finland near St. Petersburg, North-West Russia (59.9° N). Late 20th century academic atmosphere: flat horizon, Baltic water, birch and pine, granite embankments, weathered ochre and terracotta brick facades, warm amber windows, authentic Russian synoptic meteorological instruments. Strictly no alpine mountains, no palm trees, no futuristic sci-fi or fantasy elements. Orthographic projection, canvas 192x288 pixels, crisp pixel art on neutral background.",
+  "negative_prompt": "blurry, anti-aliased, smooth airbrushed gradient, painterly oil painting, 3d render, photo, noise, jpeg artifacts, text, letters, numbers, logo, watermark, signature, chromatic aberration, bloom, lens flare, distortion",
+  "metadata": {
+    "asset_class": "character_sprite",
+    "lore_key": null,
+    "target_size": [
+      192,
+      288
+    ]
+  }
+}

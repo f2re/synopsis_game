@@ -1,0 +1,8 @@
+{
+  "asset_id": "synopsis_ref_bld_doppler_radar_dome",
+  "sha256": "0c8771ec4ca9b3c897d8b08ae39a56f09ec669302d37cf309b11c616a4705b7a",
+  "role": "pixel-art-quality-reviewer",
+  "reviewer_id": "pixel-art-quality-reviewer",
+  "status": "pass",
+  "notes": "Verified logical grid, palette cluster discipline, frame consistency, and production fitness."
+}

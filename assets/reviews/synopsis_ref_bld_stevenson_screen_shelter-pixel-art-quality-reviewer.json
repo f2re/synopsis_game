@@ -1,0 +1,8 @@
+{
+  "asset_id": "synopsis_ref_bld_stevenson_screen_shelter",
+  "sha256": "9b8aa8ae9f5890d6705c5eb4bf1b43ccc6b9d08d618f8ccbcface262e06bbfc4",
+  "role": "pixel-art-quality-reviewer",
+  "reviewer_id": "pixel-art-quality-reviewer",
+  "status": "pass",
+  "notes": "Verified logical grid, palette cluster discipline, frame consistency, and production fitness."
+}
