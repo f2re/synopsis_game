@@ -1,0 +1,93 @@
+{
+  "$schema": "https://synopsis-game.local/schemas/asset-manifest.schema.json",
+  "id": "avatar.hero.m2",
+  "source": "assets/source/characters/avatar/avatar_hero_m2.png",
+  "kind": "sprite",
+  "logicalSize": {
+    "width": 576,
+    "height": 864
+  },
+  "pivot": {
+    "x": 48,
+    "y": 142
+  },
+  "layer": "L5",
+  "paletteTokens": [
+    "world.character.skin",
+    "world.character.uniform"
+  ],
+  "animations": [
+    {
+      "name": "idle_front",
+      "loop": true,
+      "frameDurationsMs": [
+        240,
+        240,
+        240,
+        240
+      ]
+    },
+    {
+      "name": "walk_side",
+      "loop": true,
+      "frameDurationsMs": [
+        110,
+        110,
+        110,
+        110,
+        110,
+        110
+      ]
+    },
+    {
+      "name": "typing_seated",
+      "loop": true,
+      "frameDurationsMs": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140
+      ]
+    },
+    {
+      "name": "thinking",
+      "loop": true,
+      "frameDurationsMs": [
+        300,
+        300,
+        300,
+        300
+      ]
+    },
+    {
+      "name": "celebrate_seated",
+      "loop": true,
+      "frameDurationsMs": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120
+      ]
+    },
+    {
+      "name": "disappointed",
+      "loop": true,
+      "frameDurationsMs": [
+        280,
+        280,
+        280,
+        280
+      ]
+    }
+  ],
+  "generated": [],
+  "provenance": {
+    "origin": "synopsis-assets MCP z_image_turbo, AVATAR-HERO-M2 poses (candidates 25, 29, 33, 37, 41, 45) built by services/asset-generator/scripts/build_avatar_sheet.py. Hi-res pixel-art sheet: frame 96x144, 6 columns x 6 rows in the order of the animations, 94 colours (shared adaptive palette, limit 96), binary alpha, pivot at the feet of the standing rows (seated rows are bottom-aligned, not seat-centred). sha256 480395ae07376a7ca16597cf72ca72b07b3db32cd49ed0f927ebfb0ed20a542b. Art approved by the project owner on 2026-10-27; the MCP independent pixel-art review gates were not run. Replaces nothing: the 32x48 avatar_base_m2 stays as the pixel variant, and the runtime skin/hair recolour contract of that variant does not apply here.",
+    "author": "claude-sonnet-5-5",
+    "license": "project-internal-generated"
+  }
+}
