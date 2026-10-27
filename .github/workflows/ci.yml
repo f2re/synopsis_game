@@ -16,7 +16,7 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: '10.34.8'
-      - name: Проверить Python-валидаторы
+      - name: Проверить Python-контракты
         run: |
           python tools/validate_repo.py
           python tools/validate_content_contracts.py
@@ -24,11 +24,11 @@ jobs:
           python tools/validate_deployment.py
           python tools/test_deployment.py
           python tools/validate_brand.py
-          python tools/validate_pixel_art.py
+          python tools/assets/check_asset_contract.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
-          python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py
+          python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py tools/assets/*.py
       - name: Собрать приложение и проверить identity и первую смену
         run: |
           pnpm bootstrap
