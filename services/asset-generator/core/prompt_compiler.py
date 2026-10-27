@@ -31,10 +31,9 @@ from core.lore_registry import WORLD_LORE_CONTEXT, get_lore_for_asset
 from core.sheet_layouts import AVATAR_BASE_SUBJECT, AVATAR_HERO_SUBJECT, layout_for
 
 STYLE_LOCK_BASE = (
-    "Pixel-art illustration for a modern high-quality game (visual direction: Eastward, Sea of Stars, A Short Hike). "
-    "Crisp hard-edged square pixels on a strict logical pixel grid, deliberate pixel clusters, "
-    "no anti-aliasing blur, no photographic texture, no rendered three-dimensional look. "
-    "Light from upper-left. Outlines are a darker shade of the local colour, never pure black."
+    "Detailed high-resolution pixel art game illustration, fine small pixels, rich saturated colour with warm "
+    "glowing light against cool deep shadows, smooth painterly colour ramps, dense detailed texture and foliage, "
+    "cinematic atmosphere. Light from upper-left. Outlines are a darker shade of the local colour."
 )
 
 STYLE_LOCK_ILLUSTRATED = (
@@ -67,8 +66,9 @@ NEG_HIRES_PIXEL = (
 
 # Environment layers that must not inherit the campus lore: it paints a building into them.
 ENVIRONMENT_REGION = (
-    "Setting: the shore of the Gulf of Finland near Saint Petersburg in North-West Russia, flat horizon, "
-    "Baltic water, birch and pine, granite embankments. No alpine mountains, no palm trees, no sci-fi."
+    "Setting: the shore of the Gulf of Finland near Saint Petersburg, a calm blue bay, dark green spruces, white "
+    "birch and orange autumn maples, grey granite embankments, a flat horizon with a distant city skyline. "
+    "No palm trees, no sci-fi."
 )
 
 NEG_LAYER_NO_BUILDINGS = (
@@ -137,9 +137,8 @@ STYLE_LOCK_UI = (
 )
 
 NEG_BASE = (
-    "blurry, anti-aliased, smooth airbrushed gradient, painterly oil painting, 3d render, photo, "
-    "noise, jpeg artifacts, text, letters, numbers, logo, watermark, signature, "
-    "chromatic aberration, bloom, lens flare, distortion"
+    "blurry, 3d render, photo, flat vector, simple shapes, low detail, jpeg artifacts, text, letters, numbers, "
+    "logo, watermark, signature, chromatic aberration, bloom, lens flare, distortion"
 )
 
 NEG_UI_SPECIFIC = (
@@ -161,8 +160,21 @@ NEG_ARCHITECTURE_SPECIFIC = (
 
 NEG_PROP_SPECIFIC = (
     "multiple unrelated objects, person holding object, busy background, wide room interior, "
-    "low contrast, messy clutter"
+    "low contrast, messy clutter, building, facade, campus, trees, landscape, sky, horizon"
 )
+
+PROP_SUBJECTS: dict[str, str] = {
+    "PROP-LAMP": "A campus lantern with a warm glass lamp and metal post",
+    "PROP-LAMP-GLOW": "A warm pool of lamplight",
+    "PROP-BENCH": "A wooden park bench with cast iron legs",
+    "PROP-STEVENSON": "A white louvered meteorological instrument shelter on four legs",
+    "PROP-ANEMOMETER": "A meteorological mast with a cup anemometer",
+    "PROP-FLAG": "A campus flag on a flagpole",
+    "PROP-RADAR-ANTENNA": "A weather radar antenna",
+    "PROP-BEACON-LIGHT": "A signal beacon lamp",
+    "PROP-SIGNPOST": "A campus signpost without lettering",
+    "PROP-BICYCLE": "A parked bicycle",
+}
 
 UI_ICON_SUBJECTS: dict[str, str] = {
     "JOURNAL": "An open meteorological observation field notebook logbook journal with lined paper pages, leather binding cover, and ribbon bookmark.",
@@ -437,12 +449,15 @@ def compile_generation_prompts(
     # 6. Props & Interactive Equipment
     elif asset_class in (CLASS_PROP, CLASS_PROP_SPRITE, CLASS_INTERACTIVE_OBJECT):
         pos_parts.append(STYLE_LOCK_BASE)
-        pos_parts.append(WORLD_LORE_CONTEXT)
         neg_parts.append(NEG_PROP_SPECIFIC)
+        subject = asset_spec.get("prompt") or PROP_SUBJECTS.get(
+            asset_id.upper(), asset_id.replace("-", " ").replace("_", " ")
+        )
+        pos_parts.append(f"Subject: {subject}")
         pos_parts.append(
-            f"Subject: Centered isolated meteorological scientific equipment instrument. "
+            f"Subject: Centered isolated object for a Baltic meteorological campus. "
             f"Canvas resolution {target_w}x{target_h} pixels. Clear mechanical silhouette, "
-            f"centered on neutral contrasting dark slate matte (#1E2430)."
+            f"centered on uniform solid dark slate matte (#1E2430), with no buildings, trees, landscape or other objects."
         )
         if correction:
             pos_parts.append(f"Correction emphasis: {correction}")

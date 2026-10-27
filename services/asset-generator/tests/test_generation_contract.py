@@ -277,6 +277,22 @@ class PipelineContractTests(unittest.TestCase):
             self.assertGreater(len(opaque), 12)
             self.assertTrue(result["within_color_limit"])
 
+    def test_default_prompts_ask_for_rich_hi_res_pixel_art_not_a_coarse_grid(self):
+        # A/B on the style LoRA: the old "strict logical pixel grid / no anti-aliasing" lock and the negatives
+        # against smooth gradients pulled results toward flat, low-detail art.
+        pos, neg, _ = compile_generation_prompts("BLD-ARCHIVE-DAY", {"size": [88, 64]})
+        for phrase in ("high-resolution pixel art", "glowing", "saturated"):
+            self.assertIn(phrase, pos)
+        for phrase in ("strict logical pixel grid", "no anti-aliasing", "Sea of Stars", "no alpine mountains"):
+            self.assertNotIn(phrase, pos)
+        for phrase in ("anti-aliased", "smooth airbrushed gradient", "painterly"):
+            self.assertNotIn(phrase, neg)
+        for phrase in ("flat vector", "low detail"):
+            self.assertIn(phrase, neg)
+        # The references show a lit dusk campus with autumn trees and a city across the bay.
+        for phrase in ("glowing windows", "autumn", "spruces", "green copper roofs"):
+            self.assertIn(phrase, pos)
+
     def test_storage_keeps_runs_and_rejects_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
             storage = WorkStorage("ICON-JOURNAL", Path(tmp))

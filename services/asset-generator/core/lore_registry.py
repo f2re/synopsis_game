@@ -3,11 +3,12 @@ from __future__ import annotations
 from typing import Any
 
 WORLD_LORE_CONTEXT = (
-    "Setting: a fictional cozy scientific meteorological campus on the shore "
-    "of the Gulf of Finland near St. Petersburg in North-West Russia. Historic academic "
-    "atmosphere: flat horizon, Baltic water, birch and pine, granite embankments, weathered ochre and terracotta "
-    "brick facades, warm amber windows, authentic Russian synoptic meteorological instruments. "
-    "Strictly no alpine mountains, no palm trees, no futuristic sci-fi or fantasy elements."
+    "Setting: a scientific meteorological campus on the shore of the Gulf of Finland near Saint Petersburg in "
+    "North-West Russia: cream-yellow classical academic buildings with green copper roofs and small domes, many "
+    "warm glowing windows, a red brick archive, glass pavilions, a white radar dome on a lattice tower, weather "
+    "balloons and instrument shelters, granite embankments and wooden piers, dark green spruces, white birch and "
+    "orange autumn maples, a blue bay with a city skyline and spires, distant blue hills, glowing street lamps, "
+    "dramatic skies at sunset. No palm trees, no futuristic sci-fi or fantasy elements."
 )
 
 CHARACTER_LORE: dict[str, dict[str, Any]] = {
