@@ -41,7 +41,7 @@ from core.spec_loader import (
 )
 from core.sprite_builder import assemble_sprite_sheet
 from core.work_storage import WorkStorage
-from core.z_image_runner import is_z_image_available, generate_z_image_candidate
+from core.z_image_runner import BACKEND_NAMES, generate_z_image_batch, is_z_image_available, resolve_mode
 
 ROOT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = ROOT_DIR.parents[1]
@@ -231,19 +231,17 @@ async def generate_candidates(
                 raw_paths.append(str(sheet_raw))
                 seeds.append(c_seed)
             chosen_backend = "character_synthesizer"
-        elif is_z_image_available() and backend in ("auto", "z_image", "z_image_turbo"):
-            for c_idx in range(count):
-                c_seed = base_seed + c_idx * 17
-                raw_target = storage.get_raw_path(start_index + c_idx)
-                if not await asyncio.to_thread(
-                    generate_z_image_candidate, pos_prompt, raw_target, target_w, target_h,
-                    seed=c_seed, steps=9, negative_prompt=neg_prompt
-                ):
-                    break
-                raw_paths.append(str(raw_target))
-                seeds.append(c_seed)
+        elif (z_mode := resolve_mode(backend)) is not None:
+            # "auto" prefers the style model (Z-Image Base + style LoRA, real CFG); Turbo is the fast draft.
+            wanted_seeds = [base_seed + c_idx * 17 for c_idx in range(count)]
+            raw_targets = [storage.get_raw_path(start_index + c_idx) for c_idx in range(count)]
+            done = await asyncio.to_thread(
+                generate_z_image_batch, pos_prompt, raw_targets, target_w, target_h, wanted_seeds, neg_prompt, z_mode
+            )
+            raw_paths = [str(path) for path in raw_targets[:done]]
+            seeds = wanted_seeds[:done]
             if raw_paths:
-                chosen_backend = "z_image_turbo"
+                chosen_backend = BACKEND_NAMES[z_mode]
 
         status = "generated_raw" if len(raw_paths) == count else "failed"
         storage.record_generation(asset, pos_prompt, neg_prompt, meta, [Path(p) for p in raw_paths],
@@ -715,7 +713,7 @@ async def generate_day_night_pair(
 # --------------------------------------------------------------------------
 
 @mcp.tool()
-def gpu_status() -> dict[str, Any]:
+async def gpu_status() -> dict[str, Any]:
     """Reports status, VRAM, and availability of GPU 0 and local AI models."""
     vram_info = "unknown"
     try:
@@ -727,10 +725,15 @@ def gpu_status() -> dict[str, Any]:
     except Exception:
         pass
 
+    try:
+        comfy_online = await comfy.is_online()
+    except Exception:
+        comfy_online = False
+
     return {
         "gpu": vram_info,
         "z_image_available": is_z_image_available(),
-        "comfyui_online": comfy.is_online(),
+        "comfyui_online": comfy_online,
         "work_dir": str(WORK_DIR),
         "spec_path": str(SPEC_PATH)
     }

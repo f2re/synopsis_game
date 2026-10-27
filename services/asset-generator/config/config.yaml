@@ -50,5 +50,7 @@ models:
     name: "SDXL + ControlNet"
     role: "geometry_locked_pairs"
   style_lora:
-    name: "synopsis_26063_style_v1.safetensors"
-    trigger: "<26063_pixel_style>"
+    name: "synopsis_26063_style_v1_candidate"
+    trigger: "synopsis_pixel_art"
+    base: "z_image_base"
+    note: "Used by the z_image_style backend (Z-Image Base + LoRA + CFG 4, 30 steps); Turbo ignores it."
