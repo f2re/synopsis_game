@@ -47,11 +47,41 @@ CONFIG_PATH = ROOT_DIR / "config/config.yaml"
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = yaml.safe_load(f)
 
+SERVER_INSTRUCTIONS = """
+Specialized generative AI sprite generator, pixel refiner, and QA pipeline for «26063: Позывной «Синоптик»».
+
+STANDARD ASSET PRODUCTION WORKFLOW:
+1. SPEC & RECON:
+   Call `asset_spec(asset_id)` to inspect dimensions, target class (one of 14 profiles), art priorities, framing contracts, and palette.
+   Call `list_art_profiles()` to view all 14 visual generation classes and their guidelines.
+
+2. GENERATION:
+   Call `generate_candidates(asset_id, count=4)` to produce raw structured candidates in `assets/work/<asset_id>/raw/`.
+   For animated characters, call `generate_sprite_frames(asset_id)`.
+   For paired buildings (day & night), call `generate_day_night_pair(day_id, night_id)`.
+
+3. EVALUATION & SELECTION:
+   Call `rank_candidates(asset_id)` to evaluate candidate occupancy, silhouette clarity, and composition.
+   Call `select_candidate(asset_id, candidate_id)` to choose the best candidate.
+
+4. PIXEL REFINEMENT:
+   Call `refine_candidate(asset_id)` to convert candidate to strict logical pixel grid, edge-aware cluster refinement, and palette mapping without destructive blur. Returns 1x, 2x, 4x preview paths and QA metrics.
+   Call `preview_asset(asset_id)` at any time to inspect generated scales.
+
+5. ART DIRECTOR REVIEW:
+   Call `art_review(asset_id, status='pass'|'fail', reasons=[...])`.
+   Review checks: adult proportions, age readability, material textures, Baltic atmospheric lighting, no chibi/babyface.
+
+6. PRODUCTION APPROVAL:
+   Call `approve_asset(asset_id)` to promote the refined asset to `assets/source/` (only succeeds if both technical contract and art review pass).
+   If rejected, call `reject_candidate(asset_id, candidate_id, reasons=[...])` or `regenerate_asset(asset_id, correction="...")`.
+"""
+
 # Initialize MCP Server (v2 Python SDK)
 mcp = MCPServer(
     name=CONFIG["server"]["name"],
     version="2.0.0",
-    instructions="Specialized AI sprite generator, pixel refiner, and QA system for 26063: Позывной «Синоптик»."
+    instructions=SERVER_INSTRUCTIONS.strip()
 )
 
 SPEC_PATH = REPO_ROOT / CONFIG["paths"]["spec_path"]
@@ -86,7 +116,7 @@ def list_art_profiles() -> dict[str, Any]:
 
 @mcp.tool()
 def asset_spec(asset_id: str) -> dict[str, Any]:
-    """Returns canonical metadata, dimensions, palette constraints, occupancy contracts, and prompts for an asset."""
+    """[Lifecycle Step 1 - Recon] Returns canonical metadata, target class (one of 14 profiles), dimensions, palette family, occupancy bounds, art priorities, and compiled positive/negative prompts."""
     spec = load_spec(SPEC_PATH)
     asset = get_asset_by_id(spec, asset_id)
     pos_prompt, neg_prompt, meta = compile_generation_prompts(asset_id, asset)
@@ -118,7 +148,7 @@ async def generate_candidates(
     seed: int | None = None,
     backend: str = "auto"
 ) -> dict[str, Any]:
-    """Generates structured raw candidate images for an asset into assets/work/<asset_id>/raw/."""
+    """[Lifecycle Step 2 - Generation] Generates raw high-detail candidate images for an asset into assets/work/<asset_id>/raw/ using class-specific workflow and prompt."""
     spec = load_spec(SPEC_PATH)
     asset = get_asset_by_id(spec, asset_id)
     pos_prompt, neg_prompt, meta = compile_generation_prompts(asset_id, asset)
@@ -214,7 +244,7 @@ async def generate_asset(
 
 @mcp.tool()
 def rank_candidates(asset_id: str) -> dict[str, Any]:
-    """Ranks generated candidates in assets/work/<asset_id>/raw/ based on framing, occupancy, and silhouette."""
+    """[Lifecycle Step 3 - Evaluation] Evaluates and scores generated candidates in assets/work/<asset_id>/raw/ on framing, occupancy, silhouette clarity, and composition. Returns ranked list and recommended candidate."""
     storage = WorkStorage(asset_id, base_dir=WORK_DIR)
     raw_files = storage.list_raw_candidates()
     if not raw_files:
@@ -257,7 +287,7 @@ def rank_candidates(asset_id: str) -> dict[str, Any]:
 
 @mcp.tool()
 def select_candidate(asset_id: str, candidate_id: str | int) -> dict[str, Any]:
-    """Promotes a candidate from raw/ to selected/ in preparation for pixel refinement."""
+    """[Lifecycle Step 4a - Selection] Promotes the chosen candidate from raw/ to selected/ for pixel refinement."""
     storage = WorkStorage(asset_id, base_dir=WORK_DIR)
     if isinstance(candidate_id, int):
         cand_path = storage.get_raw_path(candidate_id)
@@ -287,7 +317,7 @@ async def refine_candidate(
     asset_id: str,
     candidate_id: str | int | None = None
 ) -> dict[str, Any]:
-    """Runs pixel_refiner_v2 on the selected (or specified) candidate, creating 1x, 2x, 4x pixel art."""
+    """[Lifecycle Step 4b - Refinement] Transforms raw candidate into crisp logical pixel art with edge-aware downsampling, noise cleanup, and palette mapping. Produces 1x, 2x, 4x previews."""
     storage = WorkStorage(asset_id, base_dir=WORK_DIR)
     spec = load_spec(SPEC_PATH)
     asset = get_asset_by_id(spec, asset_id)
@@ -360,7 +390,7 @@ def art_review(
     status: str,
     reasons: list[str] = []
 ) -> dict[str, Any]:
-    """Records Art Director decision ('pass' or 'fail' with reasons) for the refined candidate."""
+    """[Lifecycle Step 5 - Art Gate] Records Art Director verdict ('pass' or 'fail' with reasons). Evaluates silhouette, adult proportions, age readability, material textures, Baltic atmosphere, no chibi/babyface."""
     if status not in ("pass", "fail"):
         raise HTTPException(status_code=400, detail="status must be 'pass' or 'fail'")
 
@@ -408,7 +438,7 @@ def check_asset_contract(asset_id: str) -> dict[str, Any]:
 
 @mcp.tool()
 def approve_asset(asset_id: str) -> dict[str, Any]:
-    """Approves an asset, moving it to approved/ ONLY if both art_status and technical_status are PASS."""
+    """[Lifecycle Step 6 - Production Approval] Promotes the refined asset to production assets/source/ ONLY if both technical_status and art_status are PASS."""
     storage = WorkStorage(asset_id, base_dir=WORK_DIR)
     report_path = storage.review_dir / "report.json"
     if not report_path.is_file():
