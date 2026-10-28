@@ -3,11 +3,14 @@
 
 Run on the GPU server (comfy-venv) after training, with the generation service stopped:
     python3 eval_world_checkpoints.py --lora-dir .../synopsis_26063_world_v4_B_candidate --out-dir /path/to/eval
-Writes <out>/<name>/<prompt>_s<seed>.png and one contact sheet per seed, rows = prompts, columns = checkpoints.
+Writes <out>/<name>/<prompt>_s<seed>.png, one contact sheet per seed (rows = prompts, columns = checkpoints) and
+scorecard.csv with the automatic metrics; the 0-5 manual columns are for the art director.
 """
 from __future__ import annotations
 
 import argparse
+import csv
+import itertools
 import json
 import logging
 import re
@@ -79,6 +82,56 @@ def _generate(pipe: Any, eval_set: EvalSet, out_dir: Path, *, with_trigger: bool
             log.info("wrote %s", target)
 
 
+MANUAL_CRITERIA = ("style_fidelity", "prompt_adherence", "composition_novelty", "weather_transfer", "interior_leakage")
+THUMB_SIZE = (32, 18)
+
+
+def _thumb(path: Path) -> Any:
+    """Zero-mean, unit-variance grayscale thumbnail used for a cheap composition similarity."""
+    import numpy as np
+    from PIL import Image
+
+    arr = np.asarray(Image.open(path).convert("L").resize(THUMB_SIZE), dtype=float).ravel()
+    return (arr - arr.mean()) / (arr.std() or 1.0)
+
+
+def composition_similarity(a: Path, b: Path) -> float:
+    """Correlation of two coarse luminance layouts: 1.0 is the same composition, near 0 unrelated."""
+    return float((_thumb(a) * _thumb(b)).mean())
+
+
+def automatic_metrics(eval_set: EvalSet, checkpoint_dir: Path) -> dict[str, float]:
+    """seed_diversity: 1 - similarity of the two seeds of one prompt (higher is more varied);
+    cross_prompt_similarity: similarity between different prompts at one seed (high means one stock composition)."""
+    seed_pairs = []
+    for prompt_id, _ in eval_set.prompts:
+        for first, second in itertools.combinations(eval_set.seeds, 2):
+            seed_pairs.append(1.0 - composition_similarity(
+                checkpoint_dir / f"{prompt_id}_s{first}.png", checkpoint_dir / f"{prompt_id}_s{second}.png"))
+    prompt_pairs = []
+    for seed in eval_set.seeds:
+        for (id_a, _), (id_b, _) in itertools.combinations(eval_set.prompts, 2):
+            prompt_pairs.append(composition_similarity(
+                checkpoint_dir / f"{id_a}_s{seed}.png", checkpoint_dir / f"{id_b}_s{seed}.png"))
+    return {
+        "seed_diversity": sum(seed_pairs) / len(seed_pairs) if seed_pairs else 0.0,
+        "cross_prompt_similarity": sum(prompt_pairs) / len(prompt_pairs) if prompt_pairs else 0.0,
+    }
+
+
+def write_scorecard(eval_set: EvalSet, out_dir: Path, names: list[str]) -> Path:
+    """scorecard.csv: automatic metrics filled in, manual 0-5 columns left empty for the art director."""
+    path = out_dir / "scorecard.csv"
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["checkpoint", "seed_diversity", "cross_prompt_similarity", *MANUAL_CRITERIA, "notes"])
+        for name in names:
+            auto = automatic_metrics(eval_set, out_dir / name)
+            writer.writerow([name, f"{auto['seed_diversity']:.3f}", f"{auto['cross_prompt_similarity']:.3f}",
+                             *[""] * len(MANUAL_CRITERIA), ""])
+    return path
+
+
 def _contact_sheets(eval_set: EvalSet, out_dir: Path, names: list[str]) -> None:
     from PIL import Image, ImageDraw
 
@@ -122,7 +175,9 @@ def main() -> int:
         _generate(pipe, eval_set, args.out_dir / name, with_trigger=True)
         pipe.unload_lora_weights()
 
-    _contact_sheets(eval_set, args.out_dir, [BASELINE, *(name for name, _ in checkpoints)])
+    names = [BASELINE, *(name for name, _ in checkpoints)]
+    _contact_sheets(eval_set, args.out_dir, names)
+    log.info("scorecard: %s", write_scorecard(eval_set, args.out_dir, names))
     return 0
 
 
