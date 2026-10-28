@@ -180,7 +180,43 @@ LOCAL_HUB_SPECS: list[WorldSpec] = [
 ]
 
 
-def collect_specs(*, include_local_hub: bool = False) -> list[WorldSpec]:
+# Owner-supplied full frames dropped into the local v3 folder (not checked into Git). Each is one source lineage.
+USER_BATCH_DIR = REPO_ROOT / "assets" / "work" / "style_dataset_v3"
+USER_BATCH_SPECS: list[WorldSpec] = [
+    WorldSpec(
+        "user_campus_golden_autumn",
+        USER_BATCH_DIR / "Golden-Hour Seaside Synoptic Campus-3.png",
+        "wide autumn exterior of a meteorological campus on the Gulf of Finland at golden hour, cream classical main building with a green roof and a white radar dome, lattice mast with red beacons, orange maples and dark spruces, an instrument field with shelters, wet reflective stone paving, a wide bay with a distant city skyline and a spire, layered orange and violet clouds, warm lit windows and street lamps",
+        "local/style_dataset_v3/Golden-Hour Seaside Synoptic Campus-3.png",
+        "exterior",
+        "golden_hour",
+        "autumn",
+        "partly_cloudy",
+    ),
+    WorldSpec(
+        "user_rooftop_balloon_night_snow",
+        USER_BATCH_DIR / "Snowy Rooftop Balloon Launch-2.png",
+        "winter night on the snowy roof terrace of a weather station, a staff member releasing a large pale weather balloon, a louvered instrument shelter on a tripod, equipment cases and a laptop, a lit cabin interior with monitors, a small orange cat, a frozen river with a bridge and a lit city skyline with domes under a starry sky with a moon and thin clouds",
+        "local/style_dataset_v3/Snowy Rooftop Balloon Launch-2.png",
+        "exterior",
+        "night",
+        "winter",
+        "partly_cloudy",
+    ),
+    WorldSpec(
+        "user_winter_station_dawn_balloon",
+        USER_BATCH_DIR / "Winter Weather Station at Dawn-1.png",
+        "winter dawn on a weather station rooftop, a staff member in a dark jacket holding a large weather balloon, a louvered shelter and mast instruments, snow-covered equipment cases, a lit wooden cabin with a window sign, an orange cat in the doorway, a river bridge and a city skyline with domes under a violet and pink sky",
+        "local/style_dataset_v3/Winter Weather Station at Dawn-1.png",
+        "exterior",
+        "dawn",
+        "winter",
+        "partly_cloudy",
+    ),
+]
+
+
+def collect_specs(*, include_local_hub: bool = False, include_user_batch: bool = False) -> list[WorldSpec]:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     by_id = {entry["id"]: entry for entry in manifest["assets"]}
     specs: list[WorldSpec] = []
@@ -207,6 +243,11 @@ def collect_specs(*, include_local_hub: bool = False) -> list[WorldSpec]:
                 f"--include-local-hub requested, but server-local source is missing: {LOCAL_HUB_SOURCE}"
             )
         specs.extend(LOCAL_HUB_SPECS)
+    if include_user_batch:
+        missing = [str(spec.path) for spec in USER_BATCH_SPECS if not spec.path.is_file()]
+        if missing:
+            raise FileNotFoundError(f"--include-user-batch requested, but local frames are missing: {missing}")
+        specs.extend(USER_BATCH_SPECS)
     return specs
 
 
@@ -216,10 +257,12 @@ def main() -> int:
     parser.add_argument("--max-side", type=int, default=2048)
     parser.add_argument("--include-local-hub", action="store_true",
                         help="Add up to three crops from local assets/work/style_refs_v2/ref_11.png")
+    parser.add_argument("--include-user-batch", action="store_true",
+                        help="Add the owner's three full frames from local assets/work/style_dataset_v3")
     parser.add_argument("--validate-only", action="store_true")
     args = parser.parse_args()
 
-    specs = collect_specs(include_local_hub=args.include_local_hub)
+    specs = collect_specs(include_local_hub=args.include_local_hub, include_user_batch=args.include_user_batch)
     if args.validate_only:
         coverage = inspect_world_specs(specs)
         print(json.dumps({"status": "valid", "images": len(specs), "coverage": coverage}, indent=2, ensure_ascii=False))
@@ -227,6 +270,7 @@ def main() -> int:
 
     report = build_world_style_dataset(specs, args.out, max_side=args.max_side)
     report["includes_server_local_hub"] = args.include_local_hub
+    report["includes_user_batch"] = args.include_user_batch
     (args.out / "dataset-report.json").write_text(
         json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )

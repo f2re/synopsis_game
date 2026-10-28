@@ -58,6 +58,18 @@ class WorldSpecTests(unittest.TestCase):
             validate_specs([spec(Path("unused.png"), asset_id="campus_flip")])
 
 
+class UserBatchSpecTests(unittest.TestCase):
+    def test_user_batch_specs_follow_the_protocol(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+        from build_style_dataset_v4 import USER_BATCH_SPECS  # noqa: E402
+
+        validate_specs(USER_BATCH_SPECS)
+        self.assertEqual(len({spec.lineage for spec in USER_BATCH_SPECS}), len(USER_BATCH_SPECS))
+        for spec in USER_BATCH_SPECS:
+            self.assertNotIn("rich saturated", spec.caption)
+            self.assertTrue(caption_for(spec.caption).startswith("synopsis_world_style,"))
+
+
 class WorldBuildTests(unittest.TestCase):
     def test_nearest_only_downscale_preserves_source_colours(self):
         with tempfile.TemporaryDirectory() as tmp:
