@@ -253,6 +253,19 @@ FRAME_SPECS.extend([
               "local/world_frames/world_04_winter_afternoon.png", "exterior", "late_afternoon", "winter", "partly_cloudy"),
 ])
 USER_BATCH_SPECS.extend(FRAME_SPECS[-3:])
+_RAIN = "campus after rain on the Gulf of Finland, cream classical main building with a green roof, a white radar dome and a red-and-white lattice mast behind it, birches and dark spruces, stone stairs and balustrades, iron lamps, a wooden bench, an observation field with white louvered shelters and a wind mast, a grey bay with a distant city skyline and spires, glossy wet stone paving with reflections and puddles, falling rain streaks, no people"
+FRAME_SPECS.extend([
+    WorldSpec("world_02_rain_day", FRAMES_DIR / "world_02_rain_day.png",
+              f"{_RAIN}, flat grey overcast daylight, green summer foliage, lit lamps already on, heavy rain clouds",
+              "local/world_frames/world_02_rain_day.png", "exterior", "day", "summer", "rain"),
+    WorldSpec("world_02_rain_autumn_evening", FRAMES_DIR / "world_02_rain_autumn_evening.png",
+              f"{_RAIN}, dark evening, orange and red autumn foliage, warm glowing windows and lamps, a thin pale band of light on the horizon",
+              "local/world_frames/world_02_rain_autumn_evening.png", "exterior", "dusk", "autumn", "rain"),
+    WorldSpec("world_02_rain_spring_dusk", FRAMES_DIR / "world_02_rain_spring_dusk.png",
+              f"{_RAIN}, dusk with a glow under the clouds, fresh green birch leaves, white and lilac blossoms in the beds, lit windows, city lights reflected in the water",
+              "local/world_frames/world_02_rain_spring_dusk.png", "exterior", "dusk", "spring", "rain"),
+])
+USER_BATCH_SPECS.extend(FRAME_SPECS[-3:])
 
 
 def collect_specs(*, include_local_hub: bool = False, include_user_batch: bool = False) -> list[WorldSpec]:
