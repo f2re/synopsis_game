@@ -114,7 +114,7 @@ def main() -> int:
         duplicate_regen["output_path"] = "datasets/test/job-b-r2.png"
         second["attempts"].append(duplicate_regen)
         ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
-        expect_error(lambda: validate(ledger_path), "regeneration must use a new lineage")
+        expect_error(lambda: validate(ledger_path), "duplicate attempt lineage")
 
     print("OK: LoRA execution ledger semantic tests")
     return 0
