@@ -44,13 +44,20 @@ World-style теперь отдельная задача с trigger `synopsis_wo
 
 ## Текущий seed
 
-`build_style_dataset_v4.py` намеренно собирает небольшой чистый seed из уже имеющихся материалов:
+`build_style_dataset_v4.py` по умолчанию собирает только воспроизводимый seed из файлов, реально находящихся в Git:
 
 - 10 reviewed world scenes из старого manifest;
-- 3 полноценных master-reference сцены: campus exterior, meteo playground, office interior;
-- 3 contextual crops hub из одного source lineage.
+- 3 полноценных master-reference сцены: campus exterior, meteo playground, office interior.
 
-Итого: 16 изображений. Это набор для проверки механики captions/trigger/buckets, а не финальный обучающий корпус.
+Итого по умолчанию: **13 изображений**. Это набор для проверки механики captions/trigger/buckets, а не финальный обучающий корпус.
+
+Старый `assets/work/style_refs_v2/ref_11.png` из v2/v3 не закоммичен и существует только на сервере. Если он там действительно есть, можно явно добавить не более трёх contextual hub crops:
+
+```bash
+python3 services/asset-generator/scripts/build_style_dataset_v4.py --include-local-hub
+```
+
+Тогда seed содержит до 16 изображений. Локальный файл никогда не является неявной зависимостью v4.
 
 ## Как расширять датасет
 
