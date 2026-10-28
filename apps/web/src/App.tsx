@@ -5,6 +5,7 @@ import { AvatarEditor } from './features/avatar/AvatarEditor';
 import { AvatarPreview } from './features/avatar/AvatarPreview';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
 import { PixelIcon, PixelCard, PixelProgressBar, StationNavDock } from './features/ui';
+import { SynopticDutyTicker } from './features/ui/SynopticDutyTicker';
 
 const WorldCanvas = lazy(() => import('./game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
@@ -136,6 +137,7 @@ function Home({
         )}
       </aside>
 
+      <SynopticDutyTicker />
       <StationNavDock onStartShift={() => navigate('/shift')} activeRoute="/" />
     </main>
   );
