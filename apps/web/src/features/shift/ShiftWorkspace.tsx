@@ -25,7 +25,27 @@ function correctAnswerText(value: unknown): string {
   return String(value);
 }
 
-export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
+export type ShiftExitReason = 'manual' | 'completed' | 'startup-error';
+
+export interface ShiftAnswerEvent {
+  instanceId: string;
+  definitionId: string;
+  question: string;
+  responseKind: string;
+  correct: boolean;
+  explanation: string;
+  principleTags: string[];
+  answered: number;
+  correctCount: number;
+  total: number;
+}
+
+interface ShiftWorkspaceProps {
+  onExit: (reason: ShiftExitReason) => void;
+  onAnswerEvaluated?: (event: ShiftAnswerEvent) => void;
+}
+
+export function ShiftWorkspace({ onExit, onAnswerEvaluated }: ShiftWorkspaceProps) {
   const [shiftId, setShiftId] = useState('');
   const [task, setTask] = useState<ShiftTask | null>(null);
   const [progress, setProgress] = useState({ answered: 0, correct: 0, current: 1, total: 0 });
@@ -101,6 +121,18 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
       const result = await api.submitTaskAnswer(shiftId, task.instanceId, answer);
       setFeedback(result);
       setProgress(result.progress);
+      onAnswerEvaluated?.({
+        instanceId: task.instanceId,
+        definitionId: task.definitionId,
+        question: task.question,
+        responseKind: task.response.kind,
+        correct: result.feedback.correct,
+        explanation: result.feedback.explanation,
+        principleTags: [...result.feedback.principleTags],
+        answered: result.progress.answered,
+        correctCount: result.progress.correct,
+        total: result.progress.total,
+      });
       try {
         worldAudio.play(result.feedback.correct ? 'audio.feedback.synoptic-chime' : 'audio.feedback.mistake-thud');
       } catch {}
@@ -117,7 +149,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
   function advance() {
     if (!feedback) return;
     if (feedback.nextTask) setTask(feedback.nextTask);
-    else onExit();
+    else onExit('completed');
   }
 
   if (loading) {
@@ -137,7 +169,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
           <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
           <strong>Смена не запущена</strong>
           <p>{error}</p>
-          <button className="secondary-button" onClick={onExit} style={{ marginTop: 8 }}>Вернуться в центр</button>
+          <button className="secondary-button" onClick={() => onExit('startup-error')} style={{ marginTop: 8 }}>Вернуться в центр</button>
         </section>
       </main>
     );
@@ -176,9 +208,9 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
             showPercent
           />
         </div>
-        <button type="button" className="shift-exit" onClick={onExit}>
+        <button type="button" className="shift-exit" onClick={() => onExit('manual')}>
           <PixelIcon name="logout" size="sm" />
-          <span>В центр</span>
+          <span>Сдать смену</span>
         </button>
       </header>
 
