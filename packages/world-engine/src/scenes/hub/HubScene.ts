@@ -12,6 +12,8 @@ import { HubFaunaLayer } from './HubFaunaLayer';
 import { HubNpcLayer } from './HubNpcLayer';
 import { HubSeasonLayer } from './HubSeasonLayer';
 import { HubStageLayer } from './HubStageLayer';
+import { HubDossierLayer } from './HubDossierLayer';
+import { FACILITY_DOSSIER_BY_BUILDING } from './facilityDossiers';
 import { calculateSeason, isSeason, nextSeason, SEASON_PROFILES, type Season } from './HubSeason';
 import { buildingStatesFromStages, computeStageStatuses } from './hubStages';
 import { STATION_26063_LOCATION } from './HubTimeOfDay';
@@ -32,6 +34,7 @@ export class HubScene extends Phaser.Scene {
   private weatherOverlay?: HubWeatherOverlay;
   private seasonLayer?: HubSeasonLayer;
   private stageLayer?: HubStageLayer;
+  private dossierLayer?: HubDossierLayer;
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
 
@@ -68,6 +71,12 @@ export class HubScene extends Phaser.Scene {
 
     // 4. Слой L5: Интерактивные здания кампуса 26063
     this.buildingLayer = new HubBuildingLayer(this);
+
+    // 4a. Досье помещений: живой голос хранителя и действия без смены DOM-маршрута.
+    this.dossierLayer = new HubDossierLayer(this, {
+      onStartShift: () => worldBridge.emit('world:start_shift', {}),
+      onOpenScene: (sceneKey) => this.scene.start(sceneKey),
+    });
 
     // 5. Слой L8: Фауна (синица, воробьи, чайка, утка, белка, кот Барограф)
     this.faunaLayer = new HubFaunaLayer(this, this.scheduleManager);
@@ -190,6 +199,14 @@ export class HubScene extends Phaser.Scene {
       },
     );
 
+    // 7. Фактический клик по зданию открывает досье из текущего 480×270 слоя.
+    const unsubFacilityDossier = worldBridge.on('world:building_click', (buildingId: string) => {
+      const dossierId = FACILITY_DOSSIER_BY_BUILDING[buildingId];
+      const buildingState = this.buildingLayer?.getBuildingState(buildingId);
+      if (!dossierId || !buildingState) return;
+      this.dossierLayer?.open(dossierId, buildingState);
+    });
+
     this.bridgeUnsubscribers.push(
       unsubBuildings,
       unsubPhase,
@@ -197,6 +214,7 @@ export class HubScene extends Phaser.Scene {
       unsubWeather,
       unsubCalm,
       unsubBuildingClick,
+      unsubFacilityDossier,
       unsubSeason,
       unsubCycleSeason,
       unsubStages,
@@ -230,6 +248,7 @@ export class HubScene extends Phaser.Scene {
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
 
+    this.dossierLayer?.destroy();
     this.environmentLayer?.destroy();
     this.groundDecorLayer?.destroy();
     this.buildingLayer?.destroy();
