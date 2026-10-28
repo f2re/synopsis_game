@@ -216,6 +216,32 @@ USER_BATCH_SPECS: list[WorldSpec] = [
 ]
 
 
+FRAMES_DIR = REPO_ROOT / "assets" / "work" / "world_frames"
+_ALLEY = "autumn campus alley with white birches and orange maples, black iron street lamps, wooden benches, a stone balustrade and stairs, dark spruces, a cream building with a green roof and a white radar dome behind the trees, a bay with a distant city skyline and a dome, wet reflective stone paving with fallen leaves, no people"
+_SHORE = "rocky Gulf of Finland shore in autumn, mossy granite boulders and orange heather, pines and birches, a lone instrument mast with anemometer and sensor boxes on a stone base, breaking waves and spray, a low city skyline with a dome and spires on the horizon, no people"
+FRAME_SPECS: list[WorldSpec] = [
+    WorldSpec("world_21_alley_sunset", FRAMES_DIR / "world_21_alley_sunset.png",
+              f"{_ALLEY}, low sun at the horizon, orange and violet layered clouds, lit lamps and warm windows",
+              "local/world_frames/world_21_alley_sunset.png", "exterior", "golden_hour", "autumn", "partly_cloudy"),
+    WorldSpec("world_21_alley_afternoon", FRAMES_DIR / "world_21_alley_afternoon.png",
+              f"{_ALLEY}, late afternoon warm sunlight through the foliage, blue sky with pink and gold clouds",
+              "local/world_frames/world_21_alley_afternoon.png", "exterior", "late_afternoon", "autumn", "partly_cloudy"),
+    WorldSpec("world_21_alley_day", FRAMES_DIR / "world_21_alley_day.png",
+              f"{_ALLEY}, bright daylight, deep blue sky with white cumulus clouds",
+              "local/world_frames/world_21_alley_day.png", "exterior", "day", "autumn", "partly_cloudy"),
+    WorldSpec("world_22_shore_storm", FRAMES_DIR / "world_22_shore_storm.png",
+              f"{_SHORE}, heavy dark storm clouds with a bright gap of low sun on the right, rough dark water",
+              "local/world_frames/world_22_shore_storm.png", "exterior", "late_afternoon", "autumn", "storm_clouds"),
+    WorldSpec("world_22_shore_golden", FRAMES_DIR / "world_22_shore_golden.png",
+              f"{_SHORE}, large sunlit cumulus clouds with golden edges, warm low light on the rocks, wind-driven waves",
+              "local/world_frames/world_22_shore_golden.png", "exterior", "golden_hour", "autumn", "windy_cumulus"),
+    WorldSpec("world_22_shore_skyline", FRAMES_DIR / "world_22_shore_skyline.png",
+              f"{_SHORE}, dark clouds with crepuscular rays over the city, a gull above the mast, a detailed skyline across the water",
+              "local/world_frames/world_22_shore_skyline.png", "exterior", "late_afternoon", "autumn", "storm_clouds"),
+]
+USER_BATCH_SPECS.extend(FRAME_SPECS)
+
+
 def collect_specs(*, include_local_hub: bool = False, include_user_batch: bool = False) -> list[WorldSpec]:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     by_id = {entry["id"]: entry for entry in manifest["assets"]}
@@ -258,7 +284,7 @@ def main() -> int:
     parser.add_argument("--include-local-hub", action="store_true",
                         help="Add up to three crops from local assets/work/style_refs_v2/ref_11.png")
     parser.add_argument("--include-user-batch", action="store_true",
-                        help="Add the owner's three full frames from local assets/work/style_dataset_v3")
+                        help="Add the owner's full frames from local assets/work/style_dataset_v3 and assets/work/world_frames")
     parser.add_argument("--validate-only", action="store_true")
     args = parser.parse_args()
 
