@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import itertools
 import json
 import logging
@@ -90,7 +91,7 @@ MANUAL_CRITERIA = (
     "interior_isolation_archive",
     "interior_isolation_hall",
     "prompt_adherence_workshop",
-    "prompt_adherence_radar",
+    "prompt_adherence_radar_low_angle",
 )
 THUMB_SIZE = (32, 18)
 
@@ -129,16 +130,28 @@ def automatic_metrics(eval_set: EvalSet, checkpoint_dir: Path) -> dict[str, floa
     }
 
 
-def write_scorecard(eval_set: EvalSet, out_dir: Path, names: list[str]) -> Path:
-    """scorecard.csv: automatic metrics filled in, manual 0-5 columns left empty for the art director."""
+def weights_sha256(path: Path) -> str:
+    """Checkpoint and final exports can differ technically, so equality is shown by hash, never assumed."""
+    return hashlib.sha256((path / "pytorch_lora_weights.safetensors").read_bytes()).hexdigest()
+
+
+def write_scorecard(eval_set: EvalSet, out_dir: Path, names: list[str], weights: dict[str, Path] | None = None) -> Path:
+    """scorecard.csv, one row per base/checkpoint: automatic metrics (with the delta against the base model) and the
+    weights hash are filled in, the manual 0-5 columns are left empty for the art director."""
+    weights = weights or {}
+    auto = {name: automatic_metrics(eval_set, out_dir / name) for name in names}
+    base_similarity = auto[BASELINE]["cross_prompt_similarity"] if BASELINE in auto else None
     path = out_dir / "scorecard.csv"
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
-        writer.writerow(["checkpoint", "seed_diversity", "cross_prompt_similarity", *MANUAL_CRITERIA, "notes"])
+        writer.writerow(["checkpoint", "seed_diversity", "cross_prompt_similarity", "cross_prompt_similarity_delta_vs_base",
+                         *MANUAL_CRITERIA, "weights_sha256", "notes"])
         for name in names:
-            auto = automatic_metrics(eval_set, out_dir / name)
-            writer.writerow([name, f"{auto['seed_diversity']:.3f}", f"{auto['cross_prompt_similarity']:.3f}",
-                             *[""] * len(MANUAL_CRITERIA), ""])
+            metrics = auto[name]
+            delta = "" if base_similarity is None else f"{metrics['cross_prompt_similarity'] - base_similarity:.3f}"
+            digest = weights_sha256(weights[name]) if name in weights else ""
+            writer.writerow([name, f"{metrics['seed_diversity']:.3f}", f"{metrics['cross_prompt_similarity']:.3f}", delta,
+                             *[""] * len(MANUAL_CRITERIA), digest, ""])
     return path
 
 
@@ -187,7 +200,7 @@ def main() -> int:
 
     names = [BASELINE, *(name for name, _ in checkpoints)]
     _contact_sheets(eval_set, args.out_dir, names)
-    log.info("scorecard: %s", write_scorecard(eval_set, args.out_dir, names))
+    log.info("scorecard: %s", write_scorecard(eval_set, args.out_dir, names, dict(checkpoints)))
     return 0
 
 

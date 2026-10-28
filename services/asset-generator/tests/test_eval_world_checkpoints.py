@@ -77,9 +77,16 @@ class MetricTests(unittest.TestCase):
             auto = automatic_metrics(eval_set, root / "ckpt")
             self.assertAlmostEqual(auto["seed_diversity"], 0.0, places=3)
             self.assertAlmostEqual(auto["cross_prompt_similarity"], 1.0, places=3)
-            lines = write_scorecard(eval_set, root, ["ckpt"]).read_text(encoding="utf-8").splitlines()
-            self.assertEqual(lines[0].split(",")[0:3], ["checkpoint", "seed_diversity", "cross_prompt_similarity"])
-            self.assertTrue(lines[1].startswith("ckpt,0.000,1.000,,,,,,"))
+            weights = root / "w"
+            weights.mkdir()
+            (weights / "pytorch_lora_weights.safetensors").write_bytes(b"abc")
+            lines = write_scorecard(eval_set, root, ["ckpt"], {"ckpt": weights}).read_text(encoding="utf-8").splitlines()
+            header = lines[0].split(",")
+            self.assertEqual(header[:4], ["checkpoint", "seed_diversity", "cross_prompt_similarity",
+                                          "cross_prompt_similarity_delta_vs_base"])
+            self.assertIn("prompt_adherence_radar_low_angle", header)
+            self.assertTrue(lines[1].startswith("ckpt,0.000,1.000,,"))  # no baseline row here, so no delta
+            self.assertIn("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", lines[1])  # sha256("abc")
 
 
 if __name__ == "__main__":

@@ -95,12 +95,14 @@ single independent composition, one image only, no collage, no contact sheet, no
   в ведомости обязательна: это эталон композиционной свободы без LoRA.
 - Вручную, шкала 0–5, 5 = лучше: `style_fidelity`, `weather_transfer`, `composition_novelty`,
   `interior_isolation_archive` и `interior_isolation_hall` (5 = чистый интерьер, кампус не просачивается),
-  `prompt_adherence_workshop` и `prompt_adherence_radar` (радар снизу).
+  `prompt_adherence_workshop` и `prompt_adherence_radar_low_angle` (отдельные сцены, не среднее по девяти).
 
 Три veto (чекпоинт, не прошедший любое, выбывает независимо от красоты):
 1. `interior_isolation` ≥ 4 в архиве и в оперативном зале.
-2. `cross_prompt_similarity` не выше среднего по checkpoint-200 и 300 больше чем на 0.05.
+2. `cross_prompt_similarity` не выше среднего по checkpoint-200 и 300 больше чем на 0.05 и не выше базовой модели больше чем на 0.15 (`cross_prompt_similarity_delta_vs_base` в ведомости): иначе уже испорченные 200/300 становились бы нормой.
 3. `prompt_adherence` ≥ 4 на мастерской и на радаре снизу.
+
+В ведомости для каждой строки `base / checkpoint-100…500 / final`: `seed_diversity`, `cross_prompt_similarity`, `delta_vs_base`, две оценки изоляции, adherence на мастерской и на радаре, style, weather, а также `weights_sha256`. `final` сравнивается с последним чекпоинтом по хэшу весов, а не считается им автоматически.
 
 Среди прошедших порядок: `style_fidelity`, затем `weather_transfer`, затем `seed_diversity`. Пустая ручная оценка
 считается провалом.
