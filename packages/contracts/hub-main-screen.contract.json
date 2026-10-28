@@ -1,0 +1,103 @@
+{
+  "schema": "hub-main-screen-contract/v2",
+  "scene": "hub",
+  "status": "art-review-reopened",
+  "master": {
+    "sourceName": "image-gen-1(20261025-183207).png",
+    "repositoryPath": "assets/source/environment/hub/master/hub_master_approved.png",
+    "width": 1672,
+    "height": 941,
+    "colorMode": "RGB",
+    "format": "png",
+    "bytes": 2953225,
+    "sha256": "3efc212bdcd7eaaacac119d20cbd89f83ab62d3d9761aafd5abdacae5660a340",
+    "policy": "immutable-composition-reference"
+  },
+  "runtime": {
+    "logicalCoordinateSpace": [960, 540],
+    "scalePolicy": "cover",
+    "sourceTexture": {
+      "minimumWidth": 1672,
+      "minimumHeight": 941,
+      "forbid960x540AsFullscreenTexture": true,
+      "allowedFormats": ["png", "webp"],
+      "webpMinimumQuality": 90,
+      "minimumPsnrDbAgainstMaster": 31.5,
+      "maximumMaePerChannelAgainstMaster": 4.5
+    },
+    "sampling": {
+      "integerPixelGridIsNotAssumedAtViewportScale": true,
+      "avoidNearestNeighbourForNonIntegerFullscreenScaling": true
+    }
+  },
+  "layers": [
+    {
+      "id": "L0-L4.environment",
+      "role": "clean_environment_plate",
+      "containsRuntimeUi": false,
+      "requiredForFinalArtAcceptance": true
+    },
+    {
+      "id": "L5.dynamic",
+      "role": "characters_fauna_flags_instruments_optional_runtime_families",
+      "containsRuntimeUi": false
+    },
+    {
+      "id": "L6.lighting",
+      "role": "time_weather_lighting_stack",
+      "masks": [
+        "hub.mask.environment",
+        "hub.mask.sky",
+        "hub.mask.window_light",
+        "hub.mask.lamp_glow"
+      ]
+    },
+    {
+      "id": "L7.ui",
+      "role": "runtime_ui",
+      "contains": [
+        "top_status_bar",
+        "profile",
+        "settings",
+        "location_labels",
+        "bottom_navigation",
+        "primary_cta",
+        "notifications"
+      ],
+      "mustNotBeBakedIntoEnvironmentPlate": true
+    }
+  ],
+  "timeOfDay": {
+    "worldLocationProfile": "campus-26063",
+    "states": ["day", "noon", "twilight", "night"],
+    "transition": "continuous-crossfade",
+    "rules": {
+      "day": "bright neutral-cool environment; window and lamp glow suppressed",
+      "noon": "maximum diffuse daylight; restrained warm cast; readable UI unchanged",
+      "twilight": "approved master lighting baseline",
+      "night": "blue-dark environment with additive warm window and lamp masks"
+    },
+    "uiIsExcludedFromWorldLighting": true
+  },
+  "temporaryFallback": {
+    "allowed": true,
+    "description": "The immutable approved full master may be shown only as a temporary high-fidelity visual fallback while the clean environment plate is produced.",
+    "requirements": [
+      "native texture dimensions are at least 1672x941",
+      "runtime derivative passes quality thresholds",
+      "lighting excludes baked UI regions",
+      "fallback is not marked ART_ACCEPTED as final layered production"
+    ]
+  },
+  "acceptance": {
+    "requiredViewports": ["1920x1080", "2560x1440", "1440x900", "mobile-portrait"],
+    "requiredChecks": [
+      "source SHA-256 matches approved master",
+      "no fullscreen rendering from 960x540 derivative",
+      "static composite matches approved composition outside declared dynamic/UI masks",
+      "world lighting does not recolor runtime UI",
+      "UI remains independently interactive and replaceable",
+      "no procedural geometry substitutes visible production art"
+    ]
+  }
+}
