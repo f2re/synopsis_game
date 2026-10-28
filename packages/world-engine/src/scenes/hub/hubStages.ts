@@ -15,10 +15,14 @@ export interface HubStageDefinition {
  * Маршрут прохождения по кампусу. Порядок выведен из подсказок
  * разблокировки в `locationRegistry.ts`; финальный сюжетный порядок
  * подтверждает методист/гейм-дизайнер.
+ *
+ * Архив как помещение доступен с начала: внутри ArchiveScene отдельные
+ * материалы сами управляют своими условиями открытия. Это исключает
+ * двойную блокировку двери и содержимого.
  */
 export const HUB_STAGES: readonly HubStageDefinition[] = [
   { id: 'kn01', order: 1, buildingId: 'codepost', title: 'Кодовый пост · КН-01', requires: [] },
-  { id: 'archive', order: 2, buildingId: 'archive', title: 'Архив наблюдений', requires: ['kn01'] },
+  { id: 'archive', order: 2, buildingId: 'archive', title: 'Архив наблюдений', requires: [] },
   { id: 'cartography', order: 3, buildingId: 'cartography', title: 'Картографический класс', requires: ['kn01'] },
   { id: 'duel', order: 4, buildingId: 'hall', title: 'Зал дуэлей · зачёт КН-01', requires: ['kn01', 'archive', 'cartography'] },
   { id: 'radar', order: 5, buildingId: 'radar', title: 'Радар ДМРЛ · уровень 2', requires: ['duel'] },

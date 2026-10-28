@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { createWorldGame } from '@synopsis/world-engine';
+import { createWorldGame, worldBridge } from '@synopsis/world-engine';
 
 export function WorldCanvas() {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -11,6 +11,9 @@ export function WorldCanvas() {
     }
 
     const game = createWorldGame({ parent: host });
+    const unsubscribeStartShift = worldBridge.on('world:start_shift', () => {
+      window.dispatchEvent(new CustomEvent('hub:start-shift'));
+    });
 
     const handleVisibility = () => {
       if (document.hidden) {
@@ -23,6 +26,7 @@ export function WorldCanvas() {
     document.addEventListener('visibilitychange', handleVisibility);
 
     return () => {
+      unsubscribeStartShift();
       document.removeEventListener('visibilitychange', handleVisibility);
       game.destroy(true);
     };
