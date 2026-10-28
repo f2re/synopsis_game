@@ -1,4 +1,5 @@
 {
+  "id": "training.style-lora.legacy-v1",
   "status": "trained_candidate",
   "base_model": "/home/user/synopsis-ai/models/diffusers/Z-Image",
   "trainer_sha256": "a3c801c3586983f41262253185f78c95d84791759f5faf4160a85738497bd042",
