@@ -1,0 +1,115 @@
+.shift-mentor-reaction {
+  position: fixed;
+  right: 18px;
+  bottom: 72px;
+  z-index: 158;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: min(420px, calc(100vw - 36px));
+  padding: 12px 14px;
+  border: 1px solid rgba(220, 183, 103, 0.38);
+  background: rgba(15, 44, 50, 0.97);
+  color: #cfddd8;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
+  text-align: left;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.shift-mentor-reaction strong { color: #efd89e; }
+.shift-mentor-reaction.is-wrong { border-color: rgba(209, 129, 94, 0.62); }
+.shift-mentor-reaction.is-correct { border-color: rgba(104, 174, 145, 0.58); }
+
+.shift-mentor-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 2px;
+  padding: 0 5px;
+  border: 1px solid rgba(233, 184, 97, 0.55);
+  background: rgba(112, 54, 38, 0.58);
+  color: #ffe1a1;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.shift-journal-page > .shift-journal-list {
+  display: grid;
+  gap: 10px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.shift-journal-entry {
+  padding: 12px;
+  border: 1px solid rgba(143, 177, 168, 0.24);
+  background: rgba(3, 20, 24, 0.28);
+}
+
+.shift-journal-entry.is-wrong { border-left: 3px solid #c8825f; }
+.shift-journal-entry.is-correct { border-left: 3px solid #6ead91; }
+
+.shift-journal-entry > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+  color: #d9e7e2;
+}
+
+.shift-journal-entry > header span {
+  color: #91aaa4;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.shift-journal-entry p {
+  margin: 0 0 9px;
+  color: #d0ddd9;
+  line-height: 1.45;
+}
+
+.shift-journal-explanation {
+  padding: 9px 10px;
+  border: 0;
+  background: rgba(229, 219, 183, 0.055);
+  color: #b9cec8;
+  line-height: 1.45;
+}
+
+.shift-journal-entry small {
+  display: block;
+  margin-top: 8px;
+  color: #d3b977;
+  line-height: 1.4;
+}
+
+.shift-debrief-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 48px);
+  background: rgba(3, 14, 18, 0.78);
+  backdrop-filter: blur(5px);
+}
+
+.shift-debrief-overlay .shift-debrief-card {
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+@media (max-width: 640px) {
+  .shift-mentor-reaction {
+    right: 10px;
+    bottom: 62px;
+    width: calc(100vw - 20px);
+  }
+
+  .shift-debrief-overlay { padding: 10px; }
+}
