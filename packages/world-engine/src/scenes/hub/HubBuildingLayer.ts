@@ -162,9 +162,9 @@ export class HubBuildingLayer {
   create(): void {
     HUB_BUILDINGS.forEach((building) => {
       const container = this.scene.add.container(building.bounds.x, building.bounds.y);
-      const state = this.buildingStates.get(building.id) || 'locked';
 
-      // Интерактивная зона клика
+      // Интерактивная зона клика. Закрытые здания тоже принимают клик:
+      // досье должно объяснить условие открытия вместо немого запрета.
       const hitArea = this.scene.add
         .rectangle(
           0,
@@ -175,12 +175,10 @@ export class HubBuildingLayer {
           0,
         )
         .setOrigin(0, 0)
-        .setInteractive({ useHandCursor: state !== 'locked' });
+        .setInteractive({ useHandCursor: true });
 
       hitArea.on('pointerdown', () => {
-        if (this.buildingStates.get(building.id) !== 'locked') {
-          worldBridge.notifyBuildingClicked(building.id);
-        }
+        worldBridge.notifyBuildingClicked(building.id);
       });
 
       // 1-пиксельный контур и маркер состояния
