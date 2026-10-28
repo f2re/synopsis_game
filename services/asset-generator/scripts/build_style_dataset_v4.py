@@ -240,6 +240,19 @@ FRAME_SPECS: list[WorldSpec] = [
               "local/world_frames/world_22_shore_skyline.png", "exterior", "late_afternoon", "autumn", "storm_clouds"),
 ]
 USER_BATCH_SPECS.extend(FRAME_SPECS)
+_WINTER = "snow-covered meteorological campus on the Gulf of Finland, cream classical main building with a snowy green roof, a white radar dome and a red-and-white lattice mast behind it, snowy spruces and bare white birches, stone stairs and balustrades with snow caps, iron lamps, a wooden bench, an observation field with white louvered shelters and a wind mast behind a fence, a frozen bay with ice floes and a distant city skyline with spires, no people"
+FRAME_SPECS.extend([
+    WorldSpec("world_04_winter_sunset", FRAMES_DIR / "world_04_winter_sunset.png",
+              f"{_WINTER}, low orange sun on the horizon, pink and violet snow shadows, warm lit windows and lit lamps",
+              "local/world_frames/world_04_winter_sunset.png", "exterior", "golden_hour", "winter", "clear"),
+    WorldSpec("world_04_winter_day", FRAMES_DIR / "world_04_winter_day.png",
+              f"{_WINTER}, bright clear daylight, deep blue sky with a few thin clouds, crisp cool shadows on the snow",
+              "local/world_frames/world_04_winter_day.png", "exterior", "day", "winter", "clear"),
+    WorldSpec("world_04_winter_afternoon", FRAMES_DIR / "world_04_winter_afternoon.png",
+              f"{_WINTER}, soft late afternoon light, peach and gold clouds in a pale blue sky, warm light on the facade",
+              "local/world_frames/world_04_winter_afternoon.png", "exterior", "late_afternoon", "winter", "partly_cloudy"),
+])
+USER_BATCH_SPECS.extend(FRAME_SPECS[-3:])
 
 
 def collect_specs(*, include_local_hub: bool = False, include_user_batch: bool = False) -> list[WorldSpec]:
