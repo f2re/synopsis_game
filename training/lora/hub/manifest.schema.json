@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/f2re/synopsis_game/training/lora/hub/manifest.schema.json",
+  "title": "26063 hub LoRA generation manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset", "adapter", "trigger", "logical_grid", "target_render", "generation_contract", "enums", "style_contract", "prompt_prefix", "negative_prompt", "scenes", "samples"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "dataset": {"const": "synopsis_hub_diorama"},
+    "adapter": {"const": "hub"},
+    "trigger": {"const": "synopsis_hub_diorama"},
+    "logical_grid": {"type": "array", "prefixItems": [{"const": 480}, {"const": 270}], "items": false},
+    "target_render": {
+      "type": "object", "additionalProperties": false,
+      "required": ["min_long_edge", "scaling"],
+      "properties": {
+        "min_long_edge": {"type": "integer", "minimum": 1024},
+        "scaling": {"const": "native_or_integer_nearest"}
+      }
+    },
+    "generation_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["images_per_job", "collage", "allow_flip", "allow_recolour_clone", "allow_smooth_upscale", "no_text", "no_ui"],
+      "properties": {
+        "images_per_job": {"const": 1}, "collage": {"const": false}, "allow_flip": {"const": false},
+        "allow_recolour_clone": {"const": false}, "allow_smooth_upscale": {"const": false},
+        "no_text": {"const": true}, "no_ui": {"const": true}
+      }
+    },
+    "enums": {
+      "type": "object", "additionalProperties": false,
+      "required": ["time_of_day", "weather", "season", "split"],
+      "properties": {
+        "time_of_day": {"const": ["dawn", "day", "golden_hour", "civil_twilight", "night"]},
+        "weather": {"const": ["clear", "overcast", "rain", "thunderstorm", "snow", "windy"]},
+        "season": {"const": ["spring", "summer", "autumn", "winter"]},
+        "split": {"const": ["train", "validation"]}
+      }
+    },
+    "style_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pixel_scale", "presentation", "composition", "local_surface_shades", "min_human_traces", "architecture", "forbidden"],
+      "properties": {
+        "pixel_scale": {"const": "fixed_logical_pixel_size"},
+        "presentation": {"const": "nearest_neighbour"},
+        "composition": {"const": "60/30/10"},
+        "local_surface_shades": {"type": "array", "prefixItems": [{"const": 3}, {"const": 5}], "items": false},
+        "min_human_traces": {"type": "integer", "minimum": 3},
+        "architecture": {"type": "string", "minLength": 1},
+        "forbidden": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "prompt_prefix": {"type": "string", "minLength": 100},
+    "negative_prompt": {"type": "string", "minLength": 30},
+    "scenes": {"type": "object", "minProperties": 10, "maxProperties": 10, "additionalProperties": {"type": "string", "minLength": 30}},
+    "samples": {
+      "type": "array", "minItems": 30, "maxItems": 30,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "scene_id", "lineage_id", "split", "time_of_day", "weather", "season", "independent_render", "num_images", "min_long_edge", "output_path"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^hub-[a-z0-9-]+-[0-9]{2}$"},
+          "scene_id": {"type": "string", "minLength": 1},
+          "lineage_id": {"type": "string", "pattern": "^hub-src-[0-9]{3}$"},
+          "split": {"enum": ["train", "validation"]},
+          "time_of_day": {"enum": ["dawn", "day", "golden_hour", "civil_twilight", "night"]},
+          "weather": {"enum": ["clear", "overcast", "rain", "thunderstorm", "snow", "windy"]},
+          "season": {"enum": ["spring", "summer", "autumn", "winter"]},
+          "independent_render": {"const": true}, "num_images": {"const": 1},
+          "min_long_edge": {"type": "integer", "minimum": 1024},
+          "output_path": {"type": "string", "pattern": "^datasets/lora/hub/source/.+\\.png$"}
+        }
+      }
+    }
+  }
+}
