@@ -37,7 +37,9 @@ jobs:
           python scripts/build_character_generation_queue.py --check-only
           python scripts/validate_props_lora_manifest.py
           python scripts/build_props_generation_queue.py --check-only
-          python -m py_compile scripts/validate_*_lora_manifest.py scripts/build_*_generation_queue.py
+          python scripts/init_lora_execution_ledger.py --check-only
+          python scripts/test_lora_execution_ledger.py
+          python -m py_compile scripts/validate_*_lora_manifest.py scripts/build_*_generation_queue.py scripts/init_lora_execution_ledger.py scripts/validate_lora_execution_ledger.py scripts/test_lora_execution_ledger.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
