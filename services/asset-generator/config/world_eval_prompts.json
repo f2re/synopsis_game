@@ -1,0 +1,50 @@
+{
+  "version": "world-style-v4-eval-1",
+  "note": "Fixed acceptance set for world-style checkpoints; the trigger is added by the script. Each group answers one question of docs/TRAINING_STYLE_V4.md.",
+  "negative_prompt": "text, letters, UI, watermark, frame, collage, blurry, 3d render, photo",
+  "width": 1360,
+  "height": 768,
+  "seeds": [26063, 7],
+  "prompts": [
+    {
+      "id": "known_context",
+      "group": "known subject, known context",
+      "text": "wide exterior establishing shot of a compact meteorological research campus on the Gulf of Finland, cream main building with a green roof on the left, white radar dome behind, granite terrace, birch and pine, bay on the right, daylight, partly cloudy"
+    },
+    {
+      "id": "new_composition",
+      "group": "known subject, new composition",
+      "text": "low angle view from the rocky shore looking up at the campus terraces and the radar dome on the hill, granite steps in the foreground, pines framing the left, late afternoon, scattered clouds"
+    },
+    {
+      "id": "novel_workshop",
+      "group": "novel subject, learned style",
+      "text": "medium exterior view of a small practical instrument workshop with a corrugated roof and a lit window, gravel yard, cable drums and equipment cases, birch and pine behind, overcast daylight"
+    },
+    {
+      "id": "interior_archive",
+      "group": "interior without the main building",
+      "text": "interior of a climatology archive, tall wooden shelves with folders, flat map drawers, a reading table with open binders and a green lamp, a window with grey light, no people, no radar dome in view"
+    },
+    {
+      "id": "interior_hall",
+      "group": "interior without the main building",
+      "text": "interior of an operational synoptic hall, rows of desks with monitors showing weather maps, empty chairs, a jacket over a chair, a large window onto a foggy bay, no people"
+    },
+    {
+      "id": "weather_snow",
+      "group": "weather transfer",
+      "text": "small instrument workshop beside a path in heavy snowfall, snow on the roof and fence, a lit window, bare birches and spruces, soft grey light"
+    },
+    {
+      "id": "time_day",
+      "group": "time transfer",
+      "text": "meteorological observation field with white louvered shelters and a wind mast on grass, a low fence, trees behind, bright daylight, blue sky with cumulus clouds"
+    },
+    {
+      "id": "time_twilight",
+      "group": "time transfer",
+      "text": "meteorological observation field with white louvered shelters and a wind mast on grass, a low fence, trees behind, civil twilight, deep blue sky, a few lit lamps, cool shadows"
+    }
+  ]
+}
