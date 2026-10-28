@@ -2,12 +2,13 @@
 """Build the clean environment-only 26063 world-style v4 seed dataset.
 
 v4 intentionally does not inherit v2/v3. It selects only complete environment
-scenes and a small number of contextual hub crops, uses a scoped trigger word,
-adds no global colour/lighting tail, performs no flips/recolouring and uses
-nearest-neighbour only when a source must be downscaled.
+scenes, uses a scoped trigger word, adds no global colour/lighting tail,
+performs no flips/recolouring and uses nearest-neighbour only when a source
+must be downscaled.
 
-The checked-in references currently form a small seed set. The report marks it
-as such until at least 80 genuinely distinct compositions are present.
+The reproducible Git seed contains only checked-in references. A server-local
+hub screenshot from the older v2/v3 workflow can be added explicitly with
+--include-local-hub, but is never an implicit dependency.
 """
 from __future__ import annotations
 
@@ -27,7 +28,7 @@ from core.world_style_dataset import (  # noqa: E402
 )
 
 MANIFEST = REPO_ROOT / "assets" / "manifests" / "style_lora_dataset.json"
-V2_REFS = REPO_ROOT / "assets" / "work" / "style_refs_v2"
+LOCAL_V2_REFS = REPO_ROOT / "assets" / "work" / "style_refs_v2"
 MASTER = REPO_ROOT / "design" / "pixel-art" / "references" / "master_26063"
 DEFAULT_OUT = REPO_ROOT / "assets" / "work" / "style_dataset_v4_world"
 
@@ -139,15 +140,15 @@ MASTER_SPECS: list[WorldSpec] = [
     ),
 ]
 
-# At most three samples from one screenshot lineage. These retain environment
-# context; no isolated facade/object-sheet crops are admitted.
-HUB_SOURCE = V2_REFS / "ref_11.png"
-HUB_SPECS: list[WorldSpec] = [
+# Optional server-local source inherited from the v2/v3 experiment. It is not
+# checked into Git. At most three contextual crops are accepted from it.
+LOCAL_HUB_SOURCE = LOCAL_V2_REFS / "ref_11.png"
+LOCAL_HUB_SPECS: list[WorldSpec] = [
     WorldSpec(
         "hub_context_full",
-        HUB_SOURCE,
+        LOCAL_HUB_SOURCE,
         "wide 2.5d campus hub at sunset, tiered granite plaza, several compact scientific buildings and open working pavilions, staff traces, spruces, globe fountain and one coherent dusk light",
-        "style_refs_v2/ref_11.png",
+        "local/style_refs_v2/ref_11.png",
         "exterior",
         "golden_hour",
         "autumn",
@@ -156,9 +157,9 @@ HUB_SPECS: list[WorldSpec] = [
     ),
     WorldSpec(
         "hub_context_maps_pavilion",
-        HUB_SOURCE,
+        LOCAL_HUB_SOURCE,
         "medium contextual view of a glass-sided maps pavilion inside the campus, staff desks and wall charts visible through the open front, granite terrace, vegetation and the surrounding hub still visible",
-        "style_refs_v2/ref_11.png",
+        "local/style_refs_v2/ref_11.png",
         "interior_in_context",
         "golden_hour",
         "autumn",
@@ -167,9 +168,9 @@ HUB_SPECS: list[WorldSpec] = [
     ),
     WorldSpec(
         "hub_context_archive",
-        HUB_SOURCE,
+        LOCAL_HUB_SOURCE,
         "medium contextual view of the campus archive room with bookshelves, globe and working materials visible through an open front, ivy and stone exterior tied to the surrounding dusk campus",
-        "style_refs_v2/ref_11.png",
+        "local/style_refs_v2/ref_11.png",
         "interior_in_context",
         "golden_hour",
         "autumn",
@@ -179,7 +180,7 @@ HUB_SPECS: list[WorldSpec] = [
 ]
 
 
-def collect_specs() -> list[WorldSpec]:
+def collect_specs(*, include_local_hub: bool = False) -> list[WorldSpec]:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     by_id = {entry["id"]: entry for entry in manifest["assets"]}
     specs: list[WorldSpec] = []
@@ -199,23 +200,36 @@ def collect_specs() -> list[WorldSpec]:
                 weather=tags["weather"],
             )
         )
-    return specs + MASTER_SPECS + HUB_SPECS
+    specs.extend(MASTER_SPECS)
+    if include_local_hub:
+        if not LOCAL_HUB_SOURCE.is_file():
+            raise FileNotFoundError(
+                f"--include-local-hub requested, but server-local source is missing: {LOCAL_HUB_SOURCE}"
+            )
+        specs.extend(LOCAL_HUB_SPECS)
+    return specs
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--max-side", type=int, default=2048)
+    parser.add_argument("--include-local-hub", action="store_true",
+                        help="Add up to three crops from local assets/work/style_refs_v2/ref_11.png")
     parser.add_argument("--validate-only", action="store_true")
     args = parser.parse_args()
 
-    specs = collect_specs()
+    specs = collect_specs(include_local_hub=args.include_local_hub)
     if args.validate_only:
         coverage = inspect_world_specs(specs)
         print(json.dumps({"status": "valid", "images": len(specs), "coverage": coverage}, indent=2, ensure_ascii=False))
         return 0
 
     report = build_world_style_dataset(specs, args.out, max_side=args.max_side)
+    report["includes_server_local_hub"] = args.include_local_hub
+    (args.out / "dataset-report.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     print(
         json.dumps(
             {k: v for k, v in report.items() if k not in {"sources", "coverage"}},
