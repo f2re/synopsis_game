@@ -31,6 +31,13 @@ jobs:
           python tools/assets/check_generation_profiles.py
           python -m py_compile services/asset-generator/core/world_style_dataset.py services/asset-generator/scripts/build_style_dataset_v4.py services/asset-generator/scripts/train_world_style_v4.py
           python services/asset-generator/tests/test_world_style_dataset.py
+          python scripts/validate_hub_lora_manifest.py
+          python scripts/build_hub_generation_queue.py --check-only
+          python scripts/validate_character_lora_manifest.py
+          python scripts/build_character_generation_queue.py --check-only
+          python scripts/validate_props_lora_manifest.py
+          python scripts/build_props_generation_queue.py --check-only
+          python -m py_compile scripts/validate_*_lora_manifest.py scripts/build_*_generation_queue.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
