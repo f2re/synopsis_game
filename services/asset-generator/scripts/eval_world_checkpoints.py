@@ -82,7 +82,16 @@ def _generate(pipe: Any, eval_set: EvalSet, out_dir: Path, *, with_trigger: bool
             log.info("wrote %s", target)
 
 
-MANUAL_CRITERIA = ("style_fidelity", "prompt_adherence", "composition_novelty", "weather_transfer", "interior_leakage")
+# Manual 0-5 scores, every column "higher is better" (5 = clean interior, no campus leaking in).
+MANUAL_CRITERIA = (
+    "style_fidelity",
+    "weather_transfer",
+    "composition_novelty",
+    "interior_isolation_archive",
+    "interior_isolation_hall",
+    "prompt_adherence_workshop",
+    "prompt_adherence_radar",
+)
 THUMB_SIZE = (32, 18)
 
 
@@ -101,8 +110,9 @@ def composition_similarity(a: Path, b: Path) -> float:
 
 
 def automatic_metrics(eval_set: EvalSet, checkpoint_dir: Path) -> dict[str, float]:
-    """seed_diversity: 1 - similarity of the two seeds of one prompt (higher is more varied);
-    cross_prompt_similarity: similarity between different prompts at one seed (high means one stock composition)."""
+    """seed_diversity: 1 - similarity of the two seeds of one prompt (higher is more varied, but only up to the
+    point where the scene identity stays the same); cross_prompt_similarity: similarity between different prompts at
+    one seed (LOWER is better, high means one stock composition). The baseline row gives the reference for both."""
     seed_pairs = []
     for prompt_id, _ in eval_set.prompts:
         for first, second in itertools.combinations(eval_set.seeds, 2):

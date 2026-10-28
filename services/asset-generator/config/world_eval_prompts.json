@@ -1,10 +1,13 @@
 {
-  "version": "world-style-v4-eval-1",
+  "version": "world-style-v4-eval-2",
   "note": "Fixed acceptance set for world-style checkpoints; the trigger is added by the script. Each group answers one question of docs/TRAINING_STYLE_V4.md.",
   "negative_prompt": "text, letters, UI, watermark, frame, collage, blurry, 3d render, photo",
   "width": 1360,
   "height": 768,
-  "seeds": [26063, 7],
+  "seeds": [
+    26063,
+    7
+  ],
   "prompts": [
     {
       "id": "known_context",
@@ -20,6 +23,11 @@
       "id": "novel_workshop",
       "group": "novel subject, learned style",
       "text": "medium exterior view of a small practical instrument workshop with a corrugated roof and a lit window, gravel yard, cable drums and equipment cases, birch and pine behind, overcast daylight"
+    },
+    {
+      "id": "radar_low_angle",
+      "group": "known subject, new composition",
+      "text": "camera at the foot of a granite staircase looking steeply up at a white radar dome on a tower, strong low angle, uniform low stratus sky, no main building facade, spruces at the sides"
     },
     {
       "id": "interior_archive",
