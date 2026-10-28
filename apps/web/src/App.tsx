@@ -7,7 +7,7 @@ import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './feat
 import { PixelIcon, PixelCard, PixelProgressBar, StationNavDock } from './features/ui';
 
 const WorldCanvas = lazy(() => import('./game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
-const ShiftWorkspace = lazy(() => import('./features/shift/ShiftWorkspace').then((module) => ({ default: module.ShiftWorkspace })));
+const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
 
 function navigate(path: string): void {
   window.history.pushState({}, '', path);
@@ -204,7 +204,7 @@ export function App() {
   }
 
   if (path === '/shift') {
-    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><ShiftWorkspace onExit={() => navigate('/')} /></Suspense>;
+    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow onExit={() => navigate('/')} /></Suspense>;
   }
 
   return (
