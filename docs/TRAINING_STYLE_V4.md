@@ -76,7 +76,7 @@ python3 services/asset-generator/scripts/build_style_dataset_v4.py --include-loc
 ### Восемь наружных локаций
 
 1. главный hub;
-2. синоптический центр;
+2. центр синоптического анализа;
 3. архив;
 4. аэрология;
 5. радарный корпус;
