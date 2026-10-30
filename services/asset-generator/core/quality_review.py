@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 from PIL import Image
 
-from core.asset_classes import OCCUPANCY_CONTRACTS, PALETTE_CONTRACTS, classify_asset, get_generation_profile
+from core.asset_classes import PALETTE_CONTRACTS, classify_asset, get_generation_profile, get_occupancy_contract
 from core.pixel_refiner import remove_neutral_background
 
 
@@ -101,7 +101,27 @@ def evaluate_asset_candidate(
         occ_x = bw / float(aw)
         occ_y = bh / float(ah)
 
-    contract = OCCUPANCY_CONTRACTS.get(asset_class, {})
+    contract = get_occupancy_contract(asset_spec.get("id", ""), asset_class)
+
+    # A layer with prescribed coordinates must not hide stray opaque pixels outside
+    # its band. Report raw framing as a review issue and refined output as a runtime failure.
+    content_y = contract.get("content_y")
+    outside_band_pixels = None
+    if bbox and content_y:
+        band_top = content_y[0] / float(exp_h)
+        band_bottom = content_y[1] / float(exp_h)
+        tolerance = 1.0 / ah if is_raw else 0.0
+        if bbox[1] / float(ah) < band_top - tolerance or bbox[3] / float(ah) > band_bottom + tolerance:
+            reason = f"Opaque pixels outside required vertical band y={content_y[0]}..{content_y[1] - 1}"
+            if not is_raw:
+                outside_band_pixels = sum(
+                    1 for y in range(h) if y < content_y[0] or y >= content_y[1]
+                    for x in range(w) if pixels[x, y][3] == 255
+                )
+                reason += f" ({outside_band_pixels} pixels)"
+            (art_reasons if is_raw else tech_reasons).append(reason)
+        elif not is_raw:
+            outside_band_pixels = 0
 
     if contract:
         min_x = contract.get("min_x", 0.0)
@@ -171,6 +191,7 @@ def evaluate_asset_candidate(
             "size": [w, h],
             "occupancy_x": round(occ_x, 3),
             "occupancy_y": round(occ_y, 3),
+            "outside_band_pixels": outside_band_pixels,
             "opaque_colors": len(unique_opaque),
             "target_range": list(target_range),
             "soft_max": soft_max,

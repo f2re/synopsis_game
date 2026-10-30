@@ -1,0 +1,13 @@
+=== ПОЛНЫЙ ПРОТОКОЛ CI/CD РЕЛИЗНЫХ ВОРОТ W5-06 ===
+Дата: 2026-10-27
+Проект: 26063: Позывной «Синоптик»
+
+[PASS] tools/validate_repo.py
+[PASS] tools/validate_architecture.py
+[PASS] tools/validate_brand.py
+[PASS] tools/validate_tokens.py
+[PASS] tools/validate_pixel_art.py
+[PASS] tools/validate_audio.py
+[PASS] tools/validate_content_contracts.py
+[PASS] pnpm test:server
+[PASS] apps/web build

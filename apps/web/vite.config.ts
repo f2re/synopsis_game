@@ -8,10 +8,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      '@synopsis/world-engine': path.resolve(__dirname, '../../packages/world-engine/src/index.ts'),
-      'phaser': path.resolve(__dirname, 'node_modules/.pnpm/phaser@4.2.1/node_modules/phaser'),
-    },
+    alias: [
+      {
+        find: '@synopsis/world-engine/bridge',
+        replacement: path.resolve(__dirname, '../../packages/world-engine/src/bridge/WorldBridge.ts'),
+      },
+      {
+        find: '@synopsis/world-engine',
+        replacement: path.resolve(__dirname, '../../packages/world-engine/src/index.ts'),
+      },
+      {
+        find: 'phaser',
+        replacement: path.resolve(__dirname, 'node_modules/.pnpm/phaser@4.2.1/node_modules/phaser'),
+      },
+    ],
   },
   optimizeDeps: {
     exclude: ['@synopsis/world-engine'],
@@ -32,5 +42,11 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: 4173,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: false,
+      },
+    },
   },
 });

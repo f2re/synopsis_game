@@ -3,6 +3,8 @@ import type { SessionUser } from '../../api';
 import { GAME_CALLSIGN, GAME_MARK } from '../../brand';
 import { PixelCard, PixelIcon } from '../ui';
 
+import { resolveGraphicUrl } from '../assets';
+
 interface BriefingScreenProps {
   user: SessionUser;
   onComplete: () => void;
@@ -20,23 +22,23 @@ interface DialogueStep {
 
 const BRIEFING_STEPS: DialogueStep[] = [
   {
-    speaker: 'Борис Сергеевич',
-    role: 'Старший наставник станции',
-    portrait: '/assets/characters/mentor_portrait.png',
+    speaker: 'Вера Павловна Ладожская',
+    role: 'Ведущий синоптик станции 26063, наставник',
+    portrait: resolveGraphicUrl('character:mentor.portrait'),
     text: 'Здравия желаю, синоптик! Добро пожаловать на опорную гидрометеорологическую станцию 26063. Здесь мы ведём непрерывные приземные наблюдения за балтийскими циклонами и кодируем погоду по международному коду КН-01.',
     hint: 'Нажмите «Далее» для продолжения инструктажа',
   },
   {
-    speaker: 'Борис Сергеевич',
-    role: 'Старший наставник станции',
-    portrait: '/assets/characters/mentor_portrait.png',
+    speaker: 'Вера Павловна Ладожская',
+    role: 'Ведущий синоптик станции 26063, наставник',
+    portrait: resolveGraphicUrl('character:mentor.portrait'),
     text: 'Ваша главная задача на смене — безошибочно раскодировать поступающие телеграммы Раздела 0 и Раздела 1: определять координаты станции, скорость и направление ветра, облачность, температуру воздуха, точку росы и давление.',
     hint: 'За безошибочную серию телеграмм начисляется премия в очках опыта',
   },
   {
-    speaker: 'Борис Сергеевич',
-    role: 'Старший наставник станции',
-    portrait: '/assets/characters/mentor_portrait.png',
+    speaker: 'Вера Павловна Ладожская',
+    role: 'Ведущий синоптик станции 26063, наставник',
+    portrait: resolveGraphicUrl('character:mentor.portrait'),
     text: 'Перед тем как заступить на первый срок, вам положено получить служебную форму на вещевом складе. Штормовка, карго, уставная причёска и служебный знак — облик дежурного должен соответствовать регламенту УГМС.',
     hint: 'Вы можете настроить внешний вид сейчас или сразу перейти в хаб',
   },

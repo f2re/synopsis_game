@@ -116,7 +116,7 @@ synopsis_hub_diorama, <сцена из таблицы, своими словам
 | № | Файл | Размер | Что это | Куда |
 | --- | --- | --- | --- | --- |
 | 0 | `Golden-Hour Seaside Synoptic Campus-3` | 1672×941 | Осенний кампус на заливе, золотой час, радар, мокрая брусчатка, скайлайн со шпилем | **world/hub**, подходит целиком |
-| 4, 7, 8 | `Pixel Meteorology Office at Dusk-2`, `St. Petersburg Synoptic Center at Dusk-4`, `Sunset Synoptic Meteorology Office-5` | 1672×941 | Одна сцена в трёх вариантах: Вера Павловна крупно за столом, кот, окно на Неву | **characters** и интерьер с человеком; в world только один из трёх, и то как интерьер, не как портрет |
+| 4, 7, 8 | `Pixel Meteorology Office at Dusk-2`, `St. Petersburg Synoptic Campus at Dusk-4`, `Sunset Synoptic Meteorology Office-5` | 1672×941 | Одна сцена в трёх вариантах: Вера Павловна крупно за столом, кот, окно на Неву | **characters** и интерьер с человеком; в world только один из трёх, и то как интерьер, не как портрет |
 | 6, 9 | `Snowy Rooftop Balloon Launch-2`, `Winter Weather Station at Dawn-1` | 1672×941 | Метеостанция на крыше зимой, запуск шара, снег, кот | **world** по сезону и погоде, но человек в центре кадра: решение за владельцем |
 | 2, 3 | `Meteorological Station_ Ten Weather Stories-1`, `Meteorological Stories in Pixel Art-2` | 1536×1024 и 1672×941 | Листы по 10 виньеток с людьми, 2×5 плиток | **не годятся целиком** (лист); плитки около 300×500 px, мельче 768 |
 | 1 | `Meteorological Campus Pixel Art Reference Sheet` | 1672×941 | Лист 24 мини-кадров: кампус днём, на закате, в грозу, зима, берег, аллея, небо и 8 персонажей | **не годится целиком**; здесь самое ценное для `characters` (строка персонажей 17–24) |

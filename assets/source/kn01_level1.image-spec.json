@@ -10,175 +10,291 @@
     {
       "id": "KF-01",
       "task": "W1-06",
+      "title": "Титульный экран",
       "path": "design/pixel-art/keyframes/kf-01-title.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "Night view across calm water to a small scientific meteorological campus, seen from a granite embankment. Low flat horizon at 55% of image height, three modest buildings with warm amber windows, a white radar dome on a short tower, a slim mast with a red obstruction light, long vertical window reflections on the water, a birch tree framing the left edge, one embankment lamp. Upper third is empty calm night sky with a few stars; bottom band is a dark empty embankment. Quiet, cozy, professional mood.",
+      "content": "Ночной вид с гранитной набережной через воду на кампус: низкий горизонт на y≈150, три здания с тёплыми окнами, радарный купол, мачта с красным огнём, отражения окон в воде, берёза слева на переднем плане, фонарь. Верхняя треть кадра — спокойное небо (место под знак 26063 и подзаголовок). Нижняя полоса y 220–270 — тёмная набережная (место под кнопки).",
+      "ramps": [
+        "night",
+        "water",
+        "window",
+        "facade",
+        "stone",
+        "foliage",
+        "birch_snow"
+      ]
     },
     {
       "id": "KF-02",
       "task": "W1-06",
+      "title": "Хаб ночью (композиция)",
       "path": "design/pixel-art/keyframes/kf-02-hub-night.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "Wide 16:9 view of a cozy meteorological research campus at night on the Gulf of Finland shore. Two terraces: back row of four buildings (radar tower with white dome far left, cartography classroom, archive with tall windows, aerology pavilion with a balloon hangar far right), front row with a large glass operations hall in the centre glowing warmly and a tournament hall on the right. Behind: calm water and a distant low city skyline with tiny lights. Bottom-left: fenced weather observation plot with a white louvered instrument screen and an anemometer mast. Bottom: paved plaza with lamps, birch and pine framing the edges.",
+      "content": "Полная композиция хаба по раскладке §2.3 этого документа ночью: 6 зданий на двух террасах, вода и залив за ними, метеоплощадка слева внизу, площадь с фонарями внизу. Оперативный зал в центре — самый яркий.",
+      "ramps": [
+        "night",
+        "water",
+        "window",
+        "facade",
+        "stone",
+        "foliage"
+      ]
     },
     {
       "id": "KF-03",
       "task": "W1-06",
+      "title": "Хаб днём",
       "path": "design/pixel-art/keyframes/kf-03-hub-day.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "Same campus composition as the night keyframe but on a clear summer day: soft blue sky with a few cumulus clouds, short shadows to the lower-right, windows dark, cloud shadows on the lawns, sparkling water.",
+      "content": "Та же композиция, что KF-02, ясный летний день: окна почти не светятся, короткие тени, облака отбрасывают тени на двор.",
+      "ramps": [
+        "day",
+        "water",
+        "facade",
+        "stone",
+        "foliage",
+        "birch_snow"
+      ]
     },
     {
       "id": "KF-04",
       "task": "W1-06",
+      "title": "Кодовый пост во время задания",
       "path": "design/pixel-art/keyframes/kf-04-codepost-task.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "Cozy night interior of a small teletype code room at a weather station, warm desk lamp light. Overlaid flat pixel UI mock-up: a long cream paper telegram tape with perforated edges across the upper third, a cream paper form card in the centre with grey placeholder bars instead of text, a small framed character portrait at bottom-left, a small square panel at right, one amber button at the bottom of the form.",
+      "content": "Интерьер поста ночью (см. ROOM-CODEPOST-SHELL) с наложенным интерфейсом-заглушкой: длинная бумажная лента через верхнюю треть, бумажный бланк в центре, портрет наставника слева внизу, мини-схема станции справа, янтарная кнопка «Проверить». Все тексты — серые полосы-заглушки.",
+      "ramps": [
+        "night",
+        "window",
+        "facade",
+        "stone",
+        "paper",
+        "ink",
+        "ui_teal",
+        "accent"
+      ]
     },
     {
       "id": "KF-05",
       "task": "W1-06",
+      "title": "Разбор ошибки по цифрам",
       "path": "design/pixel-art/keyframes/kf-05-error-breakdown.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "Close-up of a cream paper worksheet on a dark desk: five empty square digit cells in a row, small brackets under groups of cells, one cell circled with a hand-drawn red pencil ellipse, grey placeholder bars for text, a green ink rubber-stamp mark in the corner.",
+      "content": "Крупный бланк разбора: пять ячеек цифр (пустые прямоугольники), под ними скобки-подписи (полосы), одна ячейка обведена красным карандашом, справа зачёркнутая и правильная интерпретация (полосы).",
+      "ramps": [
+        "night",
+        "paper",
+        "ink",
+        "marks",
+        "ui_teal",
+        "accent"
+      ]
     },
     {
       "id": "KF-06",
       "task": "W1-06",
+      "title": "Сводка смены",
       "path": "design/pixel-art/keyframes/kf-06-shift-summary.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "A clipboard with a cream logbook sheet on a dark wooden desk at night: a title placeholder bar, three empty stat boxes, five horizontal progress bars of different lengths in green, a small reward box with a pencil icon, a hand-written signature scribble, two buttons at the bottom (one amber, one teal).",
+      "content": "Планшет с зажимом и листом журнала: заголовок-полоса, три крупных числовых блока (пустые), 5 полос освоения разной длины, блок награды с иконкой карандаша, подпись-росчерк, две кнопки внизу.",
+      "ramps": [
+        "night",
+        "paper",
+        "ink",
+        "accent",
+        "state",
+        "ui_teal"
+      ]
     },
     {
       "id": "KF-07",
       "task": "W1-06",
+      "title": "Разблокировка здания",
       "path": "design/pixel-art/keyframes/kf-07-unlock.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 64,
-      "people": false
+      "people": false,
+      "prompt": "Night close-up of a two-storey ochre classroom building on a campus terrace: windows lighting up one by one from left to right (half lit, half dark), a small opened padlock icon floating above the entrance, three pigeons taking off from the roof, calm water behind.",
+      "content": "Хаб ночью, кадр приближен к Картографическому классу: половина окон загорелась, раскрытый замок над входом, три голубя взлетают с крыши.",
+      "ramps": [
+        "night",
+        "window",
+        "facade",
+        "stone",
+        "foliage",
+        "water"
+      ]
     },
     {
       "id": "HUB-L0-SKY-NIGHT",
       "task": "W2-10",
+      "title": "Небо: night",
       "path": "assets/source/environment/hub/v3/hub_l0_sky_night.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Empty sky background only, horizontal colour bands with 2x2 ordered dithering between bands, no clouds, no stars, no sun, no ground.  от #070D1E вверху к #263B66 у горизонта, 2 полосы дизеринга",
+      "content": "Только небо, без облаков, звёзд, солнца и земли. Вертикальная смена цвета: ночь: от #070D1E вверху к #263B66 у горизонта, 2 полосы дизеринга. Горизонт проходит на y=96; ниже 96 — продолжение нижнего цвета.",
+      "ramps": [
+        "night",
+        "night",
+        "day"
+      ]
     },
     {
       "id": "HUB-L0-SKY-DAWN",
       "task": "W2-10",
+      "title": "Небо: dawn",
       "path": "assets/source/environment/hub/v3/hub_l0_sky_dawn.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Empty sky background only, horizontal colour bands with 2x2 ordered dithering between bands, no clouds, no stars, no sun, no ground.  вверху #263B66, к горизонту #7A4C80 → #E08A7A → #F4B98A",
+      "content": "Только небо, без облаков, звёзд, солнца и земли. Вертикальная смена цвета: рассвет: вверху #263B66, к горизонту #7A4C80 → #E08A7A → #F4B98A. Горизонт проходит на y=96; ниже 96 — продолжение нижнего цвета.",
+      "ramps": [
+        "twilight",
+        "night",
+        "day"
+      ]
     },
     {
       "id": "HUB-L0-SKY-DAY",
       "task": "W2-10",
+      "title": "Небо: day",
       "path": "assets/source/environment/hub/v3/hub_l0_sky_day.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Empty sky background only, horizontal colour bands with 2x2 ordered dithering between bands, no clouds, no stars, no sun, no ground.  вверху #5E8FC4, к горизонту #C4DDF0",
+      "content": "Только небо, без облаков, звёзд, солнца и земли. Вертикальная смена цвета: день: вверху #5E8FC4, к горизонту #C4DDF0. Горизонт проходит на y=96; ниже 96 — продолжение нижнего цвета.",
+      "ramps": [
+        "day",
+        "night",
+        "day"
+      ]
     },
     {
       "id": "HUB-L0-SKY-GOLDEN",
       "task": "W2-10",
+      "title": "Небо: golden",
       "path": "assets/source/environment/hub/v3/hub_l0_sky_golden.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Empty sky background only, horizontal colour bands with 2x2 ordered dithering between bands, no clouds, no stars, no sun, no ground.  вверху #8DB7DE, к горизонту #F4B98A и #E6C07A",
+      "content": "Только небо, без облаков, звёзд, солнца и земли. Вертикальная смена цвета: золотой час: вверху #8DB7DE, к горизонту #F4B98A и #E6C07A. Горизонт проходит на y=96; ниже 96 — продолжение нижнего цвета.",
+      "ramps": [
+        "twilight",
+        "night",
+        "day"
+      ]
     },
     {
       "id": "HUB-L0-SKY-DUSK",
       "task": "W2-10",
+      "title": "Небо: dusk",
       "path": "assets/source/environment/hub/v3/hub_l0_sky_dusk.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Empty sky background only, horizontal colour bands with 2x2 ordered dithering between bands, no clouds, no stars, no sun, no ground.  вверху #18284D, середина #4B3A6E, у горизонта #B2607F",
+      "content": "Только небо, без облаков, звёзд, солнца и земли. Вертикальная смена цвета: сумерки: вверху #18284D, середина #4B3A6E, у горизонта #B2607F. Горизонт проходит на y=96; ниже 96 — продолжение нижнего цвета.",
+      "ramps": [
+        "twilight",
+        "night",
+        "day"
+      ]
     },
     {
       "id": "HUB-L0-SKY-WHITENIGHT",
       "task": "W2-10",
+      "title": "Небо: whitenight",
       "path": "assets/source/environment/hub/v3/hub_l0_sky_whitenight.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Empty sky background only, horizontal colour bands with 2x2 ordered dithering between bands, no clouds, no stars, no sun, no ground.  вверху #3A5383, к горизонту светлый #C4DDF0 и #F4B98A, без звёзд",
+      "content": "Только небо, без облаков, звёзд, солнца и земли. Вертикальная смена цвета: белая ночь (июнь): вверху #3A5383, к горизонту светлый #C4DDF0 и #F4B98A, без звёзд. Горизонт проходит на y=96; ниже 96 — продолжение нижнего цвета.",
+      "ramps": [
+        "twilight",
+        "night",
+        "day"
+      ]
     },
     {
       "id": "HUB-L0-CELESTIAL",
       "task": "W2-10",
+      "title": "Солнце и луна",
       "path": "assets/source/environment/hub/v3/hub_l0_celestial.png",
       "size": [
         48,
@@ -190,11 +306,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Three tiny pixel sprites side by side on transparent background: a warm sun disc, a full moon with two subtle maria, a crescent moon. No glow, no rays.",
+      "content": "Диски 10–12 px в кадре 16×16, без лучей и ореолов; луна с 2–3 пятнами морей.",
+      "ramps": [
+        "window",
+        "birch_snow",
+        "stone"
+      ]
     },
     {
       "id": "HUB-L1-CLOUDS-FAR",
       "task": "W2-10",
+      "title": "Дальние облака",
       "path": "assets/source/environment/hub/v3/hub_l1_clouds_far.png",
       "size": [
         256,
@@ -206,24 +330,39 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Four separate flat stratocumulus cloud sprites in a row, each fits a 64x32 cell, three flat tones (shadow, body, highlight), soft pixel-cluster edges, transparent background.",
+      "content": "Четыре разных плоских слоистых облака, 3 тона: тень #8D939C, тело #B9BDC2, верх #E9E4D6. Тонирование по фазе суток делает код.",
+      "ramps": [
+        "stone",
+        "birch_snow"
+      ]
     },
     {
       "id": "HUB-L2-HORIZON",
       "task": "W2-10",
+      "title": "Горизонт: залив, город, лес",
       "path": "assets/source/environment/hub/v3/hub_l2_horizon.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 20,
-      "people": false
+      "people": false,
+      "prompt": "Distant low city skyline silhouette across a calm bay, very low contrast cool blue tones, rows of roofs with a couple of small domes and thin spires (generic, not recognisable landmarks), dark forest edge on the left, a thin strip of water in front. Everything else transparent.",
+      "content": "Полоса воды залива y 96–104 (#22566F/#3E7C93), за ней низкий силуэт города y 74–96: ряды крыш, 2–3 купола и 1–2 тонких шпиля без узнаваемых реальных зданий, слева тёмная кромка леса. Цвета дальнего плана — холодные, низкий контраст.",
+      "ramps": [
+        "night",
+        "water",
+        "stone",
+        "foliage"
+      ]
     },
     {
       "id": "HUB-L2-CITYLIGHTS",
       "task": "W2-10",
+      "title": "Огни города",
       "path": "assets/source/environment/hub/v3/hub_l2_citylights.png",
       "size": [
         960,
@@ -235,11 +374,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Only tiny warm city light dots (single pixels and pairs) placed along a distant skyline band, two frames for flicker, everything else transparent.",
+      "content": "Только огни — точки 1×1 и пары 2×1 цветами #FFC768/#FFE7A0, строго поверх силуэта HUB-L2-HORIZON; во втором кадре 15% огней погашены/переставлены.",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "HUB-L3-WATER",
       "task": "W2-10",
+      "title": "Вода у набережной",
       "path": "assets/source/environment/hub/v3/hub_l3_water.png",
       "size": [
         480,
@@ -251,11 +396,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "A horizontal band of calm dark water seen from above at low angle, short horizontal highlight dashes, four animation frames stacked vertically for a seamless shimmer loop.",
+      "content": "Полоса воды 24 px: основной #143A52, полосы #22566F, блики 2–6 px #3E7C93/#8DBFCF; в каждом кадре блики смещены, цикл бесшовный.",
+      "ramps": [
+        "water"
+      ]
     },
     {
       "id": "HUB-L4-FOG",
       "task": "W2-10",
+      "title": "Туман над водой",
       "path": "assets/source/environment/hub/v3/hub_l4_fog.png",
       "size": [
         480,
@@ -267,24 +418,39 @@
       ],
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Three variations of thin horizontal morning fog strips made only of 2x2 ordered dither pattern, transparent background, stacked vertically.",
+      "content": "Горизонтальные полосы дизеринга 2×2 цветами #E9E4D6 и #B9BDC2 на прозрачном фоне; плотность 25–50%.",
+      "ramps": [
+        "birch_snow",
+        "stone"
+      ]
     },
     {
       "id": "HUB-L6-GROUND",
       "task": "W2-10",
+      "title": "Земля, террасы, дорожки, метеоплощадка",
       "path": "assets/source/environment/hub/v3/hub_l6_ground.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 32,
-      "people": false
+      "people": false,
+      "prompt": "Top part transparent. Lower part: granite embankment edge, two landscaped terraces with lawns, low shrubs, stone retaining walls and two stairways, a paved plaza at the bottom with a round flowerbed, and on the lower-left a small square of light gravel fenced with a low white picket fence (weather observation plot). Flat empty ground where buildings will be placed. Slight top-down 3/4 view, consistent across the image.",
+      "content": "Гранитная набережная y 118–126; верхняя терраса y 126–152 (газон, дорожка, низкие кусты), подпорная стена и две лестницы; нижняя терраса y 152–200; метеоплощадка x 24–140, y 196–236: квадрат светлого гравия #B9BDC2 с низким белым штакетником; площадь y 230–270 мощёная (#656C78/#8D939C), клумба по центру. Места под здания (см. §2.3) — ровная земля без деталей.",
+      "ramps": [
+        "stone",
+        "foliage",
+        "birch_snow",
+        "facade"
+      ]
     },
     {
       "id": "HUB-L9-FG-BIRCH",
       "task": "W2-10",
+      "title": "Берёза переднего плана (слева)",
       "path": "assets/source/environment/hub/v3/hub_l9_fg_birch.png",
       "size": [
         144,
@@ -296,11 +462,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 12,
-      "people": false
+      "people": false,
+      "prompt": "Foreground birch tree hugging the left frame edge, white trunk with dark marks, drooping branches with small leaf clusters, two frames with a 1-pixel sway, transparent background.",
+      "content": "Ствол белый с тёмными чечевичками, свисающие ветви; во втором кадре крона смещена на 1 px.",
+      "ramps": [
+        "birch_snow",
+        "foliage"
+      ]
     },
     {
       "id": "HUB-L9-FG-PINE",
       "task": "W2-10",
+      "title": "Сосна переднего плана (справа)",
       "path": "assets/source/environment/hub/v3/hub_l9_fg_pine.png",
       "size": [
         144,
@@ -312,11 +485,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 12,
-      "people": false
+      "people": false,
+      "prompt": "Foreground Scots pine hugging the right frame edge, orange-brown trunk, dark layered needle clumps, two frames with a 1-pixel sway, transparent background.",
+      "content": "Рыжий ствол (#9A5838), тёмная хвоя ярусами.",
+      "ramps": [
+        "foliage",
+        "facade",
+        "stone"
+      ]
     },
     {
       "id": "HUB-L10-WEATHER",
       "task": "W2-10",
+      "title": "Частицы снега и дождя",
       "path": "assets/source/environment/hub/v3/hub_l10_weather.png",
       "size": [
         32,
@@ -328,245 +509,390 @@
       ],
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Four tiny particle sprites: 1px snowflake, 2x2 snowflake, 1x3 raindrop, 1x4 raindrop.",
+      "content": "Крошечные частицы для системы частиц.",
+      "ramps": [
+        "birch_snow",
+        "water"
+      ]
     },
     {
       "id": "BLD-SYNOPTIC-DAY",
       "task": "W2-10",
+      "title": "Оперативный зал (кодовый пост): day",
       "path": "assets/source/environment/hub/v3/buildings/bld_synoptic_day.png",
       "size": [
         128,
         84
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Two-storey glass-fronted operations pavilion, large window wall showing desks and wall maps inside, flat roof with small antennas, wide central entrance with a canopy, welcoming and modern-Soviet-scientific.. Lighting: daylight, dark window glass with a sky reflection.",
+      "content": "Двухэтажный павильон с большой стеклянной стеной-витриной, сквозь которую видны столы и карты; плоская кровля с антеннами; широкий вход по центру с козырьком. Самое тёплое и приветливое здание. Вариант: дневное освещение, окна тёмные (#2D323C/#464C58 с бликом #8DB7DE).",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "day",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-SYNOPTIC-NIGHT",
       "task": "W2-10",
+      "title": "Оперативный зал (кодовый пост): night",
       "path": "assets/source/environment/hub/v3/buildings/bld_synoptic_night.png",
       "size": [
         128,
         84
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Two-storey glass-fronted operations pavilion, large window wall showing desks and wall maps inside, flat roof with small antennas, wide central entrance with a canopy, welcoming and modern-Soviet-scientific.. Lighting: night, walls in cool shadow, most windows glowing warm amber.",
+      "content": "Двухэтажный павильон с большой стеклянной стеной-витриной, сквозь которую видны столы и карты; плоская кровля с антеннами; широкий вход по центру с козырьком. Самое тёплое и приветливое здание. Вариант: ночное освещение, стены в холодной тени, 60–70% окон светятся #FFC768/#F29F45.",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "night",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-SYNOPTIC-WINDOWS",
       "task": "W2-11",
+      "title": "Оперативный зал (кодовый пост): маска окон",
       "path": "assets/source/environment/hub/v3/buildings/bld_synoptic_windows.png",
       "size": [
         128,
         84
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Mask layer: only the lit window panes of the building, warm amber, exact same positions as the night sprite, everything else transparent.",
+      "content": "Только светящиеся стёкла окон того же здания, точно по их положению на BLD-*-NIGHT; всё остальное прозрачно. Используется для анимации «окна загораются по одному».",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "BLD-CARTOGRAPHY-DAY",
       "task": "W2-10",
+      "title": "Картографический класс: day",
       "path": "assets/source/environment/hub/v3/buildings/bld_cartography_day.png",
       "size": [
         88,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Two-storey ochre classroom building with tall windows, a small pediment, a little globe finial above the entrance.. Lighting: daylight, dark window glass with a sky reflection.",
+      "content": "Двухэтажное охристое здание с высокими окнами и треугольным фронтоном, над входом небольшой круглый глобус-флюгер. Вариант: дневное освещение, окна тёмные (#2D323C/#464C58 с бликом #8DB7DE).",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "day",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-CARTOGRAPHY-NIGHT",
       "task": "W2-10",
+      "title": "Картографический класс: night",
       "path": "assets/source/environment/hub/v3/buildings/bld_cartography_night.png",
       "size": [
         88,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Two-storey ochre classroom building with tall windows, a small pediment, a little globe finial above the entrance.. Lighting: night, walls in cool shadow, most windows glowing warm amber.",
+      "content": "Двухэтажное охристое здание с высокими окнами и треугольным фронтоном, над входом небольшой круглый глобус-флюгер. Вариант: ночное освещение, стены в холодной тени, 60–70% окон светятся #FFC768/#F29F45.",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "night",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-CARTOGRAPHY-WINDOWS",
       "task": "W2-11",
+      "title": "Картографический класс: маска окон",
       "path": "assets/source/environment/hub/v3/buildings/bld_cartography_windows.png",
       "size": [
         88,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Mask layer: only the lit window panes of the building, warm amber, exact same positions as the night sprite, everything else transparent.",
+      "content": "Только светящиеся стёкла окон того же здания, точно по их положению на BLD-*-NIGHT; всё остальное прозрачно. Используется для анимации «окна загораются по одному».",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "BLD-ARCHIVE-DAY",
       "task": "W2-10",
+      "title": "Научный архив: day",
       "path": "assets/source/environment/hub/v3/buildings/bld_archive_day.png",
       "size": [
         88,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Terracotta brick archive building with arched windows, a heavy wooden door, shelves with boxes visible through ground-floor windows.. Lighting: daylight, dark window glass with a sky reflection.",
+      "content": "Терракотовое кирпичное здание с арочными окнами, тяжёлой дверью и коробками за окнами первого этажа. Вариант: дневное освещение, окна тёмные (#2D323C/#464C58 с бликом #8DB7DE).",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "day",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-ARCHIVE-NIGHT",
       "task": "W2-10",
+      "title": "Научный архив: night",
       "path": "assets/source/environment/hub/v3/buildings/bld_archive_night.png",
       "size": [
         88,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Terracotta brick archive building with arched windows, a heavy wooden door, shelves with boxes visible through ground-floor windows.. Lighting: night, walls in cool shadow, most windows glowing warm amber.",
+      "content": "Терракотовое кирпичное здание с арочными окнами, тяжёлой дверью и коробками за окнами первого этажа. Вариант: ночное освещение, стены в холодной тени, 60–70% окон светятся #FFC768/#F29F45.",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "night",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-ARCHIVE-WINDOWS",
       "task": "W2-11",
+      "title": "Научный архив: маска окон",
       "path": "assets/source/environment/hub/v3/buildings/bld_archive_windows.png",
       "size": [
         88,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Mask layer: only the lit window panes of the building, warm amber, exact same positions as the night sprite, everything else transparent.",
+      "content": "Только светящиеся стёкла окон того же здания, точно по их положению на BLD-*-NIGHT; всё остальное прозрачно. Используется для анимации «окна загораются по одному».",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "BLD-RADAR-DAY",
       "task": "W2-10",
+      "title": "Радарный комплекс: day",
       "path": "assets/source/environment/hub/v3/buildings/bld_radar_day.png",
       "size": [
         56,
         96
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Concrete tower topped with a white geodesic radome, small service block at its base, red obstruction light point on top.. Lighting: daylight, dark window glass with a sky reflection.",
+      "content": "Бетонная башня с белым радиопрозрачным куполом наверху, на крыше вспомогательного блока — открытая вращающаяся антенна (отдельный ассет PROP-RADAR-ANTENNA), красный огонь на верхушке. Вариант: дневное освещение, окна тёмные (#2D323C/#464C58 с бликом #8DB7DE).",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "day",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-RADAR-NIGHT",
       "task": "W2-10",
+      "title": "Радарный комплекс: night",
       "path": "assets/source/environment/hub/v3/buildings/bld_radar_night.png",
       "size": [
         56,
         96
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Concrete tower topped with a white geodesic radome, small service block at its base, red obstruction light point on top.. Lighting: night, walls in cool shadow, most windows glowing warm amber.",
+      "content": "Бетонная башня с белым радиопрозрачным куполом наверху, на крыше вспомогательного блока — открытая вращающаяся антенна (отдельный ассет PROP-RADAR-ANTENNA), красный огонь на верхушке. Вариант: ночное освещение, стены в холодной тени, 60–70% окон светятся #FFC768/#F29F45.",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "night",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-RADAR-WINDOWS",
       "task": "W2-11",
+      "title": "Радарный комплекс: маска окон",
       "path": "assets/source/environment/hub/v3/buildings/bld_radar_windows.png",
       "size": [
         56,
         96
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Mask layer: only the lit window panes of the building, warm amber, exact same positions as the night sprite, everything else transparent.",
+      "content": "Только светящиеся стёкла окон того же здания, точно по их положению на BLD-*-NIGHT; всё остальное прозрачно. Используется для анимации «окна загораются по одному».",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "BLD-AEROLOGY-DAY",
       "task": "W2-10",
+      "title": "Аэрологический павильон: day",
       "path": "assets/source/environment/hub/v3/buildings/bld_aerology_day.png",
       "size": [
         72,
         80
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Low hangar-like pavilion with wide doors for radiosonde balloon launches, a lattice mast beside it, a white balloon resting in a net on the roof.. Lighting: daylight, dark window glass with a sky reflection.",
+      "content": "Невысокий ангар с широкими воротами для выпуска зондов, рядом решётчатая мачта, на крыше белый шар-зонд в сетке. Вариант: дневное освещение, окна тёмные (#2D323C/#464C58 с бликом #8DB7DE).",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "day",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-AEROLOGY-NIGHT",
       "task": "W2-10",
+      "title": "Аэрологический павильон: night",
       "path": "assets/source/environment/hub/v3/buildings/bld_aerology_night.png",
       "size": [
         72,
         80
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: Low hangar-like pavilion with wide doors for radiosonde balloon launches, a lattice mast beside it, a white balloon resting in a net on the roof.. Lighting: night, walls in cool shadow, most windows glowing warm amber.",
+      "content": "Невысокий ангар с широкими воротами для выпуска зондов, рядом решётчатая мачта, на крыше белый шар-зонд в сетке. Вариант: ночное освещение, стены в холодной тени, 60–70% окон светятся #FFC768/#F29F45.",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "night",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-AEROLOGY-WINDOWS",
       "task": "W2-11",
+      "title": "Аэрологический павильон: маска окон",
       "path": "assets/source/environment/hub/v3/buildings/bld_aerology_windows.png",
       "size": [
         72,
         80
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Mask layer: only the lit window panes of the building, warm amber, exact same positions as the night sprite, everything else transparent.",
+      "content": "Только светящиеся стёкла окон того же здания, точно по их положению на BLD-*-NIGHT; всё остальное прозрачно. Используется для анимации «окна загораются по одному».",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "BLD-TOURNAMENT-DAY",
       "task": "W2-10",
+      "title": "Турнирный зал: day",
       "path": "assets/source/environment/hub/v3/buildings/bld_tournament_day.png",
       "size": [
         112,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: One-storey hall with a barrel-vault roof, row of wide windows, small plain team pennants without symbols.. Lighting: daylight, dark window glass with a sky reflection.",
+      "content": "Одноэтажный зал с полукруглой кровлей, флажками команд (без символики) и широкими окнами. Вариант: дневное освещение, окна тёмные (#2D323C/#464C58 с бликом #8DB7DE).",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "day",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-TOURNAMENT-NIGHT",
       "task": "W2-10",
+      "title": "Турнирный зал: night",
       "path": "assets/source/environment/hub/v3/buildings/bld_tournament_night.png",
       "size": [
         112,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 28,
-      "people": false
+      "people": false,
+      "prompt": "Single building sprite on transparent background, 3/4 front view matching a gentle top-down campus perspective: One-storey hall with a barrel-vault roof, row of wide windows, small plain team pennants without symbols.. Lighting: night, walls in cool shadow, most windows glowing warm amber.",
+      "content": "Одноэтажный зал с полукруглой кровлей, флажками команд (без символики) и широкими окнами. Вариант: ночное освещение, стены в холодной тени, 60–70% окон светятся #FFC768/#F29F45.",
+      "ramps": [
+        "facade",
+        "stone",
+        "window",
+        "night",
+        "foliage"
+      ]
     },
     {
       "id": "BLD-TOURNAMENT-WINDOWS",
       "task": "W2-11",
+      "title": "Турнирный зал: маска окон",
       "path": "assets/source/environment/hub/v3/buildings/bld_tournament_windows.png",
       "size": [
         112,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Mask layer: only the lit window panes of the building, warm amber, exact same positions as the night sprite, everything else transparent.",
+      "content": "Только светящиеся стёкла окон того же здания, точно по их положению на BLD-*-NIGHT; всё остальное прозрачно. Используется для анимации «окна загораются по одному».",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "STATE-LOCK",
       "task": "W2-11",
+      "title": "Замок над входом (раскрытие)",
       "path": "assets/source/ui/location-states/v3/state_lock.png",
       "size": [
         28,
@@ -578,11 +904,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Tiny brass padlock icon, 4 frames: closed, shackle lifting, open, open fading.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "stone"
+      ]
     },
     {
       "id": "STATE-BEACON",
       "task": "W2-11",
+      "title": "Маячок доступной цели",
       "path": "assets/source/ui/location-states/v3/state_beacon.png",
       "size": [
         15,
@@ -594,76 +927,112 @@
       ],
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Tiny 5x5 four-pointed amber star, 3 pulse frames (small, medium, large).",
+      "content": "",
+      "ramps": [
+        "accent"
+      ]
     },
     {
       "id": "SCR-SILHOUETTE-CARTOGRAPHY",
       "task": "W2-11",
+      "title": "Силуэт интерьера: Картографический класс",
       "path": "assets/source/ui/location-states/v3/silhouette_cartography.png",
       "size": [
         96,
         64
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Monochrome dark-teal silhouette illustration of the interior of a Картографический класс at a weather station, recognisable furniture and instruments, two tones only, mysterious but friendly.",
+      "content": "Для досье закрытого здания (S07): интерьер одним-двумя тонами бирюзы как «засвеченный» силуэт, узнаваемые предметы помещения.",
+      "ramps": [
+        "ui_teal",
+        "night"
+      ]
     },
     {
       "id": "SCR-SILHOUETTE-ARCHIVE",
       "task": "W2-11",
+      "title": "Силуэт интерьера: Архив",
       "path": "assets/source/ui/location-states/v3/silhouette_archive.png",
       "size": [
         96,
         64
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Monochrome dark-teal silhouette illustration of the interior of a Архив at a weather station, recognisable furniture and instruments, two tones only, mysterious but friendly.",
+      "content": "Для досье закрытого здания (S07): интерьер одним-двумя тонами бирюзы как «засвеченный» силуэт, узнаваемые предметы помещения.",
+      "ramps": [
+        "ui_teal",
+        "night"
+      ]
     },
     {
       "id": "SCR-SILHOUETTE-RADAR",
       "task": "W2-11",
+      "title": "Силуэт интерьера: Радар",
       "path": "assets/source/ui/location-states/v3/silhouette_radar.png",
       "size": [
         96,
         64
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Monochrome dark-teal silhouette illustration of the interior of a Радар at a weather station, recognisable furniture and instruments, two tones only, mysterious but friendly.",
+      "content": "Для досье закрытого здания (S07): интерьер одним-двумя тонами бирюзы как «засвеченный» силуэт, узнаваемые предметы помещения.",
+      "ramps": [
+        "ui_teal",
+        "night"
+      ]
     },
     {
       "id": "SCR-SILHOUETTE-AEROLOGY",
       "task": "W2-11",
+      "title": "Силуэт интерьера: Аэрология",
       "path": "assets/source/ui/location-states/v3/silhouette_aerology.png",
       "size": [
         96,
         64
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Monochrome dark-teal silhouette illustration of the interior of a Аэрология at a weather station, recognisable furniture and instruments, two tones only, mysterious but friendly.",
+      "content": "Для досье закрытого здания (S07): интерьер одним-двумя тонами бирюзы как «засвеченный» силуэт, узнаваемые предметы помещения.",
+      "ramps": [
+        "ui_teal",
+        "night"
+      ]
     },
     {
       "id": "SCR-SILHOUETTE-TOURNAMENT",
       "task": "W2-11",
+      "title": "Силуэт интерьера: Турнирный зал",
       "path": "assets/source/ui/location-states/v3/silhouette_tournament.png",
       "size": [
         96,
         64
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Monochrome dark-teal silhouette illustration of the interior of a Турнирный зал at a weather station, recognisable furniture and instruments, two tones only, mysterious but friendly.",
+      "content": "Для досье закрытого здания (S07): интерьер одним-двумя тонами бирюзы как «засвеченный» силуэт, узнаваемые предметы помещения.",
+      "ramps": [
+        "ui_teal",
+        "night"
+      ]
     },
     {
       "id": "PROP-LAMP",
       "task": "W2-10",
+      "title": "Фонарь",
       "path": "assets/source/props/hub/prop_lamp.png",
       "size": [
         16,
@@ -675,37 +1044,55 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Old-style park street lamp on a thin dark pole, 2 frames: off, on (warm lamp head).",
+      "content": "",
+      "ramps": [
+        "stone",
+        "window"
+      ]
     },
     {
       "id": "PROP-LAMP-GLOW",
       "task": "W2-10",
+      "title": "Световое пятно фонаря",
       "path": "assets/source/props/hub/prop_lamp_glow.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Pool of warm lamp light on the ground made only of ordered dither pattern in three rings, transparent background.",
+      "content": "Конус и пятно на земле из дизеринга 2×2 в 3 ступени #FFE7A0→#FFC768→#F29F45, без полупрозрачности.",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "PROP-BENCH",
       "task": "W2-10",
+      "title": "Скамейка",
       "path": "assets/source/props/hub/prop_bench.png",
       "size": [
         16,
         10
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Small wooden park bench with cast-iron legs, 3/4 view.",
+      "content": "",
+      "ramps": [
+        "facade",
+        "stone"
+      ]
     },
     {
       "id": "PROP-STEVENSON",
       "task": "W2-10",
+      "title": "Метеобудка",
       "path": "assets/source/props/hub/prop_stevenson.png",
       "size": [
         24,
@@ -717,11 +1104,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "White louvered meteorological instrument shelter (Stevenson screen) on four legs, 2 frames: door closed, door open.",
+      "content": "Белая жалюзийная будка на четырёх ножках (психрометрическая будка).",
+      "ramps": [
+        "birch_snow",
+        "stone"
+      ]
     },
     {
       "id": "PROP-ANEMOMETER",
       "task": "W2-10",
+      "title": "Мачта с анемометром",
       "path": "assets/source/props/hub/prop_anemometer.png",
       "size": [
         32,
@@ -733,11 +1127,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Thin weather mast with a cup anemometer on top, 4 frames of cup rotation.",
+      "content": "",
+      "ramps": [
+        "stone",
+        "birch_snow"
+      ]
     },
     {
       "id": "PROP-FLAG",
       "task": "W2-10",
+      "title": "Ветроуказатель-конус",
       "path": "assets/source/props/hub/prop_flag.png",
       "size": [
         72,
@@ -749,11 +1150,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Striped orange and white wind sock, 6 frames of gentle flapping, attached at the left edge.",
+      "content": "Полосатый ветровой конус (бело-оранжевый #F4F7FA/#D89A52), без государственной символики.",
+      "ramps": [
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "PROP-RADAR-ANTENNA",
       "task": "W2-10",
+      "title": "Вращающаяся антенна",
       "path": "assets/source/props/hub/prop_radar_antenna.png",
       "size": [
         192,
@@ -765,11 +1173,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Small open parabolic radar antenna on a pedestal, 8 frames of a full rotation, side view.",
+      "content": "",
+      "ramps": [
+        "stone",
+        "birch_snow"
+      ]
     },
     {
       "id": "PROP-BEACON-LIGHT",
       "task": "W2-10",
+      "title": "Красный огонь мачты",
       "path": "assets/source/props/hub/prop_beacon_light.png",
       "size": [
         6,
@@ -781,50 +1196,79 @@
       ],
       "alpha": "transparent",
       "max_colors": 2,
-      "people": false
+      "people": false,
+      "prompt": "Tiny 3x3 red obstruction light, off and on.",
+      "content": "#D65E5E и тёмный #6B3A2C.",
+      "ramps": [
+        "state"
+      ]
     },
     {
       "id": "PROP-SIGNPOST",
       "task": "W2-10",
+      "title": "Указатель станции",
       "path": "assets/source/props/hub/prop_signpost.png",
       "size": [
         16,
         24
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Small station signpost with a blank teal plate, no text.",
+      "content": "Столбик с пустой табличкой 14×6.",
+      "ramps": [
+        "stone",
+        "ui_teal"
+      ]
     },
     {
       "id": "PROP-BICYCLE",
       "task": "W2-10",
+      "title": "Велосипед у стойки",
       "path": "assets/source/props/hub/prop_bicycle.png",
       "size": [
         18,
         11
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Simple city bicycle leaning on a stand, side view.",
+      "content": "",
+      "ramps": [
+        "stone",
+        "ui_teal"
+      ]
     },
     {
       "id": "ROOM-CODEPOST-SHELL",
       "task": "W2-12",
+      "title": "Комната поста (статичная основа)",
       "path": "assets/source/environment/rooms/codepost/room_codepost_shell.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 48,
-      "people": false
+      "people": false,
+      "prompt": "Cozy small teletype code room at a weather station at night, front view slightly from above. Teal wainscot panels, ochre upper walls, wooden floor. A window on the left (empty dark pane), a large wooden desk in the centre with an empty space on top, a bookcase with archive boxes on the right, a blank weather map pinned on the wall. Warm but dim lighting.",
+      "content": "Вид спереди, слегка сверху. Стены приглушённо-бирюзовые снизу (панели) и охристые сверху; деревянный пол. Слева окно x 24–120, y 40–112 (проём залить #18284D — туда кладётся ROOM-WINDOW-VIEW). Центр: большой стол x 150–330, столешница y 170. Место под телетайп x 190–286, y 106–170 пустое. Справа: шкаф с книгами и архивными коробками x 360–460, место под барограф на полке x 372–412, y 120–148, место под часы на стене x 300–364, y 30–70. На стене за столом приколота бланковая карта.",
+      "ramps": [
+        "night",
+        "facade",
+        "stone",
+        "paper",
+        "ink",
+        "window",
+        "ui_teal"
+      ]
     },
     {
       "id": "ROOM-WINDOW-VIEW",
       "task": "W2-12",
+      "title": "Вид из окна по фазам",
       "path": "assets/source/environment/rooms/codepost/room_window_view.png",
       "size": [
         480,
@@ -836,11 +1280,21 @@
       ],
       "alpha": "opaque",
       "max_colors": 24,
-      "people": false
+      "people": false,
+      "prompt": "Five versions of the same small view through a window: a campus roof, a birch branch and water, shown at night, dawn, day, golden hour and dusk.",
+      "content": "Двор кампуса и вода: ветка берёзы, крыша соседнего здания, подоконник снаружи (на него садится синица).",
+      "ramps": [
+        "night",
+        "twilight",
+        "day",
+        "foliage",
+        "water"
+      ]
     },
     {
       "id": "ROOM-WINDOW-RAIN",
       "task": "W2-12",
+      "title": "Дождь по стеклу",
       "path": "assets/source/environment/rooms/codepost/room_window_rain.png",
       "size": [
         384,
@@ -852,11 +1306,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Overlay of raindrops and short streaks on window glass, 4 frames, transparent background.",
+      "content": "",
+      "ramps": [
+        "water"
+      ]
     },
     {
       "id": "ROOM-TELETYPE",
       "task": "W2-12",
+      "title": "Телетайп",
       "path": "assets/source/environment/rooms/codepost/room_teletype.png",
       "size": [
         384,
@@ -868,11 +1328,20 @@
       ],
       "alpha": "transparent",
       "max_colors": 16,
-      "people": false
+      "people": false,
+      "prompt": "Vintage mid-century teletype machine in muted teal-green enamel on a desk, keyboard with blank keys, paper roll at the back, paper tape coming out on top. Row 1: idle frame. Row 2: four printing frames with the carriage moving and tape advancing.",
+      "content": "Массивный аппарат цвета морской волны с клавиатурой, рулон бумаги сзади, лента выходит сверху; при печати двигается каретка и подаётся лента.",
+      "ramps": [
+        "ui_teal",
+        "stone",
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "ROOM-BAROGRAPH",
       "task": "W2-12",
+      "title": "Барограф",
       "path": "assets/source/environment/rooms/codepost/room_barograph.png",
       "size": [
         160,
@@ -884,24 +1353,40 @@
       ],
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Recording barograph instrument in a wooden case with glass cover, rotating paper drum with a pen trace, 4 frames of slow drum rotation.",
+      "content": "",
+      "ramps": [
+        "facade",
+        "stone",
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "ROOM-CLOCK",
       "task": "W2-12",
+      "title": "Настенные часы UTC и местного времени",
       "path": "assets/source/environment/rooms/codepost/room_clock.png",
       "size": [
         64,
         40
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Wall-mounted double clock with two round dials in one dark case, tick marks only, no numbers, no hands.",
+      "content": "Двойные часы: два круглых циферблата в общем корпусе, деления рисками, без цифр и стрелок (стрелки — отдельный ассет).",
+      "ramps": [
+        "stone",
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "ROOM-CLOCK-HANDS",
       "task": "W2-12",
+      "title": "Секундная стрелка",
       "path": "assets/source/environment/rooms/codepost/room_clock_hands.png",
       "size": [
         128,
@@ -913,11 +1398,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 2,
-      "people": false
+      "people": false,
+      "prompt": "",
+      "content": "",
+      "ramps": [
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ROOM-LAMP",
       "task": "W2-12",
+      "title": "Настольная лампа",
       "path": "assets/source/environment/rooms/codepost/room_lamp.png",
       "size": [
         72,
@@ -929,24 +1421,37 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Green-shaded desk lamp, 3 frames: off, flickering, on.",
+      "content": "",
+      "ramps": [
+        "ui_teal",
+        "window",
+        "stone"
+      ]
     },
     {
       "id": "ROOM-LAMP-GLOW",
       "task": "W2-12",
+      "title": "Пятно света лампы",
       "path": "assets/source/environment/rooms/codepost/room_lamp_glow.png",
       "size": [
         64,
         48
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Warm dithered light pool cast by a desk lamp on a desk surface, three dither rings, transparent background.",
+      "content": "Дизеринг 2×2 в 3 ступени на прозрачном фоне.",
+      "ramps": [
+        "window"
+      ]
     },
     {
       "id": "TIT-M1",
       "task": "W2-13",
+      "title": "Большая синица (двор)",
       "path": "assets/source/animals/tit/tit_m1.png",
       "size": [
         32,
@@ -958,11 +1463,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 6 rows (one row per animation state, left to right frames) and 4 columns, each cell exactly 8x8 pixels, side view: Great tit: yellow belly with black stripe, black head with white cheeks, olive back.",
+      "content": "Большая синица (двор). Состояния: idle 4 (4/с), поворот головы 2, прыжок 4 (10/с), клюёт 3 (8/с), взлёт 4 (12/с), полёт 4 (10/с).",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "TIT-M2",
       "task": "W2-13",
+      "title": "Большая синица (подоконник поста)",
       "path": "assets/source/animals/tit/tit_m2.png",
       "size": [
         64,
@@ -974,11 +1490,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 6 rows (one row per animation state, left to right frames) and 4 columns, each cell exactly 16x16 pixels, side view: Great tit, slightly larger and more detailed.",
+      "content": "Большая синица (подоконник поста). Состояния: idle 4, поворот головы 2, прыжок 4, клюёт 3, взлёт 4, полёт 4.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "SPARROW-M1",
       "task": "W2-13",
+      "title": "Воробей",
       "path": "assets/source/animals/sparrow/sparrow_m1.png",
       "size": [
         24,
@@ -990,11 +1517,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 3 rows (one row per animation state, left to right frames) and 3 columns, each cell exactly 8x8 pixels, side view: House sparrow: brown streaked back, grey crown, pale belly.",
+      "content": "Воробей. Состояния: прыжок 3, клюёт 3, взлёт 3.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "GULL-M1",
       "task": "W2-13",
+      "title": "Чайка",
       "path": "assets/source/animals/gull/gull_m1.png",
       "size": [
         64,
@@ -1006,11 +1544,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 2 rows (one row per animation state, left to right frames) and 4 columns, each cell exactly 16x8 pixels, side view: Herring gull in flight: white body, grey wings with dark tips.",
+      "content": "Чайка. Состояния: парение 4 (6/с), взмахи 4 (8/с).",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "MALLARD-M1",
       "task": "W2-13",
+      "title": "Кряква (пара на воде)",
       "path": "assets/source/animals/mallard/mallard_m1.png",
       "size": [
         72,
@@ -1022,11 +1571,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 2 rows (one row per animation state, left to right frames) and 6 columns, each cell exactly 12x8 pixels, side view: Mallard drake on water: green head, white collar, brown chest, side view, with a waterline.",
+      "content": "Кряква (пара на воде). Состояния: плывёт 4 (4/с), ныряет 6 (8/с).",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "SQUIRREL-M1",
       "task": "W2-13",
+      "title": "Белка (двор)",
       "path": "assets/source/animals/squirrel/squirrel_m1.png",
       "size": [
         72,
@@ -1038,11 +1598,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 3 rows (one row per animation state, left to right frames) and 6 columns, each cell exactly 12x8 pixels, side view: Red squirrel with a bushy tail and ear tufts.",
+      "content": "Белка (двор). Состояния: бег 6 (12/с), сидит 4 (4/с), прячет орех 6 (8/с).",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "SQUIRREL-M2",
       "task": "W2-13",
+      "title": "Белка (крупно)",
       "path": "assets/source/animals/squirrel/squirrel_m2.png",
       "size": [
         192,
@@ -1054,11 +1625,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 3 rows (one row per animation state, left to right frames) and 6 columns, each cell exactly 32x24 pixels, side view: Red squirrel with a bushy tail and ear tufts, more detail.",
+      "content": "Белка (крупно). Состояния: бег 6, сидит 4, прячет орех 6.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "CAT-M1",
       "task": "W2-13",
+      "title": "Кот Барограф (двор)",
       "path": "assets/source/animals/cat/cat_m1.png",
       "size": [
         72,
@@ -1070,11 +1652,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 6 rows (one row per animation state, left to right frames) and 6 columns, each cell exactly 12x8 pixels, side view: Grey tabby cat with a white chest and white paws, chunky and calm.",
+      "content": "Кот Барограф (двор). Состояния: сон 4 (2/с), поднимает голову 3, потягивается 6 (8/с), умывается 6 (6/с), идёт 6 (8/с), хвост 3 (4/с).",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "CAT-M2",
       "task": "W2-13",
+      "title": "Кот Барограф (на телетайпе)",
       "path": "assets/source/animals/cat/cat_m2.png",
       "size": [
         192,
@@ -1086,11 +1679,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 12,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 6 rows (one row per animation state, left to right frames) and 6 columns, each cell exactly 32x20 pixels, side view: Grey tabby cat with a white chest and white paws, detailed, lying on top of a machine in the sleep frames.",
+      "content": "Кот Барограф (на телетайпе). Состояния: сон 4, поднимает голову 3, потягивается 6, умывается 6, идёт 6, хвост 3.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "PIGEON-M1",
       "task": "W2-13",
+      "title": "Голубь",
       "path": "assets/source/animals/pigeon/pigeon_m1.png",
       "size": [
         32,
@@ -1102,11 +1706,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 3 rows (one row per animation state, left to right frames) and 4 columns, each cell exactly 8x8 pixels, side view: Rock pigeon: blue-grey body, iridescent neck hint, dark wing bars.",
+      "content": "Голубь. Состояния: сидит 2, взлёт 4, полёт 4.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "BULLFINCH-M1",
       "task": "W2-13",
+      "title": "Снегирь (зима)",
       "path": "assets/source/animals/bullfinch/bullfinch_m1.png",
       "size": [
         32,
@@ -1118,11 +1733,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 3 rows (one row per animation state, left to right frames) and 4 columns, each cell exactly 8x8 pixels, side view: Eurasian bullfinch male: rose-red breast, black cap, grey back.",
+      "content": "Снегирь (зима). Состояния: покой 4, прыжок 4, полёт 4.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "FLOCK-FAR",
       "task": "W2-13",
+      "title": "Дальняя стая",
       "path": "assets/source/animals/flock/flock_far.png",
       "size": [
         64,
@@ -1134,11 +1760,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Pixel art animation sprite sheet on transparent background, 1 rows (one row per animation state, left to right frames) and 4 columns, each cell exactly 16x8 pixels, side view: Group of five tiny distant bird silhouettes, 2-3 px each, in a loose V.",
+      "content": "Дальняя стая. Состояния: полёт стаи 4 (8/с).",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "facade",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "FX-RIPPLE",
       "task": "W2-19",
+      "title": "Круги на воде",
       "path": "assets/source/effects/fx_ripple.png",
       "size": [
         36,
@@ -1150,11 +1787,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 2,
-      "people": false
+      "people": false,
+      "prompt": "Three frames of a small expanding water ripple ellipse seen from low angle.",
+      "content": "",
+      "ramps": [
+        "water"
+      ]
     },
     {
       "id": "MENTOR-PORTRAIT",
       "task": "W2-14",
+      "title": "Вера Павловна Ладожская: портрет",
       "path": "assets/source/characters/npc/mentor_portrait.png",
       "size": [
         384,
@@ -1166,11 +1809,20 @@
       ],
       "alpha": "transparent",
       "max_colors": 24,
-      "people": true
+      "people": true,
+      "prompt": "Character portrait sheet, head and shoulders, 3/4 view facing right: a kind, intelligent senior woman meteorologist in her late fifties, grey hair in a neat bun, thin-rimmed glasses, dark teal cardigan over a light blouse. Row 1: six expressions (neutral, smile, thoughtful, surprised, approving, stern). Row 2: four frames of a nod. Row 3: three frames of pushing glasses up onto the forehead. Consistent face across all frames.",
+      "content": "Женщина 55–60 лет, ведущий синоптик: седые волосы (#9A9AA4) в аккуратном пучке, очки в тонкой оправе, тёмно-бирюзовый кардиган поверх светлой блузки, спокойное умное лицо, лёгкая улыбка. Голова и плечи, вид 3/4 вправо.",
+      "ramps": [
+        "people",
+        "ui_teal",
+        "birch_snow",
+        "ink"
+      ]
     },
     {
       "id": "MENTOR-M1",
       "task": "W2-14",
+      "title": "Наставник: фигура в хабе",
       "path": "assets/source/characters/npc/mentor_m1.png",
       "size": [
         72,
@@ -1182,11 +1834,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 12,
-      "people": true
+      "people": true,
+      "prompt": "Tiny 12x24 walking sprite of the same senior woman meteorologist (grey bun, teal cardigan), side view.",
+      "content": "",
+      "ramps": [
+        "people",
+        "ui_teal",
+        "stone"
+      ]
     },
     {
       "id": "TECH-M1",
       "task": "W2-14",
+      "title": "Семён, техник метеоплощадки",
       "path": "assets/source/characters/npc/tech_semyon_m1.png",
       "size": [
         72,
@@ -1198,11 +1858,20 @@
       ],
       "alpha": "transparent",
       "max_colors": 12,
-      "people": true
+      "people": true,
+      "prompt": "Tiny 12x24 sprite of a young male weather technician in an orange work jacket and knitted hat holding a logbook. Row 1 walk cycle, row 2 opening an instrument shelter, row 3 writing in the logbook. Side view.",
+      "content": "Мужчина 30 лет, оранжевая рабочая куртка поверх серого, вязаная шапка, планшет-журнал в руке.",
+      "ramps": [
+        "people",
+        "ui_teal",
+        "stone",
+        "state"
+      ]
     },
     {
       "id": "LAB-M1",
       "task": "W2-14",
+      "title": "Лаборантка с папкой",
       "path": "assets/source/characters/npc/lab_assistant_m1.png",
       "size": [
         72,
@@ -1214,11 +1883,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 12,
-      "people": true
+      "people": true,
+      "prompt": "Tiny 12x24 sprite of a young female lab assistant in a white lab coat carrying a blue folder, dark ponytail. Row 1 walk cycle, row 2 dropping a sheet of paper. Side view.",
+      "content": "Молодая женщина в белом халате с синей папкой, тёмный хвост волос.",
+      "ramps": [
+        "people",
+        "birch_snow",
+        "facade"
+      ]
     },
     {
       "id": "AVATAR-BASE-M1",
       "task": "W2-15",
+      "title": "Аватар: база (двор)",
       "path": "assets/source/characters/avatar/avatar_base_m1.png",
       "size": [
         72,
@@ -1230,11 +1907,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 10,
-      "people": true
+      "people": true,
+      "prompt": "Tiny 12x24 neutral base character for a modular avatar system: plain grey t-shirt, dark trousers, short dark hair, four-direction walk sheet (down, up, side) plus side idle. Clean readable silhouette.",
+      "content": "Нейтральное тело стажёра в базовой серой футболке и тёмных брюках; кожа строго #F2C9A8/#D9A07E, волосы #2B211C — они заменяются кодом на выбранные тона. Голова 6 px, без сложных деталей.",
+      "ramps": [
+        "people",
+        "stone"
+      ]
     },
     {
       "id": "AVATAR-BASE-M2",
       "task": "W2-15",
+      "title": "Аватар: база (комната)",
       "path": "assets/source/characters/avatar/avatar_base_m2.png",
       "size": [
         192,
@@ -1246,41 +1930,40 @@
       ],
       "alpha": "transparent",
       "max_colors": 14,
-      "people": true
-    },
-    {
-      "id": "AVATAR-HERO-M2",
-      "task": "W2-15",
-      "path": "assets/source/characters/avatar/avatar_hero_m2.png",
-      "size": [
-        576,
-        864
-      ],
-      "frame": [
-        96,
-        144
-      ],
-      "alpha": "transparent",
-      "max_colors": 96,
-      "render": "hires_pixel",
-      "people": true
+      "people": true,
+      "prompt": "32x48 neutral base character sprite sheet for a modular avatar: plain grey t-shirt, dark trousers, short dark hair. Rows: front idle (4), side walk (6), seated typing at a machine seen from the side facing right (6), thinking with hand on chin (4), small seated celebration (6), small seated disappointment (4).",
+      "content": "То же нейтральное тело в масштабе 32×48. Сидячие ряды — без стула (стул рисуется в комнате).",
+      "ramps": [
+        "people",
+        "stone"
+      ]
     },
     {
       "id": "SCR-WARDROBE-BG",
       "task": "W2-15",
+      "title": "Склад формы (фон S04)",
       "path": "assets/source/environment/rooms/wardrobe/wardrobe_bg.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 40,
-      "people": false
+      "people": false,
+      "prompt": "Cozy uniform storeroom at a weather station: a round low podium on the left, wooden shelving with empty cubbies on the right, coat rails, a standing mirror, a warm ceiling lamp. No people.",
+      "content": "Тёплая комната выдачи формы: слева круглый подиум с местом под персонажа, справа стеллажи с полками-ячейками (пустыми), вешалки, зеркало, лампа.",
+      "ramps": [
+        "facade",
+        "ui_teal",
+        "stone",
+        "window",
+        "paper"
+      ]
     },
     {
       "id": "CLOTH-top.center-jacket-M1",
       "task": "W2-15",
+      "title": "Одежда top.center-jacket (M1)",
       "path": "assets/source/characters/avatar/clothes/top_center-jacket_m1.png",
       "size": [
         72,
@@ -1292,11 +1975,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (dark teal staff jacket with amber piping) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: куртка центра: тёмно-бирюзовая с янтарной окантовкой. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.center-jacket-M2",
       "task": "W2-15",
+      "title": "Одежда top.center-jacket (M2)",
       "path": "assets/source/characters/avatar/clothes/top_center-jacket_m2.png",
       "size": [
         192,
@@ -1308,11 +2002,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (dark teal staff jacket with amber piping) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: куртка центра: тёмно-бирюзовая с янтарной окантовкой. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.hoodie-M1",
       "task": "W2-15",
+      "title": "Одежда top.hoodie (M1)",
       "path": "assets/source/characters/avatar/clothes/top_hoodie_m1.png",
       "size": [
         72,
@@ -1324,11 +2029,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (grey-blue hoodie) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: толстовка с капюшоном, серо-синяя. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.hoodie-M2",
       "task": "W2-15",
+      "title": "Одежда top.hoodie (M2)",
       "path": "assets/source/characters/avatar/clothes/top_hoodie_m2.png",
       "size": [
         192,
@@ -1340,11 +2056,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (grey-blue hoodie) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: толстовка с капюшоном, серо-синяя. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.shirt-M1",
       "task": "W2-15",
+      "title": "Одежда top.shirt (M1)",
       "path": "assets/source/characters/avatar/clothes/top_shirt_m1.png",
       "size": [
         72,
@@ -1356,11 +2083,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (light short-sleeve shirt) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: светлая рубашка с коротким рукавом. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.shirt-M2",
       "task": "W2-15",
+      "title": "Одежда top.shirt (M2)",
       "path": "assets/source/characters/avatar/clothes/top_shirt_m2.png",
       "size": [
         192,
@@ -1372,11 +2110,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (light short-sleeve shirt) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: светлая рубашка с коротким рукавом. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.field-jacket-M1",
       "task": "W2-15",
+      "title": "Одежда top.field-jacket (M1)",
       "path": "assets/source/characters/avatar/clothes/top_field-jacket_m1.png",
       "size": [
         72,
@@ -1388,11 +2137,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (olive field jacket with pockets) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: полевая куртка оливковая с карманами. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.field-jacket-M2",
       "task": "W2-15",
+      "title": "Одежда top.field-jacket (M2)",
       "path": "assets/source/characters/avatar/clothes/top_field-jacket_m2.png",
       "size": [
         192,
@@ -1404,11 +2164,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (olive field jacket with pockets) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: полевая куртка оливковая с карманами. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.sweater-M1",
       "task": "W2-15",
+      "title": "Одежда top.sweater (M1)",
       "path": "assets/source/characters/avatar/clothes/top_sweater_m1.png",
       "size": [
         72,
@@ -1420,11 +2191,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (ochre knitted sweater) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: вязаный свитер охристый. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-top.sweater-M2",
       "task": "W2-15",
+      "title": "Одежда top.sweater (M2)",
       "path": "assets/source/characters/avatar/clothes/top_sweater_m2.png",
       "size": [
         192,
@@ -1436,11 +2218,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (ochre knitted sweater) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: вязаный свитер охристый. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-bottom.dark-trousers-M1",
       "task": "W2-15",
+      "title": "Одежда bottom.dark-trousers (M1)",
       "path": "assets/source/characters/avatar/clothes/bottom_dark-trousers_m1.png",
       "size": [
         72,
@@ -1452,11 +2245,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (dark trousers) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: тёмные брюки. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-bottom.dark-trousers-M2",
       "task": "W2-15",
+      "title": "Одежда bottom.dark-trousers (M2)",
       "path": "assets/source/characters/avatar/clothes/bottom_dark-trousers_m2.png",
       "size": [
         192,
@@ -1468,11 +2272,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (dark trousers) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: тёмные брюки. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-bottom.field-trousers-M1",
       "task": "W2-15",
+      "title": "Одежда bottom.field-trousers (M1)",
       "path": "assets/source/characters/avatar/clothes/bottom_field-trousers_m1.png",
       "size": [
         72,
@@ -1484,11 +2299,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (field trousers with knee pads) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: полевые брюки с наколенниками. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-bottom.field-trousers-M2",
       "task": "W2-15",
+      "title": "Одежда bottom.field-trousers (M2)",
       "path": "assets/source/characters/avatar/clothes/bottom_field-trousers_m2.png",
       "size": [
         192,
@@ -1500,11 +2326,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (field trousers with knee pads) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: полевые брюки с наколенниками. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-bottom.jeans-M1",
       "task": "W2-15",
+      "title": "Одежда bottom.jeans (M1)",
       "path": "assets/source/characters/avatar/clothes/bottom_jeans_m1.png",
       "size": [
         72,
@@ -1516,11 +2353,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (blue jeans) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: синие джинсы. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-bottom.jeans-M2",
       "task": "W2-15",
+      "title": "Одежда bottom.jeans (M2)",
       "path": "assets/source/characters/avatar/clothes/bottom_jeans_m2.png",
       "size": [
         192,
@@ -1532,11 +2380,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (blue jeans) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: синие джинсы. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-footwear.sneakers-M1",
       "task": "W2-15",
+      "title": "Одежда footwear.sneakers (M1)",
       "path": "assets/source/characters/avatar/clothes/footwear_sneakers_m1.png",
       "size": [
         72,
@@ -1548,11 +2407,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (light sneakers) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: кеды светлые. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-footwear.sneakers-M2",
       "task": "W2-15",
+      "title": "Одежда footwear.sneakers (M2)",
       "path": "assets/source/characters/avatar/clothes/footwear_sneakers_m2.png",
       "size": [
         192,
@@ -1564,11 +2434,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (light sneakers) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: кеды светлые. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-footwear.boots-M1",
       "task": "W2-15",
+      "title": "Одежда footwear.boots (M1)",
       "path": "assets/source/characters/avatar/clothes/footwear_boots_m1.png",
       "size": [
         72,
@@ -1580,11 +2461,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (hiking boots) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: походные ботинки. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-footwear.boots-M2",
       "task": "W2-15",
+      "title": "Одежда footwear.boots (M2)",
       "path": "assets/source/characters/avatar/clothes/footwear_boots_m2.png",
       "size": [
         192,
@@ -1596,11 +2488,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (hiking boots) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: походные ботинки. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-footwear.shoes-M1",
       "task": "W2-15",
+      "title": "Одежда footwear.shoes (M1)",
       "path": "assets/source/characters/avatar/clothes/footwear_shoes_m1.png",
       "size": [
         72,
@@ -1612,11 +2515,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (plain shoes) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: закрытые туфли. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-footwear.shoes-M2",
       "task": "W2-15",
+      "title": "Одежда footwear.shoes (M2)",
       "path": "assets/source/characters/avatar/clothes/footwear_shoes_m2.png",
       "size": [
         192,
@@ -1628,11 +2542,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (plain shoes) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: закрытые туфли. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.cap-M1",
       "task": "W2-15",
+      "title": "Одежда headwear.cap (M1)",
       "path": "assets/source/characters/avatar/clothes/headwear_cap_m1.png",
       "size": [
         72,
@@ -1644,11 +2569,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (cap) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: кепка. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.cap-M2",
       "task": "W2-15",
+      "title": "Одежда headwear.cap (M2)",
       "path": "assets/source/characters/avatar/clothes/headwear_cap_m2.png",
       "size": [
         192,
@@ -1660,11 +2596,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (cap) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: кепка. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.beanie-M1",
       "task": "W2-15",
+      "title": "Одежда headwear.beanie (M1)",
       "path": "assets/source/characters/avatar/clothes/headwear_beanie_m1.png",
       "size": [
         72,
@@ -1676,11 +2623,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (beanie) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: вязаная шапка. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.beanie-M2",
       "task": "W2-15",
+      "title": "Одежда headwear.beanie (M2)",
       "path": "assets/source/characters/avatar/clothes/headwear_beanie_m2.png",
       "size": [
         192,
@@ -1692,11 +2650,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (beanie) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: вязаная шапка. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.scarf-M1",
       "task": "W2-15",
+      "title": "Одежда headwear.scarf (M1)",
       "path": "assets/source/characters/avatar/clothes/headwear_scarf_m1.png",
       "size": [
         72,
@@ -1708,11 +2677,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (scarf) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: шарф. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.scarf-M2",
       "task": "W2-15",
+      "title": "Одежда headwear.scarf (M2)",
       "path": "assets/source/characters/avatar/clothes/headwear_scarf_m2.png",
       "size": [
         192,
@@ -1724,11 +2704,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (scarf) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: шарф. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.goggles-M1",
       "task": "W2-15",
+      "title": "Одежда headwear.goggles (M1)",
       "path": "assets/source/characters/avatar/clothes/headwear_goggles_m1.png",
       "size": [
         72,
@@ -1740,11 +2731,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (goggles on forehead) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: защитные очки на лоб. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-headwear.goggles-M2",
       "task": "W2-15",
+      "title": "Одежда headwear.goggles (M2)",
       "path": "assets/source/characters/avatar/clothes/headwear_goggles_m2.png",
       "size": [
         192,
@@ -1756,11 +2758,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (goggles on forehead) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: защитные очки на лоб. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-held.pencil-M1",
       "task": "W2-15",
+      "title": "Одежда held.pencil (M1)",
       "path": "assets/source/characters/avatar/clothes/held_pencil_m1.png",
       "size": [
         72,
@@ -1772,11 +2785,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (pencil in hand) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: карандаш в руке. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-held.pencil-M2",
       "task": "W2-15",
+      "title": "Одежда held.pencil (M2)",
       "path": "assets/source/characters/avatar/clothes/held_pencil_m2.png",
       "size": [
         192,
@@ -1788,11 +2812,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (pencil in hand) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: карандаш в руке. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-held.tablet-M1",
       "task": "W2-15",
+      "title": "Одежда held.tablet (M1)",
       "path": "assets/source/characters/avatar/clothes/held_tablet_m1.png",
       "size": [
         72,
@@ -1804,11 +2839,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (tablet in hand) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: планшет в руке. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-held.tablet-M2",
       "task": "W2-15",
+      "title": "Одежда held.tablet (M2)",
       "path": "assets/source/characters/avatar/clothes/held_tablet_m2.png",
       "size": [
         192,
@@ -1820,11 +2866,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (tablet in hand) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: планшет в руке. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-held.map-folder-M1",
       "task": "W2-15",
+      "title": "Одежда held.map-folder (M1)",
       "path": "assets/source/characters/avatar/clothes/held_map-folder_m1.png",
       "size": [
         72,
@@ -1836,11 +2893,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (map folder under arm) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: папка карт под мышкой. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-held.map-folder-M2",
       "task": "W2-15",
+      "title": "Одежда held.map-folder (M2)",
       "path": "assets/source/characters/avatar/clothes/held_map-folder_m2.png",
       "size": [
         192,
@@ -1852,11 +2920,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (map folder under arm) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: папка карт под мышкой. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-backpack.field-M1",
       "task": "W2-15",
+      "title": "Одежда backpack.field (M1)",
       "path": "assets/source/characters/avatar/clothes/backpack_field_m1.png",
       "size": [
         72,
@@ -1868,11 +2947,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (field backpack) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: полевой рюкзак. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-backpack.field-M2",
       "task": "W2-15",
+      "title": "Одежда backpack.field (M2)",
       "path": "assets/source/characters/avatar/clothes/backpack_field_m2.png",
       "size": [
         192,
@@ -1884,11 +2974,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (field backpack) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: полевой рюкзак. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-backpack.city-M1",
       "task": "W2-15",
+      "title": "Одежда backpack.city (M1)",
       "path": "assets/source/characters/avatar/clothes/backpack_city_m1.png",
       "size": [
         72,
@@ -1900,11 +3001,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (city backpack) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: городской рюкзак. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-backpack.city-M2",
       "task": "W2-15",
+      "title": "Одежда backpack.city (M2)",
       "path": "assets/source/characters/avatar/clothes/backpack_city_m2.png",
       "size": [
         192,
@@ -1916,11 +3028,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (city backpack) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: городской рюкзак. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-badge.meteo-M1",
       "task": "W2-15",
+      "title": "Одежда badge.meteo (M1)",
       "path": "assets/source/characters/avatar/clothes/badge_meteo_m1.png",
       "size": [
         72,
@@ -1932,11 +3055,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (small meteorologist pin badge) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: значок метеоролога на груди. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-badge.meteo-M2",
       "task": "W2-15",
+      "title": "Одежда badge.meteo (M2)",
       "path": "assets/source/characters/avatar/clothes/badge_meteo_m2.png",
       "size": [
         192,
@@ -1948,11 +3082,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (small meteorologist pin badge) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: значок метеоролога на груди. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-badge.aerology-M1",
       "task": "W2-15",
+      "title": "Одежда badge.aerology (M1)",
       "path": "assets/source/characters/avatar/clothes/badge_aerology_m1.png",
       "size": [
         72,
@@ -1964,11 +3109,22 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (small aerology pin badge) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: значок аэролога на груди. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "CLOTH-badge.aerology-M2",
       "task": "W2-15",
+      "title": "Одежда badge.aerology (M2)",
       "path": "assets/source/characters/avatar/clothes/badge_aerology_m2.png",
       "size": [
         192,
@@ -1980,115 +3136,173 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Clothing overlay layer only (small aerology pin badge) drawn exactly on top of every frame of the base avatar sheet, same grid, transparent everywhere else.",
+      "content": "Только предмет: значок аэролога на груди. Всё, что не предмет, прозрачно; предмет повторяет позу каждого кадра базы.",
+      "ramps": [
+        "ui_teal",
+        "facade",
+        "stone",
+        "foliage",
+        "state",
+        "birch_snow"
+      ]
     },
     {
       "id": "UI-PANEL-DARK",
       "task": "W2-16",
+      "title": "Панель тёмная",
       "path": "assets/source/ui/v3/ui_panel_dark.png",
       "size": [
         48,
         48
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Flat dark-teal UI panel tile with a crisp 2-pixel bevelled border, for 9-slice scaling.",
+      "content": "Фон #0C2A33, рамка 2 px: внешняя #143F4C, внутренний блик сверху-слева #367C8B, тень снизу-справа #0C2A33.",
+      "ramps": [
+        "ui_teal"
+      ]
     },
     {
       "id": "UI-PANEL-RAISED",
       "task": "W2-16",
+      "title": "Панель приподнятая",
       "path": "assets/source/ui/v3/ui_panel_raised.png",
       "size": [
         48,
         48
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Raised teal UI panel tile, 2-pixel bevel, 9-slice.",
+      "content": "Фон #1B5660, светлая фаска #6F9E95.",
+      "ramps": [
+        "ui_teal"
+      ]
     },
     {
       "id": "UI-DIALOG",
       "task": "W2-16",
+      "title": "Окно диалога с уголками",
       "path": "assets/source/ui/v3/ui_dialog.png",
       "size": [
         48,
         48
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 7,
-      "people": false
+      "people": false,
+      "prompt": "Dark teal dialog frame tile with small amber corner brackets, 9-slice.",
+      "content": "Как UI-PANEL-DARK + янтарные уголки-скобки 5×5 #F2C75C в каждом углу.",
+      "ramps": [
+        "ui_teal",
+        "accent"
+      ]
     },
     {
       "id": "UI-PAPER-SHEET",
       "task": "W2-16",
+      "title": "Бумажный бланк",
       "path": "assets/source/ui/v3/ui_paper_sheet.png",
       "size": [
         48,
         48
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Cream paper sheet tile with a subtle 1-pixel bottom shadow, clean, 9-slice.",
+      "content": "Кремовая бумага #E2D6B6, верхняя кромка #F3ECD8, тень снизу 1 px #BFAF8A, редкие волокна.",
+      "ramps": [
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-PAPER-PERF",
       "task": "W2-16",
+      "title": "Бланк с перфорацией",
       "path": "assets/source/ui/v3/ui_paper_perf.png",
       "size": [
         48,
         48
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Cream paper tile with a perforated tear-off top edge, 9-slice.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-CLIPBOARD",
       "task": "W2-16",
+      "title": "Планшет с зажимом",
       "path": "assets/source/ui/v3/ui_clipboard.png",
       "size": [
         160,
         220
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 12,
-      "people": false
+      "people": false,
+      "prompt": "Wooden clipboard with a metal clip at the top holding a blank cream sheet, front view.",
+      "content": "Деревянная доска, металлический зажим сверху, лист бумаги под ним (пустой).",
+      "ramps": [
+        "facade",
+        "stone",
+        "paper"
+      ]
     },
     {
       "id": "UI-TAPE",
       "task": "W2-16",
+      "title": "Лента телеграммы (тайл)",
       "path": "assets/source/ui/v3/ui_tape.png",
       "size": [
         32,
         24
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Seamless horizontal tile of a cream teletype paper tape with a row of small punched holes along both edges.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-TAPE-END",
       "task": "W2-16",
+      "title": "Оторванный конец ленты",
       "path": "assets/source/ui/v3/ui_tape_end.png",
       "size": [
         16,
         24
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Torn ragged end of a cream paper tape, matching the tape tile.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-BTN-PRIMARY",
       "task": "W2-16",
+      "title": "Кнопка главная",
       "path": "assets/source/ui/v3/ui_btn_primary.png",
       "size": [
         48,
@@ -2100,11 +3314,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Pixel UI button without text, янтарная #F2C75C, six states stacked vertically: idle, hover, pressed, keyboard focus, disabled, loading.",
+      "content": "янтарная #F2C75C, блик #FFDD83, тень #B88626, текст будет тёмным. Горизонтальный 9-slice: торцы 6 px. Без текста.",
+      "ramps": [
+        "accent",
+        "ui_teal",
+        "stone"
+      ]
     },
     {
       "id": "UI-BTN-SECONDARY",
       "task": "W2-16",
+      "title": "Кнопка вторичная",
       "path": "assets/source/ui/v3/ui_btn_secondary.png",
       "size": [
         48,
@@ -2116,11 +3338,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Pixel UI button without text, бирюзовая #1B5660, six states stacked vertically: idle, hover, pressed, keyboard focus, disabled, loading.",
+      "content": "бирюзовая #1B5660, блик #367C8B, тень #0C2A33. Горизонтальный 9-slice: торцы 6 px. Без текста.",
+      "ramps": [
+        "ui_teal",
+        "ui_teal",
+        "stone"
+      ]
     },
     {
       "id": "UI-BTN-GHOST",
       "task": "W2-16",
+      "title": "Кнопка-призрак",
       "path": "assets/source/ui/v3/ui_btn_ghost.png",
       "size": [
         48,
@@ -2132,11 +3362,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Pixel UI button without text, без заливки, six states stacked vertically: idle, hover, pressed, keyboard focus, disabled, loading.",
+      "content": "без заливки, только рамка #367C8B. Горизонтальный 9-slice: торцы 6 px. Без текста.",
+      "ramps": [
+        "ui_teal",
+        "ui_teal",
+        "stone"
+      ]
     },
     {
       "id": "UI-KEY",
       "task": "W2-16",
+      "title": "Клавиша клавиатуры телетайпа",
       "path": "assets/source/ui/v3/ui_key.png",
       "size": [
         80,
@@ -2148,11 +3386,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Blank cream keyboard key cap, five states: idle, hover, pressed, focus, disabled.",
+      "content": "Кремовая клавиша с тёмной фаской, без символа (символ кладёт интерфейс шрифтом).",
+      "ramps": [
+        "ui_teal",
+        "paper",
+        "accent"
+      ]
     },
     {
       "id": "UI-CHOICE-CARD",
       "task": "W2-16",
+      "title": "Карточка выбора",
       "path": "assets/source/ui/v3/ui_choice_card.png",
       "size": [
         240,
@@ -2164,11 +3410,20 @@
       ],
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Blank cream answer card tile, five states: idle, hover, selected with amber border, correct with green border and tick, wrong with red pencil cross.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "accent",
+        "state",
+        "marks"
+      ]
     },
     {
       "id": "UI-LAMP",
       "task": "W2-16",
+      "title": "Лампа серии",
       "path": "assets/source/ui/v3/ui_lamp.png",
       "size": [
         21,
@@ -2180,11 +3435,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Tiny round indicator lamp: off, lit amber, flash.",
+      "content": "",
+      "ramps": [
+        "stone",
+        "accent"
+      ]
     },
     {
       "id": "UI-STAMP-RECT",
       "task": "W2-16",
+      "title": "Оттиск штампа (прямоугольный)",
       "path": "assets/source/ui/v3/ui_stamp_rect.png",
       "size": [
         192,
@@ -2196,11 +3458,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 2,
-      "people": false
+      "people": false,
+      "prompt": "Empty rubber-stamp imprint: double rectangular border in dark green ink, uneven inking, no text, three variants.",
+      "content": "Двойная прямоугольная рамка цвета #2F6E5A с неровной пропечаткой. БЕЗ ТЕКСТА.",
+      "ramps": [
+        "marks"
+      ]
     },
     {
       "id": "UI-STAMP-ROUND",
       "task": "W2-16",
+      "title": "Оттиск печати (круглый)",
       "path": "assets/source/ui/v3/ui_stamp_round.png",
       "size": [
         96,
@@ -2212,11 +3480,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 2,
-      "people": false
+      "people": false,
+      "prompt": "Empty round ink seal imprint with a double ring, dark green, no text, three variants.",
+      "content": "Круглая печать с двойным кольцом, без текста; центр пустой.",
+      "ramps": [
+        "marks"
+      ]
     },
     {
       "id": "UI-BUBBLE",
       "task": "W2-16",
+      "title": "Пузырь реплики",
       "path": "assets/source/ui/v3/ui_bubble.png",
       "size": [
         64,
@@ -2228,11 +3502,18 @@
       ],
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Cream speech bubble tile with a dark outline, two variants: tail on the left, tail at the bottom.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-TAB",
       "task": "W2-16",
+      "title": "Закладка справочника",
       "path": "assets/source/ui/v3/ui_tab.png",
       "size": [
         48,
@@ -2244,37 +3525,56 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Book bookmark tab sticking out of a page, two states: inactive (muted), active (brighter, longer).",
+      "content": "",
+      "ramps": [
+        "facade",
+        "ui_teal",
+        "paper"
+      ]
     },
     {
       "id": "UI-PORTRAIT-FRAME",
       "task": "W2-16",
+      "title": "Рамка портрета",
       "path": "assets/source/ui/v3/ui_portrait_frame.png",
       "size": [
         72,
         72
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Square dark-teal portrait frame with a thin amber inner line, transparent centre.",
+      "content": "Рамка 4 px вокруг окна 64×64, центр прозрачный.",
+      "ramps": [
+        "ui_teal",
+        "accent"
+      ]
     },
     {
       "id": "UI-PASSEPARTOUT",
       "task": "W2-16",
+      "title": "Паспарту (тайл)",
       "path": "assets/source/ui/v3/ui_passepartout.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "opaque",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Seamless 16x16 tile of dark teal fabric with a subtle stitched pixel pattern.",
+      "content": "Тёмная бирюзовая ткань с пиксельной строчкой, бесшовный тайл.",
+      "ramps": [
+        "ui_teal"
+      ]
     },
     {
       "id": "UI-PERF-DOT",
       "task": "W2-16",
+      "title": "Перфорация прогресса",
       "path": "assets/source/ui/v3/ui_perf_dot.png",
       "size": [
         16,
@@ -2286,50 +3586,77 @@
       ],
       "alpha": "transparent",
       "max_colors": 4,
-      "people": false
+      "people": false,
+      "prompt": "Punched hole: empty and filled amber.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "accent"
+      ]
     },
     {
       "id": "UI-BOOK-SPREAD",
       "task": "W2-16",
+      "title": "Справочник: разворот",
       "path": "assets/source/ui/v3/ui_book_spread.png",
       "size": [
         400,
         240
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 16,
-      "people": false
+      "people": false,
+      "prompt": "Open hardcover reference book seen from above, cloth binding, two blank cream pages, centre spine shadow.",
+      "content": "Раскрытая книга в тканевом переплёте, две пустые страницы, корешок по центру.",
+      "ramps": [
+        "facade",
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-BOOK-STRAP",
       "task": "W2-16",
+      "title": "Справочник закрыт на ремешок",
       "path": "assets/source/ui/v3/ui_book_strap.png",
       "size": [
         200,
         240
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 12,
-      "people": false
+      "people": false,
+      "prompt": "Closed hardcover book fastened with a leather strap and buckle, front view, no title.",
+      "content": "",
+      "ramps": [
+        "facade",
+        "stone"
+      ]
     },
     {
       "id": "UI-JOURNAL-SPREAD",
       "task": "W2-16",
+      "title": "Журнал допуска: разворот",
       "path": "assets/source/ui/v3/ui_journal_spread.png",
       "size": [
         400,
         240
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 16,
-      "people": false
+      "people": false,
+      "prompt": "Open ruled logbook with a dark teal cover seen from above, two blank lined pages.",
+      "content": "Разлинованный журнал в тёмно-бирюзовой обложке, пустые страницы.",
+      "ramps": [
+        "ui_teal",
+        "paper",
+        "ink"
+      ]
     },
     {
       "id": "UI-INDEX-TAB",
       "task": "W2-16",
+      "title": "Указатель группы в журнале",
       "path": "assets/source/ui/v3/ui_index_tab.png",
       "size": [
         96,
@@ -2341,11 +3668,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Paper index tab on a logbook edge, three states.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "accent",
+        "ui_teal"
+      ]
     },
     {
       "id": "UI-USER-CARD",
       "task": "W2-16",
+      "title": "Карточка участника",
       "path": "assets/source/ui/v3/ui_user_card.png",
       "size": [
         144,
@@ -2357,11 +3692,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Small cream name card tile, three states: idle, selected with amber border, admitted with a green stamp corner.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "accent",
+        "state"
+      ]
     },
     {
       "id": "UI-LEVEL-NODE",
       "task": "W2-16",
+      "title": "Узел карты уровня",
       "path": "assets/source/ui/v3/ui_level_node.png",
       "size": [
         96,
@@ -2373,37 +3716,60 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Round tape-map node, four states: grey locked, amber available, green stamped done, gold stamped perfect.",
+      "content": "",
+      "ramps": [
+        "stone",
+        "accent",
+        "marks"
+      ]
     },
     {
       "id": "UI-TORN-TAPE",
       "task": "W2-16",
+      "title": "Оборванная лента (ошибки связи)",
       "path": "assets/source/ui/v3/ui_torn_tape.png",
       "size": [
         160,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Illustration of a teletype paper tape torn in two, ends curling, on dark background transparent.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ink",
+        "ui_teal"
+      ]
     },
     {
       "id": "UI-CERTIFICATE-PAPER",
       "task": "W2-16",
+      "title": "Бланк свидетельства",
       "path": "assets/source/ui/v3/ui_certificate_paper.png",
       "size": [
         320,
         220
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 14,
-      "people": false
+      "people": false,
+      "prompt": "Blank parchment certificate sheet with an ornamental border of stylised wavy lines and small clouds, empty text area, empty circle space at lower right for a seal, no text, no emblems.",
+      "content": "Пергаментный лист с орнаментальной рамкой из стилизованных изобар и облаков, пустые поля под текст, место под круглую печать справа внизу.",
+      "ramps": [
+        "paper",
+        "facade",
+        "accent",
+        "ink"
+      ]
     },
     {
       "id": "UI-ENVELOPE",
       "task": "W2-16",
+      "title": "Конверт награды",
       "path": "assets/source/ui/v3/ui_envelope.png",
       "size": [
         144,
@@ -2415,544 +3781,918 @@
       ],
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Small paper envelope with a wax seal, three opening frames.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "facade",
+        "marks"
+      ]
     },
     {
       "id": "ICON-JOURNAL",
       "task": "W2-16",
+      "title": "Иконка: журнал ошибок: тетрадь с закладкой",
       "path": "assets/source/ui/v3/icons/icon_journal.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: notebook with a bookmark, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "журнал ошибок: тетрадь с закладкой. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-DISCOVERIES",
       "task": "W2-16",
+      "title": "Иконка: находки: бинокль",
       "path": "assets/source/ui/v3/icons/icon_discoveries.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: binoculars, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "находки: бинокль. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-PERSON",
       "task": "W2-16",
+      "title": "Иконка: персонаж: силуэт головы и плеч",
       "path": "assets/source/ui/v3/icons/icon_person.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: person head and shoulders, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "персонаж: силуэт головы и плеч. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-GEAR",
       "task": "W2-16",
+      "title": "Иконка: настройки: шестерня",
       "path": "assets/source/ui/v3/icons/icon_gear.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: gear, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "настройки: шестерня. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-SOUND-ON",
       "task": "W2-16",
+      "title": "Иконка: звук включён: динамик с волнами",
       "path": "assets/source/ui/v3/icons/icon_sound-on.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: speaker with waves, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "звук включён: динамик с волнами. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-SOUND-OFF",
       "task": "W2-16",
+      "title": "Иконка: звук выключен: динамик с косой чертой",
       "path": "assets/source/ui/v3/icons/icon_sound-off.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: muted speaker, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "звук выключен: динамик с косой чертой. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-MOON",
       "task": "W2-16",
+      "title": "Иконка: ночь",
       "path": "assets/source/ui/v3/icons/icon_moon.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: crescent moon, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "ночь. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-SUN",
       "task": "W2-16",
+      "title": "Иконка: день",
       "path": "assets/source/ui/v3/icons/icon_sun.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: sun, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "день. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-DAWN",
       "task": "W2-16",
+      "title": "Иконка: рассвет: половина солнца над линией",
       "path": "assets/source/ui/v3/icons/icon_dawn.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: half sun on horizon, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "рассвет: половина солнца над линией. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-LOCK",
       "task": "W2-16",
+      "title": "Иконка: закрыто: замок",
       "path": "assets/source/ui/v3/icons/icon_lock.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: padlock closed, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "закрыто: замок. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-UNLOCK",
       "task": "W2-16",
+      "title": "Иконка: открыто: замок открыт",
       "path": "assets/source/ui/v3/icons/icon_unlock.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: padlock open, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "открыто: замок открыт. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-PAUSE",
       "task": "W2-16",
+      "title": "Иконка: пауза",
       "path": "assets/source/ui/v3/icons/icon_pause.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: pause bars, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "пауза. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-BOOK",
       "task": "W2-16",
+      "title": "Иконка: справочник: книга",
       "path": "assets/source/ui/v3/icons/icon_book.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: closed book, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "справочник: книга. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-CHECK",
       "task": "W2-16",
+      "title": "Иконка: верно: галочка",
       "path": "assets/source/ui/v3/icons/icon_check.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: check mark, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "верно: галочка. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-CROSS",
       "task": "W2-16",
+      "title": "Иконка: неверно: крестик карандашом",
       "path": "assets/source/ui/v3/icons/icon_cross.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: pencil cross, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "неверно: крестик карандашом. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-ARROW-LEFT",
       "task": "W2-16",
+      "title": "Иконка: назад",
       "path": "assets/source/ui/v3/icons/icon_arrow-left.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: arrow left, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "назад. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-ARROW-RIGHT",
       "task": "W2-16",
+      "title": "Иконка: вперёд",
       "path": "assets/source/ui/v3/icons/icon_arrow-right.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: arrow right, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "вперёд. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-STAR",
       "task": "W2-16",
+      "title": "Иконка: звезда результата",
       "path": "assets/source/ui/v3/icons/icon_star.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: star, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "звезда результата. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-CLOCK",
       "task": "W2-16",
+      "title": "Иконка: время",
       "path": "assets/source/ui/v3/icons/icon_clock.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: clock, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "время. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-TAPE",
       "task": "W2-16",
+      "title": "Иконка: телеграмма: кусок ленты",
       "path": "assets/source/ui/v3/icons/icon_tape.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: piece of paper tape, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "телеграмма: кусок ленты. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-STATION",
       "task": "W2-16",
+      "title": "Иконка: станция: кружок станции",
       "path": "assets/source/ui/v3/icons/icon_station.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: small circle with a dot (weather station marker), light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "станция: кружок станции. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-THERMOMETER",
       "task": "W2-16",
+      "title": "Иконка: температура",
       "path": "assets/source/ui/v3/icons/icon_thermometer.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: thermometer, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "температура. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-BAROMETER",
       "task": "W2-16",
+      "title": "Иконка: давление: стрелочный барометр",
       "path": "assets/source/ui/v3/icons/icon_barometer.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: aneroid barometer dial, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "давление: стрелочный барометр. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-VANE",
       "task": "W2-16",
+      "title": "Иконка: ветер: флюгер",
       "path": "assets/source/ui/v3/icons/icon_vane.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: weather vane, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "ветер: флюгер. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-CLOUD",
       "task": "W2-16",
+      "title": "Иконка: облачность",
       "path": "assets/source/ui/v3/icons/icon_cloud.png",
       "size": [
         16,
         16
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 5,
-      "people": false
+      "people": false,
+      "prompt": "Single 16x16 pixel icon: cloud, light cream line art with one shade, readable on dark teal, transparent background.",
+      "content": "облачность. Линия 1–2 px, светлая #F3ECD8 с тенью #367C8B, читается на тёмно-бирюзовом фоне.",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "ink",
+        "marks"
+      ]
     },
     {
       "id": "ICON-MODE-MENTOR",
       "task": "W2-16",
+      "title": "Иконка режима: режим «С наставником»: две фигуры у стола",
       "path": "assets/source/ui/v3/icons/icon_mode_mentor_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": true
+      "people": true,
+      "prompt": "Single 32x32 pixel icon: two figures at a desk, cream and teal with one amber accent, transparent background.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "people"
+      ]
     },
     {
       "id": "ICON-MODE-SOLO",
       "task": "W2-16",
+      "title": "Иконка режима: режим «Самостоятельно»: одна фигура с карандашом",
       "path": "assets/source/ui/v3/icons/icon_mode_solo_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": true
+      "people": true,
+      "prompt": "Single 32x32 pixel icon: one figure with a pencil, cream and teal with one amber accent, transparent background.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "people"
+      ]
     },
     {
       "id": "ICON-MODE-BLITZ",
       "task": "W2-16",
+      "title": "Иконка режима: режим «Блиц»: секундомер",
       "path": "assets/source/ui/v3/icons/icon_mode_blitz_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": true
+      "people": true,
+      "prompt": "Single 32x32 pixel icon: stopwatch, cream and teal with one amber accent, transparent background.",
+      "content": "",
+      "ramps": [
+        "paper",
+        "ui_teal",
+        "accent",
+        "people"
+      ]
     },
     {
       "id": "BRAND-MARK-26063",
       "task": "W2-17",
+      "title": "Знак «26063»",
       "path": "assets/source/ui/brand/brand_mark_26063.png",
       "size": [
         96,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "(Reference only) Small dark teal metal inventory plate with four rivets, space for five large stencil digits.",
+      "content": "Табличка-шильдик 96×32 с пятью цифрами 2-6-0-6-3, каждая 14×20 px, моноширинный трафаретный рисунок как у инвентарного номера; цифры #F2C75C с тенью #B88626 на тёмной табличке #0C2A33 с 4 заклёпками.",
+      "ramps": [
+        "accent",
+        "ui_teal",
+        "stone"
+      ]
     },
     {
       "id": "BRAND-EMBLEM-64",
       "task": "W2-17",
+      "title": "Эмблема станции 64×64",
       "path": "assets/source/ui/brand/brand_emblem_64.png",
       "size": [
         64,
         64
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 12,
-      "people": false
+      "people": false,
+      "prompt": "Round station emblem badge: stylised bay wave, a weather mast with a cup anemometer, one curved isobar line, a small laurel sprig, teal and amber, no text.",
+      "content": "Круглая эмблема: волна залива, силуэт метеомачты с чашечным анемометром, дуга изобары, лавровая веточка; без текста.",
+      "ramps": [
+        "ui_teal",
+        "accent",
+        "water",
+        "birch_snow"
+      ]
     },
     {
       "id": "BRAND-EMBLEM-32",
       "task": "W2-17",
+      "title": "Эмблема станции 32×32",
       "path": "assets/source/ui/brand/brand_emblem_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Simplified 32x32 version of the same round emblem: wave, mast, ring only.",
+      "content": "Та же эмблема, перерисованная под 32 px (не уменьшенная): только волна, мачта и кольцо.",
+      "ramps": [
+        "ui_teal",
+        "accent",
+        "water"
+      ]
     },
     {
       "id": "TITLE-MID",
       "task": "W2-17",
+      "title": "Титул: кампус за водой (средний план)",
       "path": "assets/source/ui/brand/title_mid.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 32,
-      "people": false
+      "people": false,
+      "prompt": "Middle layer only: small campus buildings with warm windows and a radar dome across calm water at night, with long window reflections; everything above and below transparent.",
+      "content": "Силуэты трёх зданий кампуса, радарный купол и мачта на дальнем берегу, отражения окон в воде y 160–200.",
+      "ramps": [
+        "night",
+        "water",
+        "window",
+        "facade",
+        "stone"
+      ]
     },
     {
       "id": "TITLE-FG",
       "task": "W2-17",
+      "title": "Титул: набережная (передний план)",
       "path": "assets/source/ui/brand/title_fg.png",
       "size": [
         480,
         270
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 24,
-      "people": false
+      "people": false,
+      "prompt": "Foreground layer only: granite embankment parapet with a cast-iron railing along the bottom, a lamp post on the right, a birch on the left edge; everything else transparent.",
+      "content": "Гранитный парапет набережной с чугунной решёткой, фонарь справа, берёза слева.",
+      "ramps": [
+        "stone",
+        "birch_snow",
+        "foliage",
+        "window",
+        "night"
+      ]
     },
     {
       "id": "REW-PENCIL-32",
       "task": "W2-18",
+      "title": "Награда: карандаш стажёра: простой графитовый, обгрызенный кончик",
       "path": "assets/source/items/rewards/reward_pencil_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: a simple well-used graphite pencil, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-BADGE-THERMO-32",
       "task": "W2-18",
+      "title": "Награда: значок «Термометр»: эмалевый круглый с термометром",
       "path": "assets/source/items/rewards/reward_badge-thermo_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: round enamel pin with a thermometer, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-BADGE-BARO-32",
       "task": "W2-18",
+      "title": "Награда: значок «Барометр»: эмалевый с циферблатом барометра",
       "path": "assets/source/items/rewards/reward_badge-baro_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: round enamel pin with a barometer dial, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-BADGE-VANE-32",
       "task": "W2-18",
+      "title": "Награда: значок «Флюгер»: эмалевый с флюгером",
       "path": "assets/source/items/rewards/reward_badge-vane_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: round enamel pin with a weather vane, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-LAMP-32",
       "task": "W2-18",
+      "title": "Награда: лампа дежурного: зелёная настольная",
       "path": "assets/source/items/rewards/reward_lamp_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: green-shaded desk lamp, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-TOKEN-32",
       "task": "W2-18",
+      "title": "Награда: жетон «Кодовый пост»: латунный круглый с волной и лентой; номер наносится вручную",
       "path": "assets/source/items/rewards/reward_token_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: round brass token with a wave and tape motif, blank centre, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-CERTIFICATE-32",
       "task": "W2-18",
+      "title": "Награда: свидетельство: свёрнутый пергамент с печатью",
       "path": "assets/source/items/rewards/reward_certificate_32.png",
       "size": [
         32,
         32
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 10,
-      "people": false
+      "people": false,
+      "prompt": "Single 32x32 collectible item icon: rolled parchment with a wax seal, slight 3/4 view, soft highlight, transparent background, no text.",
+      "content": "",
+      "ramps": [
+        "accent",
+        "facade",
+        "paper",
+        "ui_teal",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "REW-LAMP-DESK-M2",
       "task": "W2-18",
+      "title": "Лампа дежурного на столе поста",
       "path": "assets/source/items/rewards/reward_lamp_desk_m2.png",
       "size": [
         16,
         24
       ],
-      "frame": null,
       "alpha": "transparent",
       "max_colors": 8,
-      "people": false
+      "people": false,
+      "prompt": "Small green-shaded desk lamp sprite for a room scene, lit, transparent background.",
+      "content": "",
+      "ramps": [
+        "ui_teal",
+        "window",
+        "stone"
+      ]
     },
     {
       "id": "FX-STAMP-TOOL",
       "task": "W2-19",
+      "title": "Штамп в руке (удар)",
       "path": "assets/source/effects/fx_stamp_tool.png",
       "size": [
         48,
@@ -2964,11 +4704,19 @@
       ],
       "alpha": "transparent",
       "max_colors": 6,
-      "people": false
+      "people": false,
+      "prompt": "Wooden rubber stamp with a round handle, 3 frames: raised, hitting with squash, lifting.",
+      "content": "",
+      "ramps": [
+        "facade",
+        "stone",
+        "marks"
+      ]
     },
     {
       "id": "FX-PENCIL-CIRCLE",
       "task": "W2-19",
+      "title": "Обводка красным карандашом",
       "path": "assets/source/effects/fx_pencil_circle.png",
       "size": [
         96,
@@ -2980,11 +4728,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 2,
-      "people": false
+      "people": false,
+      "prompt": "Hand-drawn red pencil ellipse being drawn in 4 frames (quarter, half, three quarters, closed with overlap).",
+      "content": "",
+      "ramps": [
+        "marks"
+      ]
     },
     {
       "id": "FX-VALUE-TRAIL",
       "task": "W2-19",
+      "title": "След перелёта значения",
       "path": "assets/source/effects/fx_value_trail.png",
       "size": [
         24,
@@ -2996,11 +4750,17 @@
       ],
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Tiny amber sparkle in 3 fading frames.",
+      "content": "",
+      "ramps": [
+        "accent"
+      ]
     },
     {
       "id": "FX-WINDOW-GLOW",
       "task": "W2-19",
+      "title": "Вспышка загорающегося окна",
       "path": "assets/source/effects/fx_window_glow.png",
       "size": [
         32,
@@ -3012,7 +4772,12 @@
       ],
       "alpha": "transparent",
       "max_colors": 3,
-      "people": false
+      "people": false,
+      "prompt": "Small dithered warm halo around a window, 2 frames.",
+      "content": "",
+      "ramps": [
+        "window"
+      ]
     }
   ]
 }

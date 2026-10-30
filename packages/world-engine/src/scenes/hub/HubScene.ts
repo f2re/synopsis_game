@@ -18,6 +18,7 @@ import { STATION_26063_LOCATION } from './HubTimeOfDay';
 import { HubWeatherOverlay, type WeatherMode } from './HubWeatherOverlay';
 import { HubScheduleManager } from '../../world/hubSchedule';
 import { worldBridge } from '../../bridge/WorldBridge';
+import { loadPhaserGraphic } from '../../assets/graphicAssets';
 
 export class HubScene extends Phaser.Scene {
   private timeOfDay: HubTimeOfDay;
@@ -44,16 +45,19 @@ export class HubScene extends Phaser.Scene {
   }
 
   preload(): void {
-    // Предварительная загрузка растровых слоёв хаба 480x270 (v3 конвейер)
-    this.load.image('hub_l0_bg', '/hub/layers/l0_background.png');
-    this.load.image('hub_l1_clouds', '/hub/layers/l1_clouds.png');
-    this.load.image('hub_l3_ground', '/hub/layers/l3_ground.png');
-    this.load.image('hub_l5_arch', '/hub/layers/l5_architecture.png');
-    this.load.image('hub_l7_decor', '/hub/layers/l7_decor.png');
-    this.load.image('hub_l8_birds', '/hub/layers/l8_birds.png');
-    this.load.image('hub_l9_veg', '/hub/layers/l9_vegetation.png');
-    this.load.image('hub_avatar', '/hub/layers/avatar_base.png');
-    this.load.image('hub_building_states', '/hub/layers/building_states.png');
+    // Предварительная загрузка растровых мастер-кадров и слоёв хаба 480x270
+    loadPhaserGraphic(this.load, 'hub:master.day', 'hub_master_day');
+    loadPhaserGraphic(this.load, 'hub:master.night', 'hub_master_night');
+    loadPhaserGraphic(this.load, 'hub:layer.l0_bg', 'hub_l0_bg');
+    loadPhaserGraphic(this.load, 'hub:layer.l1_clouds', 'hub_l1_clouds');
+    loadPhaserGraphic(this.load, 'hub:layer.l8_birds', 'hub_l8_birds');
+    loadPhaserGraphic(this.load, 'character:avatar.hero_m2', 'hub_avatar');
+
+    // Спрайты фауны и персонажей через единую точку входа
+    loadPhaserGraphic(this.load, 'fauna:cat.m1', 'fauna_cat');
+    loadPhaserGraphic(this.load, 'fauna:tit.m1', 'fauna_tit');
+    loadPhaserGraphic(this.load, 'fauna:squirrel.raw', 'fauna_squirrel');
+    loadPhaserGraphic(this.load, 'character:mentor.vera_stick', 'npc_mentor');
   }
 
   create(): void {

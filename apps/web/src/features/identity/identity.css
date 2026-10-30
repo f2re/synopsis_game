@@ -6,7 +6,7 @@
   background-color: #07162c;
   background-image:
     linear-gradient(rgba(7, 22, 44, 0.72), rgba(7, 22, 44, 0.88)),
-    url('/ui/ui_login_terminal_backdrop_v1.png');
+    url('/hub/layers/codepost_interior.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -141,6 +141,7 @@
   background: rgba(5, 15, 30, 0.84);
   backdrop-filter: blur(6px);
   z-index: 50;
+  overflow-y: auto;
   animation: backdropFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -151,6 +152,8 @@
   animation: modalPopIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transform-origin: center center;
   max-width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
 }
 
 .batch-result-modal {

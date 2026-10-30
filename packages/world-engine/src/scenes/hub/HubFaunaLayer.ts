@@ -34,58 +34,94 @@ export class HubFaunaLayer {
     this.createSquirrel();
   }
 
-  // 1. Кот Барограф у крыльца Кодового поста (x=206, y=164)
+  // 1. Кот Барограф у крыльца Центрального корпуса (x=310, y=202)
   private createCatBarograph(): void {
-    this.catContainer = this.scene.add.container(206, 164);
+    this.catContainer = this.scene.add.container(310, 202);
 
-    const body = this.scene.add.rectangle(0, 0, 10, 6, WORLD_PALETTE.stoneConcrete2).setOrigin(0.5);
-    const head = this.scene.add.rectangle(5, -2, 5, 5, WORLD_PALETTE.stoneConcrete1).setOrigin(0.5);
-    const ears = this.scene.add.triangle(6, -6, 0, 3, 2, 0, 4, 3, WORLD_PALETTE.ochreTerracotta1);
-    const tail = this.scene.add.rectangle(-6, -1, 4, 2, WORLD_PALETTE.stoneConcrete3).setOrigin(0.5);
+    if (this.scene.textures.exists('fauna_cat')) {
+      const catSprite = this.scene.add.image(0, 0, 'fauna_cat').setScale(1.0).setOrigin(0.5);
+      const hit = this.scene.add.rectangle(0, 0, 14, 10, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
 
-    const hit = this.scene.add.rectangle(0, 0, 16, 12, 0x000000, 0)
-      .setInteractive({ useHandCursor: true });
-
-    hit.on('pointerdown', () => {
-      this.scheduleManager.interactWithFauna('animal_cat_barograph');
-      // Анимация потягивания кота
-      this.scene.tweens.add({
-        targets: [body, head],
-        scaleY: 1.3,
-        y: '-=2',
-        yoyo: true,
-        duration: 300,
+      hit.on('pointerdown', () => {
+        this.scheduleManager.interactWithFauna('animal_cat_barograph');
+        this.scene.tweens.add({
+          targets: catSprite,
+          scaleY: 0.3,
+          y: '-=2',
+          yoyo: true,
+          duration: 300,
+        });
       });
-    });
 
-    this.catContainer.add([tail, body, head, ears, hit]);
+      this.catContainer.add([catSprite, hit]);
+    } else {
+      const body = this.scene.add.rectangle(0, 0, 10, 6, WORLD_PALETTE.stoneConcrete2).setOrigin(0.5);
+      const head = this.scene.add.rectangle(5, -2, 5, 5, WORLD_PALETTE.stoneConcrete1).setOrigin(0.5);
+      const ears = this.scene.add.triangle(6, -6, 0, 3, 2, 0, 4, 3, WORLD_PALETTE.ochreTerracotta1);
+      const tail = this.scene.add.rectangle(-6, -1, 4, 2, WORLD_PALETTE.stoneConcrete3).setOrigin(0.5);
+
+      const hit = this.scene.add.rectangle(0, 0, 16, 12, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
+
+      hit.on('pointerdown', () => {
+        this.scheduleManager.interactWithFauna('animal_cat_barograph');
+        this.scene.tweens.add({
+          targets: [body, head],
+          scaleY: 1.3,
+          y: '-=2',
+          yoyo: true,
+          duration: 300,
+        });
+      });
+
+      this.catContainer.add([tail, body, head, ears, hit]);
+    }
     this.container.add(this.catContainer);
   }
 
-  // 2. Большая синица у метеоплощадки (x=246, y=154)
+  // 2. Большая синица на ограде метеоплощадки (x=135, y=165)
   private createTitBird(): void {
-    this.titContainer = this.scene.add.container(246, 154);
+    this.titContainer = this.scene.add.container(135, 165);
 
-    const body = this.scene.add.rectangle(0, 0, 6, 4, WORLD_PALETTE.actionAccent1).setOrigin(0.5);
-    const head = this.scene.add.rectangle(3, -2, 3, 3, WORLD_PALETTE.inkTelecode0).setOrigin(0.5);
-    const wing = this.scene.add.rectangle(-1, 0, 3, 3, WORLD_PALETTE.uiTeal3).setOrigin(0.5);
+    if (this.scene.textures.exists('fauna_tit')) {
+      const titSprite = this.scene.add.image(0, 0, 'fauna_tit').setScale(1.0).setOrigin(0.5);
+      const hit = this.scene.add.rectangle(0, 0, 10, 8, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
 
-    const hit = this.scene.add.rectangle(0, 0, 12, 10, 0x000000, 0)
-      .setInteractive({ useHandCursor: true });
-
-    hit.on('pointerdown', () => {
-      this.scheduleManager.interactWithFauna('bird_tit');
-      // Синица вспархивает и садится обратно
-      this.scene.tweens.add({
-        targets: this.titContainer,
-        y: '-=12',
-        x: '+=8',
-        yoyo: true,
-        duration: 250,
+      hit.on('pointerdown', () => {
+        this.scheduleManager.interactWithFauna('bird_tit');
+        this.scene.tweens.add({
+          targets: this.titContainer,
+          y: '-=12',
+          x: '+=8',
+          yoyo: true,
+          duration: 250,
+        });
       });
-    });
 
-    this.titContainer.add([body, wing, head, hit]);
+      this.titContainer.add([titSprite, hit]);
+    } else {
+      const body = this.scene.add.rectangle(0, 0, 6, 4, WORLD_PALETTE.actionAccent1).setOrigin(0.5);
+      const head = this.scene.add.rectangle(3, -2, 3, 3, WORLD_PALETTE.inkTelecode0).setOrigin(0.5);
+      const wing = this.scene.add.rectangle(-1, 0, 3, 3, WORLD_PALETTE.uiTeal3).setOrigin(0.5);
+
+      const hit = this.scene.add.rectangle(0, 0, 12, 10, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
+
+      hit.on('pointerdown', () => {
+        this.scheduleManager.interactWithFauna('bird_tit');
+        this.scene.tweens.add({
+          targets: this.titContainer,
+          y: '-=12',
+          x: '+=8',
+          yoyo: true,
+          duration: 250,
+        });
+      });
+
+      this.titContainer.add([body, wing, head, hit]);
+    }
     this.container.add(this.titContainer);
   }
 
@@ -177,29 +213,47 @@ export class HubFaunaLayer {
     this.container.add(this.duckContainer);
   }
 
-  // 6. Обыкновенная белка на сосне у Архива (x=50, y=144)
+  // 6. Обыкновенная белка на сосне слева (x=18, y=180)
   private createSquirrel(): void {
-    this.squirrelContainer = this.scene.add.container(50, 144);
+    this.squirrelContainer = this.scene.add.container(18, 180);
 
-    const body = this.scene.add.rectangle(0, 0, 6, 8, WORLD_PALETTE.ochreTerracotta2).setOrigin(0.5);
-    const tail = this.scene.add.rectangle(-4, -2, 3, 7, WORLD_PALETTE.ochreTerracotta1).setOrigin(0.5);
-    const head = this.scene.add.rectangle(2, -4, 4, 4, WORLD_PALETTE.ochreTerracotta2).setOrigin(0.5);
+    if (this.scene.textures.exists('fauna_squirrel')) {
+      const squirrelSprite = this.scene.add.image(0, 0, 'fauna_squirrel').setScale(0.24).setOrigin(0.5);
+      const hit = this.scene.add.rectangle(0, 0, 16, 16, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
 
-    const hit = this.scene.add.rectangle(0, 0, 14, 16, 0x000000, 0)
-      .setInteractive({ useHandCursor: true });
-
-    hit.on('pointerdown', () => {
-      this.scheduleManager.interactWithFauna('animal_squirrel');
-      // Белка взбегает вверх по стволу
-      this.scene.tweens.add({
-        targets: this.squirrelContainer,
-        y: '-=18',
-        yoyo: true,
-        duration: 400,
+      hit.on('pointerdown', () => {
+        this.scheduleManager.interactWithFauna('animal_squirrel');
+        this.scene.tweens.add({
+          targets: this.squirrelContainer,
+          y: '-=18',
+          yoyo: true,
+          duration: 400,
+        });
       });
-    });
 
-    this.squirrelContainer.add([tail, body, head, hit]);
+      this.squirrelContainer.add([squirrelSprite, hit]);
+    } else {
+      const body = this.scene.add.rectangle(0, 0, 6, 8, WORLD_PALETTE.ochreTerracotta2).setOrigin(0.5);
+      const tail = this.scene.add.rectangle(-4, -2, 3, 7, WORLD_PALETTE.ochreTerracotta1).setOrigin(0.5);
+      const head = this.scene.add.rectangle(2, -4, 4, 4, WORLD_PALETTE.ochreTerracotta2).setOrigin(0.5);
+
+      const hit = this.scene.add.rectangle(0, 0, 14, 16, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
+
+      hit.on('pointerdown', () => {
+        this.scheduleManager.interactWithFauna('animal_squirrel');
+        // Белка взбегает вверх по стволу
+        this.scene.tweens.add({
+          targets: this.squirrelContainer,
+          y: '-=18',
+          yoyo: true,
+          duration: 400,
+        });
+      });
+
+      this.squirrelContainer.add([tail, body, head, hit]);
+    }
     this.container.add(this.squirrelContainer);
   }
 

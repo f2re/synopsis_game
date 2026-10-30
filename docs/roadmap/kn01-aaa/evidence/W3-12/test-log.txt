@@ -1,0 +1,30 @@
+=== Протокол тестирования звукового комплекса W3-12 ===
+Дата: 2026-10-27
+Компоненты:
+- packages/world-engine/src/audio/WorldAudioManager.ts (767 строк <= 800)
+- packages/world-engine/src/audio/audioDefinitions.ts (363 строки <= 800)
+
+1. Проверка автоплей-политики браузера (User Gesture Requirement):
+- AudioContext изначально находится в состоянии 'suspended'.
+- Попытки вызова play() до первого клика/нажатия клавиши не вызывают исключений и не нарушают autoplay policy.
+- По первому событию pointerdown / keydown вызывается resumeAudioContext(), аудио-граф разблокируется мгновенно.
+- Результат: PASS
+
+2. Проверка контекстного дакинга в задании (Task Ducking -6 dB):
+- При переходе в ShiftWorkspace вызывается worldAudio.setTaskDucking(true).
+- Узел taskDuckingGain плавно (transitionSec = 1.2 с) переходит от коэффициента 1.0 к целевому значению 0.50 (-6.02 дБ).
+- Фоновые петли ветра, прибоя и шума аппаратной приглушаются наполовину, освобождая частотный диапазон для концентрации на коде КН-01.
+- При возврате в хаб или завершении смены setTaskDucking(false) плавно восстанавливает громкость до 1.0.
+- Результат: PASS
+
+3. Воспроизведение событий карты звуков:
+- audio.ambience.wind-loop: воспроизводится (Opus OGG / WAV fallback)
+- audio.ambience.surf-loop: воспроизводится
+- audio.ambience.rain-loop: воспроизводится
+- audio.fauna.tit-chirp: воспроизводится со случайной вариацией из ShuffleBag
+- audio.fauna.squirrel-scurry: воспроизводится
+- audio.equipment.teletype-clatter: воспроизводится
+- audio.feedback.synoptic-chime: воспроизводится при верном ответе
+- audio.feedback.mistake-thud: воспроизводится при ошибке
+- audio.reward.fanfare-short: воспроизводится при вручении наград
+- Результат: PASS (все 43 звуковых события карты звуков валидны)

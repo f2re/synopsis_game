@@ -161,7 +161,7 @@ export function ShiftWorkspace({ onExit }: { onExit: () => void }) {
             className="shift-topbar-icon"
             style={{ width: 36, height: 36, flexShrink: 0 }}
           />
-          <div>
+          <div className="shift-topbar-title-block">
             <span className="shift-kicker">{GAME_MARK} · учебная смена</span>
             <strong>{dependencySequence ? 'Первичный анализ' : findError ? 'Контроль наблюдений' : stationBoard ? 'Учебный планшет' : stationPlot ? 'Схема станции' : 'КН-01 SYNOP'}</strong>
           </div>

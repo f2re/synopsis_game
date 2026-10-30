@@ -129,7 +129,12 @@ def _generation_size(width: int, height: int) -> tuple[int, int]:
     """High-res generation size with the target aspect ratio, aligned to 16px multiples."""
     raw_w = raw_h = 1024
     aspect = width / float(height)
-    if aspect > 1.0:
+    if aspect > 8.0:
+        # Very wide scene strips need a wider canvas to preserve their aspect ratio
+        # without cropping; the total pixel budget remains below a 1024x1024 scene.
+        raw_h = 128
+        raw_w = min(2048, round((raw_h * aspect) / 16) * 16)
+    elif aspect > 1.0:
         raw_h = max(128, int(raw_w / aspect))
     elif aspect < 1.0:
         raw_w = max(128, int(raw_h * aspect))

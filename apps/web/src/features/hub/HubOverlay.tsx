@@ -81,16 +81,52 @@ export function HubOverlay({
           </div>
         </div>
 
-        {/* Досье дежурного */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        {/* Досье дежурного и статус-бар */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {/* Индикатор надежности прогнозов (Метрика Image 2) */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            background: 'rgba(20, 50, 40, 0.85)',
+            border: '1px solid #2ecc71',
+            borderRadius: 4,
+            padding: '4px 10px',
+            fontSize: 10,
+            fontFamily: 'var(--font-pixel-ui)',
+            color: '#a8f5c4',
+            boxShadow: '0 0 8px rgba(46, 204, 113, 0.25)'
+          }}>
+            <span>🎯</span>
+            <span>87% НАДЁЖНОСТЬ</span>
+          </div>
+
+          {/* Индикатор сменной энергии */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 5,
+            background: 'rgba(15, 30, 55, 0.85)',
+            border: '1px solid #3498db',
+            borderRadius: 4,
+            padding: '4px 8px',
+            fontSize: 10,
+            fontFamily: 'var(--font-pixel-ui)',
+            color: '#85c1e9'
+          }}>
+            <span>⚡</span>
+            <span>100/100</span>
+          </div>
+
           <button
             type="button"
             className="pixel-btn-secondary"
             onClick={onOpenWardrobe}
-            style={{ fontSize: 11, padding: '4px 8px', display: 'flex', alignItems: 'center', gap: 6 }}
+            style={{ fontSize: 11, padding: '4px 10px', display: 'flex', alignItems: 'center', gap: 6 }}
           >
             <span>👤</span>
             <span>{user.displayName}</span>
+            <span style={{ fontSize: 9, color: 'var(--color-primary-cyan)', marginLeft: 4 }}>Ур. 3</span>
           </button>
 
           {activeFindingsCount > 0 && (
@@ -107,6 +143,15 @@ export function HubOverlay({
           )}
 
           <div style={{ display: 'flex', gap: 6 }}>
+            <button
+              type="button"
+              className="pixel-btn-secondary"
+              onClick={() => alert('Оперативные метеограммы и дежурные предписания: 3 новых')}
+              title="Оперативная почта"
+              style={{ padding: '6px 10px', fontSize: 12 }}
+            >
+              ✉ 3
+            </button>
             <button
               type="button"
               className="pixel-btn-secondary"

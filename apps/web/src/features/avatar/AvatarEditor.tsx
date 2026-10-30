@@ -174,12 +174,11 @@ export function AvatarEditor({ user, onSaved, onBack }: AvatarEditorProps) {
           </div>
         </header>
 
-        <div className="avatar-workspace">
-          <aside className="avatar-stage-column">
+        <div className="avatar-stage-layout">
+          <aside className="avatar-stage-box">
             <div className="stage-card">
               <div className="stage-top-meta">
-                <span className="station-code">СТАНЦИЯ 26063</span>
-                <span className="observer-role">{user.displayName}</span>
+                <span className="station-code">СТАНЦИЯ 26063</span> · <span className="observer-role">{user.displayName}</span>
               </div>
 
               <div className="pixel-viewport">
@@ -275,8 +274,8 @@ export function AvatarEditor({ user, onSaved, onBack }: AvatarEditorProps) {
             </div>
           </aside>
 
-          <main className="wardrobe-catalog-column">
-            <nav className="wardrobe-tabs" role="tablist">
+          <main className="avatar-wardrobe-deck">
+            <nav className="wardrobe-tabs-nav" role="tablist">
               {TABS.map((tab) => (
                 <button
                   key={tab.id}

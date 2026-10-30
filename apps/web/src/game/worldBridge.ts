@@ -5,7 +5,7 @@
  * Реализует грубые (coarse) события без per-frame React state updates.
  */
 
-import { worldBridge, type DayPhase, type BuildingStateId } from '@synopsis/world-engine';
+import { worldBridge, type DayPhase, type BuildingStateId } from '@synopsis/world-engine/bridge';
 
 export type StampType = 'ПРИНЯТО' | 'ПРОВЕРИТЬ' | 'ДОПУСК';
 export type MentorExpression = 'neutral' | 'smile' | 'thoughtful' | 'surprised' | 'approval' | 'glasses_up';

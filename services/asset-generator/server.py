@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 import subprocess
+import threading
 import uuid
 from pathlib import Path
 from typing import Any
@@ -13,19 +14,21 @@ import yaml
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from mcp.server import MCPServer
+from PIL import Image
 
 from core.asset_classes import (
     ALL_CANONICAL_CLASSES,
     GENERATION_POLICY,
     GENERATION_PROFILES,
-    OCCUPANCY_CONTRACTS,
     classify_asset,
     get_generation_profile,
+    get_occupancy_contract,
     get_profile_for_asset,
 )
 from core.character_synthesizer import generate_character_sprite_frames
 from core.comfy_client import ComfyClient
 from core.day_night_matcher import compare_silhouettes, enforce_geometry_lock
+from core.horizon_strip import CANVAS, STRIP_SIZE, TOP, place_horizon_strip
 from core.lora_trainer import build_lora_dataset
 from core.normalizer import normalize_image
 from core.pixel_refiner import refine_pixel_candidate
@@ -110,10 +113,27 @@ WORK_DIR.mkdir(parents=True, exist_ok=True)
 comfy = ComfyClient(base_url=CONFIG["comfyui"]["base_url"])
 pixellab = PixelLabClient(api_url=CONFIG["pixellab"]["api_url"])
 GPU_GENERATION_LOCK = asyncio.Lock()
+HORIZON_BUILD_LOCK = threading.Lock()
+
+HORIZON_STRIP_ID = "HUB-L2-HORIZON-STRIP"
+HORIZON_PROMPT = (
+    "Detailed pixel-art game environment, a single ultra-wide narrow distant horizon strip, "
+    "muted cool blue-grey northern Baltic daylight. A low generic distant city across the "
+    "Gulf of Finland, a few small domes and slender spires without recognizable landmarks, "
+    "dark pine forest on the far left and a narrow band of calm Baltic water in front. "
+    "The strip fills the entire image; compact horizontal composition, restrained contrast, "
+    "clear logical pixel clusters, no close buildings, no text or people."
+)
+HORIZON_NEGATIVE = (
+    "sky, large foreground, mountains, identifiable landmark, multiple panels, text, letters, "
+    "watermark, photo, blurry, 3d render"
+)
 
 
 def _candidate_rejection(storage: WorkStorage, source_path: Path) -> dict[str, Any] | None:
     """Return a rejection record only when it matches this exact source image."""
+    if source_path.resolve().parent == (WORK_DIR / HORIZON_STRIP_ID / "raw").resolve():
+        storage = WorkStorage(HORIZON_STRIP_ID, base_dir=WORK_DIR)
     source_name = source_path.name.removeprefix("selected_")
     marker = storage.review_dir / f"{Path(source_name).stem}.rejected.json"
     if not marker.is_file():
@@ -168,7 +188,7 @@ def asset_spec(asset_id: str) -> dict[str, Any]:
         "generation_profile": profile,
         "size": asset.get("size"),
         "alpha": asset.get("alpha"),
-        "occupancy_contract": OCCUPANCY_CONTRACTS.get(asset_class, {}),
+        "occupancy_contract": get_occupancy_contract(asset_id, asset_class),
         "compiled_positive_prompt": pos_prompt,
         "compiled_negative_prompt": neg_prompt,
         "palette_family": get_active_palette(asset)[:5],
@@ -260,6 +280,97 @@ async def generate_candidates(
         "status": status,
         "next_step": f"Use rank_candidates('{asset_id}') to choose a candidate"
     }
+
+
+@mcp.tool()
+async def generate_horizon_strips(
+    count: int = 4,
+    seed: int = 26063,
+    backend: str = "z_image_style",
+    creator_id: str | None = None,
+) -> dict[str, Any]:
+    """Generate separate, uncropped wide source strips for the HUB-L2-HORIZON layer."""
+    if not 1 <= count <= 8:
+        raise HTTPException(status_code=400, detail="count must be between 1 and 8")
+    mode = resolve_mode(backend)
+    if mode is None:
+        raise HTTPException(status_code=503, detail=f"Requested backend unavailable: {backend}")
+    storage = WorkStorage(HORIZON_STRIP_ID, base_dir=WORK_DIR)
+    strip_spec = {"id": HORIZON_STRIP_ID, "size": list(STRIP_SIZE), "alpha": "opaque"}
+    metadata = {"creator_id": creator_id, "target_asset": "HUB-L2-HORIZON",
+                "target_canvas": list(CANVAS), "target_y": [TOP, TOP + STRIP_SIZE[1]]}
+    async with GPU_GENERATION_LOCK:
+        storage.save_spec(strip_spec)
+        storage.save_prompt(HORIZON_PROMPT, HORIZON_NEGATIVE, metadata)
+        start = storage.next_candidate_index()
+        paths = [storage.get_raw_path(start + i) for i in range(count)]
+        seeds = [seed + i * 17 for i in range(count)]
+        done = await asyncio.to_thread(
+            generate_z_image_batch, HORIZON_PROMPT, paths, *STRIP_SIZE, seeds, HORIZON_NEGATIVE, mode
+        )
+        status = "generated_raw" if done == count else "failed"
+        storage.record_generation(strip_spec, HORIZON_PROMPT, HORIZON_NEGATIVE, metadata,
+                                  paths[:done], seeds[:done], BACKEND_NAMES[mode], status)
+    if done != count:
+        raise HTTPException(status_code=503, detail=f"Generation incomplete: {done}/{count} strips")
+    return {"asset_id": HORIZON_STRIP_ID, "target_asset": "HUB-L2-HORIZON",
+            "backend": BACKEND_NAMES[mode], "raw_candidates": [str(p) for p in paths],
+            "status": status, "next_step": "Inspect strips, then call build_horizon_layer(candidate_id)"}
+
+
+@mcp.tool()
+def build_horizon_layer(candidate_id: str | int) -> dict[str, Any]:
+    """Place one intact horizon strip into y=70..103 of a transparent 480x270 candidate."""
+    with HORIZON_BUILD_LOCK:
+        return _build_horizon_layer(candidate_id)
+
+
+def _build_horizon_layer(candidate_id: str | int) -> dict[str, Any]:
+    source_storage = WorkStorage(HORIZON_STRIP_ID, base_dir=WORK_DIR)
+    try:
+        source = source_storage.resolve_candidate(candidate_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if not source.is_file():
+        raise HTTPException(status_code=404, detail="Source strip does not exist")
+    if _candidate_rejection(source_storage, source):
+        raise HTTPException(status_code=400, detail="Rejected source strip cannot be built")
+    creator = source_storage.creator_for_candidate(source)
+    if not creator:
+        raise HTTPException(status_code=400, detail="Source strip has no recorded creator or generation")
+    asset = get_asset_by_id(load_spec(SPEC_PATH), "HUB-L2-HORIZON")
+    if asset.get("size") != list(CANVAS) or asset.get("alpha") != "transparent":
+        raise HTTPException(status_code=400, detail="Horizon specification does not match strip layout")
+    source_sha = hashlib.sha256(source.read_bytes()).hexdigest()
+    try:
+        with Image.open(source) as image:
+            layer = place_horizon_strip(image)
+    except (ValueError, OSError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if hashlib.sha256(source.read_bytes()).hexdigest() != source_sha:
+        raise HTTPException(status_code=409, detail="Source changed during layer build")
+    storage = WorkStorage("HUB-L2-HORIZON", base_dir=WORK_DIR)
+    refinement_id = uuid.uuid4().hex
+    output = storage.get_refined_path(suffix=f"strip-{source.stem}-{refinement_id}")
+    layer.save(output)
+    preview_1x = output.with_name(f"{output.stem}_1x.png")
+    preview_2x = output.with_name(f"{output.stem}_2x.png")
+    preview_4x = output.with_name(f"{output.stem}_4x.png")
+    layer.save(preview_1x)
+    layer.resize((CANVAS[0] * 2, CANVAS[1] * 2), Image.Resampling.NEAREST).save(preview_2x)
+    layer.resize((CANVAS[0] * 4, CANVAS[1] * 4), Image.Resampling.NEAREST).save(preview_4x)
+    report = evaluate_asset_candidate(output, asset, palette=get_active_palette(asset))
+    report.update({"source_candidate": str(source), "source_sha256": source_sha,
+                   "creator_id": creator, "layout": {"band_y": [TOP, TOP + STRIP_SIZE[1]],
+                                                      "resize": "nearest", "cropped": False}})
+    report_path = output.with_suffix(".review.json")
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    return {"asset_id": "HUB-L2-HORIZON", "source_strip": str(source),
+            "refined_output": str(output), "previews": {"1x": str(preview_1x), "2x": str(preview_2x),
+                                                        "4x": str(preview_4x)},
+            "report_path": str(report_path), "qa_report": report,
+            "production_status": report["production_status"],
+            "next_step": "Inspect this isolated candidate; integrate it into the normal review lifecycle before approval."}
 
 
 # Backwards compatibility alias

@@ -27,36 +27,54 @@ export class HubNpcLayer {
     this.createPlayerAvatar();
   }
 
-  // 1. Вера Павловна Ладожская — ведущий синоптик, наставник (x=182, y=156)
+  // 1. Вера Павловна Ладожская — ведущий синоптик, наставник (x=270, y=215)
   private createMentor(): void {
-    this.mentorContainer = this.scene.add.container(182, 156);
+    this.mentorContainer = this.scene.add.container(270, 215);
 
-    // Ноги и юбка/брюки
-    const legs = this.scene.add.rectangle(0, 10, 6, 8, WORLD_PALETTE.uiTeal1).setOrigin(0.5);
-    // Пальто синоптика цвета тёмной морской волны
-    const torso = this.scene.add.rectangle(0, 2, 8, 12, WORLD_PALETTE.uiTeal2).setOrigin(0.5);
-    // Голова и причёска каре
-    const head = this.scene.add.rectangle(0, -7, 6, 6, WORLD_PALETTE.birchAndSnow2).setOrigin(0.5);
-    const hair = this.scene.add.rectangle(0, -9, 7, 4, WORLD_PALETTE.ochreTerracotta0).setOrigin(0.5);
-    // Очки
-    const glasses = this.scene.add.rectangle(1, -7, 5, 2, WORLD_PALETTE.actionAccent1).setOrigin(0.5);
-    // Папка с синоптическими картами в руках
-    const folder = this.scene.add.rectangle(4, 3, 4, 6, WORLD_PALETTE.paperTape1).setOrigin(0.5);
+    if (this.scene.textures.exists('npc_mentor')) {
+      const mentorSprite = this.scene.add.image(0, 0, 'npc_mentor').setScale(1.0).setOrigin(0.5);
+      const hit = this.scene.add.rectangle(0, 0, 14, 24, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
 
-    const hit = this.scene.add.rectangle(0, 0, 14, 28, 0x000000, 0)
-      .setInteractive({ useHandCursor: true });
-
-    hit.on('pointerdown', () => {
-      // Приветственный кивок наставника
-      this.scene.tweens.add({
-        targets: [head, glasses, hair],
-        y: '+=2',
-        yoyo: true,
-        duration: 180,
+      hit.on('pointerdown', () => {
+        // Приветственный кивок наставника
+        this.scene.tweens.add({
+          targets: mentorSprite,
+          y: '-=3',
+          yoyo: true,
+          duration: 180,
+        });
       });
-    });
 
-    this.mentorContainer.add([legs, torso, folder, head, hair, glasses, hit]);
+      this.mentorContainer.add([mentorSprite, hit]);
+    } else {
+      // Ноги и юбка/брюки
+      const legs = this.scene.add.rectangle(0, 10, 6, 8, WORLD_PALETTE.uiTeal1).setOrigin(0.5);
+      // Пальто синоптика цвета тёмной морской волны
+      const torso = this.scene.add.rectangle(0, 2, 8, 12, WORLD_PALETTE.uiTeal2).setOrigin(0.5);
+      // Голова и причёска каре
+      const head = this.scene.add.rectangle(0, -7, 6, 6, WORLD_PALETTE.birchAndSnow2).setOrigin(0.5);
+      const hair = this.scene.add.rectangle(0, -9, 7, 4, WORLD_PALETTE.ochreTerracotta0).setOrigin(0.5);
+      // Очки
+      const glasses = this.scene.add.rectangle(1, -7, 5, 2, WORLD_PALETTE.actionAccent1).setOrigin(0.5);
+      // Папка с синоптическими картами в руках
+      const folder = this.scene.add.rectangle(4, 3, 4, 6, WORLD_PALETTE.paperTape1).setOrigin(0.5);
+
+      const hit = this.scene.add.rectangle(0, 0, 14, 28, 0x000000, 0)
+        .setInteractive({ useHandCursor: true });
+
+      hit.on('pointerdown', () => {
+        // Приветственный кивок наставника
+        this.scene.tweens.add({
+          targets: [head, glasses, hair],
+          y: '+=2',
+          yoyo: true,
+          duration: 180,
+        });
+      });
+
+      this.mentorContainer.add([legs, torso, folder, head, hair, glasses, hit]);
+    }
     this.container.add(this.mentorContainer);
   }
 
@@ -103,9 +121,9 @@ export class HubNpcLayer {
     this.container.add(this.labContainer);
   }
 
-  // 4. Аватар игрока (M1) на центральной аллее (x=218, y=172)
+  // 4. Аватар игрока (M1) на центральной аллее (x=240, y=230)
   private createPlayerAvatar(): void {
-    this.avatarContainer = this.scene.add.container(218, 172);
+    this.avatarContainer = this.scene.add.container(240, 230);
 
     // Ноги
     const legs = this.scene.add.rectangle(0, 11, 7, 9, WORLD_PALETTE.uiTeal0).setOrigin(0.5);

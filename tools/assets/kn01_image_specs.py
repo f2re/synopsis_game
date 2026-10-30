@@ -808,7 +808,14 @@ def render_spec() -> dict:
         "palettes": {"master": MASTER_PALETTE, "people": PEOPLE_PALETTE},
         "chroma_key": "#FF00FF",
         "assets": [
-            {k: a[k] for k in ("id", "task", "path", "size", "frame", "alpha", "max_colors", "people")}
+            {
+                k: a[k]
+                for k in (
+                    "id", "task", "title", "path", "size", "frame", "alpha",
+                    "max_colors", "people", "prompt", "content", "ramps"
+                )
+                if k in a and a[k] is not None
+            }
             for a in ASSETS
         ],
     }

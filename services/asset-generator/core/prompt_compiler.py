@@ -319,7 +319,7 @@ def compile_generation_prompts(
         neg_parts.append("diorama, multiple buildings, whole campus, island base, framed picture, border, panorama")
 
         arch_data = lore_info.get("data", {})
-        description = arch_data.get("description", "Single architectural facility building, Baltic meteorological campus.")
+        description = asset_spec.get("prompt") or arch_data.get("description", "Single architectural facility building, Baltic meteorological campus.")
         pos_parts.append(f"Subject: {description}")
         if correction:
             pos_parts.append(f"Correction emphasis: {correction}")
@@ -339,20 +339,27 @@ def compile_generation_prompts(
 
         aid_u = asset_id.upper()
         if "SKY" in aid_u:
+            neg_parts[:] = [NEG_BASE.replace("flat vector, simple shapes, low detail, ", "")]
+            pos_parts[-1] = (
+                "Pixel-art sky background for a layered game world, smooth controlled colour ramps, "
+                "clean logical pixel grid, subtle ordered dithering."
+            )
             phase = next((name for name in ("WHITENIGHT", "GOLDEN", "NIGHT", "DAWN", "DUSK", "DAY")
                           if name in aid_u), "DAY")
             phase_light = {
-                "DAY": "pale Baltic blue sky and cool northern maritime daylight",
-                "DAWN": "soft cool dawn with subtle peach near the horizon",
-                "GOLDEN": "low warm golden-hour light against a cool blue sky",
-                "DUSK": "muted blue-violet twilight with a warm horizon",
-                "NIGHT": "deep northern blue night sky with restrained cloud layers",
-                "WHITENIGHT": "luminous blue-violet northern white-night sky",
+                "DAY": "#5E8FC4 at the top to #C4DDF0 at the horizon",
+                "DAWN": "#263B66 at the top to #7A4C80, #E08A7A and #F4B98A at the horizon",
+                "GOLDEN": "#8DB7DE at the top to #F4B98A and #E6C07A at the horizon",
+                "DUSK": "#18284D at the top to #4B3A6E and #B2607F at the horizon",
+                "NIGHT": "night sky, #070D1E at the top to #263B66 at the horizon",
+                "WHITENIGHT": "#3A5383 at the top to #C4DDF0 and #F4B98A at the horizon",
             }[phase]
             pos_parts.append(
                 f"Blank sky only, with zero writing, zero typography, zero letters or symbols. "
-                f"Reusable opaque sky layer: {phase_light}, with softly layered stratocumulus clouds. "
-                "The entire image is sky edge to edge; no land, sea, buildings, people, signs, text, digits or logos."
+                f"Reusable opaque sky layer: {phase_light}. Horizontal colour bands with 2x2 ordered "
+                "dithering between bands; the horizon is at y=96 of 270, with the horizon colour continuing below. "
+                "The entire image is clear sky edge to edge; no clouds, sun, moon, stars, land, sea, "
+                "buildings, people, signs, text, digits or logos."
             )
             if correction:
                 pos_parts.append(f"Correction emphasis: {correction}")
@@ -371,7 +378,8 @@ def compile_generation_prompts(
             metadata["framing"] = "environment_layer"
             return " ".join(pos_parts), ", ".join(neg_parts), metadata
         else:
-            scene_subject = f"Expansive {target_w}x{target_h} panoramic scene of the Gulf of Finland meteorological campus."
+            raw_prompt = asset_spec.get("prompt")
+            scene_subject = raw_prompt if raw_prompt else f"Expansive {target_w}x{target_h} panoramic scene of the Gulf of Finland meteorological campus."
 
         pos_parts.append(WORLD_LORE_CONTEXT)
         pos_parts.append(f"Subject: {scene_subject}")

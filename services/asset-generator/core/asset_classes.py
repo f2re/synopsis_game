@@ -183,6 +183,22 @@ OCCUPANCY_CONTRACTS: dict[str, dict[str, Any]] = {
     },
 }
 
+ASSET_OCCUPANCY_CONTRACTS: dict[str, dict[str, Any]] = {
+    "HUB-L2-HORIZON": {
+        "min_x": 0.90,
+        "max_x": 1.00,
+        "min_y": 0.08,
+        "max_y": 0.16,
+        "content_y": [70, 104],
+    },
+}
+
+
+def get_occupancy_contract(asset_id: str, asset_class: str) -> dict[str, Any]:
+    """Use a layer-specific contract when one exists, otherwise the class default."""
+    return ASSET_OCCUPANCY_CONTRACTS.get(asset_id.upper(), OCCUPANCY_CONTRACTS.get(asset_class, {}))
+
+
 PALETTE_ROLE_MAP: dict[str, str] = {
     CLASS_DIALOGUE_PORTRAIT: "people",
     CLASS_PROFILE_PORTRAIT: "people",
