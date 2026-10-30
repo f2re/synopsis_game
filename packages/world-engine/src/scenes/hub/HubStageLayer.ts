@@ -21,7 +21,7 @@ export const DIEGETIC_BADGE_DEFS: readonly DiegeticBadgeDef[] = [
   {
     stageId: 'kn01',
     buildingId: 'codepost',
-    title: 'СИНОПТИЧЕСКИЙ ЦЕНТР',
+    title: 'КОДОВЫЙ ПОСТ',
     badgeLevel: 'Ур. 3',
     hasUpgradeArrow: true,
     x: 262,
