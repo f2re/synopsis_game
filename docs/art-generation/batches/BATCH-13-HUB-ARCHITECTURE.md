@@ -1,56 +1,78 @@
-# BATCH-13 — Hub architecture modules
+# BATCH-13 — Hub architecture modules aligned to Geometry Lock v1
 
-Purpose: сделать функциональные зоны визуально различимыми без текстовых labels. Каждый job — отдельный архитектурный модуль/overlay, согласованный с 640×360 Hub camera.
+Purpose: generate the architectural identity of the first/main Hub screen without allowing perspective or placement drift.
 
-## Global rule
+## Mandatory contract for every job
 
-Attach the current Hub screenshot for exact placement/scale and the approved Hub art for style. Do not redesign the whole scene. Exactly ONE architectural asset per generation. Transparent RGBA unless stated. No labels, Cyrillic text, level badges, UI plates, people, trees or unrelated props.
+Attach accepted `hub.geometry.lock_v1` from BATCH-12 as **Image A** and the approved polished Hub style reference as **Image B**.
+
+Every output in this batch is:
+
+- exactly **640×360** full canvas;
+- transparent RGBA except for the requested architecture pixels;
+- origin fixed at `(0,0)`;
+- **NOT trimmed**;
+- aligned to Image A pixel-for-pixel as far as edit workflow allows;
+- no terrain, sky, water, UI, labels, people or unrelated props unless physically integral to requested building;
+- no re-centering, zooming or standalone asset composition.
+
+Append this geometry-lock instruction to every generation:
+
+> Image A is the accepted Hub Geometry Lock v1 and is authoritative for camera, horizon, object placement, footprint, roof pitch, scale and perspective. Keep the requested building exactly in its locked region on the full 640×360 canvas. Do not move, resize, rotate, recenter, zoom or redesign the campus. Output only the requested building pixels; every other pixel must be transparent. Do not trim the canvas.
+
+Locked regions:
+
+| Semantic zone | Region |
+|---|---|
+| Radar | `x=38..178, y=66..174` |
+| Maps & Analysis | `x=34..208, y=145..287` |
+| Synoptic Center | `x=205..433, y=111..264` |
+| Aerology | `x=438..600, y=106..221` |
+| Archive | `x=351..490, y=182..289` |
+| Tournament Hall | `x=492..634, y=180..301` |
+| Code Post / glass lab | `x=260..397, y=203..301` |
+| Central globe/plaza object | `x=246..394, y=229..329` |
 
 ## JOB 13-01 — `hub.arch.radar_building`
 
-Create exactly ONE standalone transparent pixel-art Radar building module for the left-upper campus zone: compact scientific masonry building with a prominent pale geodesic/radome dome, rooftop antenna details, service windows and restrained technical lighting. 3/4 camera compatible with Hub, clear silhouette, premium pixel clusters, cool stone/metal shadows and small warm windows. No surrounding forest/sky/ground/UI. Bottom footprint must align naturally with campus terrain.
+Create exactly ONE full-canvas transparent architecture layer for the Radar building. Keep the entire building mass inside the locked Radar region and preserve its footprint from Image A. Compact scientific masonry building, pale geodesic/radome dome, rooftop antenna details, service windows, restrained technical lighting. Premium pixel clusters, cool stone/metal shadows, small warm windows. No forest, ground, sky, labels or UI. Full 640×360 canvas, transparent everywhere else, no trim.
 
 ## JOB 13-02 — `hub.arch.maps_analysis_pavilion`
 
-Create exactly ONE standalone transparent pixel-art Maps & Analysis pavilion: modern glass-fronted analysis room, broad visible work wall area, blue-gray metal frame, large windows, warm interior, subtle map-room equipment silhouettes but NO readable synoptic graphics or text. 3/4 perspective, strong horizontal silhouette, no people or terrain.
+Create exactly ONE full-canvas transparent architecture layer for Maps & Analysis. Keep mass/footprint inside the locked Maps & Analysis region. Modern glass-fronted analysis pavilion, blue-gray frame, warm interior volume, broad wall area suitable for runtime map screens, but NO readable synoptic graphics or text baked into art. Preserve exact camera and baseline. Full 640×360 canvas; everything outside structure transparent.
 
-## JOB 13-03 — `hub.arch.archive`
+## JOB 13-03 — `hub.arch.synoptic_center`
 
-Create exactly ONE standalone transparent Archive building module: older scientific-library wing with masonry facade, tall warm windows, modest central entrance, map/document storage mood, a few exterior utility details. Avoid gothic/fantasy library styling. North-West institutional architecture, dark blue-gray roof, amber interiors. No text, people or vegetation.
+Create exactly ONE full-canvas transparent architecture layer for the central Synoptic Center, the largest institutional mass. Keep exact locked region and footprint. Balanced classical/scientific facade, broad entrance stairs, warm operational windows, restrained weather-emblem mounting area without writing, small roof instruments. Do not alter stairs/path geometry. Full 640×360 canvas, transparent elsewhere.
 
 ## JOB 13-04 — `hub.arch.aerology`
 
-Create exactly ONE standalone transparent Aerology building module: compact research building with glass/metal section, balloon-preparation bay/roof structure, small upper platform and scientific roof fittings. It must visually read as upper-air sounding/aerology even without label, but contain no text. Premium pixel art, warm interior against cool dusk exterior.
+Create exactly ONE full-canvas transparent architecture layer for Aerology in its locked region. Scientific upper-air identity: glass/metal bay, balloon-preparation cues, small platform/roof fittings, warm research interior. Preserve footprint, roof pitch and scale from Image A. No balloon outside the building layer unless physically attached. Full 640×360 canvas, transparent elsewhere.
 
-## JOB 13-05 — `hub.arch.tournament_hall`
+## JOB 13-05 — `hub.arch.archive`
 
-Create exactly ONE standalone transparent Tournament Hall module: formal but non-militarized institutional hall with broad entrance, trophy-emblem mounting area without text, tall warm windows and symmetrical facade. Slightly more ceremonial than other buildings, but still part of the same meteorological campus. No banners with writing, no people, no UI.
+Create exactly ONE full-canvas transparent Archive building layer aligned to locked Archive region. Older scientific-library wing, masonry facade, tall warm windows, modest entrance, document-storage atmosphere, blue-gray roof. Avoid gothic/fantasy styling. Preserve footprint and roofline exactly. Full canvas, transparent elsewhere.
 
-## JOB 13-06 — `hub.arch.code_post`
+## JOB 13-06 — `hub.arch.tournament_hall`
 
-Create exactly ONE standalone transparent Code Post module, the central compact operations hub: medium building with strong entrance, communications antennas, a small weather emblem shape without lettering, visible warm control-room windows, practical scientific architecture. It should function as the visual center of the campus. No label plate or text.
+Create exactly ONE full-canvas transparent Tournament Hall layer aligned to locked Tournament Hall region. Formal but non-militarized institutional hall, broad ceremonial entrance, trophy-emblem mounting area without text, tall warm windows and slightly stronger symmetry than other buildings. Do not move or enlarge beyond region. Full 640×360 canvas, transparent elsewhere.
 
-## JOB 13-07 — `hub.arch.central_synoptic_center`
+## JOB 13-07 — `hub.arch.code_post_glass_lab`
 
-Create exactly ONE standalone transparent main Synoptic Center building: largest central building, balanced classical/scientific facade, broad entrance stairs, warm operational windows, restrained weather insignia area without words, roof instruments and coherent institutional massing. Keep it compact enough for the Hub safe-zone. No people, trees, ground or UI.
+Create exactly ONE full-canvas transparent Code Post / glass laboratory layer aligned to the locked region. Compact operations pavilion with glass roof/walls, communications fittings, visible warm control-room volume, practical scientific architecture. It should read as technical/operational without text. Preserve exact footprint and perspective. Full canvas, transparent elsewhere.
 
-## JOB 13-08 — `hub.arch.glass_greenhouse_lab`
+## JOB 13-08 — `hub.arch.central_globe_landmark`
 
-Create exactly ONE standalone transparent glass greenhouse / environmental observation lab: glass roof/walls, metal framing, warm interior work lights, a few scientific benches and plant silhouettes visible through glass, no people. It should add visual variety but remain secondary. 3/4 perspective matching Hub.
+Create exactly ONE full-canvas transparent central scientific globe/armillary landmark aligned to the locked central-globe region. Blue/brass globe with broad abstract continent masses, restrained armillary frame, low scientific plinth/fountain structure. Do not include plaza paving outside the object footprint. Full 640×360 canvas, transparent elsewhere.
 
-## JOB 13-09 — `hub.arch.rooftop_instrument_cluster`
+## JOB 13-09 — `hub.arch.rooftop_instruments`
 
-Create exactly ONE transparent rooftop meteorological instrument cluster as a single prop group: small radar dish, compact antennas, radiation shield, wind sensor mast and cable boxes mounted on a low roof platform. Scientifically plausible, visually clean, no sci-fi. Designed to sit atop architecture modules. No roof slab larger than needed, no sky/text.
+Create exactly ONE full-canvas transparent layer containing ONLY rooftop scientific instruments already implied by Image A: small radar dishes, antennas, wind sensors, radiation shield, cable boxes and compact mast structures. Keep each instrument in the exact corresponding rooftop position; do not repaint roofs/buildings themselves. Full 640×360 canvas, transparent elsewhere.
 
-## JOB 13-10 — `hub.arch.entrance_canopy_shared`
+## JOB 13-10 — `hub.arch.shared_entrance_details`
 
-Create exactly ONE reusable transparent entrance-canopy module for secondary buildings: dark blue-gray metal/glass canopy, warm ceiling lamps, two support columns, shallow 3/4 perspective. Neutral scientific-campus design that can be reused with minor color variation. No signage/text/people/ground.
+Create exactly ONE full-canvas transparent layer containing ONLY reusable entrance details already positioned in Image A: restrained glass/metal canopies, small warm ceiling lamps, railings and institutional door surrounds where appropriate. Preserve exact placement. No signs, text, people or ground. Full canvas, transparent elsewhere.
 
 ## Acceptance
 
-- all modules match the same camera and scale family;
-- recognizable without labels;
-- transparent alpha, tight but safe padding;
-- no baked terrain except minimal physical base contact;
-- no text/UI;
-- no perspective drift relative to current Hub composition.
+FAIL on any perspective drift, trimmed canvas, changed building footprint, changed horizon, baked labels/UI or standalone re-centering. PASS only when each layer can be stacked on `hub.geometry.lock_v1` at `(0,0)` with no CSS offsets and no manual scaling.
