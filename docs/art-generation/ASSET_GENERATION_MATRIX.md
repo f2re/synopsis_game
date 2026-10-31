@@ -138,6 +138,25 @@ Portrait jobs 06-02…06-05 должны быть image edits от принят�
 
 Folder: `assets/source/ui/icons/`. Derivatives 64/32 получают единообразный pixel cleanup.
 
+## BATCH-08 — Living World ambient sprites
+
+Следующий production batch закрывает обязательные микро-объекты живого Hub из `docs/design/LIVING_WORLD_SYSTEM.md`. Все outputs — отдельные transparent RGBA sprites.
+
+| Job | Semantic ID | Class | Grid | Anchor | Folder |
+|---|---|---|---:|---|---|
+| 08-01 | `fauna.gull.perched` | fauna_sprite | 48×48 | bottom-center | `assets/source/animals/` |
+| 08-02 | `fauna.cormorant.perched` | fauna_sprite | 48×56 | bottom-center | `assets/source/animals/` |
+| 08-03 | `fauna.squirrel.run` | fauna_sprite | 48×48 | bottom-center | `assets/source/animals/` |
+| 08-04 | `companion.pascal.alert` | companion_sprite | 48×48 | bottom-center | `assets/source/animals/` |
+| 08-05 | `fauna.flock.distant` | ambient_group | 96×48 | center | `assets/source/animals/` |
+| 08-06 | `hub.prop.station_flag` | prop_sprite | 64×64 | bottom-left | `assets/source/props/hub/` |
+| 08-07 | `hub.prop.mast_beacon` | prop_sprite | 48×96 | bottom-center | `assets/source/props/hub/` |
+| 08-08 | `hub.prop.cup_anemometer` | prop_sprite | 64×80 | bottom-center | `assets/source/props/meteo/` |
+| 08-09 | `hub.prop.weather_vane` | prop_sprite | 64×72 | bottom-center | `assets/source/props/meteo/` |
+| 08-10 | `ambient.aircraft.distant` | ambient_sprite | 96×48 | center | `assets/source/environment/ambient/` |
+
+Prompt source: `docs/art-generation/batches/BATCH-08-LIVING-WORLD-AMBIENT.md`.
+
 ## Runtime acceptance
 
 Для каждого manifest обязательно сохранить:
