@@ -26,6 +26,24 @@ import { HubScheduleManager } from '../../world/hubSchedule';
 import { HUB_BUILDING_BY_ID } from '../../world/hub/HubWorldDefinition';
 import { worldBridge, type BuildingStateId } from '../../bridge/WorldBridge';
 
+const DEBUG_DAY_PHASES: readonly DayPhase[] = [
+  'dawn',
+  'day',
+  'golden_hour',
+  'twilight',
+  'night',
+  'white_nights',
+];
+const DEBUG_WEATHER_MODES: readonly WeatherMode[] = ['clear', 'rain', 'snow', 'fog'];
+
+function isDayPhase(value: string | null): value is DayPhase {
+  return value !== null && DEBUG_DAY_PHASES.includes(value as DayPhase);
+}
+
+function isWeatherMode(value: string | null): value is WeatherMode {
+  return value !== null && DEBUG_WEATHER_MODES.includes(value as WeatherMode);
+}
+
 export class HubScene extends Phaser.Scene {
   private timeOfDay: HubTimeOfDay;
   private scheduleManager: HubScheduleManager;
@@ -85,6 +103,7 @@ export class HubScene extends Phaser.Scene {
       this.createLegacyHub();
     }
 
+    this.applyDebugQueryOverrides();
     this.setupBridge();
     worldBridge.notifySceneReady('hub');
 
@@ -136,6 +155,39 @@ export class HubScene extends Phaser.Scene {
     this.applyStageProgress([]);
     this.applyDayPhase(this.timeOfDay.getCurrentPhase());
     this.applySeason(this.season);
+  }
+
+  /**
+   * Deterministic visual-state controls for screenshot/performance review.
+   * These are intentionally query-only diagnostics; gameplay/server state
+   * remains authoritative during normal operation.
+   *
+   * ?hubPhase=day|night|...
+   * ?hubSeason=spring|summer|autumn|winter
+   * ?hubWeather=clear|rain|snow|fog
+   */
+  private applyDebugQueryOverrides(): void {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const phase = params.get('hubPhase');
+    const season = params.get('hubSeason');
+    const weather = params.get('hubWeather');
+
+    if (isDayPhase(phase)) {
+      this.timeOfDay.setPhase(phase);
+      this.applyDayPhase(phase);
+    }
+
+    if (isSeason(season)) {
+      this.applySeason(season);
+    }
+
+    if (isWeatherMode(weather)) {
+      this.weatherForced = true;
+      this.weatherOverlay?.setWeather(weather);
+      this.threeRenderer?.setWeather(weather);
+    }
   }
 
   private handleThreePointerDown(pointer: Phaser.Input.Pointer): void {
