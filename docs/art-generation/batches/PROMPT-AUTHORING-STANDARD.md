@@ -41,7 +41,9 @@ Specify:
 - trim policy;
 - origin/pivot/anchor;
 - semantic layer;
-- whether the result is a full-canvas overlay, isolated sprite, edit state or QA composite.
+- whether the result is a full-canvas overlay, isolated sprite, edit state or QA composite/reference.
+
+Markdown emphasis is allowed: `Exactly **ONE**` is semantically identical to `Exactly ONE`.
 
 ### `Generation prompt`
 A complete natural-language prompt. It must describe:
@@ -54,18 +56,20 @@ A complete natural-language prompt. It must describe:
 - relation to the accepted master;
 - intended runtime use.
 
+For QA jobs whose purpose is explicitly to assemble already-approved layers, the heading `Generation/compositing prompt` is also valid. It must still be complete and independently actionable.
+
 ### `Hard negatives`
 At minimum prohibit:
 - contact sheet;
 - sprite sheet;
-- grid/collage/multiple variants;
+- grid/collage/multiple variants or an equivalent explicit multiple-output prohibition;
 - extra objects not requested;
 - text/UI unless explicitly required;
 - geometry/camera/identity drift;
 - smooth vector edges / painterly blur / photorealism;
 - fake transparency / checkerboard background.
 
-Add task-specific negatives as needed.
+Add task-specific negatives as needed. The validator checks semantic equivalents, not one exact English phrase.
 
 ### `PASS / FAIL`
 List measurable rejection criteria. Examples:
@@ -87,7 +91,7 @@ For Hub full-scene work:
 - runtime fullscreen uses uniform `cover`, never independent X/Y stretch;
 - no job may “improve composition” by moving a building.
 
-If only a local element changes, every non-changing pixel must remain transparent in the returned overlay.
+If only a local element changes, every non-changing pixel must remain transparent in the returned overlay. A full-scene production JOB must state its alignment locally using `(0,0)`, `origin`, `aligned` or an equivalent explicit phrase; do not rely only on a batch-level paragraph.
 
 ## 4. Animation contract
 
@@ -134,15 +138,21 @@ Every numbered generation prompt must include the semantic equivalent of:
 
 > Output exactly ONE image containing exactly the requested state/asset. Do not create a contact sheet, sprite sheet, grid, collage, comparison board, multiple options, alternate views, before/after layout, labels, captions or additional variants. If the requested result is transparent, use real alpha transparency; do not draw a checkerboard pattern.
 
-This rule is intentionally repetitive.
+This rule is intentionally repetitive. Equivalent explicit prohibitions such as “no multi-state comparison”, “no alternate version” or “no multiple views” are acceptable when they clearly prevent multi-output collapse.
 
 ## 8. Minimum prompt depth
 
-A production JOB should normally be at least 700 characters of meaningful prompt/constraint text once `References`, `Output contract`, `Generation prompt`, `Hard negatives`, and `PASS / FAIL` are combined. Shorter jobs require a documented reason.
+A production JOB should normally be at least 700 characters of meaningful prompt/constraint text once `References`, `Output contract`, `Generation prompt` (or QA `Generation/compositing prompt`), `Hard negatives`, and `PASS / FAIL` are combined. Shorter jobs require a documented reason.
 
 QA/orchestration jobs that do not call an image generator are exempt, but must say explicitly `TYPE: QA/ORCHESTRATION — NOT AN IMAGE GENERATION PROMPT`.
 
-## 9. Review gate
+## 9. Legacy protection
+
+The original high-detail batches `00–04`, `06` and `07` predate this sectioned v2 structure. They are temporarily protected by the CI validator with minimum file/JOB depth and anti-multiple-output checks. They may remain as-is until deliberately migrated, but **must not be shortened**. Any newly created batch or any batch outside that explicit allow-list must use the full v2 structure.
+
+`BATCH-05` and `BATCH-08+` have already migrated to v2 and may not revert to legacy format.
+
+## 10. Review gate
 
 A JOB is not ready merely because Markdown exists. Before execution:
 
