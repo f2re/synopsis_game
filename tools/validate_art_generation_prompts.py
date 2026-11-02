@@ -2,8 +2,9 @@
 """Validate non-degrading image-generation prompt contracts.
 
 Two tiers exist intentionally:
-1. v2 batches opt into PROMPT-AUTHORING-STANDARD.md and must satisfy the full
-   self-contained JOB contract.
+1. v2 batches opt into PROMPT-AUTHORING-STANDARD.md. Their subject-specific
+   instructions are mandatory per JOB, while a small set of mechanical invariants
+   may be inherited from the batch Shared constants / execution envelope.
 2. a small fixed allow-list of original high-detail legacy batches is protected
    against prompt shrinkage until they are migrated. No new legacy batch is allowed.
 
@@ -48,6 +49,12 @@ ANTI_MULTIPLE_TERMS = (
     "multiple views",
     "alternate version",
     "second variant",
+    "one job = one image",
+    "one job per generation",
+    "one job per generation call",
+    "generated separately",
+    "generate separately",
+    "must be generated separately",
 )
 ONE_IMAGE_TERMS = (
     "exactly one",
@@ -56,6 +63,8 @@ ONE_IMAGE_TERMS = (
     "one person",
     "one bird",
     "one animal",
+    "one job = one image",
+    "one job per generation",
     "один image",
     "один png",
     "ровно один",
@@ -75,6 +84,8 @@ ALIGNMENT_TERMS = (
     "alignment",
     "same full canvas",
     "full-canvas",
+    "full scene",
+    "full-scene",
 )
 
 # These are the original detailed batches that predate the v2 sectioned format.
@@ -86,14 +97,24 @@ LEGACY_MIN_FILE_CHARS = 4000
 V2_MIN_JOB_CHARS = 700
 
 
+def _job_matches(text: str) -> list[re.Match[str]]:
+    return list(JOB_RE.finditer(text))
+
+
 def _job_blocks(text: str) -> list[tuple[str, str, str]]:
-    matches = list(JOB_RE.finditer(text))
+    matches = _job_matches(text)
     blocks: list[tuple[str, str, str]] = []
     for index, match in enumerate(matches):
         start = match.start()
         end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
         blocks.append((match.group(1), match.group(2), text[start:end]))
     return blocks
+
+
+def _shared_envelope(text: str) -> str:
+    """Return batch-level execution constants before the first numbered JOB."""
+    matches = _job_matches(text)
+    return text[: matches[0].start()] if matches else text
 
 
 def _normalized(text: str) -> str:
@@ -133,6 +154,7 @@ def validate_v2_file(path: Path, text: str) -> list[str]:
         return errors
 
     jobs = _job_blocks(text)
+    shared = _shared_envelope(text)
     if not jobs:
         return [f"{path.relative_to(ROOT)}: v2 batch has no numbered JOB blocks"]
 
@@ -140,6 +162,12 @@ def validate_v2_file(path: Path, text: str) -> list[str]:
         errors.append(
             f"{path.relative_to(ROOT)}: expected exactly 10 JOB blocks, found {len(jobs)}"
         )
+
+    # Mechanical invariants may be centralized once, but the batch must actually
+    # provide that execution envelope if individual JOBs rely on it.
+    shared_has_one_image = _contains_any(shared, ONE_IMAGE_TERMS)
+    shared_has_anti_multiple = _contains_any(shared, ANTI_MULTIPLE_TERMS)
+    shared_has_alignment = _contains_any(shared, ALIGNMENT_TERMS)
 
     seen_ids: set[str] = set()
     seen_semantic_ids: set[str] = set()
@@ -176,10 +204,13 @@ def validate_v2_file(path: Path, text: str) -> list[str]:
         if "reference" not in normalized and "image a" not in normalized:
             errors.append(f"{prefix}: no explicit reference/identity/geometry authority")
 
-        if not _contains_any(block, ONE_IMAGE_TERMS):
+        # Single-image and anti-collage rules are universal execution mechanics.
+        # They may be stated locally or once in the batch envelope, provided the
+        # JOB still carries its own subject-specific negatives below.
+        if not _contains_any(block, ONE_IMAGE_TERMS) and not shared_has_one_image:
             errors.append(f"{prefix}: missing explicit one-image-only instruction")
 
-        if not _contains_any(block, ANTI_MULTIPLE_TERMS):
+        if not _contains_any(block, ANTI_MULTIPLE_TERMS) and not shared_has_anti_multiple:
             errors.append(f"{prefix}: missing anti-multiple-output/contact-sheet constraint")
 
         if "fail" not in normalized:
@@ -189,11 +220,17 @@ def validate_v2_file(path: Path, text: str) -> list[str]:
         if not _contains_any(output_section, OUTPUT_POLICY_TERMS):
             errors.append(f"{prefix}: output contract does not state alpha/QA/composite policy")
 
-        # Production full-scene overlays must declare fixed alignment in the job.
-        # QA composites/crops are derived views and do not require a layer origin.
+        # Production full-scene overlays must have a fixed alignment contract.
+        # It may be repeated locally or inherited from a canonical Shared constants
+        # block to avoid hundreds of inconsistent copies of the same origin rule.
         is_qa = semantic_id.startswith("hub.qa.") or "qa/reference" in normalized
         is_full_scene = "640×360" in block or "640x360" in normalized
-        if not is_qa and is_full_scene and not _contains_any(block, ALIGNMENT_TERMS):
+        if (
+            not is_qa
+            and is_full_scene
+            and not _contains_any(block, ALIGNMENT_TERMS)
+            and not shared_has_alignment
+        ):
             errors.append(f"{prefix}: full-scene production job lacks explicit origin/alignment rule")
 
     return errors
