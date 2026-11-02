@@ -1,0 +1,36 @@
+name: Regenerate Three.js POC lockfile
+
+on:
+  push:
+    branches: [feat/hub-three2d-poc]
+
+permissions:
+  contents: write
+
+jobs:
+  lockfile:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/hub-three2d-poc
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+      - name: Regenerate apps/web lockfile from manifests
+        run: pnpm --dir apps/web install --ignore-workspace --lockfile-only --no-frozen-lockfile
+      - name: Commit generated lockfile
+        run: |
+          if git diff --quiet -- apps/web/pnpm-lock.yaml; then
+            echo 'Lockfile already current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add apps/web/pnpm-lock.yaml
+          git commit -m 'build(web): regenerate lockfile for Three.js POC'
+          git push origin HEAD:feat/hub-three2d-poc
