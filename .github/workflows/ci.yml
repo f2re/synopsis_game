@@ -49,6 +49,51 @@ jobs:
           pnpm world:test
           pnpm test:server
           pnpm build
+      - name: Проверить Three.js Hub в headless Chromium
+        run: |
+          set -euo pipefail
+          chrome="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$chrome"
+          mkdir -p artifacts/hub-three2d
+          pnpm -C apps/web preview --host 127.0.0.1 --port 4173 >artifacts/hub-three2d/preview.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.5
+          done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          url='http://127.0.0.1:4173/?hubRenderer=three2d&hubGeometryDebug=1&hubStyle=edges'
+          "$chrome" \
+            --headless=new \
+            --no-sandbox \
+            --disable-dev-shm-usage \
+            --use-angle=swiftshader \
+            --enable-unsafe-swiftshader \
+            --ignore-gpu-blocklist \
+            --window-size=640,360 \
+            --virtual-time-budget=4000 \
+            --screenshot=artifacts/hub-three2d/hub-three2d.png \
+            "$url"
+          test -s artifacts/hub-three2d/hub-three2d.png
+          "$chrome" \
+            --headless=new \
+            --no-sandbox \
+            --disable-dev-shm-usage \
+            --use-angle=swiftshader \
+            --enable-unsafe-swiftshader \
+            --ignore-gpu-blocklist \
+            --virtual-time-budget=4000 \
+            --dump-dom \
+            "$url" >artifacts/hub-three2d/dom.html
+          grep -q 'data-renderer="three2d"' artifacts/hub-three2d/dom.html
+      - name: Сохранить snapshot Three.js Hub
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hub-three2d-style-lab
+          path: artifacts/hub-three2d
+          if-no-files-found: warn
       - name: Проверить production-сервер
         run: |
           SYNOPSIS_IDENTITY_STORE=/tmp/synopsis-identity-ci.json API_BIND=127.0.0.1 API_PORT=4174 node apps/server/dist/index.js >/tmp/synopsis-server.log 2>&1 &
