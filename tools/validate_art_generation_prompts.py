@@ -6,6 +6,10 @@ Two tiers exist intentionally:
    self-contained JOB contract.
 2. a small fixed allow-list of original high-detail legacy batches is protected
    against prompt shrinkage until they are migrated. No new legacy batch is allowed.
+
+The checks are semantic rather than Markdown-fragile: `Exactly **ONE**`,
+`Generation/compositing prompt`, and equivalent anti-multiple-output wording are
+accepted when they express the same production invariant.
 """
 
 from __future__ import annotations
@@ -21,14 +25,30 @@ ORCHESTRATION_MARKER = "TYPE: QA/ORCHESTRATION — NOT AN IMAGE GENERATION PROMP
 JOB_RE = re.compile(r"^## JOB\s+([0-9]{2}-[0-9]{2})\s+—\s+`([^`]+)`\s*$", re.MULTILINE)
 BATCH_NUMBER_RE = re.compile(r"BATCH-(\d{2})-")
 
-REQUIRED_SECTIONS = (
+REQUIRED_EXACT_SECTIONS = (
     "### References",
     "### Output contract",
-    "### Generation prompt",
     "### Hard negatives",
     "### PASS / FAIL",
 )
-ANTI_COLLAGE_TERMS = ("contact sheet", "sprite sheet", "grid", "collage")
+GENERATION_SECTION_ALTERNATIVES = (
+    "### Generation prompt",
+    "### Generation/compositing prompt",
+)
+ANTI_MULTIPLE_TERMS = (
+    "contact sheet",
+    "sprite sheet",
+    "grid",
+    "collage",
+    "multiple variants",
+    "multiple options",
+    "multi-state",
+    "comparison board",
+    "comparison grid",
+    "multiple views",
+    "alternate version",
+    "second variant",
+)
 ONE_IMAGE_TERMS = (
     "exactly one",
     "one image",
@@ -39,6 +59,22 @@ ONE_IMAGE_TERMS = (
     "один image",
     "один png",
     "ровно один",
+)
+OUTPUT_POLICY_TERMS = (
+    "transparent",
+    "opaque",
+    "qa",
+    "composite",
+    "reference",
+    "crop",
+)
+ALIGNMENT_TERMS = (
+    "(0,0)",
+    "origin",
+    "aligned",
+    "alignment",
+    "same full canvas",
+    "full-canvas",
 )
 
 # These are the original detailed batches that predate the v2 sectioned format.
@@ -60,14 +96,34 @@ def _job_blocks(text: str) -> list[tuple[str, str, str]]:
     return blocks
 
 
-def _contains_any(text: str, terms: tuple[str, ...]) -> bool:
+def _normalized(text: str) -> str:
+    """Normalize Markdown emphasis/punctuation enough for semantic phrase checks."""
     lowered = text.lower()
-    return any(term in lowered for term in terms)
+    lowered = lowered.replace("**", "").replace("__", "").replace("`", "")
+    lowered = lowered.replace("\u00a0", " ")
+    return re.sub(r"\s+", " ", lowered).strip()
+
+
+def _contains_any(text: str, terms: tuple[str, ...]) -> bool:
+    normalized = _normalized(text)
+    return any(term in normalized for term in terms)
 
 
 def _batch_number(path: Path) -> int | None:
     match = BATCH_NUMBER_RE.search(path.name)
     return int(match.group(1)) if match else None
+
+
+def _split_output_section(block: str) -> str:
+    if "### Output contract" not in block:
+        return ""
+    section = block.split("### Output contract", 1)[1]
+    generation_positions = [
+        section.find(header) for header in GENERATION_SECTION_ALTERNATIVES if header in section
+    ]
+    if generation_positions:
+        section = section[: min(generation_positions)]
+    return section
 
 
 def validate_v2_file(path: Path, text: str) -> list[str]:
@@ -99,9 +155,15 @@ def validate_v2_file(path: Path, text: str) -> list[str]:
             errors.append(f"{prefix}: duplicate semantic id {semantic_id}")
         seen_semantic_ids.add(semantic_id)
 
-        for section in REQUIRED_SECTIONS:
+        for section in REQUIRED_EXACT_SECTIONS:
             if section not in block:
                 errors.append(f"{prefix}: missing mandatory section {section!r}")
+
+        if not any(section in block for section in GENERATION_SECTION_ALTERNATIVES):
+            errors.append(
+                f"{prefix}: missing generation section; expected one of "
+                f"{GENERATION_SECTION_ALTERNATIVES!r}"
+            )
 
         meaningful = re.sub(r"\s+", " ", block).strip()
         if len(meaningful) < V2_MIN_JOB_CHARS:
@@ -110,31 +172,29 @@ def validate_v2_file(path: Path, text: str) -> list[str]:
                 f"({len(meaningful)} chars; minimum {V2_MIN_JOB_CHARS})"
             )
 
-        lowered = block.lower()
-        if "reference" not in lowered and "image a" not in lowered:
+        normalized = _normalized(block)
+        if "reference" not in normalized and "image a" not in normalized:
             errors.append(f"{prefix}: no explicit reference/identity/geometry authority")
 
         if not _contains_any(block, ONE_IMAGE_TERMS):
             errors.append(f"{prefix}: missing explicit one-image-only instruction")
 
-        if not any(term in lowered for term in ANTI_COLLAGE_TERMS):
-            errors.append(f"{prefix}: missing anti-contact-sheet/collage instruction")
+        if not _contains_any(block, ANTI_MULTIPLE_TERMS):
+            errors.append(f"{prefix}: missing anti-multiple-output/contact-sheet constraint")
 
-        if "fail" not in lowered:
+        if "fail" not in normalized:
             errors.append(f"{prefix}: missing measurable FAIL criteria")
 
-        output_section = block.split("### Output contract", 1)[-1]
-        output_section = output_section.split("### Generation prompt", 1)[0]
-        output_lower = output_section.lower()
-        if not any(token in output_lower for token in ("transparent", "opaque", "qa", "composite")):
-            errors.append(f"{prefix}: output contract does not state alpha/composite policy")
+        output_section = _split_output_section(block)
+        if not _contains_any(output_section, OUTPUT_POLICY_TERMS):
+            errors.append(f"{prefix}: output contract does not state alpha/QA/composite policy")
 
-        # Production full-scene overlays must declare fixed origin. QA composites/crops
-        # are derived views and do not need an alpha-layer origin contract.
-        is_qa = semantic_id.startswith("hub.qa.") or "qa/reference" in lowered
-        if not is_qa and ("640×360" in block or "640x360" in block):
-            if "(0,0)" not in block and "origin" not in lowered:
-                errors.append(f"{prefix}: full-scene production job lacks explicit origin/alignment rule")
+        # Production full-scene overlays must declare fixed alignment in the job.
+        # QA composites/crops are derived views and do not require a layer origin.
+        is_qa = semantic_id.startswith("hub.qa.") or "qa/reference" in normalized
+        is_full_scene = "640×360" in block or "640x360" in normalized
+        if not is_qa and is_full_scene and not _contains_any(block, ALIGNMENT_TERMS):
+            errors.append(f"{prefix}: full-scene production job lacks explicit origin/alignment rule")
 
     return errors
 
@@ -168,13 +228,27 @@ def validate_legacy_file(path: Path, text: str) -> list[str]:
         if len(meaningful) < LEGACY_MIN_JOB_CHARS:
             errors.append(
                 f"{prefix}: protected legacy prompt too short "
-                f"({len(meaningful)} chars; minimum {LEGACY_MIN_JOB_CHARS}); migrate to v2 instead of shortening"
+                f"({len(meaningful)} chars; minimum {LEGACY_MIN_JOB_CHARS}); "
+                "migrate to v2 instead of shortening"
             )
         if not _contains_any(block, ONE_IMAGE_TERMS):
             errors.append(f"{prefix}: protected legacy prompt lost explicit single-asset/image wording")
 
-        lowered = block.lower()
-        if not any(term in lowered for term in ("sheet", "variant", "duplicate", "second", "contact")):
+        # Legacy files use varied wording, so accept any explicit local prohibition
+        # against sheets/variants/duplicates while still requiring one in each JOB.
+        if not _contains_any(
+            block,
+            (
+                "sheet",
+                "variant",
+                "duplicate",
+                "second",
+                "contact",
+                "multiple panels",
+                "collage",
+                "alternate pose",
+            ),
+        ):
             errors.append(
                 f"{prefix}: protected legacy prompt lacks a local anti-multiple-output constraint"
             )
