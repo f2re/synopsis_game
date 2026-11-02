@@ -6,6 +6,8 @@
 
 Основной язык документации — русский. Правила употребления иностранных технических терминов приведены в [языковой политике](LANGUAGE_POLICY.md).
 
+Для нового Hub принята отдельная 2.5D-архитектура: Phaser 4 сохраняет игровой lifecycle и интеграцию, Three.js рендерит фиксированную orthographic 3D-сцену, а pixel pipeline формирует итоговый стилизованный кадр. Нормативная точка входа — [`architecture/HUB_2_5D_RENDERER_CONTRACT.md`](architecture/HUB_2_5D_RENDERER_CONTRACT.md).
+
 ## 1. Базовые спецификации
 
 | № | Документ | Назначение |
@@ -17,7 +19,7 @@
 | 03 | [Сетевые матчи и автономная трансляция](03_REALTIME_PVP_AND_BROADCAST.md) | WebSocket, турниры, большой экран и воспроизведение матчей |
 | 04 | [Учебное содержание и типы заданий](04_CONTENT_AND_TASKS.md) | типы упражнений, сценарии, реальные и учебные данные |
 | 05 | [Схема данных учебного содержания](05_CONTENT_SCHEMA.md) | JSON-сущности, методические профили, задания и правила версионирования |
-| 06 | [Технические требования](06_TECHNICAL_REQUIREMENTS.md) | браузерная архитектура, безопасность, производительность и доступность |
+| 06 | [Технические требования](06_TECHNICAL_REQUIREMENTS.md) | браузерная архитектура, Phaser + Three.js Hub, безопасность, производительность и доступность |
 | 07 | [Художественное направление и интерфейс](07_ART_DIRECTION_AND_UX.md) | визуальная иерархия, карта как главная сцена, мобильные и экранные режимы |
 | 08 | [План реализации](08_IMPLEMENTATION_ROADMAP.md) | этапы, задачи и критерии готовности |
 | 09 | [Политика источников](09_SOURCE_POLICY.md) | происхождение данных, авторитетность источников, проверка и публикация |
@@ -30,7 +32,9 @@
 | Игровая механика | [Персонаж и коллекционная прогрессия](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md) | персонализация, заработанные предметы и спутники |
 | Метеорология | [Учебные модули](meteorology/CONTENT_MODULES.md) | предметная карта курса и зависимости между разделами |
 | Архитектура | [Архитектура](architecture/README.md) | границы программных модулей, приём данных, трансляция, пользователи и живой мир |
-| Архитектура | [Игровой рабочий контур и графические ресурсы](architecture/GAME_RUNTIME_AND_ASSETS.md) | граница React/Phaser, WebGL, слои мира и контракт рабочего контура |
+| Архитектура | [Игровой рабочий контур и графические ресурсы](architecture/GAME_RUNTIME_AND_ASSETS.md) | граница React/Phaser/Three.js, WebGL, world state и asset ownership |
+| Архитектура | [Контракт Hub 2.5D renderer](architecture/HUB_2_5D_RENDERER_CONTRACT.md) | canonical 640×360, Three.js, camera, geometry, materials, environment, performance |
+| Архитектура | [Контракт персонажей и анимации 2.5D](architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md) | shared rig, modular characters, animation cadence, attachments |
 | Учебное содержание | [Руководство по добавлению заданий](content/AUTHORING_GUIDE.md) | как добавить новое задание или сценарий |
 | Учебное содержание | [Поток обработки актуальных КН-01](content/LIVE_KN01_PIPELINE.md) | реальные станции, входные потоки, декодирование, контроль качества и снимки данных |
 | Сетевой режим | [Автономный экран арены](realtime/AUTONOMOUS_ARENA_DISPLAY.md) | автоматический выбор матча, демонстрационный режим и большой экран |
@@ -38,17 +42,20 @@
 | Интерфейс | [Карта экранов](ux/SCREEN_MAP.md) | маршруты, экраны и визуальная иерархия |
 | Лор и мир | [Свод мира и истории кампуса 26063](lore/README.md) | книга мира, история станции, культура синоптиков, персонажи, локации и реестр `lore-registry.yaml` |
 | Дизайн | [Эмоциональный ориентир (Vibe Bible)](design/COZY_METEO_VIBE_BIBLE.md) | пять осей атмосферы, шесть фундаментальных контрастов и сенсорный язык |
-| Дизайн | [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md) | зафиксированное художественное направление, персонажи и инвентарь |
-| Дизайн | [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md) | Aseprite/Pixelorama → манифесты → sprite-tools → Tiled → AssetPack → Phaser |
+| Дизайн | [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md) | базовый художественный язык пиксельной графики |
+| Дизайн | [Pixel 3D style contract](design/PIXEL_3D_STYLE_CONTRACT.md) | визуальный язык Three.js 2.5D: palette, light bands, dithering, edges, motion |
+| Дизайн | [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md) | retained 2D/legacy: Aseprite/Pixelorama → manifests → packing → Phaser |
 | Дизайн | [Система живого мира](design/LIVING_WORLD_SYSTEM.md) | время суток, фоновая анимация, птицы, животные и интерактивные объекты |
-| Дизайн | [План производства спрайтов](design/sprites/README.md) | полный каталог спрайтов, персонаж, сцены, фауна, анимации и правила создания |
+| Дизайн | [План производства спрайтов](design/sprites/README.md) | retained 2D/legacy sprite production; для нового Hub уступает 2.5D contracts при конфликте |
 | Планирование | [Перечень задач первого рабочего среза](roadmap/MVP_BACKLOG.md) | исполнимые задачи начальной реализации |
 | Планирование | [Основополагающие задачи](roadmap/FOUNDATION_EPICS.md) | живой мир, КН-01, арена, пользователи и персонаж |
-| Планирование | [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md) | ENGINE/ASSET-задачи и независимые проверки |
-| Планирование | [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md) | последовательность `SPRITE-001…017`, исполнители и приёмка |
+| Планирование | [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md) | существующие ENGINE/ASSET-задачи и независимые проверки |
+| Планирование | [Миграция Hub на 2.5D](roadmap/HUB_2_5D_MIGRATION.md) | этапы R0–R10, H3D-001…025, quality gates и stop conditions |
+| Планирование | [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md) | retained 2D/legacy очередь; не требует runtime Hub variants, заменённых 2.5D renderer |
 | Планирование | [Программа KN01-AAA](roadmap/kn01-aaa/README.md) | аудит, ТЗ уровня КН-01 и харнесс роя агентов с подтверждением каждого пункта |
 | Идеи | [Реестр идей](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия в план |
 | Решения | [Архитектурные решения](decisions/README.md) | почему приняты сквозные и труднообратимые решения |
+| Решения | [ADR-0007 — Three.js 2.5D renderer для Hub](decisions/ADR-0007-threejs-2-5d-pixel-renderer.md) | почему Hub переходит от sprite-first к world-definition-first renderer |
 | Проверка | [Критерии качества](testing/QUALITY_GATES.md) | условия готовности задачи и требования перед объединением изменений |
 | Агенты | [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md) | роли Codex, Claude Code, Gemini/Antigravity, маршрутизация задач и независимая приёмка |
 
@@ -58,14 +65,14 @@
 docs/
 ├── game-design/       # игровые механики, персонаж, награды
 ├── meteorology/       # учебные модули и предметные границы
-├── architecture/      # модульная архитектура и границы сервисов
+├── architecture/      # модульная архитектура, runtime и renderer contracts
 ├── content/           # задания и потоки актуальных данных
 ├── realtime/          # сетевые матчи и автономный большой экран
 ├── accounts/          # пользователи, вход, роли, приватность
 ├── ux/                # экраны, интерфейс и адаптивность
 ├── lore/              # книга мира 26063, история кампуса, быт смены, персонажи и локации
-├── design/            # визуальный язык, пиксельная графика, живой мир и план спрайтов
-├── roadmap/           # задачи реализации
+├── design/            # визуальный язык, 2D pixel assets и 2.5D pixel style
+├── roadmap/           # задачи реализации и migration programs
 ├── ideas/             # идеи, эксперименты и гипотезы
 ├── decisions/         # архитектурные и продуктовые решения
 ├── agents/            # организация многоагентной разработки
@@ -74,7 +81,9 @@ docs/
 
 Названия каталогов сохраняются как технические пути. В обычном тексте используются русские термины.
 
-Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md). Производственные редактируемые ресурсы хранятся в [`assets/source/`](../assets/source/README.md), сцены — в `assets/scenes/`, манифесты — в `assets/manifests/`, производные игровые файлы — в `assets/generated/`. Полный план того, что необходимо нарисовать и анимировать, находится в [`design/sprites/`](design/sprites/README.md).
+Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md). Производственные редактируемые ресурсы хранятся в [`assets/source/`](../assets/source/README.md), сцены — в `assets/scenes/`, манифесты — в `assets/manifests/`, производные игровые файлы — в `assets/generated/`.
+
+Для нового Hub полный перечень изображений больше не является source of truth. Geometry Lock и существующие season/weather batches могут сохраняться как art-direction references, а runtime state задаётся `HubWorldDefinition`, materials, lighting, particles и modular 3D assets.
 
 ## 3. Что где редактировать
 
@@ -86,21 +95,25 @@ docs/
 - Изменение **баланса** → `02_GAMEPLAY_AND_BALANCE.md`, затем соответствующий профиль баланса.
 - Новая **сущность JSON** → `05_CONTENT_SCHEMA.md`.
 - Изменение **архитектуры** → `architecture/` и архитектурное решение.
-- Рабочий контур Phaser/WebGL → `architecture/GAME_RUNTIME_AND_ASSETS.md`, `packages/world-engine/` и роль `game-runtime-webgl-engineer`.
-- Исходная пиксельная графика → `assets/source/` и `design/PIXEL_ART_STYLE_GUIDE.md`.
-- Полный перечень спрайтов, анимаций, экранов, персонажей и фауны → `design/sprites/`.
-- Очередь изготовления спрайтов и их владельцы → `roadmap/SPRITE_PRODUCTION_EPICS.md`.
-- Манифесты ресурсов, sprite-tools/AssetPack и сборка → `assets/manifests/`, `tools/assets/` и роль `pixel-asset-pipeline-engineer`.
+- Рабочий контур Phaser/WebGL/Three.js → `architecture/GAME_RUNTIME_AND_ASSETS.md`, `architecture/HUB_2_5D_RENDERER_CONTRACT.md`, `packages/world-engine/`.
+- Изменение **Geometry Lock, камеры, logical coordinates Hub** → `architecture/HUB_2_5D_RENDERER_CONTRACT.md` и при существенном изменении отдельный ADR.
+- Изменение **персонажей/rig/animation runtime** → `architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md`.
+- Изменение **pixel 3D style/shader pipeline** → `design/PIXEL_3D_STYLE_CONTRACT.md`.
+- Исходная 2D-пиксельная графика → `assets/source/` и `design/PIXEL_ART_STYLE_GUIDE.md`.
+- Полный перечень retained 2D/legacy спрайтов → `design/sprites/`.
+- Очередь retained sprite production → `roadmap/SPRITE_PRODUCTION_EPICS.md`.
+- Этапы миграции нового Hub → `roadmap/HUB_2_5D_MIGRATION.md`.
+- Манифесты ресурсов, sprite-tools/AssetPack и сборка retained 2D assets → `assets/manifests/`, `tools/assets/` и роль `pixel-asset-pipeline-engineer`.
 - Новое **задание или сценарий** → `content/AUTHORING_GUIDE.md` и каталог `content/` в корне проекта.
 - Актуальные КН-01 и входные потоки данных → `content/LIVE_KN01_PIPELINE.md`.
 - Автономная трансляция и большой экран → `realtime/AUTONOMOUS_ARENA_DISPLAY.md`.
 - Вход, список пользователей и профили безопасности → `accounts/ROSTER_LOGIN_AND_ACCESS.md`.
 - Изменение **структуры экранов** → `ux/SCREEN_MAP.md`.
-- Пиксельная графика и визуальный язык → `design/PIXEL_ART_STYLE_GUIDE.md`.
+- Базовая пиксельная графика и визуальный язык → `design/PIXEL_ART_STYLE_GUIDE.md`.
 - Фоновая жизнь, время суток и интерактивные объекты → `design/LIVING_WORLD_SYSTEM.md`.
 - Канон мира, персонажи, история и диалоги → `lore/README.md`; правила добавления нового лора → `lore/09_LORE_AUTHORING_RULES.md`.
 - Новая **идея** → `ideas/IDEA_BACKLOG.md` до переноса в план реализации.
-- Готовая к реализации идея → `roadmap/MVP_BACKLOG.md` с явными критериями приёмки.
+- Готовая к реализации идея → соответствующий roadmap с явными критериями приёмки.
 - Изменение **правил работы агентов** → `AGENTS.md`, `agents/`, `.agents/` и при необходимости отдельное архитектурное решение.
 
 ## 4. Статусы документов
@@ -165,19 +178,21 @@ docs/
 5. [Актуальные КН-01](content/LIVE_KN01_PIPELINE.md)
 6. [Архитектура](architecture/README.md)
 7. [Игровой рабочий контур и графические ресурсы](architecture/GAME_RUNTIME_AND_ASSETS.md)
-8. [Сетевые матчи](03_REALTIME_PVP_AND_BROADCAST.md)
-9. [Пользователи и вход](accounts/ROSTER_LOGIN_AND_ACCESS.md)
-10. [Карта экранов](ux/SCREEN_MAP.md)
-11. [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md)
-12. [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md)
-13. [План производства спрайтов](design/sprites/README.md)
-14. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
-15. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
-16. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
-17. [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md)
-18. [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md)
-19. [Критерии качества](testing/QUALITY_GATES.md)
-20. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
+8. [ADR-0007 — Three.js 2.5D renderer](decisions/ADR-0007-threejs-2-5d-pixel-renderer.md)
+9. [Контракт Hub 2.5D renderer](architecture/HUB_2_5D_RENDERER_CONTRACT.md)
+10. [Pixel 3D style contract](design/PIXEL_3D_STYLE_CONTRACT.md)
+11. [Контракт персонажей и анимации](architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md)
+12. [План миграции Hub 2.5D](roadmap/HUB_2_5D_MIGRATION.md)
+13. [Сетевые матчи](03_REALTIME_PVP_AND_BROADCAST.md)
+14. [Пользователи и вход](accounts/ROSTER_LOGIN_AND_ACCESS.md)
+15. [Карта экранов](ux/SCREEN_MAP.md)
+16. [Правила пиксельной графики](design/PIXEL_ART_STYLE_GUIDE.md)
+17. [Конвейер пиксельной графики](design/PIXEL_ASSET_PIPELINE.md) — для retained 2D/legacy assets
+18. [Живой мир](design/LIVING_WORLD_SYSTEM.md)
+19. [Персонаж и коллекции](game-design/AVATAR_AND_COSMETIC_PROGRESSION.md)
+20. [Задачи первого рабочего среза](roadmap/MVP_BACKLOG.md)
+21. [Критерии качества](testing/QUALITY_GATES.md)
+22. [Многоагентная разработка](agents/MULTI_AGENT_DEVELOPMENT.md)
 
 ## 8. Золотое правило документации
 
