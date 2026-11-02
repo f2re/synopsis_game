@@ -1,11 +1,19 @@
-version: 1
+version: 2
 status: accepted
+
 runtime:
   phaser:
     version: 4.2.1
     role: browser-game-runtime
     repository: https://github.com/phaserjs/phaser
     package: phaser
+  three:
+    version: pending-h3d-003-exact-pin
+    role: hub-2-5d-renderer
+    repository: https://github.com/mrdoob/three.js
+    package: three
+    policy: exact version must be pinned by renderer spike before production
+
 asset_pipeline:
   sprite_tools:
     version: 0.1.0
@@ -15,6 +23,18 @@ asset_pipeline:
     version: 1.7.0
     package: '@assetpack/core'
     repository: https://github.com/pixijs/assetpack
+  gltf_validator:
+    version: pin-exact-at-h3d-029
+    package: gltf-validator
+    repository: https://github.com/KhronosGroup/glTF-Validator
+    role: required-gltf2-validation-for-production-glb
+  gltf_transform:
+    version: pin-exact-at-h3d-029
+    package: '@gltf-transform/cli'
+    repository: https://github.com/donmccurdy/glTF-Transform
+    role: inspect-and-measured-optimisation
+    policy: inspect before optimise; no blind generic optimisation
+
 editors:
   aseprite:
     version: 1.3.18.5
@@ -24,14 +44,20 @@ editors:
     version: 1.2.3
     role: open-source-alternative
     repository: https://github.com/Orama-Interactive/Pixelorama
+  blender:
+    version: pin-exact-at-h3d-028
+    role: canonical-3d-source-and-offline-procedural-workbench
+    repository: https://github.com/blender/blender
+    runtime_authority: false
   tiled:
     version: 1.12.2
-    role: canonical-world-scene-editor
+    role: canonical-legacy-2d-world-scene-editor
     repository: https://github.com/mapeditor/tiled
   ldtk:
     version: 1.5.3
     role: optional-level-authoring-experiment
     repository: https://github.com/deepnight/ldtk
+
 agent_tools:
   aseprite_ai_artist:
     repository: https://github.com/with-pebbly/aseprite-ai-artist
@@ -39,9 +65,37 @@ agent_tools:
   pixelkiln:
     repository: https://github.com/gfargo/pixelkiln
     policy: optional; provenance/review helper; pin commit before production use
+
+generative_3d:
+  trellis2:
+    repository: https://github.com/microsoft/TRELLIS.2
+    role: experimental-generated-draft-mesh-adapter
+    license_policy: upstream-main-project-mit; verify dependency licenses
+    production_policy: draft-only-until-cleanup-validation-and-approval
+    runtime_dependency: forbidden
+  hunyuan3d_2x:
+    repository: https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1
+    role: optional-generated-draft-mesh-adapter
+    license_policy: restricted-community-license; explicit license-and-territory-review-required
+    production_policy: disabled-by-default
+    runtime_dependency: forbidden
+  world_generators:
+    example_repository: https://github.com/Tencent-Hunyuan/HunyuanWorld-1.0
+    role: research-and-reference-only
+    production_policy: cannot-be-geometry-or-gameplay-authority
+    runtime_dependency: forbidden
+
 policies:
   canonical_editable_sprite_format: .aseprite
-  canonical_scene_format: Tiled JSON (.tmj/.tsj)
-  generated_assets_hand_editing: forbidden
+  canonical_editable_3d_format: .blend
+  canonical_runtime_3d_format: .glb
+  canonical_legacy_2d_scene_format: Tiled JSON (.tmj/.tsj)
+  canonical_hub_scene_authority: HubWorldDefinition + Geometry Lock
+  canonical_hub_visual_assembly: HubSceneRecipe + approved asset registry
+  generated_sprite_assets_hand_editing: forbidden unless explicitly promoted into editable source workflow
+  generated_3d_assets_direct_runtime_use: forbidden
+  generated_3d_assets_require: cleanup + provenance + gltf-validation + project-validation + style-lab-approval
+  generated_assets_may_override_geometry_lock: false
+  runtime_ai_asset_generation: forbidden
   runtime_filtering: nearest-neighbor
-  dependency_upgrade: explicit ADR/review for Phaser major; manifest update for tools
+  dependency_upgrade: explicit ADR/review for Phaser major and renderer-critical changes; manifest update for tools
