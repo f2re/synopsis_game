@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Validate non-degrading image-generation prompt contracts.
 
-The validator intentionally checks structure and minimum actionable depth rather than
-subjective prompt quality. It applies to batch files that opt into the v2 contract by
-referencing PROMPT-AUTHORING-STANDARD.md.
+Two tiers exist intentionally:
+1. v2 batches opt into PROMPT-AUTHORING-STANDARD.md and must satisfy the full
+   self-contained JOB contract.
+2. a small fixed allow-list of original high-detail legacy batches is protected
+   against prompt shrinkage until they are migrated. No new legacy batch is allowed.
 """
 
 from __future__ import annotations
@@ -15,7 +17,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BATCH_DIR = ROOT / "docs" / "art-generation" / "batches"
 OPT_IN_MARKER = "PROMPT-AUTHORING-STANDARD.md"
+ORCHESTRATION_MARKER = "TYPE: QA/ORCHESTRATION — NOT AN IMAGE GENERATION PROMPT"
 JOB_RE = re.compile(r"^## JOB\s+([0-9]{2}-[0-9]{2})\s+—\s+`([^`]+)`\s*$", re.MULTILINE)
+BATCH_NUMBER_RE = re.compile(r"BATCH-(\d{2})-")
+
 REQUIRED_SECTIONS = (
     "### References",
     "### Output contract",
@@ -24,7 +29,25 @@ REQUIRED_SECTIONS = (
     "### PASS / FAIL",
 )
 ANTI_COLLAGE_TERMS = ("contact sheet", "sprite sheet", "grid", "collage")
-ONE_IMAGE_TERMS = ("exactly one", "one image", "один image", "один png")
+ONE_IMAGE_TERMS = (
+    "exactly one",
+    "one image",
+    "one object",
+    "one person",
+    "one bird",
+    "one animal",
+    "один image",
+    "один png",
+    "ровно один",
+)
+
+# These are the original detailed batches that predate the v2 sectioned format.
+# They are allowed to remain legacy temporarily, but cannot be shortened below
+# the floor below. Every new batch number must opt into v2.
+ALLOWED_LEGACY_BATCHES = {0, 1, 2, 3, 4, 6, 7}
+LEGACY_MIN_JOB_CHARS = 320
+LEGACY_MIN_FILE_CHARS = 4000
+V2_MIN_JOB_CHARS = 700
 
 
 def _job_blocks(text: str) -> list[tuple[str, str, str]]:
@@ -42,22 +65,20 @@ def _contains_any(text: str, terms: tuple[str, ...]) -> bool:
     return any(term in lowered for term in terms)
 
 
-def validate_file(path: Path) -> list[str]:
+def _batch_number(path: Path) -> int | None:
+    match = BATCH_NUMBER_RE.search(path.name)
+    return int(match.group(1)) if match else None
+
+
+def validate_v2_file(path: Path, text: str) -> list[str]:
     errors: list[str] = []
-    text = path.read_text(encoding="utf-8")
 
-    if OPT_IN_MARKER not in text:
-        return errors
-
-    # Orchestration documents may opt into the standard but explicitly declare
-    # that they are not image-generation prompt files.
-    if "TYPE: QA/ORCHESTRATION — NOT AN IMAGE GENERATION PROMPT" in text:
+    if ORCHESTRATION_MARKER in text:
         return errors
 
     jobs = _job_blocks(text)
     if not jobs:
-        errors.append(f"{path.relative_to(ROOT)}: v2 batch has no numbered JOB blocks")
-        return errors
+        return [f"{path.relative_to(ROOT)}: v2 batch has no numbered JOB blocks"]
 
     if len(jobs) != 10:
         errors.append(
@@ -83,9 +104,10 @@ def validate_file(path: Path) -> list[str]:
                 errors.append(f"{prefix}: missing mandatory section {section!r}")
 
         meaningful = re.sub(r"\s+", " ", block).strip()
-        if len(meaningful) < 700:
+        if len(meaningful) < V2_MIN_JOB_CHARS:
             errors.append(
-                f"{prefix}: prompt contract too short ({len(meaningful)} chars; minimum 700)"
+                f"{prefix}: prompt contract too short "
+                f"({len(meaningful)} chars; minimum {V2_MIN_JOB_CHARS})"
             )
 
         lowered = block.lower()
@@ -117,18 +139,66 @@ def validate_file(path: Path) -> list[str]:
     return errors
 
 
+def validate_legacy_file(path: Path, text: str) -> list[str]:
+    errors: list[str] = []
+    number = _batch_number(path)
+    rel = path.relative_to(ROOT)
+
+    if number not in ALLOWED_LEGACY_BATCHES:
+        return [
+            f"{rel}: legacy prompt format is forbidden for BATCH-{number:02d}; "
+            f"migrate it to {OPT_IN_MARKER}"
+            if number is not None
+            else f"{rel}: unrecognized legacy batch name"
+        ]
+
+    jobs = _job_blocks(text)
+    if len(jobs) != 10:
+        errors.append(f"{rel}: protected legacy batch must keep exactly 10 jobs, found {len(jobs)}")
+
+    meaningful_file = re.sub(r"\s+", " ", text).strip()
+    if len(meaningful_file) < LEGACY_MIN_FILE_CHARS:
+        errors.append(
+            f"{rel}: protected legacy file shrank below {LEGACY_MIN_FILE_CHARS} meaningful chars"
+        )
+
+    for job_id, semantic_id, block in jobs:
+        prefix = f"{rel}:{job_id}"
+        meaningful = re.sub(r"\s+", " ", block).strip()
+        if len(meaningful) < LEGACY_MIN_JOB_CHARS:
+            errors.append(
+                f"{prefix}: protected legacy prompt too short "
+                f"({len(meaningful)} chars; minimum {LEGACY_MIN_JOB_CHARS}); migrate to v2 instead of shortening"
+            )
+        if not _contains_any(block, ONE_IMAGE_TERMS):
+            errors.append(f"{prefix}: protected legacy prompt lost explicit single-asset/image wording")
+
+        lowered = block.lower()
+        if not any(term in lowered for term in ("sheet", "variant", "duplicate", "second", "contact")):
+            errors.append(
+                f"{prefix}: protected legacy prompt lacks a local anti-multiple-output constraint"
+            )
+
+    return errors
+
+
 def main() -> int:
     if not BATCH_DIR.exists():
         print(f"missing batch directory: {BATCH_DIR}", file=sys.stderr)
         return 1
 
     errors: list[str] = []
-    checked = 0
+    v2_checked = 0
+    legacy_checked = 0
+
     for path in sorted(BATCH_DIR.glob("BATCH-*.md")):
         text = path.read_text(encoding="utf-8")
         if OPT_IN_MARKER in text:
-            checked += 1
-            errors.extend(validate_file(path))
+            v2_checked += 1
+            errors.extend(validate_v2_file(path, text))
+        else:
+            legacy_checked += 1
+            errors.extend(validate_legacy_file(path, text))
 
     if errors:
         print("Art-generation prompt validation FAILED:", file=sys.stderr)
@@ -136,7 +206,10 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    print(f"Art-generation prompt validation passed ({checked} v2 batch files checked).")
+    print(
+        "Art-generation prompt validation passed "
+        f"({v2_checked} v2 batch files + {legacy_checked} protected legacy files checked)."
+    )
     return 0
 
 
