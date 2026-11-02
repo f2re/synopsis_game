@@ -28,7 +28,7 @@ Locked semantic regions:
 |---|---|
 | Radar | `x=38..178, y=66..174` |
 | Maps & Analysis | `x=34..208, y=145..287` |
-| Synoptic Center | `x=205..433, y=111..264` |
+| 26063 main operations building | `x=205..433, y=111..264` |
 | Aerology | `x=438..600, y=106..221` |
 | Archive | `x=351..490, y=182..289` |
 | Tournament Hall | `x=492..634, y=180..301` |
@@ -50,7 +50,7 @@ Style lock: modern premium pixel art; crisp intentional clusters; coherent clust
 Return exactly **ONE opaque 640×360 PNG**, origin `(0,0)`, no trim, no borders and no black/empty margins. This image becomes the canonical geometry master; it is not a transparent overlay. Critical architecture must stay inside the declared safe zone and locked semantic regions.
 
 ### Generation prompt
-Create the canonical fullscreen geometry master for the main Hub of the meteorological educational game. Fix a wide elevated camera with horizon at y≈92 and low distant water/city band. Arrange the campus exactly as a reusable game scene: Radar in `x=38..178,y=66..174`; Maps & Analysis in `x=34..208,y=145..287`; the largest Synoptic Center in `x=205..433,y=111..264`; Aerology in `x=438..600,y=106..221`; Archive in `x=351..490,y=182..289`; Tournament Hall in `x=492..634,y=180..301`; Code Post/glass lab in `x=260..397,y=203..301`; central scientific globe/plaza in `x=246..394,y=229..329`; nearest railing/vegetation frames the lower foreground without hiding the plaza. Use a St Petersburg/North-West river-city context, believable paths/stairs/terraces and compact scientific architecture. Lighting should be neutral dusk/golden-hour-compatible so later layers can shift time of day. Geometry consistency is more important than decorative detail. Output exactly one finished reference image.
+Create the canonical fullscreen geometry master for the main Hub of the meteorological educational game. Fix a wide elevated camera with horizon at y≈92 and low distant water/city band. Arrange the campus exactly as a reusable game scene: Radar in `x=38..178,y=66..174`; Maps & Analysis in `x=34..208,y=145..287`; the largest 26063 main operations building in `x=205..433,y=111..264`; Aerology in `x=438..600,y=106..221`; Archive in `x=351..490,y=182..289`; Tournament Hall in `x=492..634,y=180..301`; Code Post/glass lab in `x=260..397,y=203..301`; central scientific globe/plaza in `x=246..394,y=229..329`; nearest railing/vegetation frames the lower foreground without hiding the plaza. Use a St Petersburg/North-West river-city context, believable paths/stairs/terraces and compact scientific architecture. Lighting should be neutral dusk/golden-hour-compatible so later layers can shift time of day. Geometry consistency is more important than decorative detail. Output exactly one finished reference image.
 
 ### Hard negatives
 Do not create UI, top HUD, bottom navigation, labels, building names, level numbers, readable signs, portraits or CTA. Do not use isometric/fisheye/tilted cinematic camera. Do not place alpine mountains or fantasy campus architecture. Do not crop critical buildings, add black margins, create a collage, contact sheet, sprite sheet, grid, comparison board or multiple variants. No photorealism, painterly brushwork, smooth vector illustration or fake checkerboard transparency.
@@ -110,7 +110,7 @@ Clouds must remain in the accepted sky/depth band and architecture-safe composit
 Exactly **ONE transparent RGBA 640×360 PNG**, origin `(0,0)`, no trim. Only 3–5 mid-level cloud masses are visible.
 
 ### Generation prompt
-Create the middle-cloud layer for the canonical Hub: 3–5 broader, slightly darker and more dimensional cloud masses mainly within `y=10..105`. Use believable cumulus/stratocumulus structure with stepped contours, grouped highlights and cool blue-violet undersides. Preserve generous breathing space above the central Synoptic Center and other major architecture so the scene remains readable and UI-safe. This layer is intended for slow parallax, so shapes must be coherent and separated rather than one continuous ceiling. Match Image A exactly in canvas and camera. Output one transparent overlay only.
+Create the middle-cloud layer for the canonical Hub: 3–5 broader, slightly darker and more dimensional cloud masses mainly within `y=10..105`. Use believable cumulus/stratocumulus structure with stepped contours, grouped highlights and cool blue-violet undersides. Preserve generous breathing space above the central 26063 main operations building and other major architecture so the scene remains readable and UI-safe. This layer is intended for slow parallax, so shapes must be coherent and separated rather than one continuous ceiling. Match Image A exactly in canvas and camera. Output one transparent overlay only.
 
 ### Hard negatives
 No sky fill, skyline, water, buildings, birds, precipitation, lightning, UI/text, fantasy supercell, smooth blur, vector edges, trim, contact sheet/grid/collage/options or additional alternate cloud states.
