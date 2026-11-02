@@ -63,7 +63,22 @@ jobs:
             sleep 0.5
           done
           curl -fsS http://127.0.0.1:4173/ >/dev/null
-          url='http://127.0.0.1:4173/?hubRenderer=three2d&hubReview=1&hubGeometryDebug=1&hubStyle=edges'
+          base_url='http://127.0.0.1:4173/?hubRenderer=three2d&hubReview=1'
+          for style in raw palette dither edges; do
+            "$chrome" \
+              --headless=new \
+              --no-sandbox \
+              --disable-dev-shm-usage \
+              --use-angle=swiftshader \
+              --enable-unsafe-swiftshader \
+              --ignore-gpu-blocklist \
+              --window-size=640,360 \
+              --virtual-time-budget=4000 \
+              --screenshot="artifacts/hub-three2d/hub-three2d-${style}.png" \
+              "${base_url}&hubStyle=${style}"
+            test -s "artifacts/hub-three2d/hub-three2d-${style}.png"
+          done
+          debug_url="${base_url}&hubGeometryDebug=1&hubStyle=edges"
           "$chrome" \
             --headless=new \
             --no-sandbox \
@@ -73,9 +88,9 @@ jobs:
             --ignore-gpu-blocklist \
             --window-size=640,360 \
             --virtual-time-budget=4000 \
-            --screenshot=artifacts/hub-three2d/hub-three2d.png \
-            "$url"
-          test -s artifacts/hub-three2d/hub-three2d.png
+            --screenshot=artifacts/hub-three2d/hub-three2d-geometry-debug.png \
+            "$debug_url"
+          test -s artifacts/hub-three2d/hub-three2d-geometry-debug.png
           "$chrome" \
             --headless=new \
             --no-sandbox \
@@ -85,7 +100,7 @@ jobs:
             --ignore-gpu-blocklist \
             --virtual-time-budget=4000 \
             --dump-dom \
-            "$url" >artifacts/hub-three2d/dom.html
+            "${base_url}&hubStyle=edges" >artifacts/hub-three2d/dom.html
           grep -q 'data-renderer="three2d"' artifacts/hub-three2d/dom.html
       - name: Сохранить snapshot Three.js Hub
         if: always()
