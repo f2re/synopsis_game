@@ -46,6 +46,7 @@ jobs:
         run: |
           pnpm bootstrap
           pnpm typecheck
+          pnpm world:test
           pnpm test:server
           pnpm build
       - name: Проверить production-сервер

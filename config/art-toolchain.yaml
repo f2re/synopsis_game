@@ -8,11 +8,11 @@ runtime:
     repository: https://github.com/phaserjs/phaser
     package: phaser
   three:
-    version: pending-h3d-003-exact-pin
+    version: 0.187.0
     role: hub-2-5d-renderer
     repository: https://github.com/mrdoob/three.js
     package: three
-    policy: exact version must be pinned by renderer spike before production
+    policy: exact version pinned by H3D-003 renderer spike; upgrades require renderer review
 
 asset_pipeline:
   sprite_tools:

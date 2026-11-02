@@ -1,11 +1,23 @@
-export { createWorldGame, WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './runtime/createWorldGame';
+export {
+  createWorldGame,
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
+  WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
+  type HubRendererMode,
+} from './runtime/createWorldGame';
 export {
   calculateIntegerPassepartout,
   fitLogicalViewport,
   bindLogicalViewport,
+  HUB_LOGICAL_SIZE,
+  LEGACY_WORLD_LOGICAL_SIZE,
+  type LogicalSize,
+  type LogicalViewportOptions,
   type ViewportFitResult,
 } from './runtime/fitLogicalViewport';
 export { HubScene } from './scenes/hub/HubScene';
+export { ThreeHubProbeScene, type ThreeHubProbeSceneOptions } from './scenes/hub/ThreeHubProbeScene';
 export { ArchiveScene } from './scenes/archive/ArchiveScene';
 export { CodePostScene } from './scenes/codepost/CodePostScene';
 export { HUB_LOCATIONS } from './scenes/hub/locationRegistry';
@@ -64,3 +76,19 @@ export {
   type AmbientCycle,
   type FindingDiscovery,
 } from './world/hubSchedule';
+export {
+  ThreeHubRenderer,
+  HUB_GEOMETRY_LOCK_V1,
+  validateGeometryLock,
+  logicalGroundToWorld,
+  worldGroundToLogical,
+  HUB_CAMERA_TILT_DEGREES,
+  DEFAULT_PIXEL_PIPELINE_TOGGLES,
+  type ThreeHubRendererOptions,
+  type HubGeometryLockManifest,
+  type HubGeometryLockBuilding,
+  type HubPoint2D,
+  type HubRect2D,
+  type HubWorldPoint3D,
+  type PixelPipelineToggles,
+} from './renderer/three';

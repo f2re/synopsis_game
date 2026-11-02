@@ -1,5 +1,34 @@
 import { useEffect, useRef } from 'react';
-import { createWorldGame, worldBridge } from '@synopsis/world-engine';
+import {
+  createWorldGame,
+  worldBridge,
+  type HubRendererMode,
+  type PixelPipelineToggles,
+} from '@synopsis/world-engine';
+
+function readRendererMode(): HubRendererMode {
+  if (typeof window === 'undefined') return 'legacy2d';
+  return new URLSearchParams(window.location.search).get('hubRenderer') === 'three2d'
+    ? 'three2d'
+    : 'legacy2d';
+}
+
+function readPipelineToggles(): Partial<PixelPipelineToggles> | undefined {
+  if (typeof window === 'undefined') return undefined;
+  const style = new URLSearchParams(window.location.search).get('hubStyle');
+  switch (style) {
+    case 'raw':
+      return { palette: false, dithering: false, edges: false };
+    case 'palette':
+      return { palette: true, dithering: false, edges: false };
+    case 'dither':
+      return { palette: true, dithering: true, edges: false };
+    case 'edges':
+      return { palette: true, dithering: true, edges: true };
+    default:
+      return undefined;
+  }
+}
 
 export function WorldCanvas() {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -10,7 +39,13 @@ export function WorldCanvas() {
       return;
     }
 
-    const game = createWorldGame({ parent: host });
+    const params = new URLSearchParams(window.location.search);
+    const game = createWorldGame({
+      parent: host,
+      hubRenderer: readRendererMode(),
+      hubDebugGeometryLock: params.get('hubGeometryDebug') === '1',
+      hubPipelineToggles: readPipelineToggles(),
+    });
     const unsubscribeStartShift = worldBridge.on('world:start_shift', () => {
       window.dispatchEvent(new CustomEvent('hub:start-shift'));
     });
