@@ -139,13 +139,13 @@ Any new geometry, fake data, or accent spill into adjacent hotspot = FAIL.
 
 ### References
 - **Image A:** `hub.geometry.lock_v1`.
-- **Image B:** accepted main Synoptic Center layer.
+- **Image B:** accepted main 26063 main operations building layer.
 
 ### Output contract
 Exactly ONE `640×360` transparent RGBA hover overlay restricted to central building accents.
 
 ### Generation prompt
-Create a restrained hover state for the main Synoptic Center. Emphasize the accepted entrance stairs, central doorway and approved weather-insignia mounting area with a balanced cyan/amber pixel treatment. The main center may read slightly stronger than secondary buildings but must not become a glowing beacon or compete with the main CTA. Preserve the central building silhouette exactly. Output one overlay only.
+Create a restrained hover state for the main 26063 main operations building. Emphasize the accepted entrance stairs, central doorway and approved weather-insignia mounting area with a balanced cyan/amber pixel treatment. The main center may read slightly stronger than secondary buildings but must not become a glowing beacon or compete with the main CTA. Preserve the central building silhouette exactly. Output one overlay only.
 
 ### Hard negatives
 No new logo/text, no full-outline glow, no facade recolor, no moved stairs/door, no UI button treatment, no collage/multiple variants.
