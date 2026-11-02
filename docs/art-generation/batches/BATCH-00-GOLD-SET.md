@@ -3,6 +3,8 @@
 **Назначение:** откалибровать стиль до массовой генерации.  
 **Исполнение:** 10 последовательных image-generation вызовов. Никогда не вставлять весь файл в один запрос.
 
+> **Важно после Geometry Lock v1:** JOB 00-10 сохраняется как ранний style/composition calibration reference. Он **не является текущим источником геометрии Hub**. Канонические camera/horizon/coordinates/crop задаёт `BATCH-12 / hub.geometry.lock_v1`. Любая последующая Hub-генерация обязана использовать BATCH-12, а не восстанавливать геометрию по 00-10.
+
 ## JOB 00-01 — `character.player.world.idle.down`
 
 **Output:** `character_player_world_idle_down.png`
@@ -61,14 +63,15 @@
 
 **Output:** `scene_hub_geometry_master_dusk.png`
 
-> Create exactly ONE 16:9 polished pixel-art master scene for the main meteorological campus Hub. This is one scene, not a collage and not multiple panels. Fictional North-West/St Petersburg-inspired scientific campus at blue-hour/dusk: low horizon, water and distant urban shoreline, layered Baltic cloudiness, conifers and deciduous vegetation, central synoptic-center building, distinct radar dome wing, map/analysis wing, aerology glasshouse, archive and tournament hall. Warm inhabited windows contrast with cool navy/blue-violet atmosphere. Preserve broad open circulation paths and a central plaza; include credible instruments such as masts/dishes/balloon infrastructure but do not overload. No Alpine permanent mountain range. Reserve clean safe zones at top and bottom for live React UI. Do NOT draw labels, Russian text, buttons, status bars, levels, energy, icons, maps with fake professional fronts, or baked interaction outlines. Modern high-quality pixel illustration with intentional clusters and material readability. Opaque scene background is correct for this job.
+> Create exactly ONE 16:9 polished pixel-art **style/composition calibration scene** for the main meteorological campus Hub. This historical gold-set job establishes the intended world mood but is superseded for exact geometry by `BATCH-12 / hub.geometry.lock_v1`. One scene only, never a collage or multiple panels. Fictional North-West/St Petersburg-inspired scientific campus at blue-hour/dusk: low horizon, water and distant urban shoreline, layered Baltic cloudiness, conifers and deciduous vegetation, central synoptic-center building, distinct radar dome wing, map/analysis wing, aerology glasshouse, archive and tournament hall. Warm inhabited windows contrast with cool navy/blue-violet atmosphere. Preserve broad open circulation paths and a central plaza; include credible instruments such as masts/dishes/balloon infrastructure but do not overload. No Alpine permanent mountain range. Reserve clean safe zones at top and bottom for live React UI. Do NOT draw labels, Russian text, buttons, status bars, levels, energy, icons, maps with fake professional fronts, or baked interaction outlines. Modern high-quality pixel illustration with intentional clusters and material readability. Opaque scene background is correct for this job. Do not use this output as the coordinate source once BATCH-12 has been accepted.
 
 ## Gate после BATCH-00
 
-Не переходить к BATCH-01, пока:
+Не переходить к character/avatar массовой генерации, пока:
 
 - `pixel-art-quality-reviewer` не подтвердил grid/cluster/alpha/pivot;
 - `art-director` не подтвердил character identity, palette/light и scene language;
 - 00-02 не принят как immutable avatar silhouette template;
 - 00-03 не принят как immutable mentor identity master;
-- 00-10 не принят как geometry master хаба.
+- 00-10 принят только как **style/composition calibration reference**;
+- точная Hub-геометрия, камера, safe-zone и full-screen coordinate contract принимаются отдельно через `BATCH-12 / hub.geometry.lock_v1`.
