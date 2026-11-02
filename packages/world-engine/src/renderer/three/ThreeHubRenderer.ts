@@ -1,3 +1,4 @@
+/// <reference path="./three-poc.d.ts" />
 import Phaser from 'phaser';
 import {
   AmbientLight,
@@ -473,7 +474,7 @@ export class ThreeHubRenderer {
         case 'active':
           material.color.setHex(WORLD_PALETTE.ochreTerracotta3);
           break;
-        case 'completed':
+        case 'just_unlocked':
           material.color.setHex(WORLD_PALETTE.foliagePine4);
           break;
         case 'available':
@@ -560,7 +561,7 @@ export class ThreeHubRenderer {
     this.phaserScene.scale.off(Phaser.Scale.Events.RESIZE, this.resizeHandler);
     const geometries = new Set<BufferGeometry>();
     const materials = new Set<MeshToonMaterial | MeshBasicMaterial | PointsMaterial>();
-    this.scene.traverse((object) => {
+    this.scene.traverse((object: Object3D) => {
       if (object instanceof Mesh || object instanceof Points) {
         geometries.add(object.geometry as BufferGeometry);
         const material = object.material;

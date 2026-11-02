@@ -1,3 +1,4 @@
+/// <reference path="../three-poc.d.ts" />
 import {
   Color,
   DepthTexture,
