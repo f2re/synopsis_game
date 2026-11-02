@@ -4,7 +4,7 @@
 
 Проект — браузерное адаптивное приложение для ноутбуков, учебных классов, смартфонов и большого экрана. Для базового сценария не требуется отдельное настольное или мобильное приложение.
 
-Архитектура первого рабочего среза определяется `ADR-0004` и `ADR-0005`.
+Архитектура первого рабочего среза определяется `ADR-0004`, `ADR-0005` и `ADR-0007`.
 
 ## 2. Зафиксированный стек
 
@@ -12,15 +12,24 @@
 
 - TypeScript;
 - React — оболочка, навигация, формы, панели и доступность;
-- Phaser 4 — живой пиксельный мир внутри `packages/world-engine`;
-- WebGL — основной способ отрисовки живого мира;
+- Phaser 4 — игровой lifecycle, input, audio, UI/HUD и интеграция живого мира внутри `packages/world-engine`;
+- Three.js — специализированный 2.5D renderer нового Hub внутри `packages/world-engine`;
+- WebGL2 — основной способ отрисовки 2.5D Hub; legacy Phaser/WebGL renderer сохраняется на переходный период;
 - SVG/Canvas — профессиональная синоптическая карта и геометрический ввод;
 - CSS;
+- GLB/glTF — runtime-формат сложных reusable 3D assets и skinned characters;
 - PWA — необязательная возможность после первого вертикального среза.
 
-Phaser не является источником метеорологической истины и не заменяет React. Карта остаётся отдельным модулем веб-приложения на SVG/Canvas.
+Phaser не является источником метеорологической истины и не заменяет React. Three.js не заменяет Phaser глобально и не становится источником gameplay state. Карта остаётся отдельным модулем веб-приложения на SVG/Canvas.
 
-Версии Phaser и графических инструментов фиксируются в `config/art-toolchain.yaml`.
+Версии Phaser и графических инструментов фиксируются в `config/art-toolchain.yaml` и package manifests/lockfile. Версия Three.js должна быть зафиксирована точной runtime dependency после technical spike; неконтролируемое major/minor обновление renderer dependency запрещено.
+
+Нормативные документы нового Hub:
+
+- `architecture/HUB_2_5D_RENDERER_CONTRACT.md`;
+- `architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md`;
+- `design/PIXEL_3D_STYLE_CONTRACT.md`;
+- `roadmap/HUB_2_5D_MIGRATION.md`.
 
 ### Сервер
 
@@ -38,13 +47,13 @@ Phaser не является источником метеорологическ
 
 ```text
 apps/
-  web/                 # React + Phaser mount + SVG/Canvas map + /arena-tv
+  web/                 # React + GameWorld mount + SVG/Canvas map + /arena-tv
   server/              # авторитетный модульный монолит
 packages/
   kn01-codec/
   content-engine/
   game-rules/
-  world-engine/
+  world-engine/        # Phaser lifecycle + Three.js 2.5D Hub renderer
   contracts/
 assets/
   source/
@@ -58,6 +67,8 @@ tools/
 На первом рабочем срезе `identity`, `live-ingest`, `realtime`, `broadcast`, `replay` и `rewards` являются внутренними модулями `apps/server`. Профессиональная карта является модулем `apps/web/src/features/map`.
 
 `Arena TV` реализуется маршрутом `/arena-tv` внутри `apps/web`; отдельное приложение большого экрана не создаётся.
+
+Three.js renderer не выделяется в отдельный top-level package до появления как минимум двух независимых потребителей и отдельного ADR.
 
 ## 4. Авторитетность сервера
 
@@ -132,17 +143,45 @@ tools/
 
 ## 10. Живой мир
 
-`packages/world-engine` отвечает за Phaser/WebGL, жизненный цикл сцен, камеры, загрузку ресурсов, анимации, эффекты и диагностические примитивы.
+`packages/world-engine` отвечает за Phaser lifecycle, WebGL, загрузку ресурсов, анимации, эффекты, diagnostic primitives и новый Three.js 2.5D renderer Hub.
 
-Состояние времени суток, сезона и фоновых событий может задаваться сервером или детерминированным локальным расписанием, но покадровые координаты птиц и декоративных объектов по сети не передаются.
+Для нового Hub действуют следующие требования:
+
+- canonical gameplay/composition space: 640×360;
+- default internal render target: 320×180;
+- fixed orthographic camera;
+- scene-specific logical viewport вместо глобального принудительного перевода всех сцен на 640×360;
+- renderer-independent `HubWorldDefinition` как источник spatial semantics;
+- 2D collision/navigation truth сохраняется вне 3D renderer;
+- weather/season/day/building states выражаются materials, lighting, particles и state parameters;
+- character movement остаётся gameplay-authoritative, root motion не определяет положение;
+- interaction использует stable semantic IDs, а не mesh/material UUID.
+
+Состояние времени суток, сезона и фоновых событий может задаваться сервером или детерминированным локальным расписанием, но покадровые координаты птиц, частиц, костей и декоративных объектов по сети не передаются.
 
 Уменьшенная анимация и режим пониженного энергопотребления обязательны.
 
 ## 11. Производственный путь графики
 
-Источником истины являются `assets/source`, `assets/manifests` и `assets/scenes`. `assets/generated` создаётся инструментами и не исправляется вручную.
+### 11.1 2D и legacy assets
 
-Концепт-арты из `design/pixel-art` служат визуальными эталонами, а не готовыми полноэкранными фонами.
+Для UI, portraits, documents, icons, legacy scenes и иных намеренно raster assets источником истины остаются `assets/source`, `assets/manifests` и `assets/scenes` там, где Tiled ещё используется. `assets/generated` создаётся инструментами и не исправляется вручную.
+
+### 11.2 Новый Hub
+
+Для Hub source of truth смещается к:
+
+- `HubWorldDefinition`;
+- procedural/parameterized geometry;
+- reusable mesh kits;
+- instanced vegetation/props;
+- GLB/glTF только для сложных reusable assets и skinned characters;
+- canonical palette/material definitions;
+- environment/world state.
+
+Концепт-арты и AI-generated Geometry Lock/season/weather batches служат визуальными эталонами. После перехода соответствующее изображение может стать `reference only`, если его визуальный state полностью воспроизводится renderer-ом.
+
+Не допускается заменять sprite proliferation на отдельный GLB для каждого visual state.
 
 ## 12. Большой экран
 
@@ -169,6 +208,8 @@ tools/
 
 Повтор не должен зависеть от текущей версии баланса или свежего внешнего потока.
 
+Декоративная локальная анимация не обязана хранить каждый render frame, но gameplay-significant world state и deterministic seeds должны позволять восстановить смысловое состояние сцены.
+
 ## 14. Производительность
 
 Проверяются как минимум три профиля:
@@ -177,9 +218,31 @@ tools/
 - проектор или большой экран;
 - смартфон среднего класса.
 
-Проверка включает частоту кадров, задержку ввода, память текстур, загрузку ресурсов, изменение размера окна, плотность пикселей, потерю и восстановление WebGL-контекста.
+Проверка включает частоту кадров, frame time, задержку ввода, память текстур, загрузку ресурсов, изменение размера окна, плотность пикселей, потерю и восстановление WebGL-контекста.
+
+Для нового Hub дополнительно контролируются:
+
+- draw calls;
+- visible triangle count;
+- shader compile stalls;
+- animation mixer cost;
+- particle cost;
+- shadow cost;
+- internal render target size.
+
+Целевые ориентиры vertical slice:
+
+- 60 FPS desktop preferred;
+- 30 FPS minimum / 60 preferred mid-range mobile;
+- ≤150k visible triangles preferred;
+- ≤80 draw calls preferred, >150 требует review;
+- 20–30 simultaneous animated humanoids;
+- один default shadow-casting key light;
+- 32–64 MB texture memory preferred for Hub.
 
 Единый универсальный лимит памяти для всех устройств не устанавливается без измерений реального вертикального среза.
+
+Поддерживаются quality profiles `high`, `balanced`, `reduced`; reduced-motion является отдельной осью.
 
 ## 15. Безопасность
 
@@ -188,7 +251,7 @@ tools/
 - публичный большой экран получает только разрешённые данные;
 - секреты и правильные ответы не встраиваются в клиентский пакет;
 - ограничения попыток входа и временная блокировка применяются согласно профилю доступа;
-- происхождение сторонних графических и звуковых ресурсов фиксируется.
+- происхождение сторонних графических, 3D и звуковых ресурсов фиксируется.
 
 ## 16. Условие выделения нового пакета или приложения
 
