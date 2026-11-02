@@ -14,6 +14,21 @@ export interface HubProjectionOptions {
   cameraTarget?: readonly [number, number, number];
 }
 
+export interface HubProjectionCheckPoint {
+  id: string;
+  x: number;
+  y: number;
+}
+
+export interface HubProjectionCheckResult {
+  id: string;
+  expectedX: number;
+  expectedY: number;
+  actualX: number;
+  actualY: number;
+  errorPx: number;
+}
+
 /**
  * Maps canonical Hub logical pixels onto the y=0 world plane.
  *
@@ -74,6 +89,43 @@ export class HubProjection {
       ((1 - projected.y) / 2) * this.logicalHeight,
     );
     return target;
+  }
+
+  /**
+   * Verifies the canonical screen→ground→screen invariant for semantic Hub
+   * anchors. This runs without renderer state and intentionally fails loudly:
+   * a camera change may not silently move gameplay anchors away from the
+   * Geometry Lock coordinate system.
+   */
+  assertRoundTrip(
+    points: readonly HubProjectionCheckPoint[],
+    tolerancePx = 0.01,
+  ): readonly HubProjectionCheckResult[] {
+    const results = points.map((point) => {
+      const ground = this.logicalToGround(point.x, point.y);
+      const logical = this.groundToLogical(ground);
+      const errorPx = Math.hypot(logical.x - point.x, logical.y - point.y);
+      return {
+        id: point.id,
+        expectedX: point.x,
+        expectedY: point.y,
+        actualX: logical.x,
+        actualY: logical.y,
+        errorPx,
+      } satisfies HubProjectionCheckResult;
+    });
+
+    const failed = results.filter((result) => result.errorPx > tolerancePx);
+    if (failed.length > 0) {
+      const details = failed
+        .map((result) => `${result.id}: ${result.errorPx.toFixed(4)}px`)
+        .join(', ');
+      throw new Error(
+        `HubProjection Geometry Lock round-trip failed (tolerance ${tolerancePx}px): ${details}`,
+      );
+    }
+
+    return results;
   }
 
   rayFromLogical(x: number, y: number): Raycaster {
