@@ -95,8 +95,7 @@ def validate_file(path: Path) -> list[str]:
         if not _contains_any(block, ONE_IMAGE_TERMS):
             errors.append(f"{prefix}: missing explicit one-image-only instruction")
 
-        missing_anti = [term for term in ANTI_COLLAGE_TERMS if term not in lowered]
-        if len(missing_anti) == len(ANTI_COLLAGE_TERMS):
+        if not any(term in lowered for term in ANTI_COLLAGE_TERMS):
             errors.append(f"{prefix}: missing anti-contact-sheet/collage instruction")
 
         if "fail" not in lowered:
@@ -108,10 +107,12 @@ def validate_file(path: Path) -> list[str]:
         if not any(token in output_lower for token in ("transparent", "opaque", "qa", "composite")):
             errors.append(f"{prefix}: output contract does not state alpha/composite policy")
 
-        # Full-scene Hub overlays should explicitly preserve full canvas alignment.
-        if "640×360" in block or "640x360" in block:
+        # Production full-scene overlays must declare fixed origin. QA composites/crops
+        # are derived views and do not need an alpha-layer origin contract.
+        is_qa = semantic_id.startswith("hub.qa.") or "qa/reference" in lowered
+        if not is_qa and ("640×360" in block or "640x360" in block):
             if "(0,0)" not in block and "origin" not in lowered:
-                errors.append(f"{prefix}: full-scene job lacks explicit origin/alignment rule")
+                errors.append(f"{prefix}: full-scene production job lacks explicit origin/alignment rule")
 
     return errors
 
