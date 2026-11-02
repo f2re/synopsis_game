@@ -1,0 +1,33 @@
+name: Art generation prompt quality
+
+on:
+  pull_request:
+    paths:
+      - 'docs/art-generation/batches/**'
+      - 'tools/validate_art_generation_prompts.py'
+      - '.github/workflows/art-generation-prompts.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/art-generation/batches/**'
+      - 'tools/validate_art_generation_prompts.py'
+      - '.github/workflows/art-generation-prompts.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-prompts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate image-generation prompt contracts
+        run: python tools/validate_art_generation_prompts.py
