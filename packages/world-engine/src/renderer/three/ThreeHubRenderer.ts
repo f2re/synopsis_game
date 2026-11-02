@@ -387,6 +387,7 @@ export class ThreeHubRenderer {
 
   setDayPhase(phase: DayPhase): void {
     this.scene.background = new Color(colorForPhase(phase));
+    this.sunLight.color.setHex(0xffe7c0);
 
     switch (phase) {
       case 'night':
