@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       '@synopsis/world-engine': path.resolve(__dirname, '../../packages/world-engine/src/index.ts'),
       'phaser': path.resolve(__dirname, 'node_modules/.pnpm/phaser@4.2.1/node_modules/phaser'),
+      'three': path.resolve(__dirname, 'node_modules/.pnpm/three@0.187.0/node_modules/three'),
     },
   },
   optimizeDeps: {
