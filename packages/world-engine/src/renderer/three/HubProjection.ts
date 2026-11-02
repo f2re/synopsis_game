@@ -65,6 +65,15 @@ export class HubProjection {
     this.camera.lookAt(...target);
     this.camera.updateProjectionMatrix();
     this.camera.updateMatrixWorld(true);
+
+    // Fail fast if a future camera/projection change breaks the canonical
+    // logical-pixel mapping. Because the ground mapping is affine, corners and
+    // the center are sufficient sentinels for the whole logical plane.
+    this.assertRoundTrip([
+      { id: 'canvas.top-left', x: 0, y: 0 },
+      { id: 'canvas.center', x: this.logicalWidth / 2, y: this.logicalHeight / 2 },
+      { id: 'canvas.bottom-right', x: this.logicalWidth, y: this.logicalHeight },
+    ]);
   }
 
   logicalToNdc(x: number, y: number, target = new Vector2()): Vector2 {
