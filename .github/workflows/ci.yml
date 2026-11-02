@@ -63,7 +63,7 @@ jobs:
             sleep 0.5
           done
           curl -fsS http://127.0.0.1:4173/ >/dev/null
-          url='http://127.0.0.1:4173/?hubRenderer=three2d&hubGeometryDebug=1&hubStyle=edges'
+          url='http://127.0.0.1:4173/?hubRenderer=three2d&hubReview=1&hubGeometryDebug=1&hubStyle=edges'
           "$chrome" \
             --headless=new \
             --no-sandbox \

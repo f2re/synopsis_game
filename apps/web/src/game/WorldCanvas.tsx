@@ -30,6 +30,24 @@ function readPipelineToggles(): Partial<PixelPipelineToggles> | undefined {
   }
 }
 
+function enableHubReviewMode(host: HTMLElement): () => void {
+  const viewport = host.closest<HTMLElement>('.game-viewport');
+  if (!viewport) return () => undefined;
+
+  const hiddenSiblings = Array.from(viewport.children).filter(
+    (child): child is HTMLElement => child instanceof HTMLElement && child !== host,
+  );
+  const previousDisplays = hiddenSiblings.map((element) => [element, element.style.display] as const);
+
+  for (const element of hiddenSiblings) element.style.display = 'none';
+  host.dataset.reviewMode = 'style-lab';
+
+  return () => {
+    for (const [element, display] of previousDisplays) element.style.display = display;
+    delete host.dataset.reviewMode;
+  };
+}
+
 export function WorldCanvas() {
   const hostRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +58,9 @@ export function WorldCanvas() {
     }
 
     const params = new URLSearchParams(window.location.search);
+    const disableReviewMode = params.get('hubReview') === '1'
+      ? enableHubReviewMode(host)
+      : () => undefined;
     const game = createWorldGame({
       parent: host,
       hubRenderer: readRendererMode(),
@@ -63,6 +84,7 @@ export function WorldCanvas() {
     return () => {
       unsubscribeStartShift();
       document.removeEventListener('visibilitychange', handleVisibility);
+      disableReviewMode();
       game.destroy(true);
     };
   }, []);

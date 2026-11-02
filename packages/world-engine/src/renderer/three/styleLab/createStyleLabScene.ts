@@ -24,45 +24,79 @@ function addGroundRect(
   return mesh;
 }
 
-function addBuilding(group: THREE.Group): void {
-  const lock = HUB_GEOMETRY_LOCK_V1.buildings.find((building) => building.id === 'codepost');
-  if (!lock) throw new Error('Geometry Lock is missing codepost.');
+function createGableRoofGeometry(width: number, depth: number, height: number): THREE.BufferGeometry {
+  const halfWidth = width / 2;
+  const halfDepth = depth / 2;
+  const positions = new Float32Array([
+    -halfWidth, 0, halfDepth,
+    halfWidth, 0, halfDepth,
+    0, height, halfDepth,
+    -halfWidth, 0, -halfDepth,
+    halfWidth, 0, -halfDepth,
+    0, height, -halfDepth,
+  ]);
 
-  const footprint = lock.screenBounds;
-  const center = logicalGroundToWorld({
-    x: footprint.x + footprint.width / 2,
-    y: footprint.y + footprint.height / 2,
-  });
-  const front = logicalGroundToWorld({ x: footprint.x, y: footprint.y });
-  const back = logicalGroundToWorld({ x: footprint.x, y: footprint.y + footprint.height });
-  const depth = Math.abs(back.z - front.z);
-  const height = 58;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setIndex([
+    0, 1, 2,
+    3, 5, 4,
+    0, 2, 5,
+    0, 5, 3,
+    1, 4, 5,
+    1, 5, 2,
+    0, 3, 4,
+    0, 4, 1,
+  ]);
+  geometry.computeVertexNormals();
+  return geometry;
+}
 
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(footprint.width, height, depth),
-    createPixelWorldMaterial({ color: WORLD_PALETTE.stoneConcrete3 }),
-  );
-  body.position.set(center.x, height / 2 + 1, center.z);
+/**
+ * Deliberately non-authoritative Style Lab fixture.
+ *
+ * This building is sized as a visual probe in world units. It does NOT derive a
+ * physical footprint from legacy screen-space building bounds. Geometry Lock is
+ * used only for camera/horizon/debug alignment until R3 introduces canonical
+ * renderer-independent HubWorldDefinition footprints.
+ */
+function addFixtureBuilding(group: THREE.Group): void {
+  const ground = logicalGroundToWorld({ x: 310, y: 226 });
+  const width = 112;
+  const depth = 64;
+  const bodyHeight = 52;
+  const frontZ = ground.z + depth / 2;
+
+  const wallMaterial = createPixelWorldMaterial({ color: WORLD_PALETTE.stoneConcrete3 });
+  const roofMaterial = createPixelWorldMaterial({ color: WORLD_PALETTE.ochreTerracotta0 });
+  const darkMaterial = createPixelWorldMaterial({ color: WORLD_PALETTE.inkTelecode0 });
+  const glassMaterial = createPixelWorldMaterial({ color: WORLD_PALETTE.waterGulf3, lightBands: 3 });
+
+  const body = new THREE.Mesh(new THREE.BoxGeometry(width, bodyHeight, depth), wallMaterial);
+  body.position.set(ground.x, bodyHeight / 2 + 1, ground.z);
   group.add(body);
 
-  const roof = new THREE.Mesh(
-    new THREE.BoxGeometry(footprint.width + 8, 8, depth + 8),
-    createPixelWorldMaterial({ color: WORLD_PALETTE.ochreTerracotta0 }),
-  );
-  roof.position.set(center.x, height + 5, center.z);
+  const roof = new THREE.Mesh(createGableRoofGeometry(width + 10, depth + 10, 20), roofMaterial);
+  roof.position.set(ground.x, bodyHeight + 1, ground.z);
   group.add(roof);
 
-  const entranceWorld = logicalGroundToWorld(lock.entrance);
-  const door = new THREE.Mesh(
-    new THREE.BoxGeometry(18, 27, 3),
-    createPixelWorldMaterial({ color: WORLD_PALETTE.inkTelecode0 }),
-  );
-  door.position.set(entranceWorld.x, 14.5, entranceWorld.z - 2);
+  const door = new THREE.Mesh(new THREE.BoxGeometry(18, 28, 3), darkMaterial);
+  door.position.set(ground.x, 15, frontZ + 2);
   group.add(door);
+
+  for (const offset of [-31, 31]) {
+    const windowMesh = new THREE.Mesh(new THREE.BoxGeometry(18, 14, 3), glassMaterial);
+    windowMesh.position.set(ground.x + offset, 32, frontZ + 2);
+    group.add(windowMesh);
+  }
+
+  const chimney = new THREE.Mesh(new THREE.BoxGeometry(10, 22, 10), darkMaterial);
+  chimney.position.set(ground.x + 34, bodyHeight + 17, ground.z - 8);
+  group.add(chimney);
 }
 
 function addTree(group: THREE.Group): void {
-  const base = logicalGroundToWorld({ x: 430, y: 228 });
+  const base = logicalGroundToWorld({ x: 445, y: 238 });
   const trunk = new THREE.Mesh(
     new THREE.BoxGeometry(9, 34, 9),
     createPixelWorldMaterial({ color: WORLD_PALETTE.ochreTerracotta0 }),
@@ -80,7 +114,7 @@ function addTree(group: THREE.Group): void {
 }
 
 function addCharacter(group: THREE.Group): void {
-  const base = logicalGroundToWorld({ x: 332, y: 270 });
+  const base = logicalGroundToWorld({ x: 372, y: 284 });
   const cloth = createPixelWorldMaterial({ color: WORLD_PALETTE.uiTeal3 });
   const skin = createPixelWorldMaterial({ color: WORLD_PALETTE.ochreTerracotta3 });
 
@@ -113,11 +147,21 @@ export function createStyleLabScene(debugGeometryLock = false): THREE.Group {
   const group = new THREE.Group();
   group.name = 'hub-style-lab';
 
-  addGroundRect(group, { x: 0, y: HUB_GEOMETRY_LOCK_V1.horizonY, width: 640, height: 360 - HUB_GEOMETRY_LOCK_V1.horizonY }, WORLD_PALETTE.foliagePine1, -2);
-  addGroundRect(group, { x: 0, y: HUB_GEOMETRY_LOCK_V1.horizonY, width: 640, height: 26 }, WORLD_PALETTE.waterGulf2, 0);
-  addGroundRect(group, { x: 245, y: 176, width: 54, height: 184 }, WORLD_PALETTE.stoneConcrete2, 1);
+  addGroundRect(
+    group,
+    { x: 0, y: HUB_GEOMETRY_LOCK_V1.horizonY, width: 640, height: 360 - HUB_GEOMETRY_LOCK_V1.horizonY },
+    WORLD_PALETTE.foliagePine1,
+    -2,
+  );
+  addGroundRect(
+    group,
+    { x: 0, y: HUB_GEOMETRY_LOCK_V1.horizonY, width: 640, height: 24 },
+    WORLD_PALETTE.waterGulf2,
+    0,
+  );
+  addGroundRect(group, { x: 280, y: 204, width: 40, height: 156 }, WORLD_PALETTE.stoneConcrete2, 1);
 
-  addBuilding(group);
+  addFixtureBuilding(group);
   addTree(group);
   addCharacter(group);
   if (debugGeometryLock) addGeometryLockMarkers(group);
