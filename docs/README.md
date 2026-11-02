@@ -51,7 +51,7 @@
 | Планирование | [Основополагающие задачи](roadmap/FOUNDATION_EPICS.md) | живой мир, КН-01, арена, пользователи и персонаж |
 | Планирование | [Phaser/WebGL и конвейер ресурсов](roadmap/PIXEL_RUNTIME_EPICS.md) | существующие ENGINE/ASSET-задачи и независимые проверки |
 | Планирование | [Миграция Hub на 2.5D](roadmap/HUB_2_5D_MIGRATION.md) | этапы R0–R10, H3D-001…025, quality gates и stop conditions |
-| Планирование | [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md) | retained 2D/legacy очередь; не требует runtime Hub variants, заменённых 2.5D renderer |
+| Планирование | [Производство спрайтов](roadmap/SPRITE_PRODUCTION_EPICS.md) | retained 2D/legacy очередь; не требует рабочий контур Hub variants, заменённых 2.5D renderer |
 | Планирование | [Программа KN01-AAA](roadmap/kn01-aaa/README.md) | аудит, ТЗ уровня КН-01 и харнесс роя агентов с подтверждением каждого пункта |
 | Идеи | [Реестр идей](ideas/IDEA_BACKLOG.md) | эксперименты и гипотезы до принятия в план |
 | Решения | [Архитектурные решения](decisions/README.md) | почему приняты сквозные и труднообратимые решения |
@@ -83,7 +83,7 @@ docs/
 
 Эталонные изображения экранов хранятся отдельно в [`design/pixel-art/`](../design/pixel-art/README.md). Производственные редактируемые ресурсы хранятся в [`assets/source/`](../assets/source/README.md), сцены — в `assets/scenes/`, манифесты — в `assets/manifests/`, производные игровые файлы — в `assets/generated/`.
 
-Для нового Hub полный перечень изображений больше не является source of truth. Geometry Lock и существующие season/weather batches могут сохраняться как art-direction references, а runtime state задаётся `HubWorldDefinition`, materials, lighting, particles и modular 3D assets.
+Для нового Hub полный перечень изображений больше не является source of truth. Geometry Lock и существующие season/weather batches могут сохраняться как art-direction references, а рабочий контур state задаётся `HubWorldDefinition`, materials, lighting, particles и modular 3D assets.
 
 ## 3. Что где редактировать
 
@@ -97,7 +97,7 @@ docs/
 - Изменение **архитектуры** → `architecture/` и архитектурное решение.
 - Рабочий контур Phaser/WebGL/Three.js → `architecture/GAME_RUNTIME_AND_ASSETS.md`, `architecture/HUB_2_5D_RENDERER_CONTRACT.md`, `packages/world-engine/`.
 - Изменение **Geometry Lock, камеры, logical coordinates Hub** → `architecture/HUB_2_5D_RENDERER_CONTRACT.md` и при существенном изменении отдельный ADR.
-- Изменение **персонажей/rig/animation runtime** → `architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md`.
+- Изменение **персонажей/rig/animation рабочий контур** → `architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md`.
 - Изменение **pixel 3D style/shader pipeline** → `design/PIXEL_3D_STYLE_CONTRACT.md`.
 - Исходная 2D-пиксельная графика → `assets/source/` и `design/PIXEL_ART_STYLE_GUIDE.md`.
 - Полный перечень retained 2D/legacy спрайтов → `design/sprites/`.
@@ -113,7 +113,7 @@ docs/
 - Фоновая жизнь, время суток и интерактивные объекты → `design/LIVING_WORLD_SYSTEM.md`.
 - Канон мира, персонажи, история и диалоги → `lore/README.md`; правила добавления нового лора → `lore/09_LORE_AUTHORING_RULES.md`.
 - Новая **идея** → `ideas/IDEA_BACKLOG.md` до переноса в план реализации.
-- Готовая к реализации идея → соответствующий roadmap с явными критериями приёмки.
+- Готовая к реализации идея → соответствующий план реализации с явными критериями приёмки.
 - Изменение **правил работы агентов** → `AGENTS.md`, `agents/`, `.agents/` и при необходимости отдельное архитектурное решение.
 
 ## 4. Статусы документов

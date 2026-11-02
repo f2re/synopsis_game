@@ -4,7 +4,7 @@
 
 **Принцип:** сначала доказать visual/technical viability на малом vertical slice, затем масштабировать. Запрещено заранее производить полный комплект 3D-моделей до прохождения shader/camera/geometry gates.
 
-## 0. Definition of Done программы
+## 0. условия завершения программы
 
 Миграция считается завершённой, когда canonical Hub:
 
@@ -15,7 +15,7 @@
 - сохраняет существующие semantic interactions и WorldBridge behaviour;
 - имеет legacy fallback до отдельного решения об удалении;
 - проходит visual acceptance и performance gates;
-- documented sprite-only Hub production jobs больше не являются обязательным runtime pipeline.
+- documented sprite-only Hub production jobs больше не являются обязательным рабочий контур pipeline.
 
 ## 1. Stage R0 — зафиксировать границы и измерения
 
@@ -220,7 +220,7 @@ TreeFactory
 
 Mesh/userData должен ссылаться на semantic IDs.
 
-**Gate R3-C:** click/raycast по зданию генерирует тот же gameplay interaction, что legacy scene.
+**Gate R3-C:** click/raycast по зданию генерирует тот же игровой процесс interaction, что legacy scene.
 
 ---
 
@@ -278,7 +278,7 @@ Mesh/userData должен ссылаться на semantic IDs.
 - required sockets;
 - GLB cleanliness.
 
-**Gate R5-A:** validator отклоняет несовместимый character asset до runtime.
+**Gate R5-A:** validator отклоняет несовместимый character asset до рабочий контур.
 
 ### R5.2 — Base animations
 
@@ -311,7 +311,7 @@ Visual facing quantize к 8 directions; movement остаётся logical.
 
 ---
 
-## 7. Stage R6 — NPC and living world integration
+## 7. Stage R6 — NPC and живой мир integration
 
 ### R6.1 — Existing NPC semantics
 
@@ -429,16 +429,16 @@ Legacy остаётся feature-flag fallback на ограниченный пе
 
 Классифицировать существующие Hub raster assets:
 
-- keep runtime;
+- keep рабочий контур;
 - keep reference only;
 - deprecated;
 - delete candidate.
 
-Season/weather Geometry Lock batches в первую очередь переводятся в `reference only`, если их смысл полностью покрыт runtime states.
+Season/weather Geometry Lock batches в первую очередь переводятся в `reference only`, если их смысл полностью покрыт рабочий контур states.
 
 ### R9.3 — Documentation supersession
 
-Обновить sprite production docs так, чтобы они не требовали создавать runtime sprites для категорий, уже реализованных 2.5D renderer-ом.
+Обновить sprite production docs так, чтобы они не требовали создавать рабочий контур sprites для категорий, уже реализованных 2.5D renderer-ом.
 
 **Gate R9:** новая задача по weather/season/building state не запускает автоматическое производство полного набора изображений.
 
@@ -534,7 +534,7 @@ Character art и world geometry могут идти параллельно то�
 - pixel pipeline не проходит visual acceptance;
 - Three.js integration ломает Phaser lifecycle/input/UI boundary;
 - mid-range target device не достигает acceptable performance после измеримых оптимизаций;
-- authoring сложнее текущего sprite pipeline без сокращения числа runtime states.
+- authoring сложнее текущего sprite pipeline без сокращения числа рабочий контур states.
 
 Stop condition означает изменение решения, а не производство большего количества ассетов в надежде скрыть проблему.
 

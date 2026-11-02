@@ -10,7 +10,7 @@
 
 Для 2D-пиксельной графики, legacy scenes, portraits, UI и иных raster assets производственный путь сохраняет Aseprite/Pixelorama, `assets/source`, manifests и reproducible packing. Канонический sprite pipeline больше не является обязательным способом построения нового Hub: для него действует ADR-0007 и контракт Three.js 2.5D renderer.
 
-Точные версии графических инструментов хранятся в `config/art-toolchain.yaml`; runtime dependencies фиксируются package manager lockfile и соответствующими package manifests.
+Точные версии графических инструментов хранятся в `config/art-toolchain.yaml`; рабочий контур dependencies фиксируются package manager lockfile и соответствующими package manifests.
 
 ## Границы ответственности
 

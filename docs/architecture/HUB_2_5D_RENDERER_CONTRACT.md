@@ -6,7 +6,7 @@
 
 ## 1. Цель
 
-Hub должен выглядеть как намеренно стилизованный pixel-art/HD-2D мир, но не зависеть от сотен растровых вариантов одной сцены. Геометрия, взаимодействия и gameplay anchors являются стабильными; сезон, погода, время суток, progression и большая часть ambience вычисляются в runtime.
+Hub должен выглядеть как намеренно стилизованный pixel-art/HD-2D мир, но не зависеть от сотен растровых вариантов одной сцены. Геометрия, взаимодействия и игровой процесс anchors являются стабильными; сезон, погода, время суток, progression и большая часть ambience вычисляются в рабочий контур.
 
 Главная производственная единица — не PNG-состояние, а `world definition + reusable geometry + material state + animation state`.
 
@@ -18,7 +18,7 @@ Hub должен выглядеть как намеренно стилизова
 - Phaser 4 — scene lifecycle, input, audio, UI/HUD, transitions, integration with `WorldBridge`;
 - Three.js — Hub 2.5D rendering;
 - WebGL2 — основной 3D backend;
-- GLB/glTF — runtime-формат для сложных reusable meshes и skinned characters;
+- GLB/glTF — рабочий контур-формат для сложных reusable meshes и skinned characters;
 - custom shader/post-processing passes — pixel style;
 - Blender — authoring только там, где procedural geometry недостаточна;
 - Meshopt-compatible optimisation допускается после измерений.
@@ -69,7 +69,7 @@ height = 360
 origin = top-left
 ```
 
-Все gameplay anchors должны иметь детерминированное соответствие этому пространству.
+Все игровой процесс anchors должны иметь детерминированное соответствие этому пространству.
 
 ### 4.2 Internal rendering
 
@@ -82,7 +82,7 @@ pixel scale:      ×2
 screen upscale:   nearest-neighbor
 ```
 
-Допускаются профили 240×135 и 480×270 только после visual/performance проверки. Runtime не должен динамически выбирать произвольный внутренний размер каждый кадр.
+Допускаются профили 240×135 и 480×270 только после visual/performance проверки. рабочий контур не должен динамически выбирать произвольный внутренний размер каждый кадр.
 
 ### 4.3 Scene-specific viewport
 
@@ -100,7 +100,7 @@ Hub использует фиксированную orthographic camera.
 - менять horizon;
 - свободно вращать camera;
 - менять canonical framing;
-- re-center/zoom сцену по контенту;
+- re-center/zoom сцену по материалу;
 - использовать camera auto-fit по bounding box.
 
 Допустимы поверх canonical framing:
@@ -108,7 +108,7 @@ Hub использует фиксированную orthographic camera.
 - короткий camera shake;
 - scripted pan;
 - scripted zoom в пределах согласованного safe range;
-- accessibility override без изменения gameplay coordinates.
+- accessibility override без изменения игровой процесс coordinates.
 
 ## 5. `HubWorldDefinition`
 
@@ -149,7 +149,7 @@ export interface HubWorldDefinition {
 }
 ```
 
-Visual mesh UUID не является gameplay ID.
+Visual mesh UUID не является игровой процесс ID.
 
 ## 6. Geometry production rules
 
@@ -306,7 +306,7 @@ I. Phaser UI/HUD composition
 
 ### 11.1 Palette
 
-Один canonical `WORLD_PALETTE` или его будущая версия является source of truth. Runtime arbitrary RGB drift между материалами запрещён.
+Один canonical `WORLD_PALETTE` или его будущая версия является source of truth. рабочий контур arbitrary RGB drift между материалами запрещён.
 
 Рекомендуемый бюджет мира: 24–48 базовых цветов до вариаций служебных UI цветов.
 
@@ -339,7 +339,7 @@ mesh hit
 → WorldBridge/gameplay event
 ```
 
-Gameplay code не должен зависеть от mesh UUID, material UUID или scene traversal order.
+игровой процесс code не должен зависеть от mesh UUID, material UUID или scene traversal order.
 
 ## 13. Collision and navigation
 
@@ -367,7 +367,7 @@ Collision остаётся 2D.
 | Simultaneous animated humanoids | 20–30 |
 | Dynamic shadow-casting key lights | 1 default |
 | Texture memory Hub | 32–64 MB preferred |
-| Full-screen runtime state textures | 0 required |
+| Full-screen рабочий контур state textures | 0 required |
 
 Порог не является поводом ухудшать арт заранее: сначала измерять, затем оптимизировать.
 
@@ -391,7 +391,7 @@ Collision остаётся 2D.
 - lower internal RT or simplified passes;
 - no nonessential particles;
 - reduced animation density;
-- preserved gameplay readability.
+- preserved игровой процесс readability.
 
 Reduced-motion profile отдельный от performance profile.
 
@@ -404,14 +404,14 @@ Reduced-motion profile отдельный от performance profile.
 - пользователь должен получить безопасный degraded mode;
 - падение renderer не должно терять progression/game state.
 
-## 17. Acceptance criteria
+## 17. Критерии приёмки
 
 Renderer считается принятым только если:
 
 - canonical screenshot alignment соответствует Geometry Lock 640×360;
 - нет reframe между weather/season/day states;
-- day/night/rain/snow работают без отдельных full-scene runtime images;
-- минимум одно building state меняется runtime parameters;
+- day/night/rain/snow работают без отдельных full-scene рабочий контур images;
+- минимум одно building state меняется рабочий контур parameters;
 - building picking возвращает стабильный semantic ID;
 - один modular character выполняет `idle` и `walk`;
 - character movement совпадает с logical coordinates;
@@ -425,7 +425,7 @@ Renderer считается принятым только если:
 
 Без отдельного решения запрещены:
 
-- full Hub as one Blender scene as source of gameplay truth;
+- full Hub as one Blender scene as source of игровой процесс truth;
 - free perspective camera;
 - baked image per season/weather/day combination;
 - one GLB per visual state;
@@ -433,7 +433,7 @@ Renderer считается принятым только если:
 - unique skeleton for every NPC;
 - high-resolution texture-first art pipeline;
 - 60 FPS smooth character pose sampling как единственный режим;
-- dependence of gameplay IDs on renderer object IDs.
+- dependence of игровой процесс IDs on renderer object IDs.
 
 ## 19. Связанные документы
 

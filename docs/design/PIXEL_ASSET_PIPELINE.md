@@ -13,14 +13,14 @@
 - companions/props/VFX, если они намеренно остаются 2D;
 - иных raster assets, для которых спрайт является осознанным production format.
 
-Для **нового Hub** этот документ больше не является основным runtime production contract. При конфликте применяются:
+Для **нового Hub** этот документ больше не является основным рабочий контур production contract. При конфликте применяются:
 
 - `docs/decisions/ADR-0007-threejs-2-5d-pixel-renderer.md`;
 - `docs/architecture/HUB_2_5D_RENDERER_CONTRACT.md`;
 - `docs/architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md`;
 - `docs/design/PIXEL_3D_STYLE_CONTRACT.md`.
 
-Новый Hub строится `world-definition-first`: geometry, materials, environment state, particles и modular characters. Существующие AI-generated Hub batches могут сохраняться как art-direction references и не обязаны становиться runtime layers.
+Новый Hub строится `world-definition-first`: geometry, materials, environment state, particles и modular characters. Существующие AI-generated Hub batches могут сохраняться как art-direction references и не обязаны становиться рабочий контур layers.
 
 Классы `world_character`, `architecture_landmark`, `architecture_small`, `terrain_tile`, `vegetation_sprite` и `large_scene` ниже описывают raster production **только там, где raster representation явно сохранено**. Их наличие не создаёт требования производить новый sprite/PNG для каждого Hub state.
 
@@ -58,7 +58,7 @@ SPEC
 
 Нельзя автоматически принимать первый результат или превращать обычную AI-иллюстрацию в финальную графику агрессивным уменьшением и жёсткой квантизацией.
 
-Этот pipeline не применяется автоматически к procedural geometry, GLB characters, Three.js materials или runtime environment states.
+Этот pipeline не применяется автоматически к procedural geometry, GLB characters, Three.js materials или рабочий контур environment states.
 
 ## Классы графики
 
@@ -81,7 +81,7 @@ SPEC
 
 Один workflow для нескольких классов запрещён. Портрет, мировой персонаж, тайл, здание, UI и крупная сцена выполняют разные художественные задачи.
 
-Для Hub эти классы не должны использоваться для искусственного размножения runtime variants, если состояние уже выражается 2.5D renderer-ом.
+Для Hub эти классы не должны использоваться для искусственного размножения рабочий контур variants, если состояние уже выражается 2.5D renderer-ом.
 
 ## Представления персонажа
 
@@ -121,7 +121,7 @@ SPEC
 
 `strictQuantization=true` в generation profiles запрещён.
 
-Для 2.5D Hub количество runtime цветов и palette mapping определяются `PIXEL_3D_STYLE_CONTRACT.md`, а не таблицей raster classes выше.
+Для 2.5D Hub количество рабочий контур цветов и palette mapping определяются `PIXEL_3D_STYLE_CONTRACT.md`, а не таблицей raster classes выше.
 
 ## Язык пикселя
 
@@ -201,7 +201,7 @@ SPEC
 
 Плохой, но технически корректный ассет обязан иметь `art_status: fail`.
 
-3D/2.5D assets проверяются отдельными контрактами: scale/orientation, skeleton compatibility, semantic IDs, material/palette compatibility и runtime budgets.
+3D/2.5D assets проверяются отдельными контрактами: scale/orientation, skeleton compatibility, semantic IDs, material/palette compatibility и рабочий контур budgets.
 
 ## Регрессионные проверки
 
@@ -221,7 +221,7 @@ SPEC
 
 ## Художественная приёмка
 
-Арт-директор оценивает ассет или runtime scene в его реальном игровом масштабе.
+Арт-директор оценивает ассет или рабочий контур scene в его реальном игровом масштабе.
 
 Принимается не «пиксельность», а совокупность:
 
@@ -236,4 +236,4 @@ SPEC
 
 Для raster assets не принимаются неизвестное происхождение, ручная правка производных файлов, несовместимые pivots, невоспроизводимая сборка, случайное сглаживание маленьких спрайтов, дублирование полной геометрии дня/ночи и автоматическое `approved` по числу цветов.
 
-Для 2.5D Hub не принимаются отдельные runtime PNG/GLB на каждый weather/season/day state, если то же состояние должно выражаться material/environment parameters согласно новым контрактам.
+Для 2.5D Hub не принимаются отдельные рабочий контур PNG/GLB на каждый weather/season/day state, если то же состояние должно выражаться material/environment parameters согласно новым контрактам.

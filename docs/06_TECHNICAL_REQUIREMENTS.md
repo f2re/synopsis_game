@@ -17,12 +17,12 @@
 - WebGL2 — основной способ отрисовки 2.5D Hub; legacy Phaser/WebGL renderer сохраняется на переходный период;
 - SVG/Canvas — профессиональная синоптическая карта и геометрический ввод;
 - CSS;
-- GLB/glTF — runtime-формат сложных reusable 3D assets и skinned characters;
+- GLB/glTF — рабочий контур-формат сложных reusable 3D assets и skinned characters;
 - PWA — необязательная возможность после первого вертикального среза.
 
-Phaser не является источником метеорологической истины и не заменяет React. Three.js не заменяет Phaser глобально и не становится источником gameplay state. Карта остаётся отдельным модулем веб-приложения на SVG/Canvas.
+Phaser не является источником метеорологической истины и не заменяет React. Three.js не заменяет Phaser глобально и не становится источником игровой процесс state. Карта остаётся отдельным модулем веб-приложения на SVG/Canvas.
 
-Версии Phaser и графических инструментов фиксируются в `config/art-toolchain.yaml` и package manifests/lockfile. Версия Three.js должна быть зафиксирована точной runtime dependency после technical spike; неконтролируемое major/minor обновление renderer dependency запрещено.
+Версии Phaser и графических инструментов фиксируются в `config/art-toolchain.yaml` и package manifests/lockfile. Версия Three.js должна быть зафиксирована точной рабочий контур dependency после technical spike; неконтролируемое major/minor обновление renderer dependency запрещено.
 
 Нормативные документы нового Hub:
 
@@ -147,14 +147,14 @@ Three.js renderer не выделяется в отдельный top-level pack
 
 Для нового Hub действуют следующие требования:
 
-- canonical gameplay/composition space: 640×360;
+- canonical игровой процесс/composition space: 640×360;
 - default internal render target: 320×180;
 - fixed orthographic camera;
 - scene-specific logical viewport вместо глобального принудительного перевода всех сцен на 640×360;
 - renderer-independent `HubWorldDefinition` как источник spatial semantics;
 - 2D collision/navigation truth сохраняется вне 3D renderer;
 - weather/season/day/building states выражаются materials, lighting, particles и state parameters;
-- character movement остаётся gameplay-authoritative, root motion не определяет положение;
+- character movement остаётся игровой процесс-authoritative, root motion не определяет положение;
 - interaction использует stable semantic IDs, а не mesh/material UUID.
 
 Состояние времени суток, сезона и фоновых событий может задаваться сервером или детерминированным локальным расписанием, но покадровые координаты птиц, частиц, костей и декоративных объектов по сети не передаются.
@@ -208,7 +208,7 @@ Three.js renderer не выделяется в отдельный top-level pack
 
 Повтор не должен зависеть от текущей версии баланса или свежего внешнего потока.
 
-Декоративная локальная анимация не обязана хранить каждый render frame, но gameplay-significant world state и deterministic seeds должны позволять восстановить смысловое состояние сцены.
+Декоративная локальная анимация не обязана хранить каждый render frame, но игровой процесс-significant world state и deterministic seeds должны позволять восстановить смысловое состояние сцены.
 
 ## 14. Производительность
 
