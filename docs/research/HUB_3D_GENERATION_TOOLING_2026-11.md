@@ -38,7 +38,7 @@ production approval
 - Python scripting и headless execution;
 - удобно нормализовать scale/pivots/material slots;
 - Geometry Nodes/Python можно использовать для deterministic kit generation;
-- не требуется использовать Blender scene graph как runtime/gameplay truth.
+- не требуется использовать Blender scene graph как рабочий контур/игровой процесс truth.
 
 Официальная документация glTF exporter:
 
@@ -149,7 +149,7 @@ World-generation подход интересен как concept/R&D: проек�
 - collision/navigation truth;
 - deterministic state matrix;
 - reusable modular assets;
-- small runtime budgets.
+- small рабочий контур budgets.
 
 Кроме того, upstream использует отдельную community license с территориальными условиями.
 
@@ -185,7 +185,7 @@ World-generation подход интересен как concept/R&D: проек�
 | material cleanup | medium | number of slots/textures to remove/remap |
 | repeatability | medium | same input/seed if supported |
 | license suitability | hard gate | upstream license review |
-| local/offline viability | medium | install/runtime footprint |
+| local/offline viability | medium | install/рабочий контур footprint |
 | GLB interoperability | high | validator + Three.js load |
 | target asset size | medium | triangles/draw/materials |
 | style consistency | hard gate | canonical shader snapshot |
@@ -202,7 +202,7 @@ Generator выигрывает только если суммарное producti
 - world-generation runtimes;
 - generator SDK/API clients.
 
-Они должны жить вне browser runtime и, при принятии, в отдельном tooling environment/adapter.
+Они должны жить вне browser рабочий контур и, при принятии, в отдельном tooling environment/adapter.
 
 ## 12. Decision recommendation
 

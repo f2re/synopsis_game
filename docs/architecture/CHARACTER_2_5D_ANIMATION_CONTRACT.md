@@ -6,7 +6,7 @@
 
 Персонажи должны сохранять читаемость пиксельной игры, но не требовать sprite sheet для каждого направления, костюма, сезона и состояния. Производственная модель: общий low-poly rig + modular meshes + shared animations + palette recoloring + стилизованная дискретизация поз.
 
-## 2. Источник gameplay truth
+## 2. Источник игровой процесс truth
 
 Renderer не управляет перемещением персонажа.
 
@@ -41,7 +41,7 @@ root
     └── upperLeg.R → lowerLeg.R → foot.R
 ```
 
-Ориентир: 13–17 deform bones. Дополнительные helper bones допускаются, но не должны превращать runtime rig в тяжёлый cinematic skeleton.
+Ориентир: 13–17 deform bones. Дополнительные helper bones допускаются, но не должны превращать рабочий контур rig в тяжёлый cinematic skeleton.
 
 Все modular wearable meshes должны быть совместимы с одной skeleton family или иметь явный adapter contract.
 
@@ -78,7 +78,7 @@ optional outerwear
 
 Не требуется отдельный цельный mesh на каждую комбинацию внешности.
 
-Player cosmetics должны ссылаться на stable item IDs из gameplay/inventory layer, а renderer mapping определяет соответствующий mesh/palette/attachment.
+Player cosmetics должны ссылаться на stable item IDs из игровой процесс/inventory layer, а renderer mapping определяет соответствующий mesh/palette/attachment.
 
 ## 6. Palette slots
 
@@ -132,11 +132,11 @@ accent
 - `sit`;
 - `emote`.
 
-Vertical slice обязан реализовать только `idle` и `walk`; остальные вводятся по мере gameplay-потребности.
+Vertical slice обязан реализовать только `idle` и `walk`; остальные вводятся по мере игровой процесс-потребности.
 
 Один clip должен переиспользоваться всеми совместимыми персонажами.
 
-## 9. Animation runtime
+## 9. Animation рабочий контур
 
 Three.js animation layer использует стандартную модель clip/action/mixer или эквивалентный abstraction внутри renderer.
 
@@ -151,7 +151,7 @@ interface CharacterAnimationState {
 }
 ```
 
-Renderer сам решает blending/crossfade, но gameplay не должен оперировать именами костей или `AnimationAction`.
+Renderer сам решает blending/crossfade, но игровой процесс не должен оперировать именами костей или `AnimationAction`.
 
 ## 10. Pixel-style pose sampling
 
@@ -192,7 +192,7 @@ velocity magnitude/action
 → animation state
 ```
 
-Walk clip не перемещает root в gameplay space.
+Walk clip не перемещает root в игровой процесс space.
 
 Преимущества:
 
@@ -200,7 +200,7 @@ Walk clip не перемещает root в gameplay space.
 - простая collision;
 - save/load без animation dependency;
 - schedule system не зависит от rig;
-- networking/replay хранит gameplay state, а не bone transforms.
+- networking/replay хранит игровой процесс state, а не bone transforms.
 
 ## 13. Attachments
 
@@ -256,7 +256,7 @@ Default character grounding — дешёвая contact/blob shadow либо об
 
 Canonical orientation и scale должны быть определены один раз в tooling и проверяться автоматически.
 
-## 17. Runtime loading
+## 17. рабочий контур loading
 
 Повторяющиеся персонажи не должны каждый раз заново парсить один GLB.
 
@@ -284,7 +284,7 @@ createCharacter({
 })
 ```
 
-Factory возвращает renderer handle, но gameplay layer не должен обращаться к bones напрямую.
+Factory возвращает renderer handle, но игровой процесс layer не должен обращаться к bones напрямую.
 
 ## 19. Animation controller
 
@@ -295,9 +295,9 @@ Factory возвращает renderer handle, но gameplay layer не долж�
 - применяет pose quantization;
 - синхронизирует animation speed с logical movement;
 - отключает secondary motion в reduced-motion;
-- не изменяет gameplay position.
+- не изменяет игровой процесс position.
 
-## 20. Acceptance criteria
+## 20. Критерии приёмки
 
 Character pipeline принят, если один и тот же base rig демонстрирует:
 
@@ -310,7 +310,7 @@ Character pipeline принят, если один и тот же base rig де�
 - attachment в руке;
 - transition `idle ↔ walk`;
 - reduced-motion mode;
-- отсутствие gameplay dependency от bone transforms.
+- отсутствие игровой процесс dependency от bone transforms.
 
 ## 21. Не делать
 

@@ -146,21 +146,21 @@ building state → emission, accent, sign/decal, local effect
 - shared animation library;
 - modular clothing/hair/headgear/accessories;
 - palette-slot recoloring;
-- runtime facing;
+- рабочий контур facing;
 - 8–12 FPS pose cadence при более высокой частоте renderer-а;
-- gameplay position остаётся авторитетной, root motion не используется как источник движения.
+- игровой процесс position остаётся авторитетной, root motion не используется как источник движения.
 
 Полный контракт: [`CHARACTER_2_5D_ANIMATION_CONTRACT.md`](CHARACTER_2_5D_ANIMATION_CONTRACT.md).
 
 ## 9. Физика и взаимодействия
 
-3D renderer не становится источником gameplay physics.
+3D renderer не становится источником игровой процесс physics.
 
 - collision: simple 2D polygons/shapes;
 - routes: logical world coordinates;
 - picking: Three.js raycast допускается;
 - результат picking преобразуется в stable semantic interaction ID;
-- gameplay не зависит от mesh/material UUID.
+- игровой процесс не зависит от mesh/material UUID.
 
 Полный 3D physics engine не добавляется без отдельного ADR.
 

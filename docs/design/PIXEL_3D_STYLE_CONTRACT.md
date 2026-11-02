@@ -2,7 +2,7 @@
 
 **Статус:** принято
 
-Этот документ фиксирует визуальный язык нового 2.5D renderer-а. Он не описывает gameplay architecture; его задача — не дать технически корректному Three.js renderer-у превратиться в обычную low-poly 3D игру с фильтром пикселизации.
+Этот документ фиксирует визуальный язык нового 2.5D renderer-а. Он не описывает игровой процесс architecture; его задача — не дать технически корректному Three.js renderer-у превратиться в обычную low-poly 3D игру с фильтром пикселизации.
 
 ## 1. Художественная цель
 
@@ -114,7 +114,7 @@ Dithering не должен покрывать каждый материал о�
 
 - depth discontinuity;
 - normal discontinuity;
-- selective semantic accent для gameplay object.
+- selective semantic accent для игровой процесс object.
 
 Не использовать:
 
@@ -320,7 +320,7 @@ Style review считается проваленным, если наблюда�
 - characters выглядят слишком плавно и теряют sprite language;
 - black outlines доминируют над формой;
 - погода требует новых полноэкранных картинок;
-- сезон меняет geometry/camera без gameplay причины;
+- сезон меняет geometry/camera без игровой процесс причины;
 - imported asset визуально выпадает из canonical palette.
 
 ## 23. Что использовать как art-direction references
@@ -334,7 +334,7 @@ Style review считается проваленным, если наблюда�
 - weather intensity;
 - seasonal cues.
 
-Они не обязаны оставаться runtime layers после принятия 2.5D renderer-а.
+Они не обязаны оставаться рабочий контур layers после принятия 2.5D renderer-а.
 
 ## 24. Связанные документы
 

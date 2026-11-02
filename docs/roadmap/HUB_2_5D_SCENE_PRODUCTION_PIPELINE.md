@@ -11,7 +11,7 @@
 - spatial truth задаёт `HubWorldDefinition` + Geometry Lock;
 - camera/framing не генерируются и не угадываются;
 - сцена собирается из procedural/reusable geometry и малого набора GLB;
-- художественный стиль формируется в основном единым runtime pixel pipeline;
+- художественный стиль формируется в основном единым рабочий контур pixel pipeline;
 - генеративные модели используются как source adapters, а не как источник истины;
 - любой импортированный mesh проходит одинаковую нормализацию и validation;
 - один и тот же world definition детерминированно собирается повторно;
@@ -28,7 +28,7 @@
 Порядок авторитета:
 
 1. `hub.geometry.lock_*` — screen-space composition, horizon, footprints, entrances, paths, waterline, safe zones;
-2. `HubWorldDefinition` — semantic/spatial data и gameplay IDs;
+2. `HubWorldDefinition` — semantic/spatial data и игровой процесс IDs;
 3. `PIXEL_3D_STYLE_CONTRACT.md` — palette/light/dither/edge/motion language;
 4. `HubSceneRecipe` — deterministic build recipe конкретного visual assembly;
 5. canonical source assets (`.blend`, procedural definitions, approved GLB);
@@ -66,7 +66,7 @@
 
 ### C. Generated draft mesh — только вход в cleanup
 
-AI image-to-3D/text-to-3D допустим для ускорения поиска формы уникального объекта. Результат **никогда не попадает напрямую в runtime**.
+AI image-to-3D/text-to-3D допустим для ускорения поиска формы уникального объекта. Результат **никогда не попадает напрямую в рабочий контур**.
 
 Обязательный путь:
 
@@ -115,7 +115,7 @@ ThreeHubRenderer scene graph
 
 ### 4.2 Blender procedural compiler
 
-Blender используется как canonical 3D workbench для сложных source assets и для offline generation/preview, но не как gameplay database.
+Blender используется как canonical 3D workbench для сложных source assets и для offline generation/preview, но не как игровой процесс database.
 
 Предусмотреть headless script entrypoint уровня:
 
@@ -142,7 +142,7 @@ blender --background hub_style_lab.blend --python tools/art/build_hub_asset.py -
 - поиск silhouette уникального meteo instrument;
 - стартовая форма дерева/куста;
 - landmark prop;
-- character accessory без gameplay-critical geometry.
+- character accessory без игровой процесс-critical geometry.
 
 Недопустимые use cases:
 
@@ -197,7 +197,7 @@ fog stress case
 
 Существующий approved Geometry Lock image используется как authoritative Image A.
 
-Reference generation нужна для art direction, а не для runtime compositing.
+Reference generation нужна для art direction, а не для рабочий контур compositing.
 
 ### 6.1 Base prompt template
 
@@ -235,7 +235,7 @@ No UI, labels or text unless explicitly requested. Full frame only.
 
 ## 7. Style authority: что НЕ надо запекать в assets
 
-Следующие признаки должны приходить из runtime renderer, а не из генератора:
+Следующие признаки должны приходить из рабочий контур renderer, а не из генератора:
 
 - 3/4 light bands;
 - canonical world palette;
@@ -335,7 +335,7 @@ approved_at: ...
 
 ## 11. Tool adapter policy
 
-Генератор считается adapter-ом и не должен проникать в runtime architecture.
+Генератор считается adapter-ом и не должен проникать в рабочий контур architecture.
 
 Интерфейс на уровне production tooling:
 
@@ -353,7 +353,7 @@ Production pipeline получает mesh + metadata, после чего раб
 - pinned version/endpoint where possible;
 - explicit license review;
 - deterministic metadata where provider exposes seed;
-- no direct write into approved runtime asset directory;
+- no direct write into approved рабочий контур asset directory;
 - quarantine/draft output directory;
 - provenance record.
 
@@ -420,7 +420,7 @@ Scene-production track начинается одновременно с R0, но
 
 Проверить один permissively licensed adapter на 2–3 isolated props.
 
-**Done:** generated draft проходит cleanup до project GLB; direct generator output не используется runtime.
+**Done:** generated draft проходит cleanup до project GLB; direct generator output не используется рабочий контур.
 
 ### H3D-032 — Provenance manifest
 
@@ -436,7 +436,7 @@ Scene-production track начинается одновременно с R0, но
 
 Совместная проверка R1-C + Style Lab + asset pipeline.
 
-**Done:** только после этого разрешён mass-production backlog для Hub assets.
+**Done:** только после этого разрешён mass-production перечень задач для Hub assets.
 
 ## 14. Порядок выполнения относительно H3D-001…008
 
@@ -468,7 +468,7 @@ H3D-001 viewport
 
 - camera не дрейфует;
 - Geometry Lock anchors совпадают;
-- recipe не может переопределять gameplay positions генеративными данными.
+- recipe не может переопределять игровой процесс positions генеративными данными.
 
 ### Gate P-B — style authority
 
@@ -482,7 +482,7 @@ H3D-001 viewport
 - provenance присутствует;
 - build не зависит от недоступного SaaS для already-approved assets.
 
-### Gate P-D — runtime suitability
+### Gate P-D — рабочий контур suitability
 
 - GLB valid;
 - budgets проверены;

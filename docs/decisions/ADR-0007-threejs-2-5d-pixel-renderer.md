@@ -10,7 +10,7 @@
 
 Одновременно производственный графический контур исторически ориентирован на спрайты, растровые слои, наборы состояний и AI-generated pixel assets. Для Hub это создаёт комбинаторный рост ресурсов: сезоны, погода, время суток, состояния зданий, направления персонажей и анимационные кадры требуют всё большего числа изображений и увеличивают риск геометрического дрейфа между вариантами.
 
-Новые требования к Hub фиксируют неизменную геометрию сцены и каноническую композицию 640×360. При этих условиях выгоднее хранить мир как данные и геометрию, а визуальные состояния получать в runtime через материалы, освещение, particles и post-processing.
+Новые требования к Hub фиксируют неизменную геометрию сцены и каноническую композицию 640×360. При этих условиях выгоднее хранить мир как данные и геометрию, а визуальные состояния получать в рабочий контур через материалы, освещение, particles и post-processing.
 
 ## Решение
 
@@ -39,12 +39,12 @@ Phaser остаётся игровым framework и владельцем жиз�
 
 ### Каноническое пространство Hub
 
-- gameplay/composition coordinates Hub: **640×360**;
+- игровой процесс/composition coordinates Hub: **640×360**;
 - default internal 3D render target: **320×180**;
 - upscale: nearest-neighbor до 640×360, затем до физического viewport;
 - камера: фиксированная `OrthographicCamera`;
 - perspective camera для канонического Hub запрещена;
-- положение камеры, horizon, building footprints, paths, waterline и ключевые gameplay anchors являются частью Geometry Lock.
+- положение камеры, horizon, building footprints, paths, waterline и ключевые игровой процесс anchors являются частью Geometry Lock.
 
 Глобальные константы 480×270 не заменяются вслепую. Старые сцены могут сохранить своё логическое пространство. Viewport helper должен принимать размеры сцены явно.
 
@@ -82,7 +82,7 @@ Legacy 2D и новый Three.js renderer могут временно читат
 
 ### Сезон, погода и время суток
 
-Новые runtime-варианты Hub не должны создаваться как полноэкранные растровые версии одной и той же геометрии.
+Новые рабочий контур-варианты Hub не должны создаваться как полноэкранные растровые версии одной и той же геометрии.
 
 Состояния реализуются параметрами мира и renderer uniforms/material parameters:
 
@@ -91,7 +91,7 @@ Legacy 2D и новый Three.js renderer могут временно читат
 - day phase: key light, ambient palette, sky state, window emission, stars;
 - building state: emissive windows, outline/accent, signs/decals, local effects.
 
-Растровые сезонные/погодные изображения могут использоваться как art-direction references, но не являются обязательными runtime-ассетами.
+Растровые сезонные/погодные изображения могут использоваться как art-direction references, но не являются обязательными рабочий контур-ассетами.
 
 ### Персонажи
 
@@ -101,15 +101,15 @@ Legacy 2D и новый Three.js renderer могут временно читат
 - общий набор animation clips;
 - modular heads/hair/clothes/headgear/accessories;
 - palette-slot recoloring вместо отдельных текстурных вариантов;
-- runtime rotation вместо sprite sheets направлений;
+- рабочий контур rotation вместо sprite sheets направлений;
 - animation pose sampling намеренно ниже render FPS для сохранения pixel-animation характера;
-- movement не использует root motion: gameplay position остаётся авторитетной.
+- movement не использует root motion: игровой процесс position остаётся авторитетной.
 
 Подробный контракт находится в `docs/architecture/CHARACTER_2_5D_ANIMATION_CONTRACT.md`.
 
 ### Физика и навигация
 
-3D renderer не становится источником gameplay-физики.
+3D renderer не становится источником игровой процесс-физики.
 
 - collision остаётся 2D polygon/shape based;
 - NPC routes остаются в logical world coordinates;
@@ -152,7 +152,7 @@ Phaser 3D/3D World рассматривается как перспективн�
 - один персонаж может работать во всех направлениях и состояниях;
 - Geometry Lock обеспечивается камерой и world definition, а не совпадением вручную нарисованных картинок;
 - procedural/instanced geometry уменьшает стоимость производства мира;
-- renderer можно заменить независимо от gameplay state и React UI;
+- renderer можно заменить независимо от игровой процесс state и React UI;
 - визуальный стиль контролируется централизованным shader pipeline.
 
 ### Отрицательные и стоимость
@@ -175,7 +175,7 @@ Phaser 3D/3D World рассматривается как перспективн�
 6. сохранение WorldBridge behaviour;
 7. целевые performance budgets.
 
-Если vertical slice не проходит visual acceptance, сначала меняется renderer/shader pipeline, а не производится полный комплект 3D-контента.
+Если vertical slice не проходит visual acceptance, сначала меняется renderer/shader pipeline, а не производится полный комплект 3D-материала.
 
 ## Связанные материалы
 

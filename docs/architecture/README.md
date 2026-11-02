@@ -94,7 +94,7 @@ React отвечает за навигацию, формы, доступност
 
 Пакет владеет lifecycle живого мира, Phaser integration, WebGL, camera/viewport helpers, loading, audio/animation integration, effects и diagnostic primitives.
 
-Для нового Hub внутри того же пакета используется Three.js 2.5D renderer. Он получает renderer-independent world definition и world state, но не становится источником gameplay truth.
+Для нового Hub внутри того же пакета используется Three.js 2.5D renderer. Он получает renderer-independent world definition и world state, но не становится источником игровой процесс truth.
 
 `world-engine` не определяет правильный метеорологический ответ и не является источником состояния матча.
 
@@ -184,18 +184,18 @@ assets/source + assets/manifests + assets/scenes where applicable
         packages/world-engine / apps/web
 ```
 
-Полноэкранный концепт-арт не используется как готовый фон сцены. AI-generated Hub batches после принятия 2.5D renderer могут сохраняться как art-direction references, если runtime state уже выражается кодом/материалами.
+Полноэкранный концепт-арт не используется как готовый фон сцены. AI-generated Hub batches после принятия 2.5D renderer могут сохраняться как art-direction references, если рабочий контур state уже выражается кодом/материалами.
 
 ## 8. Персонажи нового Hub
 
 Человекоподобные персонажи используют shared low-poly skeleton family, shared animation library, modular clothing/accessories и palette slots.
 
-Gameplay position остаётся авторитетной; root motion не управляет перемещением. Visual facing по умолчанию может quantize к 8 направлениям. Pose animation намеренно работает с более низкой частотой, чем world renderer, чтобы сохранять sprite-like cadence.
+игровой процесс position остаётся авторитетной; root motion не управляет перемещением. Visual facing по умолчанию может quantize к 8 направлениям. Pose animation намеренно работает с более низкой частотой, чем world renderer, чтобы сохранять sprite-like cadence.
 
 ## 9. Запрещённые зависимости
 
 - `world-engine` → правильный учебный ответ;
-- Three.js renderer → server/gameplay truth;
+- Three.js renderer → server/игровой процесс truth;
 - game rules → mesh/material/bone IDs;
 - `game-rules` → конкретные правила КН-01;
 - `contracts` → бизнес-логика;
@@ -204,7 +204,7 @@ Gameplay position остаётся авторитетной; root motion не у
 - `assets/generated` → ручная правка как источник истины;
 - внутренние серверные модули → прямой импорт из React, Phaser или Three.js;
 - учебный материал → конкретный компонент интерфейса;
-- gameplay interaction → renderer UUID.
+- игровой процесс interaction → renderer UUID.
 
 ## 10. Критерий выделения нового пакета
 

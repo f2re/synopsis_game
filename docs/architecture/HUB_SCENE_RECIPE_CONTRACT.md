@@ -4,9 +4,9 @@
 
 ## 1. Назначение
 
-`HubSceneRecipe` — build-time/runtime-view contract, который описывает, **как собрать visual scene graph из уже авторитетного `HubWorldDefinition`**.
+`HubSceneRecipe` — build-time/рабочий контур-view contract, который описывает, **как собрать visual scene graph из уже авторитетного `HubWorldDefinition`**.
 
-Он не заменяет `HubWorldDefinition` и не становится вторым источником gameplay coordinates.
+Он не заменяет `HubWorldDefinition` и не становится вторым источником игровой процесс coordinates.
 
 Разделение ответственности:
 
@@ -27,7 +27,7 @@ Recipe обязан:
 - не содержать альтернативные building footprints, entrances, paths или interaction anchors;
 - использовать stable semantic IDs;
 - иметь deterministic seed для разрешённых cosmetic choices;
-- разрешать воспроизводимую сборку без вызова AI generator в runtime;
+- разрешать воспроизводимую сборку без вызова AI generator в рабочий контур;
 - хранить ссылки только на approved assets/asset families;
 - отделять spatial truth от visual variant selection.
 
@@ -85,7 +85,7 @@ export interface HubVegetationVisualBinding {
 }
 ```
 
-Конкретный visual variant может выбираться seed-ом. Placement anchors и gameplay-relevant clear zones — нет.
+Конкретный visual variant может выбираться seed-ом. Placement anchors и игровой процесс-relevant clear zones — нет.
 
 ## 6. Prop binding
 
@@ -125,7 +125,7 @@ export interface HubMaterialBinding {
 }
 ```
 
-Generated/imported material names сначала нормализуются в semantic slots. Runtime не должен зависеть от названия `Material.001`, `ai_mat_4`, `rough_plaster_02` и т.п.
+Generated/imported material names сначала нормализуются в semantic slots. рабочий контур не должен зависеть от названия `Material.001`, `ai_mat_4`, `rough_plaster_02` и т.п.
 
 ## 9. Environment defaults
 
@@ -137,7 +137,7 @@ export interface HubEnvironmentDefaults {
 }
 ```
 
-Это preview/default state, а не сохранённый baked visual state. Runtime world state может менять параметры через существующий environment contract.
+Это preview/default state, а не сохранённый baked visual state. рабочий контур world state может менять параметры через существующий environment contract.
 
 ## 10. Generation policy
 
@@ -152,7 +152,7 @@ export interface HubGenerationPolicy {
 }
 ```
 
-AI generation в browser/runtime для canonical Hub запрещена.
+AI generation в browser/рабочий контур для canonical Hub запрещена.
 
 ## 11. Snapshot expectations
 
@@ -198,7 +198,7 @@ Seed разрешено применять для:
 - visual variant внутри approved family;
 - небольшого rotation/scale jitter vegetation в заранее разрешённом диапазоне;
 - decorative prop choice;
-- ambience placement вне gameplay-critical зон.
+- ambience placement вне игровой процесс-critical зон.
 
 Seed запрещено применять для:
 
@@ -307,13 +307,13 @@ Breaking changes recipe schema → major version.
 
 Изменение Geometry Lock → новый `geometryLockId` и обязательная повторная visual acceptance.
 
-Изменение seed без gameplay geometry change → visual revision, но canonical snapshots обновляются явно.
+Изменение seed без игровой процесс geometry change → visual revision, но canonical snapshots обновляются явно.
 
 ## 17. Отношение к Blender scene
 
 `.blend` может быть source-файлом отдельного GLB или Style Lab preview, но **не заменяет recipe/world definition**.
 
-Production должна иметь возможность собрать runtime scene без чтения Blender scene graph как gameplay truth.
+Production должна иметь возможность собрать рабочий контур scene без чтения Blender scene graph как игровой процесс truth.
 
 ## 18. Отношение к генеративным моделям
 
