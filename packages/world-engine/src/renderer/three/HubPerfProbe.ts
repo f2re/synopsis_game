@@ -215,7 +215,14 @@ export class HubPerfProbe {
       triangles: Math.max(0, counters.triangles - this.trianglesAtStart),
     });
     if (this.samples.length > WINDOW_SIZE) this.samples.shift();
-    if (this.samples.length % PUBLISH_EVERY === 0) this.publish(counters);
+
+    // Publish the first measured frame immediately so headless/runtime smoke
+    // can prove that the hook is alive even when requestAnimationFrame is
+    // throttled. Normal sessions then update only every 30 frames to avoid
+    // contaminating the performance sample with per-frame DOM work.
+    if (this.samples.length === 1 || this.samples.length % PUBLISH_EVERY === 0) {
+      this.publish(counters);
+    }
   }
 
   private findContext(): WebGLRenderingContext | WebGL2RenderingContext | undefined {
