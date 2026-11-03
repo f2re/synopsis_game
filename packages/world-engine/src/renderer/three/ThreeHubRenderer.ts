@@ -21,6 +21,7 @@ import {
   PointsMaterial,
   RGBAFormat,
   Scene,
+  SphereGeometry,
   SRGBColorSpace,
   UnsignedByteType,
   Vector3,
@@ -39,6 +40,7 @@ import { WORLD_PALETTE } from '../../theme/tokens';
 import {
   HUB_BUILDING_BY_ID,
   HUB_WORLD_DEFINITION_V1,
+  type HubBuildingDefinition,
   type HubPoint,
   type HubRect,
 } from '../../world/hub/HubWorldDefinition';
@@ -49,10 +51,14 @@ const INTERNAL_WIDTH = 320;
 const INTERNAL_HEIGHT = 180;
 const AVATAR_SPEED = 105;
 
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
 function makeGradientMap(): DataTexture {
   const data = new Uint8Array([
-    48, 48, 48, 255,
-    148, 148, 148, 255,
+    52, 52, 52, 255,
+    152, 152, 152, 255,
     255, 255, 255, 255,
   ]);
   const texture = new DataTexture(data, 3, 1, RGBAFormat, UnsignedByteType);
@@ -64,20 +70,128 @@ function makeGradientMap(): DataTexture {
 
 function colorForPhase(phase: DayPhase): number {
   switch (phase) {
-    case 'night': return WORLD_PALETTE.skyNight0;
-    case 'twilight': return WORLD_PALETTE.twilight0;
-    case 'dawn': return WORLD_PALETTE.twilight3;
-    case 'golden_hour': return WORLD_PALETTE.twilight4;
+    case 'night': return WORLD_PALETTE.skyNight2;
+    case 'twilight': return WORLD_PALETTE.skyNight4;
+    case 'dawn': return WORLD_PALETTE.twilight1;
+    case 'golden_hour': return WORLD_PALETTE.twilight3;
     case 'white_nights': return WORLD_PALETTE.skyNight4;
     case 'day':
     default:
-      return WORLD_PALETTE.skyDay1;
+      return WORLD_PALETTE.skyDay0;
   }
 }
 
 function deterministicUnit(index: number, salt: number): number {
   const value = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
   return value - Math.floor(value);
+}
+
+type RoofMode = 'flat' | 'pyramid' | 'dome';
+
+interface StructureStyle {
+  wall: number;
+  roof: number;
+  widthRatio: number;
+  depthPx: number;
+  roofPx: number;
+  roofMode: RoofMode;
+  windowCount: number;
+}
+
+function styleForStructure(id: string): StructureStyle {
+  switch (id) {
+    case 'operations':
+      return {
+        wall: WORLD_PALETTE.stoneConcrete3,
+        roof: WORLD_PALETTE.stoneConcrete1,
+        widthRatio: 0.76,
+        depthPx: 27,
+        roofPx: 19,
+        roofMode: 'pyramid',
+        windowCount: 4,
+      };
+    case 'radar':
+      return {
+        wall: WORLD_PALETTE.stoneConcrete4,
+        roof: WORLD_PALETTE.birchAndSnow3,
+        widthRatio: 0.34,
+        depthPx: 12,
+        roofPx: 26,
+        roofMode: 'dome',
+        windowCount: 1,
+      };
+    case 'cartography':
+      return {
+        wall: WORLD_PALETTE.birchAndSnow2,
+        roof: WORLD_PALETTE.ochreTerracotta0,
+        widthRatio: 0.67,
+        depthPx: 22,
+        roofPx: 17,
+        roofMode: 'pyramid',
+        windowCount: 4,
+      };
+    case 'lab':
+      return {
+        wall: WORLD_PALETTE.stoneConcrete3,
+        roof: WORLD_PALETTE.skyDay2,
+        widthRatio: 0.62,
+        depthPx: 21,
+        roofPx: 18,
+        roofMode: 'dome',
+        windowCount: 3,
+      };
+    case 'archive':
+      return {
+        wall: WORLD_PALETTE.ochreTerracotta3,
+        roof: WORLD_PALETTE.ochreTerracotta0,
+        widthRatio: 0.66,
+        depthPx: 20,
+        roofPx: 17,
+        roofMode: 'pyramid',
+        windowCount: 3,
+      };
+    case 'hall':
+      return {
+        wall: WORLD_PALETTE.stoneConcrete3,
+        roof: WORLD_PALETTE.twilight0,
+        widthRatio: 0.72,
+        depthPx: 22,
+        roofPx: 7,
+        roofMode: 'flat',
+        windowCount: 4,
+      };
+    case 'codepost':
+      return {
+        wall: WORLD_PALETTE.uiTeal4,
+        roof: WORLD_PALETTE.stoneConcrete1,
+        widthRatio: 0.72,
+        depthPx: 18,
+        roofPx: 6,
+        roofMode: 'flat',
+        windowCount: 4,
+      };
+    case 'meteo-site':
+      return {
+        wall: WORLD_PALETTE.birchAndSnow3,
+        roof: WORLD_PALETTE.stoneConcrete1,
+        widthRatio: 0.54,
+        depthPx: 13,
+        roofPx: 8,
+        roofMode: 'pyramid',
+        windowCount: 1,
+      };
+    case 'canteen':
+    default:
+      return {
+        wall: WORLD_PALETTE.ochreTerracotta2,
+        roof: WORLD_PALETTE.ochreTerracotta0,
+        widthRatio: 0.61,
+        depthPx: 14,
+        roofPx: 9,
+        roofMode: 'pyramid',
+        windowCount: 2,
+      };
+  }
 }
 
 export interface ThreeHubRendererOptions {
@@ -119,12 +233,13 @@ export class ThreeHubRenderer {
   private readonly avatarTarget = new Vector3();
   private avatarHasTarget = false;
   private avatarClock = 0;
-  private readonly ambientLight = new AmbientLight(0xffffff, 1.15);
-  private readonly sunLight = new DirectionalLight(0xffe7c0, 1.7);
+  private readonly ambientLight = new AmbientLight(0xffffff, 1.2);
+  private readonly sunLight = new DirectionalLight(0xffe7c0, 1.6);
   private weatherPoints?: Points<BufferGeometry, PointsMaterial>;
   private snowGround?: Mesh<BufferGeometry, MeshToonMaterial>;
   private weatherMode: WeatherMode = 'clear';
   private season: Season = 'summer';
+  private dayPhase: DayPhase = 'day';
   private resizeHandler: () => void;
 
   constructor(scene: Phaser.Scene, options: ThreeHubRendererOptions = {}) {
@@ -173,14 +288,27 @@ export class ThreeHubRenderer {
     });
 
     this.groundMaterial = this.toon(WORLD_PALETTE.foliagePine2);
-    this.pathMaterial = this.toon(WORLD_PALETTE.stoneConcrete2);
+    this.pathMaterial = this.toon(WORLD_PALETTE.stoneConcrete3);
     this.foliageMaterial = this.toon(WORLD_PALETTE.foliagePine3);
     this.waterMaterial = this.toon(WORLD_PALETTE.waterGulf2);
     this.snowMaterial = this.toon(WORLD_PALETTE.birchAndSnow3);
     this.windowMaterial = new MeshBasicMaterial({ color: WORLD_PALETTE.windowLight2 });
 
     this.scene.add(this.worldRoot, this.weatherGroup, this.debugGroup, this.ambientLight, this.sunLight);
-    this.sunLight.position.set(-240, 520, 280);
+    this.sunLight.position.set(-260, 520, 310);
+
+    this.projection.assertRoundTrip([
+      ...HUB_WORLD_DEFINITION_V1.buildings.map((building) => ({
+        id: `${building.id}.entrance`,
+        x: building.entrance.x,
+        y: building.entrance.y,
+      })),
+      ...HUB_WORLD_DEFINITION_V1.landmarks.map((landmark) => ({
+        id: landmark.id,
+        x: landmark.anchor.x,
+        y: landmark.anchor.y,
+      })),
+    ]);
 
     this.createVerticalSlice();
     if (options.debug || query.get('hubDebug') === '1') this.createDebugMarkers();
@@ -214,28 +342,32 @@ export class ThreeHubRenderer {
     return geometry;
   }
 
+  private pixelsPerWorldY(anchor: Vector3): number {
+    const baseY = this.projection.groundToLogical(anchor).y;
+    const oneUp = anchor.clone();
+    oneUp.y += 1;
+    const upY = this.projection.groundToLogical(oneUp).y;
+    return Math.max(0.05, baseY - upY);
+  }
+
   private createVerticalSlice(): void {
-    const sky = colorForPhase('day');
-    this.scene.background = new Color(sky);
-    this.scene.fog = new FogExp2(WORLD_PALETTE.skyDay2, 0.0009);
+    this.scene.background = new Color(colorForPhase('day'));
+    this.syncFog();
 
     const water = new Mesh(
-      this.logicalQuadGeometry({ x: 0, y: HUB_WORLD_DEFINITION_V1.waterlineY, width: 640, height: 40 }),
+      this.logicalQuadGeometry(HUB_WORLD_DEFINITION_V1.waterBand, -0.25),
       this.waterMaterial,
     );
-    water.position.y = -0.2;
     this.worldRoot.add(water);
+    this.createWaterGlints();
+    this.createDistantSkyline();
 
-    const ground = new Mesh(
-      this.logicalQuadGeometry({ x: 0, y: 205, width: 640, height: 155 }),
-      this.groundMaterial,
-    );
+    const groundY = HUB_WORLD_DEFINITION_V1.waterBand.y + HUB_WORLD_DEFINITION_V1.waterBand.height;
+    const groundRect = { x: 0, y: groundY, width: HUB_LOGICAL_WIDTH, height: HUB_LOGICAL_HEIGHT - groundY };
+    const ground = new Mesh(this.logicalQuadGeometry(groundRect), this.groundMaterial);
     this.worldRoot.add(ground);
 
-    const snowGround = new Mesh(
-      this.logicalQuadGeometry({ x: 0, y: 205, width: 640, height: 155 }, 1.1),
-      this.snowMaterial,
-    );
+    const snowGround = new Mesh(this.logicalQuadGeometry(groundRect, 1.1), this.snowMaterial);
     snowGround.visible = false;
     this.snowGround = snowGround;
     this.worldRoot.add(snowGround);
@@ -246,12 +378,56 @@ export class ThreeHubRenderer {
       }
     }
 
-    const codepost = HUB_BUILDING_BY_ID.get('codepost');
-    if (codepost) this.createBuildingBlock(codepost.id, codepost.bounds, codepost.entrance);
+    const operations = HUB_WORLD_DEFINITION_V1.landmarks.find((item) => item.kind === 'operations');
+    if (operations) {
+      this.createStructure('operations', operations.bounds, operations.anchor, false);
+    }
 
-    this.createTree({ x: 151, y: 260 });
-    this.createAvatar({ x: 322, y: 315 });
+    for (const building of HUB_WORLD_DEFINITION_V1.buildings) {
+      this.createBuilding(building);
+    }
+
+    this.createCentralGlobe();
+    this.createTrees();
+    this.createForegroundRailing();
+    this.createAvatar({ x: 320, y: 316 });
     this.createWeatherParticles();
+  }
+
+  private createWaterGlints(): void {
+    const material = new MeshBasicMaterial({
+      color: WORLD_PALETTE.waterGulf4,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false,
+    });
+    const strips = [
+      { x: 82, y: 112, width: 54, height: 2 },
+      { x: 224, y: 128, width: 72, height: 2 },
+      { x: 360, y: 105, width: 42, height: 2 },
+      { x: 468, y: 136, width: 66, height: 2 },
+    ];
+    for (const rect of strips) {
+      this.worldRoot.add(new Mesh(this.logicalQuadGeometry(rect, 0.15), material));
+    }
+  }
+
+  private createDistantSkyline(): void {
+    for (let index = 0; index < 13; index += 1) {
+      const centerX = 24 + index * 50 + deterministicUnit(index, 11) * 16;
+      const baseY = 120 + deterministicUnit(index, 12) * 6;
+      const widthPx = 22 + deterministicUnit(index, 13) * 24;
+      const heightPx = 8 + deterministicUnit(index, 14) * 18;
+      const base = this.projection.logicalToGround(centerX, baseY);
+      const left = this.projection.logicalToGround(centerX - widthPx / 2, baseY);
+      const right = this.projection.logicalToGround(centerX + widthPx / 2, baseY);
+      const width = left.distanceTo(right);
+      const height = heightPx / this.pixelsPerWorldY(base);
+      const material = this.toon(index % 4 === 0 ? WORLD_PALETTE.skyNight4 : WORLD_PALETTE.stoneConcrete2);
+      const block = new Mesh(new BoxGeometry(width, height, 7), material);
+      block.position.set(base.x, height / 2, base.z);
+      this.worldRoot.add(block);
+    }
   }
 
   private createPathSegment(from: HubPoint, to: HubPoint, width: number): void {
@@ -261,71 +437,165 @@ export class ThreeHubRenderer {
     const dx = end.x - start.x;
     const dz = end.z - start.z;
     const length = Math.hypot(dx, dz);
-    const mesh = new Mesh(new BoxGeometry(length, 1.4, Math.max(width, 5)), this.pathMaterial);
+    const mesh = new Mesh(new BoxGeometry(length, 1.3, Math.max(width, 5)), this.pathMaterial);
     mesh.position.set(center.x, 0.7, center.z);
     mesh.rotation.y = -Math.atan2(dz, dx);
     this.worldRoot.add(mesh);
   }
 
-  private createBuildingBlock(id: string, bounds: HubRect, entrance: HubPoint): void {
-    const left = this.projection.logicalToGround(bounds.x, entrance.y);
-    const right = this.projection.logicalToGround(bounds.x + bounds.width, entrance.y);
-    const front = this.projection.logicalToGround(entrance.x, entrance.y);
-    const back = this.projection.logicalToGround(entrance.x, entrance.y - 31);
-    const width = Math.max(50, left.distanceTo(right));
-    const depth = Math.max(30, front.distanceTo(back));
-    const center = front.clone().add(back).multiplyScalar(0.5);
-    const height = 92;
+  private createBuilding(building: HubBuildingDefinition): void {
+    this.createStructure(building.id, building.bounds, building.entrance, true);
+  }
 
-    const material = this.toon(WORLD_PALETTE.ochreTerracotta2);
-    this.buildingMaterials.set(id, material);
+  private createStructure(
+    id: string,
+    bounds: HubRect,
+    entrance: HubPoint,
+    interactive: boolean,
+  ): void {
+    const style = styleForStructure(id);
+    const centerX = bounds.x + bounds.width / 2;
+    const baseY = entrance.y;
+    const depthPx = Math.min(style.depthPx, Math.max(8, bounds.height * 0.28));
+    const centerLogicalY = baseY - depthPx / 2;
+    const center = this.projection.logicalToGround(centerX, centerLogicalY);
+    const front = this.projection.logicalToGround(centerX, baseY);
+    const back = this.projection.logicalToGround(centerX, baseY - depthPx);
+    const left = this.projection.logicalToGround(centerX - (bounds.width * style.widthRatio) / 2, centerLogicalY);
+    const right = this.projection.logicalToGround(centerX + (bounds.width * style.widthRatio) / 2, centerLogicalY);
+    const width = Math.max(18, left.distanceTo(right));
+    const depth = Math.max(12, front.distanceTo(back));
+    const bodyTopLogicalY = bounds.y + style.roofPx;
+    const bodyScreenPixels = Math.max(18, centerLogicalY - bodyTopLogicalY);
+    const height = bodyScreenPixels / this.pixelsPerWorldY(center);
+
+    const wallMaterial = this.toon(style.wall);
+    const roofMaterial = this.toon(style.roof);
+    if (interactive) this.buildingMaterials.set(id, wallMaterial);
 
     const root = new Group();
-    root.userData.buildingId = id;
-    root.position.set(center.x, 0, center.z);
+    if (interactive) root.userData.buildingId = id;
+    root.position.copy(center);
 
-    const body = new Mesh(new BoxGeometry(width, height, depth), material);
+    const body = new Mesh(new BoxGeometry(width, height, depth), wallMaterial);
     body.position.y = height / 2;
-    body.userData.buildingId = id;
+    if (interactive) body.userData.buildingId = id;
     root.add(body);
 
-    const roof = new Mesh(
-      new ConeGeometry(Math.max(width, depth) * 0.63, 34, 4),
-      this.toon(WORLD_PALETTE.ochreTerracotta0),
-    );
-    roof.position.y = height + 17;
-    roof.rotation.y = Math.PI / 4;
-    roof.userData.buildingId = id;
-    root.add(roof);
+    const roofHeight = Math.max(4, style.roofPx / this.pixelsPerWorldY(center));
+    if (style.roofMode === 'flat') {
+      const roof = new Mesh(new BoxGeometry(width * 1.04, Math.max(3, roofHeight * 0.28), depth * 1.05), roofMaterial);
+      roof.position.y = height + Math.max(1.5, roofHeight * 0.14);
+      if (interactive) roof.userData.buildingId = id;
+      root.add(roof);
+    } else if (style.roofMode === 'dome') {
+      const radius = Math.max(9, Math.min(width * 0.32, depth * 0.62));
+      const dome = new Mesh(new SphereGeometry(radius, 8, 5), roofMaterial);
+      dome.scale.y = clamp(roofHeight / (radius * 1.7), 0.55, 1.15);
+      dome.position.y = height + radius * dome.scale.y * 0.72;
+      if (interactive) dome.userData.buildingId = id;
+      root.add(dome);
+    } else {
+      const roof = new Mesh(new ConeGeometry(Math.max(width, depth) * 0.48, roofHeight, 4), roofMaterial);
+      roof.position.y = height + roofHeight / 2;
+      roof.rotation.y = Math.PI / 4;
+      if (interactive) roof.userData.buildingId = id;
+      root.add(roof);
+    }
 
     const frontZ = front.z - center.z;
-    for (const offset of [-0.23, 0.23]) {
-      const windowMesh = new Mesh(new BoxGeometry(18, 20, 2.5), this.windowMaterial);
-      windowMesh.position.set(width * offset, 48, frontZ);
-      windowMesh.userData.buildingId = id;
+    const windowCount = Math.max(1, style.windowCount);
+    const windowWidth = clamp(width / (windowCount * 3.0), 5, 14);
+    const windowHeight = clamp(height * 0.18, 5, 16);
+    for (let index = 0; index < windowCount; index += 1) {
+      const t = windowCount === 1 ? 0.5 : index / (windowCount - 1);
+      const x = -width * 0.34 + t * width * 0.68;
+      const windowMesh = new Mesh(new BoxGeometry(windowWidth, windowHeight, 2.1), this.windowMaterial);
+      windowMesh.position.set(x, height * 0.52, frontZ);
+      if (interactive) windowMesh.userData.buildingId = id;
       root.add(windowMesh);
     }
 
     this.worldRoot.add(root);
-    this.buildingRoots.push(root);
+    if (interactive) this.buildingRoots.push(root);
+  }
+
+  private createCentralGlobe(): void {
+    const landmark = HUB_WORLD_DEFINITION_V1.landmarks.find((item) => item.kind === 'central-globe');
+    if (!landmark) return;
+
+    const base = this.projection.logicalToGround(landmark.anchor.x, landmark.anchor.y);
+    const root = new Group();
+    root.position.copy(base);
+
+    const pedestal = new Mesh(
+      new CylinderGeometry(10, 14, 15, 8),
+      this.toon(WORLD_PALETTE.stoneConcrete2),
+    );
+    pedestal.position.y = 7.5;
+    root.add(pedestal);
+
+    const globe = new Mesh(
+      new SphereGeometry(17, 8, 6),
+      this.toon(WORLD_PALETTE.waterGulf4),
+    );
+    globe.position.y = 32;
+    globe.rotation.y = 0.4;
+    root.add(globe);
+    this.worldRoot.add(root);
+  }
+
+  private createTrees(): void {
+    for (const [id, anchor] of Object.entries(HUB_WORLD_DEFINITION_V1.environmentAnchors)) {
+      if (!id.startsWith('tree.')) continue;
+      this.createTree(anchor);
+    }
   }
 
   private createTree(anchor: HubPoint): void {
     const base = this.projection.logicalToGround(anchor.x, anchor.y);
+    const scale = clamp(0.68 + ((anchor.y - 170) / 190) * 0.52, 0.62, 1.18);
     const root = new Group();
     root.position.copy(base);
 
     const trunk = new Mesh(
-      new CylinderGeometry(4.5, 6, 28, 6),
+      new CylinderGeometry(3.7 * scale, 5.2 * scale, 24 * scale, 6),
       this.toon(WORLD_PALETTE.ochreTerracotta0),
     );
-    trunk.position.y = 14;
+    trunk.position.y = 12 * scale;
     root.add(trunk);
 
-    const crown = new Mesh(new ConeGeometry(22, 46, 7), this.foliageMaterial);
-    crown.position.y = 49;
-    root.add(crown);
+    const lower = new Mesh(new ConeGeometry(18 * scale, 34 * scale, 7), this.foliageMaterial);
+    lower.position.y = 33 * scale;
+    const upper = new Mesh(new ConeGeometry(13 * scale, 29 * scale, 7), this.foliageMaterial);
+    upper.position.y = 50 * scale;
+    root.add(lower, upper);
     this.worldRoot.add(root);
+  }
+
+  private createForegroundRailing(): void {
+    const start = this.projection.logicalToGround(18, 334);
+    const end = this.projection.logicalToGround(622, 334);
+    const center = start.clone().add(end).multiplyScalar(0.5);
+    const length = start.distanceTo(end);
+    const material = this.toon(WORLD_PALETTE.stoneConcrete1);
+
+    const topRail = new Mesh(new BoxGeometry(length, 3.2, 4.2), material);
+    topRail.position.set(center.x, 24, center.z);
+    this.worldRoot.add(topRail);
+
+    const lowerRail = new Mesh(new BoxGeometry(length, 2.4, 3.6), material);
+    lowerRail.position.set(center.x, 11, center.z);
+    this.worldRoot.add(lowerRail);
+
+    for (let index = 0; index <= 8; index += 1) {
+      const t = index / 8;
+      const x = start.x + (end.x - start.x) * t;
+      const z = start.z + (end.z - start.z) * t;
+      const post = new Mesh(new BoxGeometry(4, 28, 4), material);
+      post.position.set(x, 14, z);
+      this.worldRoot.add(post);
+    }
   }
 
   private createAvatar(anchor: HubPoint): void {
@@ -336,39 +606,41 @@ export class ThreeHubRenderer {
     const dark = this.toon(WORLD_PALETTE.inkTelecode0);
     const skin = this.toon(WORLD_PALETTE.ochreTerracotta3);
 
-    const body = new Mesh(new BoxGeometry(13, 21, 8), coat);
-    body.position.y = 24;
-    const head = new Mesh(new BoxGeometry(10, 10, 10), skin);
-    head.position.y = 40;
-    const leftLeg = new Mesh(new BoxGeometry(4, 13, 5), dark);
-    leftLeg.position.set(-3.5, 7, 0);
-    const rightLeg = new Mesh(new BoxGeometry(4, 13, 5), dark);
-    rightLeg.position.set(3.5, 7, 0);
+    const body = new Mesh(new BoxGeometry(11, 18, 7), coat);
+    body.position.y = 21;
+    const head = new Mesh(new BoxGeometry(9, 9, 9), skin);
+    head.position.y = 34;
+    const leftLeg = new Mesh(new BoxGeometry(3.5, 11, 4.5), dark);
+    leftLeg.position.set(-3, 6, 0);
+    const rightLeg = new Mesh(new BoxGeometry(3.5, 11, 4.5), dark);
+    rightLeg.position.set(3, 6, 0);
 
     this.avatarRoot.add(body, head, leftLeg, rightLeg);
     this.worldRoot.add(this.avatarRoot);
   }
 
   private createWeatherParticles(): void {
-    const count = 220;
+    const count = 170;
     const positions = new Float32Array(count * 3);
-    for (let i = 0; i < count; i += 1) {
-      const logicalX = deterministicUnit(i, 1) * HUB_LOGICAL_WIDTH;
-      const logicalY = 180 + deterministicUnit(i, 2) * 180;
+    for (let index = 0; index < count; index += 1) {
+      const logicalX = deterministicUnit(index, 1) * HUB_LOGICAL_WIDTH;
+      const logicalY = 72 + deterministicUnit(index, 2) * 288;
       const ground = this.projection.logicalToGround(logicalX, logicalY);
-      positions[i * 3] = ground.x;
-      positions[i * 3 + 1] = 35 + deterministicUnit(i, 3) * 300;
-      positions[i * 3 + 2] = ground.z;
+      positions[index * 3] = ground.x;
+      positions[index * 3 + 1] = 30 + deterministicUnit(index, 3) * 260;
+      positions[index * 3 + 2] = ground.z;
     }
 
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new BufferAttribute(positions, 3));
     const material = new PointsMaterial({
       color: WORLD_PALETTE.skyDay2,
-      size: 2.0,
+      size: 1.7,
       sizeAttenuation: false,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.8,
+      depthWrite: false,
+      depthTest: false,
     });
     const points = new Points(geometry, material);
     points.visible = false;
@@ -387,38 +659,57 @@ export class ThreeHubRenderer {
   }
 
   setDayPhase(phase: DayPhase): void {
+    this.dayPhase = phase;
     this.scene.background = new Color(colorForPhase(phase));
     this.sunLight.color.setHex(0xffe7c0);
 
     switch (phase) {
       case 'night':
-        this.ambientLight.intensity = 0.48;
-        this.sunLight.intensity = 0.24;
+        this.ambientLight.intensity = 0.74;
+        this.sunLight.intensity = 0.36;
         this.windowMaterial.color.setHex(WORLD_PALETTE.windowLight3);
         break;
       case 'twilight':
       case 'white_nights':
-        this.ambientLight.intensity = 0.72;
-        this.sunLight.intensity = 0.65;
+        this.ambientLight.intensity = 0.86;
+        this.sunLight.intensity = 0.72;
         this.windowMaterial.color.setHex(WORLD_PALETTE.windowLight2);
         break;
       case 'golden_hour':
-        this.ambientLight.intensity = 1.0;
-        this.sunLight.intensity = 1.35;
+        this.ambientLight.intensity = 1.02;
+        this.sunLight.intensity = 1.28;
         this.sunLight.color.setHex(WORLD_PALETTE.windowLight3);
+        this.windowMaterial.color.setHex(WORLD_PALETTE.windowLight2);
         break;
       default:
-        this.ambientLight.intensity = 1.15;
-        this.sunLight.intensity = 1.7;
-        this.sunLight.color.setHex(0xffe7c0);
+        this.ambientLight.intensity = 1.2;
+        this.sunLight.intensity = 1.6;
         this.windowMaterial.color.setHex(WORLD_PALETTE.windowLight1);
         break;
     }
+    this.syncFog();
   }
 
   setSeason(season: Season): void {
     this.season = season;
-    switch (season) {
+    this.applySeasonMaterials();
+  }
+
+  setWeather(mode: WeatherMode): void {
+    this.weatherMode = mode;
+    const points = this.weatherPoints;
+    if (points) {
+      points.visible = mode === 'rain' || mode === 'snow';
+      points.material.color.setHex(mode === 'snow' ? WORLD_PALETTE.birchAndSnow3 : WORLD_PALETTE.skyDay2);
+      points.material.size = mode === 'snow' ? 2.4 : 1.15;
+      points.material.opacity = mode === 'snow' ? 0.9 : 0.64;
+    }
+    this.applySeasonMaterials();
+    this.syncFog();
+  }
+
+  private applySeasonMaterials(): void {
+    switch (this.season) {
       case 'spring':
         this.foliageMaterial.color.setHex(WORLD_PALETTE.foliagePine4);
         this.groundMaterial.color.setHex(WORLD_PALETTE.foliagePine2);
@@ -437,26 +728,27 @@ export class ThreeHubRenderer {
         this.groundMaterial.color.setHex(WORLD_PALETTE.foliagePine2);
         break;
     }
+    if (this.weatherMode === 'rain') {
+      this.groundMaterial.color.setHex(WORLD_PALETTE.foliagePine1);
+    }
     this.syncSnowVisibility();
   }
 
-  setWeather(mode: WeatherMode): void {
-    this.weatherMode = mode;
-    const points = this.weatherPoints;
-    if (points) {
-      points.visible = mode === 'rain' || mode === 'snow';
-      points.material.color.setHex(mode === 'snow' ? WORLD_PALETTE.birchAndSnow3 : WORLD_PALETTE.skyDay2);
-      points.material.size = mode === 'snow' ? 2.8 : 1.4;
-      points.material.opacity = mode === 'snow' ? 0.92 : 0.72;
+  private syncFog(): void {
+    if (this.weatherMode === 'fog') {
+      const color = this.dayPhase === 'night' ? WORLD_PALETTE.skyNight4 : WORLD_PALETTE.skyDay2;
+      this.scene.fog = new FogExp2(color, 0.00255);
+      return;
     }
-
-    if (mode === 'fog') this.scene.fog = new FogExp2(WORLD_PALETTE.skyDay2, 0.0042);
-    else if (mode === 'rain') this.scene.fog = new FogExp2(WORLD_PALETTE.skyNight4, 0.0019);
-    else this.scene.fog = new FogExp2(WORLD_PALETTE.skyDay2, 0.0009);
-
-    if (mode === 'rain') this.groundMaterial.color.setHex(WORLD_PALETTE.foliagePine1);
-    else this.setSeason(this.season);
-    this.syncSnowVisibility();
+    if (this.weatherMode === 'rain') {
+      this.scene.fog = new FogExp2(WORLD_PALETTE.skyNight4, 0.00135);
+      return;
+    }
+    if (this.dayPhase === 'night') {
+      this.scene.fog = new FogExp2(WORLD_PALETTE.skyNight3, 0.00095);
+      return;
+    }
+    this.scene.fog = new FogExp2(WORLD_PALETTE.skyDay2, 0.00055);
   }
 
   private syncSnowVisibility(): void {
@@ -479,7 +771,7 @@ export class ThreeHubRenderer {
           break;
         case 'available':
         default:
-          material.color.setHex(WORLD_PALETTE.ochreTerracotta2);
+          material.color.setHex(styleForStructure(id).wall);
           break;
       }
     }
@@ -523,7 +815,7 @@ export class ThreeHubRenderer {
       }
     }
 
-    this.avatarRoot.position.y = this.avatarHasTarget ? Math.abs(Math.sin(this.avatarClock * 18)) * 1.6 : 0;
+    this.avatarRoot.position.y = this.avatarHasTarget ? Math.abs(Math.sin(this.avatarClock * 18)) * 1.4 : 0;
     this.updateWeather(deltaSec);
     this.pipeline.render(this.renderer, this.scene, this.projection.camera, [this.weatherGroup, this.debugGroup]);
   }
@@ -532,13 +824,13 @@ export class ThreeHubRenderer {
     const points = this.weatherPoints;
     if (!points?.visible) return;
     const position = points.geometry.getAttribute('position') as BufferAttribute;
-    const fallSpeed = this.weatherMode === 'snow' ? 36 : 210;
+    const fallSpeed = this.weatherMode === 'snow' ? 34 : 190;
     for (let index = 0; index < position.count; index += 1) {
       let y = position.getY(index) - fallSpeed * deltaSec;
-      if (y < 2) y = 280 + deterministicUnit(index, 8) * 90;
+      if (y < 2) y = 270 + deterministicUnit(index, 8) * 90;
       position.setY(index, y);
       if (this.weatherMode === 'snow') {
-        position.setX(index, position.getX(index) + Math.sin(this.avatarClock + index) * deltaSec * 2.5);
+        position.setX(index, position.getX(index) + Math.sin(this.avatarClock + index) * deltaSec * 2.2);
       }
     }
     position.needsUpdate = true;
