@@ -9,7 +9,7 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --experimental-strip-types --test src/world/hub/HubNavigation.test.ts"
+    "test": "node --experimental-strip-types --test src/world/hub/*.test.ts"
   },
   "dependencies": {
     "@types/three": "0.187.0",
