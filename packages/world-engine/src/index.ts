@@ -71,6 +71,7 @@ export { HubNpcLayer } from './scenes/hub/HubNpcLayer';
 export { HubWeatherOverlay, type WeatherMode } from './scenes/hub/HubWeatherOverlay';
 export { ThreeHubRenderer, type ThreeHubRendererOptions } from './renderer/three/ThreeHubRenderer';
 export { HubProjection, type HubProjectionOptions } from './renderer/three/HubProjection';
+export { hubGroundRectObstacle, createHubObstacleGuard, type HubGroundObstacle } from './world/hub/HubCollision';
 export { planHubRoute, type HubRouteOptions } from './world/hub/HubNavigation';
 export {
   HUB_BUILDING_BY_ID,

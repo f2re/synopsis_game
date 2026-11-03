@@ -15,6 +15,7 @@ Scope: `packages/world-engine/src/world/hub/`.
 
 - Own accepted 640×360 route graph, semantic entrances, walkability authority, and navigation tests.
 - Current vertical slice (`HubNavigation.ts`) consumes accepted `paths` and computes shortest waypoints with deterministic segment intersections and limited start/end connectors.
+- New `HubCollision.ts` validates explicit ground obstacle polygons, deletes blocked route segments, and supports avatar clearance; the accepted water band is active in Three.js routing. **There are no approved ground footprints for the procedural buildings yet.**
 - Must add *separately approved* ground `footprints`, walkable polygons, agent radius/clearance, permanent and dynamic obstacles, explicit pedestrian entrances.
 - Do **not** use `HubBuildingDefinition.bounds` as collision footprints. Those are 2D projected silhouettes.
 - Validate that every entrance can reach the connected path network and that no connector crosses approved blocked polygons.

@@ -44,6 +44,7 @@ import {
   type HubPoint,
   type HubRect,
 } from '../../world/hub/HubWorldDefinition';
+import { hubGroundRectObstacle } from '../../world/hub/HubCollision';
 import { planHubRoute } from '../../world/hub/HubNavigation';
 import { HubProjection } from './HubProjection';
 import { PixelPostPipeline } from './post/PixelPostPipeline';
@@ -826,6 +827,12 @@ export class ThreeHubRenderer {
       HUB_WORLD_DEFINITION_V1.paths,
       { x: current.x, y: current.y },
       { x: logicalX, y: logicalY },
+      {
+        // This is an accepted ground/water zone, not a projected building
+        // silhouette. Building footprints remain an independent art/QA gate.
+        obstacles: [hubGroundRectObstacle('hub-water', HUB_WORLD_DEFINITION_V1.waterBand)],
+        clearance: 2,
+      },
     );
     if (!route) {
       this.avatarWaypoints = [];
