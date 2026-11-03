@@ -21,12 +21,15 @@ export interface HubStageBuildingGeometry {
  *
  * Геометрия зданий приходит через constructor: legacy Phaser использует
  * `HUB_BUILDINGS`, а 2.5D renderer передаёт принятую 640×360 Geometry Lock.
- * Благодаря этому progression остаётся отдельным gameplay/UI-слоем и не
- * перекрашивает фасады или материалы мира.
+ * В 2.5D overlay рисует только semantic pins: наземный маршрут должен
+ * принадлежать world-renderer-у, иначе экранный пунктир проходит сквозь 3D
+ * фасады. Благодаря этому progression остаётся отдельным gameplay/UI-слоем и
+ * не перекрашивает материалы мира.
  */
 export class HubStageLayer {
   private readonly scene: Phaser.Scene;
   private readonly buildings: readonly HubStageBuildingGeometry[];
+  private readonly routeEnabled: boolean;
   private readonly routeGraphic: Phaser.GameObjects.Graphics;
   private readonly pinGraphic: Phaser.GameObjects.Graphics;
   private readonly labels = new Map<string, Phaser.GameObjects.Text>();
@@ -39,6 +42,7 @@ export class HubStageLayer {
   ) {
     this.scene = scene;
     this.buildings = buildings;
+    this.routeEnabled = buildings === HUB_BUILDINGS;
     this.routeGraphic = scene.add.graphics();
     this.pinGraphic = scene.add.graphics();
 
@@ -81,6 +85,8 @@ export class HubStageLayer {
 
   private renderRoute(): void {
     this.routeGraphic.clear();
+    if (!this.routeEnabled) return;
+
     const ordered = [...HUB_STAGES].sort((a, b) => a.order - b.order);
     for (let index = 1; index < ordered.length; index += 1) {
       const from = this.entranceOf(ordered[index - 1].buildingId);
