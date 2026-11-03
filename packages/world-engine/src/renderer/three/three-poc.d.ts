@@ -38,6 +38,7 @@ declare module 'three' {
   export class Raycaster extends AnyThreeClass {}
   export class Scene extends AnyThreeClass {}
   export class ShaderMaterial extends AnyThreeClass {}
+  export class SphereGeometry extends AnyThreeClass {}
   export class Vector2 extends AnyThreeClass {}
   export class Vector3 extends AnyThreeClass {}
   export class WebGLRenderer extends AnyThreeClass {}
