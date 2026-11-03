@@ -25,6 +25,7 @@ declare module 'three' {
   export class DirectionalLight extends AnyThreeClass {}
   export class FogExp2 extends AnyThreeClass {}
   export class Group extends AnyThreeClass {}
+  export class InstancedMesh<G = any, M = any> extends AnyThreeClass {}
   export class Mesh<G = any, M = any> extends AnyThreeClass {}
   export class MeshBasicMaterial extends AnyThreeClass {}
   export class MeshNormalMaterial extends AnyThreeClass {}
