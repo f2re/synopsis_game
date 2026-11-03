@@ -74,7 +74,8 @@ Phaser scene lifecycle/input/WorldBridge
             └── 320×180 Three.js canvas
                     │
                     ├── fixed orthographic projection
-                    ├── procedural ground/path/building/tree/avatar
+                    ├── accepted 640×360 Geometry Lock v1
+                    ├── procedural campus masses/paths/vegetation/avatar
                     ├── toon ramp lighting
                     └── PixelPostPipeline
                            ├── palette quantization
@@ -88,22 +89,25 @@ A shared Phaser/Three WebGL context is deliberately **not** part of the first sp
 
 ## Geometry Lock
 
-`HubProjection.logicalToGround()` ray-intersects canonical logical coordinates with the `y=0` ground plane. Any ground anchor produced by this mapping can be projected back to the same 640×360 logical coordinate.
+`HUB_WORLD_DEFINITION_V1` now represents the accepted `hub.geometry.lock_v1` contract from BATCH-12 directly:
 
-`HubProjection` runs a fail-fast round-trip check for the logical plane corners and center when the projection is constructed. A later camera/projection change therefore cannot silently break the screen↔ground Geometry Lock mapping.
+- logical canvas `640×360`;
+- horizon `y=92`;
+- water band `y=92..147`;
+- fixed safe zone `x=48..592, y=42..315`;
+- canonical screen regions for Radar, Maps & Analysis, 26063 main operations building, Aerology, Archive, Tournament Hall, Code Post and central globe/plaza.
 
-`HUB_WORLD_DEFINITION_V1` is currently marked `migration-baseline`: positions are scaled from the existing 480×270 runtime while the accepted 640×360 Geometry Lock is converted into authoritative runtime data.
-
-Do not treat `migration-baseline` as final art-direction geometry.
+`HubProjection.logicalToGround()` ray-intersects canonical logical coordinates with the `y=0` ground plane. `assertRoundTrip()` fails fast if the camera/projection stops mapping semantic anchors back to their exact logical coordinates.
 
 ## POC acceptance
 
-Do not expand to full-campus modelling until all are true:
+Do not expand to full-campus authored 3D assets until all are true:
 
 1. CI/typecheck/build are green;
-2. ground anchors preserve Geometry Lock;
-3. Art Direction accepts the style with pass-by-pass screenshots;
-4. Web Performance accepts the vertical-slice budget;
-5. legacy renderer remains functional.
+2. Geometry Lock round-trip is enforced;
+3. Art Direction accepts the style using the visual-smoke matrix;
+4. Web Performance accepts the vertical-slice budget on target hardware;
+5. legacy renderer remains functional;
+6. temporary `three-poc.d.ts` is replaced by maintained typings before production default.
 
 See `agents/tasks/HUB_2_5D_POC.md` and `docs/roadmap/HUB_2_5D_MIGRATION.md`.
