@@ -97,7 +97,7 @@ jobs:
           capture three-winter-snow "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=winter&hubWeather=snow"
           capture three-day-fog "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=autumn&hubWeather=fog"
           capture three-palette-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelPalette=0"
-          capture three-dither-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=0"
+          capture three-dither-on "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1"
           capture three-edges-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelEdges=0"
 
           sha256sum hub-visual-smoke/*.png | tee hub-visual-smoke/SHA256SUMS.txt
@@ -117,7 +117,7 @@ jobs:
               'three-winter-snow',
               'three-day-fog',
               'three-palette-off',
-              'three-dither-off',
+              'three-dither-on',
               'three-edges-off',
           ]
           hashes = {}
@@ -134,7 +134,7 @@ jobs:
               ('three-day-clear', 'three-winter-snow'),
               ('three-day-clear', 'three-day-fog'),
               ('three-day-clear', 'three-palette-off'),
-              ('three-day-clear', 'three-dither-off'),
+              ('three-day-clear', 'three-dither-on'),
               ('three-day-clear', 'three-edges-off'),
           ]
           identical = [f'{a} == {b}' for a, b in comparisons if hashes[a] == hashes[b]]
