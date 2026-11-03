@@ -5,7 +5,7 @@ on:
     branches:
       - feat/hub-three2d-poc
     paths:
-      - 'packages/world-engine/package.json'
+      - 'tools/migrate-three-types.trigger'
 
 permissions:
   contents: write
@@ -23,10 +23,8 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: '10.34.8'
-      - name: Regenerate lockfiles
-        run: |
-          pnpm install --lockfile-only --no-frozen-lockfile
-          pnpm -C apps/web install --ignore-workspace --lockfile-only --no-frozen-lockfile
+      - name: Regenerate isolated web lockfile
+        run: pnpm -C apps/web install --ignore-workspace --lockfile-only --no-frozen-lockfile
       - name: Remove temporary Three.js declarations
         run: |
           python - <<'PY'
@@ -47,6 +45,7 @@ jobs:
       - name: Verify source package and web consumer
         run: |
           pnpm -C apps/web install --ignore-workspace --frozen-lockfile
+          pnpm -C packages/world-engine install --ignore-workspace --frozen-lockfile=false
           pnpm -C packages/world-engine typecheck
           pnpm -C apps/web typecheck
           pnpm -C apps/web build
@@ -54,6 +53,6 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add pnpm-lock.yaml apps/web/pnpm-lock.yaml packages/world-engine/src/renderer/three
+          git add apps/web/pnpm-lock.yaml packages/world-engine/src/renderer/three
           git commit -m 'chore(world): replace Three.js POC shim with maintained typings'
           git push origin HEAD:feat/hub-three2d-poc
