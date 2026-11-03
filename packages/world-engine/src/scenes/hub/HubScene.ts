@@ -7,6 +7,7 @@ import {
   WORLD_LOGICAL_WIDTH,
 } from '../../runtime/fitLogicalViewport';
 import { isThreeHubRenderer, resolveHubRendererMode, type HubRendererMode } from '../../runtime/hubRendererMode';
+import { HubPerfProbe } from '../../renderer/three/HubPerfProbe';
 import { ThreeHubRenderer } from '../../renderer/three/ThreeHubRenderer';
 import { HubTimeOfDay, type DayPhase } from './HubTimeOfDay';
 import { HubEnvironmentLayer } from './HubEnvironmentLayer';
@@ -62,6 +63,7 @@ export class HubScene extends Phaser.Scene {
 
   // New world-definition-first renderer spike.
   private threeRenderer?: ThreeHubRenderer;
+  private perfProbe?: HubPerfProbe;
 
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
@@ -116,6 +118,12 @@ export class HubScene extends Phaser.Scene {
     bindLogicalViewport(this, HUB_LOGICAL_WIDTH, HUB_LOGICAL_HEIGHT, {
       backgroundColor: 'rgba(0,0,0,0)',
     });
+
+    const query = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    if (query.get('hubPerf') === '1') {
+      // Instrument WebGL prototypes before Three.js creates its context.
+      this.perfProbe = new HubPerfProbe();
+    }
 
     this.threeRenderer = new ThreeHubRenderer(this);
     this.stageLayer = new HubStageLayer(this, HUB_WORLD_DEFINITION_V1.buildings);
@@ -327,7 +335,12 @@ export class HubScene extends Phaser.Scene {
     this.seasonLayer?.update(deltaMs);
     this.stageLayer?.update(deltaMs);
     this.weatherOverlay?.update(deltaMs);
-    this.threeRenderer?.update(deltaMs);
+
+    if (this.threeRenderer) {
+      this.perfProbe?.beginFrame(deltaMs);
+      this.threeRenderer.update(deltaMs);
+      this.perfProbe?.endFrame();
+    }
   }
 
   private cleanup(): void {
@@ -345,5 +358,6 @@ export class HubScene extends Phaser.Scene {
     this.stageLayer?.destroy();
     this.weatherOverlay?.destroy();
     this.threeRenderer?.destroy();
+    this.perfProbe?.destroy();
   }
 }
