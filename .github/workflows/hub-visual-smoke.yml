@@ -1,0 +1,181 @@
+name: Hub 2.5D visual smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'packages/world-engine/**'
+      - 'apps/web/src/**'
+      - 'apps/web/vite.config.ts'
+      - 'apps/web/package.json'
+      - 'apps/web/pnpm-lock.yaml'
+      - '.github/workflows/hub-visual-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Получить исходный код
+        uses: actions/checkout@v4
+
+      - name: Подготовить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+
+      - name: Подготовить pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+
+      - name: Установить зависимости
+        run: pnpm -C apps/web install --ignore-workspace --frozen-lockfile
+
+      - name: Проверить типы и собрать web-клиент
+        run: |
+          pnpm -C apps/web typecheck
+          pnpm -C apps/web build
+
+      - name: Запустить production preview
+        run: |
+          nohup pnpm -C apps/web exec vite preview --host 127.0.0.1 --port 4173 > /tmp/hub-vite-preview.log 2>&1 &
+          echo $! > /tmp/hub-vite-preview.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/hub-vite-preview.log
+          exit 1
+
+      - name: Найти headless Chrome
+        id: chrome
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo 'Chrome/Chromium is not available on the runner.' >&2
+            exit 1
+          fi
+          echo "binary=$CHROME" >> "$GITHUB_OUTPUT"
+          "$CHROME" --version
+
+      - name: Снять матрицу состояний Hub
+        env:
+          CHROME: ${{ steps.chrome.outputs.binary }}
+        run: |
+          mkdir -p hub-visual-smoke
+
+          capture() {
+            name="$1"
+            url="$2"
+            echo "Capturing $name -> $url"
+            "$CHROME" \
+              --headless=new \
+              --no-sandbox \
+              --disable-dev-shm-usage \
+              --enable-webgl \
+              --use-angle=swiftshader \
+              --window-size=1280,720 \
+              --hide-scrollbars \
+              --virtual-time-budget=3500 \
+              --screenshot="hub-visual-smoke/${name}.png" \
+              "$url" \
+              >"hub-visual-smoke/${name}.chrome.log" 2>&1
+            test -s "hub-visual-smoke/${name}.png"
+          }
+
+          base='http://127.0.0.1:4173/'
+          capture legacy-day-clear "${base}?hubRenderer=legacy2d&hubPhase=day&hubSeason=summer&hubWeather=clear"
+          capture three-day-clear "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear"
+          capture three-night-clear "${base}?hubRenderer=three2d&hubPhase=night&hubSeason=summer&hubWeather=clear"
+          capture three-day-rain "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=rain"
+          capture three-winter-snow "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=winter&hubWeather=snow"
+          capture three-day-fog "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=autumn&hubWeather=fog"
+          capture three-palette-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelPalette=0"
+          capture three-dither-on "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1"
+          capture three-edges-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelEdges=0"
+          capture three-perf-probe "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubPerf=1"
+
+          sha256sum hub-visual-smoke/*.png | tee hub-visual-smoke/SHA256SUMS.txt
+
+      - name: Проверить performance probe в реальном браузерном runtime
+        env:
+          CHROME: ${{ steps.chrome.outputs.binary }}
+        run: |
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --disable-dev-shm-usage \
+            --enable-webgl \
+            --use-angle=swiftshader \
+            --window-size=1280,720 \
+            --virtual-time-budget=3500 \
+            --dump-dom \
+            'http://127.0.0.1:4173/?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubPerf=1' \
+            > hub-visual-smoke/three-perf-probe.dom.html \
+            2> hub-visual-smoke/three-perf-probe.dom.log
+
+          grep -q 'data-hub-perf="true"' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'render p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'draws  p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'GL buffers/textures/programs:' hub-visual-smoke/three-perf-probe.dom.html
+
+      - name: Проверить, что диагностические состояния дают разные кадры
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+
+          root = Path('hub-visual-smoke')
+          required = [
+              'legacy-day-clear',
+              'three-day-clear',
+              'three-night-clear',
+              'three-day-rain',
+              'three-winter-snow',
+              'three-day-fog',
+              'three-palette-off',
+              'three-dither-on',
+              'three-edges-off',
+              'three-perf-probe',
+          ]
+          hashes = {}
+          for name in required:
+              path = root / f'{name}.png'
+              if not path.exists() or path.stat().st_size < 4096:
+                  raise SystemExit(f'Missing or suspiciously small screenshot: {path}')
+              hashes[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+
+          comparisons = [
+              ('legacy-day-clear', 'three-day-clear'),
+              ('three-day-clear', 'three-night-clear'),
+              ('three-day-clear', 'three-day-rain'),
+              ('three-day-clear', 'three-winter-snow'),
+              ('three-day-clear', 'three-day-fog'),
+              ('three-day-clear', 'three-palette-off'),
+              ('three-day-clear', 'three-dither-on'),
+              ('three-day-clear', 'three-edges-off'),
+              ('three-day-clear', 'three-perf-probe'),
+          ]
+          identical = [f'{a} == {b}' for a, b in comparisons if hashes[a] == hashes[b]]
+          if identical:
+              raise SystemExit('Visual smoke states produced identical PNGs: ' + ', '.join(identical))
+          print('Visual state hashes differ as expected.')
+          PY
+
+      - name: Сохранить визуальные доказательства
+        uses: actions/upload-artifact@v4
+        with:
+          name: hub-2_5d-visual-smoke-${{ github.sha }}
+          path: hub-visual-smoke/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Показать лог preview при ошибке
+        if: failure()
+        run: cat /tmp/hub-vite-preview.log || true

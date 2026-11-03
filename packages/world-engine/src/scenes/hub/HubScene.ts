@@ -1,12 +1,17 @@
 import Phaser from 'phaser';
 import {
   bindLogicalViewport,
-  WORLD_LOGICAL_WIDTH,
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
   WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
 } from '../../runtime/fitLogicalViewport';
+import { isThreeHubRenderer, resolveHubRendererMode, type HubRendererMode } from '../../runtime/hubRendererMode';
+import { HubPerfProbe } from '../../renderer/three/HubPerfProbe';
+import { ThreeHubRenderer } from '../../renderer/three/ThreeHubRenderer';
 import { HubTimeOfDay, type DayPhase } from './HubTimeOfDay';
 import { HubEnvironmentLayer } from './HubEnvironmentLayer';
-import { HubBuildingLayer } from './HubBuildingLayer';
+import { HubBuildingLayer, HUB_BUILDINGS } from './HubBuildingLayer';
 import { HubGroundDecorLayer } from './HubGroundDecorLayer';
 import { HubFaunaLayer } from './HubFaunaLayer';
 import { HubNpcLayer } from './HubNpcLayer';
@@ -19,13 +24,33 @@ import { buildingStatesFromStages, computeStageStatuses } from './hubStages';
 import { STATION_26063_LOCATION } from './HubTimeOfDay';
 import { HubWeatherOverlay, type WeatherMode } from './HubWeatherOverlay';
 import { HubScheduleManager } from '../../world/hubSchedule';
-import { worldBridge } from '../../bridge/WorldBridge';
+import { HUB_BUILDING_BY_ID, HUB_WORLD_DEFINITION_V1 } from '../../world/hub/HubWorldDefinition';
+import { worldBridge, type BuildingStateId } from '../../bridge/WorldBridge';
+
+const DEBUG_DAY_PHASES: readonly DayPhase[] = [
+  'dawn',
+  'day',
+  'golden_hour',
+  'twilight',
+  'night',
+  'white_nights',
+];
+const DEBUG_WEATHER_MODES: readonly WeatherMode[] = ['clear', 'rain', 'snow', 'fog'];
+
+function isDayPhase(value: string | null): value is DayPhase {
+  return value !== null && DEBUG_DAY_PHASES.includes(value as DayPhase);
+}
+
+function isWeatherMode(value: string | null): value is WeatherMode {
+  return value !== null && DEBUG_WEATHER_MODES.includes(value as WeatherMode);
+}
 
 export class HubScene extends Phaser.Scene {
   private timeOfDay: HubTimeOfDay;
   private scheduleManager: HubScheduleManager;
+  private readonly rendererMode: HubRendererMode;
 
-  // Слои сцены L0 - L10
+  // Legacy 2D layers (kept intact behind the migration feature flag).
   private environmentLayer?: HubEnvironmentLayer;
   private buildingLayer?: HubBuildingLayer;
   private groundDecorLayer?: HubGroundDecorLayer;
@@ -35,19 +60,33 @@ export class HubScene extends Phaser.Scene {
   private seasonLayer?: HubSeasonLayer;
   private stageLayer?: HubStageLayer;
   private dossierLayer?: HubDossierLayer;
+
+  // New world-definition-first renderer spike.
+  private threeRenderer?: ThreeHubRenderer;
+  private perfProbe?: HubPerfProbe;
+
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
-
   private bridgeUnsubscribers: (() => void)[] = [];
+  private readonly buildingStates = new Map<string, BuildingStateId>(
+    HUB_BUILDINGS.map((building) => [building.id, building.defaultState]),
+  );
 
   constructor() {
     super('hub');
     this.timeOfDay = new HubTimeOfDay();
     this.scheduleManager = new HubScheduleManager(26063);
+    this.rendererMode = resolveHubRendererMode();
   }
 
   preload(): void {
-    // Предварительная загрузка растровых слоёв хаба 480x270 (v3 конвейер)
+    if (isThreeHubRenderer(this.rendererMode)) {
+      // The spike is deliberately asset-free: geometry/material/weather states
+      // must prove the architecture before production 3D assets are authored.
+      return;
+    }
+
+    // Legacy raster layers remain available as the fallback renderer.
     this.load.image('hub_l0_bg', '/hub/layers/l0_background.png');
     this.load.image('hub_l1_clouds', '/hub/layers/l1_clouds.png');
     this.load.image('hub_l3_ground', '/hub/layers/l3_ground.png');
@@ -60,55 +99,115 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
-    // 1. Привязка целочисленного масштабирования с паспарту
-    bindLogicalViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
+    if (isThreeHubRenderer(this.rendererMode)) {
+      this.createThreeHub();
+    } else {
+      this.createLegacyHub();
+    }
 
-    // 2. Слой L0-L4: Небо, светила, облака, горизонт залива, водные блики
-    this.environmentLayer = new HubEnvironmentLayer(this);
-
-    // 3. Слой L6: Рельеф метеоплощадки, гранитные дорожки и приборы
-    this.groundDecorLayer = new HubGroundDecorLayer(this);
-
-    // 4. Слой L5: Интерактивные здания кампуса 26063
-    this.buildingLayer = new HubBuildingLayer(this);
-
-    // 4a. Досье помещений: живой голос хранителя и действия без смены DOM-маршрута.
-    this.dossierLayer = new HubDossierLayer(this, {
-      onStartShift: () => worldBridge.emit('world:start_shift', {}),
-      onOpenScene: (sceneKey) => this.scene.start(sceneKey),
-    });
-
-    // 5. Слой L8: Фауна (синица, воробьи, чайка, утка, белка, кот Барограф)
-    this.faunaLayer = new HubFaunaLayer(this, this.scheduleManager);
-
-    // 6. Слой L8: Персонажи (Вера Павловна, техник Семён, лаборантка, аватар)
-    this.npcLayer = new HubNpcLayer(this);
-
-    // 7. Слой L10: Атмосферный тинт, частицы погоды и виньетка
-    this.weatherOverlay = new HubWeatherOverlay(this);
-
-    // 7a. Слой сезонов: вуаль, снег, листопад
-    const reducedMotion =
-      typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
-    this.seasonLayer = new HubSeasonLayer(this, reducedMotion);
-
-    // 7b. Слой этапов прохождения (маршрут и маркеры), над сезоном
-    this.stageLayer = new HubStageLayer(this);
-    this.applyStageProgress([]);
-
-    // 8. Первичная отрисовка фазы суток
-    this.applyDayPhase(this.timeOfDay.getCurrentPhase());
-    this.applySeason(this.season);
-
-    // 9. Подключение моста событий React <-> Phaser
+    this.applyDebugQueryOverrides();
     this.setupBridge();
-
-    // Уведомление о готовности сцены
     worldBridge.notifySceneReady('hub');
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.cleanup();
     });
+  }
+
+  private createThreeHub(): void {
+    bindLogicalViewport(this, HUB_LOGICAL_WIDTH, HUB_LOGICAL_HEIGHT, {
+      backgroundColor: 'rgba(0,0,0,0)',
+    });
+
+    const query = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    if (query.get('hubPerf') === '1') {
+      // Instrument WebGL prototypes before Three.js creates its context.
+      this.perfProbe = new HubPerfProbe();
+    }
+
+    this.threeRenderer = new ThreeHubRenderer(this);
+    this.stageLayer = new HubStageLayer(this, HUB_WORLD_DEFINITION_V1.buildings);
+    this.dossierLayer = new HubDossierLayer(
+      this,
+      {
+        onStartShift: () => worldBridge.emit('world:start_shift', {}),
+        onOpenScene: (sceneKey) => this.scene.start(sceneKey),
+      },
+      { width: HUB_LOGICAL_WIDTH, height: HUB_LOGICAL_HEIGHT },
+    );
+
+    this.input.on('pointerdown', this.handleThreePointerDown, this);
+    this.applyDayPhase(this.timeOfDay.getCurrentPhase());
+    this.applySeason(this.season);
+    this.applyStageProgress([]);
+  }
+
+  private createLegacyHub(): void {
+    bindLogicalViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
+
+    this.environmentLayer = new HubEnvironmentLayer(this);
+    this.groundDecorLayer = new HubGroundDecorLayer(this);
+    this.buildingLayer = new HubBuildingLayer(this);
+    this.dossierLayer = new HubDossierLayer(this, {
+      onStartShift: () => worldBridge.emit('world:start_shift', {}),
+      onOpenScene: (sceneKey) => this.scene.start(sceneKey),
+    });
+    this.faunaLayer = new HubFaunaLayer(this, this.scheduleManager);
+    this.npcLayer = new HubNpcLayer(this);
+    this.weatherOverlay = new HubWeatherOverlay(this);
+
+    const reducedMotion =
+      typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+    this.seasonLayer = new HubSeasonLayer(this, reducedMotion);
+    this.stageLayer = new HubStageLayer(this);
+
+    this.applyStageProgress([]);
+    this.applyDayPhase(this.timeOfDay.getCurrentPhase());
+    this.applySeason(this.season);
+  }
+
+  /**
+   * Deterministic visual-state controls for screenshot/performance review.
+   * These are intentionally query-only diagnostics; gameplay/server state
+   * remains authoritative during normal operation.
+   *
+   * ?hubPhase=day|night|...
+   * ?hubSeason=spring|summer|autumn|winter
+   * ?hubWeather=clear|rain|snow|fog
+   */
+  private applyDebugQueryOverrides(): void {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const phase = params.get('hubPhase');
+    const season = params.get('hubSeason');
+    const weather = params.get('hubWeather');
+
+    if (isDayPhase(phase)) {
+      this.timeOfDay.setPhase(phase);
+      this.applyDayPhase(phase);
+    }
+
+    if (isSeason(season)) {
+      this.applySeason(season);
+    }
+
+    if (isWeatherMode(weather)) {
+      this.weatherForced = true;
+      this.weatherOverlay?.setWeather(weather);
+      this.threeRenderer?.setWeather(weather);
+    }
+  }
+
+  private handleThreePointerDown(pointer: Phaser.Input.Pointer): void {
+    if (this.dossierLayer?.isOpen) return;
+
+    const buildingId = this.threeRenderer?.pickBuilding(pointer.worldX, pointer.worldY);
+    if (!buildingId) return;
+
+    const building = HUB_BUILDING_BY_ID.get(buildingId);
+    if (building) this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y);
+    worldBridge.notifyBuildingClicked(buildingId);
   }
 
   private applyDayPhase(phase: DayPhase): void {
@@ -118,6 +217,7 @@ export class HubScene extends Phaser.Scene {
     this.groundDecorLayer?.applyDayPhase(phase, colors);
     this.buildingLayer?.applyDayPhase(phase, colors);
     this.weatherOverlay?.applyDayPhase(phase);
+    this.threeRenderer?.setDayPhase(phase);
 
     worldBridge.notifyPhaseChanged(phase);
   }
@@ -125,60 +225,58 @@ export class HubScene extends Phaser.Scene {
   private applySeason(season: Season): void {
     this.season = season;
     const profile = SEASON_PROFILES[season];
+
     this.seasonLayer?.setSeason(season);
     this.groundDecorLayer?.applySeason(profile.foliageTint);
     this.buildingLayer?.applySeason(season, profile.roofSnow);
-    if (!this.weatherForced) this.weatherOverlay?.setWeather(profile.defaultWeather);
+    this.threeRenderer?.setSeason(season);
+
+    if (!this.weatherForced) {
+      this.weatherOverlay?.setWeather(profile.defaultWeather);
+      this.threeRenderer?.setWeather(profile.defaultWeather);
+    }
     worldBridge.notifySeasonChanged(season);
+  }
+
+  private setBuildingStates(states: Record<string, BuildingStateId>): void {
+    for (const [id, state] of Object.entries(states)) this.buildingStates.set(id, state);
+    this.buildingLayer?.setStates(states);
+    this.threeRenderer?.setBuildingStates(states);
   }
 
   private applyStageProgress(completed: readonly string[]): void {
     const statuses = computeStageStatuses(completed);
     this.stageLayer?.setStatuses(statuses);
-    this.buildingLayer?.setStates(buildingStatesFromStages(statuses));
+    this.setBuildingStates(buildingStatesFromStages(statuses));
   }
 
   private setupBridge(): void {
-    // 1. Обновления состояний зданий от сервера
     const unsubBuildings = worldBridge.on(
       'server:building_states',
-      (states: any) => {
-        this.buildingLayer?.setStates(states);
+      (states: Record<string, BuildingStateId>) => {
+        this.setBuildingStates(states);
       },
     );
 
-    // 2. Смена фазы суток
     const unsubPhase = worldBridge.on('server:time_phase', (phase: DayPhase) => {
       this.timeOfDay.setPhase(phase);
       this.applyDayPhase(phase);
     });
 
-    // 3. Ускоренная демонстрация
-    const unsubDemo = worldBridge.on(
-      'server:demo_acceleration',
-      (enabled: boolean) => {
-        this.timeOfDay.setAcceleratedDemo(enabled);
-      },
-    );
+    const unsubDemo = worldBridge.on('server:demo_acceleration', (enabled: boolean) => {
+      this.timeOfDay.setAcceleratedDemo(enabled);
+    });
 
-    // 4. Погодный режим (снег / дождь / ясно)
-    const unsubWeather = worldBridge.on(
-      'server:weather',
-      (mode: WeatherMode) => {
-        this.weatherForced = true;
-        this.weatherOverlay?.setWeather(mode);
-      },
-    );
+    const unsubWeather = worldBridge.on('server:weather', (mode: WeatherMode) => {
+      this.weatherForced = true;
+      this.weatherOverlay?.setWeather(mode);
+      this.threeRenderer?.setWeather(mode);
+    });
 
-    // 5. Режим study-calm (блокировка спорадических всплесков)
-    const unsubCalm = worldBridge.on(
-      'server:study_calm',
-      (enabled: boolean) => {
-        this.scheduleManager.setStudyCalm(enabled);
-      },
-    );
+    const unsubCalm = worldBridge.on('server:study_calm', (enabled: boolean) => {
+      this.scheduleManager.setStudyCalm(enabled);
+    });
 
-    // 5a. Сезон (null — календарь станции)
     const unsubSeason = worldBridge.on('server:season', (value: unknown) => {
       this.applySeason(isSeason(value) ? value : calculateSeason(new Date(), STATION_26063_LOCATION));
     });
@@ -186,23 +284,21 @@ export class HubScene extends Phaser.Scene {
       this.applySeason(nextSeason(this.season));
     });
 
-    // 5b. Пройденные этапы маршрута
     const unsubStages = worldBridge.on('server:stage_progress', (ids: unknown) => {
       this.applyStageProgress(Array.isArray(ids) ? ids.filter((x): x is string => typeof x === 'string') : []);
     });
 
-    // 6. Перемещение аватара к выбранному зданию
     const unsubBuildingClick = worldBridge.on(
       'hub:walk_to_building',
       ({ x, y }: { x: number; y: number }) => {
         this.npcLayer?.walkAvatarTo(x, y);
+        this.threeRenderer?.walkAvatarTo(x, y);
       },
     );
 
-    // 7. Фактический клик по зданию открывает досье из текущего 480×270 слоя.
     const unsubFacilityDossier = worldBridge.on('world:building_click', (buildingId: string) => {
       const dossierId = FACILITY_DOSSIER_BY_BUILDING[buildingId];
-      const buildingState = this.buildingLayer?.getBuildingState(buildingId);
+      const buildingState = this.buildingStates.get(buildingId);
       if (!dossierId || !buildingState) return;
       this.dossierLayer?.open(dossierId, buildingState);
     });
@@ -224,16 +320,13 @@ export class HubScene extends Phaser.Scene {
   override update(_time: number, deltaMs: number): void {
     const currentPhase = this.timeOfDay.getCurrentPhase();
 
-    // 1. Демонстрация фаз суток
     this.timeOfDay.update(deltaMs, (newPhase) => {
       this.applyDayPhase(newPhase);
     });
 
-    // 2. Планировщик живого мира
     const currentUtcHour = new Date().getUTCHours();
     this.scheduleManager.update(deltaMs / 1000, currentUtcHour);
 
-    // 3. Обновление слоёв
     this.environmentLayer?.update(deltaMs, currentPhase);
     this.groundDecorLayer?.update(deltaMs, currentPhase);
     this.buildingLayer?.update(deltaMs);
@@ -242,12 +335,19 @@ export class HubScene extends Phaser.Scene {
     this.seasonLayer?.update(deltaMs);
     this.stageLayer?.update(deltaMs);
     this.weatherOverlay?.update(deltaMs);
+
+    if (this.threeRenderer) {
+      this.perfProbe?.beginFrame(deltaMs);
+      this.threeRenderer.update(deltaMs);
+      this.perfProbe?.endFrame();
+    }
   }
 
   private cleanup(): void {
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
 
+    this.input.off('pointerdown', this.handleThreePointerDown, this);
     this.dossierLayer?.destroy();
     this.environmentLayer?.destroy();
     this.groundDecorLayer?.destroy();
@@ -257,5 +357,7 @@ export class HubScene extends Phaser.Scene {
     this.seasonLayer?.destroy();
     this.stageLayer?.destroy();
     this.weatherOverlay?.destroy();
+    this.threeRenderer?.destroy();
+    this.perfProbe?.destroy();
   }
 }

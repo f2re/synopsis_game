@@ -8,14 +8,25 @@ export interface HubDossierCallbacks {
   onOpenScene: (sceneKey: string) => void;
 }
 
+export interface HubDossierViewport {
+  width: number;
+  height: number;
+}
+
 export class HubDossierLayer {
   private readonly scene: any;
   private modal?: any;
   private readonly callbacks: HubDossierCallbacks;
+  private readonly viewport: HubDossierViewport;
 
-  constructor(scene: any, callbacks: HubDossierCallbacks) {
+  constructor(
+    scene: any,
+    callbacks: HubDossierCallbacks,
+    viewport: HubDossierViewport = { width: WORLD_LOGICAL_WIDTH, height: WORLD_LOGICAL_HEIGHT },
+  ) {
     this.scene = scene;
     this.callbacks = callbacks;
+    this.viewport = viewport;
     this.scene.input.keyboard?.on('keydown-ESC', this.handleEscape, this);
   }
 
@@ -39,12 +50,12 @@ export class HubDossierLayer {
     const left = -cardW / 2;
     const top = -cardH / 2;
     const modal = this.scene.add
-      .container(WORLD_LOGICAL_WIDTH / 2, WORLD_LOGICAL_HEIGHT / 2)
+      .container(this.viewport.width / 2, this.viewport.height / 2)
       .setDepth(HUB_THEME.depth.modal)
       .setScrollFactor(0);
 
     const backdrop = this.scene.add
-      .rectangle(0, 0, WORLD_LOGICAL_WIDTH * 2, WORLD_LOGICAL_HEIGHT * 2, HUB_THEME.color.backdrop, 0.82)
+      .rectangle(0, 0, this.viewport.width * 2, this.viewport.height * 2, HUB_THEME.color.backdrop, 0.82)
       .setInteractive();
     backdrop.on('pointerdown', () => this.close());
 
