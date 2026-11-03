@@ -25,9 +25,11 @@ Pixel-pipeline isolation:
 ```text
 ?hubRenderer=three2d&hubDebug=1
 ?hubRenderer=three2d&pixelPalette=0
-?hubRenderer=three2d&pixelDither=0
+?hubRenderer=three2d&pixelDither=1
 ?hubRenderer=three2d&pixelEdges=0
 ```
+
+Bayer dithering is intentionally **off by default** after visual comparison showed checkerboard noise on large Hub surfaces. `pixelDither=1` keeps it available as a controlled style experiment.
 
 Deterministic world-state overrides for screenshots and review:
 
@@ -44,7 +46,30 @@ Deterministic world-state overrides for screenshots and review:
 
 The visual-state query controls work for both legacy and Three Hub paths. They are diagnostic overrides only; normal server/world-state authority is unchanged.
 
-These switches exist so Art Direction and Web Performance can inspect the contribution of each pass and compare exactly the same semantic state instead of judging an opaque composite.
+## Real-device performance probe
+
+Use:
+
+```text
+?hubRenderer=three2d&hubPerf=1
+```
+
+The probe is installed before Three.js creates its WebGL context. It keeps a rolling 240-frame window and publishes:
+
+- Three renderer/update CPU wall time: mean, p50, p95, max;
+- Phaser frame delta: mean, p50, p95, max;
+- WebGL draw calls per frame: mean, p50, p95, max;
+- estimated rendered triangles per frame: mean, p50, p95, max;
+- live WebGL buffers, textures, programs, framebuffers and VAOs;
+- fixed internal renderer resolution (`320×180`).
+
+The current snapshot is available in DevTools as:
+
+```js
+window.__SYNOPSIS_HUB_PERF__
+```
+
+A compact overlay shows the same rolling values while the query flag is active. The probe deliberately does **not** claim GPU time. GPU time, GPU memory and thermal behaviour still require target-device/browser tooling and remain part of the independent Web Performance gate.
 
 ## Automated visual smoke
 
@@ -57,7 +82,7 @@ These switches exist so Art Direction and Web Performance can inspect the contri
 - Three winter/snow;
 - Three fog;
 - palette disabled;
-- dithering disabled;
+- dithering enabled;
 - edges disabled.
 
 The workflow stores PNGs and Chrome logs as a GitHub Actions artifact and fails if required screenshots are absent/suspiciously small or if expected comparison states produce byte-identical PNGs.
@@ -69,7 +94,9 @@ Headless SwiftShader evidence is valid for visual/smoke regression. It is **not*
 ```text
 Phaser scene lifecycle/input/WorldBridge
             │
-            ├── transparent Phaser canvas (UI/dossier/input)
+            ├── transparent Phaser canvas
+            │      ├── dossier/input
+            │      └── renderer-independent progression pins
             │
             └── 320×180 Three.js canvas
                     │
@@ -79,8 +106,9 @@ Phaser scene lifecycle/input/WorldBridge
                     ├── toon ramp lighting
                     └── PixelPostPipeline
                            ├── palette quantization
-                           ├── Bayer 4×4 dithering
-                           └── depth/normal edges
+                           ├── optional Bayer 4×4 dithering
+                           ├── depth/normal edges
+                           └── depth-aware procedural sky grading
 ```
 
 The Three.js canvas is CSS-upscaled with nearest-neighbour sampling into the same integer-scaled 640×360 Hub viewport.
@@ -89,7 +117,7 @@ A shared Phaser/Three WebGL context is deliberately **not** part of the first sp
 
 ## Geometry Lock
 
-`HUB_WORLD_DEFINITION_V1` now represents the accepted `hub.geometry.lock_v1` contract from BATCH-12 directly:
+`HUB_WORLD_DEFINITION_V1` represents the accepted `hub.geometry.lock_v1` contract from BATCH-12 directly:
 
 - logical canvas `640×360`;
 - horizon `y=92`;
@@ -98,6 +126,10 @@ A shared Phaser/Three WebGL context is deliberately **not** part of the first sp
 - canonical screen regions for Radar, Maps & Analysis, 26063 main operations building, Aerology, Archive, Tournament Hall, Code Post and central globe/plaza.
 
 `HubProjection.logicalToGround()` ray-intersects canonical logical coordinates with the `y=0` ground plane. `assertRoundTrip()` fails fast if the camera/projection stops mapping semantic anchors back to their exact logical coordinates.
+
+## Progression ownership
+
+Progression state is not a facade/material variant. `HubStageLayer` receives renderer-independent building geometry and draws semantic pins in Phaser. In Three mode the old screen-space dotted ground route is disabled because it would render over 3D facades; a future route, if needed, must be drawn on the Three world plane from the same semantic anchors.
 
 ## POC acceptance
 
