@@ -72,11 +72,11 @@ export class HubScene extends Phaser.Scene {
     HUB_BUILDINGS.map((building) => [building.id, building.defaultState]),
   );
 
-  constructor() {
+  constructor(rendererMode?: HubRendererMode) {
     super('hub');
     this.timeOfDay = new HubTimeOfDay();
     this.scheduleManager = new HubScheduleManager(26063);
-    this.rendererMode = resolveHubRendererMode();
+    this.rendererMode = rendererMode ?? resolveHubRendererMode();
   }
 
   preload(): void {

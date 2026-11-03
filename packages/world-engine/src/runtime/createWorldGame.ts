@@ -7,7 +7,13 @@ import {
   WORLD_LOGICAL_HEIGHT,
   WORLD_LOGICAL_WIDTH,
 } from './fitLogicalViewport';
-import { isThreeHubRenderer, resolveHubRendererMode, type HubRendererMode } from './hubRendererMode';
+import {
+  isThreeHubRenderer,
+  resolveHubRendererMode,
+  selectSupportedHubRendererMode,
+  supportsWebGL2,
+  type HubRendererMode,
+} from './hubRendererMode';
 
 export {
   HUB_LOGICAL_HEIGHT,
@@ -27,7 +33,14 @@ export interface CreateWorldGameOptions {
 
 export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
   const parent = typeof options.parent === 'string' ? document.querySelector<HTMLElement>(options.parent) : options.parent;
-  const rendererMode = options.hubRenderer ?? resolveHubRendererMode();
+  const requestedMode = options.hubRenderer ?? resolveHubRendererMode();
+  const rendererMode = selectSupportedHubRendererMode(
+    requestedMode,
+    !isThreeHubRenderer(requestedMode) || supportsWebGL2(),
+  );
+  if (rendererMode !== requestedMode) {
+    console.warn('[synopsis/world-engine] WebGL2 unavailable; falling back to legacy2d Hub.');
+  }
   const threeHub = isThreeHubRenderer(rendererMode);
   const minimumWidth = threeHub ? HUB_LOGICAL_WIDTH : WORLD_LOGICAL_WIDTH;
   const minimumHeight = threeHub ? HUB_LOGICAL_HEIGHT : WORLD_LOGICAL_HEIGHT;
@@ -50,6 +63,6 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
       mode: Phaser.Scale.RESIZE,
       autoCenter: Phaser.Scale.NO_CENTER,
     },
-    scene: [HubScene, ArchiveScene],
+    scene: [new HubScene(rendererMode), ArchiveScene],
   });
 }

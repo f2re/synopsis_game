@@ -27,3 +27,34 @@ export function resolveHubRendererMode(search?: string): HubRendererMode {
 export function isThreeHubRenderer(mode: HubRendererMode): boolean {
   return mode === 'three2d';
 }
+
+
+/**
+ * Three.js/WebGL2 availability gate for the opt-in Hub renderer.
+ *
+ * Do not switch the Phaser scene or preload path to the 3D variant until the
+ * required WebGL2 context has been confirmed. The small probe context is
+ * explicitly released so classroom systems with a low context limit are not
+ * left with an extra active WebGL context.
+ */
+export function supportsWebGL2(): boolean {
+  if (typeof document === 'undefined') return false;
+
+  try {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('webgl2');
+    if (!context) return false;
+    context.getExtension('WEBGL_lose_context')?.loseContext();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Keep the legacy experience usable when WebGL2 is unavailable. */
+export function selectSupportedHubRendererMode(
+  requested: HubRendererMode,
+  webGL2Available: boolean,
+): HubRendererMode {
+  return requested === 'three2d' && !webGL2Available ? 'legacy2d' : requested;
+}
