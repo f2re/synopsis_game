@@ -23,7 +23,7 @@ import { buildingStatesFromStages, computeStageStatuses } from './hubStages';
 import { STATION_26063_LOCATION } from './HubTimeOfDay';
 import { HubWeatherOverlay, type WeatherMode } from './HubWeatherOverlay';
 import { HubScheduleManager } from '../../world/hubSchedule';
-import { HUB_BUILDING_BY_ID } from '../../world/hub/HubWorldDefinition';
+import { HUB_BUILDING_BY_ID, HUB_WORLD_DEFINITION_V1 } from '../../world/hub/HubWorldDefinition';
 import { worldBridge, type BuildingStateId } from '../../bridge/WorldBridge';
 
 const DEBUG_DAY_PHASES: readonly DayPhase[] = [
@@ -118,6 +118,7 @@ export class HubScene extends Phaser.Scene {
     });
 
     this.threeRenderer = new ThreeHubRenderer(this);
+    this.stageLayer = new HubStageLayer(this, HUB_WORLD_DEFINITION_V1.buildings);
     this.dossierLayer = new HubDossierLayer(
       this,
       {
