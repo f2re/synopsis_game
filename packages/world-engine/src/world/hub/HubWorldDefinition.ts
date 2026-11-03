@@ -19,6 +19,13 @@ export interface HubBuildingDefinition {
   interactionId: string;
 }
 
+export interface HubLandmarkDefinition {
+  id: string;
+  kind: 'operations' | 'central-globe' | 'foreground-railing';
+  bounds: HubRect;
+  anchor: HubPoint;
+}
+
 export interface HubPathDefinition {
   id: string;
   points: HubPoint[];
@@ -32,101 +39,155 @@ export interface HubWorldDefinition {
   logicalSize: { width: number; height: number };
   horizonY: number;
   waterlineY: number;
+  waterBand: HubRect;
   safeZone: HubRect;
   buildings: HubBuildingDefinition[];
+  landmarks: HubLandmarkDefinition[];
   paths: HubPathDefinition[];
   environmentAnchors: Record<string, HubPoint>;
 }
 
 /**
- * Initial 640x360 machine-readable migration baseline.
+ * Authoritative machine-readable Hub Geometry Lock v1.
  *
- * The current production Hub is authored at 480x270. Until the accepted
- * 640x360 Geometry Lock is represented directly in runtime data, the known
- * semantic anchors are scaled by 4/3 and rounded to canonical logical pixels.
- * This baseline is intentionally explicit: future art-direction changes must
- * update this object and the visual snapshot together instead of drifting in
- * renderer-specific code.
+ * Source: BATCH-12-HUB-FULLSCREEN-BACKGROUND.md. These regions are the runtime
+ * contract for the 640x360 first/main Hub screen. Renderers may change
+ * materials, lighting, weather and internal 3D depth, but they may not move
+ * the horizon, water band or semantic screen regions without a new Geometry
+ * Lock revision.
  */
 export const HUB_WORLD_DEFINITION_V1: HubWorldDefinition = {
-  version: '1.0.0-migration',
-  geometryLockId: 'hub.geometry.lock_v1.migration-baseline',
-  status: 'migration-baseline',
+  version: '1.0.0',
+  geometryLockId: 'hub.geometry.lock_v1',
+  status: 'accepted',
   logicalSize: { width: HUB_LOGICAL_WIDTH, height: HUB_LOGICAL_HEIGHT },
-  horizonY: 176,
-  waterlineY: 176,
+  horizonY: 92,
+  waterlineY: 92,
+  waterBand: { x: 0, y: 92, width: 640, height: 55 },
   safeZone: { x: 48, y: 42, width: 544, height: 273 },
   buildings: [
     {
-      id: 'codepost',
-      bounds: { x: 229, y: 93, width: 184, height: 147 },
-      entrance: { x: 321, y: 240 },
-      interactionId: 'building.codepost',
-    },
-    {
-      id: 'archive',
-      bounds: { x: 80, y: 117, width: 107, height: 69 },
-      entrance: { x: 131, y: 187 },
-      interactionId: 'building.archive',
-    },
-    {
       id: 'radar',
-      bounds: { x: 460, y: 88, width: 127, height: 172 },
-      entrance: { x: 521, y: 260 },
+      bounds: { x: 38, y: 66, width: 140, height: 108 },
+      entrance: { x: 108, y: 174 },
       interactionId: 'building.radar',
     },
     {
       id: 'cartography',
-      bounds: { x: 16, y: 189, width: 77, height: 59 },
-      entrance: { x: 55, y: 248 },
+      bounds: { x: 34, y: 145, width: 174, height: 142 },
+      entrance: { x: 121, y: 287 },
       interactionId: 'building.cartography',
     },
     {
+      id: 'codepost',
+      bounds: { x: 260, y: 203, width: 137, height: 98 },
+      entrance: { x: 329, y: 301 },
+      interactionId: 'building.codepost',
+    },
+    {
+      id: 'archive',
+      bounds: { x: 351, y: 182, width: 139, height: 107 },
+      entrance: { x: 421, y: 289 },
+      interactionId: 'building.archive',
+    },
+    {
       id: 'lab',
-      bounds: { x: 61, y: 261, width: 96, height: 72 },
-      entrance: { x: 109, y: 333 },
+      bounds: { x: 438, y: 106, width: 162, height: 115 },
+      entrance: { x: 519, y: 221 },
       interactionId: 'building.lab',
     },
     {
       id: 'hall',
-      bounds: { x: 453, y: 277, width: 109, height: 69 },
-      entrance: { x: 508, y: 347 },
+      bounds: { x: 492, y: 180, width: 142, height: 121 },
+      entrance: { x: 563, y: 301 },
       interactionId: 'building.hall',
     },
     {
       id: 'meteo-site',
-      bounds: { x: 176, y: 272, width: 53, height: 69 },
-      entrance: { x: 203, y: 341 },
+      bounds: { x: 194, y: 218, width: 62, height: 82 },
+      entrance: { x: 225, y: 300 },
       interactionId: 'building.meteo-site',
     },
     {
       id: 'canteen',
-      bounds: { x: 573, y: 275, width: 61, height: 64 },
-      entrance: { x: 604, y: 339 },
+      bounds: { x: 74, y: 246, width: 92, height: 66 },
+      entrance: { x: 120, y: 312 },
       interactionId: 'building.canteen',
+    },
+  ],
+  landmarks: [
+    {
+      id: 'operations',
+      kind: 'operations',
+      bounds: { x: 205, y: 111, width: 228, height: 153 },
+      anchor: { x: 319, y: 264 },
+    },
+    {
+      id: 'central-globe',
+      kind: 'central-globe',
+      bounds: { x: 246, y: 229, width: 148, height: 100 },
+      anchor: { x: 320, y: 292 },
+    },
+    {
+      id: 'foreground-railing',
+      kind: 'foreground-railing',
+      bounds: { x: 0, y: 286, width: 640, height: 66 },
+      anchor: { x: 320, y: 328 },
     },
   ],
   paths: [
     {
-      id: 'promenade',
+      id: 'river-terrace',
       points: [
-        { x: 67, y: 224 },
-        { x: 205, y: 224 },
-        { x: 360, y: 224 },
-        { x: 491, y: 224 },
-        { x: 587, y: 224 },
+        { x: 52, y: 159 },
+        { x: 205, y: 161 },
+        { x: 320, y: 160 },
+        { x: 440, y: 162 },
+        { x: 588, y: 160 },
+      ],
+      width: 7,
+    },
+    {
+      id: 'plaza-spine',
+      points: [
+        { x: 320, y: 151 },
+        { x: 320, y: 214 },
+        { x: 320, y: 276 },
+        { x: 320, y: 326 },
+      ],
+      width: 11,
+    },
+    {
+      id: 'plaza-west',
+      points: [
+        { x: 94, y: 286 },
+        { x: 192, y: 278 },
+        { x: 320, y: 276 },
+      ],
+      width: 10,
+    },
+    {
+      id: 'plaza-east',
+      points: [
+        { x: 320, y: 276 },
+        { x: 447, y: 280 },
+        { x: 574, y: 292 },
       ],
       width: 10,
     },
   ],
   environmentAnchors: {
-    'meteo.anemometer': { x: 323, y: 131 },
+    'globe.center': { x: 320, y: 292 },
+    'meteo.anemometer': { x: 225, y: 248 },
     'lighthouse.flash': { x: 604, y: 127 },
-    'lantern.01': { x: 67, y: 224 },
-    'lantern.02': { x: 205, y: 224 },
-    'lantern.03': { x: 360, y: 224 },
-    'lantern.04': { x: 491, y: 224 },
-    'lantern.05': { x: 587, y: 224 },
+    'tree.west.01': { x: 177, y: 268 },
+    'tree.west.02': { x: 143, y: 302 },
+    'tree.east.01': { x: 467, y: 270 },
+    'tree.east.02': { x: 514, y: 316 },
+    'lantern.01': { x: 203, y: 276 },
+    'lantern.02': { x: 268, y: 276 },
+    'lantern.03': { x: 372, y: 277 },
+    'lantern.04': { x: 439, y: 281 },
   },
 };
 
