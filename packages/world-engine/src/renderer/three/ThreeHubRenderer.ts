@@ -103,7 +103,7 @@ function styleForStructure(id: string): StructureStyle {
     case 'operations':
       return {
         wall: WORLD_PALETTE.stoneConcrete3,
-        roof: WORLD_PALETTE.stoneConcrete1,
+        roof: WORLD_PALETTE.skyNight4,
         widthRatio: 0.76,
         depthPx: 27,
         roofPx: 19,
@@ -113,7 +113,7 @@ function styleForStructure(id: string): StructureStyle {
     case 'radar':
       return {
         wall: WORLD_PALETTE.stoneConcrete4,
-        roof: WORLD_PALETTE.birchAndSnow3,
+        roof: WORLD_PALETTE.birchAndSnow2,
         widthRatio: 0.34,
         depthPx: 12,
         roofPx: 26,
@@ -123,7 +123,7 @@ function styleForStructure(id: string): StructureStyle {
     case 'cartography':
       return {
         wall: WORLD_PALETTE.birchAndSnow2,
-        roof: WORLD_PALETTE.ochreTerracotta0,
+        roof: WORLD_PALETTE.ochreTerracotta1,
         widthRatio: 0.67,
         depthPx: 22,
         roofPx: 17,
@@ -143,7 +143,7 @@ function styleForStructure(id: string): StructureStyle {
     case 'archive':
       return {
         wall: WORLD_PALETTE.ochreTerracotta3,
-        roof: WORLD_PALETTE.ochreTerracotta0,
+        roof: WORLD_PALETTE.ochreTerracotta1,
         widthRatio: 0.66,
         depthPx: 20,
         roofPx: 17,
@@ -163,7 +163,7 @@ function styleForStructure(id: string): StructureStyle {
     case 'codepost':
       return {
         wall: WORLD_PALETTE.uiTeal4,
-        roof: WORLD_PALETTE.stoneConcrete1,
+        roof: WORLD_PALETTE.stoneConcrete3,
         widthRatio: 0.72,
         depthPx: 18,
         roofPx: 6,
@@ -173,7 +173,7 @@ function styleForStructure(id: string): StructureStyle {
     case 'meteo-site':
       return {
         wall: WORLD_PALETTE.birchAndSnow3,
-        roof: WORLD_PALETTE.stoneConcrete1,
+        roof: WORLD_PALETTE.stoneConcrete3,
         widthRatio: 0.54,
         depthPx: 13,
         roofPx: 8,
@@ -184,7 +184,7 @@ function styleForStructure(id: string): StructureStyle {
     default:
       return {
         wall: WORLD_PALETTE.ochreTerracotta2,
-        roof: WORLD_PALETTE.ochreTerracotta0,
+        roof: WORLD_PALETTE.ochreTerracotta1,
         widthRatio: 0.61,
         depthPx: 14,
         roofPx: 9,
@@ -226,7 +226,7 @@ export class ThreeHubRenderer {
   private readonly groundMaterial: MeshToonMaterial;
   private readonly pathMaterial: MeshToonMaterial;
   private readonly foliageMaterial: MeshToonMaterial;
-  private readonly waterMaterial: MeshToonMaterial;
+  private readonly waterMaterial: MeshBasicMaterial;
   private readonly snowMaterial: MeshToonMaterial;
   private readonly windowMaterial: MeshBasicMaterial;
   private readonly avatarRoot = new Group();
@@ -282,7 +282,7 @@ export class ThreeHubRenderer {
       height: INTERNAL_HEIGHT,
       toggles: {
         palette: query.get('pixelPalette') !== '0',
-        dither: query.get('pixelDither') !== '0',
+        dither: query.get('pixelDither') === '1',
         edges: query.get('pixelEdges') !== '0',
       },
     });
@@ -290,7 +290,7 @@ export class ThreeHubRenderer {
     this.groundMaterial = this.toon(WORLD_PALETTE.foliagePine2);
     this.pathMaterial = this.toon(WORLD_PALETTE.stoneConcrete3);
     this.foliageMaterial = this.toon(WORLD_PALETTE.foliagePine3);
-    this.waterMaterial = this.toon(WORLD_PALETTE.waterGulf2);
+    this.waterMaterial = new MeshBasicMaterial({ color: WORLD_PALETTE.waterGulf2 });
     this.snowMaterial = this.toon(WORLD_PALETTE.birchAndSnow3);
     this.windowMaterial = new MeshBasicMaterial({ color: WORLD_PALETTE.windowLight2 });
 
@@ -665,8 +665,8 @@ export class ThreeHubRenderer {
 
     switch (phase) {
       case 'night':
-        this.ambientLight.intensity = 0.74;
-        this.sunLight.intensity = 0.36;
+        this.ambientLight.intensity = 0.9;
+        this.sunLight.intensity = 0.48;
         this.windowMaterial.color.setHex(WORLD_PALETTE.windowLight3);
         break;
       case 'twilight':
@@ -756,24 +756,13 @@ export class ThreeHubRenderer {
   }
 
   setBuildingStates(states: Record<string, BuildingStateId>): void {
-    for (const [id, state] of Object.entries(states)) {
+    for (const id of Object.keys(states)) {
       const material = this.buildingMaterials.get(id);
       if (!material) continue;
-      switch (state) {
-        case 'locked':
-          material.color.setHex(WORLD_PALETTE.stoneConcrete1);
-          break;
-        case 'active':
-          material.color.setHex(WORLD_PALETTE.ochreTerracotta3);
-          break;
-        case 'just_unlocked':
-          material.color.setHex(WORLD_PALETTE.foliagePine4);
-          break;
-        case 'available':
-        default:
-          material.color.setHex(styleForStructure(id).wall);
-          break;
-      }
+      // Progression is semantic state, not an alternate facade texture/material.
+      // Keep the canonical architecture readable; a dedicated accent/emissive
+      // channel will communicate locked/active/unlocked without repainting it.
+      material.color.setHex(styleForStructure(id).wall);
     }
   }
 
