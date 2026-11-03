@@ -146,7 +146,18 @@ const FRAGMENT_SHADER = /* glsl */ `
 
   void main() {
     vec4 source = texture2D(tBeauty, vUv);
+    float sourceDepth = texture2D(tDepth, vUv).r;
     vec3 color = source.rgb;
+
+    // The scene background contains no geometry and therefore keeps depth at
+    // the far plane. Grade only those pixels: this creates a reusable sky
+    // depth band from the current phase colour without another raster asset.
+    if (sourceDepth > 0.9995) {
+      float horizonLift = 1.0 - smoothstep(0.74, 0.98, vUv.y);
+      vec3 skyTop = color * 0.76;
+      vec3 skyHorizon = min(color * 1.16 + vec3(0.030, 0.020, 0.012), vec3(1.0));
+      color = mix(skyTop, skyHorizon, horizonLift);
+    }
 
     if (uDitherEnabled) {
       float dither = bayer4(gl_FragCoord.xy) - 0.5;
