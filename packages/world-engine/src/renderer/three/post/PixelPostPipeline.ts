@@ -40,9 +40,13 @@ const PALETTE_NUMBERS = [
   WORLD_PALETTE.skyNight4,
   WORLD_PALETTE.twilight0,
   WORLD_PALETTE.skyDay0,
+  WORLD_PALETTE.skyDay1,
   WORLD_PALETTE.skyDay2,
+  WORLD_PALETTE.skyDay3,
   WORLD_PALETTE.waterGulf1,
+  WORLD_PALETTE.waterGulf2,
   WORLD_PALETTE.waterGulf3,
+  WORLD_PALETTE.waterGulf4,
   WORLD_PALETTE.foliagePine1,
   WORLD_PALETTE.foliagePine3,
   WORLD_PALETTE.stoneConcrete1,
@@ -77,7 +81,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform sampler2D tDepth;
   uniform sampler2D tNormal;
   uniform vec2 uResolution;
-  uniform vec3 uPalette[16];
+  uniform vec3 uPalette[20];
   uniform bool uPaletteEnabled;
   uniform bool uDitherEnabled;
   uniform bool uEdgesEnabled;
@@ -115,7 +119,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 best = uPalette[0];
     float bestDistance = dot(color - best, color - best);
 
-    for (int i = 1; i < 16; i++) {
+    for (int i = 1; i < 20; i++) {
       vec3 candidate = uPalette[i];
       float distanceToCandidate = dot(color - candidate, color - candidate);
       if (distanceToCandidate < bestDistance) {
