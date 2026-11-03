@@ -5,7 +5,7 @@ on:
     branches:
       - feat/hub-three2d-poc
     paths:
-      - 'tools/patch_three_instancing.py'
+      - 'tools/patch_three_instancing.trigger'
 
 permissions:
   contents: write
