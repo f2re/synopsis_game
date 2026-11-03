@@ -44,6 +44,7 @@ import {
   type HubPoint,
   type HubRect,
 } from '../../world/hub/HubWorldDefinition';
+import { planHubRoute } from '../../world/hub/HubNavigation';
 import { HubProjection } from './HubProjection';
 import { PixelPostPipeline } from './post/PixelPostPipeline';
 
@@ -230,8 +231,7 @@ export class ThreeHubRenderer {
   private readonly snowMaterial: MeshToonMaterial;
   private readonly windowMaterial: MeshBasicMaterial;
   private readonly avatarRoot = new Group();
-  private readonly avatarTarget = new Vector3();
-  private avatarHasTarget = false;
+  private avatarWaypoints: Vector3[] = [];
   private avatarClock = 0;
   private readonly ambientLight = new AmbientLight(0xffffff, 1.2);
   private readonly sunLight = new DirectionalLight(0xffe7c0, 1.6);
@@ -817,8 +817,22 @@ export class ThreeHubRenderer {
   }
 
   walkAvatarTo(logicalX: number, logicalY: number): void {
-    this.projection.logicalToGround(logicalX, logicalY, this.avatarTarget);
-    this.avatarHasTarget = true;
+    // The navigation authority lives in canonical 640×360 logical coordinates.
+    // Never project the avatar's animated vertical bob as the navigation origin.
+    const groundPosition = this.avatarRoot.position.clone();
+    groundPosition.y = 0;
+    const current = this.projection.groundToLogical(groundPosition);
+    const route = planHubRoute(
+      HUB_WORLD_DEFINITION_V1.paths,
+      { x: current.x, y: current.y },
+      { x: logicalX, y: logicalY },
+    );
+    if (!route) {
+      this.avatarWaypoints = [];
+      console.warn('[synopsis/world-engine] Hub destination is not connected to an approved path');
+      return;
+    }
+    this.avatarWaypoints = route.slice(1).map((point) => this.projection.logicalToGround(point.x, point.y));
   }
 
   pickBuilding(logicalX: number, logicalY: number): string | undefined {
@@ -838,23 +852,29 @@ export class ThreeHubRenderer {
     const deltaSec = Math.min(deltaMs, 100) / 1000;
     this.avatarClock += deltaSec;
 
-    if (this.avatarHasTarget) {
-      const delta = this.avatarTarget.clone().sub(this.avatarRoot.position);
-      delta.y = 0;
-      const distance = delta.length();
-      if (distance < 1.5) {
-        this.avatarRoot.position.x = this.avatarTarget.x;
-        this.avatarRoot.position.z = this.avatarTarget.z;
-        this.avatarHasTarget = false;
+    // Consume route waypoints at a stable speed even if a low-FPS frame can
+    // traverse several short segments; the rendered hop never affects the route.
+    let budget = AVATAR_SPEED * deltaSec;
+    while (budget > 0 && this.avatarWaypoints.length > 0) {
+      const target = this.avatarWaypoints[0];
+      const dx = target.x - this.avatarRoot.position.x;
+      const dz = target.z - this.avatarRoot.position.z;
+      const distance = Math.hypot(dx, dz);
+      if (distance > 1e-5) this.avatarRoot.rotation.y = Math.atan2(dx, dz);
+      if (distance <= budget + 1e-5) {
+        this.avatarRoot.position.x = target.x;
+        this.avatarRoot.position.z = target.z;
+        this.avatarWaypoints.shift();
+        budget -= distance;
       } else {
-        const step = Math.min(distance, AVATAR_SPEED * deltaSec);
-        delta.normalize().multiplyScalar(step);
-        this.avatarRoot.position.add(delta);
-        this.avatarRoot.rotation.y = Math.atan2(delta.x, delta.z);
+        const step = budget / distance;
+        this.avatarRoot.position.x += dx * step;
+        this.avatarRoot.position.z += dz * step;
+        budget = 0;
       }
     }
 
-    this.avatarRoot.position.y = this.avatarHasTarget ? Math.abs(Math.sin(this.avatarClock * 18)) * 1.4 : 0;
+    this.avatarRoot.position.y = this.avatarWaypoints.length > 0 ? Math.abs(Math.sin(this.avatarClock * 18)) * 1.4 : 0;
     this.updateWeather(deltaSec);
     this.pipeline.render(this.renderer, this.scene, this.projection.camera, [this.weatherGroup, this.debugGroup]);
   }
