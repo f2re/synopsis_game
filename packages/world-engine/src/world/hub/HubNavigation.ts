@@ -1,4 +1,5 @@
 import type { HubPathDefinition, HubPoint } from './HubWorldDefinition';
+import { createHubObstacleGuard, type HubGroundObstacle } from './HubCollision.ts';
 
 /** Pure, renderer-independent routing along the accepted Hub path centrelines.
  * Building screen bounds are deliberately NOT interpreted as ground obstacles.
@@ -31,6 +32,10 @@ interface Projection {
 export interface HubRouteOptions {
   /** Maximum distance from the requested anchor to an approved path, logical px. */
   maxConnectorDistance?: number;
+  /** Ground-occupancy polygons; do not pass projected building silhouettes. */
+  obstacles?: readonly HubGroundObstacle[];
+  /** Logical-pixel clearance for an avatar hull around polygon obstacles. */
+  clearance?: number;
 }
 
 function finitePoint(point: HubPoint): boolean {
@@ -57,14 +62,18 @@ function project(point: HubPoint, segment: Segment): Cut {
   return { t, point: { x: segment.a.x + t * v.x, y: segment.a.y + t * v.y } };
 }
 
-function closestOnPaths(segments: readonly Segment[], anchor: HubPoint): Projection {
+function closestOnPaths(
+  segments: readonly Segment[],
+  anchor: HubPoint,
+  isBlocked: (a: HubPoint, b: HubPoint) => boolean,
+): Projection | undefined {
   let best: Projection | undefined;
   segments.forEach((segment, index) => {
     const candidate = project(anchor, segment);
+    if (isBlocked(anchor, candidate.point)) return;
     const next: Projection = { ...candidate, index, distance: distance(anchor, candidate.point) };
     if (!best || next.distance < best.distance - EPS) best = next;
   });
-  if (!best) throw new Error('HubNavigation: path network is empty');
   return best;
 }
 
@@ -111,7 +120,13 @@ function addNode(graph: Map<string, GraphNode>, point: HubPoint): string {
   return key;
 }
 
-function addEdge(graph: Map<string, GraphNode>, a: HubPoint, b: HubPoint): void {
+function addEdge(
+  graph: Map<string, GraphNode>,
+  a: HubPoint,
+  b: HubPoint,
+  isBlocked: (a: HubPoint, b: HubPoint) => boolean,
+): void {
+  if (isBlocked(a, b)) return;
   const ka = addNode(graph, a);
   const kb = addNode(graph, b);
   if (ka === kb) return;
@@ -123,8 +138,9 @@ function addEdge(graph: Map<string, GraphNode>, a: HubPoint, b: HubPoint): void 
 /**
  * Finds a deterministic shortest route via actual path intersections.
  * The first/last short connector approaches a path; no implicit free-space
- * edge is permitted between unrelated road segments. Returns null if an
- * anchor lies too far from a path or the network is disconnected.
+ * edge is permitted between unrelated road segments. Optional ground-only
+ * polygons block all intersecting path and connector edges. Returns null if
+ * anchors are off-path, obstructed, or in disconnected graph components.
  */
 export function planHubRoute(
   paths: readonly HubPathDefinition[],
@@ -137,6 +153,8 @@ export function planHubRoute(
   if (!Number.isFinite(maxConnectorDistance) || maxConnectorDistance < 0) {
     throw new Error('HubNavigation: invalid maximum connector distance');
   }
+  const isBlocked = createHubObstacleGuard(options.obstacles ?? [], options.clearance ?? 0);
+  if (isBlocked(start, start) || isBlocked(goal, goal)) return null;
   if (distance(start, goal) < EPS) return [{ ...start }];
 
   const segments: Segment[] = [];
@@ -155,8 +173,9 @@ export function planHubRoute(
   }
   if (segments.length === 0) return null;
 
-  const startProjection = closestOnPaths(segments, start);
-  const goalProjection = closestOnPaths(segments, goal);
+  const startProjection = closestOnPaths(segments, start, isBlocked);
+  const goalProjection = closestOnPaths(segments, goal, isBlocked);
+  if (!startProjection || !goalProjection) return null;
   if (startProjection.distance > maxConnectorDistance || goalProjection.distance > maxConnectorDistance) return null;
 
   const cuts = segments.map((segment): Cut[] => [
@@ -175,11 +194,11 @@ export function planHubRoute(
   cuts.forEach((segmentCuts) => {
     segmentCuts.sort((a, b) => a.t - b.t);
     for (let j = 1; j < segmentCuts.length; j += 1) {
-      addEdge(graph, segmentCuts[j - 1].point, segmentCuts[j].point);
+      addEdge(graph, segmentCuts[j - 1].point, segmentCuts[j].point, isBlocked);
     }
   });
-  addEdge(graph, start, startProjection.point);
-  addEdge(graph, goal, goalProjection.point);
+  addEdge(graph, start, startProjection.point, isBlocked);
+  addEdge(graph, goal, goalProjection.point, isBlocked);
   const startKey = addNode(graph, start);
   const goalKey = addNode(graph, goal);
 
