@@ -10,17 +10,35 @@ const COLORS: Record<StageStatus, number> = {
   locked: WORLD_PALETTE.birchAndSnow1,
 };
 
-/** Маршрут прохождения: пунктир между входами зданий и нумерованные маркеры этапов. */
+export interface HubStageBuildingGeometry {
+  id: string;
+  bounds: { x: number; y: number; width: number; height: number };
+  entrance: { x: number; y: number };
+}
+
+/**
+ * Маршрут прохождения поверх любого renderer-а Hub.
+ *
+ * Геометрия зданий приходит через constructor: legacy Phaser использует
+ * `HUB_BUILDINGS`, а 2.5D renderer передаёт принятую 640×360 Geometry Lock.
+ * Благодаря этому progression остаётся отдельным gameplay/UI-слоем и не
+ * перекрашивает фасады или материалы мира.
+ */
 export class HubStageLayer {
   private readonly scene: Phaser.Scene;
+  private readonly buildings: readonly HubStageBuildingGeometry[];
   private readonly routeGraphic: Phaser.GameObjects.Graphics;
   private readonly pinGraphic: Phaser.GameObjects.Graphics;
   private readonly labels = new Map<string, Phaser.GameObjects.Text>();
   private statuses: StageStatusMap = {};
   private timer = 0;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(
+    scene: Phaser.Scene,
+    buildings: readonly HubStageBuildingGeometry[] = HUB_BUILDINGS,
+  ) {
     this.scene = scene;
+    this.buildings = buildings;
     this.routeGraphic = scene.add.graphics();
     this.pinGraphic = scene.add.graphics();
 
@@ -37,13 +55,22 @@ export class HubStageLayer {
     }
   }
 
+  private buildingOf(buildingId: string): HubStageBuildingGeometry | undefined {
+    return this.buildings.find((building) => building.id === buildingId);
+  }
+
   private entranceOf(buildingId: string): { x: number; y: number } | undefined {
-    return HUB_BUILDINGS.find((b) => b.id === buildingId)?.entrance;
+    return this.buildingOf(buildingId)?.entrance;
   }
 
   private pinPosition(buildingId: string): { x: number; y: number } | undefined {
-    const b = HUB_BUILDINGS.find((x) => x.id === buildingId);
-    return b ? { x: b.bounds.x + Math.floor(b.bounds.width / 2), y: b.bounds.y - 8 } : undefined;
+    const building = this.buildingOf(buildingId);
+    return building
+      ? {
+          x: building.bounds.x + Math.floor(building.bounds.width / 2),
+          y: building.bounds.y - 8,
+        }
+      : undefined;
   }
 
   setStatuses(statuses: StageStatusMap): void {
@@ -55,19 +82,27 @@ export class HubStageLayer {
   private renderRoute(): void {
     this.routeGraphic.clear();
     const ordered = [...HUB_STAGES].sort((a, b) => a.order - b.order);
-    for (let i = 1; i < ordered.length; i++) {
-      const from = this.entranceOf(ordered[i - 1].buildingId);
-      const to = this.entranceOf(ordered[i].buildingId);
+    for (let index = 1; index < ordered.length; index += 1) {
+      const from = this.entranceOf(ordered[index - 1].buildingId);
+      const to = this.entranceOf(ordered[index].buildingId);
       if (!from || !to) continue;
-      const done = this.statuses[ordered[i].id] === 'completed' || this.statuses[ordered[i - 1].id] === 'completed';
+
+      const done =
+        this.statuses[ordered[index].id] === 'completed' ||
+        this.statuses[ordered[index - 1].id] === 'completed';
       const color = done ? WORLD_PALETTE.actionAccent1 : WORLD_PALETTE.birchAndSnow1;
       this.routeGraphic.fillStyle(color, done ? 0.9 : 0.5);
-      const dist = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y);
-      const steps = Math.floor(dist / 6);
-      for (let s = 0; s < steps; s += 1) {
-        if (!done && s % 2 === 1) continue;
-        const t = s / steps;
-        this.routeGraphic.fillRect(Math.round(from.x + (to.x - from.x) * t), Math.round(from.y + (to.y - from.y) * t), 2, 2);
+      const distance = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y);
+      const steps = Math.max(1, Math.floor(distance / 6));
+      for (let step = 0; step < steps; step += 1) {
+        if (!done && step % 2 === 1) continue;
+        const t = step / steps;
+        this.routeGraphic.fillRect(
+          Math.round(from.x + (to.x - from.x) * t),
+          Math.round(from.y + (to.y - from.y) * t),
+          2,
+          2,
+        );
       }
     }
   }
@@ -109,7 +144,7 @@ export class HubStageLayer {
   destroy(): void {
     this.routeGraphic.destroy();
     this.pinGraphic.destroy();
-    this.labels.forEach((l) => l.destroy());
+    this.labels.forEach((label) => label.destroy());
     this.labels.clear();
   }
 }
