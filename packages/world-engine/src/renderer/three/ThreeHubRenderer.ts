@@ -12,6 +12,7 @@ import {
   DirectionalLight,
   FogExp2,
   Group,
+  InstancedMesh,
   Mesh,
   MeshBasicMaterial,
   MeshToonMaterial,
@@ -372,11 +373,7 @@ export class ThreeHubRenderer {
     this.snowGround = snowGround;
     this.worldRoot.add(snowGround);
 
-    for (const path of HUB_WORLD_DEFINITION_V1.paths) {
-      for (let index = 0; index < path.points.length - 1; index += 1) {
-        this.createPathSegment(path.points[index], path.points[index + 1], path.width);
-      }
-    }
+    this.createPaths();
 
     const operations = HUB_WORLD_DEFINITION_V1.landmarks.find((item) => item.kind === 'operations');
     if (operations) {
@@ -413,7 +410,15 @@ export class ThreeHubRenderer {
   }
 
   private createDistantSkyline(): void {
-    for (let index = 0; index < 13; index += 1) {
+    const count = 13;
+    const blocks = new InstancedMesh(
+      new BoxGeometry(1, 1, 1),
+      this.toon(WORLD_PALETTE.stoneConcrete2),
+      count,
+    );
+    const transform = new Object3D();
+
+    for (let index = 0; index < count; index += 1) {
       const centerX = 24 + index * 50 + deterministicUnit(index, 11) * 16;
       const baseY = 120 + deterministicUnit(index, 12) * 6;
       const widthPx = 22 + deterministicUnit(index, 13) * 24;
@@ -423,23 +428,43 @@ export class ThreeHubRenderer {
       const right = this.projection.logicalToGround(centerX + widthPx / 2, baseY);
       const width = left.distanceTo(right);
       const height = heightPx / this.pixelsPerWorldY(base);
-      const material = this.toon(index % 4 === 0 ? WORLD_PALETTE.skyNight4 : WORLD_PALETTE.stoneConcrete2);
-      const block = new Mesh(new BoxGeometry(width, height, 7), material);
-      block.position.set(base.x, height / 2, base.z);
-      this.worldRoot.add(block);
+
+      transform.position.set(base.x, height / 2, base.z);
+      transform.rotation.set(0, 0, 0);
+      transform.scale.set(width, height, 7);
+      transform.updateMatrix();
+      blocks.setMatrixAt(index, transform.matrix);
     }
+
+    blocks.instanceMatrix.needsUpdate = true;
+    this.worldRoot.add(blocks);
   }
 
-  private createPathSegment(from: HubPoint, to: HubPoint, width: number): void {
-    const start = this.projection.logicalToGround(from.x, from.y);
-    const end = this.projection.logicalToGround(to.x, to.y);
-    const center = start.clone().add(end).multiplyScalar(0.5);
-    const dx = end.x - start.x;
-    const dz = end.z - start.z;
-    const length = Math.hypot(dx, dz);
-    const mesh = new Mesh(new BoxGeometry(length, 1.3, Math.max(width, 5)), this.pathMaterial);
-    mesh.position.set(center.x, 0.7, center.z);
-    mesh.rotation.y = -Math.atan2(dz, dx);
+  private createPaths(): void {
+    const segments: { from: HubPoint; to: HubPoint; width: number }[] = [];
+    for (const path of HUB_WORLD_DEFINITION_V1.paths) {
+      for (let index = 0; index < path.points.length - 1; index += 1) {
+        segments.push({ from: path.points[index], to: path.points[index + 1], width: path.width });
+      }
+    }
+
+    const mesh = new InstancedMesh(new BoxGeometry(1, 1, 1), this.pathMaterial, segments.length);
+    const transform = new Object3D();
+    segments.forEach((segment, index) => {
+      const start = this.projection.logicalToGround(segment.from.x, segment.from.y);
+      const end = this.projection.logicalToGround(segment.to.x, segment.to.y);
+      const center = start.clone().add(end).multiplyScalar(0.5);
+      const dx = end.x - start.x;
+      const dz = end.z - start.z;
+      const length = Math.hypot(dx, dz);
+
+      transform.position.set(center.x, 0.7, center.z);
+      transform.rotation.set(0, -Math.atan2(dz, dx), 0);
+      transform.scale.set(length, 1.3, Math.max(segment.width, 5));
+      transform.updateMatrix();
+      mesh.setMatrixAt(index, transform.matrix);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
     this.worldRoot.add(mesh);
   }
 
@@ -507,14 +532,24 @@ export class ThreeHubRenderer {
     const windowCount = Math.max(1, style.windowCount);
     const windowWidth = clamp(width / (windowCount * 3.0), 5, 14);
     const windowHeight = clamp(height * 0.18, 5, 16);
+    const windows = new InstancedMesh(
+      new BoxGeometry(windowWidth, windowHeight, 2.1),
+      this.windowMaterial,
+      windowCount,
+    );
+    if (interactive) windows.userData.buildingId = id;
+    const windowTransform = new Object3D();
     for (let index = 0; index < windowCount; index += 1) {
       const t = windowCount === 1 ? 0.5 : index / (windowCount - 1);
       const x = -width * 0.34 + t * width * 0.68;
-      const windowMesh = new Mesh(new BoxGeometry(windowWidth, windowHeight, 2.1), this.windowMaterial);
-      windowMesh.position.set(x, height * 0.52, frontZ);
-      if (interactive) windowMesh.userData.buildingId = id;
-      root.add(windowMesh);
+      windowTransform.position.set(x, height * 0.52, frontZ);
+      windowTransform.rotation.set(0, 0, 0);
+      windowTransform.scale.set(1, 1, 1);
+      windowTransform.updateMatrix();
+      windows.setMatrixAt(index, windowTransform.matrix);
     }
+    windows.instanceMatrix.needsUpdate = true;
+    root.add(windows);
 
     this.worldRoot.add(root);
     if (interactive) this.buildingRoots.push(root);
@@ -546,31 +581,41 @@ export class ThreeHubRenderer {
   }
 
   private createTrees(): void {
-    for (const [id, anchor] of Object.entries(HUB_WORLD_DEFINITION_V1.environmentAnchors)) {
-      if (!id.startsWith('tree.')) continue;
-      this.createTree(anchor);
-    }
-  }
+    const anchors = Object.entries(HUB_WORLD_DEFINITION_V1.environmentAnchors)
+      .filter(([id]) => id.startsWith('tree.'))
+      .map(([, anchor]) => anchor);
+    if (anchors.length === 0) return;
 
-  private createTree(anchor: HubPoint): void {
-    const base = this.projection.logicalToGround(anchor.x, anchor.y);
-    const scale = clamp(0.68 + ((anchor.y - 170) / 190) * 0.52, 0.62, 1.18);
-    const root = new Group();
-    root.position.copy(base);
+    const trunkMaterial = this.toon(WORLD_PALETTE.ochreTerracotta0);
+    const trunks = new InstancedMesh(new CylinderGeometry(3.7, 5.2, 24, 6), trunkMaterial, anchors.length);
+    const lowerCrowns = new InstancedMesh(new ConeGeometry(18, 34, 7), this.foliageMaterial, anchors.length);
+    const upperCrowns = new InstancedMesh(new ConeGeometry(13, 29, 7), this.foliageMaterial, anchors.length);
+    const transform = new Object3D();
 
-    const trunk = new Mesh(
-      new CylinderGeometry(3.7 * scale, 5.2 * scale, 24 * scale, 6),
-      this.toon(WORLD_PALETTE.ochreTerracotta0),
-    );
-    trunk.position.y = 12 * scale;
-    root.add(trunk);
+    anchors.forEach((anchor, index) => {
+      const base = this.projection.logicalToGround(anchor.x, anchor.y);
+      const scale = clamp(0.68 + ((anchor.y - 170) / 190) * 0.52, 0.62, 1.18);
 
-    const lower = new Mesh(new ConeGeometry(18 * scale, 34 * scale, 7), this.foliageMaterial);
-    lower.position.y = 33 * scale;
-    const upper = new Mesh(new ConeGeometry(13 * scale, 29 * scale, 7), this.foliageMaterial);
-    upper.position.y = 50 * scale;
-    root.add(lower, upper);
-    this.worldRoot.add(root);
+      transform.rotation.set(0, 0, 0);
+      transform.scale.set(scale, scale, scale);
+
+      transform.position.set(base.x, 12 * scale, base.z);
+      transform.updateMatrix();
+      trunks.setMatrixAt(index, transform.matrix);
+
+      transform.position.set(base.x, 33 * scale, base.z);
+      transform.updateMatrix();
+      lowerCrowns.setMatrixAt(index, transform.matrix);
+
+      transform.position.set(base.x, 50 * scale, base.z);
+      transform.updateMatrix();
+      upperCrowns.setMatrixAt(index, transform.matrix);
+    });
+
+    trunks.instanceMatrix.needsUpdate = true;
+    lowerCrowns.instanceMatrix.needsUpdate = true;
+    upperCrowns.instanceMatrix.needsUpdate = true;
+    this.worldRoot.add(trunks, lowerCrowns, upperCrowns);
   }
 
   private createForegroundRailing(): void {
@@ -588,14 +633,20 @@ export class ThreeHubRenderer {
     lowerRail.position.set(center.x, 11, center.z);
     this.worldRoot.add(lowerRail);
 
+    const posts = new InstancedMesh(new BoxGeometry(4, 28, 4), material, 9);
+    const postTransform = new Object3D();
     for (let index = 0; index <= 8; index += 1) {
       const t = index / 8;
       const x = start.x + (end.x - start.x) * t;
       const z = start.z + (end.z - start.z) * t;
-      const post = new Mesh(new BoxGeometry(4, 28, 4), material);
-      post.position.set(x, 14, z);
-      this.worldRoot.add(post);
+      postTransform.position.set(x, 14, z);
+      postTransform.rotation.set(0, 0, 0);
+      postTransform.scale.set(1, 1, 1);
+      postTransform.updateMatrix();
+      posts.setMatrixAt(index, postTransform.matrix);
     }
+    posts.instanceMatrix.needsUpdate = true;
+    this.worldRoot.add(posts);
   }
 
   private createAvatar(anchor: HubPoint): void {
