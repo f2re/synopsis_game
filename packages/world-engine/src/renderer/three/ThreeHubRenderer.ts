@@ -1,4 +1,3 @@
-/// <reference path="./three-poc.d.ts" />
 import Phaser from 'phaser';
 import {
   AmbientLight,
