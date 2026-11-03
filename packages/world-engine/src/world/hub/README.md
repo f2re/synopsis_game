@@ -9,6 +9,11 @@ Rules:
 - collision/navigation/interaction truth belongs here or in adjacent renderer-independent world modules;
 - render meshes may be regenerated, replaced or instanced without changing gameplay IDs;
 - weather, season, time-of-day and progression states change materials/particles/visibility, not canonical geometry;
-- the current `HUB_WORLD_DEFINITION_V1` is explicitly a `migration-baseline` until accepted Geometry Lock coordinates are transferred from the art-direction contract.
+- `HUB_WORLD_DEFINITION_V1` uses accepted `hub.geometry.lock_v1` (640×360) in the Three.js POC branch; its `bounds` are screen-space silhouettes, not approved ground footprints;
+- `HubNavigation.ts` plans routes through intersections of canonical path polylines, with bounded first/last connectors. It never interprets screen-space building bounds as collision obstacles;
+- route-finding tests are run with `pnpm world:test`; gameplay remains renderer-independent even though only the Three.js avatar currently consumes the routes;
+- **not yet accepted**: pedestrian collision/occupancy polygons, building footprint approval, path width clearance for avatars, dynamic obstacles, and movement completion gating for facility interactions.
+
+The next implementation owner (`living-world-engineer`) must add validated pedestrian footprints and entrance connectors before reporting collision-safe navigation. `game-runtime-webgl-engineer` adapts the renderer, while `web-performance-engineer` and `integration-release-engineer` independently review acceptance.
 
 Renderer code consumes this definition. Renderer code must not silently become a second source of world geometry truth.
