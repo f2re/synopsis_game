@@ -37,20 +37,20 @@ const DEFAULT_HEIGHT = 180;
 const PALETTE_NUMBERS = [
   WORLD_PALETTE.skyNight0,
   WORLD_PALETTE.skyNight2,
+  WORLD_PALETTE.skyNight4,
+  WORLD_PALETTE.twilight0,
+  WORLD_PALETTE.skyDay0,
+  WORLD_PALETTE.skyDay2,
   WORLD_PALETTE.waterGulf1,
   WORLD_PALETTE.waterGulf3,
   WORLD_PALETTE.foliagePine1,
   WORLD_PALETTE.foliagePine3,
-  WORLD_PALETTE.stoneConcrete0,
-  WORLD_PALETTE.stoneConcrete2,
-  WORLD_PALETTE.birchAndSnow1,
-  WORLD_PALETTE.birchAndSnow3,
-  WORLD_PALETTE.ochreTerracotta0,
-  WORLD_PALETTE.ochreTerracotta2,
-  WORLD_PALETTE.windowLight1,
-  WORLD_PALETTE.windowLight3,
-  WORLD_PALETTE.skyDay0,
-  WORLD_PALETTE.skyDay2,
+  WORLD_PALETTE.stoneConcrete1,
+  WORLD_PALETTE.stoneConcrete3,
+  WORLD_PALETTE.birchAndSnow2,
+  WORLD_PALETTE.ochreTerracotta1,
+  WORLD_PALETTE.ochreTerracotta3,
+  WORLD_PALETTE.windowLight2,
 ] as const;
 
 function paletteVectors(): Vector3[] {
@@ -139,8 +139,8 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 normalY = texture2D(tNormal, vUv + vec2(0.0, texel.y)).rgb;
     float normalDelta = max(length(centerNormal - normalX), length(centerNormal - normalY));
 
-    float depthEdge = step(0.0018, depthDelta);
-    float normalEdge = step(0.32, normalDelta);
+    float depthEdge = smoothstep(0.0021, 0.0048, depthDelta);
+    float normalEdge = smoothstep(0.30, 0.52, normalDelta);
     return clamp(max(depthEdge, normalEdge), 0.0, 1.0);
   }
 
@@ -150,7 +150,7 @@ const FRAGMENT_SHADER = /* glsl */ `
 
     if (uDitherEnabled) {
       float dither = bayer4(gl_FragCoord.xy) - 0.5;
-      color = clamp(color + dither * 0.055, 0.0, 1.0);
+      color = clamp(color + dither * 0.028, 0.0, 1.0);
     }
 
     if (uPaletteEnabled) {
@@ -159,7 +159,7 @@ const FRAGMENT_SHADER = /* glsl */ `
 
     if (uEdgesEnabled) {
       float edge = edgeMask();
-      color = mix(color, uPalette[0], edge * 0.78);
+      color = mix(color, uPalette[0], edge * 0.52);
     }
 
     gl_FragColor = vec4(color, source.a);
