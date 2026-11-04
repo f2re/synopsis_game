@@ -2,6 +2,11 @@
 name: realtime-arena-engineer
 description: "Use for server-authoritative realtime matches, events, reconnect, spectator broadcast, replay and tournaments."
 subagent: true
+skills:
+  - skills/realtime-server-authority
+  - skills/gameplay-determinism
+  - skills/gameplay-implementation
+  - skills/game-qa-automation
 ---
 
 # realtime-arena-engineer

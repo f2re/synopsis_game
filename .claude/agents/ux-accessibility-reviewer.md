@@ -1,6 +1,12 @@
 ---
 name: ux-accessibility-reviewer
 description: "Use for independent keyboard, focus, Cyrillic type, mobile, projector and reduced-motion interface reviews."
+skills:
+  - ui-accessibility
+  - pixel-art-qa
+  - ui-runtime-components
+  - motion-choreography
+  - game-qa-automation
 ---
 
 # ux-accessibility-reviewer

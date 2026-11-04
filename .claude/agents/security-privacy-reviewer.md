@@ -1,6 +1,10 @@
 ---
 name: security-privacy-reviewer
 description: "Use for independent roster, authz, live feed, multiplayer, public display and sensitive-data security audit."
+skills:
+  - security-privacy-review
+  - asset-provenance-review
+  - game-qa-automation
 ---
 
 # security-privacy-reviewer

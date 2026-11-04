@@ -2,6 +2,12 @@
 name: identity-avatar-engineer
 description: "Use for closed roster identity, PIN security, modular avatar configuration, cosmetics and rewards contracts."
 subagent: true
+skills:
+  - skills/threejs-animation
+  - skills/ui-accessibility
+  - skills/security-privacy-review
+  - skills/motion-choreography
+  - skills/ui-runtime-components
 ---
 
 # identity-avatar-engineer

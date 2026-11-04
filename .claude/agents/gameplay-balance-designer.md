@@ -1,6 +1,10 @@
 ---
 name: gameplay-balance-designer
 description: "Use for task difficulty, educational progression, PvP fairness, reward balance and exploit review."
+skills:
+  - gameplay-determinism
+  - gameplay-implementation
+  - level-layout-design
 ---
 
 # gameplay-balance-designer

@@ -2,6 +2,10 @@
 name: gameplay-balance-designer
 description: "Use for task difficulty, educational progression, PvP fairness, reward balance and exploit review."
 subagent: true
+skills:
+  - skills/gameplay-determinism
+  - skills/gameplay-implementation
+  - skills/level-layout-design
 ---
 
 # gameplay-balance-designer
