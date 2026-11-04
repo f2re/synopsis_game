@@ -1,6 +1,11 @@
 ---
 name: integration-release-engineer
 description: "Use for CI evidence, end-to-end regression, reproducible Linux/Astra packaging, migrations and release acceptance."
+skills:
+  - release-evidence
+  - agent-handoff-gate
+  - game-qa-automation
+  - asset-provenance-review
 ---
 
 # integration-release-engineer

@@ -2,6 +2,12 @@
 name: ux-accessibility-reviewer
 description: "Use for independent keyboard, focus, Cyrillic type, mobile, projector and reduced-motion interface reviews."
 subagent: true
+skills:
+  - skills/ui-accessibility
+  - skills/pixel-art-qa
+  - skills/ui-runtime-components
+  - skills/motion-choreography
+  - skills/game-qa-automation
 ---
 
 # ux-accessibility-reviewer

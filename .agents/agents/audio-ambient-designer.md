@@ -2,6 +2,10 @@
 name: audio-ambient-designer
 description: "Use for game ambience and SFX event mapping, volume hierarchy, sound licensing and accessible audio fallback."
 subagent: true
+skills:
+  - skills/ambient-audio
+  - skills/audio-direction-qa
+  - skills/asset-provenance-review
 ---
 
 # audio-ambient-designer

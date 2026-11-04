@@ -1,6 +1,9 @@
 ---
 name: meteo-methodologist-ru
 description: "Use for Russian synoptic terminology, source-backed method profiles, KN-01 interpretation, fronts and AT/OT correctness."
+skills:
+  - russian-synoptic-acceptance
+  - gameplay-determinism
 ---
 
 # meteo-methodologist-ru

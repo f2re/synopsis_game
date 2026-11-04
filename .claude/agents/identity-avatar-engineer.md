@@ -1,6 +1,12 @@
 ---
 name: identity-avatar-engineer
 description: "Use for closed roster identity, PIN security, modular avatar configuration, cosmetics and rewards contracts."
+skills:
+  - threejs-animation
+  - ui-accessibility
+  - security-privacy-review
+  - motion-choreography
+  - ui-runtime-components
 ---
 
 # identity-avatar-engineer

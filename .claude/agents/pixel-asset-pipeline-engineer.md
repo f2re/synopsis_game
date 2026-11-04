@@ -1,6 +1,13 @@
 ---
 name: pixel-asset-pipeline-engineer
 description: "Use for reproducible sprite and GLB asset pipelines, atlas packing, manifests, provenance and source/output separation."
+skills:
+  - pixel-asset-pipeline
+  - threejs-assets
+  - pixel-art-qa
+  - gltf-3d-pipeline
+  - pixel-atlas-production
+  - asset-provenance-review
 ---
 
 # pixel-asset-pipeline-engineer

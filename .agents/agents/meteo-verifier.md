@@ -2,6 +2,9 @@
 name: meteo-verifier
 description: "Use for independent meteorological answer reconstruction, KN-01 decoding verification and detection of ambiguous tasks."
 subagent: true
+skills:
+  - skills/russian-synoptic-acceptance
+  - skills/gameplay-determinism
 ---
 
 # meteo-verifier

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "engines": [
     "codex",
     "claude-code",
@@ -10,7 +10,9 @@
     "external_agents_are_helpers": true,
     "reviewer_independence": true,
     "remote_code_execution": false,
-    "codex_native_agents": ".codex/agents/*.toml"
+    "codex_native_agents": ".codex/agents/*.toml",
+    "external_helper_skills_are_explicit": true,
+    "external_helpers_require_independent_review": true
   },
   "external_agents": [
     {
@@ -22,7 +24,16 @@
       "sha": "52cd3e4b2feffb80eb8a388d9fa9c39ace5cf19f",
       "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/threejs-specialist.md",
       "license": "MIT GameStudio",
-      "mode": "adapted"
+      "mode": "adapted",
+      "skills": [
+        "threejs-scene",
+        "threejs-architecture",
+        "threejs-postprocessing"
+      ],
+      "reviewers": [
+        "web-performance-engineer",
+        "integration-release-engineer"
+      ]
     },
     {
       "id": "phaser-specialist",
@@ -33,7 +44,16 @@
       "sha": "a35ac61543e47100cc50ad07926e28a050064178",
       "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/phaser-specialist.md",
       "license": "MIT GameStudio",
-      "mode": "adapted"
+      "mode": "adapted",
+      "skills": [
+        "phaser4-scenes",
+        "phaser4-webgl",
+        "phaser-webgl-runtime"
+      ],
+      "reviewers": [
+        "web-performance-engineer",
+        "integration-release-engineer"
+      ]
     },
     {
       "id": "world-geometry-specialist",
@@ -44,7 +64,16 @@
       "sha": "e5f3460ea9e68c0393506443506ae134a618c3e3",
       "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/level-designer.md",
       "license": "MIT GameStudio",
-      "mode": "adapted"
+      "mode": "adapted",
+      "skills": [
+        "hub-nav-geometry",
+        "threejs-geometry",
+        "level-layout-design"
+      ],
+      "reviewers": [
+        "game-runtime-webgl-engineer",
+        "art-director"
+      ]
     },
     {
       "id": "technical-artist",
@@ -55,7 +84,16 @@
       "sha": "fb2b2c97fb1be224977a99d612d5c65638990a3c",
       "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/technical-artist.md",
       "license": "MIT GameStudio",
-      "mode": "adapted"
+      "mode": "adapted",
+      "skills": [
+        "pixel-asset-pipeline",
+        "gltf-3d-pipeline",
+        "asset-provenance-review"
+      ],
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "integration-release-engineer"
+      ]
     },
     {
       "id": "webgl-perf-auditor",
@@ -66,7 +104,278 @@
       "sha": "f0dc97a1b84dd854cdb44ef132603decbc608871",
       "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/webgl-perf-auditor.md",
       "license": "MIT skinnye",
-      "mode": "adapted"
+      "mode": "adapted",
+      "skills": [
+        "threejs-performance",
+        "glsl-webgl-shaders",
+        "release-evidence"
+      ],
+      "reviewers": [
+        "integration-release-engineer"
+      ]
+    },
+    {
+      "id": "webgl-shader-specialist",
+      "owner": "game-runtime-webgl-engineer",
+      "description": "Use for writing and reviewing WebGL2 GLSL vertex and fragment shaders, texture sampling, uniforms, postprocessing and pixel-perfect effects in the Phaser/Three Hub.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/webgl-shader-specialist.md",
+      "sha": "2b0af283fd4e8f45923daf518946a3bbda80c349",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/webgl-shader-specialist.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "glsl-webgl-shaders",
+        "threejs-postprocessing",
+        "phaser4-webgl"
+      ],
+      "reviewers": [
+        "web-performance-engineer",
+        "art-director"
+      ]
+    },
+    {
+      "id": "shader-artist",
+      "owner": "art-director",
+      "description": "Use for authoring the visual language of weather, water, foliage, outlines, dithering, palette and atmosphere shaders without sacrificing the 26063 pixel-art art direction.",
+      "source": "skinnye/3d-web-pack",
+      "file": "agents/shader-artist.md",
+      "sha": "184803df770de3302b26f6651c1f762ff40e36c2",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/shader-artist.md",
+      "license": "MIT skinnye",
+      "mode": "adapted",
+      "skills": [
+        "shader-art-direction",
+        "glsl-webgl-shaders",
+        "threejs-postprocessing"
+      ],
+      "reviewers": [
+        "game-runtime-webgl-engineer",
+        "web-performance-engineer"
+      ]
+    },
+    {
+      "id": "threejs-architect",
+      "owner": "game-runtime-webgl-engineer",
+      "description": "Use for designing Vanilla Three.js experimental 2.5D Hub scene architecture, scene graph, lifecycle, feature flags, WebGL2 fallback and performance budgets.",
+      "source": "skinnye/3d-web-pack",
+      "file": "agents/threejs-architect.md",
+      "sha": "4affe3864c3f02615a0e24fe73920154c6a2ee49",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/threejs-architect.md",
+      "license": "MIT skinnye",
+      "mode": "adapted",
+      "skills": [
+        "threejs-architecture",
+        "threejs-scene",
+        "threejs-performance"
+      ],
+      "reviewers": [
+        "web-performance-engineer",
+        "integration-release-engineer"
+      ]
+    },
+    {
+      "id": "web3d-asset-pipeline",
+      "owner": "pixel-asset-pipeline-engineer",
+      "description": "Use for preparing validated GLB/glTF meshes, mesh compression, texture formats, pivots, UVs and render-budgeted 2.5D assets without changing locked Hub architecture.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/web3d-asset-pipeline.md",
+      "sha": "a11b2384ff9f84fbf975912641621dda91637c73",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/web3d-asset-pipeline.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "gltf-3d-pipeline",
+        "threejs-assets",
+        "threejs-performance"
+      ],
+      "reviewers": [
+        "web-performance-engineer",
+        "art-director"
+      ]
+    },
+    {
+      "id": "asset-pipeline-engineer",
+      "owner": "pixel-asset-pipeline-engineer",
+      "description": "Use for provenance, reproducibility, build manifests and rights-safe ingestion of web 3D models and texture packages in the existing asset pipeline.",
+      "source": "skinnye/3d-web-pack",
+      "file": "agents/asset-pipeline-engineer.md",
+      "sha": "387c540375f3743dd2ce28eedd04aac4796dad99",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/asset-pipeline-engineer.md",
+      "license": "MIT skinnye",
+      "mode": "adapted",
+      "skills": [
+        "gltf-3d-pipeline",
+        "asset-provenance-review",
+        "threejs-assets"
+      ],
+      "reviewers": [
+        "integration-release-engineer",
+        "security-privacy-reviewer"
+      ]
+    },
+    {
+      "id": "motion-choreographer",
+      "owner": "living-world-engineer",
+      "description": "Use for choreographing Hub avatar and NPC movement, weather/season transitions, timed UI feedback and reduced-motion alternatives without webpage scroll animation frameworks.",
+      "source": "skinnye/3d-web-pack",
+      "file": "agents/motion-choreographer.md",
+      "sha": "0852a234193f74d0f75764a90e207436f09fa8b0",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/motion-choreographer.md",
+      "license": "MIT skinnye",
+      "mode": "adapted",
+      "skills": [
+        "motion-choreography",
+        "threejs-animation",
+        "living-world-browser"
+      ],
+      "reviewers": [
+        "art-director",
+        "web-performance-engineer",
+        "ux-accessibility-reviewer"
+      ]
+    },
+    {
+      "id": "web2d-asset-pipeline",
+      "owner": "pixel-asset-pipeline-engineer",
+      "description": "Use for atlas packing, stable sprite IDs, pivots, animation frames, alpha and nearest-neighbour texture sampling in the 26063 2D asset build.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/web2d-asset-pipeline.md",
+      "sha": "b03ef28c94d83298803cd59051e4c2562f1aa92a",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/web2d-asset-pipeline.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "pixel-atlas-production",
+        "pixel-asset-pipeline",
+        "pixel-art-qa"
+      ],
+      "reviewers": [
+        "pixel-art-quality-reviewer",
+        "integration-release-engineer"
+      ]
+    },
+    {
+      "id": "level-designer",
+      "owner": "living-world-engineer",
+      "description": "Use for player-facing level design, Hub affordances, accessible entrance placement, spatial pacing and POI discovery rather than technical collision implementation.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/level-designer.md",
+      "sha": "e5f3460ea9e68c0393506443506ae134a618c3e3",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/level-designer.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "level-layout-design",
+        "hub-nav-geometry",
+        "living-world-browser"
+      ],
+      "reviewers": [
+        "art-director",
+        "ux-accessibility-reviewer",
+        "game-runtime-webgl-engineer"
+      ]
+    },
+    {
+      "id": "gameplay-programmer",
+      "owner": "realtime-arena-engineer",
+      "description": "Use for implementing approved Blitz/Duel game mechanics, match timers and server-authoritative effects with deterministic tests and no meteorological answer leakage.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/gameplay-programmer.md",
+      "sha": "ca46193658b17c451ed3f5846dd88ed2392f5786",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/gameplay-programmer.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "gameplay-implementation",
+        "gameplay-determinism",
+        "realtime-server-authority"
+      ],
+      "reviewers": [
+        "gameplay-balance-designer",
+        "meteo-methodologist-ru",
+        "integration-release-engineer"
+      ]
+    },
+    {
+      "id": "ui-programmer",
+      "owner": "ui-pixel-designer",
+      "description": "Use for implementing existing React pixel UI widgets, Hub HUD, dialogs and classroom flows with keyboard/touch behavior and readable Cyrillic typography.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/ui-programmer.md",
+      "sha": "d3f240a73a12aa4c4f83d4a91d36b268221ac767",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/ui-programmer.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "ui-runtime-components",
+        "ui-accessibility",
+        "pixel-art-direction"
+      ],
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "integration-release-engineer"
+      ]
+    },
+    {
+      "id": "qa-lead",
+      "owner": "integration-release-engineer",
+      "description": "Use for planning independent game regression test matrices, risk-prioritized issue triage and release quality gates rather than editing gameplay code.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/qa-lead.md",
+      "sha": "65c7a5ad2f3ab6d77e0fe8ad42d5fad26570a079",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/qa-lead.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "game-qa-automation",
+        "release-evidence",
+        "agent-handoff-gate"
+      ],
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "security-privacy-reviewer"
+      ]
+    },
+    {
+      "id": "qa-tester",
+      "owner": "integration-release-engineer",
+      "description": "Use for executing reproducible browser and integration test cases, reporting defects, validating screenshots and detecting regressions across 2D and experimental 2.5D Hub.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/qa-tester.md",
+      "sha": "0a6fba50c8060a5ec2dbdad42b67e5481e27a148",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/qa-tester.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "game-qa-automation",
+        "ui-accessibility",
+        "release-evidence"
+      ],
+      "reviewers": [
+        "ux-accessibility-reviewer",
+        "web-performance-engineer"
+      ]
+    },
+    {
+      "id": "audio-director",
+      "owner": "audio-ambient-designer",
+      "description": "Use for approving audio palette, Hub weather soundscapes, ambient and event mix hierarchy, fallback mute/reduced-sensory profiles and sound rights.",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/audio-director.md",
+      "sha": "7738969e3c46fa0be61fa70fb8f3f05c2d31ee54",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/audio-director.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted",
+      "skills": [
+        "audio-direction-qa",
+        "ambient-audio",
+        "asset-provenance-review"
+      ],
+      "reviewers": [
+        "art-director",
+        "ux-accessibility-reviewer"
+      ]
     }
   ],
   "external_skills": [
@@ -213,6 +522,114 @@
       "blob_sha": null,
       "url": null,
       "license": "original project skill"
+    },
+    {
+      "id": "glsl-webgl-shaders",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/webgl-shader-specialist.md",
+      "blob_sha": "2b0af283fd4e8f45923daf518946a3bbda80c349",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/webgl-shader-specialist.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "shader-art-direction",
+      "mode": "adapted",
+      "source": "skinnye/3d-web-pack",
+      "upstream_path": "agents/shader-artist.md",
+      "blob_sha": "184803df770de3302b26f6651c1f762ff40e36c2",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/shader-artist.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "threejs-architecture",
+      "mode": "adapted",
+      "source": "skinnye/3d-web-pack",
+      "upstream_path": "agents/threejs-architect.md",
+      "blob_sha": "4affe3864c3f02615a0e24fe73920154c6a2ee49",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/threejs-architect.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "gltf-3d-pipeline",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/web3d-asset-pipeline.md",
+      "blob_sha": "a11b2384ff9f84fbf975912641621dda91637c73",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/web3d-asset-pipeline.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "asset-provenance-review",
+      "mode": "adapted",
+      "source": "skinnye/3d-web-pack",
+      "upstream_path": "agents/asset-pipeline-engineer.md",
+      "blob_sha": "387c540375f3743dd2ce28eedd04aac4796dad99",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/asset-pipeline-engineer.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "motion-choreography",
+      "mode": "adapted",
+      "source": "skinnye/3d-web-pack",
+      "upstream_path": "agents/motion-choreographer.md",
+      "blob_sha": "0852a234193f74d0f75764a90e207436f09fa8b0",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/motion-choreographer.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "pixel-atlas-production",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/web2d-asset-pipeline.md",
+      "blob_sha": "b03ef28c94d83298803cd59051e4c2562f1aa92a",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/web2d-asset-pipeline.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "level-layout-design",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/level-designer.md",
+      "blob_sha": "e5f3460ea9e68c0393506443506ae134a618c3e3",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/level-designer.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "gameplay-implementation",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/gameplay-programmer.md",
+      "blob_sha": "ca46193658b17c451ed3f5846dd88ed2392f5786",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/gameplay-programmer.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "ui-runtime-components",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/ui-programmer.md",
+      "blob_sha": "d3f240a73a12aa4c4f83d4a91d36b268221ac767",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/ui-programmer.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "game-qa-automation",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/qa-lead.md",
+      "blob_sha": "65c7a5ad2f3ab6d77e0fe8ad42d5fad26570a079",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/qa-lead.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
+    },
+    {
+      "id": "audio-direction-qa",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/audio-director.md",
+      "blob_sha": "7738969e3c46fa0be61fa70fb8f3f05c2d31ee54",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/audio-director.md",
+      "license": "original 26063 project adaptation; upstream MIT reference"
     }
   ],
   "role_skills": {
@@ -235,68 +652,100 @@
     "art-director": [
       "pixel-art-direction",
       "pixel-art-qa",
-      "threejs-postprocessing"
+      "threejs-postprocessing",
+      "shader-art-direction",
+      "audio-direction-qa"
     ],
     "pixel-asset-designer": [
       "pixel-art-direction",
       "pixel-art-qa",
-      "threejs-assets"
+      "threejs-assets",
+      "pixel-atlas-production",
+      "gltf-3d-pipeline"
     ],
     "pixel-art-quality-reviewer": [
       "pixel-art-qa",
-      "pixel-asset-pipeline"
+      "pixel-asset-pipeline",
+      "pixel-atlas-production"
     ],
     "pixel-asset-pipeline-engineer": [
       "pixel-asset-pipeline",
       "threejs-assets",
-      "pixel-art-qa"
+      "pixel-art-qa",
+      "gltf-3d-pipeline",
+      "pixel-atlas-production",
+      "asset-provenance-review"
     ],
     "game-runtime-webgl-engineer": [
       "phaser-webgl-runtime",
       "phaser4-scenes",
       "phaser4-webgl",
       "threejs-scene",
-      "threejs-postprocessing"
+      "threejs-postprocessing",
+      "glsl-webgl-shaders",
+      "threejs-architecture"
     ],
     "living-world-engineer": [
       "living-world-browser",
       "hub-nav-geometry",
-      "threejs-geometry"
+      "threejs-geometry",
+      "motion-choreography",
+      "level-layout-design"
     ],
     "audio-ambient-designer": [
-      "ambient-audio"
+      "ambient-audio",
+      "audio-direction-qa",
+      "asset-provenance-review"
     ],
     "web-performance-engineer": [
       "threejs-performance",
-      "release-evidence"
+      "release-evidence",
+      "glsl-webgl-shaders",
+      "gltf-3d-pipeline",
+      "shader-art-direction"
     ],
     "realtime-arena-engineer": [
       "realtime-server-authority",
-      "gameplay-determinism"
+      "gameplay-determinism",
+      "gameplay-implementation",
+      "game-qa-automation"
     ],
     "identity-avatar-engineer": [
       "threejs-animation",
       "ui-accessibility",
-      "security-privacy-review"
+      "security-privacy-review",
+      "motion-choreography",
+      "ui-runtime-components"
     ],
     "gameplay-balance-designer": [
-      "gameplay-determinism"
+      "gameplay-determinism",
+      "gameplay-implementation",
+      "level-layout-design"
     ],
     "ux-accessibility-reviewer": [
       "ui-accessibility",
-      "pixel-art-qa"
+      "pixel-art-qa",
+      "ui-runtime-components",
+      "motion-choreography",
+      "game-qa-automation"
     ],
     "security-privacy-reviewer": [
-      "security-privacy-review"
+      "security-privacy-review",
+      "asset-provenance-review",
+      "game-qa-automation"
     ],
     "integration-release-engineer": [
       "release-evidence",
-      "agent-handoff-gate"
+      "agent-handoff-gate",
+      "game-qa-automation",
+      "asset-provenance-review"
     ],
     "ui-pixel-designer": [
       "ui-accessibility",
       "pixel-art-direction",
-      "pixel-art-qa"
+      "pixel-art-qa",
+      "ui-runtime-components",
+      "shader-art-direction"
     ]
   }
 }

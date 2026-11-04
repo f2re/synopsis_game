@@ -3,6 +3,11 @@ name: technical-artist
 description: "Use for technical pixel-art and GLB/texture assets, atlas manifests, geometry alignment and visual validation."
 subagent: true
 mainAgent: false
+commandExecutionPolicy: sandbox
+skills:
+  - skills/pixel-asset-pipeline
+  - skills/gltf-3d-pipeline
+  - skills/asset-provenance-review
 ---
 
 # technical-artist — specialized external capability
@@ -21,3 +26,7 @@ Use for technical acceptance of native-resolution sprites, editable Aseprite sou
 ## Handoff and limits
 
 This specialist is an adapted project helper, not an additional owner or an imported executable tool. Read `AGENTS.md`, `agents/registry.yaml`, the canonical role and project ADRs. Record the target branch, changed files, reproducible tests, acceptance evidence and independent reviewers. Do not install upstream tools, bypass owner/reviewer separation, change engine architecture, or imply a model/client was run without evidence.
+
+## Skill routing
+
+This helper consumes `.agents/skills/pixel-asset-pipeline/SKILL.md`, `.agents/skills/gltf-3d-pipeline/SKILL.md`, `.agents/skills/asset-provenance-review/SKILL.md`. Registered owner: `agents/roles/pixel-asset-pipeline-engineer.md`. Independent reviewers: `pixel-art-quality-reviewer`, `integration-release-engineer`. No extra tool permissions or independent acceptance are granted.

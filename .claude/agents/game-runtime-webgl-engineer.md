@@ -1,6 +1,14 @@
 ---
 name: game-runtime-webgl-engineer
 description: "Use for Phaser 4 scenes, the React game bridge, experimental Three.js Hub renderer, WebGL shaders and lifecycle."
+skills:
+  - phaser-webgl-runtime
+  - phaser4-scenes
+  - phaser4-webgl
+  - threejs-scene
+  - threejs-postprocessing
+  - glsl-webgl-shaders
+  - threejs-architecture
 ---
 
 # game-runtime-webgl-engineer

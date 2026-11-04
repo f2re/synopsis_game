@@ -1,6 +1,12 @@
 ---
 name: web-performance-engineer
 description: "Use for independent GPU/WebGL profiling, frame p95, memory and low-power behaviour on target browser devices."
+skills:
+  - threejs-performance
+  - release-evidence
+  - glsl-webgl-shaders
+  - gltf-3d-pipeline
+  - shader-art-direction
 ---
 
 # web-performance-engineer

@@ -1,6 +1,9 @@
 ---
 name: orchestrator
 description: "Use for breaking roadmap work into tasks, assigning internal owners and independent reviewers, ordering dependent PRs and handoffs."
+skills:
+  - agent-handoff-gate
+  - release-evidence
 ---
 
 # orchestrator

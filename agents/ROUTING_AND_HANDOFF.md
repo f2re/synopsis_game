@@ -82,3 +82,8 @@ Visual disagreement is resolved by the accepted Art Direction/ADR, then Art Dire
 ## 8. Completion
 
 A task is not complete because code compiles. It is complete when its acceptance criteria and required gates are recorded and the integration owner can reproduce the result.
+## 9. External specialist skill dispatch
+
+Use `agents/EXTERNAL_SPECIALISTS_ROUTING.md` for the verified 18-helper/35-skill matrix. Select the internal owner from the canonical registry first, then a helper for a sharply scoped advisory task; do not let helpers claim to replace an internal implementation owner. Use the helper's `skills` frontmatter (Claude/Antigravity) or `agents/capability-catalog.json` (Codex) to load exact canonical skills.
+
+Examples: `webgl-shader-specialist` for shader correctness and `shader-artist` for palette/effect visuals; `web3d-asset-pipeline` for GLB packaging and `asset-pipeline-engineer` for provenance; `qa-lead` for a test matrix and `qa-tester` for observed test runs. Do not double-assign the same review as both implementation and independent approval. To accept a result, require the branch/SHA, test commands, source/asset provenance, and registered review verdicts.

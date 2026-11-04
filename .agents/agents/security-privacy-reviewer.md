@@ -2,6 +2,10 @@
 name: security-privacy-reviewer
 description: "Use for independent roster, authz, live feed, multiplayer, public display and sensitive-data security audit."
 subagent: true
+skills:
+  - skills/security-privacy-review
+  - skills/asset-provenance-review
+  - skills/game-qa-automation
 ---
 
 # security-privacy-reviewer

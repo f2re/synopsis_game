@@ -21,6 +21,7 @@ jobs:
       - name: Проверить Python-контракты
         run: |
           python tools/validate_agent_kit.py
+          python tools/validate_external_agent_matrix.py --json
           python tools/validate_repo.py
           python tools/validate_content_contracts.py
           python tools/validate_architecture.py
