@@ -103,6 +103,19 @@ jobs:
 
           sha256sum hub-visual-smoke/*.png | tee hub-visual-smoke/SHA256SUMS.txt
 
+      - name: Сохранить пересечения дорожек с процедурной геометрией (H3D-037)
+        run: |
+          node --experimental-strip-types packages/world-engine/src/world/hub/spatialAuditCli.ts > hub-visual-smoke/spatial-audit.json
+          python -m json.tool hub-visual-smoke/spatial-audit.json >/dev/null
+          python - <<'PY'
+          import json
+          with open('hub-visual-smoke/spatial-audit.json', encoding='utf-8') as source:
+              data = json.load(source)
+          print(f"Ground-footprint review: {data['structureCount']} structures, {data['conflictCount']} path conflicts")
+          # Review evidence only. Until art approval, nonzero conflict count
+          # does not change Geometry Lock or cause an unrelated visual failure.
+          PY
+
       - name: Проверить performance probe в реальном браузерном runtime
         env:
           CHROME: ${{ steps.chrome.outputs.binary }}
