@@ -1,67 +1,32 @@
 import Phaser from 'phaser';
 import { WORLD_PALETTE } from '../theme/tokens';
+import {
+  calculateIntegerPassepartout,
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
+  WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
+  type ViewportFitResult,
+} from './logicalViewportMath.ts';
 
-export const LEGACY_LOGICAL_WIDTH = 480;
-export const LEGACY_LOGICAL_HEIGHT = 270;
-export const HUB_LOGICAL_WIDTH = 640;
-export const HUB_LOGICAL_HEIGHT = 360;
-
-/**
- * Backward-compatible aliases for legacy 480x270 scenes.
- * New scene code should prefer explicit scene-specific constants.
- */
-export const WORLD_LOGICAL_WIDTH = LEGACY_LOGICAL_WIDTH;
-export const WORLD_LOGICAL_HEIGHT = LEGACY_LOGICAL_HEIGHT;
-
-export interface LogicalViewportSize {
-  width: number;
-  height: number;
-}
+export {
+  calculateIntegerPassepartout,
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
+  LEGACY_LOGICAL_HEIGHT,
+  LEGACY_LOGICAL_WIDTH,
+  WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
+} from './logicalViewportMath.ts';
+export type { LogicalViewportSize, ViewportFitResult } from './logicalViewportMath.ts';
 
 export const SCENE_LOGICAL_VIEWPORTS = {
   hubThree2d: { width: HUB_LOGICAL_WIDTH, height: HUB_LOGICAL_HEIGHT },
-  legacy: { width: LEGACY_LOGICAL_WIDTH, height: LEGACY_LOGICAL_HEIGHT },
-} as const satisfies Record<string, LogicalViewportSize>;
-
-export interface ViewportFitResult {
-  integerScale: number;
-  viewportX: number;
-  viewportY: number;
-  viewportWidth: number;
-  viewportHeight: number;
-}
+  legacy: { width: WORLD_LOGICAL_WIDTH, height: WORLD_LOGICAL_HEIGHT },
+} as const;
 
 export interface LogicalViewportOptions {
   backgroundColor?: string | number;
-}
-
-/**
- * Вычисляет целочисленное масштабирование (Integer Scaling) и рамку-паспарту.
- * При окне меньше logical canvas сохраняет scale=1 и допускает симметричный crop,
- * вместо размытого fractional downscale.
- */
-export function calculateIntegerPassepartout(
-  windowWidth: number,
-  windowHeight: number,
-  logicalWidth = WORLD_LOGICAL_WIDTH,
-  logicalHeight = WORLD_LOGICAL_HEIGHT,
-): ViewportFitResult {
-  const scaleX = windowWidth / logicalWidth;
-  const scaleY = windowHeight / logicalHeight;
-  const integerScale = Math.max(1, Math.floor(Math.min(scaleX, scaleY)));
-
-  const viewportWidth = logicalWidth * integerScale;
-  const viewportHeight = logicalHeight * integerScale;
-  const viewportX = Math.floor((windowWidth - viewportWidth) / 2);
-  const viewportY = Math.floor((windowHeight - viewportHeight) / 2);
-
-  return {
-    integerScale,
-    viewportX,
-    viewportY,
-    viewportWidth,
-    viewportHeight,
-  };
 }
 
 export function fitLogicalViewport(
