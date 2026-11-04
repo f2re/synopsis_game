@@ -160,13 +160,13 @@ Facade change, readable event graphics, excessive brightness or activity outside
 
 ### References
 - **Image A:** `hub.geometry.lock_v1`.
-- **Image B:** accepted main 26063 main operations building architecture.
+- **Image B:** accepted main 26063 Main Operations Building architecture.
 
 ### Output contract
 Exactly ONE `640×360` transparent RGBA overlay limited to accepted lobby/entrance/window openings.
 
 ### Generation prompt
-Create an active but calm 26063 main operations building lobby state. Through the accepted entrance and nearby glazing, add warm spatial depth, a dark floor plane, 2–4 tiny staff/student silhouettes in simple groups and restrained interior fixture light. The lobby should make the central building feel occupied without becoming a focal cutscene. Keep stairs, columns, doors and facade untouched; figures remain behind the entrance plane. Output one image only.
+Create an active but calm 26063 Main Operations Building lobby state. Through the accepted entrance and nearby glazing, add warm spatial depth, a dark floor plane, 2–4 tiny staff/student silhouettes in simple groups and restrained interior fixture light. The lobby should make the central building feel occupied without becoming a focal cutscene. Keep stairs, columns, doors and facade untouched; figures remain behind the entrance plane. Output one image only.
 
 ### Hard negatives
 No exterior crowd, no new door, no readable reception signs, no banners, no facade repaint, no UI/text, no contact sheet/collage.
