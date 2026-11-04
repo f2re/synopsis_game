@@ -1,0 +1,302 @@
+{
+  "version": 1,
+  "engines": [
+    "codex",
+    "claude-code",
+    "antigravity-gemini"
+  ],
+  "policy": {
+    "canonical_roles": "agents/registry.yaml",
+    "external_agents_are_helpers": true,
+    "reviewer_independence": true,
+    "remote_code_execution": false,
+    "codex_native_agents": ".codex/agents/*.toml"
+  },
+  "external_agents": [
+    {
+      "id": "threejs-specialist",
+      "owner": "game-runtime-webgl-engineer",
+      "description": "Vanilla Three.js 2.5D Hub rendering, orthographic projection and lifecycle",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/threejs-specialist.md",
+      "sha": "52cd3e4b2feffb80eb8a388d9fa9c39ace5cf19f",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/threejs-specialist.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted"
+    },
+    {
+      "id": "phaser-specialist",
+      "owner": "game-runtime-webgl-engineer",
+      "description": "Phaser 4 scene lifecycle, bridge and input integration",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/phaser-specialist.md",
+      "sha": "a35ac61543e47100cc50ad07926e28a050064178",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/phaser-specialist.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted"
+    },
+    {
+      "id": "world-geometry-specialist",
+      "owner": "living-world-engineer",
+      "description": "Renderer-independent Hub layout, walking graph, ground footprints and collisions",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/level-designer.md",
+      "sha": null,
+      "url": "https://github.com/bullish0x/GameStudio/blob/HEAD/.agents/agents/level-designer.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted"
+    },
+    {
+      "id": "technical-artist",
+      "owner": "pixel-asset-pipeline-engineer",
+      "description": "Sprite and GLB technical acceptance, manifests, textures and shader assets",
+      "source": "bullish0x/GameStudio",
+      "file": ".agents/agents/technical-artist.md",
+      "sha": "fb2b2c97fb1be224977a99d612d5c65638990a3c",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/technical-artist.md",
+      "license": "MIT GameStudio",
+      "mode": "adapted"
+    },
+    {
+      "id": "webgl-perf-auditor",
+      "owner": "web-performance-engineer",
+      "description": "Independent frame-time, GPU resource, resize and WebGL context review",
+      "source": "skinnye/3d-web-pack",
+      "file": "agents/webgl-perf-auditor.md",
+      "sha": "f0dc97a1b84dd854cdb44ef132603decbc608871",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/webgl-perf-auditor.md",
+      "license": "MIT skinnye",
+      "mode": "adapted"
+    }
+  ],
+  "external_skills": [
+    {
+      "id": "threejs-scene",
+      "mode": "vendored",
+      "source": "cesartevisual/threejs-skills",
+      "upstream_path": "skills/threejs-scene/SKILL.md",
+      "blob_sha": "7a201b0e37a694aa9087aa0381d0473e9cad2f3a",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-scene/SKILL.md",
+      "license": "MIT Three.js Skills contributors"
+    },
+    {
+      "id": "threejs-geometry",
+      "mode": "vendored",
+      "source": "cesartevisual/threejs-skills",
+      "upstream_path": "skills/threejs-geometry/SKILL.md",
+      "blob_sha": "2220c9327a43bc0b9d5e36c94d775e83450d9141",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-geometry/SKILL.md",
+      "license": "MIT Three.js Skills contributors"
+    },
+    {
+      "id": "threejs-postprocessing",
+      "mode": "vendored",
+      "source": "cesartevisual/threejs-skills",
+      "upstream_path": "skills/threejs-postprocessing/SKILL.md",
+      "blob_sha": "5324e75860531c9856836eae8fa53e08d909da1a",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-postprocessing/SKILL.md",
+      "license": "MIT Three.js Skills contributors"
+    },
+    {
+      "id": "threejs-performance",
+      "mode": "vendored",
+      "source": "cesartevisual/threejs-skills",
+      "upstream_path": "skills/threejs-performance/SKILL.md",
+      "blob_sha": "14189766fce1523dfaf7b1aa64d431870b0d6e0f",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-performance/SKILL.md",
+      "license": "MIT Three.js Skills contributors"
+    },
+    {
+      "id": "threejs-animation",
+      "mode": "vendored",
+      "source": "cesartevisual/threejs-skills",
+      "upstream_path": "skills/threejs-animation/SKILL.md",
+      "blob_sha": "58deab629aef059c07bad34b16a090e94947e3b7",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-animation/SKILL.md",
+      "license": "MIT Three.js Skills contributors"
+    },
+    {
+      "id": "threejs-assets",
+      "mode": "vendored",
+      "source": "cesartevisual/threejs-skills",
+      "upstream_path": "skills/threejs-assets/SKILL.md",
+      "blob_sha": "6c0a3b491d32865e36b9485316c96bc69d22de39",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-assets/SKILL.md",
+      "license": "MIT Three.js Skills contributors"
+    },
+    {
+      "id": "phaser4-scenes",
+      "mode": "adapted",
+      "source": "phaserjs/phaser",
+      "upstream_path": "skills/scenes/SKILL.md",
+      "blob_sha": "c90c5e8b26993e6cd726ab8c4f36e4129cbf277d",
+      "url": "https://github.com/phaserjs/phaser/blob/main/skills/scenes/SKILL.md",
+      "license": "upstream reference, original adaptation"
+    },
+    {
+      "id": "phaser4-webgl",
+      "mode": "adapted",
+      "source": "phaserjs/phaser",
+      "upstream_path": "skills/v4-new-features/SKILL.md",
+      "blob_sha": "e06a1828337d32cfa78cd9c00b4c89c77a023b07",
+      "url": "https://github.com/phaserjs/phaser/blob/main/skills/v4-new-features/SKILL.md",
+      "license": "upstream reference, original adaptation"
+    },
+    {
+      "id": "pixel-art-qa",
+      "mode": "adapted",
+      "source": "ProkStudio/skills",
+      "upstream_path": "skills/game/2d/pixel-art-fundamentals/SKILL.md",
+      "blob_sha": "9d542f2bc632504082f13d6d6b1508ea65a49f36",
+      "url": "https://github.com/ProkStudio/skills/blob/main/skills/game/2d/pixel-art-fundamentals/SKILL.md",
+      "license": "upstream reference only, original adaptation"
+    },
+    {
+      "id": "hub-nav-geometry",
+      "mode": "adapted",
+      "source": "bullish0x/GameStudio",
+      "upstream_path": ".agents/agents/level-designer.md",
+      "blob_sha": null,
+      "url": "https://github.com/bullish0x/GameStudio/blob/HEAD/.agents/agents/level-designer.md",
+      "license": "original project skill"
+    },
+    {
+      "id": "agent-handoff-gate",
+      "mode": "adapted",
+      "source": null,
+      "upstream_path": null,
+      "blob_sha": null,
+      "url": null,
+      "license": "original project skill"
+    },
+    {
+      "id": "realtime-server-authority",
+      "mode": "adapted",
+      "source": null,
+      "upstream_path": null,
+      "blob_sha": null,
+      "url": null,
+      "license": "original project skill"
+    },
+    {
+      "id": "gameplay-determinism",
+      "mode": "adapted",
+      "source": null,
+      "upstream_path": null,
+      "blob_sha": null,
+      "url": null,
+      "license": "original project skill"
+    },
+    {
+      "id": "ui-accessibility",
+      "mode": "adapted",
+      "source": null,
+      "upstream_path": null,
+      "blob_sha": null,
+      "url": null,
+      "license": "original project skill"
+    },
+    {
+      "id": "security-privacy-review",
+      "mode": "adapted",
+      "source": null,
+      "upstream_path": null,
+      "blob_sha": null,
+      "url": null,
+      "license": "original project skill"
+    },
+    {
+      "id": "release-evidence",
+      "mode": "adapted",
+      "source": null,
+      "upstream_path": null,
+      "blob_sha": null,
+      "url": null,
+      "license": "original project skill"
+    }
+  ],
+  "role_skills": {
+    "orchestrator": [
+      "agent-handoff-gate",
+      "release-evidence"
+    ],
+    "meteo-methodologist-ru": [
+      "russian-synoptic-acceptance",
+      "gameplay-determinism"
+    ],
+    "meteo-verifier": [
+      "russian-synoptic-acceptance",
+      "gameplay-determinism"
+    ],
+    "live-kn01-engineer": [
+      "live-kn01",
+      "realtime-server-authority"
+    ],
+    "art-director": [
+      "pixel-art-direction",
+      "pixel-art-qa",
+      "threejs-postprocessing"
+    ],
+    "pixel-asset-designer": [
+      "pixel-art-direction",
+      "pixel-art-qa",
+      "threejs-assets"
+    ],
+    "pixel-art-quality-reviewer": [
+      "pixel-art-qa",
+      "pixel-asset-pipeline"
+    ],
+    "pixel-asset-pipeline-engineer": [
+      "pixel-asset-pipeline",
+      "threejs-assets",
+      "pixel-art-qa"
+    ],
+    "game-runtime-webgl-engineer": [
+      "phaser-webgl-runtime",
+      "phaser4-scenes",
+      "phaser4-webgl",
+      "threejs-scene",
+      "threejs-postprocessing"
+    ],
+    "living-world-engineer": [
+      "living-world-browser",
+      "hub-nav-geometry",
+      "threejs-geometry"
+    ],
+    "audio-ambient-designer": [
+      "ambient-audio"
+    ],
+    "web-performance-engineer": [
+      "threejs-performance",
+      "release-evidence"
+    ],
+    "realtime-arena-engineer": [
+      "realtime-server-authority",
+      "gameplay-determinism"
+    ],
+    "identity-avatar-engineer": [
+      "threejs-animation",
+      "ui-accessibility",
+      "security-privacy-review"
+    ],
+    "gameplay-balance-designer": [
+      "gameplay-determinism"
+    ],
+    "ux-accessibility-reviewer": [
+      "ui-accessibility",
+      "pixel-art-qa"
+    ],
+    "security-privacy-reviewer": [
+      "security-privacy-review"
+    ],
+    "integration-release-engineer": [
+      "release-evidence",
+      "agent-handoff-gate"
+    ],
+    "ui-pixel-designer": [
+      "ui-accessibility",
+      "pixel-art-direction",
+      "pixel-art-qa"
+    ]
+  }
+}
