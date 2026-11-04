@@ -182,6 +182,38 @@ async function run(cdp) {
   await capture(cdp, 'retarget-arrival');
   await escape(cdp);
   await until(cdp, 'final modal closes', s => s?.dossierOpen === false, 5000);
+
+  // Keyboard-only access: real Tab moves from the canvas host to the
+  // first native semantic building button. Enter must request exactly the
+  // same safe walking + dossier flow as a physical mouse pointer hit.
+  await evaluate(cdp, "document.querySelector('.world-canvas-host').focus(); true");
+  await cdp.request('Input.dispatchKeyEvent', {
+    type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9,
+  });
+  await cdp.request('Input.dispatchKeyEvent', {
+    type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9,
+  });
+  const keyboardId = await evaluate(cdp,
+    "document.activeElement?.getAttribute('data-hub-building-id') ?? null");
+  assert.ok(keyboardId, 'Tab from game canvas must focus a native building button');
+  const oldCount = state.worldEvents.length;
+  await cdp.request('Input.dispatchKeyEvent', {
+    type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13,
+  });
+  await cdp.request('Input.dispatchKeyEvent', {
+    type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13,
+  });
+  state = await until(cdp, 'keyboard-selected building arrival', s =>
+    s?.worldEvents?.length > oldCount && s.dossierOpen === true, 45000);
+  assert.equal(state.worldEvents.at(-1), keyboardId, 'Enter must visit the focused building');
+  assert.equal(state.worldEvents.length, oldCount + 1, 'Keyboard visit must emit once');
+  report.steps.push({
+    name: 'Tab -> native building button -> Enter -> safe visit -> dossier',
+    result: 'PASS', building: keyboardId,
+  });
+  await capture(cdp, 'keyboard-arrival');
+  await escape(cdp);
+  await until(cdp, 'keyboard modal closes', s => s?.dossierOpen === false, 5000);
 }
 
 const profile = mkdtempSync(join(tmpdir(), 'hub-cdp-'));
