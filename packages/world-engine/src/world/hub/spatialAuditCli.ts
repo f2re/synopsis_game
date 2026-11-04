@@ -5,7 +5,7 @@ import { auditHubProceduralPathCrossings, previewHubProceduralFootprints } from 
 const world = HUB_WORLD_DEFINITION_V1;
 const footprints = previewHubProceduralFootprints(world);
 const conflicts = auditHubProceduralPathCrossings(world);
-process.stdout.write(JSON.stringify({
+console.log(JSON.stringify({
   contract: world.geometryLockId,
   status: 'unapproved-procedural-ground-footprint-preview',
   logicalSize: world.logicalSize,
@@ -14,4 +14,4 @@ process.stdout.write(JSON.stringify({
   conflictCount: conflicts.length,
   footprints,
   conflicts,
-}, null, 2) + '\n');
+}, null, 2));
