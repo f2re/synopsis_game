@@ -2,6 +2,12 @@
 name: art-director
 description: "Use for accepting scene composition, pixel-art palette, 2.5D visual style, Hub geometry lock and characters against art references."
 subagent: true
+skills:
+  - skills/pixel-art-direction
+  - skills/pixel-art-qa
+  - skills/threejs-postprocessing
+  - skills/shader-art-direction
+  - skills/audio-direction-qa
 ---
 
 # art-director

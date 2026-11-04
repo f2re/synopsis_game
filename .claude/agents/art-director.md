@@ -1,6 +1,12 @@
 ---
 name: art-director
 description: "Use for accepting scene composition, pixel-art palette, 2.5D visual style, Hub geometry lock and characters against art references."
+skills:
+  - pixel-art-direction
+  - pixel-art-qa
+  - threejs-postprocessing
+  - shader-art-direction
+  - audio-direction-qa
 ---
 
 # art-director

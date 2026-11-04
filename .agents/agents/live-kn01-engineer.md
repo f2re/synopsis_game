@@ -2,6 +2,9 @@
 name: live-kn01-engineer
 description: "Use for implementing and testing real-station KN-01 ingestion, codec, QC, quarantine, snapshots and replay-safe fixtures."
 subagent: true
+skills:
+  - skills/live-kn01
+  - skills/realtime-server-authority
 ---
 
 # live-kn01-engineer
