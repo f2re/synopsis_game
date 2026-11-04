@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 import re
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -86,6 +87,24 @@ def main():
         if not e.get("url") or e.get("mode") != "adapted":
             fail(f"external agent has unreviewed provenance: {e.get('id')}")
     expected_agents = set(role_files) | helpers
+    # Codex project custom agents are TOML, not Markdown.
+    codex_files = {p.stem for p in (ROOT / ".codex/agents").glob("*.toml")}
+    if codex_files != expected_agents:
+        fail(f"Codex agent inventory mismatch: missing={sorted(expected_agents-codex_files)}, extra={sorted(codex_files-expected_agents)}")
+    for agent in sorted(expected_agents):
+        path = f".codex/agents/{agent}.toml"
+        try:
+            item = tomllib.loads(text(path))
+        except (ValueError, OSError) as exc:
+            fail(f"invalid Codex TOML {path}: {exc}")
+            continue
+        owner = role_files.get(agent)
+        if owner is None:
+            owner = f"agents/roles/{next(e['owner'] for e in external if e['id'] == agent)}.md"
+        if item.get("name") != agent or not item.get("description") or owner not in item.get("developer_instructions", ""):
+            fail(f"Codex agent metadata/owner mismatch: {path}")
+        if any(k in item for k in ("model", "sandbox_mode", "mcp_servers")):
+            fail(f"Codex agent overrides inherited runtime settings: {path}")
     for directory in AGENT_DIRS:
         found = {p.stem for p in (ROOT / directory).glob("*.md")}
         if found != expected_agents:

@@ -9,7 +9,8 @@
     "canonical_roles": "agents/registry.yaml",
     "external_agents_are_helpers": true,
     "reviewer_independence": true,
-    "remote_code_execution": false
+    "remote_code_execution": false,
+    "codex_native_agents": ".codex/agents/*.toml"
   },
   "external_agents": [
     {

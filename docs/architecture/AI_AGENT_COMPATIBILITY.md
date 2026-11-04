@@ -9,19 +9,19 @@
 - Основной каталог 23 навыков: `.agents/skills/<id>/SKILL.md` — 7 существовавших, 6 импортированных с лицензией MIT и 10 адаптированных.
 - Для Claude Code: `.claude/agents/*.md` и `.claude/skills/*/SKILL.md`; последние адресуют единый основной файл навыка.
 - Для Antigravity: `.agents/agents/*.md` и `.agents/skills/*/SKILL.md`.
-- Для Codex: `AGENTS.md`, реестр ролей и `.agents/skills`. Наличие файлов Anthropic **не означает** их автоматическое обнаружение Codex.
+- Для Codex: `AGENTS.md`, реестр ролей, нативные `.codex/agents/*.toml` и `.agents/skills`. Субагенты запускаются по делегированному заданию; наличие файла не доказывает реального запуска.
 
 ## Матрица совместимости
 
 | Свойство | Codex | Claude Code | Antigravity |
 | --- | --- | --- | --- |
 | Основные правила | AGENTS.md | CLAUDE.md + AGENTS.md | GEMINI.md + AGENTS.md |
-| Выбор роли | Реестр и карточка роли | .claude/agents/*.md | .agents/agents/*.md |
+| Выбор роли | .codex/agents/*.toml + реестр | .claude/agents/*.md | .agents/agents/*.md |
 | Навыки | .agents/skills | .claude/skills | .agents/skills |
 | Назначение владельца | Единый реестр | Единый реестр | Единый реестр |
 | Независимая приёмка | Обязательна | Обязательна | Обязательна |
 
-Адаптеры используют совместимые поля YAML `name` и `description`, без привязки к доступности конкретной модели или инструментов. Внешние специалисты **не** заменяют внутреннего владельца задачи.
+Адаптеры Markdown используют поля YAML `name` и `description`, а субагенты Codex — поля TOML `name`, `description`, `developer_instructions`, без привязки к доступности конкретной модели или инструментов. Внешние специалисты **не** заменяют внутреннего владельца задачи.
 
 ## Порядок работы
 
