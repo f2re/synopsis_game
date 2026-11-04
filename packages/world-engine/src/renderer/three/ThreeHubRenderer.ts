@@ -864,6 +864,10 @@ export class ThreeHubRenderer {
     if (typeof window === 'undefined' ||
         new URLSearchParams(window.location.search).get('hubE2E') !== '1') return [];
 
+    // The observer is installed during Phaser.create(), before the first
+    // Three.js render tick. Update transforms explicitly; otherwise Raycaster
+    // tests uninitialized group matrices and finds no visible building.
+    this.scene.updateMatrixWorld(true);
     const cam = this.phaserScene.cameras.main;
     const rect = this.phaserScene.game.canvas.getBoundingClientRect();
     const viewportW = Math.max(this.phaserScene.scale.width, 1);
