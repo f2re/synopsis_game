@@ -25,6 +25,7 @@ import { STATION_26063_LOCATION } from './HubTimeOfDay';
 import { HubWeatherOverlay, type WeatherMode } from './HubWeatherOverlay';
 import { HubScheduleManager } from '../../world/hubSchedule';
 import { HUB_BUILDING_BY_ID, HUB_WORLD_DEFINITION_V1 } from '../../world/hub/HubWorldDefinition';
+import { HubVisitQueue } from '../../world/hub/HubVisitQueue';
 import { worldBridge, type BuildingStateId } from '../../bridge/WorldBridge';
 
 const DEBUG_DAY_PHASES: readonly DayPhase[] = [
@@ -64,6 +65,7 @@ export class HubScene extends Phaser.Scene {
   // New world-definition-first renderer spike.
   private threeRenderer?: ThreeHubRenderer;
   private perfProbe?: HubPerfProbe;
+  private readonly visitQueue = new HubVisitQueue();
 
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
@@ -206,8 +208,17 @@ export class HubScene extends Phaser.Scene {
     if (!buildingId) return;
 
     const building = HUB_BUILDING_BY_ID.get(buildingId);
-    if (building) this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y);
-    worldBridge.notifyBuildingClicked(buildingId);
+    // A newer click always supersedes any unfinished visit. If no safe
+    // route exists, never open the dossier under the arrival-gated variant.
+    const outcome = building
+      ? this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y)
+      : undefined;
+    // The accepted legacy/canonical Hub stays immediate. The separate
+    // collisionReview variant opens exactly once on arrival.
+    const immediateId = this.visitQueue.request(
+      buildingId, outcome, this.threeRenderer?.isArrivalGated ?? false,
+    );
+    if (immediateId) worldBridge.notifyBuildingClicked(immediateId);
   }
 
   private applyDayPhase(phase: DayPhase): void {
@@ -291,6 +302,7 @@ export class HubScene extends Phaser.Scene {
     const unsubBuildingClick = worldBridge.on(
       'hub:walk_to_building',
       ({ x, y }: { x: number; y: number }) => {
+        this.visitQueue.cancel();
         this.npcLayer?.walkAvatarTo(x, y);
         this.threeRenderer?.walkAvatarTo(x, y);
       },
@@ -340,10 +352,15 @@ export class HubScene extends Phaser.Scene {
       this.perfProbe?.beginFrame(deltaMs);
       this.threeRenderer.update(deltaMs);
       this.perfProbe?.endFrame();
+      // Exactly one discrete game event on arrival. Never send per-frame
+      // position updates into React/WorldBridge; stage state is unchanged.
+      const arrivedId = this.visitQueue.onMovementUpdate(this.threeRenderer.isAvatarMoving);
+      if (arrivedId) worldBridge.notifyBuildingClicked(arrivedId);
     }
   }
 
   private cleanup(): void {
+    this.visitQueue.cancel();
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
 

@@ -47,6 +47,7 @@ import {
 } from '../../world/hub/HubWorldDefinition';
 import { hubGroundRectObstacle } from '../../world/hub/HubCollision';
 import { planHubRoute } from '../../world/hub/HubNavigation';
+import { stepHubAvatarMotion } from '../../world/hub/HubAvatarMotion';
 import {
   HUB_COLLISION_REVIEW_CLEARANCE,
   HUB_COLLISION_REVIEW_WORLD,
@@ -200,6 +201,8 @@ export class ThreeHubRenderer {
   private avatarWaypoints: Vector3[] = [];
   private navigationWorld: HubWorldDefinition = HUB_WORLD_DEFINITION_V1;
   private collisionReviewEnabled = false;
+  private readonly reducedMotion = typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
   private avatarClock = 0;
   private readonly ambientLight = new AmbientLight(0xffffff, 1.2);
   private readonly sunLight = new DirectionalLight(0xffe7c0, 1.6);
@@ -791,7 +794,17 @@ export class ThreeHubRenderer {
     }
   }
 
-  walkAvatarTo(logicalX: number, logicalY: number): void {
+  /** In the opt-in collision-review mode the dossier opens after arrival. */
+  get isArrivalGated(): boolean {
+    return this.collisionReviewEnabled;
+  }
+
+  get isAvatarMoving(): boolean {
+    return this.avatarWaypoints.length > 0;
+  }
+
+  /** Returns the status for a discrete user request; never emits game events. */
+  walkAvatarTo(logicalX: number, logicalY: number): 'moving' | 'arrived' | 'unreachable' {
     // The navigation authority lives in canonical 640×360 logical coordinates.
     // Never project the avatar's animated vertical bob as the navigation origin.
     const groundPosition = this.avatarRoot.position.clone();
@@ -818,9 +831,21 @@ export class ThreeHubRenderer {
     if (!route) {
       this.avatarWaypoints = [];
       console.warn('[synopsis/world-engine] Hub destination is not connected to an approved path');
-      return;
+      return 'unreachable';
     }
+
+    // The planned geometry is validated even for reduced-motion users.
+    // Only the *visual interpolation* is omitted; no unsafe free-space route
+    // is accepted and the logical destination remains the same.
+    if (this.reducedMotion) {
+      const destination = route[route.length - 1];
+      this.avatarRoot.position.copy(this.projection.logicalToGround(destination.x, destination.y));
+      this.avatarWaypoints = [];
+      return 'arrived';
+    }
+
     this.avatarWaypoints = route.slice(1).map((point) => this.projection.logicalToGround(point.x, point.y));
+    return this.avatarWaypoints.length > 0 ? 'moving' : 'arrived';
   }
 
   pickBuilding(logicalX: number, logicalY: number): string | undefined {
@@ -840,27 +865,17 @@ export class ThreeHubRenderer {
     const deltaSec = Math.min(deltaMs, 100) / 1000;
     this.avatarClock += deltaSec;
 
-    // Consume route waypoints at a stable speed even if a low-FPS frame can
-    // traverse several short segments; the rendered hop never affects the route.
-    let budget = AVATAR_SPEED * deltaSec;
-    while (budget > 0 && this.avatarWaypoints.length > 0) {
-      const target = this.avatarWaypoints[0];
-      const dx = target.x - this.avatarRoot.position.x;
-      const dz = target.z - this.avatarRoot.position.z;
-      const distance = Math.hypot(dx, dz);
-      if (distance > 1e-5) this.avatarRoot.rotation.y = Math.atan2(dx, dz);
-      if (distance <= budget + 1e-5) {
-        this.avatarRoot.position.x = target.x;
-        this.avatarRoot.position.z = target.z;
-        this.avatarWaypoints.shift();
-        budget -= distance;
-      } else {
-        const step = budget / distance;
-        this.avatarRoot.position.x += dx * step;
-        this.avatarRoot.position.z += dz * step;
-        budget = 0;
-      }
-    }
+    // Step in the world ground plane via a renderer-independent, tested
+    // distance budget; the cosmetic hop is never part of collision geometry.
+    const motion = stepHubAvatarMotion(
+      { x: this.avatarRoot.position.x, z: this.avatarRoot.position.z },
+      this.avatarWaypoints,
+      AVATAR_SPEED * deltaSec,
+    );
+    this.avatarRoot.position.x = motion.position.x;
+    this.avatarRoot.position.z = motion.position.z;
+    if (motion.headingRadians !== null) this.avatarRoot.rotation.y = motion.headingRadians;
+    if (motion.completedWaypoints > 0) this.avatarWaypoints.splice(0, motion.completedWaypoints);
 
     this.avatarRoot.position.y = this.avatarWaypoints.length > 0 ? Math.abs(Math.sin(this.avatarClock * 18)) * 1.4 : 0;
     this.updateWeather(deltaSec);
