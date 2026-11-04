@@ -1,3 +1,8 @@
+---
+name: hub-2-5d-scene-production
+description: "Use for producing and validating canonical 2.5D Hub procedural geometry, source assets, shader-friendly GLB models, scene recipes and art acceptance before publishing."
+---
+
 # Skill: Hub 2.5D scene production
 
 Используй этот skill для задач по моделированию, procedural generation, generated draft meshes, GLB production и visual acceptance нового Three.js Hub.
