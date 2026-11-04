@@ -19,3 +19,13 @@ Rules:
 The next implementation owner (`living-world-engineer`) must add validated pedestrian footprints and entrance connectors before reporting collision-safe navigation. `game-runtime-webgl-engineer` adapts the renderer, while `web-performance-engineer` and `integration-release-engineer` independently review acceptance.
 
 Renderer code consumes this definition. Renderer code must not silently become a second source of world geometry truth.
+
+## H3D-037: проверяемый вариант обходов (не принят)
+
+`HubCollisionReviewLayout.ts` предлагает **отдельную** пространственную версию `hub.geometry.collision_review_v1`. В ней неизменны положения зданий, небосклон, береговая полоса, канонический холст 640×360 и идентификаторы взаимодействия; изменены только семь осевых дорожек и наружные точки остановки возле восьми входов. Кандидат не перезаписывает `HUB_WORLD_DEFINITION_V1`.
+
+Включение **только для художественного/технического просмотра**: `?hubRenderer=three2d&hubLayout=collisionReview`. Рендерер и граф перемещения используют одни и те же предложенные дорожки. Для маршрутов включены девять предварительных процедурных footprints, запретная водная полоса и отступ 5 логических пикселей. Открытие досье здания по клику сохранено и не зависит от завершения ходьбы.
+
+`pnpm world:test` проверяет, что все осевые линии не пересекают контуры построек, все восемь входов доступны от стартовой точки, а каждая пара зданий имеет проходимый маршрут. CI сохраняет базовую и исправленную схемы в `spatial-audit.svg` / `collision-review.svg`, численные данные — в JSON, браузерные скриншоты — в `hub-2_5d-visual-smoke`.
+
+**Нельзя выпускать как production:** footprint-полигоны отражают текущие процедурные BoxGeometry, но ещё не утверждены арт-директором как постоянная геометрия. Отдельно проверить действительную ширину дорожек, столбы/ограждения, центральный глобус и читаемость новой трассировки. До закрытия #91, #93, #94 и #85 режим `legacy2d` остаётся стандартным.
