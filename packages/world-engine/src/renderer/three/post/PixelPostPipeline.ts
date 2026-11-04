@@ -28,6 +28,8 @@ export interface PixelPostPipelineOptions {
   width?: number;
   height?: number;
   toggles?: Partial<PixelPipelineToggles>;
+  outlineStrength?: number;
+  ditherStrength?: number;
 }
 
 const DEFAULT_WIDTH = 320;
@@ -84,6 +86,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform bool uPaletteEnabled;
   uniform bool uDitherEnabled;
   uniform bool uEdgesEnabled;
+  uniform float uOutlineStrength;
+  uniform float uDitherStrength;
 
   float bayer4(vec2 fragCoord) {
     float x = mod(floor(fragCoord.x), 4.0);
@@ -164,7 +168,7 @@ const FRAGMENT_SHADER = /* glsl */ `
 
     if (uDitherEnabled) {
       float dither = bayer4(gl_FragCoord.xy) - 0.5;
-      color = clamp(color + dither * 0.028, 0.0, 1.0);
+      color = clamp(color + dither * uDitherStrength, 0.0, 1.0);
     }
 
     if (uPaletteEnabled) {
@@ -173,7 +177,7 @@ const FRAGMENT_SHADER = /* glsl */ `
 
     if (uEdgesEnabled) {
       float edge = edgeMask();
-      color = mix(color, uPalette[0], edge * 0.52);
+      color = mix(color, uPalette[0], edge * uOutlineStrength);
     }
 
     gl_FragColor = vec4(color, source.a);
@@ -216,7 +220,7 @@ export class PixelPostPipeline {
 
     const toggles: PixelPipelineToggles = {
       palette: options.toggles?.palette ?? true,
-      dither: options.toggles?.dither ?? true,
+      dither: options.toggles?.dither ?? false,
       edges: options.toggles?.edges ?? true,
     };
 
@@ -232,6 +236,8 @@ export class PixelPostPipeline {
         uPaletteEnabled: { value: toggles.palette },
         uDitherEnabled: { value: toggles.dither },
         uEdgesEnabled: { value: toggles.edges },
+        uOutlineStrength: { value: Number.isFinite(options.outlineStrength) ? Math.min(0.75, Math.max(0, options.outlineStrength!)) : 0.52 },
+        uDitherStrength: { value: Number.isFinite(options.ditherStrength) ? Math.min(0.05, Math.max(0, options.ditherStrength!)) : 0.028 },
       },
       vertexShader: VERTEX_SHADER,
       fragmentShader: FRAGMENT_SHADER,
@@ -254,28 +260,39 @@ export class PixelPostPipeline {
     excludeFromNormalPass: readonly Object3D[] = [],
   ): void {
     const previousVisibility = excludeFromNormalPass.map((object) => object.visible);
-    excludeFromNormalPass.forEach((object) => {
-      object.visible = false;
-    });
-
     const previousOverride = scene.overrideMaterial;
-    scene.overrideMaterial = this.normalMaterial;
-    renderer.setRenderTarget(this.normalTarget);
-    renderer.clear();
-    renderer.render(scene, camera);
-    scene.overrideMaterial = previousOverride;
+    const previousTarget = renderer.getRenderTarget();
 
-    excludeFromNormalPass.forEach((object, index) => {
-      object.visible = previousVisibility[index];
-    });
+    // An interrupted normal pass must never leave precipitation hidden,
+    // overrideMaterial attached, or an offscreen target bound for Phaser.
+    try {
+      excludeFromNormalPass.forEach((object) => {
+        object.visible = false;
+      });
+      scene.overrideMaterial = this.normalMaterial;
+      renderer.setRenderTarget(this.normalTarget);
+      renderer.clear();
+      renderer.render(scene, camera);
 
-    renderer.setRenderTarget(this.beautyTarget);
-    renderer.clear();
-    renderer.render(scene, camera);
+      scene.overrideMaterial = previousOverride;
+      excludeFromNormalPass.forEach((object, index) => {
+        object.visible = previousVisibility[index];
+      });
 
-    renderer.setRenderTarget(null);
-    renderer.clear();
-    renderer.render(this.postScene, this.postCamera);
+      renderer.setRenderTarget(this.beautyTarget);
+      renderer.clear();
+      renderer.render(scene, camera);
+
+      renderer.setRenderTarget(null);
+      renderer.clear();
+      renderer.render(this.postScene, this.postCamera);
+    } finally {
+      scene.overrideMaterial = previousOverride;
+      excludeFromNormalPass.forEach((object, index) => {
+        object.visible = previousVisibility[index];
+      });
+      renderer.setRenderTarget(previousTarget);
+    }
   }
 
   dispose(): void {

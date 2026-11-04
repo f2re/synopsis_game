@@ -57,6 +57,7 @@ import { previewHubProceduralFootprints } from '../../world/hub/HubSpatialAudit'
 import { geometryForStructure, type HubStructureGeometry } from '../../world/hub/HubStructureGeometry';
 import { HubProjection } from './HubProjection';
 import { PixelPostPipeline } from './post/PixelPostPipeline';
+import { resolvePixelPostSettings } from './post/PixelPostConfig';
 
 const INTERNAL_WIDTH = 320;
 const INTERNAL_HEIGHT = 180;
@@ -255,14 +256,17 @@ export class ThreeHubRenderer {
       this.navigationWorld = HUB_COLLISION_REVIEW_WORLD;
       console.info('[synopsis/world-engine] H3D-037 unapproved collision review layout enabled');
     }
+    const pixelSettings = resolvePixelPostSettings(query);
     this.pipeline = new PixelPostPipeline({
       width: INTERNAL_WIDTH,
       height: INTERNAL_HEIGHT,
       toggles: {
-        palette: query.get('pixelPalette') !== '0',
-        dither: query.get('pixelDither') === '1',
-        edges: query.get('pixelEdges') !== '0',
+        palette: pixelSettings.palette,
+        dither: pixelSettings.dither,
+        edges: pixelSettings.edges,
       },
+      outlineStrength: pixelSettings.outlineStrength,
+      ditherStrength: pixelSettings.ditherStrength,
     });
 
     this.groundMaterial = this.toon(WORLD_PALETTE.foliagePine2);
