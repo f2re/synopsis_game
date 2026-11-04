@@ -82,6 +82,8 @@ def main():
     if len(helpers) != len(external) or set(role_files) & helpers:
         fail("duplicate or colliding external agent IDs")
     for e in external:
+        if e.get("source") and not re.fullmatch(r"[0-9a-f]{40}", e.get("sha") or ""):
+            fail(f"missing immutable source blob for external helper: {e.get('id')}")
         if e.get("owner") not in role_files:
             fail(f"invalid external owner: {e.get('id')}")
         if not e.get("url") or e.get("mode") != "adapted":
@@ -114,6 +116,10 @@ def main():
             fm = meta(path)
             if fm.get("name") != agent:
                 fail(f"agent name mismatch: {path}")
+            if not fm.get("description", "").startswith("Use for ") or len(fm.get("description", "")) < 70:
+                fail(f"unhelpful agent discovery description: {path}")
+            if directory == ".agents/agents" and "subagent: true" not in text(path).split("---", 2)[1]:
+                fail(f"Antigravity subagent not explicitly enabled: {path}")
             body = text(path)
             if agent in role_files and role_files[agent] not in body:
                 fail(f"canonical role reference missing: {path}")
@@ -133,6 +139,9 @@ def main():
             fail(f"canonical skill name mismatch: {source}")
         if meta(wrapper).get("name") != skill:
             fail(f"Claude skill name mismatch: {wrapper}")
+        desc = meta(wrapper).get("description", "")
+        if not desc.startswith("Use for ") or len(desc) < 70:
+            fail(f"unhelpful Claude skill discovery description: {wrapper}")
         if source not in text(wrapper):
             fail(f"Claude adapter lacks canonical reference: {wrapper}")
     declared = cat.get("role_skills", {})
@@ -144,6 +153,14 @@ def main():
         for name in names:
             if name not in skills:
                 fail(f"unresolvable skill for {role}: {name}")
+    unused = skills - set(name for names in declared.values() for name in names)
+    if unused:
+        fail(f"unused, unroutable canonical skills: {sorted(unused)}")
+    for helper in external:
+        for provider in (".agents/agents", ".claude/agents"):
+            body = text(f"{provider}/{helper['id']}.md")
+            if "## Specific execution checklist" not in body or len(body) < 1100:
+                fail(f"external helper lacks task-specific procedure: {provider}/{helper['id']}.md")
     ext_skills = cat.get("external_skills", [])
     if len(ext_skills) != len({e.get("id") for e in ext_skills}):
         fail("duplicate external skill IDs")

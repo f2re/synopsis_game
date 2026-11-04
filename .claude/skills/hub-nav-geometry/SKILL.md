@@ -1,9 +1,8 @@
 ---
 name: hub-nav-geometry
-description: "26063 hub-nav-geometry workflow; read canonical cross-provider skill and project gates."
+description: "Use for branch-aware 2.5D Hub navigation, ground footprint vs screen bounds, route graph and blocked polygons."
 ---
 
-# hub-nav-geometry — Claude discovery adapter
+# hub-nav-geometry — project-specific discovery adapter
 
-Read and follow `.agents/skills/hub-nav-geometry/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/hub-nav-geometry/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.

@@ -4,7 +4,7 @@
 
 **Preferred provider:** Codex; fallback Claude Code.
 
-Owns `KN01-LIVE-*` and future `packages/kn01-codec`, `packages/live-ingest` plus related tests/tools.
+Owns `KN01-LIVE-*`, the existing `packages/kn01-codec`, and future live-ingest modules **inside `apps/server`** plus related tests/tools. Creating a new `packages/live-ingest` package is forbidden without a separate accepted ADR.
 
 Required design:
 

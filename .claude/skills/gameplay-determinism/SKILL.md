@@ -1,9 +1,8 @@
 ---
 name: gameplay-determinism
-description: "26063 gameplay-determinism workflow; read canonical cross-provider skill and project gates."
+description: "Use for deterministic educational task generation, gameplay difficulty, server answer checks and replay fixtures."
 ---
 
-# gameplay-determinism — Claude discovery adapter
+# gameplay-determinism — project-specific discovery adapter
 
-Read and follow `.agents/skills/gameplay-determinism/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/gameplay-determinism/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.

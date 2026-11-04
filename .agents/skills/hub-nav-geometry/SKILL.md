@@ -1,12 +1,16 @@
 ---
 name: hub-nav-geometry
-description: "Hub 640x360 Ground footprint, route topology, entrances and obstacle checks"
+description: "Use for branch-aware 2.5D Hub navigation, ground footprint vs screen bounds, route graph and blocked polygons."
 ---
 
-# hub-nav-geometry
+# Hub navigation and collision — branch-aware skill
 
-Read ADR-0007, `HubWorldDefinition.ts`, `HubNavigation.ts`, `HubCollision.ts`, H3D-035/036/037, and Geometry Lock v1. Use renderer-independent semantic coordinates. Screen bounds and facade silhouettes are never ground collision footprints. Overlay the actual 3D ground polygons, water band, path polylines and door anchors before route edits. Validate every building entrance and connected walkway; check avatar clearance, blocked paths, dynamic obstacles, disconnected graph and retargeting. Do not solve polygon overlap by silently moving locked architecture or enabling impassable collision geometry.
+**Precondition:** This is an H3D experimental skill. The accepted production `main` currently has no `HubWorldDefinition.ts`, `HubNavigation.ts`, `HubCollision.ts` or ADR-0007. Before editing, inspect the exact target branch and PR dependency chain (especially #79, #80, #87, #89, #90 and issue #91). If required files are not present in the selected branch, **STOP and report a missing prerequisite**; do not generate invented replacement modules or silently change `main`.
 
-Upstream research reference (not a runtime dependency): https://github.com/bullish0x/GameStudio/blob/HEAD/.agents/agents/level-designer.md
+For an H3D branch containing the relevant files, read its ADR-0007, `packages/world-engine/src/world/hub/HubWorldDefinition.ts`, `HubNavigation.ts`, `HubCollision.ts`, and H3D handoff. Follow the versioned 640×360 Geometry Lock. Keep renderer-independent semantic coordinates. Screen/facade silhouettes are never ground collision footprints. Overlay actual ground polygons, water, path polylines, entrance anchors and avatar clearance before rerouting.
 
-Evidence: list tested cases and exact commands, with independent reviewer decisions when required.
+Check every accepted building entry, disconnected graph, blocked segment, dynamic obstacle, path retarget and routes from inside an occupied footprint. Do not solve overlaps by silently moving locked architecture or switching the renderer default. Require `art-director` for Geometry Lock decisions, `game-runtime-webgl-engineer` for renderer contract, `web-performance-engineer` and `integration-release-engineer` for independent tests.
+
+Output: branch and commit SHA, map overlay/coordinate evidence, all entrance route test results, known limitations and reviewer verdicts. A branch with no H3D files has **NOT APPLICABLE**, never `PASS`.
+
+Reference (not an executable dependency): https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/level-designer.md

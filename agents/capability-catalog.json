@@ -41,8 +41,8 @@
       "description": "Renderer-independent Hub layout, walking graph, ground footprints and collisions",
       "source": "bullish0x/GameStudio",
       "file": ".agents/agents/level-designer.md",
-      "sha": null,
-      "url": "https://github.com/bullish0x/GameStudio/blob/HEAD/.agents/agents/level-designer.md",
+      "sha": "e5f3460ea9e68c0393506443506ae134a618c3e3",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/level-designer.md",
       "license": "MIT GameStudio",
       "mode": "adapted"
     },
@@ -156,8 +156,8 @@
       "mode": "adapted",
       "source": "bullish0x/GameStudio",
       "upstream_path": ".agents/agents/level-designer.md",
-      "blob_sha": null,
-      "url": "https://github.com/bullish0x/GameStudio/blob/HEAD/.agents/agents/level-designer.md",
+      "blob_sha": "e5f3460ea9e68c0393506443506ae134a618c3e3",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/level-designer.md",
       "license": "original project skill"
     },
     {
