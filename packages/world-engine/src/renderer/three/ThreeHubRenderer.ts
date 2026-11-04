@@ -46,6 +46,7 @@ import {
 } from '../../world/hub/HubWorldDefinition';
 import { hubGroundRectObstacle } from '../../world/hub/HubCollision';
 import { planHubRoute } from '../../world/hub/HubNavigation';
+import { geometryForStructure, type HubStructureGeometry } from '../../world/hub/HubStructureGeometry';
 import { HubProjection } from './HubProjection';
 import { PixelPostPipeline } from './post/PixelPostPipeline';
 
@@ -88,16 +89,9 @@ function deterministicUnit(index: number, salt: number): number {
   return value - Math.floor(value);
 }
 
-type RoofMode = 'flat' | 'pyramid' | 'dome';
-
-interface StructureStyle {
+interface StructureStyle extends HubStructureGeometry {
   wall: number;
   roof: number;
-  widthRatio: number;
-  depthPx: number;
-  roofPx: number;
-  roofMode: RoofMode;
-  windowCount: number;
 }
 
 function styleForStructure(id: string): StructureStyle {
@@ -106,92 +100,56 @@ function styleForStructure(id: string): StructureStyle {
       return {
         wall: WORLD_PALETTE.stoneConcrete3,
         roof: WORLD_PALETTE.skyNight4,
-        widthRatio: 0.76,
-        depthPx: 27,
-        roofPx: 19,
-        roofMode: 'pyramid',
-        windowCount: 4,
+        ...geometryForStructure(id),
       };
     case 'radar':
       return {
         wall: WORLD_PALETTE.stoneConcrete4,
         roof: WORLD_PALETTE.birchAndSnow2,
-        widthRatio: 0.34,
-        depthPx: 12,
-        roofPx: 26,
-        roofMode: 'dome',
-        windowCount: 1,
+        ...geometryForStructure(id),
       };
     case 'cartography':
       return {
         wall: WORLD_PALETTE.birchAndSnow2,
         roof: WORLD_PALETTE.ochreTerracotta1,
-        widthRatio: 0.67,
-        depthPx: 22,
-        roofPx: 17,
-        roofMode: 'pyramid',
-        windowCount: 4,
+        ...geometryForStructure(id),
       };
     case 'lab':
       return {
         wall: WORLD_PALETTE.stoneConcrete3,
         roof: WORLD_PALETTE.skyDay2,
-        widthRatio: 0.62,
-        depthPx: 21,
-        roofPx: 18,
-        roofMode: 'dome',
-        windowCount: 3,
+        ...geometryForStructure(id),
       };
     case 'archive':
       return {
         wall: WORLD_PALETTE.ochreTerracotta3,
         roof: WORLD_PALETTE.ochreTerracotta1,
-        widthRatio: 0.66,
-        depthPx: 20,
-        roofPx: 17,
-        roofMode: 'pyramid',
-        windowCount: 3,
+        ...geometryForStructure(id),
       };
     case 'hall':
       return {
         wall: WORLD_PALETTE.stoneConcrete3,
         roof: WORLD_PALETTE.twilight0,
-        widthRatio: 0.72,
-        depthPx: 22,
-        roofPx: 7,
-        roofMode: 'flat',
-        windowCount: 4,
+        ...geometryForStructure(id),
       };
     case 'codepost':
       return {
         wall: WORLD_PALETTE.uiTeal4,
         roof: WORLD_PALETTE.stoneConcrete3,
-        widthRatio: 0.72,
-        depthPx: 18,
-        roofPx: 6,
-        roofMode: 'flat',
-        windowCount: 4,
+        ...geometryForStructure(id),
       };
     case 'meteo-site':
       return {
         wall: WORLD_PALETTE.birchAndSnow3,
         roof: WORLD_PALETTE.stoneConcrete3,
-        widthRatio: 0.54,
-        depthPx: 13,
-        roofPx: 8,
-        roofMode: 'pyramid',
-        windowCount: 1,
+        ...geometryForStructure(id),
       };
     case 'canteen':
     default:
       return {
         wall: WORLD_PALETTE.ochreTerracotta2,
         roof: WORLD_PALETTE.ochreTerracotta1,
-        widthRatio: 0.61,
-        depthPx: 14,
-        roofPx: 9,
-        roofMode: 'pyramid',
-        windowCount: 2,
+        ...geometryForStructure(id),
       };
   }
 }
