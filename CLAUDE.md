@@ -16,3 +16,6 @@ Recommended Claude roles in this project:
 - `orchestrator` — decomposition and cross-agent handoff.
 
 Output must include evidence, files touched, tests/reviews required and unresolved ambiguity.
+## Installed portable capabilities
+
+Use `agents/capability-catalog.json` for internal role-to-skill routing. Project subagents are discoverable under `.claude/agents/*.md`; canonical skill bodies live in `.agents/skills` and are exposed to Claude via `.claude/skills/*/SKILL.md` adapters. Do not use upstream GameStudio confirmation rituals or R3F defaults; apply existing project rules. Static compatibility checks: `python tools/validate_agent_kit.py`. Live Claude Code discovery must be verified in the installed client.
