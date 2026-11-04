@@ -2,6 +2,10 @@
 name: pixel-art-quality-reviewer
 description: "Use for independent pixel grid, palette, alpha, pivot, silhouette and sprite-animation technical quality review."
 subagent: true
+skills:
+  - skills/pixel-art-qa
+  - skills/pixel-asset-pipeline
+  - skills/pixel-atlas-production
 ---
 
 # pixel-art-quality-reviewer

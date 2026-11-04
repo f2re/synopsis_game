@@ -1,6 +1,10 @@
 ---
 name: audio-ambient-designer
 description: "Use for game ambience and SFX event mapping, volume hierarchy, sound licensing and accessible audio fallback."
+skills:
+  - ambient-audio
+  - audio-direction-qa
+  - asset-provenance-review
 ---
 
 # audio-ambient-designer

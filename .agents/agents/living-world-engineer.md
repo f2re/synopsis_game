@@ -2,6 +2,12 @@
 name: living-world-engineer
 description: "Use for Hub world state, navigation routes, NPC ambient schedules, weather and season transitions, interaction semantics."
 subagent: true
+skills:
+  - skills/living-world-browser
+  - skills/hub-nav-geometry
+  - skills/threejs-geometry
+  - skills/motion-choreography
+  - skills/level-layout-design
 ---
 
 # living-world-engineer
