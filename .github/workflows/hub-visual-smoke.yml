@@ -106,6 +106,8 @@ jobs:
       - name: Сохранить пересечения дорожек с процедурной геометрией (H3D-037)
         run: |
           node --experimental-strip-types packages/world-engine/src/world/hub/spatialAuditCli.ts > hub-visual-smoke/spatial-audit.json
+          node --experimental-strip-types packages/world-engine/src/world/hub/spatialAuditSvgCli.ts > hub-visual-smoke/spatial-audit.svg
+          test -s hub-visual-smoke/spatial-audit.svg
           python -m json.tool hub-visual-smoke/spatial-audit.json >/dev/null
           python - <<'PY'
           import json
