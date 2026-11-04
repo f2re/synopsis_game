@@ -1,6 +1,10 @@
 ---
 name: phaser-specialist
 description: "Use for Phaser 4.2.1 scene, input, render loop, React bridge and legacy2d fallback."
+skills:
+  - phaser4-scenes
+  - phaser4-webgl
+  - phaser-webgl-runtime
 ---
 
 # phaser-specialist — specialized external capability
@@ -19,3 +23,7 @@ Use for Phaser 4.2.1 integration and React↔Phaser scene lifecycle. Inspect pac
 ## Handoff and limits
 
 This specialist is an adapted project helper, not an additional owner or an imported executable tool. Read `AGENTS.md`, `agents/registry.yaml`, the canonical role and project ADRs. Record the target branch, changed files, reproducible tests, acceptance evidence and independent reviewers. Do not install upstream tools, bypass owner/reviewer separation, change engine architecture, or imply a model/client was run without evidence.
+
+## Skill routing
+
+This helper consumes `.agents/skills/phaser4-scenes/SKILL.md`, `.agents/skills/phaser4-webgl/SKILL.md`, `.agents/skills/phaser-webgl-runtime/SKILL.md`. Registered owner: `agents/roles/game-runtime-webgl-engineer.md`. Independent reviewers: `web-performance-engineer`, `integration-release-engineer`. No extra tool permissions or independent acceptance are granted.

@@ -1,6 +1,12 @@
 ---
 name: living-world-engineer
 description: "Use for Hub world state, navigation routes, NPC ambient schedules, weather and season transitions, interaction semantics."
+skills:
+  - living-world-browser
+  - hub-nav-geometry
+  - threejs-geometry
+  - motion-choreography
+  - level-layout-design
 ---
 
 # living-world-engineer

@@ -2,6 +2,12 @@
 name: web-performance-engineer
 description: "Use for independent GPU/WebGL profiling, frame p95, memory and low-power behaviour on target browser devices."
 subagent: true
+skills:
+  - skills/threejs-performance
+  - skills/release-evidence
+  - skills/glsl-webgl-shaders
+  - skills/gltf-3d-pipeline
+  - skills/shader-art-direction
 ---
 
 # web-performance-engineer

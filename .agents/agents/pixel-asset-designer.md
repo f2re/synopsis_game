@@ -2,6 +2,12 @@
 name: pixel-asset-designer
 description: "Use for creating editable pixel sprites, portraits, architecture, tiles and props with manifest-ready metadata."
 subagent: true
+skills:
+  - skills/pixel-art-direction
+  - skills/pixel-art-qa
+  - skills/threejs-assets
+  - skills/pixel-atlas-production
+  - skills/gltf-3d-pipeline
 ---
 
 # pixel-asset-designer

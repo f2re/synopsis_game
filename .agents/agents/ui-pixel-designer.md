@@ -2,6 +2,12 @@
 name: ui-pixel-designer
 description: "Use for pixel-art HUD, windows, buttons, icon affordances, Cyrillic typography and responsive UI states."
 subagent: true
+skills:
+  - skills/ui-accessibility
+  - skills/pixel-art-direction
+  - skills/pixel-art-qa
+  - skills/ui-runtime-components
+  - skills/shader-art-direction
 ---
 
 # ui-pixel-designer

@@ -1,6 +1,10 @@
 ---
 name: world-geometry-specialist
 description: "Use for Hub navigation, semantic ground footprints, collision polygons, entrances and walkability."
+skills:
+  - hub-nav-geometry
+  - threejs-geometry
+  - level-layout-design
 ---
 
 # world-geometry-specialist — specialized external capability
@@ -19,3 +23,7 @@ Use for approved Hub 2.5D walking paths, real ground footprints, entrances and c
 ## Handoff and limits
 
 This specialist is an adapted project helper, not an additional owner or an imported executable tool. Read `AGENTS.md`, `agents/registry.yaml`, the canonical role and project ADRs. Record the target branch, changed files, reproducible tests, acceptance evidence and independent reviewers. Do not install upstream tools, bypass owner/reviewer separation, change engine architecture, or imply a model/client was run without evidence.
+
+## Skill routing
+
+This helper consumes `.agents/skills/hub-nav-geometry/SKILL.md`, `.agents/skills/threejs-geometry/SKILL.md`, `.agents/skills/level-layout-design/SKILL.md`. Registered owner: `agents/roles/living-world-engineer.md`. Independent reviewers: `game-runtime-webgl-engineer`, `art-director`. No extra tool permissions or independent acceptance are granted.

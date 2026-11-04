@@ -19,3 +19,5 @@ Output must include evidence, files touched, tests/reviews required and unresolv
 ## Installed portable capabilities
 
 Use `agents/capability-catalog.json` for internal role-to-skill routing. Project subagents are discoverable under `.claude/agents/*.md`; canonical skill bodies live in `.agents/skills` and are exposed to Claude via `.claude/skills/*/SKILL.md` adapters. Do not use upstream GameStudio confirmation rituals or R3F defaults; apply existing project rules. Static compatibility checks: `python tools/validate_agent_kit.py`. Live Claude Code discovery must be verified in the installed client.
+
+Subagent frontmatter `skills` now preloads the assigned Claude adapters. For a complete 18-helper / 35-skill routing table, read `agents/EXTERNAL_SPECIALISTS_ROUTING.md`; verify actual client discovery separately.

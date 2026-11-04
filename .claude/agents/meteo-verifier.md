@@ -1,6 +1,9 @@
 ---
 name: meteo-verifier
 description: "Use for independent meteorological answer reconstruction, KN-01 decoding verification and detection of ambiguous tasks."
+skills:
+  - russian-synoptic-acceptance
+  - gameplay-determinism
 ---
 
 # meteo-verifier

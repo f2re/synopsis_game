@@ -1,6 +1,12 @@
 ---
 name: ui-pixel-designer
 description: "Use for pixel-art HUD, windows, buttons, icon affordances, Cyrillic typography and responsive UI states."
+skills:
+  - ui-accessibility
+  - pixel-art-direction
+  - pixel-art-qa
+  - ui-runtime-components
+  - shader-art-direction
 ---
 
 # ui-pixel-designer

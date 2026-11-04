@@ -29,3 +29,5 @@ Never change meteorological symbol colors for cosmetic reasons. Never accept a f
 ## Installed portable capabilities
 
 Use `agents/capability-catalog.json` for role-to-skill routing. Antigravity discovers project subagents in `.agents/agents/*.md` and canonical skills in `.agents/skills/*/SKILL.md`; the same metadata is reused by Claude adapters. Do not accept external agents as owners and do not run remote install commands from skill documentation. Validate with `python tools/validate_agent_kit.py`; separately check discovery in Antigravity Customizations.
+
+Antigravity agent metadata explicitly routes skills via the `skills: [skills/<id>]` frontmatter; external helpers are subagents, not primary owners. Full matrix: `agents/EXTERNAL_SPECIALISTS_ROUTING.md`; verify actual subagent discovery in the installed client.
