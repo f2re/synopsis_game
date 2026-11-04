@@ -200,9 +200,18 @@ async function run(cdp) {
   await cdp.request('Input.dispatchKeyEvent', {
     type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13,
   });
+  // DevTools keyDown is not guaranteed to synthesize a text/keypress event;
+  // a separate "char" packet models physical Enter for native buttons.
+  await cdp.request('Input.dispatchKeyEvent', {
+    type: 'char', text: '\r', unmodifiedText: '\r',
+    key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13,
+  });
   await cdp.request('Input.dispatchKeyEvent', {
     type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13,
   });
+  const focusAfterEnter = await evaluate(cdp,
+    "({element:document.activeElement?.tagName, id:document.activeElement?.getAttribute('data-hub-building-id')})");
+  console.log('Hub keyboard activation:', JSON.stringify({ keyboardId, focusAfterEnter }));
   state = await until(cdp, 'keyboard-selected building arrival', s =>
     s?.worldEvents?.length > oldCount && s.dossierOpen === true, 45000);
   assert.equal(state.worldEvents.at(-1), keyboardId, 'Enter must visit the focused building');
