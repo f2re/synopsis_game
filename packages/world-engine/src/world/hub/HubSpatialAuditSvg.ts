@@ -16,11 +16,12 @@ function p(point: { x: number; y: number }): string {
 export function renderHubSpatialAuditSvg(world: HubWorldDefinition): string {
   const footprints = previewHubProceduralFootprints(world);
   const conflicts = auditHubProceduralPathCrossings(world);
+  const water = world.waterBand;
   const parts: string[] = [
     '<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 640 360" role="img" aria-label="Hub ground footprint audit">',
     '<rect width="640" height="360" fill="#f5f3ee"/>',
-    '<rect x="0" y="92" width="640" height="55" fill="#b2dce7" opacity=".85"/>',
-    '<text x="10" y="116" fill="#28546e" font-family="monospace" font-size="9">water 92–147</text>',
+    '<rect x="' + water.x + '" y="' + water.y + '" width="' + water.width + '" height="' + water.height + '" fill="#b2dce7" opacity=".85"/>',
+    '<text x="10" y="' + (water.y + 24) + '" fill="#28546e" font-family="monospace" font-size="9">water ' + water.y + '–' + (water.y + water.height) + '</text>',
   ];
   const safe = world.safeZone;
   parts.push('<rect x="' + safe.x + '" y="' + safe.y + '" width="' + safe.width +
