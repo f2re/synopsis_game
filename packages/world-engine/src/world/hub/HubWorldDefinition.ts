@@ -1,4 +1,4 @@
-import { HUB_LOGICAL_HEIGHT, HUB_LOGICAL_WIDTH } from '../../runtime/fitLogicalViewport';
+import { HUB_LOGICAL_HEIGHT, HUB_LOGICAL_WIDTH } from '../../runtime/logicalViewportMath.ts';
 
 export interface HubPoint {
   x: number;
