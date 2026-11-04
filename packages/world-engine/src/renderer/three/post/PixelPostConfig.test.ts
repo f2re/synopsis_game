@@ -9,6 +9,8 @@ test('pixel shader production default is stable and Bayer dithering is opt-in', 
   assert.deepEqual(resolvePixelPostSettings(new URLSearchParams()), DEFAULT_PIXEL_POST_SETTINGS);
   assert.equal(resolvePixelPostSettings(new URLSearchParams('pixelDither=0')).dither, false);
   assert.equal(resolvePixelPostSettings(new URLSearchParams('pixelDither=1')).dither, true);
+  assert.equal(resolvePixelPostSettings(new URLSearchParams('pixelDither=1')).ditherSky, false);
+  assert.equal(resolvePixelPostSettings(new URLSearchParams('pixelDither=1&pixelDitherSky=1')).ditherSky, true);
 });
 
 test('independent palette, edge and dither states have unambiguous switches', () => {

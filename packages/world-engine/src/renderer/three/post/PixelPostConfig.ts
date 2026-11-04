@@ -2,6 +2,7 @@
 export interface PixelPostSettings {
   palette: boolean;
   dither: boolean;
+  ditherSky: boolean;
   edges: boolean;
   /** Mix amount for depth/normal edges, normalized to [0, 0.75]. */
   outlineStrength: number;
@@ -12,6 +13,7 @@ export interface PixelPostSettings {
 export const DEFAULT_PIXEL_POST_SETTINGS: Readonly<PixelPostSettings> = Object.freeze({
   palette: true,
   dither: false,
+  ditherSky: false,
   edges: true,
   outlineStrength: 0.52,
   ditherStrength: 0.028,
@@ -33,6 +35,7 @@ export function resolvePixelPostSettings(query: URLSearchParams): PixelPostSetti
   return {
     palette: query.get('pixelPalette') !== '0',
     dither: query.get('pixelDither') === '1',
+    ditherSky: query.get('pixelDitherSky') === '1',
     edges: query.get('pixelEdges') !== '0',
     outlineStrength: readBounded(query, 'pixelOutlineStrength', DEFAULT_PIXEL_POST_SETTINGS.outlineStrength, 0.75),
     ditherStrength: readBounded(query, 'pixelDitherStrength', DEFAULT_PIXEL_POST_SETTINGS.ditherStrength, 0.05),

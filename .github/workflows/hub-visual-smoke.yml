@@ -103,6 +103,7 @@ jobs:
           capture three-outline-soft "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelOutlineStrength=0.15"
           capture three-outline-strong "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelOutlineStrength=0.75"
           capture three-dither-strong "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1&pixelDitherStrength=0.05"
+          capture three-dither-sky "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1&pixelDitherSky=1"
           capture three-perf-probe "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubPerf=1"
 
           sha256sum hub-visual-smoke/*.png | tee hub-visual-smoke/SHA256SUMS.txt
@@ -169,6 +170,7 @@ jobs:
               'three-outline-soft',
               'three-outline-strong',
               'three-dither-strong',
+              'three-dither-sky',
               'three-perf-probe',
           ]
           hashes = {}
@@ -190,6 +192,7 @@ jobs:
               ('three-day-clear', 'three-edges-off'),
               ('three-outline-soft', 'three-outline-strong'),
               ('three-dither-on', 'three-dither-strong'),
+              ('three-dither-on', 'three-dither-sky'),
               ('three-day-clear', 'three-perf-probe'),
           ]
           identical = [f'{a} == {b}' for a, b in comparisons if hashes[a] == hashes[b]]

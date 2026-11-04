@@ -21,6 +21,7 @@ import { WORLD_PALETTE } from '../../../theme/tokens';
 export interface PixelPipelineToggles {
   palette: boolean;
   dither: boolean;
+  ditherSky: boolean;
   edges: boolean;
 }
 
@@ -85,6 +86,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform vec3 uPalette[20];
   uniform bool uPaletteEnabled;
   uniform bool uDitherEnabled;
+  uniform bool uDitherSkyEnabled;
   uniform bool uEdgesEnabled;
   uniform float uOutlineStrength;
   uniform float uDitherStrength;
@@ -166,7 +168,9 @@ const FRAGMENT_SHADER = /* glsl */ `
       color = mix(skyTop, skyHorizon, horizonLift);
     }
 
-    if (uDitherEnabled) {
+    // Avoid ordered-checkerboard noise in the depthless, flat sky by default.
+    // Diagnostic sky dithering can be explicitly enabled in Style Lab only.
+    if (uDitherEnabled && (uDitherSkyEnabled || sourceDepth <= 0.9995)) {
       float dither = bayer4(gl_FragCoord.xy) - 0.5;
       color = clamp(color + dither * uDitherStrength, 0.0, 1.0);
     }
@@ -221,6 +225,7 @@ export class PixelPostPipeline {
     const toggles: PixelPipelineToggles = {
       palette: options.toggles?.palette ?? true,
       dither: options.toggles?.dither ?? false,
+      ditherSky: options.toggles?.ditherSky ?? false,
       edges: options.toggles?.edges ?? true,
     };
 
@@ -235,6 +240,7 @@ export class PixelPostPipeline {
         uPalette: { value: paletteVectors() },
         uPaletteEnabled: { value: toggles.palette },
         uDitherEnabled: { value: toggles.dither },
+        uDitherSkyEnabled: { value: toggles.ditherSky },
         uEdgesEnabled: { value: toggles.edges },
         uOutlineStrength: { value: Number.isFinite(options.outlineStrength) ? Math.min(0.75, Math.max(0, options.outlineStrength!)) : 0.52 },
         uDitherStrength: { value: Number.isFinite(options.ditherStrength) ? Math.min(0.05, Math.max(0, options.ditherStrength!)) : 0.028 },
@@ -250,6 +256,7 @@ export class PixelPostPipeline {
   setToggles(toggles: Partial<PixelPipelineToggles>): void {
     if (typeof toggles.palette === 'boolean') this.material.uniforms.uPaletteEnabled.value = toggles.palette;
     if (typeof toggles.dither === 'boolean') this.material.uniforms.uDitherEnabled.value = toggles.dither;
+    if (typeof toggles.ditherSky === 'boolean') this.material.uniforms.uDitherSkyEnabled.value = toggles.ditherSky;
     if (typeof toggles.edges === 'boolean') this.material.uniforms.uEdgesEnabled.value = toggles.edges;
   }
 

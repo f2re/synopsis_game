@@ -263,6 +263,7 @@ export class ThreeHubRenderer {
       toggles: {
         palette: pixelSettings.palette,
         dither: pixelSettings.dither,
+        ditherSky: pixelSettings.ditherSky,
         edges: pixelSettings.edges,
       },
       outlineStrength: pixelSettings.outlineStrength,
