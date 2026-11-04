@@ -4,7 +4,7 @@
 
 **Preferred provider:** Codex; fallback Claude Code.
 
-Owns `ID-*`, `AVATAR-*`, identity/rewards packages and related UI/data contracts.
+Owns `ID-*`, `AVATAR-*`, existing identity logic in `apps/server/src/modules/identity`, future rewards modules inside `apps/server`, plus related UI/data contracts. New identity/rewards packages require a separate accepted ADR.
 
 Requirements:
 

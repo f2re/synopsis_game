@@ -24,7 +24,7 @@ Owns:
 - art briefs for pixel asset generation;
 - visual acceptance of Hub, Blitz, Duel, Inventory, Tournament and Progression.
 
-For the current hub generation the Art Director must reject painterly pseudo-pixel output, tiny noisy pixels, palace-like central architecture, repeated project-title signage and scenes where locations are visually indistinguishable from decoration. The accepted baseline is a 480×270 logical world with chunky readable pixels, bright green/pastel environment, grounded scientific buildings and explicit open/locked/active location affordances.
+For the current hub generation the Art Director must reject painterly pseudo-pixel output, tiny noisy pixels, palace-like central architecture, repeated project-title signage and scenes where locations are visually indistinguishable from decoration. Legacy scenes use the 480×270 logical baseline with readable pixel clusters, green/pastel environment and explicit open/locked/active affordances. The separate 2.5D Hub proposal uses a **640×360 logical Geometry Lock** and a **320×180** Three.js render target; apply its contract only in the relevant H3D PR branch until its ADR is merged and the independent gates are accepted. Never force one scene's grid onto the other.
 
 ## Локальный характер 26063
 

@@ -1,9 +1,8 @@
 ---
 name: russian-synoptic-acceptance
-description: "26063 russian-synoptic-acceptance workflow; read canonical cross-provider skill and project gates."
+description: "Use for Russian meteorological terminology, method profiles, sources, KN-01 and answer verification."
 ---
 
-# russian-synoptic-acceptance — Claude discovery adapter
+# russian-synoptic-acceptance — project-specific discovery adapter
 
-Read and follow `.agents/skills/russian-synoptic-acceptance/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/russian-synoptic-acceptance/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.

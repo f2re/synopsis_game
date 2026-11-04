@@ -22,3 +22,7 @@ Implementation should prefer reusable sprites, transforms, Phaser scene primitiv
 The role defines **what the world does**: state machines, schedules, density and interactions. `game-runtime-webgl-engineer` defines **how Phaser/WebGL renders it**: lifecycle, cameras, texture sampling, tweens, filters/shaders, particles and renderer diagnostics.
 
 Required reviewers: `art-director`, `game-runtime-webgl-engineer`, `web-performance-engineer`, `ux-accessibility-reviewer`.
+
+## Experimental 2.5D Hub boundary
+
+If work targets H3D PRs rather than `main`, use the approved branch-specific `HubWorldDefinition` and accepted 640×360 Geometry Lock; Phaser still owns lifecycle and semantic input. Navigation, footprints and collision are gameplay/world data, not screen-space renderer bounds. The existing 2D sprite-layer pipeline remains valid for legacy scenes, but the proposed 2.5D Hub should express weather/season/day phase through materials, lighting and world parameters instead of multiplying full-screen raster states. Do not read H3D-only files from `main` as if they existed there; identify the target PR before editing.

@@ -1,9 +1,8 @@
 ---
 name: realtime-server-authority
-description: "26063 realtime-server-authority workflow; read canonical cross-provider skill and project gates."
+description: "Use for server-authoritative match protocol, WebSocket reconnect, replay, identity and security cases."
 ---
 
-# realtime-server-authority — Claude discovery adapter
+# realtime-server-authority — project-specific discovery adapter
 
-Read and follow `.agents/skills/realtime-server-authority/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/realtime-server-authority/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.
