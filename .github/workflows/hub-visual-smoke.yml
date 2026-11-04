@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - 'packages/world-engine/**'
+      - 'tools/hub/**'
       - 'apps/web/src/**'
       - 'apps/web/vite.config.ts'
       - 'apps/web/package.json'
@@ -145,6 +146,15 @@ jobs:
           grep -q 'draws  p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
           grep -q 'GL buffers/textures/programs:' hub-visual-smoke/three-perf-probe.dom.html
 
+      - name: Проверить реальные клики по 3D-зданиям, маршруты, Escape и повторный выбор
+        env:
+          CHROME: ${{ steps.chrome.outputs.binary }}
+          HUB_SMOKE_BASE_URL: http://127.0.0.1:4173
+          HUB_SMOKE_DIR: hub-visual-smoke
+        run: |
+          node --check tools/hub/browser-interaction-smoke.mjs
+          node tools/hub/browser-interaction-smoke.mjs
+
       - name: Проверить, что диагностические состояния дают разные кадры
         run: |
           python - <<'PY'
@@ -191,6 +201,7 @@ jobs:
           PY
 
       - name: Сохранить визуальные доказательства
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: hub-2_5d-visual-smoke-${{ github.sha }}
