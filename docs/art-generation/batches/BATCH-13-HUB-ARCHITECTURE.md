@@ -19,7 +19,7 @@ Locked regions:
 |---|---|
 | Radar | `x=38..178, y=66..174` |
 | Maps & Analysis | `x=34..208, y=145..287` |
-| Synoptic Center | `x=205..433, y=111..264` |
+| 26063 Main Operations Building | `x=205..433, y=111..264` |
 | Aerology | `x=438..600, y=106..221` |
 | Archive | `x=351..490, y=182..289` |
 | Tournament Hall | `x=492..634, y=180..301` |
@@ -75,10 +75,10 @@ Footprint/entrance/window mass must align to Image A. New geometry outside locke
 - **Image B:** polished Hub reference — institutional style/material hierarchy.
 
 ### Output contract
-Exactly ONE `640×360` transparent RGBA architecture layer at `(0,0)`, no trim. Only the main Synoptic Center and physically integral attached fixtures are non-transparent.
+Exactly ONE `640×360` transparent RGBA architecture layer at `(0,0)`, no trim. Only the main 26063 Main Operations Building and physically integral attached fixtures are non-transparent.
 
 ### Generation prompt
-Create the main Synoptic Center as the largest and visually primary institutional building while preserving Image A geometry exactly. Use a balanced scientific/classical facade with broad central entrance, existing stair relationship, cool stone/blue-gray structural masses, warm operational windows and a restrained blank weather-insignia mounting area with no lettering. Add only compact scientifically plausible roof fittings where they fit the accepted silhouette. The building should communicate competence and centrality through massing and material quality, not through excessive monumentality. Keep vertical edges vertical and match the Hub elevated camera. Output one aligned layer only.
+Create the main 26063 Main Operations Building as the largest and visually primary institutional building while preserving Image A geometry exactly. Use a balanced scientific/classical facade with broad central entrance, existing stair relationship, cool stone/blue-gray structural masses, warm operational windows and a restrained blank weather-insignia mounting area with no lettering. Add only compact scientifically plausible roof fittings where they fit the accepted silhouette. The building should communicate competence and centrality through massing and material quality, not through excessive monumentality. Keep vertical edges vertical and match the Hub elevated camera. Output one aligned layer only.
 
 ### Hard negatives
 No readable building name/logo, new staircase, moved entrance, changed roof pitch, fantasy observatory tower, government-palace grandeur, people, terrain, sky, trees, UI, contact sheet/collage/options or standalone recentering.
@@ -118,7 +118,7 @@ Footprint/roof relation drift, architecture expanding beyond locked region, free
 Exactly ONE `640×360` transparent RGBA Archive layer at `(0,0)`, never trimmed.
 
 ### Generation prompt
-Create the Archive building aligned exactly to the accepted geometry. Use an older but maintained scientific-library/institutional wing: cool masonry facade, dark blue-gray roof, tall warm windows, modest central entrance and subtle exterior service/storage cues. The architecture should suggest historical maps, observation journals and document storage through proportion/material character only, not through written signs. Keep the building grounded in North-West institutional design and visually quieter than the main Synoptic Center. Preserve every accepted footprint and roofline relationship. Output one aligned architecture layer only.
+Create the Archive building aligned exactly to the accepted geometry. Use an older but maintained scientific-library/institutional wing: cool masonry facade, dark blue-gray roof, tall warm windows, modest central entrance and subtle exterior service/storage cues. The architecture should suggest historical maps, observation journals and document storage through proportion/material character only, not through written signs. Keep the building grounded in North-West institutional design and visually quieter than the main 26063 Main Operations Building. Preserve every accepted footprint and roofline relationship. Output one aligned architecture layer only.
 
 ### Hard negatives
 No gothic fantasy library, castle towers, oversized clock, readable archive sign, books/papers outside, people, terrain, trees, sky, UI, changed footprint, contact sheet/collage/options or standalone cropped asset.
@@ -158,7 +158,7 @@ Region overflow, altered entrance/roof geometry, sports-arena/military drift, re
 Exactly ONE `640×360` transparent RGBA PNG at `(0,0)`, never trimmed. Only Code Post/glass laboratory architecture pixels visible.
 
 ### Generation prompt
-Create the central compact Code Post / glass laboratory pavilion aligned to Image A. Preserve exact footprint and camera. Use transparent/glazed roof or wall sections, blue-gray structural frames, compact communications fittings, visible warm control-room volume and practical scientific-campus proportions. It should read as a technical operational node and provide a visually lighter glass contrast against masonry buildings, without fake screens or readable data. Keep the structure secondary in size to the main Synoptic Center while distinct in material. Output exactly one full-canvas architecture layer.
+Create the central compact Code Post / glass laboratory pavilion aligned to Image A. Preserve exact footprint and camera. Use transparent/glazed roof or wall sections, blue-gray structural frames, compact communications fittings, visible warm control-room volume and practical scientific-campus proportions. It should read as a technical operational node and provide a visually lighter glass contrast against masonry buildings, without fake screens or readable data. Keep the structure secondary in size to the main 26063 Main Operations Building while distinct in material. Output exactly one full-canvas architecture layer.
 
 ### Hard negatives
 No readable code, AAXX groups, screen text, neon cyberpunk lab, giant antenna tower, people, terrain, plants, UI, changed footprint, glasshouse redesign outside region, contact sheet/collage/options.

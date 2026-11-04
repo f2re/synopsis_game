@@ -146,7 +146,7 @@ Readable data, new geometry, excessive neon brightness or overlay outside accept
 Exactly ONE `640×360` transparent RGBA identity overlay at `(0,0)`.
 
 ### Generation prompt
-Create the main Synoptic Center identity overlay using only accepted facade/entrance features. Add a restrained abstract scientific emblem geometry based on cloud/wind/globe forms without letters, compact warm canopy/entrance-light accents and a few small brass/blue material highlights at existing architectural details. The building should become more immediately recognizable as the primary center while remaining text-free. Do not copy walls, stairs or roof into the overlay. Output one full-canvas aligned layer.
+Create the main 26063 Main Operations Building identity overlay using only accepted facade/entrance features. Add a restrained abstract scientific emblem geometry based on cloud/wind/globe forms without letters, compact warm canopy/entrance-light accents and a few small brass/blue material highlights at existing architectural details. The building should become more immediately recognizable as the primary center while remaining text-free. Do not copy walls, stairs or roof into the overlay. Output one full-canvas aligned layer.
 
 ### Hard negatives
 No building name, station number, logo text, giant crest, changed canopy/stairs, facade repaint, flags, UI badge, contact sheet/collage/options.
