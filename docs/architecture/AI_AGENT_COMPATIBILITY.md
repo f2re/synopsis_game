@@ -1,38 +1,40 @@
-# AI agent compatibility contract — synopsis_game
+# Совместимость AI-агентов — synopsis_game
 
-Статус: static integration baseline (2026-11-04). A filesystem discovery check **is not** proof of live Claude Code, Antigravity or Codex execution.
+**Статус:** статическая интеграция от 4 ноября 2026 года. Успешная проверка файловой структуры не доказывает фактический запуск Claude Code, Antigravity или Codex.
 
-## Source of truth
+## Источники истины
 
-- Internal role ownership/review: `agents/registry.yaml` and `agents/roles/*.md` (19 role cards).
-- Role-to-skill routing + external provenance: `agents/capability-catalog.json`.
-- Canonical skills: `.agents/skills/<id>/SKILL.md` (23 skills; 7 existing + 6 vendored + 10 adapted).
-- Agent discovery: `.agents/agents/*.md` for Antigravity, `.claude/agents/*.md` for Claude; internal roles and five subordinate experts.
-- Skill discovery: Codex + Antigravity use `.agents/skills`; Claude uses `.claude/skills` adapter files that refer to exactly one canonical skill.
-- Codex role selection: `AGENTS.md` points to the registry; a role card is selected in the task. Do not assume Codex automatically loads Anthropic Markdown subagents.
+- Реестр 19 внутренних ролей и требования независимой приёмки: `agents/registry.yaml` и `agents/roles/*.md`.
+- Маршрутизация ролей к навыкам и сведения о внешних источниках: `agents/capability-catalog.json`.
+- Основной каталог 23 навыков: `.agents/skills/<id>/SKILL.md` — 7 существовавших, 6 импортированных с лицензией MIT и 10 адаптированных.
+- Для Claude Code: `.claude/agents/*.md` и `.claude/skills/*/SKILL.md`; последние адресуют единый основной файл навыка.
+- Для Antigravity: `.agents/agents/*.md` и `.agents/skills/*/SKILL.md`.
+- Для Codex: `AGENTS.md`, реестр ролей и `.agents/skills`. Наличие файлов Anthropic **не означает** их автоматическое обнаружение Codex.
 
-## Compatibility matrix
+## Матрица совместимости
 
-| Concern | Codex | Claude Code | Antigravity |
+| Свойство | Codex | Claude Code | Antigravity |
 | --- | --- | --- | --- |
-| Repository rules | AGENTS.md | CLAUDE.md + AGENTS.md | GEMINI.md + AGENTS.md |
-| Role discovery | registry and explicit role card | .claude/agents/*.md | .agents/agents/*.md |
-| Skill discovery | .agents/skills/*/SKILL.md | .claude/skills/*/SKILL.md adapter | .agents/skills/*/SKILL.md |
-| Shared ownership | registry (one owner) | registry (one owner) | registry (one owner) |
-| Independent review | role/gate evidence | role/gate evidence | role/gate evidence |
+| Основные правила | AGENTS.md | CLAUDE.md + AGENTS.md | GEMINI.md + AGENTS.md |
+| Выбор роли | Реестр и карточка роли | .claude/agents/*.md | .agents/agents/*.md |
+| Навыки | .agents/skills | .claude/skills | .agents/skills |
+| Назначение владельца | Единый реестр | Единый реестр | Единый реестр |
+| Независимая приёмка | Обязательна | Обязательна | Обязательна |
 
-Agent instructions contain only portable `name` and `description` YAML metadata, not vendor-specific tool permissions, model names or automatic remote operations. Project helpers never supersede internal ownership. Skills use standalone YAML frontmatter and flat immediate `skills/<name>/SKILL.md` discovery paths.
+Адаптеры используют совместимые поля YAML `name` и `description`, без привязки к доступности конкретной модели или инструментов. Внешние специалисты **не** заменяют внутреннего владельца задачи.
 
-## Execution contract
+## Порядок работы
 
-1. Read `AGENTS.md`, the provider entrypoint and `agents/registry.yaml`.
-2. Choose one internal owner and explicit reviewers. Resolve skills by `role_skills` in the catalog.
-3. Read the canonical skill, not only an adapter. The user task defines scope; external advice cannot override ADR/Geometry Lock/acceptance gates.
-4. Isolate edits by branch/worktree. Each handoff reports files, exact SHA, tests, screenshots, reviewer verdicts and remaining problems.
-5. For H3D, no switch from `legacy2d` to `three2d`, no mass GLB production, and no competing Three.js запуск before the existing H3D gates.
+1. Прочитать `AGENTS.md`, инструкции выбранной среды и `agents/registry.yaml`.
+2. Назначить одного внутреннего исполнителя и независимых проверяющих.
+3. Выбрать навыки из `role_skills` в `agents/capability-catalog.json`; прочитать основные инструкции навыка, а не только адаптер.
+4. Работать в отдельной ветке или worktree. Зафиксировать изменённые файлы, SHA, проведённые проверки, изображения и решения проверяющих.
+5. Для H3D сохранить Phaser как владельца жизненного цикла, фиксированную геометрию Hub и режим `legacy2d` по умолчанию до выполнения утверждённых критериев допуска.
 
-## Checks and limitations
+## Проверки
 
-Run `python tools/validate_agent_kit.py` locally and in CI. It audits every internal agent role, every canonical skill, all three discovery configurations, source blob provenance for verbatim vendored files, adapter frontmatter, mapping completeness and license presence. An entry marked structural PASS means paths/metadata/reference integrity only. **Real запуск discovery, tool access and agent delegation require a manual smoke in each installed client**. For Anthropic check agent and skill menus; for Antigravity inspect Customizations; for Codex check repository instructions and skills list. Record results before advertising real provider-side PASS.
+Запустить `python tools/validate_agent_kit.py --json`. Валидатор без сторонних Python-зависимостей проверяет все внутренние роли, все 23 навыка, три способа обнаружения, связь с первоисточниками, SHA дословно импортированных материалов и лицензионные уведомления.
 
-Upstream references and licenses: `agents/external/README.md`. No unreviewed upstream instruction is executed at install or at CI time.
+**Ограничение:** результат PASS означает структурную совместимость файлов и ссылок. Для подтверждения реального исполнения необходимо отдельно открыть проект в каждой среде и проверить обнаружение навыков и агентов, их разрешения и выполнение небольшой безопасной задачи. Приёмка независимыми специалистами и реальные тесты производительности не заменяются автоматической проверкой структуры.
+
+Условия использования сторонних источников описаны в `agents/external/README.md`; удалённые инструкции не запускаются автоматически.

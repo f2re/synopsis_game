@@ -130,8 +130,12 @@ def check_documentation_language() -> list[str]:
         ROOT / "docs" / "LANGUAGE_POLICY.md",  # содержит примеры запрещённых слов намеренно
     }
 
+    # Англоязычные производственные промпты проверяются профильным валидатором
+    # tools/validate_art_generation_prompts.py. Это не пользовательская документация.
+    prompt_contract_root = ROOT / "docs" / "art-generation"
+
     for path in paths:
-        if not path.exists() or path in excluded:
+        if not path.exists() or path in excluded or prompt_contract_root in path.parents:
             continue
         prose = strip_nonprose_markdown(path.read_text(encoding="utf-8"))
         for line_no, line in enumerate(prose.splitlines(), start=1):
