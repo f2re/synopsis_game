@@ -233,21 +233,24 @@ export class HubScene extends Phaser.Scene {
 
   private handleThreePointerDown(pointer: Phaser.Input.Pointer): void {
     if (this.dossierLayer?.isOpen) return;
-
     const buildingId = this.threeRenderer?.pickBuilding(pointer.worldX, pointer.worldY);
     if (!buildingId) return;
     if (this.smokeSnapshot) this.smokePointerHits.push(buildingId);
+    this.visitBuildingById(buildingId);
+  }
 
+  /**
+   * One semantic interaction path for mouse picking and native keyboard
+   * controls. The event contains only a canonical building ID, never a
+   * mesh UUID, CSS pixel or a separate set of UI route coordinates.
+   */
+  private visitBuildingById(buildingId: string): void {
+    if (this.dossierLayer?.isOpen) return;
     const building = HUB_BUILDING_BY_ID.get(buildingId);
-    // A newer click always supersedes any unfinished visit. If no safe
-    // route exists, never open the dossier under the arrival-gated variant.
-    const outcome = building
-      ? this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y)
-      : undefined;
-    // The accepted legacy/canonical Hub stays immediate. The separate
-    // collisionReview variant opens exactly once on arrival.
+    if (!building) return;
+    const outcome = this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y);
     const immediateId = this.visitQueue.request(
-      buildingId, outcome, this.threeRenderer?.isArrivalGated ?? false,
+      building.id, outcome, this.threeRenderer?.isArrivalGated ?? false,
     );
     if (immediateId) worldBridge.notifyBuildingClicked(immediateId);
   }
@@ -339,6 +342,12 @@ export class HubScene extends Phaser.Scene {
       },
     );
 
+    // Accessible HTML buttons use the exact same navigation/dossier flow
+    // as a Three.js raycast hit or the legacy Phaser building interaction.
+    const unsubKeyboardVisit = worldBridge.on('hub:visit_building', (buildingId: string) => {
+      this.visitBuildingById(buildingId);
+    });
+
     const unsubFacilityDossier = worldBridge.on('world:building_click', (buildingId: string) => {
       const dossierId = FACILITY_DOSSIER_BY_BUILDING[buildingId];
       const buildingState = this.buildingStates.get(buildingId);
@@ -353,6 +362,7 @@ export class HubScene extends Phaser.Scene {
       unsubWeather,
       unsubCalm,
       unsubBuildingClick,
+      unsubKeyboardVisit,
       unsubFacilityDossier,
       unsubSeason,
       unsubCycleSeason,
