@@ -66,6 +66,9 @@ export class HubScene extends Phaser.Scene {
   private threeRenderer?: ThreeHubRenderer;
   private perfProbe?: HubPerfProbe;
   private readonly visitQueue = new HubVisitQueue();
+  private readonly smokePointerHits: string[] = [];
+  private readonly smokeWorldEvents: string[] = [];
+  private smokeSnapshot?: () => object;
 
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
@@ -139,6 +142,7 @@ export class HubScene extends Phaser.Scene {
     );
 
     this.input.on('pointerdown', this.handleThreePointerDown, this);
+    this.installBrowserSmokeObserver();
     this.applyDayPhase(this.timeOfDay.getCurrentPhase());
     this.applySeason(this.season);
     this.applyStageProgress([]);
@@ -201,11 +205,38 @@ export class HubScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Browser QA-only observer. It is read-only and installed only for the
+   * explicit hubE2E=1 query. Chrome drives real mouse/keyboard input through
+   * Phaser; this hook does not select buildings or advance animations.
+   */
+  private installBrowserSmokeObserver(): void {
+    if (typeof window === 'undefined' ||
+        new URLSearchParams(window.location.search).get('hubE2E') !== '1') return;
+
+    const global = window as Window & { __synopsisHubSmoke?: { snapshot: () => object } };
+    const targets = this.threeRenderer?.getBrowserSmokeTargets() ?? [];
+    this.smokeSnapshot = () => ({
+      ready: Boolean(this.threeRenderer),
+      targets,
+      pointerHits: [...this.smokePointerHits],
+      worldEvents: [...this.smokeWorldEvents],
+      moving: this.threeRenderer?.isAvatarMoving ?? false,
+      dossierOpen: this.dossierLayer?.isOpen ?? false,
+      arrivalGated: this.threeRenderer?.isArrivalGated ?? false,
+    });
+    global.__synopsisHubSmoke = { snapshot: this.smokeSnapshot };
+    this.bridgeUnsubscribers.push(worldBridge.on('world:building_click', (id: string) => {
+      this.smokeWorldEvents.push(id);
+    }));
+  }
+
   private handleThreePointerDown(pointer: Phaser.Input.Pointer): void {
     if (this.dossierLayer?.isOpen) return;
 
     const buildingId = this.threeRenderer?.pickBuilding(pointer.worldX, pointer.worldY);
     if (!buildingId) return;
+    if (this.smokeSnapshot) this.smokePointerHits.push(buildingId);
 
     const building = HUB_BUILDING_BY_ID.get(buildingId);
     // A newer click always supersedes any unfinished visit. If no safe
@@ -361,6 +392,13 @@ export class HubScene extends Phaser.Scene {
 
   private cleanup(): void {
     this.visitQueue.cancel();
+    if (this.smokeSnapshot && typeof window !== 'undefined') {
+      const global = window as Window & { __synopsisHubSmoke?: { snapshot: () => object } };
+      if (global.__synopsisHubSmoke?.snapshot === this.smokeSnapshot) {
+        delete global.__synopsisHubSmoke;
+      }
+      this.smokeSnapshot = undefined;
+    }
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
 
