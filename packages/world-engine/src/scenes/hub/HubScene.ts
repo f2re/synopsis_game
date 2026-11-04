@@ -64,6 +64,7 @@ export class HubScene extends Phaser.Scene {
   // New world-definition-first renderer spike.
   private threeRenderer?: ThreeHubRenderer;
   private perfProbe?: HubPerfProbe;
+  private pendingArrivalBuildingId?: string;
 
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
@@ -206,7 +207,19 @@ export class HubScene extends Phaser.Scene {
     if (!buildingId) return;
 
     const building = HUB_BUILDING_BY_ID.get(buildingId);
-    if (building) this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y);
+    // A newer click always supersedes any unfinished visit. If no safe
+    // route exists, never open the dossier under the arrival-gated variant.
+    this.pendingArrivalBuildingId = undefined;
+    const outcome = building
+      ? this.threeRenderer?.walkAvatarTo(building.entrance.x, building.entrance.y)
+      : undefined;
+    if (outcome === 'unreachable') return;
+    if (building && outcome === 'moving' && this.threeRenderer?.isArrivalGated) {
+      this.pendingArrivalBuildingId = buildingId;
+      return;
+    }
+    // The accepted legacy and canonical Three Hub retain immediate
+    // interaction. Only opt-in collisionReview delays until arrival.
     worldBridge.notifyBuildingClicked(buildingId);
   }
 
@@ -291,6 +304,7 @@ export class HubScene extends Phaser.Scene {
     const unsubBuildingClick = worldBridge.on(
       'hub:walk_to_building',
       ({ x, y }: { x: number; y: number }) => {
+        this.pendingArrivalBuildingId = undefined;
         this.npcLayer?.walkAvatarTo(x, y);
         this.threeRenderer?.walkAvatarTo(x, y);
       },
@@ -340,10 +354,18 @@ export class HubScene extends Phaser.Scene {
       this.perfProbe?.beginFrame(deltaMs);
       this.threeRenderer.update(deltaMs);
       this.perfProbe?.endFrame();
+      // Exactly one discrete game event on arrival. Never send per-frame
+      // position updates into React/WorldBridge; stage state is unchanged.
+      if (this.pendingArrivalBuildingId && !this.threeRenderer.isAvatarMoving) {
+        const arrivedId = this.pendingArrivalBuildingId;
+        this.pendingArrivalBuildingId = undefined;
+        worldBridge.notifyBuildingClicked(arrivedId);
+      }
     }
   }
 
   private cleanup(): void {
+    this.pendingArrivalBuildingId = undefined;
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
 
