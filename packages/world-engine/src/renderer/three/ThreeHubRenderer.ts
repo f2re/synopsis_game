@@ -43,9 +43,16 @@ import {
   type HubBuildingDefinition,
   type HubPoint,
   type HubRect,
+  type HubWorldDefinition,
 } from '../../world/hub/HubWorldDefinition';
 import { hubGroundRectObstacle } from '../../world/hub/HubCollision';
 import { planHubRoute } from '../../world/hub/HubNavigation';
+import {
+  HUB_COLLISION_REVIEW_CLEARANCE,
+  HUB_COLLISION_REVIEW_WORLD,
+  reviewApproachForEntrance,
+} from '../../world/hub/HubCollisionReviewLayout';
+import { previewHubProceduralFootprints } from '../../world/hub/HubSpatialAudit';
 import { geometryForStructure, type HubStructureGeometry } from '../../world/hub/HubStructureGeometry';
 import { HubProjection } from './HubProjection';
 import { PixelPostPipeline } from './post/PixelPostPipeline';
@@ -191,6 +198,8 @@ export class ThreeHubRenderer {
   private readonly windowMaterial: MeshBasicMaterial;
   private readonly avatarRoot = new Group();
   private avatarWaypoints: Vector3[] = [];
+  private navigationWorld: HubWorldDefinition = HUB_WORLD_DEFINITION_V1;
+  private collisionReviewEnabled = false;
   private avatarClock = 0;
   private readonly ambientLight = new AmbientLight(0xffffff, 1.2);
   private readonly sunLight = new DirectionalLight(0xffe7c0, 1.6);
@@ -236,6 +245,13 @@ export class ThreeHubRenderer {
     this.renderer.outputColorSpace = SRGBColorSpace;
 
     const query = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    // Opt-in review only: camera, building positions and accepted Geometry
+    // Lock v1 remain unchanged in the default and production renderer.
+    this.collisionReviewEnabled = query.get('hubLayout') === 'collisionReview';
+    if (this.collisionReviewEnabled) {
+      this.navigationWorld = HUB_COLLISION_REVIEW_WORLD;
+      console.info('[synopsis/world-engine] H3D-037 unapproved collision review layout enabled');
+    }
     this.pipeline = new PixelPostPipeline({
       width: INTERNAL_WIDTH,
       height: INTERNAL_HEIGHT,
@@ -400,7 +416,7 @@ export class ThreeHubRenderer {
 
   private createPaths(): void {
     const segments: { from: HubPoint; to: HubPoint; width: number }[] = [];
-    for (const path of HUB_WORLD_DEFINITION_V1.paths) {
+    for (const path of this.navigationWorld.paths) {
       for (let index = 0; index < path.points.length - 1; index += 1) {
         segments.push({ from: path.points[index], to: path.points[index + 1], width: path.width });
       }
@@ -781,15 +797,22 @@ export class ThreeHubRenderer {
     const groundPosition = this.avatarRoot.position.clone();
     groundPosition.y = 0;
     const current = this.projection.groundToLogical(groundPosition);
+    const goal = this.collisionReviewEnabled
+      ? reviewApproachForEntrance({ x: logicalX, y: logicalY })
+      : { x: logicalX, y: logicalY };
+    const obstacles = [hubGroundRectObstacle('hub-water', this.navigationWorld.waterBand)];
+    if (this.collisionReviewEnabled) {
+      // These procedural footprints are activated ONLY for the explicit
+      // unapproved review variant, where paths and entrances are rerouted.
+      obstacles.push(...previewHubProceduralFootprints(this.navigationWorld));
+    }
     const route = planHubRoute(
-      HUB_WORLD_DEFINITION_V1.paths,
+      this.navigationWorld.paths,
       { x: current.x, y: current.y },
-      { x: logicalX, y: logicalY },
+      goal,
       {
-        // This is an accepted ground/water zone, not a projected building
-        // silhouette. Building footprints remain an independent art/QA gate.
-        obstacles: [hubGroundRectObstacle('hub-water', HUB_WORLD_DEFINITION_V1.waterBand)],
-        clearance: 2,
+        obstacles,
+        clearance: this.collisionReviewEnabled ? HUB_COLLISION_REVIEW_CLEARANCE : 2,
       },
     );
     if (!route) {
