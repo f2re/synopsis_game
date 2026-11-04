@@ -235,7 +235,8 @@
     "art-director": [
       "pixel-art-direction",
       "pixel-art-qa",
-      "threejs-postprocessing"
+      "threejs-postprocessing",
+      "hub-2-5d-scene-production"
     ],
     "pixel-asset-designer": [
       "pixel-art-direction",
@@ -249,7 +250,8 @@
     "pixel-asset-pipeline-engineer": [
       "pixel-asset-pipeline",
       "threejs-assets",
-      "pixel-art-qa"
+      "pixel-art-qa",
+      "hub-2-5d-scene-production"
     ],
     "game-runtime-webgl-engineer": [
       "phaser-webgl-runtime",
