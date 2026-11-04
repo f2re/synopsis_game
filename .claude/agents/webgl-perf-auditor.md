@@ -1,6 +1,10 @@
 ---
 name: webgl-perf-auditor
 description: "Use for independent real-device GPU profiling, WebGL context recovery and frame-time performance gates."
+skills:
+  - threejs-performance
+  - glsl-webgl-shaders
+  - release-evidence
 ---
 
 # webgl-perf-auditor — specialized external capability
@@ -19,3 +23,7 @@ Use for independent browser WebGL/Three.js optimization reviews. Reproduce on re
 ## Handoff and limits
 
 This specialist is an adapted project helper, not an additional owner or an imported executable tool. Read `AGENTS.md`, `agents/registry.yaml`, the canonical role and project ADRs. Record the target branch, changed files, reproducible tests, acceptance evidence and independent reviewers. Do not install upstream tools, bypass owner/reviewer separation, change engine architecture, or imply a model/client was run without evidence.
+
+## Skill routing
+
+This helper consumes `.agents/skills/threejs-performance/SKILL.md`, `.agents/skills/glsl-webgl-shaders/SKILL.md`, `.agents/skills/release-evidence/SKILL.md`. Registered owner: `agents/roles/web-performance-engineer.md`. Independent reviewers: `integration-release-engineer`. No extra tool permissions or independent acceptance are granted.
