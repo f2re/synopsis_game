@@ -19,7 +19,7 @@
       "source": "bullish0x/GameStudio",
       "file": ".agents/agents/threejs-specialist.md",
       "sha": "52cd3e4b2feffb80eb8a388d9fa9c39ace5cf19f",
-      "url": "https://github.com/bullish0x/GameStudio/blob/52cd3e4b2feffb80eb8a388d9fa9c39ace5cf19f/.agents/agents/threejs-specialist.md",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/threejs-specialist.md",
       "license": "MIT GameStudio",
       "mode": "adapted"
     },
@@ -30,7 +30,7 @@
       "source": "bullish0x/GameStudio",
       "file": ".agents/agents/phaser-specialist.md",
       "sha": "a35ac61543e47100cc50ad07926e28a050064178",
-      "url": "https://github.com/bullish0x/GameStudio/blob/a35ac61543e47100cc50ad07926e28a050064178/.agents/agents/phaser-specialist.md",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/phaser-specialist.md",
       "license": "MIT GameStudio",
       "mode": "adapted"
     },
@@ -52,7 +52,7 @@
       "source": "bullish0x/GameStudio",
       "file": ".agents/agents/technical-artist.md",
       "sha": "fb2b2c97fb1be224977a99d612d5c65638990a3c",
-      "url": "https://github.com/bullish0x/GameStudio/blob/fb2b2c97fb1be224977a99d612d5c65638990a3c/.agents/agents/technical-artist.md",
+      "url": "https://github.com/bullish0x/GameStudio/blob/main/.agents/agents/technical-artist.md",
       "license": "MIT GameStudio",
       "mode": "adapted"
     },
@@ -63,7 +63,7 @@
       "source": "skinnye/3d-web-pack",
       "file": "agents/webgl-perf-auditor.md",
       "sha": "f0dc97a1b84dd854cdb44ef132603decbc608871",
-      "url": "https://github.com/skinnye/3d-web-pack/blob/f0dc97a1b84dd854cdb44ef132603decbc608871/agents/webgl-perf-auditor.md",
+      "url": "https://github.com/skinnye/3d-web-pack/blob/main/agents/webgl-perf-auditor.md",
       "license": "MIT skinnye",
       "mode": "adapted"
     }
@@ -75,7 +75,7 @@
       "source": "cesartevisual/threejs-skills",
       "upstream_path": "skills/threejs-scene/SKILL.md",
       "blob_sha": "7a201b0e37a694aa9087aa0381d0473e9cad2f3a",
-      "url": "https://github.com/cesartevisual/threejs-skills/blob/7a201b0e37a694aa9087aa0381d0473e9cad2f3a/skills/threejs-scene/SKILL.md",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-scene/SKILL.md",
       "license": "MIT Three.js Skills contributors"
     },
     {
@@ -84,7 +84,7 @@
       "source": "cesartevisual/threejs-skills",
       "upstream_path": "skills/threejs-geometry/SKILL.md",
       "blob_sha": "2220c9327a43bc0b9d5e36c94d775e83450d9141",
-      "url": "https://github.com/cesartevisual/threejs-skills/blob/2220c9327a43bc0b9d5e36c94d775e83450d9141/skills/threejs-geometry/SKILL.md",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-geometry/SKILL.md",
       "license": "MIT Three.js Skills contributors"
     },
     {
@@ -93,7 +93,7 @@
       "source": "cesartevisual/threejs-skills",
       "upstream_path": "skills/threejs-postprocessing/SKILL.md",
       "blob_sha": "5324e75860531c9856836eae8fa53e08d909da1a",
-      "url": "https://github.com/cesartevisual/threejs-skills/blob/5324e75860531c9856836eae8fa53e08d909da1a/skills/threejs-postprocessing/SKILL.md",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-postprocessing/SKILL.md",
       "license": "MIT Three.js Skills contributors"
     },
     {
@@ -102,7 +102,7 @@
       "source": "cesartevisual/threejs-skills",
       "upstream_path": "skills/threejs-performance/SKILL.md",
       "blob_sha": "14189766fce1523dfaf7b1aa64d431870b0d6e0f",
-      "url": "https://github.com/cesartevisual/threejs-skills/blob/14189766fce1523dfaf7b1aa64d431870b0d6e0f/skills/threejs-performance/SKILL.md",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-performance/SKILL.md",
       "license": "MIT Three.js Skills contributors"
     },
     {
@@ -111,7 +111,7 @@
       "source": "cesartevisual/threejs-skills",
       "upstream_path": "skills/threejs-animation/SKILL.md",
       "blob_sha": "58deab629aef059c07bad34b16a090e94947e3b7",
-      "url": "https://github.com/cesartevisual/threejs-skills/blob/58deab629aef059c07bad34b16a090e94947e3b7/skills/threejs-animation/SKILL.md",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-animation/SKILL.md",
       "license": "MIT Three.js Skills contributors"
     },
     {
@@ -120,7 +120,7 @@
       "source": "cesartevisual/threejs-skills",
       "upstream_path": "skills/threejs-assets/SKILL.md",
       "blob_sha": "6c0a3b491d32865e36b9485316c96bc69d22de39",
-      "url": "https://github.com/cesartevisual/threejs-skills/blob/6c0a3b491d32865e36b9485316c96bc69d22de39/skills/threejs-assets/SKILL.md",
+      "url": "https://github.com/cesartevisual/threejs-skills/blob/main/skills/threejs-assets/SKILL.md",
       "license": "MIT Three.js Skills contributors"
     },
     {
@@ -129,7 +129,7 @@
       "source": "phaserjs/phaser",
       "upstream_path": "skills/scenes/SKILL.md",
       "blob_sha": "c90c5e8b26993e6cd726ab8c4f36e4129cbf277d",
-      "url": "https://github.com/phaserjs/phaser/blob/c90c5e8b26993e6cd726ab8c4f36e4129cbf277d/skills/scenes/SKILL.md",
+      "url": "https://github.com/phaserjs/phaser/blob/main/skills/scenes/SKILL.md",
       "license": "upstream reference, original adaptation"
     },
     {
@@ -138,7 +138,7 @@
       "source": "phaserjs/phaser",
       "upstream_path": "skills/v4-new-features/SKILL.md",
       "blob_sha": "e06a1828337d32cfa78cd9c00b4c89c77a023b07",
-      "url": "https://github.com/phaserjs/phaser/blob/e06a1828337d32cfa78cd9c00b4c89c77a023b07/skills/v4-new-features/SKILL.md",
+      "url": "https://github.com/phaserjs/phaser/blob/main/skills/v4-new-features/SKILL.md",
       "license": "upstream reference, original adaptation"
     },
     {
@@ -147,7 +147,7 @@
       "source": "ProkStudio/skills",
       "upstream_path": "skills/game/2d/pixel-art-fundamentals/SKILL.md",
       "blob_sha": "9d542f2bc632504082f13d6d6b1508ea65a49f36",
-      "url": "https://github.com/ProkStudio/skills/blob/9d542f2bc632504082f13d6d6b1508ea65a49f36/skills/game/2d/pixel-art-fundamentals/SKILL.md",
+      "url": "https://github.com/ProkStudio/skills/blob/main/skills/game/2d/pixel-art-fundamentals/SKILL.md",
       "license": "upstream reference only, original adaptation"
     },
     {
