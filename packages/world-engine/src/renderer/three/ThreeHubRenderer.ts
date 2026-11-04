@@ -848,6 +848,56 @@ export class ThreeHubRenderer {
     return this.avatarWaypoints.length > 0 ? 'moving' : 'arrived';
   }
 
+  /**
+   * Read-only browser QA coordinates, available only with the explicit
+   * ?hubE2E=1 switch. Mouse input itself is NOT synthesized here: the CI
+   * runner sends real Chrome DevTools mouse events to the Phaser canvas.
+   * This method discovers visible pixels without guessing facade locations.
+   */
+  getBrowserSmokeTargets(): ReadonlyArray<{
+    id: string;
+    logicalX: number;
+    logicalY: number;
+    clientX: number;
+    clientY: number;
+  }> {
+    if (typeof window === 'undefined' ||
+        new URLSearchParams(window.location.search).get('hubE2E') !== '1') return [];
+
+    const cam = this.phaserScene.cameras.main;
+    const rect = this.phaserScene.game.canvas.getBoundingClientRect();
+    const viewportW = Math.max(this.phaserScene.scale.width, 1);
+    const viewportH = Math.max(this.phaserScene.scale.height, 1);
+    const targets: { id: string; logicalX: number; logicalY: number; clientX: number; clientY: number }[] = [];
+
+    for (const building of HUB_WORLD_DEFINITION_V1.buildings) {
+      const samples: { x: number; y: number; rank: number }[] = [];
+      for (let ix = 1; ix <= 9; ix += 1) {
+        for (let iy = 1; iy <= 9; iy += 1) {
+          const x = building.bounds.x + building.bounds.width * ix / 10;
+          const y = building.bounds.y + building.bounds.height * iy / 10;
+          const rank = Math.hypot(ix - 5, iy - 5);
+          samples.push({ x, y, rank });
+        }
+      }
+      samples.sort((a, b) => a.rank - b.rank);
+      for (const p of samples) {
+        if (this.pickBuilding(p.x, p.y) !== building.id) continue;
+        const localX = cam.x + (p.x - cam.scrollX) * cam.zoom;
+        const localY = cam.y + (p.y - cam.scrollY) * cam.zoom;
+        targets.push({
+          id: building.id,
+          logicalX: p.x,
+          logicalY: p.y,
+          clientX: rect.left + localX * rect.width / viewportW,
+          clientY: rect.top + localY * rect.height / viewportH,
+        });
+        break;
+      }
+    }
+    return targets;
+  }
+
   pickBuilding(logicalX: number, logicalY: number): string | undefined {
     const intersections = this.projection.rayFromLogical(logicalX, logicalY).intersectObjects(this.buildingRoots, true);
     for (const hit of intersections) {
