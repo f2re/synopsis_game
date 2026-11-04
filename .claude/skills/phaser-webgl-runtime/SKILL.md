@@ -1,9 +1,8 @@
 ---
 name: phaser-webgl-runtime
-description: "26063 phaser-webgl-runtime workflow; read canonical cross-provider skill and project gates."
+description: "Use for Phaser/WebGL engine lifecycle, React↔Phaser integration, pixel scaling and context-loss handling."
 ---
 
-# phaser-webgl-runtime — Claude discovery adapter
+# phaser-webgl-runtime — project-specific discovery adapter
 
-Read and follow `.agents/skills/phaser-webgl-runtime/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/phaser-webgl-runtime/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.

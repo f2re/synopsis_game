@@ -1,9 +1,8 @@
 ---
 name: pixel-art-direction
-description: "26063 pixel-art-direction workflow; read canonical cross-provider skill and project gates."
+description: "Use for creating and reviewing pixel-art screens, portraits, sprites, architecture and art-direction briefs."
 ---
 
-# pixel-art-direction — Claude discovery adapter
+# pixel-art-direction — project-specific discovery adapter
 
-Read and follow `.agents/skills/pixel-art-direction/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/pixel-art-direction/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.

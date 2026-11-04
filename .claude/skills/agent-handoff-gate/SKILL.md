@@ -1,9 +1,8 @@
 ---
 name: agent-handoff-gate
-description: "26063 agent-handoff-gate workflow; read canonical cross-provider skill and project gates."
+description: "Use for assigning one implementation owner, independent reviewers, task handoffs and evidence-based release gates."
 ---
 
-# agent-handoff-gate — Claude discovery adapter
+# agent-handoff-gate — project-specific discovery adapter
 
-Read and follow `.agents/skills/agent-handoff-gate/SKILL.md` before work. That file is the single source of this skill's instructions.
-Read `AGENTS.md` and `agents/registry.yaml`; do not override project architecture, task ownership or required independent review.
+When this task matches the description above, read the full canonical skill at `.agents/skills/agent-handoff-gate/SKILL.md` before acting. Then read `AGENTS.md` and `agents/registry.yaml`, preserving the registered owner, accepted architecture and independent review gates. The adapter does not grant new permissions or trigger network installs.
