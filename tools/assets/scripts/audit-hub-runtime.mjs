@@ -22,32 +22,45 @@ function reportOk(message) {
   console.log('OK ' + message);
 }
 
-const sceneFile = join(root, 'packages/world-engine/src/scenes/hub/HubScene.ts');
-if (!existsSync(sceneFile)) {
-  reportProblem('Не найден исходник HubScene.ts');
+const {createHash}=await import('node:crypto');
+const requireProduction=process.argv.includes('--require-production');
+const manifestPath=join(root,'assets/manifests/hub.runtime-approved.json');
+if(!existsSync(manifestPath)) {
+  reportProblem('Не найден approved-asset манифест');
 } else {
-  const source = readFileSync(sceneFile, 'utf8');
-  const declared = [...source.matchAll(/this\.load\.image\(\s*['"][^'"]+['"]\s*,\s*['"](\/hub\/[^'"]+)['"]/g)];
-  if (declared.length === 0) reportProblem('Не обнаружены загрузки hub-изображений: проверить парсер/сцену');
-  for (const match of declared) {
-    const urlPath = match[1];
-    const target = join(publicRoot, urlPath.slice(1));
-    if (!existsSync(target)) {
-      reportProblem('Отсутствует runtime текстура ' + urlPath);
-      continue;
-    }
-    const bytes = readFileSync(target);
-    if (urlPath.endsWith('.png')) {
-      const png = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-      if (bytes.length < 24 || !bytes.subarray(0, 8).equals(png) || bytes.toString('ascii', 12, 16) !== 'IHDR') {
-        reportProblem('Повреждён PNG/IHDR: ' + urlPath);
+  const catalog=JSON.parse(readFileSync(manifestPath,'utf8'));
+  if(catalog.schemaVersion!==1||!Array.isArray(catalog.assets)) reportProblem('Неверная схема манифеста');
+  else {
+    const keys=new Set(),urls=new Set();
+    for(const asset of catalog.assets){
+      if(!asset.key||keys.has(asset.key)||urls.has(asset.url)||!/^\/hub\/layers\/[a-z0-9_-]+\.png$/.test(asset.url??'')){
+        reportProblem('Неуникальный или небезопасный asset: '+JSON.stringify(asset));continue;
+      }
+      keys.add(asset.key);urls.add(asset.url);
+      if(asset.status==='pending'){
+        console.log('PENDING '+asset.url+' (Phaser не загружает)');
+        if(requireProduction)reportProblem('Не принят production-ресурс '+asset.url);
         continue;
       }
-      const width = bytes.readUInt32BE(16);
-      const height = bytes.readUInt32BE(20);
-      if (width === 0 || height === 0) reportProblem('Нулевая геометрия PNG: ' + urlPath);
-      else reportOk(urlPath + ' (' + width + 'x' + height + ')');
-    } else reportOk(urlPath + ' (' + bytes.length + ' байт)');
+      if(asset.status!=='approved'||catalog.artAcceptance!=='PASS'){
+        reportProblem('Недопустимый статус допуска: '+asset.url);continue;
+      }
+      if(!/^[a-f0-9]{64}$/.test(asset.sha256??'')||!/^https:\/\/github.com\/f2re\/synopsis_game\/(issues|pull)\/\d+/.test(asset.artReviewUrl??'')){
+        reportProblem('Нет SHA-256 или независимого review: '+asset.url);continue;
+      }
+      const target=join(publicRoot,asset.url.slice(1));
+      if(!existsSync(target)){reportProblem('Отсутствует утверждённый PNG: '+asset.url);continue;}
+      const bytes=readFileSync(target),signature=Buffer.from([137,80,78,71,13,10,26,10]);
+      if(bytes.length<24||!bytes.subarray(0,8).equals(signature)||bytes.toString('ascii',12,16)!=='IHDR'){
+        reportProblem('Не PNG/IHDR: '+asset.url);continue;
+      }
+      const sha=createHash('sha256').update(bytes).digest('hex');
+      if(sha!==asset.sha256)reportProblem('SHA-256 mismatch: '+asset.url);
+      else reportOk('Принятый PNG '+asset.url+' '+bytes.readUInt32BE(16)+'x'+bytes.readUInt32BE(20));
+    }
+    if(catalog.artAcceptance==='PASS'&&catalog.assets.some(a=>a.status!=='approved'))reportProblem('ART PASS при незавершённых слоях');
+    if(catalog.artAcceptance!=='PASS')console.log('STATUS: art pending; legacy procedural fallback only, not ART_ACCEPTED');
+    if(requireProduction&&catalog.artAcceptance!=='PASS')reportProblem('Не допускать production Hub');
   }
 }
 

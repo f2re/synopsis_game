@@ -31,6 +31,7 @@ jobs:
           python tools/validate_brand.py
           python tools/assets/check_asset_contract.py
           python tools/assets/check_asset_manifests.py
+          node tools/assets/scripts/audit-hub-runtime.mjs
           python tools/assets/check_generation_profiles.py
           python -m py_compile services/asset-generator/core/world_style_dataset.py services/asset-generator/scripts/build_style_dataset_v4.py services/asset-generator/scripts/train_world_style_v4.py
           python services/asset-generator/tests/test_world_style_dataset.py
@@ -53,6 +54,7 @@ jobs:
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
+          node --experimental-strip-types --test packages/world-engine/src/runtime/hubCoverGeometry.test.ts
           pnpm build
       - name: Проверить production-сервер
         run: |

@@ -29,6 +29,7 @@ jobs:
       - name: Проверка структуры манифестов
         run: |
           python tools/assets/check_asset_manifests.py
+          node tools/assets/scripts/audit-hub-runtime.mjs
       - name: Проверка палитр проекта
         run: |
           python -c "

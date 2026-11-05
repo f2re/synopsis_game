@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { WORLD_PALETTE } from '../theme/tokens';
+import { calculateHubCoverGeometry } from './hubCoverGeometry';
 
 export const WORLD_LOGICAL_WIDTH = 480;
 export const WORLD_LOGICAL_HEIGHT = 270;
@@ -72,4 +73,20 @@ export function bindLogicalViewport(
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
     scene.scale.off(Phaser.Scale.Events.RESIZE, resize);
   });
+}
+
+/** Hub-only full bleed camera. Legacy scenes retain integer-fit. */
+export function bindHubCoverViewport(scene: Phaser.Scene, logicalWidth=WORLD_LOGICAL_WIDTH, logicalHeight=WORLD_LOGICAL_HEIGHT): void {
+  const resize=()=>{
+    const width=Math.max(scene.scale.width,1),height=Math.max(scene.scale.height,1);
+    const g=calculateHubCoverGeometry(width,height,logicalWidth,logicalHeight);
+    const camera=scene.cameras.main;
+    camera.setBackgroundColor(WORLD_PALETTE.skyNight0);
+    camera.setViewport(0,0,width,height);
+    camera.setZoom(g.zoom);
+    camera.centerOn(logicalWidth/2,logicalHeight/2);
+  };
+  resize();
+  scene.scale.on(Phaser.Scale.Events.RESIZE,resize);
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN,()=>scene.scale.off(Phaser.Scale.Events.RESIZE,resize));
 }
