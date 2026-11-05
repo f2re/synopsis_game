@@ -49,6 +49,9 @@ jobs:
           pnpm bootstrap
           pnpm typecheck
           pnpm test:server
+          # Проверка астрономии выполняется на закреплённом Node 22
+          # (native TypeScript type stripping), без внешнего test runner.
+          node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
           pnpm build
       - name: Проверить production-сервер
         run: |
