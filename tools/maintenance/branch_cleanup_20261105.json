@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "repository": "f2re/synopsis_game",
+  "baseline_main_sha": "9ca5368181b50965d90a05e6a9bcc6b7e9ed34da",
+  "generated_at": "2026-11-05",
+  "mode": "dry_run",
+  "rules": "Only SHA-pinned, no-open-PR, unprotected refs with merged PR or verified ancestor. No wildcard deletes.",
+  "retain": {
+    "open_pr_head_or_base": [
+      "agent/game-runtime-webgl-engineer/h3d-pixel-shader-hardening-20261104",
+      "agent/game-runtime-webgl-engineer/hub-v2-resolution-visual-gate-20261105",
+      "agent/pixel-asset-designer/lora-character-references-v1",
+      "agent/pixel-asset-designer/lora-props-references-v1",
+      "agent/pixel-asset-pipeline/hub-generation-batch-v1",
+      "docs/three2d-renderer-contracts",
+      "feat/h3d-arrival-and-movement-20261104",
+      "feat/h3d-collision-review-layout-20261104",
+      "feat/h3d-consolidation-contract-tests-20261104",
+      "feat/h3d-keyboard-accessibility-20261104",
+      "feat/h3d-obstacle-navigation-20261103",
+      "feat/h3d-real-browser-interaction-e2e-20261104",
+      "feat/h3d-waypoint-navigation-20261103",
+      "feat/h3d-webgl-capability-fallback-20261103",
+      "feat/hub-three2d-poc",
+      "fix/hub-master-runtime-contract",
+      "integration/hub-2-5d-rc-20261104"
+    ],
+    "active_art_tasks": [
+      "agent/art-director/hub-master-decomposition",
+      "agent/pixel-asset-designer/hub-master-production"
+    ],
+    "unique_work_to_review": [
+      "agent/orchestrator/kn01-aaa-spec",
+      "feat/h3d-r0-r1-style-lab",
+      "feat/kn01-live-ingest",
+      "feat/living-facility-dossiers",
+      "feat/lore-seamless-gameplay"
+    ]
+  },
+  "delete": [
+    {
+      "branch": "agent/art/art-batch-001-archive-hub",
+      "sha": "c984bbb242166053d973eea7820d3a985d98dd4a",
+      "reason": "merged_pr",
+      "pr": 19
+    },
+    {
+      "branch": "agent/game-runtime-webgl-engineer/hub-runtime-assets-cover-p0",
+      "sha": "fd9caffa424c1ebbf5e2c4635198f0192d6ee962",
+      "reason": "merged_pr",
+      "pr": 118
+    },
+    {
+      "branch": "agent/identity-avatar/identity-admin-avatar-mvp",
+      "sha": "e4c8bd8f6c95deac653a6405cc9823c9e93e2f21",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "agent/integration-release/auto-versioned-releases",
+      "sha": "976a9a1bae8d54468fe64b680cbe833a08cf4c94",
+      "reason": "merged_pr",
+      "pr": 22
+    },
+    {
+      "branch": "agent/integration-release/deployment-infrastructure",
+      "sha": "a193999e411d97ec425d9c4e16087cea993dbb60",
+      "reason": "merged_pr",
+      "pr": 16
+    },
+    {
+      "branch": "agent/integration/all-open-product-work",
+      "sha": "6ed376723ff391917e892bf6206d77ee95e84862",
+      "reason": "merged_pr",
+      "pr": 27
+    },
+    {
+      "branch": "agent/orchestrator/agent-kit-cross-provider-20261104",
+      "sha": "8c88be5942b06fdd16d3c0bd674aaa085e9f060a",
+      "reason": "merged_pr",
+      "pr": 96
+    },
+    {
+      "branch": "agent/orchestrator/art-sprite-production-plan",
+      "sha": "7447f086cdb98cf66df1c3d98680e7f323cd263d",
+      "reason": "merged_pr",
+      "pr": 3
+    },
+    {
+      "branch": "agent/orchestrator/brand-26063",
+      "sha": "ff76475f649d04df644aa3033790ba3531b0a602",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "agent/orchestrator/brand-26063-current-main",
+      "sha": "bb926abac5f430ed07bc898beca7d7e1888e0e56",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "agent/orchestrator/consolidate-main-20261026",
+      "sha": "4bb74f9f5a8d326db49dac29b0f1cdf1f8fdb78c",
+      "reason": "merged_pr",
+      "pr": 10
+    },
+    {
+      "branch": "agent/orchestrator/eng-phaser-pixel-pipeline",
+      "sha": "2c9dac40d1d2df17b892ad615abeac70b093b603",
+      "reason": "merged_pr",
+      "pr": 2
+    },
+    {
+      "branch": "agent/orchestrator/engine-006-web-prototype-main",
+      "sha": "1d680cea8a7459c89c175c2b98602f87a60a7949",
+      "reason": "merged_pr",
+      "pr": 11
+    },
+    {
+      "branch": "agent/orchestrator/extended-game-art-qa-kit-20261104",
+      "sha": "11b1e594609c09e6420ba8de2a8694bfad260590",
+      "reason": "merged_pr",
+      "pr": 101
+    },
+    {
+      "branch": "agent/orchestrator/prototype-web-app",
+      "sha": "73c8d6beabe198dbc0824ea6ce397c448b9cedbc",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "agent/pixel-asset-designer/sprite-archive-vertical-slice",
+      "sha": "299e7830b634604109e0f85e288ed6391c4f861d",
+      "reason": "merged_pr",
+      "pr": 4
+    },
+    {
+      "branch": "agent/pixel-asset-pipeline/lora-dataset-tooling-v1",
+      "sha": "29d807d3cd42b720be3d155939015c5f8538c6f7",
+      "reason": "merged_pr",
+      "pr": 65
+    },
+    {
+      "branch": "art/chatgpt-asset-regeneration-plan",
+      "sha": "f56750367095a28d3a7ed03cf04ccf9c6f55125a",
+      "reason": "merged_pr",
+      "pr": 78
+    },
+    {
+      "branch": "art/hub-v2-coastal-composition-candidate-20261105",
+      "sha": "8e9f424228477fc751e8fe262acd6f7d5ea7c1dd",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "art/reference-screen-v2-original-png-20261105",
+      "sha": "3622fce089409d2dca4d13ce1cef9d8e8c5505e1",
+      "reason": "merged_pr",
+      "pr": 116
+    },
+    {
+      "branch": "audit/agent-kit-compatibility-20261104",
+      "sha": "fdabb0d4da249e805edff6e906ab82f602c5ccc8",
+      "reason": "merged_pr",
+      "pr": 99
+    },
+    {
+      "branch": "audit/import-agent-content-pack",
+      "sha": "ee0798d0954e3f54adef92680ebbfc57ea66229f",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "chore/remove-obsolete-lock-refresh",
+      "sha": "7cd21c2e96bf84f4b39ca0d2974c3949474676a1",
+      "reason": "merged_pr",
+      "pr": 30
+    },
+    {
+      "branch": "codex/asset-pipeline-all-classes",
+      "sha": "22fa9be0318bb67709e78d1ffaed8306d2f165a5",
+      "reason": "merged_pr",
+      "pr": 52
+    },
+    {
+      "branch": "codex/asset-pipeline-v2",
+      "sha": "a8409268a3047985d35cef74f1ef403f5638b24d",
+      "reason": "merged_pr",
+      "pr": 51
+    },
+    {
+      "branch": "codex/hub-quiet-ui",
+      "sha": "4feebb9ccaf21b9917284984c1a4da34a922a7a8",
+      "reason": "merged_pr",
+      "pr": 47
+    },
+    {
+      "branch": "codex/integrate-lore-bible-archive",
+      "sha": "bced15fe4252e92079261a3a930a340fab614454",
+      "reason": "merged_pr",
+      "pr": 50
+    },
+    {
+      "branch": "codex/lore-foundation",
+      "sha": "1e9b6be4a884150792202bf8107e124202459684",
+      "reason": "merged_pr",
+      "pr": 49
+    },
+    {
+      "branch": "design/pixel-art-style-guide",
+      "sha": "ee0798d0954e3f54adef92680ebbfc57ea66229f",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "docs/reference-screen-v2-hub-visual-contract-20261105",
+      "sha": "6176f130130a0c040fb6ccdd4b62736b99611c7c",
+      "reason": "merged_pr",
+      "pr": 108
+    },
+    {
+      "branch": "feat/find-error-td",
+      "sha": "d5cfc93d78a6e5858b20a5d069ef0519ca2e9a13",
+      "reason": "merged_pr",
+      "pr": 42
+    },
+    {
+      "branch": "feat/first-shift-kn01",
+      "sha": "6d2ceb5c272fcea6dfb544b19b536686397cd4e3",
+      "reason": "merged_pr",
+      "pr": 34
+    },
+    {
+      "branch": "feat/living-facility-dossiers-main",
+      "sha": "d03aa62465ca97766ed9c3a06190e73628fb4fb5",
+      "reason": "merged_pr",
+      "pr": 66
+    },
+    {
+      "branch": "feat/living-shift-feedback",
+      "sha": "5206ba4aebb50aedd4a15e453c1d959d0f8b3000",
+      "reason": "merged_pr",
+      "pr": 64
+    },
+    {
+      "branch": "feat/lore-seamless-runtime-wiring",
+      "sha": "8337c1dff9843fd54356b52a9e1c8b276bd1e531",
+      "reason": "merged_pr",
+      "pr": 63
+    },
+    {
+      "branch": "feat/primary-analysis-dependencies",
+      "sha": "c643d868fb282fe2710f5931c45aa38c4958d3ae",
+      "reason": "merged_pr",
+      "pr": 44
+    },
+    {
+      "branch": "feat/production-hub-master",
+      "sha": "5a6a996007cca7e95cdea001c94b893cac4b664b",
+      "reason": "merged_pr",
+      "pr": 33
+    },
+    {
+      "branch": "feat/station-board-3",
+      "sha": "3fdf3392ab78db9494471953c953f2003209bded",
+      "reason": "merged_pr",
+      "pr": 39
+    },
+    {
+      "branch": "feat/station-board-8",
+      "sha": "7b8263c755f23a99a575a88778550291984d4961",
+      "reason": "merged_pr",
+      "pr": 40
+    },
+    {
+      "branch": "feat/stationplot-tablet",
+      "sha": "f83d70ff64081ecef997d14ebe7286999719261c",
+      "reason": "merged_pr",
+      "pr": 38
+    },
+    {
+      "branch": "feat/synoptic-duty-ticker",
+      "sha": "b7504080ae5c492ec7b547f665dabd2411f53bce",
+      "reason": "merged_pr",
+      "pr": 70
+    },
+    {
+      "branch": "fix/fullscreen-hub-art-direction",
+      "sha": "041774e4d38bf8e18ae0f71766e5165b83d93175",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "integration/hub-2-5d-main-sync-20261104",
+      "sha": "ef5bef94ad2561e3786b18af3ab089d02ba513c4",
+      "reason": "ancestor_rc"
+    },
+    {
+      "branch": "merge/find-error-stable",
+      "sha": "d5cfc93d78a6e5858b20a5d069ef0519ca2e9a13",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "training/lora-dataset-plan-v1",
+      "sha": "508fff870164108671c499e4c28d0ade52278a53",
+      "reason": "ancestor_main"
+    },
+    {
+      "branch": "training/lora-hub-contract-v1",
+      "sha": "508fff870164108671c499e4c28d0ade52278a53",
+      "reason": "merged_pr",
+      "pr": 56
+    },
+    {
+      "branch": "training/world-style-v4",
+      "sha": "0d6eabe647b8e2e646b246c6bd80ca644f977f35",
+      "reason": "merged_pr",
+      "pr": 53
+    }
+  ]
+}

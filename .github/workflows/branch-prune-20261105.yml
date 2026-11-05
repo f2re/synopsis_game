@@ -1,0 +1,37 @@
+name: Однократная очистка устаревших веток — аудит 2026-11-05
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/maintenance/branch_cleanup_20261105.json'
+      - 'tools/maintenance/prune_branches.py'
+      - '.github/workflows/branch-prune-20261105.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: synopsis-branch-prune-20261105
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    if: github.repository == 'f2re/synopsis_game' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Проверить SHA, PR, защиту веток и выполнить заданный режим
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/maintenance/prune_branches.py
+      - name: Сохранить протокол и SHA удалённых веток
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-prune-audit-20261105
+          path: branch_cleanup_result.json
+          if-no-files-found: warn
