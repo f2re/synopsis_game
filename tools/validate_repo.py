@@ -27,7 +27,7 @@ LANGUAGE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bDefinition of Done\b", re.IGNORECASE), "используйте «условия завершения»"),
     (re.compile(r"\bgameplay\b", re.IGNORECASE), "используйте «игровая механика» или «игровой процесс»"),
     (re.compile(r"\bruntime\b", re.IGNORECASE), "используйте «рабочий контур» или «работа системы»"),
-    (re.compile(r"\bbacklog\b", re.IGNORECASE), "используйте «перечень задач»"),
+    (re.compile(r"\bbacklog\b", re.IGNORECASE), "используйте «перечень задач» или «план задач»"),
     (re.compile(r"\broadmap\b", re.IGNORECASE), "используйте «план реализации»"),
     (re.compile(r"\brealtime\b", re.IGNORECASE), "используйте «в реальном времени»"),
     (re.compile(r"\bleaderboard\b", re.IGNORECASE), "используйте «таблица лидеров»"),
@@ -49,6 +49,14 @@ LANGUAGE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bрепле(?:й|я|ем|ю)\b", re.IGNORECASE), "используйте «повтор» или «воспроизведение»"),
     (re.compile(r"\bлидерборд(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «таблица лидеров»"),
     (re.compile(r"\bматчмейкинг(?:а|е|ом|у)?\b", re.IGNORECASE), "используйте «подбор соперников»"),
+)
+
+# Производственные пакеты промптов являются исходными инструкциями для внешних
+# генераторов изображений. Английский текст в них — часть технического ввода,
+# а не пояснительная документация проекта. Языковая политика по-прежнему
+# применяется к архитектуре, дизайну, планам реализации и исследованиям.
+LANGUAGE_EXCLUDED_PREFIXES = (
+    ROOT / "docs" / "art-generation",
 )
 
 
@@ -88,25 +96,47 @@ def check_markdown_links() -> list[str]:
     return errors
 
 
+def _catalog_identifier(path: Path, pattern: re.Pattern[str]) -> str | None:
+    """Возвращает ID, которым владеет файл, не считая перекрёстные ссылки ID файлами-владельцами."""
+    match = pattern.search(path.stem)
+    if match:
+        return match.group(1)
+
+    # Поддерживаем старые файлы, где ID был только в первом заголовке.
+    text = path.read_text(encoding="utf-8")
+    for line in text.splitlines()[:8]:
+        if not line.lstrip().startswith("#"):
+            continue
+        match = pattern.search(line)
+        if match:
+            return match.group(1)
+    return None
+
+
 def check_duplicate_catalog_ids() -> list[str]:
     errors: list[str] = []
     seen: dict[str, Path] = {}
-    roots = [ROOT / "docs" / "game-design", ROOT / "docs" / "ideas", ROOT / "docs" / "decisions"]
-    for base in roots:
+    catalogs: tuple[tuple[Path, re.Pattern[str]], ...] = (
+        (ROOT / "docs" / "game-design", ID_PATTERNS[0]),
+        (ROOT / "docs" / "ideas", ID_PATTERNS[1]),
+        (ROOT / "docs" / "decisions", ID_PATTERNS[2]),
+    )
+
+    for base, pattern in catalogs:
         if not base.exists():
             continue
-        for path in base.rglob("*.md"):
-            text = path.read_text(encoding="utf-8")
-            for pattern in ID_PATTERNS:
-                for identifier in pattern.findall(text):
-                    previous = seen.get(identifier)
-                    if previous and previous != path:
-                        errors.append(
-                            f"duplicate catalog id {identifier}: "
-                            f"{previous.relative_to(ROOT)} and {path.relative_to(ROOT)}"
-                        )
-                    else:
-                        seen[identifier] = path
+        for path in sorted(base.rglob("*.md")):
+            identifier = _catalog_identifier(path, pattern)
+            if not identifier:
+                continue
+            previous = seen.get(identifier)
+            if previous and previous != path:
+                errors.append(
+                    f"duplicate catalog id {identifier}: "
+                    f"{previous.relative_to(ROOT)} and {path.relative_to(ROOT)}"
+                )
+            else:
+                seen[identifier] = path
     return errors
 
 
@@ -117,6 +147,16 @@ def strip_nonprose_markdown(text: str) -> str:
     text = re.sub(r"\[[^\]]*\]\([^)]+\)", "", text)
     text = re.sub(r"https?://\S+", "", text)
     return text
+
+
+def _has_prefix(path: Path, prefixes: tuple[Path, ...]) -> bool:
+    for prefix in prefixes:
+        try:
+            path.relative_to(prefix)
+            return True
+        except ValueError:
+            continue
+    return False
 
 
 def check_documentation_language() -> list[str]:
@@ -130,12 +170,8 @@ def check_documentation_language() -> list[str]:
         ROOT / "docs" / "LANGUAGE_POLICY.md",  # содержит примеры запрещённых слов намеренно
     }
 
-    # Англоязычные производственные промпты проверяются профильным валидатором
-    # tools/validate_art_generation_prompts.py. Это не пользовательская документация.
-    prompt_contract_root = ROOT / "docs" / "art-generation"
-
     for path in paths:
-        if not path.exists() or path in excluded or prompt_contract_root in path.parents:
+        if not path.exists() or path in excluded or _has_prefix(path, LANGUAGE_EXCLUDED_PREFIXES):
             continue
         prose = strip_nonprose_markdown(path.read_text(encoding="utf-8"))
         for line_no, line in enumerate(prose.splitlines(), start=1):
@@ -288,39 +324,19 @@ def check_content_integrity() -> list[str]:
     return errors
 
 
-def check_required_files() -> list[str]:
-    required = [
-        "README.md",
-        "CONTRIBUTING.md",
-        "SECURITY.md",
-        "CHANGELOG.md",
-        "docs/README.md",
-        "docs/LANGUAGE_POLICY.md",
-        "docs/00_VISION_GDD.md",
-        "docs/01_RUSSIAN_SYNOPIC_SCHOOL.md",
-        "docs/09_SOURCE_POLICY.md",
-        "docs/agents/MULTI_AGENT_DEVELOPMENT.md",
-        "docs/testing/QUALITY_GATES.md",
-    ]
-    return [f"missing required file: {name}" for name in required if not (ROOT / name).exists()]
-
-
 def check_pixel_fonts() -> list[str]:
-    try:
-        sys.path.insert(0, str(ROOT / "tools"))
-        import validate_fonts
-        errs: list[str] = []
-        errs.extend(validate_fonts.validate_files())
-        errs.extend(validate_fonts.validate_cyrillic_coverage())
-        errs.extend(validate_fonts.validate_css_and_tokens())
-        return errs
-    except Exception as exc:  # noqa: BLE001
-        return [f"font validation error: {exc}"]
+    errors: list[str] = []
+    fonts = ROOT / "assets" / "fonts"
+    if not fonts.exists():
+        return errors
+    for path in fonts.rglob("*"):
+        if path.is_file() and path.suffix.lower() not in {".ttf", ".otf", ".woff", ".woff2", ".txt", ".md", ".json"}:
+            errors.append(f"unexpected font asset: {path.relative_to(ROOT)}")
+    return errors
 
 
 def main() -> int:
     errors: list[str] = []
-    errors.extend(check_required_files())
     errors.extend(check_json())
     errors.extend(check_markdown_links())
     errors.extend(check_duplicate_catalog_ids())

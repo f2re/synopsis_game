@@ -123,3 +123,65 @@
     display: none;
   }
 }
+
+/* Native Tab/Enter/Space navigation for all eight semantic Hub buildings.
+ * Remains visually absent during pointer play; focus reveals the accessible
+ * list without changing canonical scene geometry or the approved HUD. */
+.hub-keyboard-locations {
+  position: fixed;
+  top: max(56px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 50;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.hub-keyboard-locations:focus-within {
+  width: min(340px, calc(100vw - 24px));
+  height: auto;
+  max-height: calc(100vh - 82px);
+  padding: 10px;
+  overflow: auto;
+  clip-path: none;
+  border: 1px solid var(--ui-primary-cta);
+  border-radius: 4px;
+  background: rgba(20, 63, 76, 0.98);
+  box-shadow: 0 4px 0 rgba(4, 10, 22, 0.82);
+}
+
+.hub-keyboard-locations-title {
+  color: var(--ui-text-primary);
+  font-family: var(--font-pixel-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 4px 2px;
+}
+
+.hub-keyboard-location {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 7px 9px;
+  border: 1px solid var(--ui-panel-border);
+  border-radius: 3px;
+  background: var(--ui-panel-elevated);
+  color: var(--ui-text-primary);
+  text-align: left;
+  font-family: var(--font-pixel-ui);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.hub-keyboard-location:focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 1px;
+  border-color: var(--ui-primary-cta);
+  background: var(--ui-secondary-highlight);
+}

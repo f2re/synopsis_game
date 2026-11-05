@@ -49,6 +49,7 @@ jobs:
         run: |
           pnpm bootstrap
           pnpm typecheck
+          pnpm world:test
           pnpm test:server
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.

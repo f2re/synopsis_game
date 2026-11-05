@@ -1,27 +1,59 @@
 import Phaser from 'phaser';
 import { ArchiveScene } from '../scenes/archive/ArchiveScene';
 import { HubScene } from '../scenes/hub/HubScene';
-import { WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './fitLogicalViewport';
+import {
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
+  WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
+} from './fitLogicalViewport';
+import {
+  isThreeHubRenderer,
+  resolveHubRendererMode,
+  selectSupportedHubRendererMode,
+  supportsWebGL2,
+  type HubRendererMode,
+} from './hubRendererMode';
 
-export { WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './fitLogicalViewport';
+export {
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
+  LEGACY_LOGICAL_HEIGHT,
+  LEGACY_LOGICAL_WIDTH,
+  WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
+} from './fitLogicalViewport';
+export { resolveHubRendererMode, isThreeHubRenderer, type HubRendererMode } from './hubRendererMode';
 
 export interface CreateWorldGameOptions {
   parent: string | HTMLElement;
   transparent?: boolean;
+  hubRenderer?: HubRendererMode;
 }
 
 export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
   const parent = typeof options.parent === 'string' ? document.querySelector<HTMLElement>(options.parent) : options.parent;
-  const initialWidth = Math.max(parent?.clientWidth ?? WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_WIDTH);
-  const initialHeight = Math.max(parent?.clientHeight ?? WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_HEIGHT);
+  const requestedMode = options.hubRenderer ?? resolveHubRendererMode();
+  const rendererMode = selectSupportedHubRendererMode(
+    requestedMode,
+    !isThreeHubRenderer(requestedMode) || supportsWebGL2(),
+  );
+  if (rendererMode !== requestedMode) {
+    console.warn('[synopsis/world-engine] WebGL2 unavailable; falling back to legacy2d Hub.');
+  }
+  const threeHub = isThreeHubRenderer(rendererMode);
+  const minimumWidth = threeHub ? HUB_LOGICAL_WIDTH : WORLD_LOGICAL_WIDTH;
+  const minimumHeight = threeHub ? HUB_LOGICAL_HEIGHT : WORLD_LOGICAL_HEIGHT;
+  const initialWidth = Math.max(parent?.clientWidth ?? minimumWidth, minimumWidth);
+  const initialHeight = Math.max(parent?.clientHeight ?? minimumHeight, minimumHeight);
 
   return new Phaser.Game({
     type: Phaser.AUTO,
     parent: options.parent,
     width: initialWidth,
     height: initialHeight,
-    transparent: options.transparent ?? false,
-    backgroundColor: '#08152f',
+    transparent: options.transparent ?? threeHub,
+    backgroundColor: threeHub ? 'rgba(0,0,0,0)' : '#08152f',
     render: {
       antialias: false,
       pixelArt: true,
@@ -31,6 +63,6 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
       mode: Phaser.Scale.RESIZE,
       autoCenter: Phaser.Scale.NO_CENTER,
     },
-    scene: [HubScene, ArchiveScene],
+    scene: [new HubScene(rendererMode), ArchiveScene],
   });
 }

@@ -1,8 +1,22 @@
-export { createWorldGame, WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './runtime/createWorldGame';
+export {
+  createWorldGame,
+  HUB_LOGICAL_HEIGHT,
+  HUB_LOGICAL_WIDTH,
+  LEGACY_LOGICAL_HEIGHT,
+  LEGACY_LOGICAL_WIDTH,
+  WORLD_LOGICAL_HEIGHT,
+  WORLD_LOGICAL_WIDTH,
+  isThreeHubRenderer,
+  resolveHubRendererMode,
+  type HubRendererMode,
+} from './runtime/createWorldGame';
 export {
   calculateIntegerPassepartout,
   fitLogicalViewport,
   bindLogicalViewport,
+  SCENE_LOGICAL_VIEWPORTS,
+  type LogicalViewportOptions,
+  type LogicalViewportSize,
   type ViewportFitResult,
 } from './runtime/fitLogicalViewport';
 export { HubScene } from './scenes/hub/HubScene';
@@ -55,6 +69,19 @@ export { HubGroundDecorLayer } from './scenes/hub/HubGroundDecorLayer';
 export { HubFaunaLayer } from './scenes/hub/HubFaunaLayer';
 export { HubNpcLayer } from './scenes/hub/HubNpcLayer';
 export { HubWeatherOverlay, type WeatherMode } from './scenes/hub/HubWeatherOverlay';
+export { ThreeHubRenderer, type ThreeHubRendererOptions } from './renderer/three/ThreeHubRenderer';
+export { HubProjection, type HubProjectionOptions } from './renderer/three/HubProjection';
+export { hubGroundRectObstacle, createHubObstacleGuard, type HubGroundObstacle } from './world/hub/HubCollision';
+export { planHubRoute, type HubRouteOptions } from './world/hub/HubNavigation';
+export {
+  HUB_BUILDING_BY_ID,
+  HUB_WORLD_DEFINITION_V1,
+  type HubBuildingDefinition,
+  type HubPathDefinition,
+  type HubPoint,
+  type HubRect,
+  type HubWorldDefinition,
+} from './world/hub/HubWorldDefinition';
 export {
   HubScheduleManager,
   HUB_AMBIENT_CYCLES,
