@@ -3,7 +3,7 @@
   "repository": "f2re/synopsis_game",
   "baseline_main_sha": "9ca5368181b50965d90a05e6a9bcc6b7e9ed34da",
   "generated_at": "2026-11-05",
-  "mode": "dry_run",
+  "mode": "apply",
   "rules": "Only SHA-pinned, no-open-PR, unprotected refs with merged PR or verified ancestor. No wildcard deletes.",
   "retain": {
     "open_pr_head_or_base": [
