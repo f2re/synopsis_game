@@ -8,6 +8,10 @@
     ".": {
       "types": "./src/index.d.ts",
       "import": "./src/index.js"
+    },
+    "./synop-header": {
+      "types": "./src/synop-header.d.ts",
+      "import": "./src/synop-header.js"
     }
   },
   "scripts": {

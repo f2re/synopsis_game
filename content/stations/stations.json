@@ -1,0 +1,5 @@
+{
+  "schema_version": "0.1.0",
+  "source_policy": "В production-реестр добавляются только реальные станции с проверяемым sourceId/sourceLocator. Координаты, высота и идентификаторы не синтезируются.",
+  "stations": []
+}
