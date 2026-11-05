@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "toolchain:check": "sprite-tools --help && assetpack --help"
+    "toolchain:check": "sprite-tools --help && assetpack --help",
+    "hub:runtime:audit": "node scripts/audit-hub-runtime.mjs"
   },
   "devDependencies": {
     "@assetpack/core": "1.7.0",
