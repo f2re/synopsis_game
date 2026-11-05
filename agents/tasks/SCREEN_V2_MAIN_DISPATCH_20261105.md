@@ -58,3 +58,14 @@
 3. Передать конкретные файлы, контракт и критерии выполнения назначенному внутреннему владельцу в соответствующем агентском клиенте. Записать ссылку на запуск/артефакт в Issue.
 4. Передать коммит/PR независимым рецензентам. При FAIL вернуть владельцу без `ART_ACCEPTED`.
 5. После подтверждённых gate включить изменения в `main`, затем приложить браузерные доказательства и зафиксировать состояние выполнения.
+
+## Текущий исполнительский пакет P0 (05.11.2026)
+
+- **Код технического слоя:** [PR #118](https://github.com/f2re/synopsis_game/pull/118), владелец `game-runtime-webgl-engineer`. Отдельная camera-cover работает только с `?hubCover=1`; ассеты со статусом `PENDING` не грузятся до независимой приёмки. Это инженерная подготовка, а не сданный рисунок.
+- **Артовые ресурсы и упаковка:** [#109](https://github.com/f2re/synopsis_game/issues/109), `pixel-asset-pipeline-engineer` (Codex). Обязательный исходный пакет — шесть неизменённых R01–R06 PNG; `artAcceptance=PASS` не проставлять до проверки SHA и независимого ревью.
+- **Художественная приёмка:** [#107](https://github.com/f2re/synopsis_game/issues/107), `art-director` (Antigravity/Gemini), независимый `pixel-art-quality-reviewer` [#31](https://github.com/f2re/synopsis_game/issues/31).
+- **Геометрия и доступность:** `living-world-engineer` [#104](https://github.com/f2re/synopsis_game/issues/104) (Codex), консультанты `level-designer` и `world-geometry-specialist`. При 390×844 camera-cover открывает только центральную часть мира; до UX-решения этот режим не становится основным.
+- **Независимая интеграция:** `integration-release-engineer` [#85](https://github.com/f2re/synopsis_game/issues/85) (Codex), `web-performance-engineer` для замеров real-device GPU [#94](https://github.com/f2re/synopsis_game/issues/94).
+- **Оркестратор:** `orchestrator` (Claude Code), проверяет последовательность #107 → #109 → #31 → #85/#94 и фиксирует SHA/логи/проверяющих. Нельзя открывать очередной этап на основании одной сгенерированной картинки или зелёной сборки.
+
+Нативные роли уже находятся в `.codex/agents/`, `.claude/agents/`, `.agents/agents/`; полный список навыков — в `agents/capability-catalog.json`. Это файловые задания и GitHub-передачи: **не утверждается, что подключение реально запустило Claude, Codex или Antigravity**. Ссылка на execution-session/PR-review обязательна для перевода любой карточки в `IN_PROGRESS` или `PASS`.
