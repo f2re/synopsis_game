@@ -90,7 +90,7 @@
 - читаемый современный интерфейс;
 - соревновательную энергетику без псевдовоенной стилистики.
 
-Эталонные экраны находятся в [`../design/pixel-art/`](../design/pixel-art/README.md), подробные правила — в [`design/PIXEL_ART_STYLE_GUIDE.md`](design/PIXEL_ART_STYLE_GUIDE.md).
+Новые полноразмерные референсы R01–R06 и правила их интерпретации зафиксированы в [визуальном контракте V2](design/SCREEN_REFERENCE_SET_V2_20261105.md). Старые WebP-миниатюры в [`../design/pixel-art/`](../design/pixel-art/README.md) имеют исторический статус. Подробные общие правила — в [`design/PIXEL_ART_STYLE_GUIDE.md`](design/PIXEL_ART_STYLE_GUIDE.md).
 
 ## 6. Допустимые композиционные поднаправления
 

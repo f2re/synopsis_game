@@ -1,3 +1,5 @@
+> **Новые утверждённые референсы V2 (05.11.2026):** [полноразмерный набор R01–R06 и SHA-256](../../docs/design/SCREEN_REFERENCE_SET_V2_20261105.md). Исходные PNG поставляются отдельным архивом до импорта в `design/pixel-art/v2/`. Старые WebP ниже остаются только историческими миниатюрами; они **не** задают текущую композицию и плотность графики.
+
 # Pixel-art visual references
 
 Status: `legacy-thumbnail / deprecated-for-acceptance` (W0-02 audit confirmed absence of high-res originals; see `docs/roadmap/kn01-aaa/evidence/W0-02/references.md`).
