@@ -24,6 +24,10 @@ function reportOk(message) {
 
 const {createHash}=await import('node:crypto');
 const requireProduction=process.argv.includes('--require-production');
+function reportRetiredLegacyProblem(message){
+  console.warn('LEGACY_BLOCKER '+message+' (старый встраиваемый WebP; не входит в принятые слои)');
+  if(requireProduction)reportProblem(message);
+}
 const manifestPath=join(root,'assets/manifests/hub.runtime-approved.json');
 if(!existsSync(manifestPath)) {
   reportProblem('Не найден approved-asset манифест');
@@ -85,13 +89,13 @@ if (chunks.length === 0) {
   if (parts.length === chunks.length) {
     const encoded = parts.join('');
     if (!/^[A-Za-z0-9+/]*={0,2}$/.test(encoded) || encoded.length % 4 !== 0) {
-      reportProblem('Встроенный WebP Base64 повреждён: длина ' + encoded.length + ' (mod 4 = ' + encoded.length % 4 + ')');
+      reportRetiredLegacyProblem('Встроенный WebP Base64 повреждён: длина ' + encoded.length + ' (mod 4 = ' + encoded.length % 4 + ')');
     } else {
       const bytes = Buffer.from(encoded, 'base64');
       if (bytes.length < 12 || bytes.toString('ascii', 0, 4) !== 'RIFF' || bytes.toString('ascii', 8, 12) !== 'WEBP') {
-        reportProblem('Встроенная текстура не является корректным RIFF/WEBP');
+        reportRetiredLegacyProblem('Встроенная текстура не является корректным RIFF/WEBP');
       } else if (bytes.readUInt32LE(4) + 8 !== bytes.length) {
-        reportProblem('Несовпадение длины RIFF/WebP: header=' + (bytes.readUInt32LE(4) + 8) + ', decoded=' + bytes.length);
+        reportRetiredLegacyProblem('Несовпадение длины RIFF/WebP: header=' + (bytes.readUInt32LE(4) + 8) + ', decoded=' + bytes.length);
       } else {
         reportOk('Встроенный RIFF/WEBP: ' + bytes.length + ' байт; декодируемость и визуал требуют отдельной проверки');
       }
