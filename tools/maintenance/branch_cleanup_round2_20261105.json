@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "repository": "f2re/synopsis_game",
+  "created_at": "2026-11-05",
+  "mode": "dry_run",
+  "note": "Reviewed in #119; four exact SHA-pinned refs only. Keep 2D/2.5D active PR refs and unique StyleLab/KN01-AAA branches.",
+  "preserve": [
+    "main",
+    "agent/orchestrator/kn01-aaa-spec",
+    "feat/h3d-r0-r1-style-lab",
+    "agent/art-director/hub-master-decomposition",
+    "agent/pixel-asset-designer/hub-master-production"
+  ],
+  "delete": [
+    {
+      "branch": "feat/lore-seamless-gameplay",
+      "sha": "5387f03e17e04070d4d552154818a1198db0e44a",
+      "reason": "verified_superseded_lore"
+    },
+    {
+      "branch": "feat/living-facility-dossiers",
+      "sha": "a9d3e95d203c867df5b09d86d8ae537975fa5649",
+      "reason": "verified_superseded_dossier"
+    },
+    {
+      "branch": "feat/kn01-live-ingest",
+      "sha": "5217a3a6cb16396bbb6652c2d1ddab7f831a693c",
+      "reason": "ported_kn01_pr120"
+    },
+    {
+      "branch": "agent/live-kn01-engineer/preserve-live-ingest-20261105",
+      "sha": "4cb6fe86887ef7ff76b541986186b5dfded6ffb9",
+      "reason": "merged_pr120"
+    }
+  ]
+}
