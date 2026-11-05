@@ -3,7 +3,7 @@
   "repository": "f2re/synopsis_game",
   "baseline_main_sha": "9ca5368181b50965d90a05e6a9bcc6b7e9ed34da",
   "generated_at": "2026-11-05",
-  "mode": "apply",
+  "mode": "archived",
   "rules": "Only SHA-pinned, no-open-PR, unprotected refs with merged PR or verified ancestor. No wildcard deletes.",
   "retain": {
     "open_pr_head_or_base": [
@@ -309,5 +309,16 @@
       "reason": "merged_pr",
       "pr": 53
     }
-  ]
+  ],
+  "execution": {
+    "result": "SUCCESS",
+    "deleted": 47,
+    "errors": 0,
+    "workflow_run": 42078772388,
+    "workflow_url": "https://github.com/f2re/synopsis_game/actions/runs/42078772388",
+    "branches_before": 72,
+    "branches_after": 25,
+    "restorable_from": "delete[].sha",
+    "cleanup_workflow_removed_after_execution": true
+  }
 }
