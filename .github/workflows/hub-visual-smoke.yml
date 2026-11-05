@@ -93,6 +93,10 @@ jobs:
           base='http://127.0.0.1:4173/'
           capture legacy-day-clear "${base}?hubRenderer=legacy2d&hubPhase=day&hubSeason=summer&hubWeather=clear"
           capture three-day-clear "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear"
+          # G1/G3: same orthographic camera + world, three internal framebuffer profiles.
+          capture three-res-320 "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubRenderWidth=320"
+          capture three-res-480 "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubRenderWidth=480"
+          capture three-res-640 "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubRenderWidth=640"
           capture three-collision-review "${base}?hubRenderer=three2d&hubLayout=collisionReview&hubPhase=day&hubSeason=summer&hubWeather=clear"
           capture three-night-clear "${base}?hubRenderer=three2d&hubPhase=night&hubSeason=summer&hubWeather=clear"
           capture three-day-rain "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=rain"
@@ -146,6 +150,22 @@ jobs:
           grep -q 'draws  p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
           grep -q 'GL buffers/textures/programs:' hub-visual-smoke/three-perf-probe.dom.html
 
+          # Verify a nondefault render profile in actual Chrome, not only in unit tests.
+          "$CHROME" \\
+            --headless=new \\
+            --no-sandbox \\
+            --disable-dev-shm-usage \\
+            --enable-webgl \\
+            --use-angle=swiftshader \\
+            --window-size=1280,720 \\
+            --virtual-time-budget=3500 \\
+            --dump-dom \\
+            'http://127.0.0.1:4173/?hubRenderer=three2d&hubRenderWidth=480&hubPerf=1' \\
+            > hub-visual-smoke/three-res-480.dom.html \\
+            2> hub-visual-smoke/three-res-480.dom.log
+          grep -q 'data-hub-internal-resolution="480x270"' hub-visual-smoke/three-res-480.dom.html
+          grep -q 'internal: 480x270' hub-visual-smoke/three-res-480.dom.html
+
       - name: Проверить реальные клики по 3D-зданиям, маршруты, Escape и повторный выбор
         env:
           CHROME: ${{ steps.chrome.outputs.binary }}
@@ -165,6 +185,9 @@ jobs:
           required = [
               'legacy-day-clear',
               'three-day-clear',
+              'three-res-320',
+              'three-res-480',
+              'three-res-640',
               'three-collision-review',
               'three-night-clear',
               'three-day-rain',
@@ -184,6 +207,8 @@ jobs:
 
           comparisons = [
               ('legacy-day-clear', 'three-day-clear'),
+              ('three-res-320', 'three-res-480'),
+              ('three-res-480', 'three-res-640'),
               ('three-day-clear', 'three-collision-review'),
               ('three-day-clear', 'three-night-clear'),
               ('three-day-clear', 'three-day-rain'),

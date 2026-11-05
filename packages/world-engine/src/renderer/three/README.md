@@ -46,6 +46,22 @@ Deterministic world-state overrides for screenshots and review:
 
 The visual-state query controls work for both legacy and Three Hub paths. They are diagnostic overrides only; normal server/world-state authority is unchanged.
 
+## G1/G3 — проверка читаемости при трёх разрешениях (только для художественной оценки)
+
+В экспериментальном `three2d` работает диагностический параметр:
+
+```text
+?hubRenderer=three2d&hubRenderWidth=320  # по умолчанию, 320×180
+?hubRenderer=three2d&hubRenderWidth=480  # кандидат, 480×270
+?hubRenderer=three2d&hubRenderWidth=640  # кандидат, 640×360
+```
+
+Параметр принимает **только** `320`, `480`, `640`; пустые, повторные и остальные значения безопасно возвращают 320×180. Разрешение выбирается один раз при создании renderer-а и не меняет world-space геометрию, ortho camera 640×360, hit regions или Phaser lifecycle. Постфильтр, depth/normal/beauty render targets используют точно такие же размеры, что и Canvas backing store. Выбор **не включается** в production по умолчанию.
+
+Для проверяемого браузерного кадра запускайте `hub-visual-smoke.yml`; архив содержит три PNG `three-res-320.png`, `three-res-480.png`, `three-res-640.png`. В DevTools Canvas имеет `data-hub-internal-resolution`; `?hubPerf=1` показывает **реальные** внутренние размеры.
+
+**Как оценивать:** все три изображения сравниваются при одинаковом viewport, `hubPhase`, `hubSeason`, `hubWeather`, `hubLayout`, seed и UI. Арт-директор проверяет читаемость окон, лестниц, приборов, людей, кустов, масштаба пиксельных кластеров и контраста, а инженер измеряет CPU frame p95, количество отрисовок и работу на **настоящем GPU**. CI SwiftShader доказывает только работоспособность кадра. Выбирать минимальное разрешение, прошедшее обе независимые приёмки. Само увеличение разрешения **не заменяет** новые фасады, UV/decals, персонажей и авторскую пиксельную графику.
+
 ## Real-device performance probe
 
 Use:
@@ -61,7 +77,7 @@ The probe is installed before Three.js creates its WebGL context. It keeps a rol
 - WebGL draw calls per frame: mean, p50, p95, max;
 - estimated rendered triangles per frame: mean, p50, p95, max;
 - live WebGL buffers, textures, programs, framebuffers and VAOs;
-- fixed internal renderer resolution (`320×180`).
+- active internal renderer resolution (320×180 / 480×270 / 640×360; default 320×180).
 
 The current snapshot is available in DevTools as:
 

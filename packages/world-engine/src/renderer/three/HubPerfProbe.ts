@@ -19,7 +19,7 @@ export interface HubPerfSnapshot {
     framebuffers: number;
     vertexArrays: number;
   };
-  internalResolution: { width: 320; height: 180 };
+  internalResolution: { width: number; height: number };
   timestamp: string;
 }
 
@@ -251,13 +251,18 @@ export class HubPerfProbe {
         framebuffers: counters.framebuffers,
         vertexArrays: counters.vertexArrays,
       },
-      internalResolution: { width: 320, height: 180 },
+      // Read the active canvas instead of claiming the default 320×180 in
+      // the G1/G3 resolution A/B diagnostic variants.
+      internalResolution: this.context?.canvas
+        ? { width: this.context.canvas.width, height: this.context.canvas.height }
+        : { width: 320, height: 180 },
       timestamp: new Date().toISOString(),
     };
     publishSnapshot(snapshot);
     if (this.overlay) {
       this.overlay.textContent = [
         'HUB 2.5D PERF',
+        `internal: ${snapshot.internalResolution.width}x${snapshot.internalResolution.height}`,
         `render p50/p95/max: ${snapshot.renderMs.p50}/${snapshot.renderMs.p95}/${snapshot.renderMs.max} ms`,
         `frame  p50/p95/max: ${snapshot.frameDeltaMs.p50}/${snapshot.frameDeltaMs.p95}/${snapshot.frameDeltaMs.max} ms`,
         `draws  p50/p95/max: ${snapshot.drawCalls.p50}/${snapshot.drawCalls.p95}/${snapshot.drawCalls.max}`,
