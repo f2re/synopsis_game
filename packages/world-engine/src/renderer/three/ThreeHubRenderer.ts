@@ -57,9 +57,8 @@ import { previewHubProceduralFootprints } from '../../world/hub/HubSpatialAudit'
 import { geometryForStructure, type HubStructureGeometry } from '../../world/hub/HubStructureGeometry';
 import { HubProjection } from './HubProjection';
 import { PixelPostPipeline } from './post/PixelPostPipeline';
+import { resolveHubRenderResolution, type HubRenderResolution } from '../../runtime/HubRenderResolution';
 
-const INTERNAL_WIDTH = 320;
-const INTERNAL_HEIGHT = 180;
 const AVATAR_SPEED = 105;
 
 function clamp(value: number, min: number, max: number): number {
@@ -176,6 +175,7 @@ export interface ThreeHubRendererOptions {
  */
 export class ThreeHubRenderer {
   private readonly phaserScene: Phaser.Scene;
+  private readonly internalResolution: HubRenderResolution;
   private readonly host: HTMLElement;
   private readonly canvas: HTMLCanvasElement;
   private readonly renderer: WebGLRenderer;
@@ -222,6 +222,10 @@ export class ThreeHubRenderer {
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'hub-three2d-canvas';
     this.canvas.setAttribute('aria-hidden', 'true');
+    const query = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    this.internalResolution = resolveHubRenderResolution(query);
+    // Browser-smoke and performance diagnostics read the true backing RT size.
+    this.canvas.dataset.hubInternalResolution = `${this.internalResolution.width}x${this.internalResolution.height}`;
     this.canvas.style.position = 'absolute';
     this.canvas.style.pointerEvents = 'none';
     this.canvas.style.zIndex = '0';
@@ -244,10 +248,9 @@ export class ThreeHubRenderer {
       powerPreference: 'high-performance',
     });
     this.renderer.setPixelRatio(1);
-    this.renderer.setSize(INTERNAL_WIDTH, INTERNAL_HEIGHT, false);
+    this.renderer.setSize(this.internalResolution.width, this.internalResolution.height, false);
     this.renderer.outputColorSpace = SRGBColorSpace;
 
-    const query = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
     // Opt-in review only: camera, building positions and accepted Geometry
     // Lock v1 remain unchanged in the default and production renderer.
     this.collisionReviewEnabled = query.get('hubLayout') === 'collisionReview';
@@ -256,8 +259,8 @@ export class ThreeHubRenderer {
       console.info('[synopsis/world-engine] H3D-037 unapproved collision review layout enabled');
     }
     this.pipeline = new PixelPostPipeline({
-      width: INTERNAL_WIDTH,
-      height: INTERNAL_HEIGHT,
+      width: this.internalResolution.width,
+      height: this.internalResolution.height,
       toggles: {
         palette: query.get('pixelPalette') !== '0',
         dither: query.get('pixelDither') === '1',
