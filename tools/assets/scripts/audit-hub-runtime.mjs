@@ -28,7 +28,7 @@ function reportRetiredLegacyProblem(message){
   console.warn('LEGACY_BLOCKER '+message+' (старый встраиваемый WebP; не входит в принятые слои)');
   if(requireProduction)reportProblem(message);
 }
-const manifestPath=join(root,'assets/manifests/hub.runtime-approved.json');
+const manifestPath=join(root,'packages/world-engine/src/assets/hub/runtime-approval.json');
 if(!existsSync(manifestPath)) {
   reportProblem('Не найден approved-asset манифест');
 } else {

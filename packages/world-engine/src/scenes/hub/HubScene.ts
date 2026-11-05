@@ -5,7 +5,7 @@ import {
   WORLD_LOGICAL_HEIGHT,
 } from '../../runtime/fitLogicalViewport';
 import { HubTimeOfDay, type DayPhase } from './HubTimeOfDay';
-import approvedAssets from '../../../../../assets/manifests/hub.runtime-approved.json';
+import approvedAssets from '../../assets/hub/runtime-approval.json';
 import { HubEnvironmentLayer } from './HubEnvironmentLayer';
 import { HubBuildingLayer } from './HubBuildingLayer';
 import { HubGroundDecorLayer } from './HubGroundDecorLayer';
