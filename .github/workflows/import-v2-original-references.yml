@@ -1,0 +1,30 @@
+name: Однократная загрузка эталонных PNG V2
+on:
+  push:
+    branches:
+      - art/reference-screen-v2-original-png-20261105
+    paths:
+      - 'design/pixel-art/v2/_transfer/**'
+permissions:
+  contents: write
+jobs:
+  reconstruct-source-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - name: Восстановить шесть оригинальных PNG
+        run: python tools/import_v2_references_from_parts.py
+      - name: Проверить контрольные суммы и размеры
+        run: python tools/validate_visual_refs_v2.py
+      - name: Сохранить оригиналы и удалить временные инструменты
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A design/pixel-art/v2/
+          git rm -f .github/workflows/import-v2-original-references.yml tools/import_v2_references_from_parts.py
+          git commit -m "art(ref): save six exact full-resolution V2 reference PNGs"
+          git push origin HEAD:art/reference-screen-v2-original-png-20261105
