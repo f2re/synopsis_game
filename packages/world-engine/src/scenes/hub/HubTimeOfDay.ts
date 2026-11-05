@@ -142,34 +142,100 @@ export class HubTimeOfDay {
   }
 
   calculateSolarPhase(date: Date = new Date()): DayPhase {
-    // Вычисляем местное астрономическое время с учётом часового пояса локации станции
-    let hours = date.getHours();
-    let month = date.getMonth();
+    const solar = calculateSolarPosition(date, this.location);
+    const { elevationDeg, hourAngleDeg, midnightElevationDeg } = solar;
 
-    try {
-      const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: this.location.timezone,
-        hour: 'numeric',
-        month: 'numeric',
-        hourCycle: 'h23',
-      }).formatToParts(date);
-      const hourPart = parts.find((p) => p.type === 'hour')?.value;
-      const monthPart = parts.find((p) => p.type === 'month')?.value;
-      if (hourPart !== undefined) hours = parseInt(hourPart, 10);
-      if (monthPart !== undefined) month = parseInt(monthPart, 10) - 1;
-    } catch {
-      // Резервный расчёт по локальному времени устройства
+    // Художественное состояние «белые ночи» включается, только если в
+    // текущие сутки нет морской ночи (минимальная высота Солнца > -12°).
+    // Это явно выбранный критерий среды, а не официальный прогноз.
+    const isWhiteNight = midnightElevationDeg > -12 && elevationDeg < 0;
+
+    if (elevationDeg >= 0) {
+      const latitude = degreesToRadians(this.location.latitude);
+      const cosHourAngle = -Math.tan(latitude) * Math.tan(solar.declinationRad);
+      // В полярный день, когда границы восхода нет, вся освещённая
+      // часть суток остаётся днём. В прочих случаях выделяем ~48 мин
+      // после восхода и перед закатом для художественного света.
+      if (cosHourAngle <= -1) return 'day';
+      const sunriseHourAngleDeg = radiansToDegrees(Math.acos(Math.min(1, Math.max(-1, cosHourAngle))));
+      const dayHourAngleDeg = Math.max(0, sunriseHourAngleDeg - 12);
+      if (Math.abs(hourAngleDeg) <= dayHourAngleDeg) return 'day';
+      return hourAngleDeg < 0 ? 'dawn' : 'golden_hour';
     }
 
-    // В июне/июле (месяцы 5 и 6) в Санкт-Петербурге действуют Белые ночи
-    if ((month === 5 || month === 6) && (hours >= 23 || hours <= 4)) {
-      return 'white_nights';
-    }
-
-    if (hours >= 23 || hours < 5) return 'night';
-    if (hours >= 5 && hours < 8) return 'dawn';
-    if (hours >= 8 && hours < 18) return 'day';
-    if (hours >= 18 && hours < 21) return 'golden_hour';
-    return 'twilight';
+    if (isWhiteNight) return 'white_nights';
+    // Гражданские сумерки: -6° ≤ h < 0°. Утреннее состояние — dawn,
+    // вечернее — twilight; далее морские сумерки до -12°.
+    if (elevationDeg >= -6) return hourAngleDeg < 0 ? 'dawn' : 'twilight';
+    if (elevationDeg >= -12) return 'twilight';
+    return 'night';
   }
+}
+
+/** Геометрическое положение центра Солнца без поправки на рефракцию.
+ * NOAA GML, General Solar Position Calculations:
+ * https://gml.noaa.gov/grad/solcalc/solareqns.PDF
+ * Границы гражданских (-6°) и морских (-12°) сумерек: USNO
+ * https://aa.usno.navy.mil/faq/RST_defs
+ *
+ * Это приближённый расчёт для художественного освещения, НЕ
+ * астрономический эфемеридный сервис и НЕ учёт рельефа/рефракции.
+ */
+export interface SolarPosition {
+  elevationDeg: number;
+  hourAngleDeg: number;
+  declinationRad: number;
+  midnightElevationDeg: number;
+}
+
+const degreesToRadians = (value: number): number => value * Math.PI / 180;
+const radiansToDegrees = (value: number): number => value * 180 / Math.PI;
+
+export function calculateSolarPosition(date: Date, location: WorldLocation): SolarPosition {
+  const year = date.getUTCFullYear();
+  const dayOfYear = Math.floor((
+    Date.UTC(year, date.getUTCMonth(), date.getUTCDate()) - Date.UTC(year, 0, 1)
+  ) / 86_400_000) + 1;
+  const daysInYear = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / 86_400_000;
+  const utcHours = date.getUTCHours()
+    + date.getUTCMinutes() / 60
+    + date.getUTCSeconds() / 3600
+    + date.getUTCMilliseconds() / 3_600_000;
+  const gamma = 2 * Math.PI / daysInYear * (dayOfYear - 1 + (utcHours - 12) / 24);
+  const equationOfTimeMin = 229.18 * (
+    0.000075
+    + 0.001868 * Math.cos(gamma)
+    - 0.032077 * Math.sin(gamma)
+    - 0.014615 * Math.cos(2 * gamma)
+    - 0.040849 * Math.sin(2 * gamma)
+  );
+  const declinationRad =
+    0.006918
+    - 0.399912 * Math.cos(gamma)
+    + 0.070257 * Math.sin(gamma)
+    - 0.006758 * Math.cos(2 * gamma)
+    + 0.000907 * Math.sin(2 * gamma)
+    - 0.002697 * Math.cos(3 * gamma)
+    + 0.00148 * Math.sin(3 * gamma);
+
+  // UTC-минуты + уравнение времени + 4 мин/градус восточной долготы.
+  // Часовой пояс нужен только при отображении времени в интерфейсе.
+  const trueSolarTimeMin = ((utcHours * 60 + equationOfTimeMin + 4 * location.longitude)
+    % 1440 + 1440) % 1440;
+  const hourAngleDeg = trueSolarTimeMin / 4 - 180;
+  const latitudeRad = degreesToRadians(location.latitude);
+  const hourAngleRad = degreesToRadians(hourAngleDeg);
+  const sinElevation =
+    Math.sin(latitudeRad) * Math.sin(declinationRad)
+    + Math.cos(latitudeRad) * Math.cos(declinationRad) * Math.cos(hourAngleRad);
+  const sinMidnightElevation =
+    Math.sin(latitudeRad) * Math.sin(declinationRad)
+    - Math.cos(latitudeRad) * Math.cos(declinationRad);
+
+  return {
+    elevationDeg: radiansToDegrees(Math.asin(Math.min(1, Math.max(-1, sinElevation)))),
+    hourAngleDeg,
+    declinationRad,
+    midnightElevationDeg: radiansToDegrees(Math.asin(Math.min(1, Math.max(-1, sinMidnightElevation)))),
+  };
 }
