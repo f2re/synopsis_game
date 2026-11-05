@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import {
   bindHubCoverViewport,
+  bindLogicalViewport,
   WORLD_LOGICAL_WIDTH,
   WORLD_LOGICAL_HEIGHT,
 } from '../../runtime/fitLogicalViewport';
@@ -57,8 +58,12 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
-    // 1. Fullscreen cover только для Hub; прочие сцены не изменяются
-    bindHubCoverViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
+    // 1. Экспериментальная полноэкранная камера Hub; до UX-приёмки только ?hubCover=1
+    // Opt-in camera until art/UX acceptance; legacy scene behaviour stays default.
+    const coverPreview = typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('hubCover') === '1';
+    if (coverPreview) bindHubCoverViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
+    else bindLogicalViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
 
     // 2. Слой L0-L4: Небо, светила, облака, горизонт залива, водные блики
     this.environmentLayer = new HubEnvironmentLayer(this);
