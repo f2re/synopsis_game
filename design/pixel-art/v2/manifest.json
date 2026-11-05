@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "reference_set": "26063-screen-reference-v2-2026-11-05",
+  "role": "composition-and-art-direction-reference-not-runtime-asset",
+  "status": "user_supplied_unmodified",
+  "source": "provided by project owner in ChatGPT conversation on 2026-11-05",
+  "images": [
+    {
+      "id": "01_hub",
+      "path": "design/pixel-art/v2/01_hub.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "size_bytes": 3655149,
+      "sha256": "c4c5958ac0948cf4213d9259b9c9952fd73ec77d68832e374f361389b917353c",
+      "screen": "Кампус / главный экран",
+      "preservation": "source bytes unchanged"
+    },
+    {
+      "id": "02_blitz",
+      "path": "design/pixel-art/v2/02_blitz.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "size_bytes": 3321584,
+      "sha256": "4a6427dbf5d543af93565fb8f4aef994578273c6ba554d9177826c0186f73610",
+      "screen": "Блиц / задача",
+      "preservation": "source bytes unchanged"
+    },
+    {
+      "id": "03_duel",
+      "path": "design/pixel-art/v2/03_duel.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "size_bytes": 3614866,
+      "sha256": "8297be67708e938c4d6b7a86db7a2dbb956c00b3b839ee1328a34af300dd2fb1",
+      "screen": "Синоптическая дуэль",
+      "preservation": "source bytes unchanged"
+    },
+    {
+      "id": "04_inventory",
+      "path": "design/pixel-art/v2/04_inventory.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "size_bytes": 3204679,
+      "sha256": "a5602a500c17ce7bdb82333c0df7d34f0cf9d79db4e48b634d6e616f9a9668a6",
+      "screen": "Инвентарь",
+      "preservation": "source bytes unchanged"
+    },
+    {
+      "id": "05_tournament",
+      "path": "design/pixel-art/v2/05_tournament.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "size_bytes": 3396080,
+      "sha256": "515f2104b054ba32ad83ca7c05beb031879189ec22c726d8e5a3653e15b866b1",
+      "screen": "Турнир",
+      "preservation": "source bytes unchanged"
+    },
+    {
+      "id": "06_progression",
+      "path": "design/pixel-art/v2/06_progression.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "size_bytes": 3413476,
+      "sha256": "76568db9bafac4801138ffa70f7603f8c4c14a149fe4e387757e574a92937cfe",
+      "screen": "Сезон и развитие",
+      "preservation": "source bytes unchanged"
+    }
+  ]
+}
