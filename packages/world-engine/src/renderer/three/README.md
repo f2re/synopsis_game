@@ -27,7 +27,13 @@ Pixel-pipeline isolation:
 ?hubRenderer=three2d&pixelPalette=0
 ?hubRenderer=three2d&pixelDither=1
 ?hubRenderer=three2d&pixelEdges=0
+?hubRenderer=three2d&pixelOutlineStrength=0.15
+?hubRenderer=three2d&pixelOutlineStrength=0.75
+?hubRenderer=three2d&pixelDither=1&pixelDitherStrength=0.05
+?hubRenderer=three2d&pixelDither=1&pixelDitherSky=1
 ```
+
+The pixel post pipeline accepts bounded diagnostic uniforms: `pixelOutlineStrength` from 0 to 0.75 (default 0.52) and `pixelDitherStrength` from 0 to 0.05 (default 0.028). Nonfinite or nonnumeric values restore the default; strength values outside bounds clamp. The controls change only the final shader, never camera, meshes, paths, user interaction or the accepted Geometry Lock. Pixel settings are covered by pure Node unit tests and dedicated visual-smoke comparisons. Shader dithering now deliberately excludes depthless sky pixels, avoiding full-sky Bayer checkerboards; the optional `pixelDitherSky=1` flag restores the legacy all-pixel diagnostic look.
 
 Bayer dithering is intentionally **off by default** after visual comparison showed checkerboard noise on large Hub surfaces. `pixelDither=1` keeps it available as a controlled style experiment.
 
@@ -83,7 +89,10 @@ A compact overlay shows the same rolling values while the query flag is active. 
 - Three fog;
 - palette disabled;
 - dithering enabled;
-- edges disabled.
+- edges disabled;
+- outlines at low and high strength;
+- dithering at high strength;
+- optional legacy sky dithering diagnostic for direct screenshot comparison.
 
 The workflow stores PNGs and Chrome logs as a GitHub Actions artifact and fails if required screenshots are absent/suspiciously small or if expected comparison states produce byte-identical PNGs.
 
@@ -143,3 +152,7 @@ Do not expand to full-campus authored 3D assets until all are true:
 6. temporary `three-poc.d.ts` is replaced by maintained typings before production default.
 
 See `agents/tasks/HUB_2_5D_POC.md` and `docs/roadmap/HUB_2_5D_MIGRATION.md`.
+
+## Renderer state integrity
+
+`PixelPostPipeline.render()` now restores scene `overrideMaterial`, excluded normal-pass visibility and the prior WebGL render target through `finally`, including if a draw throws. This protects surrounding Phaser/Three scene state; it does **not** implement full WebGL context-loss restoration. Context loss/restore, GPU frame p95 and pixel-style art acceptance remain independent gates (#94 and #93).
