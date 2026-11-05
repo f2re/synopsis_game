@@ -9,63 +9,72 @@
       "url": "/hub/layers/l0_background.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l0_bg"
     },
     {
       "key": "hub_l1_clouds",
       "url": "/hub/layers/l1_clouds.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l1_clouds"
     },
     {
       "key": "hub_l3_ground",
       "url": "/hub/layers/l3_ground.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l3_ground"
     },
     {
       "key": "hub_l5_arch",
       "url": "/hub/layers/l5_architecture.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l5_arch"
     },
     {
       "key": "hub_l7_decor",
       "url": "/hub/layers/l7_decor.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l7_decor"
     },
     {
       "key": "hub_l8_birds",
       "url": "/hub/layers/l8_birds.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l8_birds"
     },
     {
       "key": "hub_l9_veg",
       "url": "/hub/layers/l9_vegetation.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_l9_veg"
     },
     {
       "key": "hub_avatar",
       "url": "/hub/layers/avatar_base.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_avatar"
     },
     {
       "key": "hub_building_states",
       "url": "/hub/layers/building_states.png",
       "status": "pending",
       "sha256": null,
-      "artReviewUrl": null
+      "artReviewUrl": null,
+      "id": "hub_building_states"
     }
   ]
 }
