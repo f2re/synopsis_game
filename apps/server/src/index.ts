@@ -11,6 +11,7 @@ import {
 } from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
 import { ShiftError, ShiftService } from './modules/shift/shiftService.js';
+import { rejectUnverifiedClientProgressionWrite } from './modules/progression/progressionMutationPolicy.js';
 import {
   ProgressionError,
   ProgressionService,
@@ -221,21 +222,12 @@ const server = createServer(async (request, response) => {
       sendJson(response, 200, progression.checkExamEligibility(user.id));
       return;
     }
-    if (request.method === 'POST' && path === '/api/progression/shift') {
-      const user = identity.me(bearer(request));
-      const body = await readJson(request);
-      const summary = progression.completeShift(user.id, body as unknown as Parameters<typeof progression.completeShift>[1]);
-      await progression.saveState();
-      sendJson(response, 200, { summary });
-      return;
-    }
-    if (request.method === 'POST' && path === '/api/progression/exam') {
-      const user = identity.me(bearer(request));
-      const body = await readJson(request);
-      const result = progression.completeExam(user.id, body as unknown as Parameters<typeof progression.completeExam>[1]);
-      await progression.saveState();
-      sendJson(response, 200, { result });
-      return;
+    if (request.method === 'POST' && (path === '/api/progression/shift' || path === '/api/progression/exam')) {
+      // Публичный клиент не может передать себе правильность и награды.
+      // Пока нет сервера, выдающего проверенные результаты смен/экзамена,
+      // этот путь всегда закрыт. Существующий ShiftService остаётся доступен.
+      identity.me(bearer(request));
+      rejectUnverifiedClientProgressionWrite();
     }
     if (request.method === 'GET' && path === '/api/progression/errors') {
       const user = identity.me(bearer(request));
