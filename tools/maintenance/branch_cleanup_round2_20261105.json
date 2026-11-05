@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "f2re/synopsis_game",
   "created_at": "2026-11-05",
-  "mode": "dry_run",
+  "mode": "apply",
   "note": "Reviewed in #119; four exact SHA-pinned refs only. Keep 2D/2.5D active PR refs and unique StyleLab/KN01-AAA branches.",
   "preserve": [
     "main",
