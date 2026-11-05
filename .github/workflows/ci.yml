@@ -23,6 +23,7 @@ jobs:
           python tools/validate_agent_kit.py
           python tools/validate_external_agent_matrix.py --json
           python tools/validate_repo.py
+          python tools/test_import_visual_refs_v2.py
           python tools/validate_content_contracts.py
           python tools/validate_architecture.py
           python tools/validate_deployment.py
