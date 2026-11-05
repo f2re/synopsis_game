@@ -7,7 +7,7 @@
 - `main`: React 19 + Vite 8; `@synopsis/world-engine` на Phaser **4.2.1**, логический кампус **480×270**, отдельные DOM UI и SVG/Canvas синоптические карты. Файлы: `packages/world-engine/src/runtime/createWorldGame.ts`, `packages/world-engine/src/scenes/hub/HubScene.ts`, `apps/web/src/features/hub/HubOverlay.tsx`.
 - 2.5D находится **не в main**, а в [draft PR #95](https://github.com/f2re/synopsis_game/pull/95): Three.js 0.187, ортокамера 640×360, internal 320×180, GLSL palette/dither/edge; opt-in `?hubRenderer=three2d`, fallback `legacy2d`.
 - Открытые блокеры перед переключением renderer: [#91](https://github.com/f2re/synopsis_game/issues/91) пересечения маршрутов/объектов; [#93](https://github.com/f2re/synopsis_game/issues/93) арт-приёмка; [#94](https://github.com/f2re/synopsis_game/issues/94) реальный GPU; [#85](https://github.com/f2re/synopsis_game/issues/85) интеграционная QA. Ранее успешные Chrome/SwiftShader smoke не равны real-GPU тестам.
-- Старые `design/pixel-art/0*.webp` — 120×68, только история. Новые PNG ожидают импорта по SHA-256.
+- Старые `design/pixel-art/0*.webp` — 120×68, только история. Шесть оригинальных полноразмерных PNG уже импортированы и проверены по SHA-256; художественное производство первого экрана остаётся открытой задачей.
 
 ## Принцип реализации: сперва one-screen vertical slice
 
