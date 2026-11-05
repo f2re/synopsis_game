@@ -1,10 +1,12 @@
 import Phaser from 'phaser';
 import {
+  bindHubCoverViewport,
   bindLogicalViewport,
   WORLD_LOGICAL_WIDTH,
   WORLD_LOGICAL_HEIGHT,
 } from '../../runtime/fitLogicalViewport';
 import { HubTimeOfDay, type DayPhase } from './HubTimeOfDay';
+import approvedAssets from '../../assets/hub/runtime-approval.json';
 import { HubEnvironmentLayer } from './HubEnvironmentLayer';
 import { HubBuildingLayer } from './HubBuildingLayer';
 import { HubGroundDecorLayer } from './HubGroundDecorLayer';
@@ -47,21 +49,21 @@ export class HubScene extends Phaser.Scene {
   }
 
   preload(): void {
-    // Предварительная загрузка растровых слоёв хаба 480x270 (v3 конвейер)
-    this.load.image('hub_l0_bg', '/hub/layers/l0_background.png');
-    this.load.image('hub_l1_clouds', '/hub/layers/l1_clouds.png');
-    this.load.image('hub_l3_ground', '/hub/layers/l3_ground.png');
-    this.load.image('hub_l5_arch', '/hub/layers/l5_architecture.png');
-    this.load.image('hub_l7_decor', '/hub/layers/l7_decor.png');
-    this.load.image('hub_l8_birds', '/hub/layers/l8_birds.png');
-    this.load.image('hub_l9_veg', '/hub/layers/l9_vegetation.png');
-    this.load.image('hub_avatar', '/hub/layers/avatar_base.png');
-    this.load.image('hub_building_states', '/hub/layers/building_states.png');
+    // Не делать 404-запросы на непринятые графические слои. Отладочная
+    // процедурная сцена не является готовым художественным результатом.
+    if (approvedAssets.artAcceptance !== 'PASS') return;
+    for (const asset of approvedAssets.assets) {
+      if (asset.status === 'approved') this.load.image(asset.key, asset.url);
+    }
   }
 
   create(): void {
-    // 1. Привязка целочисленного масштабирования с паспарту
-    bindLogicalViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
+    // 1. Экспериментальная полноэкранная камера Hub; до UX-приёмки только ?hubCover=1
+    // Opt-in camera until art/UX acceptance; legacy scene behaviour stays default.
+    const coverPreview = typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('hubCover') === '1';
+    if (coverPreview) bindHubCoverViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
+    else bindLogicalViewport(this, WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_HEIGHT);
 
     // 2. Слой L0-L4: Небо, светила, облака, горизонт залива, водные блики
     this.environmentLayer = new HubEnvironmentLayer(this);
