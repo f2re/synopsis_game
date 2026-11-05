@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "f2re/synopsis_game",
   "created_at": "2026-11-05",
-  "mode": "apply",
+  "mode": "archived",
   "note": "Reviewed in #119; four exact SHA-pinned refs only. Keep 2D/2.5D active PR refs and unique StyleLab/KN01-AAA branches.",
   "preserve": [
     "main",
@@ -32,5 +32,16 @@
       "sha": "4cb6fe86887ef7ff76b541986186b5dfded6ffb9",
       "reason": "merged_pr120"
     }
-  ]
+  ],
+  "execution": {
+    "workflow_run_id": 42086589874,
+    "workflow_url": "https://github.com/f2re/synopsis_game/actions/runs/42086589874",
+    "result": "SUCCESS",
+    "deleted": 4,
+    "errors": 0,
+    "branches_before": 26,
+    "branches_after": 22,
+    "sha_recovery": "delete[].sha",
+    "single_use_workflow_removed": true
+  }
 }
