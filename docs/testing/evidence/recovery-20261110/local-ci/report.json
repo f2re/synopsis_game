@@ -1,0 +1,481 @@
+{
+  "task": "remaining-local-ci-20261110",
+  "agent": "/root/ui_review",
+  "startedAtUtc": "2026-11-10T18:19:27.999575+00:00",
+  "baseCommit": "594e766ff2cd001cf85b728aa077184054380e09",
+  "nodeVersion": "v24.22.1",
+  "pythonVersion": "Python 3.12.14",
+  "workflow": ".github/workflows/ci.yml",
+  "scope": "Only remaining local checks from mandatory CI. Node 24 local evidence; GitHub Node 22, Linux release and Astra remain separate gates.",
+  "checks": [
+    {
+      "name": "agent-kit",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.166,
+      "command": [
+        "python",
+        "tools/validate_agent_kit.py"
+      ],
+      "cwd": ".",
+      "log": "agent-kit.log"
+    },
+    {
+      "name": "external-agent-matrix",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.115,
+      "command": [
+        "python",
+        "tools/validate_external_agent_matrix.py",
+        "--json"
+      ],
+      "cwd": ".",
+      "log": "external-agent-matrix.log"
+    },
+    {
+      "name": "visual-reference-import",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.168,
+      "command": [
+        "python",
+        "tools/test_import_visual_refs_v2.py"
+      ],
+      "cwd": ".",
+      "log": "visual-reference-import.log",
+      "testCounts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0
+      }
+    },
+    {
+      "name": "content-contracts",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.065,
+      "command": [
+        "python",
+        "tools/validate_content_contracts.py"
+      ],
+      "cwd": ".",
+      "log": "content-contracts.log"
+    },
+    {
+      "name": "deployment-contracts",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.064,
+      "command": [
+        "python",
+        "tools/validate_deployment.py"
+      ],
+      "cwd": ".",
+      "log": "deployment-contracts.log"
+    },
+    {
+      "name": "deployment-tests",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.165,
+      "command": [
+        "python",
+        "tools/test_deployment.py"
+      ],
+      "cwd": ".",
+      "log": "deployment-tests.log"
+    },
+    {
+      "name": "hub-runtime-audit",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.169,
+      "command": [
+        "node",
+        "tools/assets/scripts/audit-hub-runtime.mjs"
+      ],
+      "cwd": ".",
+      "log": "hub-runtime-audit.log"
+    },
+    {
+      "name": "generation-profiles",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.068,
+      "command": [
+        "python",
+        "tools/assets/check_generation_profiles.py"
+      ],
+      "cwd": ".",
+      "log": "generation-profiles.log"
+    },
+    {
+      "name": "world-style-dataset",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.319,
+      "command": [
+        "python",
+        "services/asset-generator/tests/test_world_style_dataset.py"
+      ],
+      "cwd": ".",
+      "log": "world-style-dataset.log",
+      "testCounts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0
+      }
+    },
+    {
+      "name": "hub-lora-manifest",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.066,
+      "command": [
+        "python",
+        "scripts/validate_hub_lora_manifest.py"
+      ],
+      "cwd": ".",
+      "log": "hub-lora-manifest.log"
+    },
+    {
+      "name": "hub-generation-queue",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.064,
+      "command": [
+        "python",
+        "scripts/build_hub_generation_queue.py",
+        "--check-only"
+      ],
+      "cwd": ".",
+      "log": "hub-generation-queue.log"
+    },
+    {
+      "name": "character-lora-manifest",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.064,
+      "command": [
+        "python",
+        "scripts/validate_character_lora_manifest.py"
+      ],
+      "cwd": ".",
+      "log": "character-lora-manifest.log"
+    },
+    {
+      "name": "character-generation-queue",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.115,
+      "command": [
+        "python",
+        "scripts/build_character_generation_queue.py",
+        "--check-only"
+      ],
+      "cwd": ".",
+      "log": "character-generation-queue.log"
+    },
+    {
+      "name": "props-lora-manifest",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.064,
+      "command": [
+        "python",
+        "scripts/validate_props_lora_manifest.py"
+      ],
+      "cwd": ".",
+      "log": "props-lora-manifest.log"
+    },
+    {
+      "name": "props-generation-queue",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.064,
+      "command": [
+        "python",
+        "scripts/build_props_generation_queue.py",
+        "--check-only"
+      ],
+      "cwd": ".",
+      "log": "props-generation-queue.log"
+    },
+    {
+      "name": "digit-anatomy",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.826,
+      "command": [
+        "node",
+        "tools/test_digit_anatomy.cjs"
+      ],
+      "cwd": ".",
+      "log": "digit-anatomy.log"
+    },
+    {
+      "name": "kn01-codec",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.318,
+      "command": [
+        "node",
+        "--test",
+        "test/codec.test.mjs",
+        "test/level1.test.js",
+        "test/synop-header.test.mjs"
+      ],
+      "cwd": "packages/kn01-codec",
+      "log": "kn01-codec.log",
+      "testCounts": {
+        "tests": 16,
+        "suites": 0,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "content-engine",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.367,
+      "command": [
+        "node",
+        "--test",
+        "test/content-engine.test.mjs",
+        "test/dependency-sequence.test.mjs",
+        "test/find-error.test.mjs",
+        "test/generator.test.js"
+      ],
+      "cwd": "packages/content-engine",
+      "log": "content-engine.log",
+      "testCounts": {
+        "tests": 16,
+        "suites": 0,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "audio-manifest",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.215,
+      "command": [
+        "node",
+        "packages/world-engine/scripts/syncAudioManifest.mjs",
+        "--check"
+      ],
+      "cwd": ".",
+      "log": "audio-manifest.log"
+    },
+    {
+      "name": "world-audio-controls",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.518,
+      "command": [
+        "node",
+        "tools/test_world_audio_controls.cjs"
+      ],
+      "cwd": ".",
+      "log": "world-audio-controls.log"
+    },
+    {
+      "name": "character-assets",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.315,
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "packages/world-engine/src/runtime/characterAssets.test.ts"
+      ],
+      "cwd": ".",
+      "log": "character-assets.log",
+      "testCounts": {
+        "tests": 6,
+        "suites": 0,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "world-characters",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.719,
+      "command": [
+        "node",
+        "tools/test_world_characters.cjs"
+      ],
+      "cwd": ".",
+      "log": "world-characters.log"
+    },
+    {
+      "name": "hub-time-of-day",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.316,
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts"
+      ],
+      "cwd": ".",
+      "log": "hub-time-of-day.log",
+      "testCounts": {
+        "tests": 5,
+        "suites": 0,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "hub-cover-geometry",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.319,
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "packages/world-engine/src/runtime/hubCoverGeometry.test.ts"
+      ],
+      "cwd": ".",
+      "log": "hub-cover-geometry.log",
+      "testCounts": {
+        "tests": 4,
+        "suites": 0,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "python-compile",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.221,
+      "command": [
+        "python",
+        "-m",
+        "py_compile",
+        "deploy/scripts/check-update.py",
+        "deploy/scripts/config_merge.py",
+        "deploy/scripts/migrate.py",
+        "deploy/scripts/update.py",
+        "scripts/build_character_generation_queue.py",
+        "scripts/build_hub_generation_queue.py",
+        "scripts/build_props_generation_queue.py",
+        "scripts/release/write-manifest.py",
+        "scripts/validate_character_lora_manifest.py",
+        "scripts/validate_hub_lora_manifest.py",
+        "scripts/validate_props_lora_manifest.py",
+        "services/asset-generator/core/world_style_dataset.py",
+        "services/asset-generator/scripts/build_style_dataset_v4.py",
+        "services/asset-generator/scripts/train_world_style_v4.py",
+        "tools/assets/build_characters_r01.py",
+        "tools/assets/build_equipment_r01.py",
+        "tools/assets/build_hub_r01.py",
+        "tools/assets/build_inventory_icons_r01.py",
+        "tools/assets/check_asset_contract.py",
+        "tools/assets/check_asset_manifests.py",
+        "tools/assets/check_generation_profiles.py",
+        "tools/assets/kn01_image_specs.py",
+        "tools/assets/normalize_candidate.py",
+        "tools/build_learning_lora_dataset.py",
+        "tools/import_visual_refs_v2.py",
+        "tools/render_font_dpr_test.py",
+        "tools/simulate_progression.py",
+        "tools/test_deployment.py",
+        "tools/test_import_visual_refs_v2.py",
+        "tools/validate_agent_kit.py",
+        "tools/validate_architecture.py",
+        "tools/validate_art_generation_prompts.py",
+        "tools/validate_audio.py",
+        "tools/validate_brand.py",
+        "tools/validate_content_contracts.py",
+        "tools/validate_deployment.py",
+        "tools/validate_external_agent_matrix.py",
+        "tools/validate_fonts.py",
+        "tools/validate_harness_plan.py",
+        "tools/validate_repo.py",
+        "tools/validate_tokens.py",
+        "tools/validate_visual_refs_v2.py"
+      ],
+      "cwd": ".",
+      "log": "python-compile.log",
+      "fileCount": 42
+    },
+    {
+      "name": "shell-syntax",
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.031,
+      "command": [
+        "bash",
+        "-n",
+        "<each deploy/release shell script>"
+      ],
+      "cwd": ".",
+      "log": "shell-syntax.log",
+      "files": [
+        "deploy/scripts/backup.sh",
+        "deploy/scripts/configure.sh",
+        "deploy/scripts/ensure-host-deps.sh",
+        "deploy/scripts/healthcheck.sh",
+        "deploy/scripts/install.sh",
+        "deploy/scripts/render-web-config.sh",
+        "scripts/release/build-release.sh",
+        "scripts/release/test-astra17.sh",
+        "scripts/release/validate-release.sh"
+      ]
+    }
+  ],
+  "notRepeated": [
+    "server test suite 48",
+    "web typecheck/build",
+    "equipment HTTP API",
+    "avatar inventory/API",
+    "repository/architecture/brand/fonts",
+    "asset contracts/manifests",
+    "R01 asset pipelines"
+  ],
+  "notRunHere": [
+    "pnpm bootstrap: direct locked app installs already verified by root",
+    "Linux release build and validation",
+    "Astra Linux 1.7 release smoke",
+    "GitHub Node 22 execution"
+  ],
+  "finishedAtUtc": "2026-11-10T18:19:29.553996+00:00",
+  "summary": {
+    "total": 26,
+    "pass": 26,
+    "fail": 0
+  },
+  "observations": [
+    {
+      "check": "hub-runtime-audit",
+      "severity": "informational",
+      "detail": "One existing base64 fragment is not divisible by four before concatenation; auditor explicitly accepts this; zero errors."
+    },
+    {
+      "check": "world-style-dataset",
+      "severity": "nonblocking-warning",
+      "detail": "Existing test calls Pillow Image.getdata; current installed Pillow warns about future removal. All seven tests pass; implementation unchanged."
+    }
+  ]
+}

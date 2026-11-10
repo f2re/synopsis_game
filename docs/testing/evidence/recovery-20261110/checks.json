@@ -1,0 +1,139 @@
+{
+  "reviewer": "/root/recover_audit",
+  "startedAtUtc": "2026-11-10T18:03:47.166366+00:00",
+  "baseCommit": "594e766ff2cd001cf85b728aa077184054380e09",
+  "restoredTree": "249198299e8f0a5ef5ec5c22b3485511c6f5b8cd",
+  "pythonVersion": "3.12.14",
+  "checks": [
+    {
+      "name": "repository",
+      "command": [
+        "python",
+        "tools/validate_repo.py"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.918,
+      "log": "repository.log"
+    },
+    {
+      "name": "architecture",
+      "command": [
+        "python",
+        "tools/validate_architecture.py"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.064,
+      "log": "architecture.log"
+    },
+    {
+      "name": "brand",
+      "command": [
+        "python",
+        "tools/validate_brand.py"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.324,
+      "log": "brand.log"
+    },
+    {
+      "name": "fonts",
+      "command": [
+        "python",
+        "tools/validate_fonts.py"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.102,
+      "log": "fonts.log"
+    },
+    {
+      "name": "legacy-pixel-art-validator",
+      "command": [
+        "python",
+        "tools/validate_pixel_art.py"
+      ],
+      "status": "MISSING",
+      "reason": "Referenced by AGENTS.md, absent from restored source; no success claimed."
+    },
+    {
+      "name": "asset-contract",
+      "command": [
+        "python",
+        "tools/assets/check_asset_contract.py"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.04,
+      "log": "asset-contract.log"
+    },
+    {
+      "name": "asset-manifests",
+      "command": [
+        "python",
+        "tools/assets/check_asset_manifests.py"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.06,
+      "log": "asset-manifests.log"
+    },
+    {
+      "name": "hub-r01",
+      "command": [
+        "python",
+        "tools/assets/build_hub_r01.py",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 34.649,
+      "log": "hub-r01.log"
+    },
+    {
+      "name": "characters-r01",
+      "command": [
+        "python",
+        "tools/assets/build_characters_r01.py",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.533,
+      "log": "characters-r01.log"
+    },
+    {
+      "name": "inventory-r01",
+      "command": [
+        "python",
+        "tools/assets/build_inventory_icons_r01.py",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 0.2,
+      "log": "inventory-r01.log"
+    },
+    {
+      "name": "equipment-r01",
+      "command": [
+        "python",
+        "tools/assets/build_equipment_r01.py",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 5.8,
+      "log": "equipment-r01.log"
+    },
+    {
+      "name": "spritecook-manifest-hashes",
+      "status": "PASS",
+      "entries": 59,
+      "log": "spritecook-manifest-hashes.json"
+    }
+  ],
+  "scope": "Fresh read-only repository, asset reproducibility and hash checks; not new browser/device or Linux/Astra release testing."
+}

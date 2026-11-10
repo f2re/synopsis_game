@@ -38,6 +38,7 @@ export interface ShiftAnswerEvent {
   question: string;
   responseKind: string;
   correct: boolean;
+  firstAttemptCorrect: boolean;
   explanation: string;
   principleTags: string[];
   answered: number;
@@ -149,6 +150,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
       question: task.question,
       responseKind: task.response.kind,
       correct: result.feedback.correct,
+      firstAttemptCorrect: result.feedback.firstAttemptCorrect,
       explanation: result.feedback.explanation,
       principleTags: [...result.feedback.principleTags],
       answered: result.progress.answered,

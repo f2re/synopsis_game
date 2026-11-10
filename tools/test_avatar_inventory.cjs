@@ -11,19 +11,23 @@ const { once } = require('node:events');
 const ts = require('../apps/web/node_modules/typescript');
 
 const repo = path.resolve(__dirname, '..');
-function sourceModule(relativePath) {
+function sourceModule(relativePath, dependencies = {}) {
   const code = ts.transpileModule(fs.readFileSync(path.join(repo, relativePath), 'utf8'), {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
   }).outputText;
   const module = { exports: {} };
-  // Both selected modules are repository-owned pure catalog/model sources. Type-only imports disappear.
-  new Function('module', 'exports', code)(module, module.exports);
+  // Only explicitly provided repository-owned dependencies may be loaded.
+  new Function('module', 'exports', 'require', code)(module, module.exports, (name) => {
+    assert(Object.prototype.hasOwnProperty.call(dependencies, name), `Unexpected dependency: ${name}`);
+    return dependencies[name];
+  });
   return module.exports;
 }
 
 const ui = sourceModule('apps/web/src/features/avatar/avatarOptions.ts');
 const server = sourceModule('apps/server/src/modules/identity/model.ts');
 const { AVATAR_OPTIONS, DEFAULT_AVATAR, validateAvatar } = server;
+const drafts = sourceModule('apps/web/src/features/avatar/avatarDraft.ts', { './avatarOptions': ui });
 let optionCount = 0;
 let imageCount = 0;
 const allIds = new Set();
@@ -67,7 +71,38 @@ for (const [id, image] of Object.entries(reviewedReplacements)) {
   assert(item.iconLabel && item.image === image, `Unreviewed legacy artwork reintroduced: ${id}`);
 }
 assert.equal(new Set(ui.INVENTORY_ITEMS.map((item) => item.id)).size, ui.INVENTORY_ITEMS.length);
-const result = { catalogParity: true, supportedSlots: Object.keys(AVATAR_OPTIONS).length, supportedValues: optionCount, inventoryItems: ui.INVENTORY_ITEMS.length, validImages: imageCount, validPresets: ui.STYLE_PRESETS.length };
+// Browser Back unmounts the editor: recover its cosmetic draft without touching
+// another account or silently replacing fields changed on the server meanwhile.
+const values = new Map();
+const storage = { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value), removeItem: (key) => values.delete(key) };
+const outfit = { ...DEFAULT_AVATAR, top: 'top.sweater' };
+assert(drafts.writeAvatarDraft(storage, 'observer-one', DEFAULT_AVATAR, outfit));
+assert.equal(drafts.readAvatarDraft(storage, 'observer-two'), null);
+const recoveredDraft = drafts.readAvatarDraft(storage, 'observer-one');
+assert.deepEqual(recoveredDraft.avatar, outfit);
+const newerServer = { ...DEFAULT_AVATAR, headwear: 'headwear.cap', top: 'top.field-jacket' };
+assert.deepEqual(drafts.mergeAvatarDraft(recoveredDraft, newerServer), { ...newerServer, top: 'top.sweater' });
+assert.deepEqual(drafts.avatarDraftConflicts(recoveredDraft, newerServer), ['top']);
+assert.deepEqual(drafts.avatarDraftConflicts(recoveredDraft, outfit), []);
+assert(drafts.writeAvatarDraft(storage, 'observer-two', DEFAULT_AVATAR, { ...DEFAULT_AVATAR, companion: 'companion.tit' }));
+assert(drafts.clearAvatarDraft(storage, 'observer-one'));
+assert.equal(drafts.readAvatarDraft(storage, 'observer-one'), null);
+assert.equal(drafts.readAvatarDraft(storage, 'observer-two').avatar.companion, 'companion.tit');
+assert(drafts.writeAvatarDraft(storage, 'observer-two', DEFAULT_AVATAR, DEFAULT_AVATAR));
+assert.equal(drafts.readAvatarDraft(storage, 'observer-two'), null);
+const rejectedStorage = { getItem: () => { throw new Error('blocked'); }, setItem: () => { throw new Error('quota'); }, removeItem: () => { throw new Error('blocked'); } };
+assert.equal(drafts.readAvatarDraft(rejectedStorage, 'observer-one'), null);
+assert.equal(drafts.writeAvatarDraft(rejectedStorage, 'observer-one', DEFAULT_AVATAR, outfit), false);
+assert.equal(drafts.clearAvatarDraft(rejectedStorage, 'observer-one'), false);
+for (const malformed of [
+  '{broken',
+  JSON.stringify({ version: 2, base: DEFAULT_AVATAR, avatar: outfit }),
+  JSON.stringify({ version: 1, base: DEFAULT_AVATAR, avatar: { ...outfit, top: 'top.unknown' } }),
+  JSON.stringify({ version: 1, base: DEFAULT_AVATAR, avatar: { ...outfit, rewards: 100 } }),
+  JSON.stringify({ version: 1, base: DEFAULT_AVATAR, avatar: {} }),
+]) assert.equal(drafts.readAvatarDraft({ ...storage, getItem: () => malformed }, 'observer-one'), null);
+assert.equal(drafts.writeAvatarDraft(storage, 'observer-one', DEFAULT_AVATAR, { ...outfit, top: 'top.unknown' }), false);
+const result = { catalogParity: true, supportedSlots: Object.keys(AVATAR_OPTIONS).length, supportedValues: optionCount, inventoryItems: ui.INVENTORY_ITEMS.length, validImages: imageCount, validPresets: ui.STYLE_PRESETS.length, draftRecovery: { isolatedAccounts: true, validOptionsOnly: true, newerServerFieldsPreserved: true, explicitConflicts: true, storageFailureSafe: true } };
 
 async function freePort() {
   const listener = net.createServer();

@@ -4,8 +4,9 @@ import { api, type AvatarProfile, type EquipmentResponse, type SessionUser } fro
 import { AvatarPreview, type AvatarDirection, type AvatarAnimation } from './AvatarPreview';
 import { AvatarAppearance, AvatarOptionGrid } from './AvatarOptionGrid';
 import { EQUIPMENT_SLOTS, INVENTORY_ITEMS, OPTIONS, STYLE_PRESETS, type InventoryCategory, type InventoryItem } from './avatarOptions';
-import { readHubPreferences } from '../hub/hubPreferences';
+import { HUB_PREFERENCES_EVENT, readHubPreferences } from '../hub/hubPreferences';
 import { EquipmentBadges, EquipmentSummary } from './EquipmentBadges';
+import { avatarDraftConflicts, avatarDraftStorage, clearAvatarDraft, mergeAvatarDraft, readAvatarDraft, sameAvatar, writeAvatarDraft, type AvatarDraft } from './avatarDraft';
 import './inventory.css';
 
 interface AvatarEditorProps {
@@ -38,13 +39,16 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const [equipmentLoading, setEquipmentLoading] = useState(true);
   const [equipmentError, setEquipmentError] = useState('');
   const [selectingBadge, setSelectingBadge] = useState(false);
+  const [pendingDraft, setPendingDraft] = useState<AvatarDraft | null>(null);
+  const [draftOwner, setDraftOwner] = useState<string | null>(null);
+  const [draftStored, setDraftStored] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(() => readHubPreferences().reducedMotion);
   const equipmentRequest = useRef(0);
   const avatarRequest = useRef(0);
   const accountId = useRef(user.id);
   accountId.current = user.id;
-  const inspectTimer = useRef<number | null>(null);
   const exitDialog = useRef<HTMLDialogElement>(null);
-  const dirty = (Object.keys(avatar) as Array<keyof AvatarProfile>).some((slot) => avatar[slot] !== savedAvatar[slot]);
+  const dirty = !sameAvatar(avatar, savedAvatar);
   const visibleEquipment = equipmentOwner === user.id ? equipment : null;
   const busy = saving || selectingBadge;
 
@@ -56,8 +60,9 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     setCategory('all'); setSection(initialSection);
     setConfirmExit(false);
     setSaving(false); setDirection('down'); setAnimation('idle');
-    if (inspectTimer.current !== null) window.clearTimeout(inspectTimer.current);
-    inspectTimer.current = null;
+    const draft = readAvatarDraft(avatarDraftStorage(), user.id);
+    setPendingDraft(draft && !sameAvatar(mergeAvatarDraft(draft, user.avatar), user.avatar) ? draft : null);
+    setDraftOwner(user.id); setDraftStored(false);
     setNotice(null);
     // A different account must never inherit an unsaved outfit from the previous one.
     return () => { avatarRequest.current += 1; };
@@ -69,7 +74,26 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     return () => { equipmentRequest.current += 1; };
   }, [user.id]);
 
-  useEffect(() => () => { if (inspectTimer.current !== null) window.clearTimeout(inspectTimer.current); }, []);
+  useEffect(() => {
+    // Wait for account initialization and an explicit recovery decision. This
+    // prevents a pristine mount from erasing an existing draft, or another account.
+    if (draftOwner !== user.id || pendingDraft) return;
+    const written = writeAvatarDraft(avatarDraftStorage(), user.id, savedAvatar, avatar);
+    setDraftStored(dirty && written);
+  }, [avatar, savedAvatar, user.id, draftOwner, pendingDraft, dirty]);
+
+  useEffect(() => {
+    const media = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    const sync = () => setReducedMotion(readHubPreferences().reducedMotion);
+    media?.addEventListener('change', sync);
+    window.addEventListener(HUB_PREFERENCES_EVENT, sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      media?.removeEventListener('change', sync);
+      window.removeEventListener(HUB_PREFERENCES_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, []);
 
   useEffect(() => {
     if (!dirty) return;
@@ -129,10 +153,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   }
 
   function setMotion(value: AvatarAnimation) {
-    if (inspectTimer.current !== null) window.clearTimeout(inspectTimer.current);
-    inspectTimer.current = null;
     setAnimation(value);
-    if (value === 'inspect') inspectTimer.current = window.setTimeout(() => { setAnimation('idle'); inspectTimer.current = null; }, 1200);
   }
 
   function updateOption(slot: keyof AvatarProfile, value: string) {
@@ -151,7 +172,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
 
   function handlePreviewKeys(event: KeyboardEvent<HTMLDivElement>) {
     // Shortcuts belong to the preview, so Space and arrows keep their normal form behavior elsewhere.
-    if (event.altKey || event.ctrlKey || event.metaKey || saving) return;
+    if (event.altKey || event.ctrlKey || event.metaKey || busy || pendingDraft) return;
     const current = DIRECTIONS.indexOf(direction);
     if (event.code === 'ArrowLeft' || event.code === 'KeyA') { event.preventDefault(); setDirection(DIRECTIONS[(current + 1) % 4]); }
     else if (event.code === 'ArrowRight' || event.code === 'KeyD') { event.preventDefault(); setDirection(DIRECTIONS[(current + 3) % 4]); }
@@ -169,7 +190,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   }
 
   async function save(exitAfter = false) {
-    if (busy) return;
+    if (busy || pendingDraft) return;
     if (!dirty) { if (exitAfter) onBack(); return; }
     const requestId = ++avatarRequest.current;
     const owner = user.id;
@@ -177,6 +198,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     try {
       const updated = await api.updateAvatar({ ...avatar });
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
+      clearAvatarDraft(avatarDraftStorage(), owner);
       setAvatar({ ...updated.avatar }); setSavedAvatar({ ...updated.avatar });
       onSaved(updated);
       void loadEquipment();
@@ -207,16 +229,27 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
           <p>{equipmentLoading ? 'Обновляем журнал…' : equipmentError ? 'Журнал требует обновления' : 'Личный учебный прогресс'}<span>Рейтинговый режим — без усилений</span></p>
         </section>
 
-        <fieldset className="inventory-workspace" disabled={busy} aria-label="Настройка персонажа">
+        {pendingDraft && <section className="inventory-draft-recovery" aria-labelledby="inventory-draft-title">
+          <div><h2 id="inventory-draft-title">Осталась незавершённая примерка</h2><p>Она сохранена в этой вкладке. Восстановите её или оставьте образ из профиля.</p>
+            {avatarDraftConflicts(pendingDraft, savedAvatar).length > 0 && <p>Некоторые вещи в профиле уже изменились. При восстановлении в этих слотах будет выбран ваш черновик; остальные сохранённые вещи останутся.</p>}
+          </div>
+          <div className="inventory-draft-recovery__actions">
+            <button type="button" className="inventory-button inventory-button--primary" disabled={busy} onClick={() => { setAvatar(mergeAvatarDraft(pendingDraft, savedAvatar)); setPendingDraft(null); setNotice({ kind: 'info', text: 'Примерка восстановлена. Сохраните образ, чтобы применить её в профиле.' }); }}>Восстановить примерку</button>
+            <button type="button" className="inventory-button" disabled={busy} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setPendingDraft(null); setNotice({ kind: 'info', text: 'Черновик удалён. Оставлен сохранённый образ.' }); }}>Удалить черновик</button>
+          </div>
+        </section>}
+
+        <fieldset className="inventory-workspace" disabled={busy || Boolean(pendingDraft)} aria-label="Настройка персонажа">
           <aside className="inventory-observer" aria-label="Ваш персонаж и надетые вещи">
             <div className="inventory-observer__heading"><span className="inventory-eyebrow">Дежурный синоптик</span><strong>{user.displayName}</strong></div>
             <div className="inventory-portrait" tabIndex={0} role="group" aria-label="Предпросмотр персонажа. Стрелки — поворот, пробел — шаг, E — осмотр" onKeyDown={handlePreviewKeys}>
-              <AvatarPreview avatar={avatar} direction={direction} animation={animation} size={192} showBackdrop={false} />
+              <AvatarPreview avatar={avatar} direction={direction} animation={animation} size={192} showBackdrop={false} onAnimationComplete={() => setAnimation('idle')} />
               <span className="inventory-portrait__caption">{dirty ? 'Примерка' : 'Сохранённый образ'}</span>
             </div>
             <div className="inventory-directions" aria-label="Ракурс персонажа">{DIRECTIONS.map((value) => <button type="button" key={value} className="inventory-segment" aria-pressed={direction === value} onClick={() => setDirection(value)}>{DIRECTION_LABELS[value]}</button>)}</div>
             <div className="inventory-motions" aria-label="Действие персонажа">{([['idle', 'Стойка'], ['walk', 'Шаг'], ['inspect', 'Осмотр']] as const).map(([value, label]) => <button key={value} type="button" className="inventory-segment" aria-pressed={animation === value} onClick={() => setMotion(value)}>{label}</button>)}</div>
             <p className="inventory-preview-hint">В фокусе персонажа: ← → поворот · пробел шаг</p>
+            {reducedMotion && <p className="inventory-motion-status" role="status">Движение уменьшено: показана неподвижная поза.</p>}
             <h2 className="inventory-subtitle">На персонаже</h2>
             <div className="inventory-slots">{EQUIPMENT_SLOTS.map((slot) => {
               const item = OPTIONS[slot.id].find((entry) => entry.id === avatar[slot.id]);
@@ -246,14 +279,14 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         </fieldset>
 
         <footer className="inventory-footer">
-          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : dirty ? 'Есть несохранённые изменения' : 'Образ сохранён'}</strong><span>Сохранённый инструмент действует со следующей смены.</span></div>
+          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : dirty ? 'Есть несохранённые изменения' : 'Образ сохранён'}</strong><span>{dirty ? draftStored ? 'Примерка сохранена в этой вкладке. В профиле она появится после сохранения образа.' : 'Сохраните образ перед уходом: браузер не сохранил черновик.' : 'Сохранённый инструмент действует со следующей смены.'}</span></div>
           <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={!dirty || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : 'Сохранить образ'}</button></div>
         </footer>
         {notice && <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
       </div>
       <dialog ref={exitDialog} className="inventory-exit-dialog" onCancel={() => setConfirmExit(false)} aria-labelledby="inventory-exit-title">
         <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед возвращением в кампус его можно сохранить.</p>
-        <div><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save(true)}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
+        <div><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save(true)}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
       </dialog>
     </main>
   );

@@ -170,6 +170,7 @@ export interface ShiftAnswerResponse {
   retryAvailable: boolean;
   feedback: {
     correct: boolean;
+    firstAttemptCorrect: boolean;
     correctAnswer?: unknown;
     details?: ShiftFeedbackDetails | null;
     explanation: string;

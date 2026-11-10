@@ -38,7 +38,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
   const rhythm = useMemo(() => getSynopticRhythm(), []);
   const journalActive = mentorTopicId === 'journal';
   const mentorTopic = MENTOR_TOPICS.find((topic) => topic.id === mentorTopicId) ?? MENTOR_TOPICS[0];
-  const mistakes = journal.filter((entry) => !entry.correct);
+  const mistakes = journal.filter((entry) => !entry.firstAttemptCorrect);
   useEffect(() => {
     if (debriefReason && debriefDialog.current && !debriefDialog.current.open) debriefDialog.current.showModal();
   }, [debriefReason]);
@@ -63,7 +63,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
     if (event.correct) {
       setMentorReaction({
         correct: true,
-        text: 'Принято. Теперь свяжи цифру с процессом и не теряй ход анализа.',
+        text: event.retried ? 'Повтор помог исправить ответ. Первую ошибку сохраним в разборе смены.' : 'Принято. Теперь свяжи цифру с процессом и не теряй ход анализа.',
       });
       return;
     }
@@ -145,7 +145,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
       >
         <PixelIcon name="guide" size="sm" />
         <span>Спросить Ольхина</span>
-        {mistakes.length > 0 && <b className="shift-mentor-count" aria-label={`Ошибок в разборе: ${mistakes.length}`}>{mistakes.length}</b>}
+        {mistakes.length > 0 && <b className="shift-mentor-count" aria-label={`Ошибок первой попытки в разборе: ${mistakes.length}`}>{mistakes.length}</b>}
       </button>
 
       {mentorOpen && !debriefReason && (

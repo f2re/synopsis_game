@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "executedAt": "2026-11-10T18:05:57.313Z",
+  "node": "v24.22.1",
+  "checks": [
+    "anonymous, ownership, locked/unknown badge, forged charge/mode, legacy progression guards PASS",
+    "start/resume idempotent and immutable equipment snapshot PASS",
+    "concurrent hint/retry charge idempotency, no solution in retry offer, restart with pending retry, independent score excludes retry PASS",
+    "complete real ten-task shift, once-only rewards, cross-account isolation, earned selection and restart persistence PASS",
+    "durable canonical/audit evidence matches with 11 unique attempts PASS",
+    "invalid JSON shapes rejected at input boundary PASS"
+  ]
+}

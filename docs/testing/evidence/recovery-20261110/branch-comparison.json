@@ -1,0 +1,58 @@
+{
+  "reviewer": "/root/recover_audit",
+  "comparedBranch": "origin/feature/equipment-badges-buffs-20261110",
+  "comparedCommit": "0c7813d92a9dca7a01b5fa0d188f27b230f023a3",
+  "restoredCommit": "594e766ff2cd001cf85b728aa077184054380e09",
+  "restoredTree": "249198299e8f0a5ef5ec5c22b3485511c6f5b8cd",
+  "changedFiles": [
+    "apps/server/src/index.ts",
+    "apps/server/src/modules/equipment/equipmentService.test.ts",
+    "apps/server/src/modules/equipment/equipmentService.ts",
+    "apps/server/src/modules/identity/model.ts",
+    "apps/server/src/modules/shift/shiftService.ts"
+  ],
+  "decision": "SUPERSEDED_IMPLEMENTATION_WITH_EXPLICIT_GAMEPLAY_DIFFERENCES",
+  "sharedGoalsCovered": [
+    "Server-authoritative completed-shift rewards",
+    "Ownership validation",
+    "Held-tool plus badge effects capped at two per kind",
+    "First-attempt accounting",
+    "Source inspection before merge"
+  ],
+  "recoveredImprovements": [
+    "Separate cosmetic and training badge slots",
+    "Atomic completion/rewards/answer transaction",
+    "Fail-closed corrupted-store load",
+    "One resumable active shift",
+    "References and attempts survive restart",
+    "Idempotent concurrent operations",
+    "Recoverable attempt log projection",
+    "Explicit practice mode gate",
+    "Integrated UI and independently accepted art"
+  ],
+  "notCarriedOverExactly": [
+    {
+      "branch": "badge.observer: one perfect unassisted shift",
+      "current": "badge.accuracy: at least 80 percent independent first answers in one completed shift",
+      "disposition": "Alternative achievement threshold; preserve as possible future distinction, not a claim of identical behavior"
+    },
+    {
+      "branch": "badge.duty: three completed shifts, including same day",
+      "current": "badge.regular: shifts completed on three different UTC days",
+      "disposition": "Different repetition/regularity goal; same-day count remains in stats but is not this badge unlock"
+    },
+    {
+      "branch": "badge.focus: three perfect unassisted shifts; perfectShifts counter",
+      "current": "No separate perfect-shift streak badge/counter; best and cumulative independent correct answers retained",
+      "disposition": "Preserved as unimplemented design idea; no new bonus or badge added during integration"
+    },
+    {
+      "branch": "Generic task-kind hints at POST /api/shifts/:id/hint",
+      "current": "Authored explanation plus registered sources at POST /api/shifts/:id/reference; assisted mark and idempotency",
+      "disposition": "A graded hint before showing explanation remains a possible future source-reviewed feature"
+    }
+  ],
+  "storageCompatibility": "Branch version:1 players/earned schema and avatar badge IDs differ from current version:1 users/shifts/attempts schema and separate loadout. No silent migration. Confirm usage before any deployment that reuses old branch data.",
+  "sourceStatus": "No evidence found that compared branch was deployed or contains production saves; preserve its Git commit rather than delete it.",
+  "scope": "Static code comparison only; not an execution test of the superseded branch."
+}

@@ -1,0 +1,16 @@
+Command: node tools/assets/scripts/audit-hub-runtime.mjs
+Working directory: .
+
+PENDING /hub/layers/l0_background.png (Phaser не загружает)
+PENDING /hub/layers/l1_clouds.png (Phaser не загружает)
+PENDING /hub/layers/l3_ground.png (Phaser не загружает)
+PENDING /hub/layers/l5_architecture.png (Phaser не загружает)
+PENDING /hub/layers/l7_decor.png (Phaser не загружает)
+PENDING /hub/layers/l8_birds.png (Phaser не загружает)
+PENDING /hub/layers/l9_vegetation.png (Phaser не загружает)
+PENDING /hub/layers/avatar_base.png (Phaser не загружает)
+PENDING /hub/layers/building_states.png (Phaser не загружает)
+STATUS: art pending; legacy procedural fallback only, not ART_ACCEPTED
+OK runtimePart04.ts: фрагмент не кратен 4 (допустимо до конкатенации)
+LEGACY_BLOCKER Встроенный WebP Base64 повреждён: длина 83249 (mod 4 = 1) (старый встраиваемый WebP; не входит в принятые слои)
+Hub runtime asset audit: 0 ошибок; 1 наблюдений.

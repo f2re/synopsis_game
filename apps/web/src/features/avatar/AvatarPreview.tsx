@@ -11,6 +11,7 @@ export interface AvatarPreviewProps {
   direction?: AvatarDirection;
   animation?: AvatarAnimation;
   showBackdrop?: boolean;
+  onAnimationComplete?: () => void;
 }
 
 interface PaletteRamp {
@@ -65,8 +66,11 @@ export function AvatarPreview({
   direction = 'down',
   animation = 'idle',
   showBackdrop = true,
+  onAnimationComplete,
 }: AvatarPreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationComplete = useRef(onAnimationComplete);
+  animationComplete.current = onAnimationComplete;
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -156,7 +160,8 @@ export function AvatarPreview({
     fill(ctx, 'rgba(8, 16, 24, 0.70)', 10, 44, 11, 2);
 
     // 3. BACKPACK (drawn behind character when facing down/sides, or prominent in rear)
-    if (avatar.backpack !== 'backpack.none') {
+    const drawBackpack = () => {
+      if (avatar.backpack === 'backpack.none') return;
       const isField = avatar.backpack === 'backpack.field';
       const bpBase = isField ? '#46593b' : '#8a5229';
       const bpDark = isField ? '#2f3d27' : '#5c3519';
@@ -181,7 +186,8 @@ export function AvatarPreview({
         fill(ctx, '#f2c75c', 14, 25 + bounceY, 4, 2); // brass buckle
         if (isField) fill(ctx, '#d8c29d', 9, 17 + bounceY, 14, 3);
       }
-    }
+    };
+    if (direction !== 'up') drawBackpack();
 
     // 4. LEGS & TROUSERS (Zero-gap waistline at y=31)
     const legLeftY = walkPhase === -1 ? 32 + bounceY : 33 + bounceY;
@@ -330,6 +336,10 @@ export function AvatarPreview({
       fill(ctx, top.base, armFrontX, torsoY + 3, 2, 9);
       fill(ctx, skin.base, armFrontX, torsoY + 12, 2, 3);
     }
+
+    // From the rear, the same backpack layer belongs in front of the jacket.
+    // Painting it behind the torso hid the item the player had equipped.
+    if (direction === 'up') drawBackpack();
 
     // 7. NECK & HEAD
     const headY = 6 + bounceY;
@@ -563,9 +573,15 @@ export function AvatarPreview({
       const preferences = readHubPreferences();
       const paused = document.hidden || preferences.reducedMotion || media?.matches === true;
       canvas.dataset.animationPaused = String(paused);
-      draw(0);
+      draw(paused && animation === 'inspect' ? 1 : 0);
       if (!paused) {
         timer = window.setInterval(() => {
+          if (animation === 'inspect' && frame === 3) {
+            window.clearInterval(timer);
+            timer = undefined;
+            animationComplete.current?.();
+            return;
+          }
           frame = (frame + 1) % 4;
           draw(frame);
         }, preferences.lowPower ? 640 : 320);

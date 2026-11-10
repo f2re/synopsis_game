@@ -1,0 +1,4 @@
+Command: python scripts/validate_character_lora_manifest.py
+Working directory: .
+
+OK: synopsis_pixel_char manifest — 30 samples, 23 train, 7 validation, 20 human + 10 fauna, 1 prompt -> 1 image

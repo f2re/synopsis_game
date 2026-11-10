@@ -1,0 +1,4 @@
+Command: python scripts/validate_props_lora_manifest.py
+Working directory: .
+
+OK: synopsis_pixel_prop manifest — 36 samples, 28 train, 8 validation, 24 physical + 8 icons + 4 frames, 1 prompt -> 1 image

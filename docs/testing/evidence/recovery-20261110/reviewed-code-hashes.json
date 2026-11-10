@@ -1,0 +1,42 @@
+[
+  {
+    "path": "apps/server/src/modules/identity/identityService.ts",
+    "sha256": "b1ad77250be000e5aaed3a9976b85f530561bdc9867c8ec6998e64fa9c016831"
+  },
+  {
+    "path": "apps/server/src/modules/identity/identityService.test.ts",
+    "sha256": "e85b230fd63bcf3b061f28fe0f50087cc99f80db2edd5a7853c5f397603dabca"
+  },
+  {
+    "path": "apps/web/src/features/avatar/AvatarEditor.tsx",
+    "sha256": "c45b6cb37c64d53edafeb63462d84463c10ec682f49bf6dc70e8358fbe3d0586"
+  },
+  {
+    "path": "apps/web/src/features/avatar/AvatarPreview.tsx",
+    "sha256": "26e964f67af00e19c4c05428a7d56f2269483e28fdb7cd87c9a3ff0935eb12e3"
+  },
+  {
+    "path": "apps/web/src/features/avatar/avatarDraft.ts",
+    "sha256": "e75103472cdf3f1c982ecdfa165370d484baaadc5f47f290848934f0966df4df"
+  },
+  {
+    "path": "apps/web/src/features/avatar/inventory.css",
+    "sha256": "a3a49a549ffe67cedc2fa8f2eccd78354feeba6a87941ee14559724175045e10"
+  },
+  {
+    "path": "apps/web/src/api.ts",
+    "sha256": "29bf105db8b684953380f75b384d966e2528ab8f67e9c69faf3cc3374a5410ed"
+  },
+  {
+    "path": "apps/web/src/features/shift/ShiftWorkspace.tsx",
+    "sha256": "9caafb6b227cf1410ae8caff40d6b1e41b053851102fda42011ca328fea5f6c6"
+  },
+  {
+    "path": "apps/web/src/features/shift/SeamlessShiftFlow.tsx",
+    "sha256": "1b26f994a900f5d29d7836c9cb529916eeb8a971ff148374d863495f40692eec"
+  },
+  {
+    "path": "tools/test_avatar_inventory.cjs",
+    "sha256": "b7a77bcfccf5ca6e20ac625bfa157a92d5e4e5ee4ed60b79fb1bde68cb19fd96"
+  }
+]

@@ -1,5 +1,5 @@
 import { randomBytes, randomUUID, scrypt, timingSafeEqual } from 'node:crypto';
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import {
   AVATAR_OPTIONS,
@@ -346,14 +346,25 @@ export class IdentityService {
   }
 
   async updateAvatar(token: string, input: unknown): Promise<SessionUser> {
-    const user = this.requireSession(token);
+    this.requireSession(token);
+    let avatar: AvatarProfile;
     try {
-      user.avatar = validateAvatar(input);
+      avatar = validateAvatar(input);
     } catch (error) {
       throw new IdentityError(400, (error as Error).message, 'invalid_avatar');
     }
-    await this.persist();
-    return toSessionUser(user);
+    return this.enqueuePersistence(async () => {
+      // Recheck access after earlier queued writes, and keep the last committed
+      // loadout visible to shift starts until this complete snapshot is saved.
+      const user = this.requireSession(token);
+      const draft: IdentityState = {
+        ...this.state,
+        users: this.state.users.map((candidate) => candidate === user ? { ...candidate, avatar } : candidate),
+      };
+      await this.writeSnapshot(draft);
+      user.avatar = avatar;
+      return toSessionUser(user);
+    });
   }
 
   listUsers(token: string): AdminUser[] {
@@ -533,14 +544,31 @@ export class IdentityService {
     return user;
   }
 
-  private async persist(): Promise<void> {
-    const snapshot = JSON.stringify(this.state, null, 2) + '\n';
-    this.persistQueue = this.persistQueue.then(async () => {
-      await mkdir(dirname(this.options.storePath), { recursive: true });
-      const temporary = `${this.options.storePath}.tmp`;
-      await writeFile(temporary, snapshot, { encoding: 'utf8', mode: 0o600 });
+  private enqueuePersistence<T>(operation: () => Promise<T>): Promise<T> {
+    const result = this.persistQueue.then(operation, operation);
+    // A temporary filesystem error must not block all later identity writes.
+    this.persistQueue = result.then(() => undefined, () => undefined);
+    return result;
+  }
+
+  private persist(): Promise<void> {
+    // Capture at execution time: an earlier queued avatar save must be included
+    // in subsequent login/admin snapshots instead of being overwritten on disk.
+    return this.enqueuePersistence(() => this.writeSnapshot(this.state));
+  }
+
+  private async writeSnapshot(state: IdentityState): Promise<void> {
+    const snapshot = JSON.stringify(state, null, 2) + '\n';
+    await mkdir(dirname(this.options.storePath), { recursive: true });
+    const temporary = `${this.options.storePath}.${randomUUID()}.tmp`;
+    try {
+      const handle = await open(temporary, 'wx', 0o600);
+      try { await handle.writeFile(snapshot, 'utf8'); await handle.sync(); }
+      finally { await handle.close(); }
       await rename(temporary, this.options.storePath);
-    });
-    await this.persistQueue;
+    } catch (error) {
+      await rm(temporary, { force: true }).catch(() => undefined);
+      throw error;
+    }
   }
 }
