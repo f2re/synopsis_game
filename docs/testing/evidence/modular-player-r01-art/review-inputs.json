@@ -1,0 +1,268 @@
+{
+  "rigId": "player.modular.r01.v1",
+  "revision": "r01-idle4-20261110",
+  "inputArtAcceptance": "PENDING",
+  "inputs": {
+    "assets/generated/characters/player-r01/atlas.png": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+    "assets/generated/characters/player-r01/manifest.json": "5be877061d9eb7aa0dfe3ec34305f5fea11440119a73544254b463a6ae264857",
+    "assets/manifests/player-modular-r01.json": "87116780e3d7d6e1c0b41e2cccd715af67e61f52e5925f89f97534503930e324",
+    "assets/source/characters/player-r01/rig.json": "5ca4bd22b2288d8289ac813613e36a6a1bdd694d7b12c04ffbb359aceedf4863",
+    "assets/generated/characters/player-r01/catalog-contact.png": "0afb36639246e86c206218105f8d77d834ae64ddb5803808647ded504e44bf4e",
+    "assets/generated/characters/player-r01/default-contact.png": "0db2bc9bfad9b0ad456f85f243c5aea08933d17d445b766c1ac9850079bcf5c1",
+    "assets/generated/characters/player-r01/hair-headwear-contact.png": "f0e660a2f6ab848f95aa741f0f34274e589ebace87eab8a9fcad2acaa7decd67",
+    "assets/generated/characters/player-r01/outfit-contact.png": "15dfa90c5459000f85c4a942b51382458d661e7d769b21d9a5ac464e9146ae31",
+    "assets/generated/characters/player-r01/hair-headwear-left.png": "817b5af383649724feef3a808841d2646ae6893155a8beea1e3e8e6fe006b277",
+    "assets/generated/characters/player-r01/hair-headwear-right.png": "6a53012b67fdea8d39ed4e37b33353de566975897d2d89c4be789c15999b4b1e",
+    "assets/generated/characters/player-r01/hair-headwear-up.png": "b53933de1456c9cd51b398f287449cefcdc0f24a0a70be3b2966431e5504c756"
+  },
+  "sheets": {
+    "actual-presets.png": {
+      "sha256": "82060cca1718b530ef70fda1d09e62c577a744ee389450a47f4582744491b1ca",
+      "profiles": {
+        "default": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.short",
+          "headwear": "headwear.none",
+          "top": "top.center-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.sneakers",
+          "backpack": "backpack.none",
+          "heldItem": "held.none",
+          "badge": "badge.none",
+          "companion": "companion.none"
+        },
+        "preset.center": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.short",
+          "headwear": "headwear.none",
+          "top": "top.center-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.shoes",
+          "backpack": "backpack.none",
+          "heldItem": "held.map-folder",
+          "badge": "badge.meteo",
+          "companion": "companion.none"
+        },
+        "preset.field": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.short",
+          "headwear": "headwear.cap",
+          "top": "top.field-jacket",
+          "bottom": "bottom.field-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.pencil",
+          "badge": "badge.meteo",
+          "companion": "companion.none"
+        },
+        "preset.rest": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.short",
+          "headwear": "headwear.beanie",
+          "top": "top.sweater",
+          "bottom": "bottom.jeans",
+          "footwear": "footwear.sneakers",
+          "backpack": "backpack.city",
+          "heldItem": "held.none",
+          "badge": "badge.none",
+          "companion": "companion.tit"
+        }
+      },
+      "directions": [
+        "down",
+        "right",
+        "up",
+        "left"
+      ],
+      "phase": 0
+    },
+    "stress-combinations.png": {
+      "sha256": "c1e15118f91c0cbc177c64973f74fd65900b40a4bb13c67fb14c84636ccd2eef",
+      "profiles": {
+        "long / goggles / field / folder": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.long",
+          "headwear": "headwear.goggles",
+          "top": "top.field-jacket",
+          "bottom": "bottom.field-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.map-folder",
+          "badge": "badge.meteo",
+          "companion": "companion.none"
+        },
+        "long / scarf / city / tablet": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.long",
+          "headwear": "headwear.scarf",
+          "top": "top.center-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.shoes",
+          "backpack": "backpack.city",
+          "heldItem": "held.tablet",
+          "badge": "badge.meteo",
+          "companion": "companion.none"
+        },
+        "curl / cap / shirt / pencil": {
+          "skinTone": "skin.deep",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.curl",
+          "headwear": "headwear.cap",
+          "top": "top.shirt",
+          "bottom": "bottom.field-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.pencil",
+          "badge": "badge.meteo",
+          "companion": "companion.none"
+        },
+        "long / beanie / hoodie / field": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.blond",
+          "hair": "hair.long",
+          "headwear": "headwear.beanie",
+          "top": "top.hoodie",
+          "bottom": "bottom.field-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.pencil",
+          "badge": "badge.meteo",
+          "companion": "companion.none"
+        }
+      },
+      "directions": [
+        "down",
+        "right",
+        "up",
+        "left"
+      ],
+      "phase": 0
+    },
+    "companions.png": {
+      "sha256": "9f0ec12ce500ed2b113009012da8415e9c6631fbb2b7c7ec273deb16749834ce",
+      "profiles": {
+        "companion.tit": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.short",
+          "headwear": "headwear.none",
+          "top": "top.center-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.sneakers",
+          "backpack": "backpack.none",
+          "heldItem": "held.none",
+          "badge": "badge.none",
+          "companion": "companion.tit"
+        },
+        "companion.squirrel": {
+          "skinTone": "skin.warm",
+          "hairColor": "haircolor.brown",
+          "hair": "hair.short",
+          "headwear": "headwear.none",
+          "top": "top.center-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.sneakers",
+          "backpack": "backpack.none",
+          "heldItem": "held.none",
+          "badge": "badge.none",
+          "companion": "companion.squirrel"
+        }
+      },
+      "directions": [
+        "down",
+        "right",
+        "up",
+        "left"
+      ],
+      "phase": 0
+    },
+    "idle-phases.png": {
+      "sha256": "5154fdc27fee7a1cf24efbfbf559d61a8cb07564568c1cbfb2932ad6858cb8e5",
+      "profile": {
+        "skinTone": "skin.warm",
+        "hairColor": "haircolor.brown",
+        "hair": "hair.short",
+        "headwear": "headwear.cap",
+        "top": "top.field-jacket",
+        "bottom": "bottom.field-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.pencil",
+        "badge": "badge.meteo",
+        "companion": "companion.none"
+      },
+      "directions": [
+        "down",
+        "right",
+        "up",
+        "left"
+      ],
+      "phases": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "palette-combinations.png": {
+      "sha256": "2590e32e10de9b11ea84e6a52e717375951e87f58e8fac9b616858b065eec68e",
+      "skinTone": [
+        "skin.light",
+        "skin.warm",
+        "skin.medium",
+        "skin.deep"
+      ],
+      "hairColor": [
+        "haircolor.brown",
+        "haircolor.black",
+        "haircolor.blond",
+        "haircolor.auburn"
+      ],
+      "direction": "down",
+      "phase": 0
+    },
+    "catalog-page-1.png": {
+      "sha256": "790e1c2495718be78fd486ed7dca47c55dfa0055e308f203c7fd5e3c4ad4f625",
+      "source": "assets/generated/characters/player-r01/catalog-contact.png",
+      "sourceY": [
+        0,
+        1480
+      ],
+      "scale": 1
+    },
+    "catalog-page-2.png": {
+      "sha256": "0a6890ac4db5ea1f11fb61812bdb346496c55a4f0e7312b571b1ef7bdee2d7a6",
+      "source": "assets/generated/characters/player-r01/catalog-contact.png",
+      "sourceY": [
+        1480,
+        2960
+      ],
+      "scale": 1
+    },
+    "catalog-page-3.png": {
+      "sha256": "37dda10e0e80d83401952bf531dac09c54c2f325dca4e7cdd4c949f251532eed",
+      "source": "assets/generated/characters/player-r01/catalog-contact.png",
+      "sourceY": [
+        2960,
+        4440
+      ],
+      "scale": 1
+    },
+    "catalog-page-4.png": {
+      "sha256": "7247f4722892b15eda6011b5d4f284c8538b7ea186772646fb435d732457c304",
+      "source": "assets/generated/characters/player-r01/catalog-contact.png",
+      "sourceY": [
+        4440,
+        5920
+      ],
+      "scale": 1
+    }
+  },
+  "scope": "Offline visual review evidence only; no product acceptance or browser verification implied."
+}

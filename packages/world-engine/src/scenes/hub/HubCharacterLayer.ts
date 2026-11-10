@@ -87,6 +87,7 @@ export class HubCharacterLayer {
   private layout: ReturnType<typeof getR01Layout>;
   private sampleTimeMs = 0;
   private destroyed = false;
+  private reservedActors = 0;
 
   constructor(private readonly scene: Phaser.Scene) {
     this.layout = getR01Layout(scene.scale.width, scene.scale.height);
@@ -246,7 +247,7 @@ export class HubCharacterLayer {
       if (!actor.image.visible) continue;
       // Extra background actors stay in their authored first frame if a future
       // content pack contains more than this scene's three-actor budget (plus the existing fountain loop).
-      if (actor.clip.frameCount > 1 && activeLoops++ >= MAX_ANIMATED_ACTORS) {
+      if (actor.clip.frameCount > 1 && activeLoops++ >= MAX_ANIMATED_ACTORS - this.reservedActors) {
         if (actor.frame !== 0) { actor.image.setFrame(0); actor.frame = 0; }
         continue;
       }
@@ -298,8 +299,9 @@ export class HubCharacterLayer {
       playerPresent,
       personalizationScope: playerPresent ? 'world-and-inventory' : 'inventory-preview',
       visibleActors: visible.length,
-      animatedActors: this.preferences.reducedMotion ? 0 : Math.min(animated, MAX_ANIMATED_ACTORS),
+      animatedActors: this.preferences.reducedMotion ? 0 : Math.min(animated, MAX_ANIMATED_ACTORS - this.reservedActors),
       animationBudget: MAX_ANIMATED_ACTORS,
+      reservedForPersonalAvatar: this.reservedActors,
       reducedMotion: this.preferences.reducedMotion,
       lowPower: this.preferences.lowPower,
       selectedItem: this.presentation.heldItem,
@@ -311,6 +313,12 @@ export class HubCharacterLayer {
     };
     this.scene.registry.set('world.characters.diagnostics', diagnostics);
     worldBridge.emit('world:characters_ready', diagnostics);
+  }
+
+  /** Player and companion share the scene's existing three-actor animation cap. */
+  reservePersonalAvatar(actors: number): void {
+    this.reservedActors = Math.max(0, Math.min(MAX_ANIMATED_ACTORS, Math.floor(actors)));
+    this.publishDiagnostics();
   }
 
   destroy(): void {

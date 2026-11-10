@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "status": "REFERENCE_ONLY_NOT_PLAYABLE",
+  "spritecook_asset_id": "4df0cb13-6074-4156-8b96-161ba05ac433",
+  "source": "motion-guide-right.aseprite",
+  "sourceSha256": "ad54bc890161121bac68917da127a0edd9cd09a42fb317e9db3f6490559fe909",
+  "frameSize": [
+    170,
+    170
+  ],
+  "frameCount": 6,
+  "providerDurationMs": 125,
+  "targetRigDurationMs": 140,
+  "directions": [
+    "right"
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "bounds": [
+        52,
+        40,
+        118,
+        170
+      ],
+      "visibleBottomExclusive": 170
+    },
+    {
+      "index": 1,
+      "bounds": [
+        56,
+        37,
+        109,
+        169
+      ],
+      "visibleBottomExclusive": 169
+    },
+    {
+      "index": 2,
+      "bounds": [
+        73,
+        35,
+        103,
+        170
+      ],
+      "visibleBottomExclusive": 170
+    },
+    {
+      "index": 3,
+      "bounds": [
+        61,
+        36,
+        109,
+        170
+      ],
+      "visibleBottomExclusive": 170
+    },
+    {
+      "index": 4,
+      "bounds": [
+        51,
+        40,
+        119,
+        170
+      ],
+      "visibleBottomExclusive": 170
+    },
+    {
+      "index": 5,
+      "bounds": [
+        55,
+        36,
+        107,
+        169
+      ],
+      "visibleBottomExclusive": 169
+    }
+  ],
+  "purpose": "Shared contact/passing-pose motion reference. Author compatible limb, sleeve, hem and held-item cels per direction; validate support-foot origin before adding a walk clip. No automatic rescale or timing promotion.",
+  "publishedInRuntime": false
+}

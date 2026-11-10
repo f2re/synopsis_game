@@ -35,6 +35,7 @@ jobs:
           python tools/assets/build_characters_r01.py --check
           python tools/assets/build_inventory_icons_r01.py --check
           python tools/assets/build_equipment_r01.py --check
+          python tools/assets/build_modular_player_r01.py --check
           node tools/assets/scripts/audit-hub-runtime.mjs
           python tools/assets/check_generation_profiles.py
           python -m py_compile services/asset-generator/core/world_style_dataset.py services/asset-generator/scripts/build_style_dataset_v4.py services/asset-generator/scripts/train_world_style_v4.py
@@ -59,7 +60,9 @@ jobs:
           node packages/world-engine/scripts/syncAudioManifest.mjs --check
           node tools/test_world_audio_controls.cjs
           node --experimental-strip-types --test packages/world-engine/src/runtime/characterAssets.test.ts
+          node --experimental-strip-types --test packages/world-engine/src/runtime/modularAvatar.test.ts
           node tools/test_world_characters.cjs
+          node tools/test_modular_avatar.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts

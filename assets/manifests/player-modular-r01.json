@@ -1,0 +1,827 @@
+{
+  "version": 1,
+  "id": "player.modular.r01.v1",
+  "art_status": "pass",
+  "technical_status": "pass",
+  "source_root": "assets/source/characters/player-r01",
+  "editable_format": "aseprite",
+  "provenance": "assets/source/characters/player-r01/provenance.json",
+  "source_authoring": "tools/assets/prepare_modular_player_r01.py",
+  "build": "tools/assets/build_modular_player_r01.py",
+  "release_scope": "All current appearance values, four views, idle breathing only; walk and inspect remain unaccepted motion-guide work.",
+  "reviews": [
+    "docs/testing/2026-11-10-modular-player-independent-review.md",
+    "docs/art/reviews/2026-11-10-modular-player-r01-art-review.md"
+  ],
+  "sources": {
+    "body": {
+      "source": "assets/source/characters/player-r01/editable/body.aseprite",
+      "sha256": "d7ececac1b031ceaa273606552c9a131878fff274d3861e4a9deb6c5534fa222",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "hair.short": {
+      "source": "assets/source/characters/player-r01/editable/hair.short.aseprite",
+      "sha256": "678bfc60a4006ce4ccf7df9fa5fdd6f9c54d0641268b1f423ed5cb0ae33ca4a2",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "hair.wave": {
+      "source": "assets/source/characters/player-r01/editable/hair.wave.aseprite",
+      "sha256": "605f1c626db9ad1dee5401d2db3c219a7e393189010bb35277e60f385be7f799",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "hair.bob": {
+      "source": "assets/source/characters/player-r01/editable/hair.bob.aseprite",
+      "sha256": "58bc99ff488fa99014d7b57d17a4aac2e9717b66f553d6ec15898eb3169b52e2",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "hair.curl": {
+      "source": "assets/source/characters/player-r01/editable/hair.curl.aseprite",
+      "sha256": "1b4b348b63ecd6feb94acf83e2364a8fefd743cac5c10c61e857df12a2e12b94",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "hair.long": {
+      "source": "assets/source/characters/player-r01/editable/hair.long.aseprite",
+      "sha256": "f9bdc41f6a66a673af9fb8d68335dbb9416afaa9a5a1563ae80386c51b690138",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "headwear.cap": {
+      "source": "assets/source/characters/player-r01/editable/headwear.cap.aseprite",
+      "sha256": "f6c1707c60c22fbf379dd8af7dd695185afe9c55c7f1b041ac80792346cfab36",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "headwear.beanie": {
+      "source": "assets/source/characters/player-r01/editable/headwear.beanie.aseprite",
+      "sha256": "afc80c647a44716f7b4827fd0f98e1f00b1976437047ac773730124d1866c3a4",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "headwear.scarf": {
+      "source": "assets/source/characters/player-r01/editable/headwear.scarf.aseprite",
+      "sha256": "7e1cb90a9b27f0671d48b463e868ad6e93d51f28f9c7c41ae8da9030686c9cd9",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "headwear.goggles": {
+      "source": "assets/source/characters/player-r01/editable/headwear.goggles.aseprite",
+      "sha256": "17025c244e3d6d4c45bd0be59f47801f4e7dfdabc02efb91db0afed4b197bbfb",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "top.center-jacket": {
+      "source": "assets/source/characters/player-r01/editable/top.center-jacket.aseprite",
+      "sha256": "654785bf471ffb4c15313bcc3782c4822f06048cfcb45c090b7c9c8c63312d86",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "top.field-jacket": {
+      "source": "assets/source/characters/player-r01/editable/top.field-jacket.aseprite",
+      "sha256": "5d669075cbb3b520ee59359ab60efa86e81e39c3b92a536dd22077f3ec8ee42e",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "top.hoodie": {
+      "source": "assets/source/characters/player-r01/editable/top.hoodie.aseprite",
+      "sha256": "38b72c0aa24ec19daa5bcf614b3cf1e4c17383eb5f40ac04d8406d057e331d3c",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "top.sweater": {
+      "source": "assets/source/characters/player-r01/editable/top.sweater.aseprite",
+      "sha256": "db0079109ad0788183a76b4e7998c49fa643da5e56dca260a703cba79bfcc0b5",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "top.shirt": {
+      "source": "assets/source/characters/player-r01/editable/top.shirt.aseprite",
+      "sha256": "18bbd59f1dd6a1f71c0d9c7ec74293a865afb55714f757face76d164323f1459",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "bottom.dark-trousers": {
+      "source": "assets/source/characters/player-r01/editable/bottom.dark-trousers.aseprite",
+      "sha256": "c3c53bd5d622473ed150d67c049348fafe5739af42c329507d83c8e65f970849",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "bottom.field-trousers": {
+      "source": "assets/source/characters/player-r01/editable/bottom.field-trousers.aseprite",
+      "sha256": "0313cf86cab7309cce59b85226a597cbf25990ea0aa3009e9b49b1495977cbf6",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "bottom.jeans": {
+      "source": "assets/source/characters/player-r01/editable/bottom.jeans.aseprite",
+      "sha256": "0ae8e2af9c0f178655dfb14c5ff33c85dec89fe840bf4036e6e28fa60b6411b2",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "footwear.sneakers": {
+      "source": "assets/source/characters/player-r01/editable/footwear.sneakers.aseprite",
+      "sha256": "df31d3fb050c2289ef71236c2ee958d6cecf12d99501837c46e11d569abb3bf6",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "footwear.boots": {
+      "source": "assets/source/characters/player-r01/editable/footwear.boots.aseprite",
+      "sha256": "7a8b140bb1fc88288a686b699b2826667135f7f681f2f672c5d9b5aa91bfd065",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "footwear.shoes": {
+      "source": "assets/source/characters/player-r01/editable/footwear.shoes.aseprite",
+      "sha256": "f46dc595b86659a2920ed2baae6fc31a1070788d10353c5baed69bef8fcd604c",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "backpack.city": {
+      "source": "assets/source/characters/player-r01/editable/backpack.city.aseprite",
+      "sha256": "4e842199578327821832b9b0c40ba2db8d16a3c7c66a953ca8acd1e1f396618b",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "backpack.field": {
+      "source": "assets/source/characters/player-r01/editable/backpack.field.aseprite",
+      "sha256": "39c945ba7f7e0c72882f121d736fe234676d02f6f8eee9b7ece4503c97e2a37d",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "held.tablet": {
+      "source": "assets/source/characters/player-r01/editable/held.tablet.aseprite",
+      "sha256": "560ec3f198374f4744ef024365fd4ae6d999c76f2cd49a602387053e10630c2b",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "held.map-folder": {
+      "source": "assets/source/characters/player-r01/editable/held.map-folder.aseprite",
+      "sha256": "19c0406b6101782fa84b5c7eeaf8d7d11ede411ca0b40133edc34619ab81ad0c",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "held.pencil": {
+      "source": "assets/source/characters/player-r01/editable/held.pencil.aseprite",
+      "sha256": "14ccb35ef0743249d5955c72b96e78a1f17ea446995126f1cc7b57e55570ac52",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "badge.meteo": {
+      "source": "assets/source/characters/player-r01/editable/badge.meteo.aseprite",
+      "sha256": "8992912d889e8a99c22b09f76cb82fee2a1ae027ddae69dd8caef01a34c12e53",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "badge.aerology": {
+      "source": "assets/source/characters/player-r01/editable/badge.aerology.aseprite",
+      "sha256": "a93ea6adbf67fb059597cdffba656b13e4f147b08c5ff05f92cd6da6036e23b6",
+      "frameSize": [
+        96,
+        144
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "companion.tit": {
+      "source": "assets/source/characters/player-r01/editable/companion.tit.aseprite",
+      "sha256": "4c9055c6135f63616df89a1e0532d047fabb039b3809ebde70cc229c37314637",
+      "frameSize": [
+        64,
+        64
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    },
+    "companion.squirrel": {
+      "source": "assets/source/characters/player-r01/editable/companion.squirrel.aseprite",
+      "sha256": "a58c735c9218a0d599faac5b628c1551b17e24a5a5c32c001644926327904d94",
+      "frameSize": [
+        64,
+        64
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      }
+    }
+  },
+  "rigSha256": "5ca4bd22b2288d8289ac813613e36a6a1bdd694d7b12c04ffbb359aceedf4863",
+  "budget": {
+    "compressedAtlasBytes": 167734,
+    "decodedAtlasBytes": 917504,
+    "atlasSize": [
+      512,
+      448
+    ],
+    "uniqueCels": 125,
+    "sourceFamilies": 30,
+    "catalogValues": 42,
+    "appearanceCombinations": 1944000,
+    "publishedDirections": [
+      "down",
+      "right",
+      "up",
+      "left"
+    ],
+    "publishedClips": [
+      "idle"
+    ],
+    "playerCompositeRgbaBytesPerDirection": 221184,
+    "companionCompositeRgbaBytesPerDirection": 65536,
+    "maximumDecodedAtlasBytes": 2097152
+  },
+  "outputs": {
+    "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+    "manifestSha256": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "rigId": "player.modular.r01.v1",
+  "description": "Four-view modular standing family; a restrained upper-body breathing cycle. Feet and lower body remain planted. Walk/inspect are not published by this revision.",
+  "idleUpperDy": [0, -1, -1, 0],
+  "palettes": {
+    "skin": {
+      "source": [[112,69,48],[174,112,74],[225,159,105],[255,205,154]],
+      "variants": {
+        "skin.light": [[151,99,78],[206,151,114],[242,190,150],[255,224,185]],
+        "skin.warm": [[112,69,48],[174,112,74],[225,159,105],[255,205,154]],
+        "skin.medium": [[81,47,34],[130,77,49],[180,117,73],[220,160,107]],
+        "skin.deep": [[48,31,30],[82,50,40],[124,77,54],[166,111,77]]
+      }
+    },
+    "hair": {
+      "source": [[35,27,31],[66,46,44],[103,72,57],[147,107,78]],
+      "variants": {
+        "haircolor.brown": [[35,27,31],[66,46,44],[103,72,57],[147,107,78]],
+        "haircolor.black": [[22,22,29],[34,34,44],[52,52,65],[80,80,93]],
+        "haircolor.blond": [[74,52,40],[135,94,53],[195,151,80],[237,199,125]],
+        "haircolor.auburn": [[52,27,30],[100,47,37],[154,75,46],[205,119,66]]
+      }
+    }
+  }
+}

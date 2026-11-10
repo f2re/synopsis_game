@@ -59,7 +59,7 @@ export class WorldBridge {
   }
 
   getAvatarPresentation(): WorldAvatarPresentation {
-    return { ...this.avatarPresentation };
+    return { ...this.avatarPresentation, ...(this.avatarPresentation.profile ? { profile: { ...this.avatarPresentation.profile } } : {}) };
   }
 
   // Команды от сервера/React в Phaser

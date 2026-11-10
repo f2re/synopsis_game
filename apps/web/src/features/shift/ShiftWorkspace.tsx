@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   api,
+  type AvatarProfile,
   type FindErrorPayload,
   type EquipmentSnapshot,
   type ShiftAnswerResponse,
@@ -21,6 +22,8 @@ import { DigitAnatomy } from './feedback/DigitAnatomy';
 import { createCodePostBridge } from '../../game/worldBridge';
 import { worldAudio } from '@synopsis/world-engine';
 import { OPTIONS } from '../avatar/avatarOptions';
+import { AvatarPreview } from '../avatar/AvatarPreview';
+import { avatarForContext } from '@synopsis/world-engine/avatar';
 import './ShiftWorkspace.css';
 
 function normalizedNumber(value: string): number { return Number(value.trim().replace(',', '.')); }
@@ -51,12 +54,13 @@ export interface ShiftAnswerEvent {
 }
 
 interface ShiftWorkspaceProps {
+  avatar?: AvatarProfile;
   onExit: (reason: ShiftExitReason) => void;
   onAnswerEvaluated?: (event: ShiftAnswerEvent) => void;
   onProgressChanged?: (progress: ShiftProgress, assistedTasks: number) => void;
 }
 
-export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }: ShiftWorkspaceProps) {
+export function ShiftWorkspace({ avatar, onExit, onAnswerEvaluated, onProgressChanged }: ShiftWorkspaceProps) {
   const [shiftId, setShiftId] = useState('');
   const [task, setTask] = useState<ShiftTask | null>(null);
   const [progress, setProgress] = useState({ answered: 0, correct: 0, current: 1, total: 0 });
@@ -271,6 +275,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
   const stationTask = stationPlot || stationBoard;
   const wideTask = stationTask || findError || dependencySequence;
   const heldTool = OPTIONS.heldItem.find((item) => item.id === equipment?.heldItem);
+  const shiftAvatar = avatar ? avatarForContext(avatar, 'shift', equipment) : null;
   const answerBlocked = Boolean(feedback) || retryOffered || submitting || openingReference;
   // Feedback still belongs to the answered task; the server already points to
   // the next unanswered one while the player is reading this explanation.
@@ -308,7 +313,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
       </header>
 
       {equipment && <section className="shift-equipment" aria-label="Снаряжение этой смены">
-        <div className="shift-equipment__identity">{heldTool?.image && <img src={heldTool.image} alt="" width={44} height={44} />}<div><strong>{heldTool?.name ?? 'Без инструмента'}</strong><span>{equipment.badgeName ?? 'Учебный знак не выбран'}</span></div></div>
+        <div className="shift-equipment__identity">{shiftAvatar && <AvatarPreview avatar={shiftAvatar} size={48} showBackdrop={false} />}{heldTool?.image && <img src={heldTool.image} alt="" width={44} height={44} />}<div><strong>{heldTool?.name ?? 'Без инструмента'}</strong><span>{equipment.badgeName ?? 'Учебный знак не выбран'}</span></div></div>
         <div className="shift-equipment__charges"><span>Справка <strong>{equipment.remaining.reference} / {equipment.charges.reference}</strong></span><span>Повтор <strong>{equipment.remaining.retry} / {equipment.charges.retry}</strong></span></div>
         <p>Комплект на начало смены<span>Помощь учитывается отдельно</span></p>
       </section>}

@@ -101,6 +101,9 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       worldBridge.on<Record<string, unknown>>('world:characters_ready', (diagnostic) => {
         host.dataset.characters = JSON.stringify(diagnostic);
       }),
+      worldBridge.on<Record<string, unknown>>('world:avatar_ready', (diagnostic) => {
+        host.dataset.avatar = JSON.stringify(diagnostic);
+      }),
       worldBridge.on<WorldInteractionTarget[]>('world:interaction_layout', (layout) => {
         if (!disposed) setTargets(layout);
       }),

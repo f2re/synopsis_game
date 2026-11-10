@@ -1,0 +1,92 @@
+{
+  "task": "MODULAR-PLAYER-R01",
+  "owner": "/root/ui_review",
+  "date": "2026-11-10",
+  "implementation": "PREPARED_GATED",
+  "runtimeRegression": "PASS",
+  "artAcceptance": "PENDING",
+  "productionActivation": "BLOCKED_UNTIL_COMPLETE_ACCEPTED_ART",
+  "environment": {
+    "node": "24.22.1",
+    "ciNode": "22.23.4",
+    "browserLayout": "BLOCKED_ENVIRONMENT"
+  },
+  "checks": [
+    {
+      "command": "apps/web/node_modules/.bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "status": "PASS",
+      "evidence": "web-typecheck.txt"
+    },
+    {
+      "command": "apps/web/node_modules/.bin/tsc -p packages/world-engine/tsconfig.json --noEmit",
+      "status": "PASS"
+    },
+    {
+      "command": "vite build (apps/web)",
+      "status": "PASS",
+      "evidence": "web-build.txt"
+    },
+    {
+      "command": "node --experimental-strip-types --test packages/world-engine/src/runtime/modularAvatar.test.ts packages/world-engine/src/runtime/characterAssets.test.ts",
+      "status": "PASS",
+      "passed": 16,
+      "evidence": "modular-and-character-unit.txt"
+    },
+    {
+      "command": "node tools/test_modular_avatar.cjs",
+      "status": "PASS",
+      "evidence": "modular-lifecycle.txt"
+    },
+    {
+      "command": "node tools/test_world_characters.cjs",
+      "status": "PASS"
+    },
+    {
+      "command": "node tools/test_avatar_inventory.cjs",
+      "status": "PASS",
+      "slots": 11,
+      "values": 42,
+      "draftRecovery": true
+    },
+    {
+      "command": "python tools/assets/build_modular_player_r01.py --check",
+      "status": "PASS",
+      "evidence": "asset-check.txt",
+      "art": "PENDING",
+      "sourceFamilies": 30,
+      "compressedAtlasBytes": 167734,
+      "decodedAtlasBytes": 917504
+    },
+    {
+      "id": "actual-candidate-schema",
+      "status": "PASS",
+      "productionPendingRejected": true,
+      "inMemoryAcceptanceOverrideForSchemaOnly": true,
+      "filesModified": false,
+      "clips": [
+        "idle"
+      ],
+      "parts": 31,
+      "companions": 3,
+      "atlas": [
+        512,
+        448
+      ]
+    },
+    {
+      "command": "node tools/test_modular_avatar_layout.cjs",
+      "status": "BLOCKED_ENVIRONMENT",
+      "reason": "Local Chromium cannot create its process-singleton socket (EPERM); Cloud Browser cannot connect to executor localhost. Root will verify via existing native HTTP 5181 review stand."
+    }
+  ],
+  "fixedReviewFindings": [
+    "Required body/clothing/companion pixels are mandatory in every declared frame. Optional occlusion must explicitly declare hidden:direction|occlusion.",
+    "The Canvas uses one family-wide companion envelope and object-fit:contain within the existing 2:3 CSS box, preserving body scale across companion choices."
+  ],
+  "limitations": [
+    "No production visual acceptance or GPU/device performance claim.",
+    "Candidate pack publishes idle only. Walk/inspect are optional contract capabilities and remain absent until authored art is accepted.",
+    "Blitz has a pure presentation adapter only; no new playable mode or score/buff rule is added.",
+    "Per-account draft implementation is preserved; existing regression passes."
+  ]
+}
