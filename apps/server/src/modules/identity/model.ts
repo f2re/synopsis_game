@@ -22,7 +22,7 @@ export const AVATAR_OPTIONS = {
   backpack: ['backpack.none', 'backpack.city', 'backpack.field'],
   heldItem: ['held.none', 'held.tablet', 'held.map-folder', 'held.pencil'],
   companion: ['companion.none', 'companion.tit', 'companion.squirrel'],
-  badge: ['badge.none', 'badge.meteo', 'badge.aerology'],
+  badge: ['badge.none', 'badge.meteo', 'badge.aerology', 'badge.first-shift', 'badge.observer', 'badge.duty', 'badge.focus'],
 } as const;
 
 export interface AvatarProfile {

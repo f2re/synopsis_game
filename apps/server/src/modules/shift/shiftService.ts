@@ -37,6 +37,8 @@ interface MethodProfile {
   dependency_graphs?: Record<string, DependencyGraphProfile>;
 }
 
+export interface ShiftBonuses { hints: number; retries: number }
+
 interface ShiftState {
   id: string;
   userId: string;
@@ -45,6 +47,11 @@ interface ShiftState {
   currentIndex: number;
   correct: number;
   createdAt: string;
+  bonuses: ShiftBonuses;
+  hintsUsed: number;
+  retriesUsed: number;
+  firstTryCorrect: number;
+  attemptedTaskIds: Set<string>;
 }
 
 export class ShiftError extends Error {
@@ -94,7 +101,7 @@ export class ShiftService {
     this.validateContent();
   }
 
-  startShift(userId: string) {
+  startShift(userId: string, bonuses: ShiftBonuses = { hints: 0, retries: 0 }) {
     const pack = this.requirePack();
     const state: ShiftState = {
       id: randomUUID(),
@@ -104,6 +111,11 @@ export class ShiftService {
       currentIndex: 0,
       correct: 0,
       createdAt: new Date().toISOString(),
+      bonuses: { hints: Math.max(0, Math.min(2, Math.trunc(bonuses.hints))), retries: Math.max(0, Math.min(2, Math.trunc(bonuses.retries))) },
+      hintsUsed: 0,
+      retriesUsed: 0,
+      firstTryCorrect: 0,
+      attemptedTaskIds: new Set<string>(),
     };
     this.shifts.set(state.id, state);
     return {
@@ -113,25 +125,55 @@ export class ShiftService {
       contentStatus: pack.status,
       task: this.buildCurrentTask(state).publicTask,
       progress: this.progress(state),
+      bonuses: this.remainingBonuses(state),
     };
   }
 
   getCurrentTask(userId: string, shiftId: string) {
     const state = this.requireShift(userId, shiftId);
     if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
-    return { task: this.buildCurrentTask(state).publicTask, progress: this.progress(state) };
+    return { task: this.buildCurrentTask(state).publicTask, progress: this.progress(state), bonuses: this.remainingBonuses(state) };
   }
 
-  async submitAnswer(userId: string, shiftId: string, instanceId: string, submitted: unknown) {
+  getHint(userId: string, shiftId: string) {
+    const state = this.requireShift(userId, shiftId);
+    if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена завершена', 'shift_completed');
+    if (this.remainingBonuses(state).hints < 1) throw new ShiftError(409, 'Справки на эту смену израсходованы', 'hints_exhausted');
+    const kind = this.buildCurrentTask(state).publicTask.response.kind;
+    const hints: Record<string, string> = {
+      numeric: 'Проверьте знак, единицы измерения и правила декодирования группы КН-01. Сравните результат с физически допустимым диапазоном.',
+      choice: 'Сопоставьте каждое утверждение с описанным физическим процессом и его временным развитием.',
+      sequence: 'Начинайте с исходных наблюдений, затем переходите к их физическому анализу и итоговому выводу.',
+      dependencySequence: 'Сначала выполните физический контроль наблюдений; заключительный анализ должен опираться на все предыдущие этапы.',
+      stationPlot: 'Проверьте, какой параметр к какому полю станционной модели относится.',
+      stationBoard: 'Сначала определите станцию, затем положение метеоэлемента относительно её центра.',
+      findError: 'Проверьте физическую согласованность температуры и точки росы для каждой станции.',
+    };
+    state.hintsUsed += 1;
+    return { hint: hints[kind] ?? 'Вспомните физический смысл величин и порядок проверки наблюдений.', bonuses: this.remainingBonuses(state) };
+  }
+
+  private remainingBonuses(state: ShiftState): ShiftBonuses {
+    return { hints: state.bonuses.hints - state.hintsUsed, retries: state.bonuses.retries - state.retriesUsed };
+  }
+
+  async submitAnswer(userId: string, shiftId: string, instanceId: string, submitted: unknown, useRetry = false) {
     const state = this.requireShift(userId, shiftId);
     if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
     const current = this.buildCurrentTask(state);
     if (current.publicTask.instanceId !== instanceId) throw new ShiftError(409, 'Ответ относится не к текущему заданию', 'task_instance_mismatch');
 
     const validation = validateTaskAnswer(current.definition, current.validationContext, submitted);
-    if (validation.correct) state.correct += 1;
+    const firstAttempt = !state.attemptedTaskIds.has(instanceId);
+    const retryGranted = !validation.correct && useRetry === true && firstAttempt && this.remainingBonuses(state).retries > 0;
+    state.attemptedTaskIds.add(instanceId);
+    if (retryGranted) state.retriesUsed += 1;
+    if (validation.correct) {
+      state.correct += 1;
+      if (firstAttempt) state.firstTryCorrect += 1;
+    }
     const answeredIndex = state.currentIndex;
-    state.currentIndex += 1;
+    if (!retryGranted) state.currentIndex += 1;
 
     await this.appendAttempt({
       occurredAt: new Date().toISOString(),
@@ -150,15 +192,17 @@ export class ShiftService {
     return {
       feedback: {
         correct: validation.correct,
-        correctAnswer: validation.correctAnswer,
-        details: (validation as unknown as { details?: unknown }).details ?? null,
-        explanation: current.definition.explanation ?? '',
-        principleTags: current.definition.principle_tags ?? [],
-        sources: this.resolveSources(current.definition),
+        correctAnswer: retryGranted ? null : validation.correctAnswer,
+        details: retryGranted ? null : (validation as unknown as { details?: unknown }).details ?? null,
+        explanation: retryGranted ? 'Повторная попытка активирована. Эталон не раскрыт — проверьте рассуждение ещё раз.' : current.definition.explanation ?? '',
+        principleTags: retryGranted ? [] : current.definition.principle_tags ?? [],
+        sources: retryGranted ? [] : this.resolveSources(current.definition),
       },
-      answered: answeredIndex + 1,
+      answered: retryGranted ? answeredIndex : answeredIndex + 1,
       completed,
       nextTask,
+      retryGranted,
+      bonuses: this.remainingBonuses(state),
       progress: this.progress(state),
     };
   }
@@ -171,6 +215,10 @@ export class ShiftService {
       answered: state.currentIndex,
       correct: state.correct,
       total: state.taskIds.length,
+      firstTryCorrect: state.firstTryCorrect,
+      assisted: state.hintsUsed > 0 || state.retriesUsed > 0,
+      hintsUsed: state.hintsUsed,
+      retriesUsed: state.retriesUsed,
       startedAt: state.createdAt,
       contentPack: this.contentPackId(this.requirePack()),
     };
