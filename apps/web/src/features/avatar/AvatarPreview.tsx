@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { HUB_PREFERENCES_EVENT, readHubPreferences } from '../hub/hubPreferences';
 import type { AvatarProfile } from '../../api';
 
 export type AvatarDirection = 'down' | 'left' | 'right' | 'up';
@@ -66,22 +67,14 @@ export function AvatarPreview({
   showBackdrop = true,
 }: AvatarPreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [animFrame, setAnimFrame] = useState(0);
-
-  useEffect(() => {
-    // 320ms frame step for intentional retro cadence
-    const interval = window.setInterval(() => {
-      setAnimFrame((prev) => (prev + 1) % 4);
-    }, 320);
-    return () => window.clearInterval(interval);
-  }, []);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const draw = (animFrame: number) => {
+    canvas.dataset.frame = String(animFrame);
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, 32, 48);
 
@@ -457,10 +450,11 @@ export function AvatarPreview({
       fill(ctx, beanLine, 8, headY + 1, 16, 3); // rolled rim
       fill(ctx, '#8b70a3', 9, headY + 2, 14, 1);
     } else if (avatar.headwear === 'headwear.scarf') {
-      const scBase = '#8a3333';
-      const scDark = '#5c1f1f';
-      const scLight = '#b84d4d';
-      const scFringe = '#f0e6d2';
+      const scBase = '#c59036';
+      const scDark = '#785321';
+      const scLight = '#ecc66c';
+      const scFringe = '#d9a94b';
+      const scStripe = '#263b55';
       const flutter = animFrame % 2 === 1 ? 1 : 0;
 
       if (direction === 'down') {
@@ -469,6 +463,7 @@ export function AvatarPreview({
         fill(ctx, scLight, 12, 16 + bounceY, 8, 1);
         fill(ctx, scDark, 11, 18 + bounceY, 4, 9 + flutter);
         fill(ctx, scBase, 12, 18 + bounceY, 2, 8 + flutter);
+        fill(ctx, scStripe, 11, 24 + bounceY + flutter, 4, 1);
         fill(ctx, scFringe, 11, 27 + bounceY + flutter, 4, 2);
       } else if (direction === 'up') {
         fill(ctx, scDark, 10, 15 + bounceY, 12, 4);
@@ -479,6 +474,8 @@ export function AvatarPreview({
         fill(ctx, scDark, scX - 1, 15 + bounceY, 8, 4);
         fill(ctx, scBase, scX, 15 + bounceY, 6, 3);
         fill(ctx, scDark, scX + 1, 18 + bounceY, 3, 8 + flutter);
+        fill(ctx, scBase, scX + 2, 18 + bounceY, 1, 7 + flutter);
+        fill(ctx, scStripe, scX + 1, 23 + bounceY + flutter, 3, 1);
         fill(ctx, scFringe, scX + 1, 26 + bounceY + flutter, 3, 2);
       }
     } else if (avatar.headwear === 'headwear.goggles') {
@@ -552,7 +549,41 @@ export function AvatarPreview({
       fill(ctx, '#e87c38', sqX + 5, sqY - 1 + tailWiggle, 3, 7);
       fill(ctx, '#b5561b', sqX + 6, sqY + 1 + tailWiggle, 2, 4);
     }
-  }, [avatar, size, direction, animation, animFrame, showBackdrop]);
+    };
+
+    // Paint directly to the canvas: the preview frame cadence never triggers
+    // per-frame React updates. System and in-game motion preferences both apply.
+    let frame = 0;
+    let timer: number | undefined;
+    const media = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    const sync = () => {
+      if (timer !== undefined) window.clearInterval(timer);
+      timer = undefined;
+      frame = 0;
+      const preferences = readHubPreferences();
+      const paused = document.hidden || preferences.reducedMotion || media?.matches === true;
+      canvas.dataset.animationPaused = String(paused);
+      draw(0);
+      if (!paused) {
+        timer = window.setInterval(() => {
+          frame = (frame + 1) % 4;
+          draw(frame);
+        }, preferences.lowPower ? 640 : 320);
+      }
+    };
+    media?.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+    window.addEventListener(HUB_PREFERENCES_EVENT, sync);
+    window.addEventListener('storage', sync);
+    sync();
+    return () => {
+      if (timer !== undefined) window.clearInterval(timer);
+      media?.removeEventListener('change', sync);
+      document.removeEventListener('visibilitychange', sync);
+      window.removeEventListener(HUB_PREFERENCES_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, [avatar, size, direction, animation, showBackdrop]);
 
   return (
     <canvas

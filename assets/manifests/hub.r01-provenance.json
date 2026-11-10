@@ -1,0 +1,229 @@
+{
+  "id": "hub.r01-provenance",
+  "schema": "spritecook-provenance/v1",
+  "date": "2026-11-09",
+  "reference": {
+    "path": "design/pixel-art/v2/01_hub.png",
+    "sha256": "c4c5958ac0948cf4213d9259b9c9952fd73ec77d68832e374f361389b917353c",
+    "spritecookAssetId": "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+  },
+  "uiKit": {
+    "ui_kit_id": "7319b7db-d3c2-4ff2-b529-da0d98ebaa6c",
+    "job_id": "78ee8d2f-f790-4244-b450-036307bfe147",
+    "sheet_asset_id": "0791c37d-c48b-487b-9e02-03617d004861",
+    "model": "gpt-image-2.5-sunburst",
+    "components": 28,
+    "extractionCorrections": "Corrected component groups and states; split merged orange CTA pair; protected 9-slice edges; smart-alpha cutout finalization."
+  },
+  "generations": [
+    {
+      "name": "rejected-buildings",
+      "job_id": "fc49e258-6dc2-415a-90aa-eb8841bf25b5",
+      "status": "REJECTED",
+      "note": "Lost facade detail and cropped silhouettes at 224 × 128 for the whole six-part sheet.",
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "transparent",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 256,
+        "requested_height": 256,
+        "pixel_perfect": true,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 224,
+            "height": 128,
+            "asset_id": "e1d1dba2-c920-4c1d-b70a-f099100a5b54"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "asset_id": "e1d1dba2-c920-4c1d-b70a-f099100a5b54",
+          "width": 224,
+          "height": 128
+        }
+      ],
+      "source_files": [
+        "assets/source/environment/hub/r01/candidates/buildings-low-detail__REJECTED.png",
+        "assets/source/environment/hub/r01/candidates/buildings-low-detail-alpha__REJECTED.png"
+      ]
+    },
+    {
+      "name": "buildings",
+      "job_id": "039ecd55-935b-4447-986d-b98a1be99426",
+      "status": "reviewed",
+      "note": "Native detailed source retained; thresholded cutouts and no palette reduction.",
+      "resolved_parameters": {
+        "model": "gpt-image-2",
+        "mode": "assets",
+        "pixel": false,
+        "variations": 1,
+        "background_mode": "transparent",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "low",
+        "requested_width": 512,
+        "requested_height": 512,
+        "pixel_perfect": false,
+        "aspect_ratio": "1:1",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 1024,
+            "height": 1024,
+            "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    {
+      "name": "coastal-sky",
+      "job_id": "e3991ebf-9641-4a2a-9fe1-051e4d42c7be",
+      "status": "reviewed",
+      "note": "Separate distant sky/coast layer, low flat Gulf of Finland horizon.",
+      "resolved_parameters": {
+        "model": "gpt-image-2",
+        "mode": "assets",
+        "pixel": false,
+        "variations": 1,
+        "background_mode": "include",
+        "resolution": "1K",
+        "provider_image_size": "2K",
+        "quality": "low",
+        "requested_width": 512,
+        "requested_height": 288,
+        "pixel_perfect": false,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 2048,
+            "height": 1152,
+            "asset_id": "1247bf53-6b2b-412f-9981-eb3fed885555"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "asset_id": "1247bf53-6b2b-412f-9981-eb3fed885555",
+          "width": 2048,
+          "height": 1152
+        }
+      ]
+    },
+    {
+      "name": "props",
+      "job_id": "bf4a90a8-6b43-48a3-9256-cc50b89b539e",
+      "status": "reviewed",
+      "note": "Six independent cutouts; detached tree edge artifact removed in editable source.",
+      "resolved_parameters": {
+        "model": "gpt-image-2",
+        "mode": "assets",
+        "pixel": false,
+        "variations": 1,
+        "background_mode": "transparent",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 512,
+        "requested_height": 512,
+        "pixel_perfect": false,
+        "aspect_ratio": "1:1",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 1024,
+            "height": 1024,
+            "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    {
+      "name": "campus-ground",
+      "job_id": "7d09ad1e-edb4-451b-930c-0bf33e452a49",
+      "status": "reviewed",
+      "note": "Independent terrain plate with no architecture or UI.",
+      "resolved_parameters": {
+        "model": "gpt-image-2",
+        "mode": "assets",
+        "pixel": false,
+        "variations": 1,
+        "background_mode": "include",
+        "resolution": "1K",
+        "provider_image_size": "2K",
+        "quality": "medium",
+        "requested_width": 512,
+        "requested_height": 288,
+        "pixel_perfect": false,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 2048,
+            "height": 1152,
+            "asset_id": "b2326256-27c3-4ab5-99a6-acbb39c98826"
+          }
+        ]
+      },
+      "assets": [
+        {
+          "asset_id": "b2326256-27c3-4ab5-99a6-acbb39c98826",
+          "width": 2048,
+          "height": 1152
+        }
+      ]
+    }
+  ],
+  "build": {
+    "script": "tools/assets/build_hub_r01.py",
+    "python": "3.12.14",
+    "pillow": "13.0.0",
+    "zlib": "1.3.2",
+    "sourceFormat": "single-frame RGBA Aseprite",
+    "transforms": [
+      "native pixels",
+      "manifest binary-alpha cutoff",
+      "clear invisible RGB",
+      "lossless PNG"
+    ],
+    "forbiddenTransforms": [
+      "palette quantization",
+      "aggressive downsample",
+      "reference image as full-screen backdrop"
+    ]
+  },
+  "review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md",
+  "promptRecord": "Original provider prompts remain attached to the stable SpriteCook asset IDs; this manifest records generation parameters, source references and review decisions."
+}

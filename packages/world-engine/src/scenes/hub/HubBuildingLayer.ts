@@ -136,6 +136,7 @@ export class HubBuildingLayer {
   private radarBeaconGraphic: Phaser.GameObjects.Graphics;
   private pulseTimer = 0;
   private currentPhase: DayPhase = 'day';
+  private focusedId: string | null = null;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -222,6 +223,13 @@ export class HubBuildingLayer {
     });
   }
 
+  setFocused(id: string | null): void {
+    const previous = this.focusedId;
+    this.focusedId = id;
+    if (previous) this.renderBuildingState(previous);
+    if (id) this.renderBuildingState(id);
+  }
+
   applyDayPhase(phase: DayPhase, colors: PhaseColors): void {
     this.currentPhase = phase;
     this.redrawFacades();
@@ -265,6 +273,10 @@ export class HubBuildingLayer {
     if (!outline || !building) return;
 
     outline.clear();
+    if (this.focusedId === id) {
+      outline.lineStyle(2, WORLD_PALETTE.windowLight3, 1);
+      outline.strokeRect(-2, -2, building.bounds.width + 4, building.bounds.height + 4);
+    }
 
     if (state === 'active') {
       // 1-пиксельный контур активного здания

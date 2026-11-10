@@ -1,13 +1,12 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { api, getSessionToken, setSessionToken, type SessionUser } from './api';
-import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from './brand';
+import { GAME_MARK } from './brand';
 import { AvatarEditor } from './features/avatar/AvatarEditor';
-import { AvatarPreview } from './features/avatar/AvatarPreview';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
-import { PixelIcon, PixelCard, PixelProgressBar, StationNavDock } from './features/ui';
-import { SynopticDutyTicker } from './features/ui/SynopticDutyTicker';
+import { PixelIcon, PixelCard, PixelProgressBar } from './features/ui';
+import { HubScreen } from './features/hub/HubScreen';
+import { HubModalLayer } from './features/hub/HubModalLayer';
 
-const WorldCanvas = lazy(() => import('./game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
 
 function navigate(path: string): void {
@@ -49,106 +48,13 @@ function ArenaTvPlaceholder() {
   );
 }
 
-function Home({
-  user,
-  onLoginClick,
-  onLogout,
-  onOpenSetCode,
-}: {
-  user: SessionUser | null;
-  onLoginClick: () => void;
-  onLogout: () => void;
-  onOpenSetCode: () => void;
-}) {
-  const [sessionMenuOpen, setSessionMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const toggleSessionMenu = () => setSessionMenuOpen((open) => !open);
-    const startShift = () => navigate('/shift');
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setSessionMenuOpen(false);
-    };
-
-    window.addEventListener('hub:session-menu', toggleSessionMenu);
-    window.addEventListener('hub:start-shift', startShift);
-    window.addEventListener('keydown', closeOnEscape);
-    return () => {
-      window.removeEventListener('hub:session-menu', toggleSessionMenu);
-      window.removeEventListener('hub:start-shift', startShift);
-      window.removeEventListener('keydown', closeOnEscape);
-    };
-  }, []);
-
-  return (
-    <main className="game-viewport" aria-label={GAME_TITLE}>
-      <Suspense fallback={null}><WorldCanvas /></Suspense>
-      <aside className={`game-user-overlay ${sessionMenuOpen ? 'is-open' : 'is-collapsed'}`} aria-label={user ? 'Профиль пользователя' : 'Статус наблюдателя'}>
-        {user ? (
-          <>
-            <button
-              type="button"
-              className="game-user-chip"
-              aria-expanded={sessionMenuOpen}
-              aria-haspopup="dialog"
-              onClick={() => setSessionMenuOpen((open) => !open)}
-            >
-              <AvatarPreview avatar={user.avatar} size={28} />
-              <span className="game-user-chip-copy">
-                <strong>{user.displayName}</strong>
-                <small>{user.groupId}</small>
-              </span>
-              <span className="game-user-chip-caret" aria-hidden="true">{sessionMenuOpen ? '▴' : '▾'}</span>
-            </button>
-            {sessionMenuOpen && (
-              <div className="game-session-popover" role="dialog" aria-label="Меню профиля">
-                <button type="button" className="ghost-button" onClick={() => navigate('/profile/avatar')}>Персонаж</button>
-                <button type="button" className="ghost-button" onClick={onOpenSetCode}>
-                  {user.codeSet ? 'Сменить код' : 'Задать код'}
-                </button>
-                {user.roles.includes('admin') && (
-                  <button type="button" className="ghost-button" onClick={() => navigate('/admin')}>Администратор</button>
-                )}
-                <button type="button" className="ghost-button" onClick={onLogout}>Выйти</button>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <button
-              type="button"
-              className="game-user-chip game-observer-chip"
-              aria-expanded={sessionMenuOpen}
-              aria-haspopup="dialog"
-              onClick={() => setSessionMenuOpen((open) => !open)}
-            >
-              <PixelIcon name="observer" size="sm" />
-              <span className="game-user-chip-copy">
-                <strong>{GAME_MARK} · {GAME_CALLSIGN}</strong>
-                <small>Режим наблюдателя</small>
-              </span>
-              <span className="game-user-chip-caret" aria-hidden="true">{sessionMenuOpen ? '▴' : '▾'}</span>
-            </button>
-            {sessionMenuOpen && (
-              <div className="game-session-popover" role="dialog" aria-label="Вход в игру">
-                <button type="button" className="primary-button" onClick={onLoginClick}>Войти</button>
-              </div>
-            )}
-          </>
-        )}
-      </aside>
-
-      <SynopticDutyTicker />
-      <StationNavDock onStartShift={() => navigate('/shift')} activeRoute="/" />
-    </main>
-  );
-}
-
 export function App() {
   const [path, setPath] = useState(window.location.pathname);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [booting, setBooting] = useState(true);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [setCodeModalOpen, setSetCodeModalOpen] = useState(false);
+  const [pendingShift, setPendingShift] = useState(false);
 
   useEffect(() => {
     const onPopState = () => setPath(window.location.pathname);
@@ -176,7 +82,11 @@ export function App() {
   if (booting) return <LoadingScreen text="Проверяем сессию…" />;
 
   async function logout() {
-    await api.logout();
+    try {
+      await api.logout();
+    } catch {
+      // api.logout always removes the local token, including network failures.
+    }
     setUser(null);
     navigate('/');
   }
@@ -199,40 +109,58 @@ export function App() {
 
   if (path === '/profile/avatar') {
     if (user) {
-      return <AvatarEditor user={user} onSaved={setUser} onBack={() => navigate('/')} />;
+      return <AvatarEditor user={user} onSaved={setUser} onBack={() => navigate('/')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />;
     }
     navigate('/');
     return null;
   }
 
   if (path === '/shift') {
-    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow onExit={() => navigate('/')} /></Suspense>;
+    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} /></Suspense>;
+  }
+
+  function startShift() {
+    if (user) navigate('/shift');
+    else {
+      setPendingShift(true);
+      setLoginModalOpen(true);
+    }
   }
 
   return (
     <>
-      <Home
+      <HubScreen
         user={user}
         onLoginClick={() => setLoginModalOpen(true)}
         onLogout={() => void logout()}
         onOpenSetCode={() => setSetCodeModalOpen(true)}
+        onStartShift={startShift}
+        onOpenAvatar={() => navigate('/profile/avatar')}
+        onOpenAdmin={() => navigate('/admin')}
+        externalModalOpen={loginModalOpen || setCodeModalOpen}
       />
       {loginModalOpen && (
+        <HubModalLayer label="Вход в учебную группу" onClose={() => { setLoginModalOpen(false); setPendingShift(false); }}>
         <LoginScreen
           onLogin={(loggedIn) => {
             setUser(loggedIn);
             setLoginModalOpen(false);
+            if (pendingShift) navigate('/shift');
+            setPendingShift(false);
           }}
-          onClose={() => setLoginModalOpen(false)}
+          onClose={() => { setLoginModalOpen(false); setPendingShift(false); }}
           isModal
         />
+        </HubModalLayer>
       )}
       {setCodeModalOpen && user && (
+        <HubModalLayer label="Персональный код входа" onClose={() => setSetCodeModalOpen(false)}>
         <SetCodeModal
           user={user}
           onSuccess={setUser}
           onClose={() => setSetCodeModalOpen(false)}
         />
+        </HubModalLayer>
       )}
     </>
   );

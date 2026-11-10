@@ -34,6 +34,7 @@ export class WorldAudioManager {
 
   // Активные слои эмбиента
   private activeAmbientLayers: Map<string, ActiveAmbientLayer> = new Map();
+  private fallbackEffects = new Set<HTMLAudioElement>();
   private lfoAnimationId: number | null = null;
   private lfoStartTime = 0;
 
@@ -51,6 +52,7 @@ export class WorldAudioManager {
   };
   private muted = false;
   private reducedSensory = false;
+  private lowPower = false;
   private taskDucking = false;
 
   public static getInstance(): WorldAudioManager {
@@ -142,7 +144,6 @@ export class WorldAudioManager {
       ambient.connect(taskDuck);
       this.ambientBus = ambient;
 
-      this.startLfoEngine();
     }
 
     if (this.audioCtx.state === 'suspended') {
@@ -258,6 +259,14 @@ export class WorldAudioManager {
         layer.fallbackElement.muted = muted;
       }
     }
+    if (muted) {
+      for (const audio of this.fallbackEffects) {
+        audio.muted = true;
+        audio.pause();
+      }
+      this.fallbackEffects.clear();
+    }
+    this.updateLfoState();
   }
 
   public isMuted(): boolean {
@@ -271,6 +280,12 @@ export class WorldAudioManager {
       const cutoff = enabled ? 3800 : 22000;
       this.sensoryFilterNode.frequency.setTargetAtTime(cutoff, ctx.currentTime, 0.2);
     }
+    this.updateLfoState();
+  }
+
+  public setLowPower(enabled: boolean): void {
+    this.lowPower = enabled;
+    this.updateLfoState();
   }
 
   public isReducedSensory(): boolean {
@@ -335,6 +350,7 @@ export class WorldAudioManager {
 
     // Загрузка буфера и воспроизведение через Web Audio граф
     this.loadBuffer(targetId).then((buffer) => {
+      if (this.muted) return;
       if (!buffer) {
         this.playFallbackAudio(soundDef, options);
         return;
@@ -397,6 +413,7 @@ export class WorldAudioManager {
     def: SoundDefinition,
     options?: { volume?: number; loop?: boolean }
   ): void {
+    if (this.muted) return;
     try {
       const audio = new Audio(def.compressedUrl || def.url);
       const chVol = this.volumes[def.channel] ?? 1.0;
@@ -409,7 +426,11 @@ export class WorldAudioManager {
         )
       );
       audio.loop = options?.loop ?? def.loop;
-      audio.play().catch(() => {});
+      this.fallbackEffects.add(audio);
+      const release = () => this.fallbackEffects.delete(audio);
+      audio.addEventListener('ended', release, { once: true });
+      audio.addEventListener('error', release, { once: true });
+      audio.play().catch(release);
     } catch {
       // Игнорируем ошибки воспроизведения
     }
@@ -470,12 +491,13 @@ export class WorldAudioManager {
     phaseOffset = 0.0,
     fadeDurationMs = 2000
   ): void {
+    if (this.muted) return;
     const existing = this.activeAmbientLayers.get(soundId);
     if (existing) {
       existing.baseVolume = targetVolume;
       const ctx = this.audioCtx;
-      if (ctx) {
-        existing.gainNode.gain.setTargetAtTime(targetVolume, ctx.currentTime, fadeDurationMs / 3000);
+      if (ctx && existing.gainNode) {
+        existing.gainNode.gain.setTargetAtTime(targetVolume, ctx.currentTime, Math.max(.001, fadeDurationMs / 3000));
       }
       return;
     }
@@ -506,9 +528,10 @@ export class WorldAudioManager {
       phaseOffset,
     };
     this.activeAmbientLayers.set(soundId, layerRecord);
+    this.updateLfoState();
 
     this.loadBuffer(soundId).then((buffer) => {
-      if (!buffer || !this.activeAmbientLayers.has(soundId)) return;
+      if (!buffer || this.muted || this.activeAmbientLayers.get(soundId) !== layerRecord) return;
 
       try {
         const source = ctx.createBufferSource();
@@ -523,7 +546,7 @@ export class WorldAudioManager {
         gainNode.gain.setTargetAtTime(
           targetVolume,
           ctx.currentTime,
-          fadeDurationMs / 3000
+          Math.max(.001, fadeDurationMs / 3000)
         );
       } catch (err) {
         console.warn(`[WorldAudioManager] Ошибка запуска эмбиент-петли ${soundId}:`, err);
@@ -539,10 +562,11 @@ export class WorldAudioManager {
     if (!layer) return;
 
     this.activeAmbientLayers.delete(soundId);
+    this.updateLfoState();
     const ctx = this.audioCtx;
 
     if (ctx && layer.gainNode) {
-      layer.gainNode.gain.setTargetAtTime(0.0001, ctx.currentTime, fadeDurationMs / 3000);
+      layer.gainNode.gain.setTargetAtTime(0.0001, ctx.currentTime, Math.max(.001, fadeDurationMs / 3000));
       setTimeout(() => {
         try {
           layer.sourceNode?.stop();
@@ -603,7 +627,7 @@ export class WorldAudioManager {
    * предотвращая слуховую усталость при длительных игровых сессиях.
    */
   private startLfoEngine(): void {
-    if (typeof window === 'undefined' || this.lfoAnimationId !== null) return;
+    if (typeof window === 'undefined' || !this.audioCtx || this.lfoAnimationId !== null) return;
 
     this.lfoStartTime = performance.now();
     const lfoFreq = 0.025; // 0.025 Гц = цикл 40 секунд
@@ -627,6 +651,23 @@ export class WorldAudioManager {
     };
 
     this.lfoAnimationId = requestAnimationFrame(lfoTick);
+  }
+
+  private updateLfoState(): void {
+    if (!this.muted && !this.reducedSensory && !this.lowPower && this.activeAmbientLayers.size > 0) {
+      this.startLfoEngine();
+      return;
+    }
+    if (this.lfoAnimationId !== null) {
+      cancelAnimationFrame(this.lfoAnimationId);
+      this.lfoAnimationId = null;
+      const ctx = this.audioCtx;
+      if (ctx && ctx.state !== 'closed') {
+        for (const layer of this.activeAmbientLayers.values()) {
+          layer.gainNode?.gain.setValueAtTime(layer.baseVolume, ctx.currentTime);
+        }
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------

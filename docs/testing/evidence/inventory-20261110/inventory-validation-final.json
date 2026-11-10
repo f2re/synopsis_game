@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-10",
+  "command": "node tools/test_avatar_inventory.cjs --api",
+  "catalogParity": true,
+  "supportedSlots": 11,
+  "supportedValues": 42,
+  "inventoryItems": 24,
+  "validImages": 29,
+  "validPresets": 3,
+  "api": {
+    "allCatalogValuesAccepted": true,
+    "persistedAcrossServerRestart": true,
+    "anotherAccountUnchanged": true,
+    "invalidIdRejected": true,
+    "anonymousSaveRejected": true
+  },
+  "additionalChecks": {
+    "sourceTypecheck": "PASS: node apps/web/node_modules/typescript/bin/tsc -p /workspace/scratch/a956fb596146/runtime-source-tsconfig.json --noEmit",
+    "gitDiffCheck": "PASS"
+  }
+}

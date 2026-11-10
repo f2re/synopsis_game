@@ -1,0 +1,36 @@
+Final integration gates: 2026-11-10T09:43:29.319126+00:00
+
+$ python tools/validate_repo.py
+Проверка репозитория успешно завершена.
+
+exit=0
+
+$ python tools/validate_architecture.py
+Проверка архитектуры успешно завершена.
+Apps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.
+
+exit=0
+
+$ python tools/validate_brand.py
+Проверка бренда успешно завершена: 26063: Позывной «Синоптик»
+
+exit=0
+
+$ python tools/validate_fonts.py
+Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.
+
+exit=0
+
+$ python tools/assets/build_equipment_r01.py --check
+Equipment R01: 6 assets; 2,577,563 PNG bytes; 6,948,768 decoded; verified
+
+exit=0
+
+$ node tools/test_digit_anatomy.cjs
+PASS: canonical station pressure, supplied high-altitude value, unavailable/non-finite fallback, component binding and unchanged temperature group.
+
+exit=0
+
+$ git diff --check
+
+exit=0

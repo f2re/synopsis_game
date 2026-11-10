@@ -1,0 +1,200 @@
+{
+  "id": "hub.r01-buildings",
+  "schema": "spritecook-buildings/v1",
+  "title": "Шесть отдельных фасадов кампуса R01",
+  "source": "assets/source/environment/hub/r01/buildings.aseprite",
+  "sourceSheet": "assets/source/environment/hub/r01/buildings-detailed-sheet.png",
+  "spritecookAssetId": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+  "reference": "design/pixel-art/v2/01_hub.png",
+  "model": "gpt-image-2",
+  "sourceTreatment": "Native 1024px source. Separate alpha cutouts, no downsampling, no colour quantization. Pixel-style illustration; pixel grid is reviewed independently.",
+  "art_status": "pass",
+  "provenance": {
+    "origin": "SpriteCook generated facade sheet referenced to approved project R01",
+    "license": "project-generated; retain provider and reference provenance"
+  },
+  "assets": [
+    {
+      "id": "hub.r01.building.codepost",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "layer": "codepost",
+      "label": "building-codepost",
+      "source_png": "assets/source/environment/hub/r01/components/building-codepost.png",
+      "source_rect": {
+        "x": 17,
+        "y": 164,
+        "width": 340,
+        "height": 343
+      },
+      "logicalSize": {
+        "width": 340,
+        "height": 343
+      },
+      "pivot": {
+        "x": 170,
+        "y": 340
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/building-codepost.png",
+      "publicPath": "/hub/r01/building-codepost.png",
+      "sha256": "64f40cf4429e75fc61713f6e3dbb6331c9eb083fb54197e611cf831f73373c40",
+      "sha12": "64f40cf4429e",
+      "bytes": 171170,
+      "sourceSha256": "2c11d5d535322cb864586f7602a6ccf4dac75f306a575802baf87b466979c509"
+    },
+    {
+      "id": "hub.r01.building.radar",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "layer": "radar",
+      "label": "building-radar",
+      "source_png": "assets/source/environment/hub/r01/components/building-radar.png",
+      "source_rect": {
+        "x": 384,
+        "y": 189,
+        "width": 275,
+        "height": 316
+      },
+      "logicalSize": {
+        "width": 275,
+        "height": 316
+      },
+      "pivot": {
+        "x": 137,
+        "y": 313
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/building-radar.png",
+      "publicPath": "/hub/r01/building-radar.png",
+      "sha256": "43a97268a0a83e3c6e32e9a575b5392b022a4bbeac7a82ccba423217ad09ec96",
+      "sha12": "43a97268a0a8",
+      "bytes": 143397,
+      "sourceSha256": "b7b156f7be6d1d06ab1386328922fda044cd840df54b398bd6bd4e10fa9d36ac"
+    },
+    {
+      "id": "hub.r01.building.lab",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "layer": "lab",
+      "label": "building-lab",
+      "source_png": "assets/source/environment/hub/r01/components/building-lab.png",
+      "source_rect": {
+        "x": 688,
+        "y": 126,
+        "width": 312,
+        "height": 381
+      },
+      "logicalSize": {
+        "width": 312,
+        "height": 381
+      },
+      "pivot": {
+        "x": 156,
+        "y": 378
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/building-lab.png",
+      "publicPath": "/hub/r01/building-lab.png",
+      "sha256": "bf06f7c58ab748bac863b4cd0ed835fe84eeaef536fa790e0d001a3cfd1ed5dc",
+      "sha12": "bf06f7c58ab7",
+      "bytes": 157465,
+      "sourceSha256": "a30f24585f06ee4d96ff8ee67d9195efb20af7bd36201dfbc4b7ef2e8b4a53fe"
+    },
+    {
+      "id": "hub.r01.building.cartography",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "layer": "cartography",
+      "label": "building-cartography",
+      "source_png": "assets/source/environment/hub/r01/components/building-cartography.png",
+      "source_rect": {
+        "x": 17,
+        "y": 603,
+        "width": 339,
+        "height": 264
+      },
+      "logicalSize": {
+        "width": 339,
+        "height": 264
+      },
+      "pivot": {
+        "x": 169,
+        "y": 261
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/building-cartography.png",
+      "publicPath": "/hub/r01/building-cartography.png",
+      "sha256": "bd0a6147a3d343f381307a98bb282006c8ae10adc35ea04e9ad952fba69c0464",
+      "sha12": "bd0a6147a3d3",
+      "bytes": 168406,
+      "sourceSha256": "733f3b81e25da0eb82e7e2519a2448b18a1ba7aeb9e54e2c8bec25bf005ee970"
+    },
+    {
+      "id": "hub.r01.building.archive",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "layer": "archive",
+      "label": "building-archive",
+      "source_png": "assets/source/environment/hub/r01/components/building-archive.png",
+      "source_rect": {
+        "x": 391,
+        "y": 595,
+        "width": 267,
+        "height": 274
+      },
+      "logicalSize": {
+        "width": 267,
+        "height": 274
+      },
+      "pivot": {
+        "x": 133,
+        "y": 271
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/building-archive.png",
+      "publicPath": "/hub/r01/building-archive.png",
+      "sha256": "ab243f75edaad9b49e880f904fc8db6278312ff655851a7df6faf418b45927a9",
+      "sha12": "ab243f75edaa",
+      "bytes": 134957,
+      "sourceSha256": "7449130982b59bc3fdc5486dedab3263c07cffc2be731e2cba5f2e94817d2f40"
+    },
+    {
+      "id": "hub.r01.building.hall",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "layer": "hall",
+      "label": "building-hall",
+      "source_png": "assets/source/environment/hub/r01/components/building-hall.png",
+      "source_rect": {
+        "x": 693,
+        "y": 627,
+        "width": 313,
+        "height": 240
+      },
+      "logicalSize": {
+        "width": 313,
+        "height": 240
+      },
+      "pivot": {
+        "x": 156,
+        "y": 237
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/building-hall.png",
+      "publicPath": "/hub/r01/building-hall.png",
+      "sha256": "f0dccc87515713b225b02ff06b31659e2a43a4ce7664adf7d176fda59c105c22",
+      "sha12": "f0dccc875157",
+      "bytes": 138435,
+      "sourceSha256": "92992bc942bbd838b816a5eebe50a464e60a56a2cf525a8f06b48d4e774e1755"
+    }
+  ],
+  "sourceSha256": "eb9340de12665cb7a48eeb4e40aef7e5fc314e3ce4711a553399cf9c56ca01f4",
+  "art_review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md"
+}

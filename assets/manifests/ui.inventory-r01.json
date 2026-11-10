@@ -1,0 +1,183 @@
+{
+  "id": "ui.inventory-r01",
+  "schemaVersion": 1,
+  "art_status": "pass",
+  "art_review": "docs/art/reviews/2026-11-10-inventory-icons-review.md",
+  "class": "detailed-pixel-inventory-icon",
+  "provider": {
+    "name": "OpenAI built-in image_gen",
+    "generatedAt": "2026-11-10",
+    "source": "assets/source/ui/inventory-r01/provider-sheet.png",
+    "originalDimensions": [
+      1254,
+      1254
+    ],
+    "spritecookGenerationCredits": 0,
+    "sha256": "2cbebe52ec11c4d8cd7808213bd12edeb0867f00073292f780fbc77918b95511"
+  },
+  "normalization": "Per-quadrant extraction; alpha cutoff128; tight bounds fit within112px on128px canvas; nearest-neighbour; no color quantization or redrawing. Original provider RGBA preserved.",
+  "rights": {
+    "origin": "User-requested AI generated artwork",
+    "source": "OpenAI image_gen",
+    "thirdPartySource": false
+  },
+  "items": [
+    {
+      "id": "headwear.scarf",
+      "label": "Тёплый вязаный шарф",
+      "providerCrop": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "size": 128,
+      "padding": 8,
+      "alphaCutoff": 128,
+      "source": "assets/source/ui/inventory-r01/scarf.aseprite",
+      "generated": "assets/generated/ui/inventory-r01/scarf.png",
+      "url": "/assets/items/scarf_reviewed.png",
+      "sourceSha256": "3be53b2eb74d2f18684e447ccb29da34f912c84ab364bc47318a6ccc0de82f58",
+      "output": {
+        "sha256": "bb05c05cc0a8a2277e1049aac22b4cab56e9645a18fc797dc9e123ba7bca2490",
+        "bytes": 24764,
+        "dimensions": [
+          128,
+          128
+        ],
+        "alpha": "binary",
+        "bounds": [
+          16,
+          8,
+          111,
+          120
+        ]
+      },
+      "spritecook_asset": {
+        "asset_id": "e176b837-30e9-477c-bfbe-ddd8c177ae37",
+        "sha12": "bb05c05cc0a8",
+        "label": "Тёплый вязаный шарф"
+      }
+    },
+    {
+      "id": "headwear.goggles",
+      "label": "Защитные очки с ремешком",
+      "providerCrop": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "size": 128,
+      "padding": 8,
+      "alphaCutoff": 128,
+      "source": "assets/source/ui/inventory-r01/goggles.aseprite",
+      "generated": "assets/generated/ui/inventory-r01/goggles.png",
+      "url": "/assets/items/goggles_reviewed.png",
+      "sourceSha256": "4e6996d3982bcdb4cf13066753d5e2a12538506f3c908820c68b9bbdbfed3e4e",
+      "output": {
+        "sha256": "58a14d45135f70eb6215f6c613a65437cfaaa058323bca13683fe4f5e378dc21",
+        "bytes": 16811,
+        "dimensions": [
+          128,
+          128
+        ],
+        "alpha": "binary",
+        "bounds": [
+          8,
+          25,
+          120,
+          102
+        ]
+      },
+      "spritecook_asset": {
+        "asset_id": "470cbafa-6aa4-406c-9884-c165846aa375",
+        "sha12": "58a14d45135f",
+        "label": "Защитные очки с ремешком"
+      }
+    },
+    {
+      "id": "badge.meteo",
+      "label": "Значок метеонаблюдений",
+      "providerCrop": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "size": 128,
+      "padding": 8,
+      "alphaCutoff": 128,
+      "source": "assets/source/ui/inventory-r01/badge_meteo.aseprite",
+      "generated": "assets/generated/ui/inventory-r01/badge_meteo.png",
+      "url": "/assets/items/badge_meteo_reviewed.png",
+      "sourceSha256": "2a9aa1b8757b4a99cfde7837b871c6df2509fd3510c54dcfa30c7b691caa9680",
+      "output": {
+        "sha256": "dbea7ed3ce32af15321f59fb857763b2cbd10062d08a95e804030de261ffa0a6",
+        "bytes": 22369,
+        "dimensions": [
+          128,
+          128
+        ],
+        "alpha": "binary",
+        "bounds": [
+          10,
+          8,
+          118,
+          120
+        ]
+      },
+      "spritecook_asset": {
+        "asset_id": "061e66c9-15e5-458f-919c-344433d3e0c7",
+        "sha12": "dbea7ed3ce32",
+        "label": "Значок метеонаблюдений"
+      }
+    },
+    {
+      "id": "badge.aerology",
+      "label": "Значок аэрологии",
+      "providerCrop": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "size": 128,
+      "padding": 8,
+      "alphaCutoff": 128,
+      "source": "assets/source/ui/inventory-r01/badge_aerology.aseprite",
+      "generated": "assets/generated/ui/inventory-r01/badge_aerology.png",
+      "url": "/assets/items/badge_aerology_reviewed.png",
+      "sourceSha256": "7115848d981a75dcb80478a114016b50b76b88789e0a6570ba63f20d8a3d4186",
+      "output": {
+        "sha256": "fc2c2784018997d87bcbc750a3beb660fe0a8fb49f12b947a19186f1ddcc38d4",
+        "bytes": 20605,
+        "dimensions": [
+          128,
+          128
+        ],
+        "alpha": "binary",
+        "bounds": [
+          10,
+          8,
+          118,
+          120
+        ]
+      },
+      "spritecook_asset": {
+        "asset_id": "9a2e69f9-4f40-4ff2-800c-447681878c00",
+        "sha12": "fc2c27840189",
+        "label": "Значок аэрологии"
+      }
+    }
+  ],
+  "source_format": "aseprite-rgba-frames-tags-v1",
+  "spritecook": {
+    "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+    "collection_id": "ed734855-679a-4f57-89ea-23b69a563c64",
+    "operation": "upload finalized exported PNGs; no generation or background-removal job",
+    "credits_before": 720,
+    "credits_after": 720,
+    "credits_used": 0
+  }
+}

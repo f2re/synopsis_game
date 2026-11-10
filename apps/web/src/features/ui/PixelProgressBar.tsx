@@ -1,4 +1,5 @@
 import React from 'react';
+import './PixelProgressBar.css';
 
 export interface PixelProgressBarProps {
   value: number;

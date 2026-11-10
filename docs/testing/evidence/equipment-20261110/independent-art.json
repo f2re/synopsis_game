@@ -1,0 +1,163 @@
+{
+  "status": "PASS",
+  "assets": [
+    {
+      "id": "inventory.badge.starter",
+      "png": "assets/generated/ui/equipment-r01/badge_starter.png",
+      "sha256": "a668ce6de2695f4c8d4769709ef002b5728a07013f1ed9e6d5ddeadb28456dc1",
+      "sourceSha256": "b001cd244087b62b103ef93a0ea3f0e4177323f9e0e649d558e0d3b89e8dd6f9",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bytes": 15970,
+      "decodedBytes": 65536,
+      "aseprite": {
+        "frames": 1,
+        "width": 128,
+        "height": 128,
+        "depth": 32
+      },
+      "alphaValues": [
+        0,
+        255
+      ],
+      "bounds": [
+        18,
+        10,
+        110,
+        118
+      ],
+      "visibleColors": 4041,
+      "byteEqualPublic": true,
+      "byteEqualSourceExport": true
+    },
+    {
+      "id": "inventory.badge.first_shift",
+      "png": "assets/generated/ui/equipment-r01/badge_first_shift.png",
+      "sha256": "1e8736e1755d06af65048bd1bf30c19adf113899268aabe3d60e51e3820322ab",
+      "sourceSha256": "5991367395e3d7ccd25da11e40fdcb45259212cf8b0267c84eb12454b5d4587e",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bytes": 14221,
+      "decodedBytes": 65536,
+      "aseprite": {
+        "frames": 1,
+        "width": 128,
+        "height": 128,
+        "depth": 32
+      },
+      "alphaValues": [
+        0,
+        255
+      ],
+      "bounds": [
+        25,
+        10,
+        102,
+        118
+      ],
+      "visibleColors": 4041,
+      "byteEqualPublic": true,
+      "byteEqualSourceExport": true
+    },
+    {
+      "id": "inventory.badge.accuracy",
+      "png": "assets/generated/ui/equipment-r01/badge_accuracy.png",
+      "sha256": "d47338108ee9b85b63f9bdf81fd0257e003105141889852e00e9eb0edf349410",
+      "sourceSha256": "d9fcd1f5b47bb1ceec7420da57c50071168fd05acafbc165b8791d5c71fb1cec",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bytes": 17614,
+      "decodedBytes": 65536,
+      "aseprite": {
+        "frames": 1,
+        "width": 128,
+        "height": 128,
+        "depth": 32
+      },
+      "alphaValues": [
+        0,
+        255
+      ],
+      "bounds": [
+        19,
+        10,
+        108,
+        118
+      ],
+      "visibleColors": 4788,
+      "byteEqualPublic": true,
+      "byteEqualSourceExport": true
+    },
+    {
+      "id": "inventory.badge.regular",
+      "png": "assets/generated/ui/equipment-r01/badge_regular.png",
+      "sha256": "32be10ce703fd3d40f9d3163f274e350c0adebdb16843908ddff744a7959223e",
+      "sourceSha256": "ac8bb58808773359c0dafbf6d2ea3940e2b316a488e9260097d92c41ac34d0b2",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bytes": 13773,
+      "decodedBytes": 65536,
+      "aseprite": {
+        "frames": 1,
+        "width": 128,
+        "height": 128,
+        "depth": 32
+      },
+      "alphaValues": [
+        0,
+        255
+      ],
+      "bounds": [
+        26,
+        10,
+        101,
+        118
+      ],
+      "visibleColors": 3706,
+      "byteEqualPublic": true,
+      "byteEqualSourceExport": true
+    },
+    {
+      "id": "inventory.scene.wardrobe",
+      "png": "assets/generated/ui/equipment-r01/wardrobe-room.png",
+      "sha256": "c43748cee0bf727c9cd3e6a6a5634fcbed021482be4afa35e8098e1be5122e9b",
+      "sourceSha256": "82082956a7c4277a4d6ac8508ac757de3ced9ce81ccd0d1a88519fa78eb337bb",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "bytes": 2497361,
+      "decodedBytes": 6293408,
+      "aseprite": {
+        "frames": 1,
+        "width": 1672,
+        "height": 941,
+        "depth": 32
+      },
+      "alphaValues": [
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "visibleColors": 462567,
+      "byteEqualPublic": true,
+      "byteEqualSourceExport": true
+    }
+  ],
+  "totals": {
+    "pngBytes": 2558939,
+    "decodedBytes": 6555552
+  }
+}

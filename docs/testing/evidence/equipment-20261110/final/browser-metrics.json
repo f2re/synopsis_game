@@ -1,0 +1,213 @@
+{
+  "executedAt": "2026-11-10T09:31:48.733Z",
+  "states": [
+    {
+      "brokenImages": [],
+      "documentWidth": 337,
+      "smallButtons": [],
+      "state": "badges-narrow-400pct",
+      "viewport": {
+        "height": 234,
+        "width": 340
+      }
+    },
+    {
+      "brokenImages": [],
+      "documentWidth": 337,
+      "state": "inventory-narrow-400pct",
+      "viewport": {
+        "height": 234,
+        "width": 340
+      }
+    },
+    {
+      "characters": {
+        "actors": [
+          {
+            "frames": 8,
+            "id": "character.r01.observer",
+            "pivot": [
+              0.5,
+              0.9555555555555556
+            ],
+            "state": "walk"
+          },
+          {
+            "frames": 6,
+            "id": "npc.r01.vera",
+            "pivot": [
+              0.5,
+              0.9555555555555556
+            ],
+            "state": "idle"
+          },
+          {
+            "frames": 6,
+            "id": "companion.r01.pascal",
+            "pivot": [
+              0.5,
+              0.9444444444444444
+            ],
+            "state": "idle"
+          }
+        ],
+        "animatedActors": 3,
+        "animationBudget": 3,
+        "artAccepted": true,
+        "characterClass": "r01-detailed-actor",
+        "errors": [],
+        "lowPower": false,
+        "personalizationScope": "inventory-preview",
+        "playerPresent": false,
+        "reducedMotion": false,
+        "selectedCompanion": "companion.none",
+        "selectedCompanionReady": true,
+        "selectedItem": "held.pencil",
+        "selectedItemReady": false,
+        "visibleActors": 3
+      },
+      "context": "ready",
+      "fpsLimit": "60",
+      "state": "hub-normal"
+    },
+    {
+      "characters": {
+        "actors": [
+          {
+            "frames": 1,
+            "id": "character.r01.observer",
+            "pivot": [
+              0.5,
+              0.9555555555555556
+            ],
+            "state": "idle"
+          },
+          {
+            "frames": 6,
+            "id": "npc.r01.vera",
+            "pivot": [
+              0.5,
+              0.9555555555555556
+            ],
+            "state": "idle"
+          },
+          {
+            "frames": 6,
+            "id": "companion.r01.pascal",
+            "pivot": [
+              0.5,
+              0.9444444444444444
+            ],
+            "state": "idle"
+          }
+        ],
+        "animatedActors": 0,
+        "animationBudget": 3,
+        "artAccepted": true,
+        "characterClass": "r01-detailed-actor",
+        "errors": [],
+        "lowPower": false,
+        "personalizationScope": "inventory-preview",
+        "playerPresent": false,
+        "reducedMotion": true,
+        "selectedCompanion": "companion.none",
+        "selectedCompanionReady": true,
+        "selectedItem": "held.pencil",
+        "selectedItemReady": false,
+        "visibleActors": 3
+      },
+      "fpsLimit": "60",
+      "state": "hub-reduced"
+    },
+    {
+      "characters": {
+        "actors": [
+          {
+            "frames": 8,
+            "id": "character.r01.observer",
+            "pivot": [
+              0.5,
+              0.9555555555555556
+            ],
+            "state": "walk"
+          },
+          {
+            "frames": 6,
+            "id": "npc.r01.vera",
+            "pivot": [
+              0.5,
+              0.9555555555555556
+            ],
+            "state": "idle"
+          },
+          {
+            "frames": 6,
+            "id": "companion.r01.pascal",
+            "pivot": [
+              0.5,
+              0.9444444444444444
+            ],
+            "state": "idle"
+          }
+        ],
+        "animatedActors": 3,
+        "animationBudget": 3,
+        "artAccepted": true,
+        "characterClass": "r01-detailed-actor",
+        "errors": [],
+        "lowPower": true,
+        "personalizationScope": "inventory-preview",
+        "playerPresent": false,
+        "reducedMotion": false,
+        "selectedCompanion": "companion.none",
+        "selectedCompanionReady": true,
+        "selectedItem": "held.pencil",
+        "selectedItemReady": false,
+        "visibleActors": 3
+      },
+      "fpsLimit": "30",
+      "state": "hub-low-power"
+    },
+    {
+      "state": "pressure-30218",
+      "displayed": "1021.8 гПа",
+      "observedVia": "accessible feedback and screenshot"
+    },
+    {
+      "brokenImages": [],
+      "documentWidth": 1348,
+      "state": "badges-desktop-loaded",
+      "viewport": {
+        "height": 936,
+        "width": 1363
+      }
+    },
+    {
+      "state": "task-number-with-feedback",
+      "task": 4,
+      "answered": 4,
+      "nextTask": 5,
+      "observed": "Задание 4 из 10, 40%, вопрос 57103 и его разбор"
+    }
+  ],
+  "completedShift": {
+    "answers": 10,
+    "firstAttemptCorrect": 8,
+    "unassistedCorrect": 8,
+    "assistedTasks": 1,
+    "newBadges": [
+      "badge.first_shift",
+      "badge.accuracy"
+    ],
+    "selectedBadge": "badge.accuracy",
+    "nextShift": {
+      "reference": 1,
+      "retry": 2
+    }
+  },
+  "notes": [
+    "Test profile and isolated local stores; no production learner data.",
+    "Narrow layout tested by ordinary Chromium zoom400%, not physical mobile or GPU profiling.",
+    "Pressure screenshot predates only the final task-number display fix; shift-header-final shows that fix."
+  ]
+}

@@ -11,6 +11,8 @@ import {
 } from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
 import { ShiftError, ShiftService } from './modules/shift/shiftService.js';
+import { EquipmentService } from './modules/equipment/equipmentService.js';
+import { EquipmentError } from './modules/equipment/model.js';
 import { rejectUnverifiedClientProgressionWrite } from './modules/progression/progressionMutationPolicy.js';
 import {
   ProgressionError,
@@ -29,6 +31,7 @@ const ATTEMPT_LOG_PATH = process.env.SYNOPSIS_ATTEMPT_LOG ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/attempts.jsonl' : resolve(MODULE_DIR, '../.local/attempts.jsonl'));
 const PROGRESSION_STORE = process.env.SYNOPSIS_PROGRESSION_STORE ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/progression.json' : resolve(process.cwd(), '.local/progression.json'));
+const EQUIPMENT_STORE = process.env.SYNOPSIS_EQUIPMENT_STORE ?? resolve(dirname(STORE_PATH), 'equipment.json');
 const startedAt = new Date().toISOString();
 const version = process.env.SYNOPSIS_VERSION ?? (() => {
   try {
@@ -40,7 +43,8 @@ const version = process.env.SYNOPSIS_VERSION ?? (() => {
 
 const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE });
 await identity.init();
-const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH });
+const equipment = new EquipmentService({ storePath: EQUIPMENT_STORE });
+const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH, equipment });
 await shifts.init();
 const progression = new ProgressionService({ storePath: PROGRESSION_STORE });
 await progression.loadState();
@@ -82,7 +86,9 @@ async function readJson(request: IncomingMessage): Promise<Record<string, unknow
   }
   if (chunks.length === 0) return {};
   try {
-    return JSON.parse(Buffer.concat(chunks).toString('utf8')) as Record<string, unknown>;
+    const value: unknown = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Ожидался JSON-объект');
+    return value as Record<string, unknown>;
   } catch {
     throw new IdentityError(400, 'Некорректный JSON', 'invalid_json');
   }
@@ -173,9 +179,32 @@ const server = createServer(async (request, response) => {
       return;
     }
 
+    if (request.method === 'GET' && path === '/api/equipment') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, equipment.getEquipment(user.id, user.avatar));
+      return;
+    }
+    if (request.method === 'PATCH' && path === '/api/equipment/loadout') {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      sendJson(response, 200, await equipment.setLoadout(user.id, body.badgeId, user.avatar));
+      return;
+    }
+
     if (request.method === 'POST' && path === '/api/shifts') {
       const user = identity.me(bearer(request));
-      sendJson(response, 201, shifts.startShift(user.id));
+      sendJson(response, 201, await shifts.startShift(user.id, user.avatar));
+      return;
+    }
+    const shiftEffectMatch = path.match(/^\/api\/shifts\/([^/]+)\/(reference|reveal)$/);
+    if (request.method === 'POST' && shiftEffectMatch) {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      const shiftId = decodeURIComponent(shiftEffectMatch[1]);
+      const instanceId = typeof body.instanceId === 'string' ? body.instanceId : '';
+      sendJson(response, 200, shiftEffectMatch[2] === 'reference'
+        ? await shifts.openReference(user.id, shiftId, instanceId)
+        : await shifts.revealAnswer(user.id, shiftId, instanceId));
       return;
     }
     const shiftTaskMatch = path.match(/^\/api\/shifts\/([^/]+)\/task$/);
@@ -193,6 +222,7 @@ const server = createServer(async (request, response) => {
         String(body.shiftId ?? ''),
         decodeURIComponent(taskAnswerMatch[1]),
         body.answer,
+        body.attempt ?? 1,
       ));
       return;
     }
@@ -280,7 +310,7 @@ const server = createServer(async (request, response) => {
     }
     sendJson(response, 404, { error: 'Маршрут не найден', code: 'not_found' });
   } catch (error) {
-    if (error instanceof IdentityError || error instanceof ShiftError || error instanceof ProgressionError) {
+    if (error instanceof IdentityError || error instanceof ShiftError || error instanceof ProgressionError || error instanceof EquipmentError) {
       sendJson(response, error.status, { error: error.message, code: error.code });
       return;
     }

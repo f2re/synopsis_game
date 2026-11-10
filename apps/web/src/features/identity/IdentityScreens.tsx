@@ -77,7 +77,7 @@ export function LoginScreen({
     <section className="panel login-panel" aria-labelledby="login-title">
       <div className="login-header-row">
         <div className="brand-mark" aria-hidden="true">
-          <img src="/ui/ui_station_crest_badge_v2.png" alt="" className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+          <img src="/ui/ui_station_crest_badge_v2.png" alt="" width={56} height={64} className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; if (e.currentTarget.parentElement) e.currentTarget.parentElement.dataset.imageFailed = 'true'; }} />
           <span className="brand-mark-fallback">☁</span>
         </div>
         {onClose && (
@@ -205,7 +205,7 @@ export function AdminLoginScreen({
       <section className="panel login-panel" aria-labelledby="admin-login-title">
         <div className="login-header-row">
           <div className="brand-mark" aria-hidden="true">
-            <img src="/ui/ui_station_crest_badge_v2.png" alt="" className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            <img src="/ui/ui_station_crest_badge_v2.png" alt="" width={56} height={64} className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; if (e.currentTarget.parentElement) e.currentTarget.parentElement.dataset.imageFailed = 'true'; }} />
             <span className="brand-mark-fallback">⚙</span>
           </div>
           <button type="button" className="ghost-button login-close-button" onClick={onBack} aria-label="Назад" title="Вернуться на главную">

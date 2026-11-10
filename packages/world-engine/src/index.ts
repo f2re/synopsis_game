@@ -1,4 +1,6 @@
 export { createWorldGame, WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './runtime/createWorldGame';
+export { normalizeWorldPreferences, DEFAULT_WORLD_PREFERENCES } from './runtime/uiPreferences';
+export type { WorldUiPreferences, WorldInteractionTarget } from './runtime/uiPreferences';
 export {
   calculateIntegerPassepartout,
   fitLogicalViewport,
@@ -64,3 +66,6 @@ export {
   type AmbientCycle,
   type FindingDiscovery,
 } from './world/hubSchedule';
+
+export { normalizeAvatarPresentation } from './runtime/characterAssets';
+export type { WorldAvatarPresentation } from './runtime/characterAssets';

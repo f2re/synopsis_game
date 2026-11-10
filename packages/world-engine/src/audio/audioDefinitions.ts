@@ -63,283 +63,360 @@ export class ShuffleBag<T> {
   }
 }
 
+// BEGIN generated audio definitions
+// Source: assets/manifests/audio.collection.json; regenerate with npm run sync:audio in this package.
+// Source SHA-256: e0abe23c6050bacc20ee9efba9f1f9dcb9490ecde635dcd89e35e6977a71dd5e
 export const SOUND_DEFINITIONS: Record<string, SoundDefinition> = {
-  // --- Эмбиент-петли (Взаимно простые длительности) ---
-  'audio.ambience.wind-loop': {
-    id: 'audio.ambience.wind-loop',
-    url: '/assets/audio/ambience/wind_light_loop.wav',
-    compressedUrl: '/assets/audio/ambience/wind_light_loop.opus.ogg',
-    channel: 'ambient',
-    defaultVolume: 0.45,
-    loop: true,
+  "audio.ambient.wind-trees": {
+    "id": "audio.ambient.wind-trees",
+    "url": "/audio/ambient/amb_wind_trees_bed.wav",
+    "compressedUrl": "/audio/ambient/amb_wind_trees_bed.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.45,
+    "loop": true
   },
-  'audio.ambience.surf-loop': {
-    id: 'audio.ambience.surf-loop',
-    url: '/assets/audio/ambience/gulf_surf_loop.wav',
-    compressedUrl: '/assets/audio/ambience/gulf_surf_loop.opus.ogg',
-    channel: 'ambient',
-    defaultVolume: 0.35,
-    loop: true,
+  "audio.ambient.water-shore": {
+    "id": "audio.ambient.water-shore",
+    "url": "/audio/ambient/amb_water_shore_bed.wav",
+    "compressedUrl": "/audio/ambient/amb_water_shore_bed.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.4,
+    "loop": true
   },
-  'audio.ambience.rain-loop': {
-    id: 'audio.ambience.rain-loop',
-    url: '/assets/audio/ambience/rain_moderate_loop.wav',
-    compressedUrl: '/assets/audio/ambience/rain_moderate_loop.opus.ogg',
-    channel: 'ambient',
-    defaultVolume: 0.4,
-    loop: true,
+  "audio.ambient.rain-soft": {
+    "id": "audio.ambient.rain-soft",
+    "url": "/audio/ambient/amb_rain_soft_bed.wav",
+    "compressedUrl": "/audio/ambient/amb_rain_soft_bed.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.35,
+    "loop": true
   },
-  'audio.ambience.room-archive-hum': {
-    id: 'audio.ambience.room-archive-hum',
-    url: '/assets/audio/ambience/room_archive_hum.wav',
-    compressedUrl: '/assets/audio/ambience/room_archive_hum.opus.ogg',
-    channel: 'ambient',
-    defaultVolume: 0.3,
-    loop: true,
+  "audio.ambient.archive-room": {
+    "id": "audio.ambient.archive-room",
+    "url": "/audio/ambient/amb_archive_room_bed.wav",
+    "compressedUrl": "/audio/ambient/amb_archive_room_bed.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.35,
+    "loop": true
   },
-
-  // --- Фауна (Органичные спорадические голоса птиц) ---
-  'audio.fauna.tit-chirp': {
-    id: 'audio.fauna.tit-chirp',
-    url: '/assets/audio/fauna/tit_chirp_01.wav',
-    channel: 'ambient',
-    defaultVolume: 0.5,
-    loop: false,
-    variations: [
-      '/assets/audio/fauna/tit_chirp_01.wav',
-      '/assets/audio/fauna/tit_chirp_02.wav',
-      '/assets/audio/fauna/tit_chirp_03.wav',
-    ],
+  "audio.ambient.night-air": {
+    "id": "audio.ambient.night-air",
+    "url": "/audio/ambient/amb_night_air_bed.wav",
+    "compressedUrl": "/audio/ambient/amb_night_air_bed.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.35,
+    "loop": true
   },
-  'audio.fauna.chaffinch-trill': {
-    id: 'audio.fauna.chaffinch-trill',
-    url: '/assets/audio/fauna/chaffinch_trill_01.wav',
-    channel: 'ambient',
-    defaultVolume: 0.45,
-    loop: false,
-    variations: [
-      '/assets/audio/fauna/chaffinch_trill_01.wav',
-      '/assets/audio/fauna/chaffinch_trill_02.wav',
-    ],
+  "audio.ambient.pine-creak-01": {
+    "id": "audio.ambient.pine-creak-01",
+    "url": "/audio/ambient/amb_pine_creak_01.wav",
+    "compressedUrl": "/audio/ambient/amb_pine_creak_01.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-  'audio.fauna.gull-distant': {
-    id: 'audio.fauna.gull-distant',
-    url: '/assets/audio/fauna/gull_distant_01.wav',
-    channel: 'ambient',
-    defaultVolume: 0.35,
-    loop: false,
-    variations: [
-      '/assets/audio/fauna/gull_distant_01.wav',
-      '/assets/audio/fauna/gull_distant_02.wav',
-      '/assets/audio/fauna/gull_distant_03.wav',
-    ],
+  "audio.ambient.pine-creak-02": {
+    "id": "audio.ambient.pine-creak-02",
+    "url": "/audio/ambient/amb_pine_creak_02.wav",
+    "compressedUrl": "/audio/ambient/amb_pine_creak_02.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
   },
-  'audio.fauna.crow-caw': {
-    id: 'audio.fauna.crow-caw',
-    url: '/assets/audio/fauna/crow_caw.wav',
-    channel: 'ambient',
-    defaultVolume: 0.4,
-    loop: false,
+  "audio.ambient.pine-creak-03": {
+    "id": "audio.ambient.pine-creak-03",
+    "url": "/audio/ambient/amb_pine_creak_03.wav",
+    "compressedUrl": "/audio/ambient/amb_pine_creak_03.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-  'audio.fauna.squirrel-scurry': {
-    id: 'audio.fauna.squirrel-scurry',
-    url: '/assets/audio/fauna/squirrel_scurry.wav',
-    channel: 'ambient',
-    defaultVolume: 0.45,
-    loop: false,
+  "audio.ambient.wind-gust-01": {
+    "id": "audio.ambient.wind-gust-01",
+    "url": "/audio/ambient/amb_wind_gust_01.wav",
+    "compressedUrl": "/audio/ambient/amb_wind_gust_01.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.55,
+    "loop": false
   },
-
-  // --- Оборудование метеостанции (Аутентичные ретро-приборы) ---
-  'audio.equipment.barometer-tick': {
-    id: 'audio.equipment.barometer-tick',
-    url: '/assets/audio/equipment/barometer_tick.wav',
-    channel: 'effects',
-    defaultVolume: 0.55,
-    loop: false,
+  "audio.ambient.wind-gust-02": {
+    "id": "audio.ambient.wind-gust-02",
+    "url": "/audio/ambient/amb_wind_gust_02.wav",
+    "compressedUrl": "/audio/ambient/amb_wind_gust_02.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.5,
+    "loop": false
   },
-  'audio.equipment.clock-pendulum': {
-    id: 'audio.equipment.clock-pendulum',
-    url: '/assets/audio/equipment/clock_pendulum.wav',
-    channel: 'effects',
-    defaultVolume: 0.3,
-    loop: false,
+  "audio.ambient.foghorn-distant": {
+    "id": "audio.ambient.foghorn-distant",
+    "url": "/audio/ambient/amb_foghorn_distant.wav",
+    "compressedUrl": "/audio/ambient/amb_foghorn_distant.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.4,
+    "loop": false
   },
-  'audio.equipment.teletype-clatter': {
-    id: 'audio.equipment.teletype-clatter',
-    url: '/assets/audio/equipment/teletype_clatter.wav',
-    channel: 'effects',
-    defaultVolume: 0.5,
-    loop: false,
+  "audio.fauna.tit-chirp-01": {
+    "id": "audio.fauna.tit-chirp-01",
+    "url": "/audio/fauna/fauna_tit_chirp_01.wav",
+    "compressedUrl": "/audio/fauna/fauna_tit_chirp_01.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-  'audio.equipment.anemometer-spin': {
-    id: 'audio.equipment.anemometer-spin',
-    url: '/assets/audio/equipment/anemometer_spin.wav',
-    channel: 'effects',
-    defaultVolume: 0.4,
-    loop: false,
+  "audio.fauna.tit-chirp-02": {
+    "id": "audio.fauna.tit-chirp-02",
+    "url": "/audio/fauna/fauna_tit_chirp_02.wav",
+    "compressedUrl": "/audio/fauna/fauna_tit_chirp_02.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-  'audio.equipment.hygrograph-scrape': {
-    id: 'audio.equipment.hygrograph-scrape',
-    url: '/assets/audio/equipment/hygrograph_scrape.wav',
-    channel: 'effects',
-    defaultVolume: 0.4,
-    loop: false,
+  "audio.fauna.tit-chirp-03": {
+    "id": "audio.fauna.tit-chirp-03",
+    "url": "/audio/fauna/fauna_tit_chirp_03.wav",
+    "compressedUrl": "/audio/fauna/fauna_tit_chirp_03.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-
-  // --- Взаимодействие с миром (Интерьер и физика) ---
-  'audio.interact.door-latch': {
-    id: 'audio.interact.door-latch',
-    url: '/assets/audio/interact/door_latch_heavy.wav',
-    channel: 'effects',
-    defaultVolume: 0.6,
-    loop: false,
+  "audio.fauna.finch-trill-01": {
+    "id": "audio.fauna.finch-trill-01",
+    "url": "/audio/fauna/fauna_finch_trill_01.wav",
+    "compressedUrl": "/audio/fauna/fauna_finch_trill_01.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
   },
-  'audio.interact.drawer-slide': {
-    id: 'audio.interact.drawer-slide',
-    url: '/assets/audio/interact/drawer_slide.wav',
-    channel: 'effects',
-    defaultVolume: 0.5,
-    loop: false,
+  "audio.fauna.finch-trill-02": {
+    "id": "audio.fauna.finch-trill-02",
+    "url": "/audio/fauna/fauna_finch_trill_02.wav",
+    "compressedUrl": "/audio/fauna/fauna_finch_trill_02.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
   },
-  'audio.interact.teacup-clink': {
-    id: 'audio.interact.teacup-clink',
-    url: '/assets/audio/interact/teacup_clink.wav',
-    channel: 'effects',
-    defaultVolume: 0.45,
-    loop: false,
+  "audio.fauna.gull-distant-01": {
+    "id": "audio.fauna.gull-distant-01",
+    "url": "/audio/fauna/fauna_gull_distant_01.wav",
+    "compressedUrl": "/audio/fauna/fauna_gull_distant_01.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.35,
+    "loop": false
   },
-  'audio.interact.steps-wood': {
-    id: 'audio.interact.steps-wood',
-    url: '/assets/audio/interact/steps_wood_01.wav',
-    channel: 'effects',
-    defaultVolume: 0.45,
-    loop: false,
-    variations: [
-      '/assets/audio/interact/steps_wood_01.wav',
-      '/assets/audio/interact/steps_wood_02.wav',
-      '/assets/audio/interact/steps_wood_03.wav',
-      '/assets/audio/interact/steps_wood_04.wav',
-    ],
+  "audio.fauna.gull-distant-02": {
+    "id": "audio.fauna.gull-distant-02",
+    "url": "/audio/fauna/fauna_gull_distant_02.wav",
+    "compressedUrl": "/audio/fauna/fauna_gull_distant_02.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.35,
+    "loop": false
   },
-  'audio.interact.steps-gravel': {
-    id: 'audio.interact.steps-gravel',
-    url: '/assets/audio/interact/steps_gravel_01.wav',
-    channel: 'effects',
-    defaultVolume: 0.4,
-    loop: false,
-    variations: [
-      '/assets/audio/interact/steps_gravel_01.wav',
-      '/assets/audio/interact/steps_gravel_02.wav',
-      '/assets/audio/interact/steps_gravel_03.wav',
-    ],
+  "audio.fauna.gull-distant-03": {
+    "id": "audio.fauna.gull-distant-03",
+    "url": "/audio/fauna/fauna_gull_distant_03.wav",
+    "compressedUrl": "/audio/fauna/fauna_gull_distant_03.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.35,
+    "loop": false
   },
-
-  // --- Экипировка и картография ---
-  'audio.equip.cloth-rustle': {
-    id: 'audio.equip.cloth-rustle',
-    url: '/assets/audio/equip/cloth_rustle.wav',
-    channel: 'effects',
-    defaultVolume: 0.45,
-    loop: false,
+  "audio.fauna.woodpecker-drum": {
+    "id": "audio.fauna.woodpecker-drum",
+    "url": "/audio/fauna/fauna_woodpecker_drum.wav",
+    "compressedUrl": "/audio/fauna/fauna_woodpecker_drum.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
   },
-  'audio.equip.paper-turn': {
-    id: 'audio.equip.paper-turn',
-    url: '/assets/audio/equip/paper_turn.wav',
-    channel: 'effects',
-    defaultVolume: 0.5,
-    loop: false,
+  "audio.fauna.crow-distant": {
+    "id": "audio.fauna.crow-distant",
+    "url": "/audio/fauna/fauna_crow_distant.wav",
+    "compressedUrl": "/audio/fauna/fauna_crow_distant.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.45,
+    "loop": false
   },
-  'audio.equip.pencil-write': {
-    id: 'audio.equip.pencil-write',
-    url: '/assets/audio/equip/pencil_write.wav',
-    channel: 'effects',
-    defaultVolume: 0.55,
-    loop: false,
+  "audio.fauna.squirrel-scurry": {
+    "id": "audio.fauna.squirrel-scurry",
+    "url": "/audio/fauna/fauna_squirrel_scurry.wav",
+    "compressedUrl": "/audio/fauna/fauna_squirrel_scurry.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-
-  // --- UI и навигация ---
-  'audio.ui.click-soft': {
-    id: 'audio.ui.click-soft',
-    url: '/assets/audio/ui/click_soft.wav',
-    channel: 'ui',
-    defaultVolume: 0.5,
-    loop: false,
+  "audio.equip.barograph-tick": {
+    "id": "audio.equip.barograph-tick",
+    "url": "/audio/equipment/equip_barograph_tick.wav",
+    "compressedUrl": "/audio/equipment/equip_barograph_tick.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.7,
+    "loop": false
   },
-  'audio.ui.tab-switch': {
-    id: 'audio.ui.tab-switch',
-    url: '/assets/audio/ui/tab_switch.wav',
-    channel: 'ui',
-    defaultVolume: 0.45,
-    loop: false,
+  "audio.equip.clockwork-hum": {
+    "id": "audio.equip.clockwork-hum",
+    "url": "/audio/equipment/equip_clockwork_hum.wav",
+    "compressedUrl": "/audio/equipment/equip_clockwork_hum.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.5,
+    "loop": false
   },
-  'audio.ui.toggle-lever': {
-    id: 'audio.ui.toggle-lever',
-    url: '/assets/audio/ui/toggle_lever.wav',
-    channel: 'ui',
-    defaultVolume: 0.6,
-    loop: false,
+  "audio.equip.lamp-switch": {
+    "id": "audio.equip.lamp-switch",
+    "url": "/audio/equipment/equip_lamp_switch.wav",
+    "compressedUrl": "/audio/equipment/equip_lamp_switch.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.75,
+    "loop": false
   },
-  'audio.ui.error-buzz': {
-    id: 'audio.ui.error-buzz',
-    url: '/assets/audio/ui/error_buzz.wav',
-    channel: 'ui',
-    defaultVolume: 0.5,
-    loop: false,
+  "audio.equip.paper-turn": {
+    "id": "audio.equip.paper-turn",
+    "url": "/audio/equipment/equip_paper_turn.wav",
+    "compressedUrl": "/audio/equipment/equip_paper_turn.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-
-  // --- Обратная связь задач КН-01 (Педагогические стимулы) ---
-  'audio.feedback.synoptic-chime': {
-    id: 'audio.feedback.synoptic-chime',
-    url: '/assets/audio/feedback/synoptic_chime_c_major.wav',
-    channel: 'effects',
-    defaultVolume: 0.6,
-    loop: false,
+  "audio.equip.teletype-chatter": {
+    "id": "audio.equip.teletype-chatter",
+    "url": "/audio/equipment/equip_teletype_chatter.wav",
+    "compressedUrl": "/audio/equipment/equip_teletype_chatter.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.6,
+    "loop": false
   },
-  'audio.feedback.mistake-thud': {
-    id: 'audio.feedback.mistake-thud',
-    url: '/assets/audio/feedback/mistake_soft_thud.wav',
-    channel: 'effects',
-    defaultVolume: 0.5,
-    loop: false,
+  "audio.interact.radar-pulse": {
+    "id": "audio.interact.radar-pulse",
+    "url": "/audio/interact/interact_radar_pulse.wav",
+    "compressedUrl": "/audio/interact/interact_radar_pulse.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.7,
+    "loop": false
   },
-  'audio.feedback.streak-ascend': {
-    id: 'audio.feedback.streak-ascend',
-    url: '/assets/audio/feedback/streak_ascend.wav',
-    channel: 'effects',
-    defaultVolume: 0.6,
-    loop: false,
+  "audio.interact.balloon-release": {
+    "id": "audio.interact.balloon-release",
+    "url": "/audio/interact/interact_balloon_release.wav",
+    "compressedUrl": "/audio/interact/interact_balloon_release.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-  'audio.feedback.storm-warning': {
-    id: 'audio.feedback.storm-warning',
-    url: '/assets/audio/feedback/storm_warning_horn.wav',
-    channel: 'effects',
-    defaultVolume: 0.65,
-    loop: false,
+  "audio.interact.anemometer-spin": {
+    "id": "audio.interact.anemometer-spin",
+    "url": "/audio/interact/interact_anemometer_spin.wav",
+    "compressedUrl": "/audio/interact/interact_anemometer_spin.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.65,
+    "loop": false
   },
-
-  // --- Награды и торжественные вехи ---
-  'audio.reward.fanfare-short': {
-    id: 'audio.reward.fanfare-short',
-    url: '/assets/audio/reward/fanfare_short.wav',
-    channel: 'effects',
-    defaultVolume: 0.65,
-    loop: false,
+  "audio.interact.door-latch": {
+    "id": "audio.interact.door-latch",
+    "url": "/audio/interact/interact_door_latch.wav",
+    "compressedUrl": "/audio/interact/interact_door_latch.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.75,
+    "loop": false
   },
-  'audio.reward.stamp-verdict': {
-    id: 'audio.reward.stamp-verdict',
-    url: '/assets/audio/reward/stamp_verdict.wav',
-    channel: 'effects',
-    defaultVolume: 0.7,
-    loop: false,
+  "audio.ui.click-soft": {
+    "id": "audio.ui.click-soft",
+    "url": "/audio/feedback/ui_click_soft.wav",
+    "compressedUrl": "/audio/feedback/ui_click_soft.ogg",
+    "channel": "ui",
+    "defaultVolume": 0.8,
+    "loop": false
   },
-  'audio.reward.medal-shimmer': {
-    id: 'audio.reward.medal-shimmer',
-    url: '/assets/audio/reward/medal_shimmer.wav',
-    channel: 'effects',
-    defaultVolume: 0.55,
-    loop: false,
+  "audio.ui.hover-subtle": {
+    "id": "audio.ui.hover-subtle",
+    "url": "/audio/feedback/ui_hover_subtle.wav",
+    "compressedUrl": "/audio/feedback/ui_hover_subtle.ogg",
+    "channel": "ui",
+    "defaultVolume": 0.5,
+    "loop": false
   },
+  "audio.feedback.synoptic-chime": {
+    "id": "audio.feedback.synoptic-chime",
+    "url": "/audio/feedback/feedback_synoptic_chime.wav",
+    "compressedUrl": "/audio/feedback/feedback_synoptic_chime.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.85,
+    "loop": false
+  },
+  "audio.feedback.mistake-thud": {
+    "id": "audio.feedback.mistake-thud",
+    "url": "/audio/feedback/feedback_mistake_thud.wav",
+    "compressedUrl": "/audio/feedback/feedback_mistake_thud.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.75,
+    "loop": false
+  },
+  "audio.arena.round-start": {
+    "id": "audio.arena.round-start",
+    "url": "/audio/feedback/arena_round_start.wav",
+    "compressedUrl": "/audio/feedback/arena_round_start.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.85,
+    "loop": false
+  },
+  "audio.arena.countdown-tick": {
+    "id": "audio.arena.countdown-tick",
+    "url": "/audio/feedback/arena_countdown_tick.wav",
+    "compressedUrl": "/audio/feedback/arena_countdown_tick.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.75,
+    "loop": false
+  },
+  "audio.lore.callsign-26063": {
+    "id": "audio.lore.callsign-26063",
+    "url": "/audio/lore/lore_callsign_26063.wav",
+    "compressedUrl": "/audio/lore/lore_callsign_26063.ogg",
+    "channel": "effects",
+    "defaultVolume": 0.7,
+    "loop": false
+  },
+  "audio.ambient.pine-creak": {
+    "id": "audio.ambient.pine-creak",
+    "url": "/audio/ambient/amb_pine_creak.wav",
+    "compressedUrl": "/audio/ambient/amb_pine_creak.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
+  },
+  "audio.ambient.wind-gust": {
+    "id": "audio.ambient.wind-gust",
+    "url": "/audio/ambient/amb_wind_gust.wav",
+    "compressedUrl": "/audio/ambient/amb_wind_gust.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
+  },
+  "audio.fauna.tit-chirp": {
+    "id": "audio.fauna.tit-chirp",
+    "url": "/audio/fauna/fauna_tit_chirp.wav",
+    "compressedUrl": "/audio/fauna/fauna_tit_chirp.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
+  },
+  "audio.fauna.finch-trill": {
+    "id": "audio.fauna.finch-trill",
+    "url": "/audio/fauna/fauna_finch_trill.wav",
+    "compressedUrl": "/audio/fauna/fauna_finch_trill.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
+  },
+  "audio.fauna.gull-distant": {
+    "id": "audio.fauna.gull-distant",
+    "url": "/audio/fauna/fauna_gull_distant.wav",
+    "compressedUrl": "/audio/fauna/fauna_gull_distant.ogg",
+    "channel": "ambient",
+    "defaultVolume": 0.6,
+    "loop": false
+  }
 };
+// END generated audio definitions
+
+// The existing reward UI uses this legacy cue; the shipped positive chime is
+// the documented fallback until a dedicated reward cue enters the manifest.
+SOUND_DEFINITIONS['audio.reward.fanfare-short'] = SOUND_DEFINITIONS['audio.feedback.synoptic-chime'];
 
 export interface ActiveAmbientLayer {
   soundId: string;

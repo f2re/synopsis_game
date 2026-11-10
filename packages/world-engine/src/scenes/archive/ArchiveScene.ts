@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { worldAudio } from '../../audio/WorldAudioManager';
+import { worldBridge } from '../../bridge/WorldBridge';
 import { bindLogicalViewport } from '../../runtime/fitLogicalViewport';
 import { createPixelButton } from '../ui/createPixelButton';
 import {
@@ -24,6 +25,8 @@ export class ArchiveScene extends Phaser.Scene {
     this.drawActions();
     bindLogicalViewport(this);
     worldAudio.playArchiveAmbient(1500);
+    worldBridge.emit('world:interaction_layout', []);
+    worldBridge.notifySceneReady('archive');
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       worldAudio.stopAmbient(1000);
@@ -98,7 +101,7 @@ export class ArchiveScene extends Phaser.Scene {
       height: 24,
       label: 'Старые карты',
       state: 'locked',
-      onUnavailable: () => this.showNotice('Откроется после первой завершённой смены'),
+      onUnavailable: () => this.showNotice('Модуль архивных карт находится в разработке'),
     });
 
     createPixelButton(this, {

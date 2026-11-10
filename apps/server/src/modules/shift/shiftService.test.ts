@@ -11,7 +11,7 @@ test('первая смена не раскрывает ответ и сохра
     const attemptLogPath = join(directory, 'attempts.jsonl');
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath });
     await service.init();
-    const started = service.startShift('student-1');
+    const started = await service.startShift('student-1');
     assert.equal(started.task.definitionId, 'kn01_temp_001');
     assert.equal(JSON.stringify(started.task).includes('23.4'), false);
     assert.equal('answer' in started.task, false);
@@ -30,7 +30,7 @@ test('задания с выбором и последовательностью
   try {
     const service = new ShiftService({ contentRoot: resolve(process.cwd(), '../../content'), attemptLogPath: join(directory, 'attempts.jsonl') });
     await service.init();
-    const started = service.startShift('student-2');
+    const started = await service.startShift('student-2');
     let task = started.task;
     const shiftId = started.shiftId;
     for (const value of [23.4, -5.2, 1021.8]) {
@@ -43,7 +43,7 @@ test('задания с выбором и последовательностью
 });
 
 async function reachStationPlot(service: ShiftService, userId: string) {
-  const started = service.startShift(userId);
+  const started = await service.startShift(userId);
   const shiftId = started.shiftId;
   let task = started.task;
   for (const value of [23.4, -5.2, 1021.8]) {

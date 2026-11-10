@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "artAcceptance": "PASS",
+  "review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md",
+  "scene": {
+    "world_location": {
+      "id": "reference-campus",
+      "latitude": 59.9386,
+      "longitude": 30.3141,
+      "timezone": "Europe/Moscow"
+    },
+    "demo_override": {
+      "enabled": true,
+      "phase": "golden_hour",
+      "label": "Художественный закат",
+      "reason": "The authored R01 scenery has fixed sunset lighting. Solar-time variants remain pending; this decorative override does not represent live weather or the station clock."
+    }
+  },
+  "assets": [
+    {
+      "id": "codepost",
+      "key": "hub-r01-codepost",
+      "url": "/hub/r01/building-codepost.png",
+      "status": "approved",
+      "sha256": "64f40cf4429e75fc61713f6e3dbb6331c9eb083fb54197e611cf831f73373c40"
+    },
+    {
+      "id": "radar",
+      "key": "hub-r01-radar",
+      "url": "/hub/r01/building-radar.png",
+      "status": "approved",
+      "sha256": "43a97268a0a83e3c6e32e9a575b5392b022a4bbeac7a82ccba423217ad09ec96"
+    },
+    {
+      "id": "lab",
+      "key": "hub-r01-lab",
+      "url": "/hub/r01/building-lab.png",
+      "status": "approved",
+      "sha256": "bf06f7c58ab748bac863b4cd0ed835fe84eeaef536fa790e0d001a3cfd1ed5dc"
+    },
+    {
+      "id": "cartography",
+      "key": "hub-r01-cartography",
+      "url": "/hub/r01/building-cartography.png",
+      "status": "approved",
+      "sha256": "bd0a6147a3d343f381307a98bb282006c8ae10adc35ea04e9ad952fba69c0464"
+    },
+    {
+      "id": "archive",
+      "key": "hub-r01-archive",
+      "url": "/hub/r01/building-archive.png",
+      "status": "approved",
+      "sha256": "ab243f75edaad9b49e880f904fc8db6278312ff655851a7df6faf418b45927a9"
+    },
+    {
+      "id": "hall",
+      "key": "hub-r01-hall",
+      "url": "/hub/r01/building-hall.png",
+      "status": "approved",
+      "sha256": "f0dccc87515713b225b02ff06b31659e2a43a4ce7664adf7d176fda59c105c22"
+    }
+  ],
+  "optionalAssets": [
+    {
+      "id": "coastal-sky",
+      "key": "hub-r01-coastal-sky",
+      "url": "/hub/r01/coastal-sky.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "0ca81078aa2f69bae714c143bbe46c656eb322d05950846d44806884bc875c3a"
+    },
+    {
+      "id": "campus-ground",
+      "key": "hub-r01-campus-ground",
+      "url": "/hub/r01/campus-ground.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "b1935ecfa83d63c2d3e199e2a4105adb86ea645b825154587d919dbba342c11b"
+    },
+    {
+      "id": "prop-pine",
+      "key": "hub-r01-prop-pine",
+      "url": "/hub/r01/prop-pine.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "7855c227de3ec78e4119557ac8ee1dd9eb7696ff0ad6ff80e07d2d9304e4c3fe"
+    },
+    {
+      "id": "prop-tree",
+      "key": "hub-r01-prop-tree",
+      "url": "/hub/r01/prop-tree.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "21cbe2212ae6e2ea65c2b74553254a9ec09a34df6c07e30ffebc1580b6f7ef30"
+    },
+    {
+      "id": "prop-hedge",
+      "key": "hub-r01-prop-hedge",
+      "url": "/hub/r01/prop-hedge.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "58d1b0d914d4b842ffe9086d8ec97be3b9d0cad2bef7412dd9204ab70d90630d"
+    },
+    {
+      "id": "prop-lamp",
+      "key": "hub-r01-prop-lamp",
+      "url": "/hub/r01/prop-lamp.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "9de9f553a8eaec1bcdb67eb65080a61337d4cd58b98464f364480f1b8ae569be"
+    },
+    {
+      "id": "prop-bench",
+      "key": "hub-r01-prop-bench",
+      "url": "/hub/r01/prop-bench.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "82dc057c2f4c989d1bd633da47074568349ab4ef61dadd33117c4aa4bdb17e3c"
+    },
+    {
+      "id": "prop-fountain",
+      "key": "hub-r01-prop-fountain",
+      "url": "/hub/r01/prop-fountain.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "d8b723f82fa52d8365c32f54efca3902a011b56aa4c3c02122db03750c24c6a2"
+    }
+  ],
+  "acceptanceScope": "First interactive R01-derived campus slice: native detailed pixel-style components, authored golden-hour lighting, desktop and portrait composition. Not a declaration of complete MVP, all weather/time variants or target-device performance."
+}

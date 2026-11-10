@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "artAcceptance": "PASS",
+  "actors": [
+    {
+      "id": "character.r01.observer",
+      "label": "Наблюдатель кампуса",
+      "role": "npc",
+      "displayHeight": 64,
+      "pivot": [
+        0.5,
+        0.9555555555555556
+      ],
+      "positions": {
+        "landscape": [
+          370,
+          486
+        ],
+        "portrait": [
+          210,
+          700
+        ]
+      },
+      "motion": {
+        "type": "walk-across",
+        "direction": "right",
+        "speed": 22
+      },
+      "clips": {
+        "idle": {
+          "assetId": "character.r01.observer.idle",
+          "url": "/hub/characters/observer-idle.png",
+          "frameWidth": 180,
+          "frameHeight": 180,
+          "frameCount": 1,
+          "durationsMs": [
+            125
+          ]
+        },
+        "walk": {
+          "assetId": "character.r01.observer.walk",
+          "url": "/hub/characters/observer-walk.png",
+          "frameWidth": 180,
+          "frameHeight": 180,
+          "frameCount": 8,
+          "durationsMs": [
+            125,
+            125,
+            125,
+            125,
+            125,
+            125,
+            125,
+            125
+          ],
+          "facing": "right"
+        }
+      }
+    },
+    {
+      "id": "npc.r01.vera",
+      "label": "Вера Павловна Ладожская",
+      "role": "npc",
+      "displayHeight": 60,
+      "pivot": [
+        0.5,
+        0.9555555555555556
+      ],
+      "positions": {
+        "landscape": [
+          386,
+          412
+        ],
+        "portrait": [
+          250,
+          485
+        ]
+      },
+      "clips": {
+        "idle": {
+          "assetId": "npc.r01.vera.idle",
+          "url": "/hub/characters/vera-idle.png",
+          "frameWidth": 180,
+          "frameHeight": 180,
+          "frameCount": 6,
+          "durationsMs": [
+            280,
+            280,
+            280,
+            280,
+            280,
+            280
+          ]
+        }
+      }
+    },
+    {
+      "id": "companion.r01.pascal",
+      "label": "Кот Паскаль",
+      "role": "npc",
+      "displayHeight": 30,
+      "pivot": [
+        0.5,
+        0.9444444444444444
+      ],
+      "positions": {
+        "landscape": [
+          405,
+          489
+        ],
+        "portrait": [
+          219,
+          653
+        ]
+      },
+      "clips": {
+        "idle": {
+          "assetId": "companion.r01.pascal.idle",
+          "url": "/hub/characters/pascal-idle.png",
+          "frameWidth": 144,
+          "frameHeight": 144,
+          "frameCount": 6,
+          "durationsMs": [
+            260,
+            260,
+            260,
+            260,
+            260,
+            260
+          ]
+        }
+      }
+    }
+  ],
+  "equipment": []
+}

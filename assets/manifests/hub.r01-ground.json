@@ -1,0 +1,47 @@
+{
+  "id": "hub.r01-ground",
+  "schema": "spritecook-landscape/v1",
+  "title": "Каменное мощение и террасы кампуса R01",
+  "source": "assets/source/environment/hub/r01/ground.aseprite",
+  "reference": "design/pixel-art/v2/01_hub.png",
+  "model": "gpt-image-2",
+  "sourceTreatment": "Native source pixels; independent scenery plates. No reference-image backdrop, interpolation, palette quantization or colour replacement in export.",
+  "art_status": "pass",
+  "provenance": {
+    "origin": "SpriteCook generation referenced to project R01",
+    "license": "project-generated; retain provider and reference provenance"
+  },
+  "assets": [
+    {
+      "id": "hub.r01.campus-ground",
+      "asset_id": "b2326256-27c3-4ab5-99a6-acbb39c98826",
+      "layer": "campus-ground",
+      "label": "campus-ground",
+      "source_png": "assets/source/environment/hub/r01/campus-ground-source.png",
+      "source_rect": {
+        "x": 0,
+        "y": 0,
+        "width": 2048,
+        "height": 1152
+      },
+      "logicalSize": {
+        "width": 2048,
+        "height": 1152
+      },
+      "pivot": {
+        "x": 1024,
+        "y": 0
+      },
+      "kind": "environment",
+      "state": "dusk",
+      "generated": "assets/generated/hub/r01/campus-ground.png",
+      "publicPath": "/hub/r01/campus-ground.png",
+      "sha256": "b1935ecfa83d63c2d3e199e2a4105adb86ea645b825154587d919dbba342c11b",
+      "sha12": "b1935ecfa83d",
+      "bytes": 4585306,
+      "sourceSha256": "b38edd2f1f7ecdc14be5bf99305fa8d6358d15ad2fb64b5cd033fead5aaba7f8"
+    }
+  ],
+  "sourceSha256": "cad095c2f9dda482fecb114882df9aee7ea9e1b5af9ccbc327a1b9ad567384f2",
+  "art_review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md"
+}

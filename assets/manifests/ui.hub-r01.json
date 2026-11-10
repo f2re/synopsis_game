@@ -1,0 +1,1087 @@
+{
+  "id": "ui.hub-r01",
+  "schema": "spritecook-ui/v1",
+  "title": "Главный кампус R01: интерфейс SpriteCook",
+  "ui_kit_id": "7319b7db-d3c2-4ff2-b529-da0d98ebaa6c",
+  "reference": {
+    "path": "design/pixel-art/v2/01_hub.png",
+    "asset_id": "ad6697b5-1cf4-425c-9f41-6f09c1526012",
+    "sha256": "c4c5958ac0948cf4213d9259b9c9952fd73ec77d68832e374f361389b917353c"
+  },
+  "source": "assets/source/ui/hub-r01/hub-controls.aseprite",
+  "sourceSheet": "assets/source/ui/hub-r01/spritecook-component-sheet.png",
+  "model": "gpt-image-2.5-sunburst",
+  "art_status": "pass",
+  "provenance": {
+    "origin": "SpriteCook UI kit generated from the project owner's approved R01 reference",
+    "license": "project-generated; retain SpriteCook provenance, no third-party license claimed"
+  },
+  "assets": [
+    {
+      "id": "ui.hub-r01.nav.hover",
+      "asset_id": "ed09523a-9070-40f3-bd8a-d0c4bde9306e",
+      "layer": "nav-hover",
+      "label": "nav_hover",
+      "source_png": "assets/source/ui/hub-r01/components/nav-hover.png",
+      "source_rect": {
+        "x": 546,
+        "y": 87,
+        "width": 466,
+        "height": 182
+      },
+      "logicalSize": {
+        "width": 466,
+        "height": 182
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "nav",
+      "state": "hover",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/nav-hover.png",
+      "publicPath": "/assets/ui/hub-r01/nav-hover.png",
+      "sha256": "906c727edb41f7d8f742fd43c35c376d1ba3eb77d9939c63fde5395bc1c13e9e",
+      "sha12": "906c727edb41",
+      "bytes": 85546,
+      "sourceSha256": "b5c71708be56f3886e17b836230fc1cc54d72ef0b05c6d3578651a50c096eec8"
+    },
+    {
+      "id": "ui.hub-r01.nav.pressed",
+      "asset_id": "bc77d0d8-a8b3-4572-937d-a2592726dea8",
+      "layer": "nav-pressed",
+      "label": "nav_pressed",
+      "source_png": "assets/source/ui/hub-r01/components/nav-pressed.png",
+      "source_rect": {
+        "x": 1040,
+        "y": 87,
+        "width": 468,
+        "height": 182
+      },
+      "logicalSize": {
+        "width": 468,
+        "height": 182
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "nav",
+      "state": "pressed",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/nav-pressed.png",
+      "publicPath": "/assets/ui/hub-r01/nav-pressed.png",
+      "sha256": "20c6bd48cc774f2e7211b10e0675a40a4c1bc8640328ca02968d169b8fa631e4",
+      "sha12": "20c6bd48cc77",
+      "bytes": 72032,
+      "sourceSha256": "835ca289bccdfc58ace0e16d21083de74c3df664b559da63b7351a67f42e8cd8"
+    },
+    {
+      "id": "ui.hub-r01.nav.disabled",
+      "asset_id": "fdc008c2-aff1-4c9a-807d-f1c08cb3ecd8",
+      "layer": "nav-disabled",
+      "label": "nav_disabled",
+      "source_png": "assets/source/ui/hub-r01/components/nav-disabled.png",
+      "source_rect": {
+        "x": 1536,
+        "y": 87,
+        "width": 463,
+        "height": 179
+      },
+      "logicalSize": {
+        "width": 463,
+        "height": 179
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "nav",
+      "state": "disabled",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/nav-disabled.png",
+      "publicPath": "/assets/ui/hub-r01/nav-disabled.png",
+      "sha256": "52c90495a99031fb9844b6a858dbe3b981c3d418819072ec01c6616b99c13903",
+      "sha12": "52c90495a990",
+      "bytes": 53104,
+      "sourceSha256": "e7ff0a4ef6d59ea2eaeb6e6cfa090a9d7a5d9a914501b9f073325ec30b3f31ab"
+    },
+    {
+      "id": "ui.hub-r01.nav.normal",
+      "asset_id": "4a636f72-776c-413c-9e66-d8ae4a78cc9b",
+      "layer": "nav-normal",
+      "label": "nav_normal",
+      "source_png": "assets/source/ui/hub-r01/components/nav-normal.png",
+      "source_rect": {
+        "x": 50,
+        "y": 89,
+        "width": 466,
+        "height": 177
+      },
+      "logicalSize": {
+        "width": 466,
+        "height": 177
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "nav",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/nav-normal.png",
+      "publicPath": "/assets/ui/hub-r01/nav-normal.png",
+      "sha256": "95b8980205b1a86c58e7e96e2d78633cd165b8f91333e36a50c328acee54d5b6",
+      "sha12": "95b8980205b1",
+      "bytes": 74648,
+      "sourceSha256": "1d4074c898a07a138893fc466dde96da462b1881f16b83d9a796b4d4c1ef29b4"
+    },
+    {
+      "id": "ui.hub-r01.cta.hex.normal",
+      "asset_id": "af137b71-02a8-450b-b6c7-49fad4896050",
+      "layer": "cta-hex-normal",
+      "label": "cta_hex_normal",
+      "source_png": "assets/source/ui/hub-r01/components/cta-hex-normal.png",
+      "source_rect": {
+        "x": 31,
+        "y": 291,
+        "width": 497,
+        "height": 186
+      },
+      "logicalSize": {
+        "width": 497,
+        "height": 186
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "cta-hex",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 60,
+        "top": 16,
+        "right": 60,
+        "bottom": 22
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/cta-hex-normal.png",
+      "publicPath": "/assets/ui/hub-r01/cta-hex-normal.png",
+      "sha256": "e3bdf4a98f1d344eb2d428b66d6493ab00664f08a9977b787612e8882028fe06",
+      "sha12": "e3bdf4a98f1d",
+      "bytes": 101715,
+      "sourceSha256": "8bf99ef4382e34227f08c1ab161472493c0dcd41331743990e59f9cb7c95211a"
+    },
+    {
+      "id": "ui.hub-r01.cta.hex.hover",
+      "asset_id": "88888a51-4dfd-46aa-9477-a5ec69522478",
+      "layer": "cta-hex-hover",
+      "label": "cta_hex_hover",
+      "source_png": "assets/source/ui/hub-r01/components/cta-hex-hover.png",
+      "source_rect": {
+        "x": 537,
+        "y": 291,
+        "width": 487,
+        "height": 186
+      },
+      "logicalSize": {
+        "width": 487,
+        "height": 186
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "cta-hex",
+      "state": "hover",
+      "scalable": true,
+      "nineSlice": {
+        "left": 60,
+        "top": 16,
+        "right": 60,
+        "bottom": 22
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/cta-hex-hover.png",
+      "publicPath": "/assets/ui/hub-r01/cta-hex-hover.png",
+      "sha256": "f55b4d6efd3b43e9266d1f4e40c8fd575c66b45391104faa7cd824c8ab0799ad",
+      "sha12": "f55b4d6efd3b",
+      "bytes": 106630,
+      "sourceSha256": "0908bf6bdbab5228aee6c5a782e240faf8309d79ca47ec0cd3e80475ee76ca9c"
+    },
+    {
+      "id": "ui.hub-r01.square.frame",
+      "asset_id": "59a696d7-460c-4745-a774-a38a99749e31",
+      "layer": "square-frame",
+      "label": "square_frame",
+      "source_png": "assets/source/ui/hub-r01/components/square-frame.png",
+      "source_rect": {
+        "x": 1821,
+        "y": 514,
+        "width": 177,
+        "height": 164
+      },
+      "logicalSize": {
+        "width": 177,
+        "height": 164
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "panel",
+      "group": "square-frame",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/square-frame.png",
+      "publicPath": "/assets/ui/hub-r01/square-frame.png",
+      "sha256": "f148801a5396caa9cf4dafe8a4d5b9fbb88c607cfd7cf4f732c92cc78959d90f",
+      "sha12": "f148801a5396",
+      "bytes": 32746,
+      "sourceSha256": "d3a937de0c380147a20bfe72788e86f429eea8855d8b706b5d6286f18bc17ef5"
+    },
+    {
+      "id": "ui.hub-r01.hud.strip",
+      "asset_id": "da5d813a-b2d2-4095-b41d-c2bfa661c100",
+      "layer": "hud-strip",
+      "label": "hud_strip",
+      "source_png": "assets/source/ui/hub-r01/components/hud-strip.png",
+      "source_rect": {
+        "x": 45,
+        "y": 518,
+        "width": 1708,
+        "height": 152
+      },
+      "logicalSize": {
+        "width": 1708,
+        "height": 152
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "panel",
+      "group": "hud-strip",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/hud-strip.png",
+      "publicPath": "/assets/ui/hub-r01/hud-strip.png",
+      "sha256": "44a153338487adb9e494f38589a209d310e32205bece9b70a71cd4e3b6bcc45c",
+      "sha12": "44a153338487",
+      "bytes": 191002,
+      "sourceSha256": "a65d42c03c31b5e40fdd794394c7ef5c5b6eb8faf9fd64424d938ad1c3633ca7"
+    },
+    {
+      "id": "ui.hub-r01.dialog.frame",
+      "asset_id": "ab4e9147-353a-4e30-81a5-52d61d77ce2b",
+      "layer": "dialog-frame",
+      "label": "dialog_frame",
+      "source_png": "assets/source/ui/hub-r01/components/dialog-frame.png",
+      "source_rect": {
+        "x": 49,
+        "y": 717,
+        "width": 1023,
+        "height": 683
+      },
+      "logicalSize": {
+        "width": 1023,
+        "height": 683
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "panel",
+      "group": "dialog",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 58,
+        "top": 58,
+        "right": 58,
+        "bottom": 58
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/dialog-frame.png",
+      "publicPath": "/assets/ui/hub-r01/dialog-frame.png",
+      "sha256": "172b1d5a565c3edaf4deae92fcf6ab7cd9208049bef230366c212b7db6ada6c6",
+      "sha12": "172b1d5a565c",
+      "bytes": 574687,
+      "sourceSha256": "095f1e286aeb8a57ad153e8e70b39cb8caeb8c33b9441fd0a54b8eb2da49ba3d"
+    },
+    {
+      "id": "ui.hub-r01.icon.weather",
+      "asset_id": "defe60a6-c2c3-4d25-a581-8deff9178ede",
+      "layer": "icon-weather",
+      "label": "icon_weather",
+      "source_png": "assets/source/ui/hub-r01/components/icon-weather.png",
+      "source_rect": {
+        "x": 1819,
+        "y": 725,
+        "width": 180,
+        "height": 175
+      },
+      "logicalSize": {
+        "width": 180,
+        "height": 175
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "icon",
+      "group": "weather",
+      "state": "normal",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/icon-weather.png",
+      "publicPath": "/assets/ui/hub-r01/icon-weather.png",
+      "sha256": "53a300112e6d2df7fa559b8480de76a5432b20b3affbe41969761cd6da5e20ad",
+      "sha12": "53a300112e6d",
+      "bytes": 41177,
+      "sourceSha256": "2713e4bd89acdd92dcedd5bfd3bd1777efe8889df628eb21d3fabcca364763f4"
+    },
+    {
+      "id": "ui.hub-r01.progress.track",
+      "asset_id": "de2e7962-849c-4fbb-8e72-ee50f2624aef",
+      "layer": "progress-track",
+      "label": "progress_track",
+      "source_png": "assets/source/ui/hub-r01/components/progress-track.png",
+      "source_rect": {
+        "x": 1127,
+        "y": 756,
+        "width": 603,
+        "height": 98
+      },
+      "logicalSize": {
+        "width": 603,
+        "height": 98
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "track",
+      "group": "progress",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 24,
+        "top": 24,
+        "right": 24,
+        "bottom": 24
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/progress-track.png",
+      "publicPath": "/assets/ui/hub-r01/progress-track.png",
+      "sha256": "41d404af1a21513eb0b0a8820b131406fbd7ff9f50327fedaec031295b3409ea",
+      "sha12": "41d404af1a21",
+      "bytes": 49614,
+      "sourceSha256": "463bb41f49d51b58482b635fe7ae6e65acc108c95bb32c3f175ffac2e6d73280"
+    },
+    {
+      "id": "ui.hub-r01.progress.amber.sample",
+      "asset_id": "73b7636e-abfb-47bb-91f9-3aba4445d690",
+      "layer": "progress-amber-sample",
+      "label": "progress_amber_sample",
+      "source_png": "assets/source/ui/hub-r01/components/progress-amber-sample.png",
+      "source_rect": {
+        "x": 1126,
+        "y": 906,
+        "width": 604,
+        "height": 78
+      },
+      "logicalSize": {
+        "width": 604,
+        "height": 78
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "decoration",
+      "group": "progress-amber",
+      "state": "filled",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/progress-amber-sample.png",
+      "publicPath": "/assets/ui/hub-r01/progress-amber-sample.png",
+      "sha256": "07ff18f8ad231b50c2190ec6aab91bde15c23c5ed95553a88adbb6b8e4b1c6c0",
+      "sha12": "07ff18f8ad23",
+      "bytes": 45229,
+      "sourceSha256": "f90ce868b0fd8b474544ce11e583244e41454f3ed302f4a160b1f6e9fbc5c9d3"
+    },
+    {
+      "id": "ui.hub-r01.icon.settings",
+      "asset_id": "9ef7daaa-6e71-4e6a-ae0c-54079ec23615",
+      "layer": "icon-settings",
+      "label": "icon_settings",
+      "source_png": "assets/source/ui/hub-r01/components/icon-settings.png",
+      "source_rect": {
+        "x": 1819,
+        "y": 923,
+        "width": 180,
+        "height": 171
+      },
+      "logicalSize": {
+        "width": 180,
+        "height": 171
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "icon",
+      "group": "settings",
+      "state": "normal",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/icon-settings.png",
+      "publicPath": "/assets/ui/hub-r01/icon-settings.png",
+      "sha256": "55cd23c0f47f6f1b430097968812f2abe98eb116c5b89e9859438f2441cc0217",
+      "sha12": "55cd23c0f47f",
+      "bytes": 40298,
+      "sourceSha256": "aad2345600db19b580e3b5e056a37a4881e5e5af8b0f11671850320ab387a656"
+    },
+    {
+      "id": "ui.hub-r01.icon.archive",
+      "asset_id": "e93c96f1-af99-4abe-9d8b-06ab6087d9a7",
+      "layer": "icon-archive",
+      "label": "icon_archive",
+      "source_png": "assets/source/ui/hub-r01/components/icon-archive.png",
+      "source_rect": {
+        "x": 1819,
+        "y": 1114,
+        "width": 180,
+        "height": 178
+      },
+      "logicalSize": {
+        "width": 180,
+        "height": 178
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "icon",
+      "group": "archive",
+      "state": "normal",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/icon-archive.png",
+      "publicPath": "/assets/ui/hub-r01/icon-archive.png",
+      "sha256": "7d340ebab3b868914ed1695c6b32c495bbc6882dad94efda80d345f084e55756",
+      "sha12": "7d340ebab3b8",
+      "bytes": 36683,
+      "sourceSha256": "0e1ebe7387996cd6816eae0ae21296221a9ba7529189b26cac8c8fe679836042"
+    },
+    {
+      "id": "ui.hub-r01.progress.blue.sample",
+      "asset_id": "41f5a29d-f0c5-4fe5-9369-dc7ac2fa3dc0",
+      "layer": "progress-blue-sample",
+      "label": "progress_blue_sample",
+      "source_png": "assets/source/ui/hub-r01/components/progress-blue-sample.png",
+      "source_rect": {
+        "x": 1125,
+        "y": 1221,
+        "width": 605,
+        "height": 78
+      },
+      "logicalSize": {
+        "width": 605,
+        "height": 78
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "decoration",
+      "group": "progress-blue",
+      "state": "filled",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/progress-blue-sample.png",
+      "publicPath": "/assets/ui/hub-r01/progress-blue-sample.png",
+      "sha256": "ca8c8ba115fcdb2267383ae664faaf0f229528bdde26510a7910e9cd125ff316",
+      "sha12": "ca8c8ba115fc",
+      "bytes": 45226,
+      "sourceSha256": "3404494fb564b82c722ce5fe1011e459be254d45b322453cb5787d92b764e159"
+    },
+    {
+      "id": "ui.hub-r01.icon.book",
+      "asset_id": "b0e9c55b-0b6d-47e9-bf84-0287be3bd5f8",
+      "layer": "icon-book",
+      "label": "icon_book",
+      "source_png": "assets/source/ui/hub-r01/components/icon-book.png",
+      "source_rect": {
+        "x": 1818,
+        "y": 1314,
+        "width": 181,
+        "height": 178
+      },
+      "logicalSize": {
+        "width": 181,
+        "height": 178
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "icon",
+      "group": "book",
+      "state": "normal",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/icon-book.png",
+      "publicPath": "/assets/ui/hub-r01/icon-book.png",
+      "sha256": "4300b701e77fb7c8d27ea810146ed6c341a210bb3afa679e836b4b9eedb348be",
+      "sha12": "4300b701e77f",
+      "bytes": 39983,
+      "sourceSha256": "626a6ffd20e9b6feb4e0fbc3201098462624ee0d897c0130ac157d712626df1f"
+    },
+    {
+      "id": "ui.hub-r01.secondary.normal",
+      "asset_id": "4b1dc1ef-a5d1-47c6-932c-b85bad24eab6",
+      "layer": "secondary-normal",
+      "label": "secondary_normal",
+      "source_png": "assets/source/ui/hub-r01/components/secondary-normal.png",
+      "source_rect": {
+        "x": 53,
+        "y": 1454,
+        "width": 406,
+        "height": 132
+      },
+      "logicalSize": {
+        "width": 406,
+        "height": 132
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "secondary",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/secondary-normal.png",
+      "publicPath": "/assets/ui/hub-r01/secondary-normal.png",
+      "sha256": "18222312b64c4b8c40fcb4bbf6c603ef13fe8242455544ad91ac190083136a21",
+      "sha12": "18222312b64c",
+      "bytes": 48374,
+      "sourceSha256": "1889a4d004e03472b0970dd8d83e06094fde637695b0d6111fab8e92834d44d3"
+    },
+    {
+      "id": "ui.hub-r01.secondary.hover",
+      "asset_id": "af8adaa8-7484-46de-9ca7-6a1b69c61f3e",
+      "layer": "secondary-hover",
+      "label": "secondary_hover",
+      "source_png": "assets/source/ui/hub-r01/components/secondary-hover.png",
+      "source_rect": {
+        "x": 493,
+        "y": 1454,
+        "width": 398,
+        "height": 133
+      },
+      "logicalSize": {
+        "width": 398,
+        "height": 133
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "secondary",
+      "state": "hover",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/secondary-hover.png",
+      "publicPath": "/assets/ui/hub-r01/secondary-hover.png",
+      "sha256": "508d047ec8370bfc79b4284463ace28a32c1c0a5c6b5d78a3ea6a597789ce579",
+      "sha12": "508d047ec837",
+      "bytes": 54724,
+      "sourceSha256": "a111d88fe615424435119f1caa04215d55045e593881ae47c6b6cf9a6f1fb215"
+    },
+    {
+      "id": "ui.hub-r01.secondary.disabled",
+      "asset_id": "c3d9b9f1-e2b7-463c-9256-6c976e24611c",
+      "layer": "secondary-disabled",
+      "label": "secondary_disabled",
+      "source_png": "assets/source/ui/hub-r01/components/secondary-disabled.png",
+      "source_rect": {
+        "x": 1356,
+        "y": 1454,
+        "width": 393,
+        "height": 133
+      },
+      "logicalSize": {
+        "width": 393,
+        "height": 133
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "secondary",
+      "state": "disabled",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/secondary-disabled.png",
+      "publicPath": "/assets/ui/hub-r01/secondary-disabled.png",
+      "sha256": "09f618cf51cba16ef88317e4a474b6c2dca6c8c38587b66ef6540429d3384a26",
+      "sha12": "09f618cf51cb",
+      "bytes": 36865,
+      "sourceSha256": "11ad980b42a5736f39db34286e065418f11fc351e68c8cb6cd8c4f01cac0993a"
+    },
+    {
+      "id": "ui.hub-r01.secondary.pressed",
+      "asset_id": "3c575dc7-0cdf-42c9-83cd-0f76c5672fc6",
+      "layer": "secondary-pressed",
+      "label": "secondary_pressed",
+      "source_png": "assets/source/ui/hub-r01/components/secondary-pressed.png",
+      "source_rect": {
+        "x": 924,
+        "y": 1455,
+        "width": 401,
+        "height": 131
+      },
+      "logicalSize": {
+        "width": 401,
+        "height": 131
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "secondary",
+      "state": "pressed",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/secondary-pressed.png",
+      "publicPath": "/assets/ui/hub-r01/secondary-pressed.png",
+      "sha256": "839d666f3321745d02a347af9e6c1abcfbc8986f1b79fa6c9adc17c85ffe745c",
+      "sha12": "839d666f3321",
+      "bytes": 48689,
+      "sourceSha256": "a366318d4b6e871eee5df78bb7a56139b99b0a4e5960a512611708d0e5b8d166"
+    },
+    {
+      "id": "ui.hub-r01.icon.route",
+      "asset_id": "043aeecf-1b50-4ec4-be28-6f6ed0e084d6",
+      "layer": "icon-route",
+      "label": "icon_route",
+      "source_png": "assets/source/ui/hub-r01/components/icon-route.png",
+      "source_rect": {
+        "x": 1819,
+        "y": 1516,
+        "width": 180,
+        "height": 185
+      },
+      "logicalSize": {
+        "width": 180,
+        "height": 185
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "icon",
+      "group": "route",
+      "state": "normal",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/icon-route.png",
+      "publicPath": "/assets/ui/hub-r01/icon-route.png",
+      "sha256": "97356ffaf48ad89c9ab80e5a79022569e81dfd848ef12f29244862dd8f95bb87",
+      "sha12": "97356ffaf48a",
+      "bytes": 41612,
+      "sourceSha256": "3a570135a1a4606ebf5429517d4d21f3a9f0cfbeb198d5127626b9992cc0e612"
+    },
+    {
+      "id": "ui.hub-r01.icon.observer",
+      "asset_id": "574cb29a-b080-40fa-8cdf-552bfbd99607",
+      "layer": "icon-observer",
+      "label": "icon_observer",
+      "source_png": "assets/source/ui/hub-r01/components/icon-observer.png",
+      "source_rect": {
+        "x": 1810,
+        "y": 1731,
+        "width": 190,
+        "height": 188
+      },
+      "logicalSize": {
+        "width": 190,
+        "height": 188
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "icon",
+      "group": "observer",
+      "state": "normal",
+      "scalable": false,
+      "nineSlice": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/icon-observer.png",
+      "publicPath": "/assets/ui/hub-r01/icon-observer.png",
+      "sha256": "127519aab7e0e07cd7b055259e683651ed9eed2204e7cf90ac24747b7962c3f1",
+      "sha12": "127519aab7e0",
+      "bytes": 57178,
+      "sourceSha256": "186eec7f52e19869ace9d0d8351b1857c99f9abcf874316590b23186fd236056"
+    },
+    {
+      "id": "ui.hub-r01.primary.normal",
+      "asset_id": "a9637c4c-9ee6-4ced-a8a7-2f5a3d47be79",
+      "layer": "primary-normal",
+      "label": "primary_normal",
+      "source_png": "assets/source/ui/hub-r01/components/primary-normal.png",
+      "source_rect": {
+        "x": 53,
+        "y": 1793,
+        "width": 407,
+        "height": 127
+      },
+      "logicalSize": {
+        "width": 407,
+        "height": 127
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "primary",
+      "state": "normal",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/primary-normal.png",
+      "publicPath": "/assets/ui/hub-r01/primary-normal.png",
+      "sha256": "3a5e05dc7a5e1e146fa8a15ea5731493d90d97203f4bb65843eebaffb4b2f310",
+      "sha12": "3a5e05dc7a5e",
+      "bytes": 44923,
+      "sourceSha256": "2533fdbfd8cb1b7e6b6d6f59a40b303d8fea3164c546a52bea8a143c09c725f6"
+    },
+    {
+      "id": "ui.hub-r01.primary.hover",
+      "asset_id": "b3b7b54b-2ea4-49b9-8c36-76c0029848c3",
+      "layer": "primary-hover",
+      "label": "primary_hover",
+      "source_png": "assets/source/ui/hub-r01/components/primary-hover.png",
+      "source_rect": {
+        "x": 493,
+        "y": 1793,
+        "width": 400,
+        "height": 127
+      },
+      "logicalSize": {
+        "width": 400,
+        "height": 127
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "primary",
+      "state": "hover",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/primary-hover.png",
+      "publicPath": "/assets/ui/hub-r01/primary-hover.png",
+      "sha256": "0d47ef8619c626209957d1cdb648f62aaf2989c07b53555bf2613fd03e141ee9",
+      "sha12": "0d47ef8619c6",
+      "bytes": 47269,
+      "sourceSha256": "01a3e4f19bbd1381e3b4502f858923f1814398426bb4e7b624c461c60bfdfa94"
+    },
+    {
+      "id": "ui.hub-r01.primary.pressed",
+      "asset_id": "9d2c887d-dcc9-4ba4-bac5-48d68a9c7432",
+      "layer": "primary-pressed",
+      "label": "primary_pressed",
+      "source_png": "assets/source/ui/hub-r01/components/primary-pressed.png",
+      "source_rect": {
+        "x": 925,
+        "y": 1793,
+        "width": 400,
+        "height": 127
+      },
+      "logicalSize": {
+        "width": 400,
+        "height": 127
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "primary",
+      "state": "pressed",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/primary-pressed.png",
+      "publicPath": "/assets/ui/hub-r01/primary-pressed.png",
+      "sha256": "45c5e48044c9a86967923c1347a2812a7e931f4da9c1f529a2215cc43a42ed95",
+      "sha12": "45c5e48044c9",
+      "bytes": 42585,
+      "sourceSha256": "e20f0d4ba08dcb23c7ca701257a6f14b733a1dfe6982652bcc90cb03e5e81500"
+    },
+    {
+      "id": "ui.hub-r01.primary.disabled",
+      "asset_id": "2d64d542-eb6d-4718-b9bc-2845baf4aaed",
+      "layer": "primary-disabled",
+      "label": "primary_disabled",
+      "source_png": "assets/source/ui/hub-r01/components/primary-disabled.png",
+      "source_rect": {
+        "x": 1357,
+        "y": 1793,
+        "width": 392,
+        "height": 127
+      },
+      "logicalSize": {
+        "width": 392,
+        "height": 127
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "primary",
+      "state": "disabled",
+      "scalable": true,
+      "nineSlice": {
+        "left": 32,
+        "top": 32,
+        "right": 32,
+        "bottom": 32
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/primary-disabled.png",
+      "publicPath": "/assets/ui/hub-r01/primary-disabled.png",
+      "sha256": "2472382e259646519beef5d0bea20073bd8a078cafdc50a142eb93e9a89925bd",
+      "sha12": "2472382e2596",
+      "bytes": 44064,
+      "sourceSha256": "a27247f5554a421545b31103a4b298d7ac4865bf557ebb249d0a99a33a67b38d"
+    },
+    {
+      "id": "ui.hub-r01.cta.hex.pressed",
+      "asset_id": "2a78542c-1f53-4bac-a137-b94cf898b7a5",
+      "layer": "cta-hex-pressed",
+      "label": "cta_hex_pressed",
+      "source_png": "assets/source/ui/hub-r01/components/cta-hex-pressed.png",
+      "source_rect": {
+        "x": 1032,
+        "y": 289,
+        "width": 482,
+        "height": 189
+      },
+      "logicalSize": {
+        "width": 482,
+        "height": 189
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "cta-hex",
+      "state": "pressed",
+      "scalable": true,
+      "nineSlice": {
+        "left": 60,
+        "top": 16,
+        "right": 60,
+        "bottom": 22
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/cta-hex-pressed.png",
+      "publicPath": "/assets/ui/hub-r01/cta-hex-pressed.png",
+      "sha256": "338131ab4c69b90277a351981811d6160c290c9a86e08d1903bd1e149032f334",
+      "sha12": "338131ab4c69",
+      "bytes": 100426,
+      "sourceSha256": "e7833922671ea6aea7eeb04ce6aa6f4afc7245b100af219164f157810e0ca551"
+    },
+    {
+      "id": "ui.hub-r01.cta.hex.disabled",
+      "asset_id": "ac3f53d2-c87a-46c1-b8b5-031f0c612f0b",
+      "layer": "cta-hex-disabled",
+      "label": "cta_hex_disabled",
+      "source_png": "assets/source/ui/hub-r01/components/cta-hex-disabled.png",
+      "source_rect": {
+        "x": 1521,
+        "y": 289,
+        "width": 492,
+        "height": 189
+      },
+      "logicalSize": {
+        "width": 492,
+        "height": 189
+      },
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "kind": "button",
+      "group": "cta-hex",
+      "state": "disabled",
+      "scalable": true,
+      "nineSlice": {
+        "left": 60,
+        "top": 16,
+        "right": 60,
+        "bottom": 22
+      },
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/hub-r01/cta-hex-disabled.png",
+      "publicPath": "/assets/ui/hub-r01/cta-hex-disabled.png",
+      "sha256": "a6ecd5a027f855a251e7e4d3335480d125e2306b891a02582e957d33dd28ce1a",
+      "sha12": "a6ecd5a027f8",
+      "bytes": 98766,
+      "sourceSha256": "269858c3d9b5b8b620be554eec5c359a45499c34290de2036069f77579e673d0"
+    }
+  ],
+  "sourceSha256": "1313c7937d273523fe6c72d3a9fc093d324c21c19f7cad64757dc112f6993d9a",
+  "art_review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md"
+}

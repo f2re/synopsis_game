@@ -27,7 +27,7 @@ export class HubStageLayer {
     for (const stage of HUB_STAGES) {
       const label = scene.add
         .text(0, 0, String(stage.order), {
-          fontFamily: 'monospace',
+          fontFamily: 'PixCyrillic, monospace',
           fontSize: '8px',
           color: '#1a1a1a',
         })

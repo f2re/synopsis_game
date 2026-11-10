@@ -1,0 +1,54 @@
+.pixel-progress-wrapper {
+  --progress-color: var(--color-ui-teal-3, #367c8b);
+  --progress-light: var(--color-ui-teal-4, #6f9e95);
+  --progress-height: 14px;
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  width: 100%;
+  color: var(--color-birch-and-snow-3, #f4f7fa);
+  font: 14px/1.4 var(--font-pixel-ui);
+}
+
+.pixel-progress-gold {
+  --progress-color: var(--color-action-accent-1, #f2c75c);
+  --progress-light: var(--color-action-accent-2, #ffdd83);
+}
+
+.pixel-progress-sm { --progress-height: 10px; }
+.pixel-progress-lg { --progress-height: 18px; }
+
+.pixel-progress-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  min-width: 0;
+}
+
+.pixel-progress-label { min-width: 0; overflow-wrap: anywhere; }
+.pixel-progress-percent { flex: 0 0 auto; margin-inline-start: auto; white-space: nowrap; color: var(--color-sky-day-2, #c4ddf0); }
+
+.pixel-progress-track {
+  box-sizing: border-box;
+  height: var(--progress-height);
+  overflow: hidden;
+  border: 1px solid var(--color-sky-night-4, #3a5383);
+  background: var(--color-sky-night-0, #070d1e);
+  box-shadow: inset 0 1px 0 #0006;
+}
+
+.pixel-progress-fill {
+  position: relative;
+  height: 100%;
+  background: var(--progress-color);
+  box-shadow: inset 0 2px 0 var(--progress-light);
+  transition: width 180ms ease-out;
+}
+
+.pixel-progress-leading-accent { position: absolute; inset: 0 0 0 auto; width: 3px; background: var(--progress-light); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-progress-fill { transition: none; }
+}

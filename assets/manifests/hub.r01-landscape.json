@@ -1,0 +1,47 @@
+{
+  "id": "hub.r01-landscape",
+  "schema": "spritecook-landscape/v1",
+  "title": "Дальнее побережье и мощение кампуса R01",
+  "source": "assets/source/environment/hub/r01/landscape.aseprite",
+  "reference": "design/pixel-art/v2/01_hub.png",
+  "model": "gpt-image-2",
+  "sourceTreatment": "Native source pixels; independent scenery plates. No reference-image backdrop, interpolation, palette quantization or colour replacement in export.",
+  "art_status": "pass",
+  "provenance": {
+    "origin": "SpriteCook generation referenced to project R01",
+    "license": "project-generated; retain provider and reference provenance"
+  },
+  "assets": [
+    {
+      "id": "hub.r01.coastal-sky",
+      "asset_id": "1247bf53-6b2b-412f-9981-eb3fed885555",
+      "layer": "coastal-sky",
+      "label": "coastal-sky",
+      "source_png": "assets/source/environment/hub/r01/coastal-sky-source.png",
+      "source_rect": {
+        "x": 0,
+        "y": 0,
+        "width": 2048,
+        "height": 1152
+      },
+      "logicalSize": {
+        "width": 2048,
+        "height": 1152
+      },
+      "pivot": {
+        "x": 1024,
+        "y": 576
+      },
+      "kind": "environment",
+      "state": "dusk",
+      "generated": "assets/generated/hub/r01/coastal-sky.png",
+      "publicPath": "/hub/r01/coastal-sky.png",
+      "sha256": "0ca81078aa2f69bae714c143bbe46c656eb322d05950846d44806884bc875c3a",
+      "sha12": "0ca81078aa2f",
+      "bytes": 2961897,
+      "sourceSha256": "84774f52a33a4544fd9a89ced28c3d3d0db68ce115e73da3b6cb318f7bae5c07"
+    }
+  ],
+  "sourceSha256": "e39a2641805b1b4c01c1eaeee1cc36edd6d5b4f50f0a834f71c1ea4a34da569b",
+  "art_review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md"
+}
