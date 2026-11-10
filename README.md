@@ -9,7 +9,7 @@
 [![Сборка](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml)
 [![Документация](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 [![Выпуск](https://github.com/f2re/synopsis_game/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/release.yml)
-[![Версия](https://img.shields.io/badge/версия-0.2.0-2563eb)](package.json)
+[![Версия](https://img.shields.io/badge/версия-0.3.0-2563eb)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520.19-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34.8-F69220?logo=pnpm&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](apps/web/package.json)
@@ -75,6 +75,8 @@
 Проект находится в активной разработке и пока не считается завершённым учебным продуктом.
 
 ### Срез от 10 ноября 2026 года
+
+Версия **0.3.0** объединяет восстановленные исходники, графику, инвентарь и учебные усиления. Актуальные результаты проверок, восстановленная история и границы готовности собраны в [передаче интеграции](docs/testing/2026-11-10-recovered-inventory-release.md). Несохранённую примерку теперь можно восстановить после перехода назад; успешный повтор ответа сохраняет первую ошибку в разборе.
 
 Главный экран R01 собран из отдельных зданий, площади, побережья и элементов интерфейса. В кампусе появились три самостоятельных анимированных персонажа: проходящий наблюдатель, Вера Павловна и кот Паскаль. Изменение кадров учитывает режим уменьшенного движения и экономию ресурсов.
 
