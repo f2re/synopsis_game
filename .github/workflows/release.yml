@@ -47,6 +47,14 @@ jobs:
           [[ "$VERSION" == "$PACKAGE_VERSION" ]] || { echo "Версия выпуска $VERSION не совпадает с package.json: $PACKAGE_VERSION" >&2; exit 2; }
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "publish=$PUBLISH" >> "$GITHUB_OUTPUT"
+      - name: Подготовить Python-проверки
+        if: steps.v.outputs.publish == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Установить зависимости проверок
+        if: steps.v.outputs.publish == 'true'
+        run: python -m pip install --disable-pip-version-check fonttools
       - name: Полная проверка
         if: steps.v.outputs.publish == 'true'
         run: |
