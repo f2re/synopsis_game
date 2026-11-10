@@ -1,0 +1,15 @@
+Command: node --experimental-strip-types --test packages/world-engine/src/runtime/hubCoverGeometry.test.ts
+Working directory: .
+
+✔ 16:9 fills viewport without cropping (1.298362ms)
+✔ 16:10 fills viewport with symmetric horizontal cropping (0.571975ms)
+✔ portrait reveals UX limitation requiring alternative navigation (0.177061ms)
+✔ invalid dimensions cannot produce invalid camera state (0.680559ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 205.423358

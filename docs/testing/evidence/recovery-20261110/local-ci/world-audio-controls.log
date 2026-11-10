@@ -1,0 +1,4 @@
+Command: node tools/test_world_audio_controls.cjs
+Working directory: .
+
+PASS: HTMLAudio fallback mute, active-effect stop, both canonical ambient beds, ambient stop; Web Audio low-power/reduced-motion RAF suspension, late-decode cancellation, stale-layer replacement, return from mute, final-layer RAF cleanup.

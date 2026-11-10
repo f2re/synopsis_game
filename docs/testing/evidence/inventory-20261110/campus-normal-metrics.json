@@ -1,0 +1,47 @@
+[
+  {
+    "actors": [
+      {
+        "frames": 8,
+        "id": "character.r01.observer",
+        "pivot": [
+          0.5,
+          0.9555555555555556
+        ],
+        "state": "walk"
+      },
+      {
+        "frames": 6,
+        "id": "npc.r01.vera",
+        "pivot": [
+          0.5,
+          0.9555555555555556
+        ],
+        "state": "idle"
+      },
+      {
+        "frames": 6,
+        "id": "companion.r01.pascal",
+        "pivot": [
+          0.5,
+          0.9444444444444444
+        ],
+        "state": "idle"
+      }
+    ],
+    "animatedActors": 3,
+    "animationBudget": 3,
+    "artAccepted": true,
+    "characterClass": "r01-detailed-actor",
+    "errors": [],
+    "lowPower": false,
+    "personalizationScope": "inventory-preview",
+    "playerPresent": false,
+    "reducedMotion": false,
+    "selectedCompanion": "companion.none",
+    "selectedCompanionReady": true,
+    "selectedItem": "held.none",
+    "selectedItemReady": true,
+    "visibleActors": 3
+  }
+]

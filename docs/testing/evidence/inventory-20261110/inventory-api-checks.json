@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checkedAt": "2026-11-10T03:50:11.619Z",
+  "supportedSlots": 11,
+  "supportedValues": 42,
+  "allCatalogVariantsAccepted": true,
+  "freshLoginRestoresEquipment": true,
+  "serverDiskPersistsEquipment": true,
+  "secondAccountUnchanged": true,
+  "invalidCatalogIdRejected": true,
+  "anonymousSaveRejected": true,
+  "syntheticRewards": false,
+  "scope": "Isolated opt-in test roster; no production account modified."
+}

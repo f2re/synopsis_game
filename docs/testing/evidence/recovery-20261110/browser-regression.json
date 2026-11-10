@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-10",
+  "reviewer": "/root",
+  "url": "http://127.0.0.1:5181/profile/avatar",
+  "profile": "Тестовый наблюдатель UI",
+  "viewport": {
+    "width": 1363,
+    "height": 936
+  },
+  "frontend": "Fresh production dist copied from the active integration checkout; index SHA-256 9766098a359bf11b56fa37b0561e425c0e4856b4bc3ba86c5c7aa3853594f148",
+  "backend": "Existing isolated equipment browser harness, restored baseline compiled API on port8793. New identity persistence fix tested separately in fresh compiled server48 and real HTTP tests.",
+  "checks": [
+    {
+      "case": "Unsaved field preset → Back/Forward",
+      "result": "PASS",
+      "observed": "Explicit restore/discard banner; saved outfit unchanged before Save",
+      "evidence": "recovery-draft-restoration.png"
+    },
+    {
+      "case": "Restore → Save → reload",
+      "result": "PASS",
+      "observed": "Field cap/jacket/trousers/boots/backpack persisted; draft banner absent; Save disabled"
+    },
+    {
+      "case": "New after-shift draft → Back/Forward → discard",
+      "result": "PASS",
+      "observed": "Saved field backpack retained; draft banner absent; Save disabled"
+    },
+    {
+      "case": "Rear backpack layer",
+      "result": "PASS",
+      "observed": "Backpack visibly drawn above torso",
+      "evidence": "recovery-inventory-back.png"
+    },
+    {
+      "case": "Earned badge selection → reload",
+      "result": "PASS",
+      "observed": "First duty persisted with pencil: zero reference charges, two retry charges; Accuracy restored: one reference and two retries",
+      "evidence": "recovery-badges.png"
+    },
+    {
+      "case": "Reduced motion → inspect",
+      "result": "PASS",
+      "observed": "Static-pose explanation visible; canvas dataset animationPaused=true, frame=1; original setting restored"
+    },
+    {
+      "case": "First wrong sorting answer → retry → correct",
+      "result": "PASS",
+      "observed": "Exactly one retry consumed (2/2→1/2), correct-after-retry label and first-error counter1 retained; early-exit summary showed5answers,4correct first tries,1assisted",
+      "evidence": "recovery-retry-result.txt"
+    },
+    {
+      "case": "Final saved equipment screen",
+      "result": "PASS",
+      "evidence": "recovery-inventory-final.png"
+    }
+  ],
+  "limitations": [
+    "Fresh browser checks used the existing isolated baseline API; latest backend changes were independently exercised by fresh server and HTTP tests.",
+    "This run did not repeat physical mobile/projector, all narrow viewport sizes, low-power frame timing or FPS/GPU measurements.",
+    "The latest ten console error entries were extension metadata errors under chrome-extension://, not application-origin errors; no clean-console claim is made."
+  ]
+}

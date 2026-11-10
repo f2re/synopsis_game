@@ -1,0 +1,6 @@
+.award-badge { display: inline-block; position: relative; width: var(--award-size); height: var(--award-size); flex: 0 0 var(--award-size); }
+.award-badge img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+.award-badge--animate img { visibility: hidden; }
+.award-badge__frames { position: absolute; inset: 0; background: url('/assets/ui/equipment/badge-first-shift-award.png') 0 0 / 600% 100% no-repeat; image-rendering: pixelated; animation: equipment-award-gleam .75s steps(6) 2; }
+@keyframes equipment-award-gleam { to { background-position: calc(var(--award-size) * -6) 0; } }
+@media (prefers-reduced-motion: reduce) { .award-badge--animate img { visibility: visible; } .award-badge__frames { display: none; animation: none; } }

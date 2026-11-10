@@ -1,0 +1,4 @@
+Command: python scripts/build_character_generation_queue.py --check-only
+Working directory: .
+
+OK: queue would contain 30 one-image jobs for split=all, kind=all

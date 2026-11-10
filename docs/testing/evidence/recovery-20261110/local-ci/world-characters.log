@@ -1,0 +1,4 @@
+Command: node tools/test_world_characters.cjs
+Working directory: .
+
+PASS: authored cadence/pivot, immediate reduced-motion fallback, 3-actor animation budget, low-power sampling, explicit walk→idle, account item/companion selection, portrait placement, fixed-facing offscreen-only NPC wrap, sign-out/restart, missing-art diagnostic and loader/layer cleanup.

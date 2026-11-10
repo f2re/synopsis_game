@@ -1,0 +1,10 @@
+Command: python services/asset-generator/tests/test_world_style_dataset.py
+Working directory: .
+
+/workspace/scratch/5d8f6d96542f/synopsis_game/services/asset-generator/tests/test_world_style_dataset.py:76: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  self.assertLessEqual(set(trained.getdata()), {(255, 0, 0), (0, 0, 255)})
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.111s
+
+OK

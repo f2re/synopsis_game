@@ -1,0 +1,4 @@
+Command: python tools/test_deployment.py
+Working directory: .
+
+Deployment tests passed.

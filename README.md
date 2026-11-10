@@ -9,7 +9,7 @@
 [![Сборка](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml)
 [![Документация](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 [![Выпуск](https://github.com/f2re/synopsis_game/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/release.yml)
-[![Версия](https://img.shields.io/badge/версия-0.2.0-2563eb)](package.json)
+[![Версия](https://img.shields.io/badge/версия-0.3.0-2563eb)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520.19-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34.8-F69220?logo=pnpm&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](apps/web/package.json)
@@ -73,6 +73,55 @@
 | Сетевые режимы и автономный экран арены | 🟡 поэтапная реализация |
 
 Проект находится в активной разработке и пока не считается завершённым учебным продуктом.
+
+### Срез от 10 ноября 2026 года
+
+Версия **0.3.0** объединяет восстановленные исходники, графику, инвентарь и учебные усиления. Актуальные результаты проверок, восстановленная история и границы готовности собраны в [передаче интеграции](docs/testing/2026-11-10-recovered-inventory-release.md). Несохранённую примерку теперь можно восстановить после перехода назад; успешный повтор ответа сохраняет первую ошибку в разборе.
+
+Главный экран R01 собран из отдельных зданий, площади, побережья и элементов интерфейса. В кампусе появились три самостоятельных анимированных персонажа: проходящий наблюдатель, Вера Павловна и кот Паскаль. Изменение кадров учитывает режим уменьшенного движения и экономию ресурсов.
+
+На маршруте `/profile/avatar` работает **инвентарь**: категории, поиск, описание предмета, примерка, надевание и снятие, восемь слотов снаряжения и сохранение профиля через настоящий сервер. Каталог согласован с API: 11 полей и 42 значения. Сохранность экипировки проверяется после перезапуска сервера и отдельно для двух учётных записей.
+
+Во вкладке **«Знаки отличия»** доступны четыре учебных знака. Получение наград, прогресс и выбор одного активного знака сохраняет сервер.
+
+| Знак | Условие получения | Эффект на смену |
+|---|---|---|
+| На связи | Доступен сразу | +1 справка |
+| Первое дежурство | Завершить одну учебную смену | +1 повтор |
+| Точный разбор | Решить самостоятельно с первой попытки не менее 80% заданий одной полной смены | +1 справка и +1 повтор |
+| Ритм станции | Завершить смены в три разных дня UTC | +2 справки |
+
+Сохранённый планшет или папка добавляют справку, карандаш — повтор. Комплект фиксируется при начале смены; предел — два заряда каждого вида. Справка открывает объяснение задания, повтор позволяет исправить неверный ответ; помощь учитывается отдельно и не заменяет результат первой попытки. Незавершённая смена восстанавливается после перезагрузки, повторные запросы не начисляют награду заново. Эффекты разрешены только в учебной практике; рейтинговые и экзаменационные режимы их не получают. Подробности: [учебная экипировка и значки](docs/gameplay/EQUIPMENT_AND_BUFFS.md).
+
+Для R01 сохранены исходники персонажей, прозрачных иконок, четырёх учебных знаков и кабинета экипировки. Изображения созданы встроенной генерацией; SpriteCook использован для анимаций персонажей, прозрачности и короткого блика награды. Редактируемые `.aseprite`, кадры, длительности, происхождение и контрольные суммы связаны через [манифест персонажей](assets/manifests/characters.r01.json), [манифест иконок инвентаря](assets/manifests/ui.inventory-r01.json) и [манифест экипировки](assets/manifests/ui.equipment-r01.json). Производные PNG воспроизводятся из этих исходников.
+
+Проверка воспроизводимости графики:
+
+```bash
+python -m pip install -r tools/assets/requirements-r01.txt
+python tools/assets/build_hub_r01.py --check
+python tools/assets/build_characters_r01.py --check
+python tools/assets/build_inventory_icons_r01.py --check
+python tools/assets/build_equipment_r01.py --check
+node tools/test_avatar_inventory.cjs --api
+node tools/test_equipment_api.mjs
+node tools/test_digit_anatomy.cjs
+node --experimental-strip-types --test packages/world-engine/src/runtime/characterAssets.test.ts
+node tools/test_world_characters.cjs
+```
+
+Для проверок API предварительно соберите сервер. Итоговые доказательства: [интеграционная проверка экипировки](docs/testing/2026-11-10-equipment-integration-review.md), [независимая проверка графики и анимации](docs/testing/2026-11-10-equipment-final-art-runtime-review.md). Предыдущий этап описан в [передаче инвентаря](docs/testing/2026-11-10-inventory-handoff.md).
+
+**Границы среза:** сотрудники кампуса имеют собственные образы. Настройка личного персонажа отражается в его предпросмотре и профиле; полная авторская модульная анимация всех сочетаний одежды в мире ещё не готова. Учебный пакет остаётся черновым; игровые значки не означают методическую публикацию или квалификацию. Режимы дуэлей, турниров, сезонных наград и остальные учебные модули не объявляются завершёнными.
+
+**Снимки работающей сборки от 10 ноября:**
+
+![Кампус R01 с тремя анимированными персонажами](docs/testing/evidence/equipment-20261110/final/hub-final.jpg)
+
+![Работающий инвентарь с примеркой и сохранением экипировки](docs/testing/evidence/equipment-20261110/final/inventory-desktop.jpg)
+
+Получение наград после полной смены и последующий выбор: [итог смены](docs/testing/evidence/equipment-20261110/final/reward-earned.jpg), [открытые знаки отличия](docs/testing/evidence/equipment-20261110/final/badges-unlocked.jpg).
+
 
 ## Визуальное направление
 

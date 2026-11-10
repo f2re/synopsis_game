@@ -1,0 +1,12 @@
+Command: python tools/validate_external_agent_matrix.py --json
+Working directory: .
+
+{
+  "status": "PASS",
+  "internal_roles": 19,
+  "external_helpers": 18,
+  "canonical_skills": 35,
+  "profiles_per_provider": 37,
+  "validation": "static; not live AI client execution",
+  "errors": []
+}

@@ -1,0 +1,4 @@
+Command: node tools/test_digit_anatomy.cjs
+Working directory: .
+
+PASS: canonical station pressure, supplied high-altitude value, unavailable/non-finite fallback, component binding and unchanged temperature group.

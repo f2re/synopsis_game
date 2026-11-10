@@ -1,0 +1,22 @@
+Command: python tools/test_import_visual_refs_v2.py
+Working directory: .
+
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.005s
+
+OK
+Импортирован: design/pixel-art/v2/01_hub.png
+Импортирован: design/pixel-art/v2/02_blitz.png
+Импортирован: design/pixel-art/v2/03_duel.png
+Импортирован: design/pixel-art/v2/04_inventory.png
+Импортирован: design/pixel-art/v2/05_tournament.png
+Импортирован: design/pixel-art/v2/06_progression.png
+Проверено: 6, новых файлов: 6. Запустите tools/validate_visual_refs_v2.py
+Уже проверен: design/pixel-art/v2/01_hub.png
+Уже проверен: design/pixel-art/v2/02_blitz.png
+Уже проверен: design/pixel-art/v2/03_duel.png
+Уже проверен: design/pixel-art/v2/04_inventory.png
+Уже проверен: design/pixel-art/v2/05_tournament.png
+Уже проверен: design/pixel-art/v2/06_progression.png
+Проверено: 6, новых файлов: 0. Запустите tools/validate_visual_refs_v2.py

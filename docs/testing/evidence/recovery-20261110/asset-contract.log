@@ -1,0 +1,5 @@
+WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png
+WARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png
+WARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png
+Технический контракт assets: PASS (24 simple manifests, 19 иных manifests пропущено).
+Художественное качество этим checker не оценивается.

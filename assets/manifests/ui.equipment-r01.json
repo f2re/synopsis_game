@@ -1,0 +1,295 @@
+{
+  "id": "ui.equipment-r01",
+  "schemaVersion": 1,
+  "art_status": "pass",
+  "art_review": "docs/testing/2026-11-10-equipment-final-art-runtime-review.md",
+  "providers": [
+    {
+      "name": "OpenAI built-in image_gen",
+      "source": "assets/source/ui/equipment-r01/provider-badges.png",
+      "role": "Four original training merit badge designs",
+      "spritecookGenerationCredits": 0,
+      "sha256": "3e8f6ff4eb0b3e43e9af66c0bbfe35e338ddcfeb3897dea1dc89dd6bcbceda56"
+    },
+    {
+      "name": "OpenAI built-in image_gen",
+      "source": "assets/source/ui/equipment-r01/provider-room.png",
+      "role": "Environment-only edit of user-owned inventory reference",
+      "reference": "design/pixel-art/v2/04_inventory.png",
+      "spritecookGenerationCredits": 0,
+      "sha256": "a81e35706b0172ab5cd08dc6cd472f87dd29f57ee3432fd2a6972a16f2dd5281"
+    },
+    {
+      "name": "SpriteCook pixel-engine-v1.1",
+      "source": "assets/source/ui/equipment-r01/provider-award.png",
+      "canonicalAnimation": "assets/source/ui/equipment-r01/provider-award.webp",
+      "sourceAssetId": "84f8459a-b650-4c43-a4cb-34509d218c93",
+      "asset_id": "65bc1a0c-881a-4e04-884b-f152960087e2",
+      "job_id": "14321d23-b69f-47a7-a9db-4ff8a8d2175f",
+      "frames": 6,
+      "frameSize": [
+        128,
+        128
+      ],
+      "fps": 8,
+      "creditsUsed": 20,
+      "alpha": "Basic, source threshold128, no frame resize or synthesized tween",
+      "sha256": "f1ba37caff11a569c97b1fdef86d8e9e55b5972e38448265e542c4336b93b881"
+    }
+  ],
+  "normalization": "Badges: per-quadrant crop, alpha cutoff128, 108px inner bounds on128 canvas, nearest-neighbour; no palette quantization. Room: original authored pixels, opaque. Export from editable Aseprite.",
+  "rights": {
+    "origin": "User-authorized project artwork",
+    "thirdPartySource": false
+  },
+  "budgets": {
+    "pngBytes": 6000000,
+    "decodedBytes": 10000000
+  },
+  "assets": [
+    {
+      "id": "inventory.badge.starter",
+      "label": "Компас практиканта",
+      "class": "detailed-pixel-ui-icon",
+      "source": "assets/source/ui/equipment-r01/badge_starter.aseprite",
+      "providerSource": "assets/source/ui/equipment-r01/provider-badges.png",
+      "providerCrop": [
+        0,
+        0,
+        631,
+        623
+      ],
+      "size": [
+        128,
+        128
+      ],
+      "padding": 10,
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/equipment-r01/badge_starter.png",
+      "url": "/assets/items/badge_starter.png",
+      "sourceSha256": "b001cd244087b62b103ef93a0ea3f0e4177323f9e0e649d558e0d3b89e8dd6f9",
+      "output": {
+        "sha256": "a668ce6de2695f4c8d4769709ef002b5728a07013f1ed9e6d5ddeadb28456dc1",
+        "bytes": 15970,
+        "dimensions": [
+          128,
+          128
+        ],
+        "frames": 1,
+        "durationsMs": [
+          1000
+        ],
+        "decodedBytes": 65536
+      },
+      "spritecook_asset": {
+        "asset_id": "d2828a23-1100-4259-befd-8e71507d5914",
+        "sha12": "a668ce6de269",
+        "label": "Компас практиканта"
+      }
+    },
+    {
+      "id": "inventory.badge.first_shift",
+      "label": "Первая смена",
+      "class": "detailed-pixel-ui-icon",
+      "source": "assets/source/ui/equipment-r01/badge_first_shift.aseprite",
+      "providerSource": "assets/source/ui/equipment-r01/provider-badges.png",
+      "providerCrop": [
+        631,
+        0,
+        1262,
+        623
+      ],
+      "size": [
+        128,
+        128
+      ],
+      "padding": 10,
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/equipment-r01/badge_first_shift.png",
+      "url": "/assets/items/badge_first_shift.png",
+      "sourceSha256": "5991367395e3d7ccd25da11e40fdcb45259212cf8b0267c84eb12454b5d4587e",
+      "output": {
+        "sha256": "1e8736e1755d06af65048bd1bf30c19adf113899268aabe3d60e51e3820322ab",
+        "bytes": 14221,
+        "dimensions": [
+          128,
+          128
+        ],
+        "frames": 1,
+        "durationsMs": [
+          1000
+        ],
+        "decodedBytes": 65536
+      },
+      "spritecook_asset": {
+        "asset_id": "84f8459a-b650-4c43-a4cb-34509d218c93",
+        "sha12": "1e8736e1755d",
+        "label": "Первая смена"
+      }
+    },
+    {
+      "id": "inventory.badge.accuracy",
+      "label": "Внимательный наблюдатель",
+      "class": "detailed-pixel-ui-icon",
+      "source": "assets/source/ui/equipment-r01/badge_accuracy.aseprite",
+      "providerSource": "assets/source/ui/equipment-r01/provider-badges.png",
+      "providerCrop": [
+        0,
+        623,
+        631,
+        1246
+      ],
+      "size": [
+        128,
+        128
+      ],
+      "padding": 10,
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/equipment-r01/badge_accuracy.png",
+      "url": "/assets/items/badge_accuracy.png",
+      "sourceSha256": "d9fcd1f5b47bb1ceec7420da57c50071168fd05acafbc165b8791d5c71fb1cec",
+      "output": {
+        "sha256": "d47338108ee9b85b63f9bdf81fd0257e003105141889852e00e9eb0edf349410",
+        "bytes": 17614,
+        "dimensions": [
+          128,
+          128
+        ],
+        "frames": 1,
+        "durationsMs": [
+          1000
+        ],
+        "decodedBytes": 65536
+      },
+      "spritecook_asset": {
+        "asset_id": "1a1559c6-4c4e-4b6f-8fb1-09a10ef7700b",
+        "sha12": "d47338108ee9",
+        "label": "Внимательный наблюдатель"
+      }
+    },
+    {
+      "id": "inventory.badge.regular",
+      "label": "На дежурстве",
+      "class": "detailed-pixel-ui-icon",
+      "source": "assets/source/ui/equipment-r01/badge_regular.aseprite",
+      "providerSource": "assets/source/ui/equipment-r01/provider-badges.png",
+      "providerCrop": [
+        631,
+        623,
+        1262,
+        1246
+      ],
+      "size": [
+        128,
+        128
+      ],
+      "padding": 10,
+      "alphaCutoff": 128,
+      "generated": "assets/generated/ui/equipment-r01/badge_regular.png",
+      "url": "/assets/items/badge_regular.png",
+      "sourceSha256": "ac8bb58808773359c0dafbf6d2ea3940e2b316a488e9260097d92c41ac34d0b2",
+      "output": {
+        "sha256": "32be10ce703fd3d40f9d3163f274e350c0adebdb16843908ddff744a7959223e",
+        "bytes": 13773,
+        "dimensions": [
+          128,
+          128
+        ],
+        "frames": 1,
+        "durationsMs": [
+          1000
+        ],
+        "decodedBytes": 65536
+      },
+      "spritecook_asset": {
+        "asset_id": "097a9a84-f056-4895-a982-17ecebe3ef87",
+        "sha12": "32be10ce703f",
+        "label": "На дежурстве"
+      }
+    },
+    {
+      "id": "inventory.scene.wardrobe",
+      "label": "Кабинет и гардероб станции",
+      "class": "large_scene",
+      "source": "assets/source/ui/equipment-r01/wardrobe-room.aseprite",
+      "providerSource": "assets/source/ui/equipment-r01/provider-room.png",
+      "size": [
+        1672,
+        941
+      ],
+      "generated": "assets/generated/ui/equipment-r01/wardrobe-room.png",
+      "url": "/assets/ui/equipment/wardrobe-room.png",
+      "sourceSha256": "82082956a7c4277a4d6ac8508ac757de3ced9ce81ccd0d1a88519fa78eb337bb",
+      "output": {
+        "sha256": "c43748cee0bf727c9cd3e6a6a5634fcbed021482be4afa35e8098e1be5122e9b",
+        "bytes": 2497361,
+        "dimensions": [
+          1672,
+          941
+        ],
+        "frames": 1,
+        "durationsMs": [
+          1000
+        ],
+        "decodedBytes": 6293408
+      }
+    },
+    {
+      "id": "inventory.badge.first_shift.award",
+      "label": "Награда за первую смену — блик",
+      "class": "detailed-pixel-ui-animation",
+      "source": "assets/source/ui/equipment-r01/badge-first-shift-award.aseprite",
+      "providerSource": "assets/source/ui/equipment-r01/provider-award.png",
+      "size": [
+        128,
+        128
+      ],
+      "frames": 6,
+      "padding": 6,
+      "tags": {
+        "award": [
+          0,
+          5
+        ]
+      },
+      "generated": "assets/generated/ui/equipment-r01/badge-first-shift-award.png",
+      "url": "/assets/ui/equipment/badge-first-shift-award.png",
+      "spritecook_asset": {
+        "asset_id": "65bc1a0c-881a-4e04-884b-f152960087e2",
+        "sha12": "f1ba37caff11",
+        "label": "Первая смена — шестикадровый блик"
+      },
+      "sourceSha256": "700d457599579506f692bfa16e3fe7ece4367af507d4005cb931dfd85a94c2f6",
+      "output": {
+        "sha256": "92517ecfdc96c99fc19131edb9057345f152c0dd9ded427dd249bcc4daddd45d",
+        "bytes": 18624,
+        "dimensions": [
+          768,
+          128
+        ],
+        "frames": 6,
+        "durationsMs": [
+          125,
+          125,
+          125,
+          125,
+          125,
+          125
+        ],
+        "decodedBytes": 393216
+      }
+    }
+  ],
+  "totals": {
+    "pngBytes": 2577563,
+    "decodedBytes": 6948768
+  },
+  "spritecook": {
+    "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+    "collection_id": "ed734855-679a-4f57-89ea-23b69a563c64",
+    "creditsBefore": 720,
+    "creditsUsed": 20,
+    "creditsAfter": 700,
+    "freeUploads": 4
+  }
+}

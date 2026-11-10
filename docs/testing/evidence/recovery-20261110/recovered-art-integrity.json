@@ -1,0 +1,1316 @@
+{
+  "sourceCommit": "d9d780d9b21207e5e1bee54464c44895d4f92fb2",
+  "expectedTree": "249198299e8f0a5ef5ec5c22b3485511c6f5b8cd",
+  "status": "PASS",
+  "matched": 218,
+  "files": [
+    {
+      "path": "apps/web/public/assets/items/badge_accuracy.png",
+      "expectedGitBlob": "a3eb47c121ddc1935312395466daec8e1fc4d15e",
+      "actualGitBlob": "a3eb47c121ddc1935312395466daec8e1fc4d15e",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/badge_aerology_reviewed.png",
+      "expectedGitBlob": "634772b9ccf1277d99663cca6890524e200b34d3",
+      "actualGitBlob": "634772b9ccf1277d99663cca6890524e200b34d3",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/badge_first_shift.png",
+      "expectedGitBlob": "f2b4e6ad6f9d1bbfdeb7beff72075b37bca9c89e",
+      "actualGitBlob": "f2b4e6ad6f9d1bbfdeb7beff72075b37bca9c89e",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/badge_meteo_reviewed.png",
+      "expectedGitBlob": "00e83f40562e17e8c52bfca04794c395bc60d99a",
+      "actualGitBlob": "00e83f40562e17e8c52bfca04794c395bc60d99a",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/badge_regular.png",
+      "expectedGitBlob": "3c110b79319b6a9d9fdb67716d4cbe44802eaf0e",
+      "actualGitBlob": "3c110b79319b6a9d9fdb67716d4cbe44802eaf0e",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/badge_starter.png",
+      "expectedGitBlob": "03851d164b21b871d378bb83c4f82aea4fda7d73",
+      "actualGitBlob": "03851d164b21b871d378bb83c4f82aea4fda7d73",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/goggles_reviewed.png",
+      "expectedGitBlob": "787de2a39398f4dd6e5b0d6c0a460f1dc0f11444",
+      "actualGitBlob": "787de2a39398f4dd6e5b0d6c0a460f1dc0f11444",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/items/scarf_reviewed.png",
+      "expectedGitBlob": "26460f6f0e8ab786ed2e428da5d0e68801696e81",
+      "actualGitBlob": "26460f6f0e8ab786ed2e428da5d0e68801696e81",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/equipment/badge-first-shift-award.png",
+      "expectedGitBlob": "7188aa1a806400d7df8fecef42f7725b2f7f0c46",
+      "actualGitBlob": "7188aa1a806400d7df8fecef42f7725b2f7f0c46",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/equipment/wardrobe-room.png",
+      "expectedGitBlob": "a8ffc7048aebf0b5c0d2f722cc16ac219d804524",
+      "actualGitBlob": "a8ffc7048aebf0b5c0d2f722cc16ac219d804524",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/cta-hex-disabled.png",
+      "expectedGitBlob": "411d8e1eb3b8df52da1cfc1b54811cffb7446396",
+      "actualGitBlob": "411d8e1eb3b8df52da1cfc1b54811cffb7446396",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/cta-hex-hover.png",
+      "expectedGitBlob": "8d18cfbacc981aed7d6c660a5aaa46569bcc9d72",
+      "actualGitBlob": "8d18cfbacc981aed7d6c660a5aaa46569bcc9d72",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/cta-hex-normal.png",
+      "expectedGitBlob": "e063e195fd2a50b7519d6ee4e6975b75e3e103e7",
+      "actualGitBlob": "e063e195fd2a50b7519d6ee4e6975b75e3e103e7",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/cta-hex-pressed.png",
+      "expectedGitBlob": "4f1231e9b4dd543c291ef8229854f376c4e966e6",
+      "actualGitBlob": "4f1231e9b4dd543c291ef8229854f376c4e966e6",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/dialog-frame.png",
+      "expectedGitBlob": "376da0788e2211fffa3c91e50f91daddea262a04",
+      "actualGitBlob": "376da0788e2211fffa3c91e50f91daddea262a04",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/hud-strip.png",
+      "expectedGitBlob": "33722b3960eefbf96af89b95e9b2e5f3037b00ac",
+      "actualGitBlob": "33722b3960eefbf96af89b95e9b2e5f3037b00ac",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/icon-archive.png",
+      "expectedGitBlob": "7510fdff4d0df4a7e593f56665b03610233b58e5",
+      "actualGitBlob": "7510fdff4d0df4a7e593f56665b03610233b58e5",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/icon-book.png",
+      "expectedGitBlob": "f52f034bf74b8be236c136e7bbbf25ff65ffd9a5",
+      "actualGitBlob": "f52f034bf74b8be236c136e7bbbf25ff65ffd9a5",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/icon-observer.png",
+      "expectedGitBlob": "3cc7db4d451bad12b34c7797d92213a74c23ed35",
+      "actualGitBlob": "3cc7db4d451bad12b34c7797d92213a74c23ed35",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/icon-route.png",
+      "expectedGitBlob": "5fcb55db26fc12eed4ade37e98535ad23c4be8e8",
+      "actualGitBlob": "5fcb55db26fc12eed4ade37e98535ad23c4be8e8",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/icon-settings.png",
+      "expectedGitBlob": "6a272336e4902f1fee0fc386f45385ed058b5bc5",
+      "actualGitBlob": "6a272336e4902f1fee0fc386f45385ed058b5bc5",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/icon-weather.png",
+      "expectedGitBlob": "90a98c5d4a85951193d92f338ff665ed3025f09c",
+      "actualGitBlob": "90a98c5d4a85951193d92f338ff665ed3025f09c",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/nav-disabled.png",
+      "expectedGitBlob": "a2f6b2d7e2cf59b6f7b900bc47fe7019fb06db26",
+      "actualGitBlob": "a2f6b2d7e2cf59b6f7b900bc47fe7019fb06db26",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/nav-hover.png",
+      "expectedGitBlob": "5c71b832b375e07480e2acc2f4c573d57ba066a8",
+      "actualGitBlob": "5c71b832b375e07480e2acc2f4c573d57ba066a8",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/nav-normal.png",
+      "expectedGitBlob": "004d247407c51a64c583b1acb27e59a8375e134c",
+      "actualGitBlob": "004d247407c51a64c583b1acb27e59a8375e134c",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/nav-pressed.png",
+      "expectedGitBlob": "53ca476896396431c044d8fe80c9d8392844be81",
+      "actualGitBlob": "53ca476896396431c044d8fe80c9d8392844be81",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/primary-disabled.png",
+      "expectedGitBlob": "c168b6b1c3ae2356ad3c74149dbca4cf12c4d475",
+      "actualGitBlob": "c168b6b1c3ae2356ad3c74149dbca4cf12c4d475",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/primary-hover.png",
+      "expectedGitBlob": "842fb9bc57c0dbfdbda182ab68d1e38cd61645e8",
+      "actualGitBlob": "842fb9bc57c0dbfdbda182ab68d1e38cd61645e8",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/primary-normal.png",
+      "expectedGitBlob": "8242f4142a5bc0f412a7811b43dd67443d98669f",
+      "actualGitBlob": "8242f4142a5bc0f412a7811b43dd67443d98669f",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/primary-pressed.png",
+      "expectedGitBlob": "556caf4ed7460e774b204cdf42a50cc4db8f3b67",
+      "actualGitBlob": "556caf4ed7460e774b204cdf42a50cc4db8f3b67",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/progress-amber-sample.png",
+      "expectedGitBlob": "138f0b71bf35141830e317f7b858f20a8a5cd2d6",
+      "actualGitBlob": "138f0b71bf35141830e317f7b858f20a8a5cd2d6",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/progress-blue-sample.png",
+      "expectedGitBlob": "d653d1be5b435d2f53e9bc27782bfaa6b409808f",
+      "actualGitBlob": "d653d1be5b435d2f53e9bc27782bfaa6b409808f",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/progress-track.png",
+      "expectedGitBlob": "a38529b644be771baf09aeb51ae19e47d1f96283",
+      "actualGitBlob": "a38529b644be771baf09aeb51ae19e47d1f96283",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/secondary-disabled.png",
+      "expectedGitBlob": "801bc68073c67c96c707298c024400986686b238",
+      "actualGitBlob": "801bc68073c67c96c707298c024400986686b238",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/secondary-hover.png",
+      "expectedGitBlob": "afb3fd7afce48ea3d04ebb0ca7cdef983da531dd",
+      "actualGitBlob": "afb3fd7afce48ea3d04ebb0ca7cdef983da531dd",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/secondary-normal.png",
+      "expectedGitBlob": "06244c43a9d8decabbd2a5470099287328472e40",
+      "actualGitBlob": "06244c43a9d8decabbd2a5470099287328472e40",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/secondary-pressed.png",
+      "expectedGitBlob": "026107d29a640b4f373cfe7eb19ae0460473bef3",
+      "actualGitBlob": "026107d29a640b4f373cfe7eb19ae0460473bef3",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/assets/ui/hub-r01/square-frame.png",
+      "expectedGitBlob": "6dfab174978b53cbe4f93e5fc64be00969c3f669",
+      "actualGitBlob": "6dfab174978b53cbe4f93e5fc64be00969c3f669",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/characters/manifest.json",
+      "expectedGitBlob": "edbeba27a295ffadf8b9bac09bbf8def70dc0f32",
+      "actualGitBlob": "edbeba27a295ffadf8b9bac09bbf8def70dc0f32",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/characters/observer-idle.png",
+      "expectedGitBlob": "c344f99f45604027f74467f0fd2a1d23af31286a",
+      "actualGitBlob": "c344f99f45604027f74467f0fd2a1d23af31286a",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/characters/observer-walk.png",
+      "expectedGitBlob": "54ff367554aff6c83b2b5d1759acc9c4f3a786a7",
+      "actualGitBlob": "54ff367554aff6c83b2b5d1759acc9c4f3a786a7",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/characters/pascal-idle.png",
+      "expectedGitBlob": "8029a01ee3d17897219a89349d4a934643716445",
+      "actualGitBlob": "8029a01ee3d17897219a89349d4a934643716445",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/characters/vera-idle.png",
+      "expectedGitBlob": "b1d00efc8d23e77f7b850cc2933356689c032883",
+      "actualGitBlob": "b1d00efc8d23e77f7b850cc2933356689c032883",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/building-archive.png",
+      "expectedGitBlob": "1d9a45b5e7e61beb2bc8d4acde117b8e8d609323",
+      "actualGitBlob": "1d9a45b5e7e61beb2bc8d4acde117b8e8d609323",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/building-cartography.png",
+      "expectedGitBlob": "6eafb666f14eed9c4ec479bc0b758366afd43214",
+      "actualGitBlob": "6eafb666f14eed9c4ec479bc0b758366afd43214",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/building-codepost.png",
+      "expectedGitBlob": "400d7e9f7bb66151ca43c2f1bbd849e03f3505ab",
+      "actualGitBlob": "400d7e9f7bb66151ca43c2f1bbd849e03f3505ab",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/building-hall.png",
+      "expectedGitBlob": "8fff37cea37f808af692cbdaa3f465e12fde0e1a",
+      "actualGitBlob": "8fff37cea37f808af692cbdaa3f465e12fde0e1a",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/building-lab.png",
+      "expectedGitBlob": "28b487a444bd8f50d113356b0509fd483b72b756",
+      "actualGitBlob": "28b487a444bd8f50d113356b0509fd483b72b756",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/building-radar.png",
+      "expectedGitBlob": "f3caaa30d0bb2100427acd027991cf64ad057123",
+      "actualGitBlob": "f3caaa30d0bb2100427acd027991cf64ad057123",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/campus-ground.png",
+      "expectedGitBlob": "35c1093a94af59bea86ccd0abeefbdda9abe806b",
+      "actualGitBlob": "35c1093a94af59bea86ccd0abeefbdda9abe806b",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/coastal-sky.png",
+      "expectedGitBlob": "0012aff107fb206b212c46b7b09b670b80fedaab",
+      "actualGitBlob": "0012aff107fb206b212c46b7b09b670b80fedaab",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/prop-bench.png",
+      "expectedGitBlob": "1e4dfde559ea7eede15ac5179e7e18b23f7aeee9",
+      "actualGitBlob": "1e4dfde559ea7eede15ac5179e7e18b23f7aeee9",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/prop-fountain.png",
+      "expectedGitBlob": "a067600a2abe5b5888a92731a6167ff710632147",
+      "actualGitBlob": "a067600a2abe5b5888a92731a6167ff710632147",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/prop-hedge.png",
+      "expectedGitBlob": "999b91e844ff6c0f73ec59d411962b99798919bd",
+      "actualGitBlob": "999b91e844ff6c0f73ec59d411962b99798919bd",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/prop-lamp.png",
+      "expectedGitBlob": "aea04018cb6b79273dc763b1d35a026064f53987",
+      "actualGitBlob": "aea04018cb6b79273dc763b1d35a026064f53987",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/prop-pine.png",
+      "expectedGitBlob": "0afbd8a26d58b4ece0c3a9b47a9d3ce22fbf7cb1",
+      "actualGitBlob": "0afbd8a26d58b4ece0c3a9b47a9d3ce22fbf7cb1",
+      "matches": true
+    },
+    {
+      "path": "apps/web/public/hub/r01/prop-tree.png",
+      "expectedGitBlob": "452f5551555e67ded932febae6c8d2d1850ef72a",
+      "actualGitBlob": "452f5551555e67ded932febae6c8d2d1850ef72a",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/characters/r01/observer-idle.png",
+      "expectedGitBlob": "c344f99f45604027f74467f0fd2a1d23af31286a",
+      "actualGitBlob": "c344f99f45604027f74467f0fd2a1d23af31286a",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/characters/r01/observer-walk.png",
+      "expectedGitBlob": "54ff367554aff6c83b2b5d1759acc9c4f3a786a7",
+      "actualGitBlob": "54ff367554aff6c83b2b5d1759acc9c4f3a786a7",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/characters/r01/pascal-idle.png",
+      "expectedGitBlob": "8029a01ee3d17897219a89349d4a934643716445",
+      "actualGitBlob": "8029a01ee3d17897219a89349d4a934643716445",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/characters/r01/vera-idle.png",
+      "expectedGitBlob": "b1d00efc8d23e77f7b850cc2933356689c032883",
+      "actualGitBlob": "b1d00efc8d23e77f7b850cc2933356689c032883",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/building-archive.png",
+      "expectedGitBlob": "1d9a45b5e7e61beb2bc8d4acde117b8e8d609323",
+      "actualGitBlob": "1d9a45b5e7e61beb2bc8d4acde117b8e8d609323",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/building-cartography.png",
+      "expectedGitBlob": "6eafb666f14eed9c4ec479bc0b758366afd43214",
+      "actualGitBlob": "6eafb666f14eed9c4ec479bc0b758366afd43214",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/building-codepost.png",
+      "expectedGitBlob": "400d7e9f7bb66151ca43c2f1bbd849e03f3505ab",
+      "actualGitBlob": "400d7e9f7bb66151ca43c2f1bbd849e03f3505ab",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/building-hall.png",
+      "expectedGitBlob": "8fff37cea37f808af692cbdaa3f465e12fde0e1a",
+      "actualGitBlob": "8fff37cea37f808af692cbdaa3f465e12fde0e1a",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/building-lab.png",
+      "expectedGitBlob": "28b487a444bd8f50d113356b0509fd483b72b756",
+      "actualGitBlob": "28b487a444bd8f50d113356b0509fd483b72b756",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/building-radar.png",
+      "expectedGitBlob": "f3caaa30d0bb2100427acd027991cf64ad057123",
+      "actualGitBlob": "f3caaa30d0bb2100427acd027991cf64ad057123",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/campus-ground.png",
+      "expectedGitBlob": "35c1093a94af59bea86ccd0abeefbdda9abe806b",
+      "actualGitBlob": "35c1093a94af59bea86ccd0abeefbdda9abe806b",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/coastal-sky.png",
+      "expectedGitBlob": "0012aff107fb206b212c46b7b09b670b80fedaab",
+      "actualGitBlob": "0012aff107fb206b212c46b7b09b670b80fedaab",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/prop-bench.png",
+      "expectedGitBlob": "1e4dfde559ea7eede15ac5179e7e18b23f7aeee9",
+      "actualGitBlob": "1e4dfde559ea7eede15ac5179e7e18b23f7aeee9",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/prop-fountain.png",
+      "expectedGitBlob": "a067600a2abe5b5888a92731a6167ff710632147",
+      "actualGitBlob": "a067600a2abe5b5888a92731a6167ff710632147",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/prop-hedge.png",
+      "expectedGitBlob": "999b91e844ff6c0f73ec59d411962b99798919bd",
+      "actualGitBlob": "999b91e844ff6c0f73ec59d411962b99798919bd",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/prop-lamp.png",
+      "expectedGitBlob": "aea04018cb6b79273dc763b1d35a026064f53987",
+      "actualGitBlob": "aea04018cb6b79273dc763b1d35a026064f53987",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/prop-pine.png",
+      "expectedGitBlob": "0afbd8a26d58b4ece0c3a9b47a9d3ce22fbf7cb1",
+      "actualGitBlob": "0afbd8a26d58b4ece0c3a9b47a9d3ce22fbf7cb1",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/hub/r01/prop-tree.png",
+      "expectedGitBlob": "452f5551555e67ded932febae6c8d2d1850ef72a",
+      "actualGitBlob": "452f5551555e67ded932febae6c8d2d1850ef72a",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/equipment-r01/badge-first-shift-award.png",
+      "expectedGitBlob": "7188aa1a806400d7df8fecef42f7725b2f7f0c46",
+      "actualGitBlob": "7188aa1a806400d7df8fecef42f7725b2f7f0c46",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/equipment-r01/badge_accuracy.png",
+      "expectedGitBlob": "a3eb47c121ddc1935312395466daec8e1fc4d15e",
+      "actualGitBlob": "a3eb47c121ddc1935312395466daec8e1fc4d15e",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/equipment-r01/badge_first_shift.png",
+      "expectedGitBlob": "f2b4e6ad6f9d1bbfdeb7beff72075b37bca9c89e",
+      "actualGitBlob": "f2b4e6ad6f9d1bbfdeb7beff72075b37bca9c89e",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/equipment-r01/badge_regular.png",
+      "expectedGitBlob": "3c110b79319b6a9d9fdb67716d4cbe44802eaf0e",
+      "actualGitBlob": "3c110b79319b6a9d9fdb67716d4cbe44802eaf0e",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/equipment-r01/badge_starter.png",
+      "expectedGitBlob": "03851d164b21b871d378bb83c4f82aea4fda7d73",
+      "actualGitBlob": "03851d164b21b871d378bb83c4f82aea4fda7d73",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/equipment-r01/wardrobe-room.png",
+      "expectedGitBlob": "a8ffc7048aebf0b5c0d2f722cc16ac219d804524",
+      "actualGitBlob": "a8ffc7048aebf0b5c0d2f722cc16ac219d804524",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/cta-hex-disabled.png",
+      "expectedGitBlob": "411d8e1eb3b8df52da1cfc1b54811cffb7446396",
+      "actualGitBlob": "411d8e1eb3b8df52da1cfc1b54811cffb7446396",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/cta-hex-hover.png",
+      "expectedGitBlob": "8d18cfbacc981aed7d6c660a5aaa46569bcc9d72",
+      "actualGitBlob": "8d18cfbacc981aed7d6c660a5aaa46569bcc9d72",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/cta-hex-normal.png",
+      "expectedGitBlob": "e063e195fd2a50b7519d6ee4e6975b75e3e103e7",
+      "actualGitBlob": "e063e195fd2a50b7519d6ee4e6975b75e3e103e7",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/cta-hex-pressed.png",
+      "expectedGitBlob": "4f1231e9b4dd543c291ef8229854f376c4e966e6",
+      "actualGitBlob": "4f1231e9b4dd543c291ef8229854f376c4e966e6",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/dialog-frame.png",
+      "expectedGitBlob": "376da0788e2211fffa3c91e50f91daddea262a04",
+      "actualGitBlob": "376da0788e2211fffa3c91e50f91daddea262a04",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/hud-strip.png",
+      "expectedGitBlob": "33722b3960eefbf96af89b95e9b2e5f3037b00ac",
+      "actualGitBlob": "33722b3960eefbf96af89b95e9b2e5f3037b00ac",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/icon-archive.png",
+      "expectedGitBlob": "7510fdff4d0df4a7e593f56665b03610233b58e5",
+      "actualGitBlob": "7510fdff4d0df4a7e593f56665b03610233b58e5",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/icon-book.png",
+      "expectedGitBlob": "f52f034bf74b8be236c136e7bbbf25ff65ffd9a5",
+      "actualGitBlob": "f52f034bf74b8be236c136e7bbbf25ff65ffd9a5",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/icon-observer.png",
+      "expectedGitBlob": "3cc7db4d451bad12b34c7797d92213a74c23ed35",
+      "actualGitBlob": "3cc7db4d451bad12b34c7797d92213a74c23ed35",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/icon-route.png",
+      "expectedGitBlob": "5fcb55db26fc12eed4ade37e98535ad23c4be8e8",
+      "actualGitBlob": "5fcb55db26fc12eed4ade37e98535ad23c4be8e8",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/icon-settings.png",
+      "expectedGitBlob": "6a272336e4902f1fee0fc386f45385ed058b5bc5",
+      "actualGitBlob": "6a272336e4902f1fee0fc386f45385ed058b5bc5",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/icon-weather.png",
+      "expectedGitBlob": "90a98c5d4a85951193d92f338ff665ed3025f09c",
+      "actualGitBlob": "90a98c5d4a85951193d92f338ff665ed3025f09c",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/nav-disabled.png",
+      "expectedGitBlob": "a2f6b2d7e2cf59b6f7b900bc47fe7019fb06db26",
+      "actualGitBlob": "a2f6b2d7e2cf59b6f7b900bc47fe7019fb06db26",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/nav-hover.png",
+      "expectedGitBlob": "5c71b832b375e07480e2acc2f4c573d57ba066a8",
+      "actualGitBlob": "5c71b832b375e07480e2acc2f4c573d57ba066a8",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/nav-normal.png",
+      "expectedGitBlob": "004d247407c51a64c583b1acb27e59a8375e134c",
+      "actualGitBlob": "004d247407c51a64c583b1acb27e59a8375e134c",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/nav-pressed.png",
+      "expectedGitBlob": "53ca476896396431c044d8fe80c9d8392844be81",
+      "actualGitBlob": "53ca476896396431c044d8fe80c9d8392844be81",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/primary-disabled.png",
+      "expectedGitBlob": "c168b6b1c3ae2356ad3c74149dbca4cf12c4d475",
+      "actualGitBlob": "c168b6b1c3ae2356ad3c74149dbca4cf12c4d475",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/primary-hover.png",
+      "expectedGitBlob": "842fb9bc57c0dbfdbda182ab68d1e38cd61645e8",
+      "actualGitBlob": "842fb9bc57c0dbfdbda182ab68d1e38cd61645e8",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/primary-normal.png",
+      "expectedGitBlob": "8242f4142a5bc0f412a7811b43dd67443d98669f",
+      "actualGitBlob": "8242f4142a5bc0f412a7811b43dd67443d98669f",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/primary-pressed.png",
+      "expectedGitBlob": "556caf4ed7460e774b204cdf42a50cc4db8f3b67",
+      "actualGitBlob": "556caf4ed7460e774b204cdf42a50cc4db8f3b67",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/progress-amber-sample.png",
+      "expectedGitBlob": "138f0b71bf35141830e317f7b858f20a8a5cd2d6",
+      "actualGitBlob": "138f0b71bf35141830e317f7b858f20a8a5cd2d6",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/progress-blue-sample.png",
+      "expectedGitBlob": "d653d1be5b435d2f53e9bc27782bfaa6b409808f",
+      "actualGitBlob": "d653d1be5b435d2f53e9bc27782bfaa6b409808f",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/progress-track.png",
+      "expectedGitBlob": "a38529b644be771baf09aeb51ae19e47d1f96283",
+      "actualGitBlob": "a38529b644be771baf09aeb51ae19e47d1f96283",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/secondary-disabled.png",
+      "expectedGitBlob": "801bc68073c67c96c707298c024400986686b238",
+      "actualGitBlob": "801bc68073c67c96c707298c024400986686b238",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/secondary-hover.png",
+      "expectedGitBlob": "afb3fd7afce48ea3d04ebb0ca7cdef983da531dd",
+      "actualGitBlob": "afb3fd7afce48ea3d04ebb0ca7cdef983da531dd",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/secondary-normal.png",
+      "expectedGitBlob": "06244c43a9d8decabbd2a5470099287328472e40",
+      "actualGitBlob": "06244c43a9d8decabbd2a5470099287328472e40",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/secondary-pressed.png",
+      "expectedGitBlob": "026107d29a640b4f373cfe7eb19ae0460473bef3",
+      "actualGitBlob": "026107d29a640b4f373cfe7eb19ae0460473bef3",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/hub-r01/square-frame.png",
+      "expectedGitBlob": "6dfab174978b53cbe4f93e5fc64be00969c3f669",
+      "actualGitBlob": "6dfab174978b53cbe4f93e5fc64be00969c3f669",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/inventory-r01/badge_aerology.png",
+      "expectedGitBlob": "634772b9ccf1277d99663cca6890524e200b34d3",
+      "actualGitBlob": "634772b9ccf1277d99663cca6890524e200b34d3",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/inventory-r01/badge_meteo.png",
+      "expectedGitBlob": "00e83f40562e17e8c52bfca04794c395bc60d99a",
+      "actualGitBlob": "00e83f40562e17e8c52bfca04794c395bc60d99a",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/inventory-r01/goggles.png",
+      "expectedGitBlob": "787de2a39398f4dd6e5b0d6c0a460f1dc0f11444",
+      "actualGitBlob": "787de2a39398f4dd6e5b0d6c0a460f1dc0f11444",
+      "matches": true
+    },
+    {
+      "path": "assets/generated/ui/inventory-r01/scarf.png",
+      "expectedGitBlob": "26460f6f0e8ab786ed2e428da5d0e68801696e81",
+      "actualGitBlob": "26460f6f0e8ab786ed2e428da5d0e68801696e81",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/characters.r01.json",
+      "expectedGitBlob": "b25dfb3ce030a591f722d031592a7f76061d64a3",
+      "actualGitBlob": "b25dfb3ce030a591f722d031592a7f76061d64a3",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/hub.r01-buildings.json",
+      "expectedGitBlob": "54f3455f407db40cb3aa5dd8eb6bc99bca16a92f",
+      "actualGitBlob": "54f3455f407db40cb3aa5dd8eb6bc99bca16a92f",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/hub.r01-ground.json",
+      "expectedGitBlob": "d2cb310a7e78e2a784c477923ba09fec60096114",
+      "actualGitBlob": "d2cb310a7e78e2a784c477923ba09fec60096114",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/hub.r01-landscape.json",
+      "expectedGitBlob": "cc8044f7dd86d1bfe394b5b0b1bdefa9cc8c6bbe",
+      "actualGitBlob": "cc8044f7dd86d1bfe394b5b0b1bdefa9cc8c6bbe",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/hub.r01-props.json",
+      "expectedGitBlob": "917b4498b027a105c237b9bef303fc034528d7fa",
+      "actualGitBlob": "917b4498b027a105c237b9bef303fc034528d7fa",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/hub.r01-provenance.json",
+      "expectedGitBlob": "510c4804cc8ceeb8162be8aba445f7b65ada7af5",
+      "actualGitBlob": "510c4804cc8ceeb8162be8aba445f7b65ada7af5",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/spritecook-assets.json",
+      "expectedGitBlob": "77dba5c403f88244450152a8e6420dcf3ec28120",
+      "actualGitBlob": "77dba5c403f88244450152a8e6420dcf3ec28120",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/ui.equipment-r01.json",
+      "expectedGitBlob": "d3ce73186378286690613ee14e2357b666292b91",
+      "actualGitBlob": "d3ce73186378286690613ee14e2357b666292b91",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/ui.hub-r01.json",
+      "expectedGitBlob": "ef6da06f6dac013b4e22e807980ee912fa9ec29e",
+      "actualGitBlob": "ef6da06f6dac013b4e22e807980ee912fa9ec29e",
+      "matches": true
+    },
+    {
+      "path": "assets/manifests/ui.inventory-r01.json",
+      "expectedGitBlob": "0aae6faf41e9e510d4e06c9696d21f71b6a353ca",
+      "actualGitBlob": "0aae6faf41e9e510d4e06c9696d21f71b6a353ca",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/observer.aseprite",
+      "expectedGitBlob": "af04b393875798ce98725a872b00bd3d809ad285",
+      "actualGitBlob": "af04b393875798ce98725a872b00bd3d809ad285",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/pascal.aseprite",
+      "expectedGitBlob": "f55cf4146dfbddd939530d9d7212e8635d76aaaa",
+      "actualGitBlob": "f55cf4146dfbddd939530d9d7212e8635d76aaaa",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/prepared/observer.png",
+      "expectedGitBlob": "3128ae1b97407719a190776e611ca60db47ee74b",
+      "actualGitBlob": "3128ae1b97407719a190776e611ca60db47ee74b",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/prepared/pascal.png",
+      "expectedGitBlob": "ab8c32942ad7c28474399f54e189374d64aba00c",
+      "actualGitBlob": "ab8c32942ad7c28474399f54e189374d64aba00c",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/prepared/vera.png",
+      "expectedGitBlob": "f1ed76c0dff5a40b07fd244755cdb0b25810cd56",
+      "actualGitBlob": "f1ed76c0dff5a40b07fd244755cdb0b25810cd56",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provenance.json",
+      "expectedGitBlob": "de485eb8d19e83c2165b86615723d6318b8af76b",
+      "actualGitBlob": "de485eb8d19e83c2165b86615723d6318b8af76b",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/observer-animation.png",
+      "expectedGitBlob": "d08cb2ea57968e66453d5a8c04b0f92842bfad39",
+      "actualGitBlob": "d08cb2ea57968e66453d5a8c04b0f92842bfad39",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/observer-animation.webp",
+      "expectedGitBlob": "18f18a2aaff006d550673006c10647c118314a68",
+      "actualGitBlob": "18f18a2aaff006d550673006c10647c118314a68",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/observer.png",
+      "expectedGitBlob": "8b11cc6fbd2bf93790a3d42f207855851ef8d7db",
+      "actualGitBlob": "8b11cc6fbd2bf93790a3d42f207855851ef8d7db",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/pascal-animation.png",
+      "expectedGitBlob": "b38c688c17a0dd5d985ed90f57301ed646f41b36",
+      "actualGitBlob": "b38c688c17a0dd5d985ed90f57301ed646f41b36",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/pascal-animation.webp",
+      "expectedGitBlob": "c5ec9bb5d630cbb783e9f267b6f8ed28b4535eb1",
+      "actualGitBlob": "c5ec9bb5d630cbb783e9f267b6f8ed28b4535eb1",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/pascal.png",
+      "expectedGitBlob": "1cf322db286c6f93a7e97d4534a0799ce71d0df9",
+      "actualGitBlob": "1cf322db286c6f93a7e97d4534a0799ce71d0df9",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/vera-animation.png",
+      "expectedGitBlob": "4a6b48db474ab68ec511199a4cdd8630889c058d",
+      "actualGitBlob": "4a6b48db474ab68ec511199a4cdd8630889c058d",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/vera-animation.webp",
+      "expectedGitBlob": "d4a44297495f58f36602ece463b0d8bbe59fb5e6",
+      "actualGitBlob": "d4a44297495f58f36602ece463b0d8bbe59fb5e6",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/provider/vera.png",
+      "expectedGitBlob": "b4fdfb6af9c25d465e7978ef97920bcd7f187b84",
+      "actualGitBlob": "b4fdfb6af9c25d465e7978ef97920bcd7f187b84",
+      "matches": true
+    },
+    {
+      "path": "assets/source/characters/r01/vera.aseprite",
+      "expectedGitBlob": "2b5f42d930ff95ecbffe294b28121814caeed66a",
+      "actualGitBlob": "2b5f42d930ff95ecbffe294b28121814caeed66a",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/buildings-detailed-sheet.png",
+      "expectedGitBlob": "e180959afe3258cb5688d359b7a560f71f025d1c",
+      "actualGitBlob": "e180959afe3258cb5688d359b7a560f71f025d1c",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/buildings.aseprite",
+      "expectedGitBlob": "98278341c7504664b8fb5d910a90fa79b5ababb6",
+      "actualGitBlob": "98278341c7504664b8fb5d910a90fa79b5ababb6",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/campus-ground-source.png",
+      "expectedGitBlob": "0d9f0bdf6ac11f25336390f3d2778c23dc47bfd3",
+      "actualGitBlob": "0d9f0bdf6ac11f25336390f3d2778c23dc47bfd3",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/candidates/buildings-low-detail-alpha__REJECTED.png",
+      "expectedGitBlob": "01ea8dba69f67466034efe12158eb4b52bd7b704",
+      "actualGitBlob": "01ea8dba69f67466034efe12158eb4b52bd7b704",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/candidates/buildings-low-detail__REJECTED.png",
+      "expectedGitBlob": "481e725b882267ca0dd7f860088f93833a620e40",
+      "actualGitBlob": "481e725b882267ca0dd7f860088f93833a620e40",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/coastal-sky-source.png",
+      "expectedGitBlob": "f7414f29ce85cfdbe9e141954cfa967aa40211a4",
+      "actualGitBlob": "f7414f29ce85cfdbe9e141954cfa967aa40211a4",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/building-archive.png",
+      "expectedGitBlob": "6e62093e1ca388f0cc13c39ce55daef50a9a5769",
+      "actualGitBlob": "6e62093e1ca388f0cc13c39ce55daef50a9a5769",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/building-cartography.png",
+      "expectedGitBlob": "1cbdf7177bd4670a5f6afca15f2aeb24513a60cf",
+      "actualGitBlob": "1cbdf7177bd4670a5f6afca15f2aeb24513a60cf",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/building-codepost.png",
+      "expectedGitBlob": "185e98c5716e8d73d3a9b6d9f0d2da152a0239a5",
+      "actualGitBlob": "185e98c5716e8d73d3a9b6d9f0d2da152a0239a5",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/building-hall.png",
+      "expectedGitBlob": "5a6dc33c34e0f415e269a74fc980d374ae2024f4",
+      "actualGitBlob": "5a6dc33c34e0f415e269a74fc980d374ae2024f4",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/building-lab.png",
+      "expectedGitBlob": "313f4a8ae528119b4bb04c571a3066cf109f1518",
+      "actualGitBlob": "313f4a8ae528119b4bb04c571a3066cf109f1518",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/building-radar.png",
+      "expectedGitBlob": "648c46ee3b66d11d7f8ff7e476baa2947e384cd0",
+      "actualGitBlob": "648c46ee3b66d11d7f8ff7e476baa2947e384cd0",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/prop-bench.png",
+      "expectedGitBlob": "b81c98d650cbd2d817e610a96b1e6e8dd9dac7c2",
+      "actualGitBlob": "b81c98d650cbd2d817e610a96b1e6e8dd9dac7c2",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/prop-fountain.png",
+      "expectedGitBlob": "3d199405879350e51f4f2230e49eec8e31fd9f8b",
+      "actualGitBlob": "3d199405879350e51f4f2230e49eec8e31fd9f8b",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/prop-hedge.png",
+      "expectedGitBlob": "c30aae583ddee7cfc9bedb2a7fb4e3a4f525a380",
+      "actualGitBlob": "c30aae583ddee7cfc9bedb2a7fb4e3a4f525a380",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/prop-lamp.png",
+      "expectedGitBlob": "d13cf421240bd0957ca0f4e9683db16a069e9a6b",
+      "actualGitBlob": "d13cf421240bd0957ca0f4e9683db16a069e9a6b",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/prop-pine.png",
+      "expectedGitBlob": "5dfaa2e09919920bcb674961c0c5a79d11f3388e",
+      "actualGitBlob": "5dfaa2e09919920bcb674961c0c5a79d11f3388e",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/components/prop-tree.png",
+      "expectedGitBlob": "81be6fc7a488f9d3c27bf2914f68af87ba301541",
+      "actualGitBlob": "81be6fc7a488f9d3c27bf2914f68af87ba301541",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/ground.aseprite",
+      "expectedGitBlob": "2e337b1887b25110497a40236c1f72b2e7adea86",
+      "actualGitBlob": "2e337b1887b25110497a40236c1f72b2e7adea86",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/landscape.aseprite",
+      "expectedGitBlob": "4d74fd3b39acaa3d7d1525298124557176fe9619",
+      "actualGitBlob": "4d74fd3b39acaa3d7d1525298124557176fe9619",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/props-detailed-sheet.png",
+      "expectedGitBlob": "5deb15a287d5b8b89b56076de0080dd853083749",
+      "actualGitBlob": "5deb15a287d5b8b89b56076de0080dd853083749",
+      "matches": true
+    },
+    {
+      "path": "assets/source/environment/hub/r01/props.aseprite",
+      "expectedGitBlob": "708437e98e47fcd3ea66c482bfb54190188f71ba",
+      "actualGitBlob": "708437e98e47fcd3ea66c482bfb54190188f71ba",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/badge-first-shift-award.aseprite",
+      "expectedGitBlob": "027645f37060131850697c5c36c5092a85ca6594",
+      "actualGitBlob": "027645f37060131850697c5c36c5092a85ca6594",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/badge_accuracy.aseprite",
+      "expectedGitBlob": "80306caa085a8447de1ae3eda423cf1070a5fa0f",
+      "actualGitBlob": "80306caa085a8447de1ae3eda423cf1070a5fa0f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/badge_first_shift.aseprite",
+      "expectedGitBlob": "a9ecfc3de665367104f466d15ef02aebed377b0f",
+      "actualGitBlob": "a9ecfc3de665367104f466d15ef02aebed377b0f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/badge_regular.aseprite",
+      "expectedGitBlob": "c5f052af93e22170b8fa643fc6258f0b29ae9c70",
+      "actualGitBlob": "c5f052af93e22170b8fa643fc6258f0b29ae9c70",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/badge_starter.aseprite",
+      "expectedGitBlob": "637ed8dafd0380d37e364d9ad24373a9667c2539",
+      "actualGitBlob": "637ed8dafd0380d37e364d9ad24373a9667c2539",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/provider-award.png",
+      "expectedGitBlob": "417244df5c90417265183c853131274aa2d0cb01",
+      "actualGitBlob": "417244df5c90417265183c853131274aa2d0cb01",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/provider-award.webp",
+      "expectedGitBlob": "1ae435c02b0bd78f16c084b22afd0763e554467e",
+      "actualGitBlob": "1ae435c02b0bd78f16c084b22afd0763e554467e",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/provider-badges.png",
+      "expectedGitBlob": "3f47761341cde5bd5c52c1ef2cf89a1f96c10519",
+      "actualGitBlob": "3f47761341cde5bd5c52c1ef2cf89a1f96c10519",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/provider-room.png",
+      "expectedGitBlob": "63632fb91c551313d93fb6ecb7a20950c90730db",
+      "actualGitBlob": "63632fb91c551313d93fb6ecb7a20950c90730db",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/equipment-r01/wardrobe-room.aseprite",
+      "expectedGitBlob": "5969f972de526a9e3d80bfe9fab0d96b8d7ffd32",
+      "actualGitBlob": "5969f972de526a9e3d80bfe9fab0d96b8d7ffd32",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/cta-hex-disabled.png",
+      "expectedGitBlob": "783fe4fc7cd6cfbd440074ab4ae5b01acbbf4c58",
+      "actualGitBlob": "783fe4fc7cd6cfbd440074ab4ae5b01acbbf4c58",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/cta-hex-hover.png",
+      "expectedGitBlob": "09097a3a57ba566fb2e1e30fa60e210c5199c6f8",
+      "actualGitBlob": "09097a3a57ba566fb2e1e30fa60e210c5199c6f8",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/cta-hex-normal.png",
+      "expectedGitBlob": "b785382ae6c24a843001f9f602362b631aa4313c",
+      "actualGitBlob": "b785382ae6c24a843001f9f602362b631aa4313c",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/cta-hex-pressed.png",
+      "expectedGitBlob": "81f8b9012c4b50b7eb4e9f18f7a7b58a6db7fda2",
+      "actualGitBlob": "81f8b9012c4b50b7eb4e9f18f7a7b58a6db7fda2",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/dialog-frame.png",
+      "expectedGitBlob": "ce87404e0340a7305e48cf1d670edd6c227e2dde",
+      "actualGitBlob": "ce87404e0340a7305e48cf1d670edd6c227e2dde",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/hud-strip.png",
+      "expectedGitBlob": "67d8d55980c445e98a1aa4369774615fe499768f",
+      "actualGitBlob": "67d8d55980c445e98a1aa4369774615fe499768f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/icon-archive.png",
+      "expectedGitBlob": "6010c090a0115cfcf9465fa3da3998cab378f6f9",
+      "actualGitBlob": "6010c090a0115cfcf9465fa3da3998cab378f6f9",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/icon-book.png",
+      "expectedGitBlob": "7697effc9d72534f8793aeacfbfe94fb9241604e",
+      "actualGitBlob": "7697effc9d72534f8793aeacfbfe94fb9241604e",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/icon-observer.png",
+      "expectedGitBlob": "f65b5bd30d938a1b89d6b1e438c35a14a0f99ddb",
+      "actualGitBlob": "f65b5bd30d938a1b89d6b1e438c35a14a0f99ddb",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/icon-route.png",
+      "expectedGitBlob": "2e0e0ab3c572e1ac9584b2e36027394992309275",
+      "actualGitBlob": "2e0e0ab3c572e1ac9584b2e36027394992309275",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/icon-settings.png",
+      "expectedGitBlob": "7a6da7a9fc2b8486cc4ee0547cc93615013deb93",
+      "actualGitBlob": "7a6da7a9fc2b8486cc4ee0547cc93615013deb93",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/icon-weather.png",
+      "expectedGitBlob": "fd1c1133ba64e7590fac6c74884552b83822fc7f",
+      "actualGitBlob": "fd1c1133ba64e7590fac6c74884552b83822fc7f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/nav-disabled.png",
+      "expectedGitBlob": "94ec2850941ffab72311275ac337e749eb8daf4e",
+      "actualGitBlob": "94ec2850941ffab72311275ac337e749eb8daf4e",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/nav-hover.png",
+      "expectedGitBlob": "a0273910b6c54873e0c48f7f962ab410ee432220",
+      "actualGitBlob": "a0273910b6c54873e0c48f7f962ab410ee432220",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/nav-normal.png",
+      "expectedGitBlob": "42d29df82fef0202fd0bbf2029326364e526a08e",
+      "actualGitBlob": "42d29df82fef0202fd0bbf2029326364e526a08e",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/nav-pressed.png",
+      "expectedGitBlob": "15daa68a555c61f7b02b87a1ade321391b07330d",
+      "actualGitBlob": "15daa68a555c61f7b02b87a1ade321391b07330d",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/primary-disabled.png",
+      "expectedGitBlob": "73648853ba1fe40ca803744e42550248affcc4b9",
+      "actualGitBlob": "73648853ba1fe40ca803744e42550248affcc4b9",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/primary-hover.png",
+      "expectedGitBlob": "31213cb035568a5f3222e3919bd292d57c2ec922",
+      "actualGitBlob": "31213cb035568a5f3222e3919bd292d57c2ec922",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/primary-normal.png",
+      "expectedGitBlob": "9b29a91b99a56da477b673c05996311d75341e6f",
+      "actualGitBlob": "9b29a91b99a56da477b673c05996311d75341e6f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/primary-pressed.png",
+      "expectedGitBlob": "c4b095d951d007162680a80a90f1618d4a2f4ef8",
+      "actualGitBlob": "c4b095d951d007162680a80a90f1618d4a2f4ef8",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/progress-amber-sample.png",
+      "expectedGitBlob": "bc738d6676efc7607f115d2859fa83e1fb57b12f",
+      "actualGitBlob": "bc738d6676efc7607f115d2859fa83e1fb57b12f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/progress-blue-sample.png",
+      "expectedGitBlob": "e3cf1f9bedd87b9e0ce31ef37a24a3cc946ac778",
+      "actualGitBlob": "e3cf1f9bedd87b9e0ce31ef37a24a3cc946ac778",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/progress-track.png",
+      "expectedGitBlob": "249e8fceec5ed9d3e34a459c97b09517216a7ab7",
+      "actualGitBlob": "249e8fceec5ed9d3e34a459c97b09517216a7ab7",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/secondary-disabled.png",
+      "expectedGitBlob": "2746689d5a3df08b578e85f775fc6c5171616069",
+      "actualGitBlob": "2746689d5a3df08b578e85f775fc6c5171616069",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/secondary-hover.png",
+      "expectedGitBlob": "ed779af79a5674246bfca370482c2693a3412bc8",
+      "actualGitBlob": "ed779af79a5674246bfca370482c2693a3412bc8",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/secondary-normal.png",
+      "expectedGitBlob": "477dff6c95654109498e3517eb11961aaeace74f",
+      "actualGitBlob": "477dff6c95654109498e3517eb11961aaeace74f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/secondary-pressed.png",
+      "expectedGitBlob": "896af184a5a3d64771c8884b7107fe2475d74445",
+      "actualGitBlob": "896af184a5a3d64771c8884b7107fe2475d74445",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/components/square-frame.png",
+      "expectedGitBlob": "b32f2044cd47dfc9b51a421661babb415dba7825",
+      "actualGitBlob": "b32f2044cd47dfc9b51a421661babb415dba7825",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/hub-controls.aseprite",
+      "expectedGitBlob": "51cb74fd3ba622b464f1f6449f8f4ca5209bb1ba",
+      "actualGitBlob": "51cb74fd3ba622b464f1f6449f8f4ca5209bb1ba",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/hub-r01/spritecook-component-sheet.png",
+      "expectedGitBlob": "22ecf85e1d371413b72a60d25444bf5163eec50e",
+      "actualGitBlob": "22ecf85e1d371413b72a60d25444bf5163eec50e",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/README.md",
+      "expectedGitBlob": "559e8e0bd46a32981d4d4f86902093984923c317",
+      "actualGitBlob": "559e8e0bd46a32981d4d4f86902093984923c317",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/badge_aerology.aseprite",
+      "expectedGitBlob": "dd802478fed9b771286570bfe01ee9e732695c6d",
+      "actualGitBlob": "dd802478fed9b771286570bfe01ee9e732695c6d",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/badge_meteo.aseprite",
+      "expectedGitBlob": "ad835cdee289973a73c72a76ab9ef579b849d62f",
+      "actualGitBlob": "ad835cdee289973a73c72a76ab9ef579b849d62f",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/goggles.aseprite",
+      "expectedGitBlob": "0431cb68f1e7a467f23bb34a90e474e402ae1298",
+      "actualGitBlob": "0431cb68f1e7a467f23bb34a90e474e402ae1298",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/prompt.txt",
+      "expectedGitBlob": "acf6ddce63cad7ec7047ce12209f342984ad6c43",
+      "actualGitBlob": "acf6ddce63cad7ec7047ce12209f342984ad6c43",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/provider-sheet.png",
+      "expectedGitBlob": "c778185c16506bd6b827a4b8b59062feeaf13b54",
+      "actualGitBlob": "c778185c16506bd6b827a4b8b59062feeaf13b54",
+      "matches": true
+    },
+    {
+      "path": "assets/source/ui/inventory-r01/scarf.aseprite",
+      "expectedGitBlob": "5317879bd25926984d139e51585680c2f955d1a5",
+      "actualGitBlob": "5317879bd25926984d139e51585680c2f955d1a5",
+      "matches": true
+    },
+    {
+      "path": "docs/art/reviews/2026-11-09-spritecook-r01-review.md",
+      "expectedGitBlob": "2c2a0edd3a48281f8ef5c13263579eb57dbc4855",
+      "actualGitBlob": "2c2a0edd3a48281f8ef5c13263579eb57dbc4855",
+      "matches": true
+    },
+    {
+      "path": "docs/art/reviews/2026-11-10-characters-inventory-review.md",
+      "expectedGitBlob": "40939bed273f6b9c5e535f087ada0d4e581c262a",
+      "actualGitBlob": "40939bed273f6b9c5e535f087ada0d4e581c262a",
+      "matches": true
+    },
+    {
+      "path": "docs/art/reviews/2026-11-10-equipment-r01-review.md",
+      "expectedGitBlob": "a2faf35b694da57358a46d3b7244487099fac57b",
+      "actualGitBlob": "a2faf35b694da57358a46d3b7244487099fac57b",
+      "matches": true
+    },
+    {
+      "path": "docs/art/reviews/2026-11-10-inventory-icons-review.md",
+      "expectedGitBlob": "8965534ec24d1ccb5adc21d76d1d32901fce9184",
+      "actualGitBlob": "8965534ec24d1ccb5adc21d76d1d32901fce9184",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/2026-11-10-character-runtime.md",
+      "expectedGitBlob": "e91513b793502e49d5e195e976d53c6f94c0a6bb",
+      "actualGitBlob": "e91513b793502e49d5e195e976d53c6f94c0a6bb",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/2026-11-10-characters-inventory-review.md",
+      "expectedGitBlob": "850f748b9b899060842617b332a1dd077d828404",
+      "actualGitBlob": "850f748b9b899060842617b332a1dd077d828404",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/2026-11-10-equipment-final-art-runtime-review.md",
+      "expectedGitBlob": "3040da6d87fa70d8ece91bcee85cd4ba8f5599e8",
+      "actualGitBlob": "3040da6d87fa70d8ece91bcee85cd4ba8f5599e8",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/2026-11-10-equipment-independent-review.md",
+      "expectedGitBlob": "a63ca1b2b6cb37a3c3e2a5c3cd8ee340b5960375",
+      "actualGitBlob": "a63ca1b2b6cb37a3c3e2a5c3cd8ee340b5960375",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/2026-11-10-equipment-integration-review.md",
+      "expectedGitBlob": "80545361e75e4314b0e33d8f4d3e7448d258fbd2",
+      "actualGitBlob": "80545361e75e4314b0e33d8f4d3e7448d258fbd2",
+      "matches": true
+    },
+    {
+      "path": "docs/testing/2026-11-10-inventory-handoff.md",
+      "expectedGitBlob": "7b50757ff4cddbae58fc950b78126580f4f250c3",
+      "actualGitBlob": "7b50757ff4cddbae58fc950b78126580f4f250c3",
+      "matches": true
+    }
+  ]
+}

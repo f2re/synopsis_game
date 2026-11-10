@@ -1,0 +1,4 @@
+Command: python tools/validate_deployment.py
+Working directory: .
+
+Deployment validation passed.

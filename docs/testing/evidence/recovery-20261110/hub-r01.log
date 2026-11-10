@@ -1,0 +1,5 @@
+CHECK ui.hub-r01: 28 assets
+CHECK hub.r01-buildings: 6 assets
+CHECK hub.r01-landscape: 1 assets
+CHECK hub.r01-ground: 1 assets
+CHECK hub.r01-props: 6 assets

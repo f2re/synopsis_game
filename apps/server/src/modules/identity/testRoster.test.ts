@@ -125,7 +125,7 @@ test('testRoster: in trusted profile with enabled flag, seeds correctly and allo
     });
     await shiftService.init();
 
-    const started = shiftService.startShift(login.user.id);
+    const started = await shiftService.startShift(login.user.id);
     assert.ok(started.shiftId);
     assert.ok(started.task);
 

@@ -1,0 +1,633 @@
+{
+  "reviewer": "/root/recover_audit",
+  "status": "PASS",
+  "items": [
+    {
+      "id": "character.r01.observer.idle",
+      "path": "apps/web/public/hub/characters/observer-idle.png",
+      "size": [
+        180,
+        180
+      ],
+      "frameSize": [
+        180,
+        180
+      ],
+      "frameCount": 1,
+      "sha256": "44bdd7e75eef87a449b7d65b2ae8553bdacf83a29fc92ad6451df3b056ad5a3f",
+      "bytes": 7760,
+      "decodedRgbaBytes": 129600,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            52,
+            28,
+            128,
+            172
+          ],
+          "durationMs": 125
+        }
+      ]
+    },
+    {
+      "id": "character.r01.observer.walk",
+      "path": "apps/web/public/hub/characters/observer-walk.png",
+      "size": [
+        1440,
+        180
+      ],
+      "frameSize": [
+        180,
+        180
+      ],
+      "frameCount": 8,
+      "sha256": "f34d679f2718e66d091110e094cba212d4009a3e8aea15ac970fe3a821c470f9",
+      "bytes": 48894,
+      "decodedRgbaBytes": 1036800,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            52,
+            28,
+            128,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 1,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            56,
+            29,
+            116,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 2,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            58,
+            25,
+            109,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 3,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            57,
+            25,
+            113,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 4,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            52,
+            30,
+            131,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 5,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            48,
+            32,
+            120,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 6,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            56,
+            28,
+            110,
+            172
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 7,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            58,
+            26,
+            109,
+            172
+          ],
+          "durationMs": 125
+        }
+      ]
+    },
+    {
+      "id": "npc.r01.vera.idle",
+      "path": "apps/web/public/hub/characters/vera-idle.png",
+      "size": [
+        1080,
+        180
+      ],
+      "frameSize": [
+        180,
+        180
+      ],
+      "frameCount": 6,
+      "sha256": "7fc8dfcad85df3db6eb115ad88b79803202bc3e8b8508345a785e05cbe12c25a",
+      "bytes": 19879,
+      "decodedRgbaBytes": 777600,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            66,
+            28,
+            112,
+            172
+          ],
+          "durationMs": 280
+        },
+        {
+          "index": 1,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            66,
+            28,
+            112,
+            172
+          ],
+          "durationMs": 280
+        },
+        {
+          "index": 2,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            66,
+            28,
+            112,
+            172
+          ],
+          "durationMs": 280
+        },
+        {
+          "index": 3,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            66,
+            29,
+            112,
+            172
+          ],
+          "durationMs": 280
+        },
+        {
+          "index": 4,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            66,
+            29,
+            112,
+            172
+          ],
+          "durationMs": 280
+        },
+        {
+          "index": 5,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            66,
+            29,
+            112,
+            172
+          ],
+          "durationMs": 280
+        }
+      ]
+    },
+    {
+      "id": "companion.r01.pascal.idle",
+      "path": "apps/web/public/hub/characters/pascal-idle.png",
+      "size": [
+        864,
+        144
+      ],
+      "frameSize": [
+        144,
+        144
+      ],
+      "frameCount": 6,
+      "sha256": "56117bcd43df4b89a84de2c20666c86926eb2caa9ac7cb46be83b6763156d01b",
+      "bytes": 14490,
+      "decodedRgbaBytes": 497664,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            27,
+            24,
+            119,
+            136
+          ],
+          "durationMs": 260
+        },
+        {
+          "index": 1,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            27,
+            24,
+            119,
+            136
+          ],
+          "durationMs": 260
+        },
+        {
+          "index": 2,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            27,
+            25,
+            119,
+            136
+          ],
+          "durationMs": 260
+        },
+        {
+          "index": 3,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            27,
+            24,
+            119,
+            136
+          ],
+          "durationMs": 260
+        },
+        {
+          "index": 4,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            27,
+            24,
+            119,
+            136
+          ],
+          "durationMs": 260
+        },
+        {
+          "index": 5,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            27,
+            24,
+            119,
+            136
+          ],
+          "durationMs": 260
+        }
+      ]
+    },
+    {
+      "id": "inventory.badge.starter",
+      "path": "assets/generated/ui/equipment-r01/badge_starter.png",
+      "size": [
+        128,
+        128
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "frameCount": 1,
+      "sha256": "a668ce6de2695f4c8d4769709ef002b5728a07013f1ed9e6d5ddeadb28456dc1",
+      "bytes": 15970,
+      "decodedRgbaBytes": 65536,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            18,
+            10,
+            110,
+            118
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "inventory.badge.first_shift",
+      "path": "assets/generated/ui/equipment-r01/badge_first_shift.png",
+      "size": [
+        128,
+        128
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "frameCount": 1,
+      "sha256": "1e8736e1755d06af65048bd1bf30c19adf113899268aabe3d60e51e3820322ab",
+      "bytes": 14221,
+      "decodedRgbaBytes": 65536,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            25,
+            10,
+            102,
+            118
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "inventory.badge.accuracy",
+      "path": "assets/generated/ui/equipment-r01/badge_accuracy.png",
+      "size": [
+        128,
+        128
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "frameCount": 1,
+      "sha256": "d47338108ee9b85b63f9bdf81fd0257e003105141889852e00e9eb0edf349410",
+      "bytes": 17614,
+      "decodedRgbaBytes": 65536,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            19,
+            10,
+            108,
+            118
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "inventory.badge.regular",
+      "path": "assets/generated/ui/equipment-r01/badge_regular.png",
+      "size": [
+        128,
+        128
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "frameCount": 1,
+      "sha256": "32be10ce703fd3d40f9d3163f274e350c0adebdb16843908ddff744a7959223e",
+      "bytes": 13773,
+      "decodedRgbaBytes": 65536,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            101,
+            118
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "inventory.scene.wardrobe",
+      "path": "assets/generated/ui/equipment-r01/wardrobe-room.png",
+      "size": [
+        1672,
+        941
+      ],
+      "frameSize": [
+        1672,
+        941
+      ],
+      "frameCount": 1,
+      "sha256": "c43748cee0bf727c9cd3e6a6a5634fcbed021482be4afa35e8098e1be5122e9b",
+      "bytes": 2497361,
+      "decodedRgbaBytes": 6293408,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            255
+          ],
+          "bounds": [
+            0,
+            0,
+            1672,
+            941
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "inventory.badge.first_shift.award",
+      "path": "assets/generated/ui/equipment-r01/badge-first-shift-award.png",
+      "size": [
+        768,
+        128
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "frameCount": 6,
+      "sha256": "92517ecfdc96c99fc19131edb9057345f152c0dd9ded427dd249bcc4daddd45d",
+      "bytes": 18624,
+      "decodedRgbaBytes": 393216,
+      "frames": [
+        {
+          "index": 0,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            103,
+            117
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 1,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            103,
+            117
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 2,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            103,
+            117
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 3,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            103,
+            117
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 4,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            103,
+            117
+          ],
+          "durationMs": 125
+        },
+        {
+          "index": 5,
+          "alphaValues": [
+            0,
+            255
+          ],
+          "bounds": [
+            26,
+            10,
+            103,
+            117
+          ],
+          "durationMs": 125
+        }
+      ]
+    }
+  ]
+}

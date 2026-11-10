@@ -5,8 +5,13 @@ import {
   WORLD_LOGICAL_WIDTH,
   WORLD_LOGICAL_HEIGHT,
 } from '../../runtime/fitLogicalViewport';
-import { HubTimeOfDay, type DayPhase } from './HubTimeOfDay';
+import { HubTimeOfDay, PHASE_COLOR_MAP, type DayPhase } from './HubTimeOfDay';
 import approvedAssets from '../../assets/hub/runtime-approval.json';
+import r01Assets from '../../assets/hub/r01-approval.json';
+import { HubR01Layer } from './HubR01Layer';
+import { HubCharacterLayer, preloadHubCharacters } from './HubCharacterLayer';
+import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
+import { HUB_BUILDINGS } from './HubBuildingLayer';
 import { HubEnvironmentLayer } from './HubEnvironmentLayer';
 import { HubBuildingLayer } from './HubBuildingLayer';
 import { HubGroundDecorLayer } from './HubGroundDecorLayer';
@@ -14,8 +19,6 @@ import { HubFaunaLayer } from './HubFaunaLayer';
 import { HubNpcLayer } from './HubNpcLayer';
 import { HubSeasonLayer } from './HubSeasonLayer';
 import { HubStageLayer } from './HubStageLayer';
-import { HubDossierLayer } from './HubDossierLayer';
-import { FACILITY_DOSSIER_BY_BUILDING } from './facilityDossiers';
 import { calculateSeason, isSeason, nextSeason, SEASON_PROFILES, type Season } from './HubSeason';
 import { buildingStatesFromStages, computeStageStatuses } from './hubStages';
 import { STATION_26063_LOCATION } from './HubTimeOfDay';
@@ -36,9 +39,11 @@ export class HubScene extends Phaser.Scene {
   private weatherOverlay?: HubWeatherOverlay;
   private seasonLayer?: HubSeasonLayer;
   private stageLayer?: HubStageLayer;
-  private dossierLayer?: HubDossierLayer;
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
+  private r01Layer?: HubR01Layer;
+  private characterLayer?: HubCharacterLayer;
+  private useR01 = false;
 
   private bridgeUnsubscribers: (() => void)[] = [];
 
@@ -49,6 +54,20 @@ export class HubScene extends Phaser.Scene {
   }
 
   preload(): void {
+    const query = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const preview = query?.get('hubArtPreview') === '1';
+    const development = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true;
+    const legacyComparator = development && query?.get('hubArtLegacy') === '1';
+    this.useR01 = false;
+    if (!legacyComparator && (r01Assets.artAcceptance === 'PASS' || preview)) {
+      this.useR01 = true;
+      preloadHubCharacters(this);
+      for (const asset of r01Assets.assets) this.load.image(asset.key, asset.url);
+      for (const asset of r01Assets.optionalAssets) {
+        if (asset.enabled && (preview || asset.status === 'approved')) this.load.image(asset.key, asset.url);
+      }
+      return;
+    }
     // Не делать 404-запросы на непринятые графические слои. Отладочная
     // процедурная сцена не является готовым художественным результатом.
     if (approvedAssets.artAcceptance !== 'PASS') return;
@@ -58,6 +77,28 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Candidate preview is explicit; the default switches only after independent art acceptance.
+    if (this.useR01 && r01Assets.assets.every((asset) => this.textures.exists(asset.key))) {
+      this.timeOfDay = new HubTimeOfDay(r01Assets.scene.world_location);
+      const authoredPhase = this.getAuthoredPhase();
+      if (authoredPhase) this.timeOfDay.setPhase(authoredPhase);
+      this.r01Layer = new HubR01Layer(this);
+      this.characterLayer = new HubCharacterLayer(this);
+      this.setupBridge();
+      this.applyDayPhase(this.timeOfDay.getCurrentPhase());
+      const environment = {
+        lightingMode: authoredPhase ? 'authored-demo' : 'solar',
+        label: authoredPhase ? r01Assets.scene.demo_override.label : '',
+        phase: this.timeOfDay.getCurrentPhase(),
+        worldLocation: r01Assets.scene.world_location,
+      };
+      this.registry.set('world.environment', environment);
+      worldBridge.emit('world:environment_mode', environment);
+      worldBridge.notifySeasonChanged(this.season);
+      worldBridge.notifySceneReady('hub');
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.cleanup());
+      return;
+    }
     // 1. Экспериментальная полноэкранная камера Hub; до UX-приёмки только ?hubCover=1
     // Opt-in camera until art/UX acceptance; legacy scene behaviour stays default.
     const coverPreview = typeof window !== 'undefined' &&
@@ -74,11 +115,7 @@ export class HubScene extends Phaser.Scene {
     // 4. Слой L5: Интерактивные здания кампуса 26063
     this.buildingLayer = new HubBuildingLayer(this);
 
-    // 4a. Досье помещений: живой голос хранителя и действия без смены DOM-маршрута.
-    this.dossierLayer = new HubDossierLayer(this, {
-      onStartShift: () => worldBridge.emit('world:start_shift', {}),
-      onOpenScene: (sceneKey) => this.scene.start(sceneKey),
-    });
+    // Accessible dossiers are owned by React; the canvas publishes discrete selection events.
 
     // 5. Слой L8: Фауна (синица, воробьи, чайка, утка, белка, кот Барограф)
     this.faunaLayer = new HubFaunaLayer(this, this.scheduleManager);
@@ -104,6 +141,8 @@ export class HubScene extends Phaser.Scene {
 
     // 9. Подключение моста событий React <-> Phaser
     this.setupBridge();
+    this.publishLegacyTargets();
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.publishLegacyTargets, this);
 
     // Уведомление о готовности сцены
     worldBridge.notifySceneReady('hub');
@@ -114,14 +153,21 @@ export class HubScene extends Phaser.Scene {
   }
 
   private applyDayPhase(phase: DayPhase): void {
-    const colors = this.timeOfDay.getPhaseColors();
+    const effectivePhase = this.r01Layer ? this.getAuthoredPhase() ?? phase : phase;
+    const colors = PHASE_COLOR_MAP[effectivePhase];
+    this.r01Layer?.applyDayPhase(effectivePhase, colors);
 
     this.environmentLayer?.applyDayPhase(phase, colors);
     this.groundDecorLayer?.applyDayPhase(phase, colors);
     this.buildingLayer?.applyDayPhase(phase, colors);
     this.weatherOverlay?.applyDayPhase(phase);
 
-    worldBridge.notifyPhaseChanged(phase);
+    worldBridge.notifyPhaseChanged(effectivePhase);
+  }
+
+  private getAuthoredPhase(): DayPhase | null {
+    const override = r01Assets.scene.demo_override;
+    return override.enabled && override.phase in PHASE_COLOR_MAP ? override.phase as DayPhase : null;
   }
 
   private applySeason(season: Season): void {
@@ -198,15 +244,13 @@ export class HubScene extends Phaser.Scene {
       'hub:walk_to_building',
       ({ x, y }: { x: number; y: number }) => {
         this.npcLayer?.walkAvatarTo(x, y);
+        this.characterLayer?.walkAvatarTo(x, y);
       },
     );
 
     // 7. Фактический клик по зданию открывает досье из текущего 480×270 слоя.
-    const unsubFacilityDossier = worldBridge.on('world:building_click', (buildingId: string) => {
-      const dossierId = FACILITY_DOSSIER_BY_BUILDING[buildingId];
-      const buildingState = this.buildingLayer?.getBuildingState(buildingId);
-      if (!dossierId || !buildingState) return;
-      this.dossierLayer?.open(dossierId, buildingState);
+    const unsubFocusBuilding = worldBridge.on<{buildingId: string | null}>('ui:focus_building', ({buildingId}) => {
+      this.buildingLayer?.setFocused(buildingId);
     });
 
     this.bridgeUnsubscribers.push(
@@ -216,7 +260,7 @@ export class HubScene extends Phaser.Scene {
       unsubWeather,
       unsubCalm,
       unsubBuildingClick,
-      unsubFacilityDossier,
+      unsubFocusBuilding,
       unsubSeason,
       unsubCycleSeason,
       unsubStages,
@@ -227,9 +271,18 @@ export class HubScene extends Phaser.Scene {
     const currentPhase = this.timeOfDay.getCurrentPhase();
 
     // 1. Демонстрация фаз суток
-    this.timeOfDay.update(deltaMs, (newPhase) => {
-      this.applyDayPhase(newPhase);
-    });
+    if (!this.r01Layer || !this.getAuthoredPhase()) {
+      this.timeOfDay.update(deltaMs, (newPhase) => {
+        this.applyDayPhase(newPhase);
+      });
+    }
+    const preferences = normalizeWorldPreferences(this.registry.get('ui.preferences'));
+    if (preferences.reducedMotion) return;
+    if (this.r01Layer) {
+      this.r01Layer.update(deltaMs);
+      this.characterLayer?.update(deltaMs);
+      return;
+    }
 
     // 2. Планировщик живого мира
     const currentUtcHour = new Date().getUTCHours();
@@ -249,8 +302,12 @@ export class HubScene extends Phaser.Scene {
   private cleanup(): void {
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
+    this.scale.off(Phaser.Scale.Events.RESIZE, this.publishLegacyTargets, this);
+    this.characterLayer?.destroy();
+    this.characterLayer = undefined;
+    this.r01Layer?.destroy();
+    this.r01Layer = undefined;
 
-    this.dossierLayer?.destroy();
     this.environmentLayer?.destroy();
     this.groundDecorLayer?.destroy();
     this.buildingLayer?.destroy();
@@ -259,5 +316,29 @@ export class HubScene extends Phaser.Scene {
     this.seasonLayer?.destroy();
     this.stageLayer?.destroy();
     this.weatherOverlay?.destroy();
+    this.environmentLayer = undefined;
+    this.groundDecorLayer = undefined;
+    this.buildingLayer = undefined;
+    this.faunaLayer = undefined;
+    this.npcLayer = undefined;
+    this.seasonLayer = undefined;
+    this.stageLayer = undefined;
+    this.weatherOverlay = undefined;
+  }
+
+  private publishLegacyTargets(): void {
+    if (this.r01Layer) return;
+    const camera = this.cameras.main;
+    const zoom = camera.zoom;
+    const offsetX = camera.x + camera.width / 2 - WORLD_LOGICAL_WIDTH * zoom / 2;
+    const offsetY = camera.y + camera.height / 2 - WORLD_LOGICAL_HEIGHT * zoom / 2;
+    const visible = HUB_BUILDINGS.filter((building) => !building.service);
+    worldBridge.emit('world:interaction_layout', visible.map((building) => ({
+      id: building.id, label: building.name, state: this.buildingLayer?.getBuildingState(building.id) ?? building.defaultState,
+      x: offsetX + building.bounds.x * zoom,
+      y: offsetY + building.bounds.y * zoom,
+      width: Math.max(44, building.bounds.width * zoom),
+      height: Math.max(44, building.bounds.height * zoom),
+    })));
   }
 }

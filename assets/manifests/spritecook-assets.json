@@ -1,0 +1,359 @@
+{
+  "id": "spritecook.assets",
+  "assets": [
+    {
+      "id": "assets/source/ui/hub-r01/components/nav-hover.png",
+      "asset_id": "ed09523a-9070-40f3-bd8a-d0c4bde9306e",
+      "sha12": "b5c71708be56",
+      "label": "assets/source/ui/hub-r01/components/nav-hover.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/nav-pressed.png",
+      "asset_id": "bc77d0d8-a8b3-4572-937d-a2592726dea8",
+      "sha12": "835ca289bccd",
+      "label": "assets/source/ui/hub-r01/components/nav-pressed.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/nav-disabled.png",
+      "asset_id": "fdc008c2-aff1-4c9a-807d-f1c08cb3ecd8",
+      "sha12": "e7ff0a4ef6d5",
+      "label": "assets/source/ui/hub-r01/components/nav-disabled.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/nav-normal.png",
+      "asset_id": "4a636f72-776c-413c-9e66-d8ae4a78cc9b",
+      "sha12": "1d4074c898a0",
+      "label": "assets/source/ui/hub-r01/components/nav-normal.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/cta-hex-normal.png",
+      "asset_id": "af137b71-02a8-450b-b6c7-49fad4896050",
+      "sha12": "8bf99ef4382e",
+      "label": "assets/source/ui/hub-r01/components/cta-hex-normal.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/cta-hex-hover.png",
+      "asset_id": "88888a51-4dfd-46aa-9477-a5ec69522478",
+      "sha12": "0908bf6bdbab",
+      "label": "assets/source/ui/hub-r01/components/cta-hex-hover.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/square-frame.png",
+      "asset_id": "59a696d7-460c-4745-a774-a38a99749e31",
+      "sha12": "d3a937de0c38",
+      "label": "assets/source/ui/hub-r01/components/square-frame.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/hud-strip.png",
+      "asset_id": "da5d813a-b2d2-4095-b41d-c2bfa661c100",
+      "sha12": "a65d42c03c31",
+      "label": "assets/source/ui/hub-r01/components/hud-strip.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/dialog-frame.png",
+      "asset_id": "ab4e9147-353a-4e30-81a5-52d61d77ce2b",
+      "sha12": "095f1e286aeb",
+      "label": "assets/source/ui/hub-r01/components/dialog-frame.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/icon-weather.png",
+      "asset_id": "defe60a6-c2c3-4d25-a581-8deff9178ede",
+      "sha12": "2713e4bd89ac",
+      "label": "assets/source/ui/hub-r01/components/icon-weather.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/progress-track.png",
+      "asset_id": "de2e7962-849c-4fbb-8e72-ee50f2624aef",
+      "sha12": "463bb41f49d5",
+      "label": "assets/source/ui/hub-r01/components/progress-track.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/progress-amber-sample.png",
+      "asset_id": "73b7636e-abfb-47bb-91f9-3aba4445d690",
+      "sha12": "f90ce868b0fd",
+      "label": "assets/source/ui/hub-r01/components/progress-amber-sample.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/icon-settings.png",
+      "asset_id": "9ef7daaa-6e71-4e6a-ae0c-54079ec23615",
+      "sha12": "aad2345600db",
+      "label": "assets/source/ui/hub-r01/components/icon-settings.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/icon-archive.png",
+      "asset_id": "e93c96f1-af99-4abe-9d8b-06ab6087d9a7",
+      "sha12": "0e1ebe738799",
+      "label": "assets/source/ui/hub-r01/components/icon-archive.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/progress-blue-sample.png",
+      "asset_id": "41f5a29d-f0c5-4fe5-9369-dc7ac2fa3dc0",
+      "sha12": "3404494fb564",
+      "label": "assets/source/ui/hub-r01/components/progress-blue-sample.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/icon-book.png",
+      "asset_id": "b0e9c55b-0b6d-47e9-bf84-0287be3bd5f8",
+      "sha12": "626a6ffd20e9",
+      "label": "assets/source/ui/hub-r01/components/icon-book.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/secondary-normal.png",
+      "asset_id": "4b1dc1ef-a5d1-47c6-932c-b85bad24eab6",
+      "sha12": "1889a4d004e0",
+      "label": "assets/source/ui/hub-r01/components/secondary-normal.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/secondary-hover.png",
+      "asset_id": "af8adaa8-7484-46de-9ca7-6a1b69c61f3e",
+      "sha12": "a111d88fe615",
+      "label": "assets/source/ui/hub-r01/components/secondary-hover.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/secondary-disabled.png",
+      "asset_id": "c3d9b9f1-e2b7-463c-9256-6c976e24611c",
+      "sha12": "11ad980b42a5",
+      "label": "assets/source/ui/hub-r01/components/secondary-disabled.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/secondary-pressed.png",
+      "asset_id": "3c575dc7-0cdf-42c9-83cd-0f76c5672fc6",
+      "sha12": "a366318d4b6e",
+      "label": "assets/source/ui/hub-r01/components/secondary-pressed.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/icon-route.png",
+      "asset_id": "043aeecf-1b50-4ec4-be28-6f6ed0e084d6",
+      "sha12": "3a570135a1a4",
+      "label": "assets/source/ui/hub-r01/components/icon-route.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/icon-observer.png",
+      "asset_id": "574cb29a-b080-40fa-8cdf-552bfbd99607",
+      "sha12": "186eec7f52e1",
+      "label": "assets/source/ui/hub-r01/components/icon-observer.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/primary-normal.png",
+      "asset_id": "a9637c4c-9ee6-4ced-a8a7-2f5a3d47be79",
+      "sha12": "2533fdbfd8cb",
+      "label": "assets/source/ui/hub-r01/components/primary-normal.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/primary-hover.png",
+      "asset_id": "b3b7b54b-2ea4-49b9-8c36-76c0029848c3",
+      "sha12": "01a3e4f19bbd",
+      "label": "assets/source/ui/hub-r01/components/primary-hover.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/primary-pressed.png",
+      "asset_id": "9d2c887d-dcc9-4ba4-bac5-48d68a9c7432",
+      "sha12": "e20f0d4ba08d",
+      "label": "assets/source/ui/hub-r01/components/primary-pressed.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/primary-disabled.png",
+      "asset_id": "2d64d542-eb6d-4718-b9bc-2845baf4aaed",
+      "sha12": "a27247f5554a",
+      "label": "assets/source/ui/hub-r01/components/primary-disabled.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/cta-hex-pressed.png",
+      "asset_id": "2a78542c-1f53-4bac-a137-b94cf898b7a5",
+      "sha12": "e7833922671e",
+      "label": "assets/source/ui/hub-r01/components/cta-hex-pressed.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/components/cta-hex-disabled.png",
+      "asset_id": "ac3f53d2-c87a-46c1-b8b5-031f0c612f0b",
+      "sha12": "269858c3d9b5",
+      "label": "assets/source/ui/hub-r01/components/cta-hex-disabled.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/building-codepost.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "2c11d5d53532",
+      "label": "assets/source/environment/hub/r01/components/building-codepost.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/building-radar.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "b7b156f7be6d",
+      "label": "assets/source/environment/hub/r01/components/building-radar.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/building-lab.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "a30f24585f06",
+      "label": "assets/source/environment/hub/r01/components/building-lab.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/building-cartography.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "733f3b81e25d",
+      "label": "assets/source/environment/hub/r01/components/building-cartography.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/building-archive.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "7449130982b5",
+      "label": "assets/source/environment/hub/r01/components/building-archive.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/building-hall.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "92992bc942bb",
+      "label": "assets/source/environment/hub/r01/components/building-hall.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/coastal-sky-source.png",
+      "asset_id": "1247bf53-6b2b-412f-9981-eb3fed885555",
+      "sha12": "84774f52a33a",
+      "label": "assets/source/environment/hub/r01/coastal-sky-source.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/campus-ground-source.png",
+      "asset_id": "b2326256-27c3-4ab5-99a6-acbb39c98826",
+      "sha12": "b38edd2f1f7e",
+      "label": "assets/source/environment/hub/r01/campus-ground-source.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/prop-pine.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "a717174aeb18",
+      "label": "assets/source/environment/hub/r01/components/prop-pine.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/prop-tree.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "ee21ef99e047",
+      "label": "assets/source/environment/hub/r01/components/prop-tree.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/prop-hedge.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "e4b8410a4e35",
+      "label": "assets/source/environment/hub/r01/components/prop-hedge.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/prop-lamp.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "73d40c12926e",
+      "label": "assets/source/environment/hub/r01/components/prop-lamp.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/prop-bench.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "08ea411533f1",
+      "label": "assets/source/environment/hub/r01/components/prop-bench.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/components/prop-fountain.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "ca27fba0bbc0",
+      "label": "assets/source/environment/hub/r01/components/prop-fountain.png"
+    },
+    {
+      "id": "design/pixel-art/v2/01_hub.png",
+      "asset_id": "ad6697b5-1cf4-425c-9f41-6f09c1526012",
+      "sha12": "c4c5958ac094",
+      "label": "design/pixel-art/v2/01_hub.png"
+    },
+    {
+      "id": "assets/source/ui/hub-r01/spritecook-component-sheet.png",
+      "asset_id": "0791c37d-c48b-487b-9e02-03617d004861",
+      "sha12": "47812e56d86a",
+      "label": "assets/source/ui/hub-r01/spritecook-component-sheet.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/buildings-detailed-sheet.png",
+      "asset_id": "d9b7a69f-1f72-434d-8305-fa397cf3f3d3",
+      "sha12": "96d65dd68676",
+      "label": "assets/source/environment/hub/r01/buildings-detailed-sheet.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r01/props-detailed-sheet.png",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "sha12": "a43ad2175f2b",
+      "label": "assets/source/environment/hub/r01/props-detailed-sheet.png"
+    },
+    {
+      "id": "assets/source/characters/r01/prepared/observer.png",
+      "asset_id": "5c958981-2866-4579-9e6d-aef51cd65cc7",
+      "sha12": "eeb8fa427e05",
+      "label": "observer source"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/observer-animation.png",
+      "asset_id": "ebbdb5a6-89b8-4a95-b4ee-94340dae2c4e",
+      "sha12": "79bbf62de8c7",
+      "label": "observer animation"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/observer-animation.webp",
+      "asset_id": "ebbdb5a6-89b8-4a95-b4ee-94340dae2c4e",
+      "sha12": "adf12c6b0b5f",
+      "label": "observer animation"
+    },
+    {
+      "id": "assets/source/characters/r01/prepared/vera.png",
+      "asset_id": "1602ffa6-cd66-4454-8ab1-c341b3b53cc9",
+      "sha12": "4aae18b4de18",
+      "label": "vera source"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/vera-animation.png",
+      "asset_id": "8378bacb-7fe6-492d-a9b5-6903f5fe458e",
+      "sha12": "300255e887fe",
+      "label": "vera animation"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/vera-animation.webp",
+      "asset_id": "8378bacb-7fe6-492d-a9b5-6903f5fe458e",
+      "sha12": "37bffbfacfd8",
+      "label": "vera animation"
+    },
+    {
+      "id": "assets/source/characters/r01/prepared/pascal.png",
+      "asset_id": "d94f82fb-c959-40f8-986a-4a4632fb89d4",
+      "sha12": "ae5776daa77c",
+      "label": "pascal source"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/pascal-animation.png",
+      "asset_id": "28daea1a-54eb-4498-9e3d-4e48833c8750",
+      "sha12": "ca0cc39769c0",
+      "label": "pascal animation"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/pascal-animation.webp",
+      "asset_id": "28daea1a-54eb-4498-9e3d-4e48833c8750",
+      "sha12": "f03004a4a4e8",
+      "label": "pascal animation"
+    },
+    {
+      "id": "assets/generated/ui/inventory-r01/scarf.png",
+      "asset_id": "e176b837-30e9-477c-bfbe-ddd8c177ae37",
+      "sha12": "bb05c05cc0a8",
+      "label": "Тёплый вязаный шарф"
+    },
+    {
+      "id": "assets/generated/ui/inventory-r01/goggles.png",
+      "asset_id": "470cbafa-6aa4-406c-9884-c165846aa375",
+      "sha12": "58a14d45135f",
+      "label": "Защитные очки с ремешком"
+    },
+    {
+      "id": "assets/generated/ui/inventory-r01/badge_meteo.png",
+      "asset_id": "061e66c9-15e5-458f-919c-344433d3e0c7",
+      "sha12": "dbea7ed3ce32",
+      "label": "Значок метеонаблюдений"
+    },
+    {
+      "id": "assets/generated/ui/inventory-r01/badge_aerology.png",
+      "asset_id": "9a2e69f9-4f40-4ff2-800c-447681878c00",
+      "sha12": "fc2c27840189",
+      "label": "Значок аэрологии"
+    }
+  ]
+}

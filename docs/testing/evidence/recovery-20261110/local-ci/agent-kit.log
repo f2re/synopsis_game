@@ -1,0 +1,4 @@
+Command: python tools/validate_agent_kit.py
+Working directory: .
+
+Agent kit PASS: 19 roles, 18 external helpers, 35 skills; 0 issue(s)

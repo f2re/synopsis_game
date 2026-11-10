@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "task": "20261110-characters-inventory",
+  "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "collection_id": "ab61e707-9657-4d5e-9f58-0b591aa94eb1",
+  "still_provider": "built-in image_gen",
+  "animation_provider": "SpriteCook pixel-engine-v1.1",
+  "spritecook_credits_before": 780,
+  "spritecook_credits_used": 60,
+  "spritecook_credits_after": 720,
+  "rights": "Original project illustrations generated from written project lore; no external photos or game sprites were imported.",
+  "workflow": "ImageGen transparent still → selected native pixel source → SpriteCook upload → one animation per actor with Basic alpha removal → source foot alignment and padding → editable Aseprite frames/tags → deterministic PNG strips.",
+  "sourcePreparation": "Nearest-neighbour fit to 128×160 for people and 128×128 for Pascal, binary alpha threshold96, 8px lower margin. Original ImageGen PNG preserved. Animation pixels are never rescaled.",
+  "actors": [
+    {
+      "name": "observer",
+      "still_prompt": "Use case: stylized-concept. Asset type: a single isolated production character sprite for the game 26063, a cozy Russian scientific weather campus. Full-body young adult weather observer, warm intelligent face, tousled dark brown hair, navy-blue hooded field jacket with narrow warm amber piping and a tiny generic cloud patch, ivory shirt, navy trousers, sturdy brown boots, small brown leather backpack. Compact expressive proportions like a beautifully crafted detailed pixel adventure game: head is about one quarter of total height, readable face, crisp stepped silhouette, restrained warm amber highlights and cool navy shadows, fine deliberate pixel clusters, NO smooth rendering or anti-aliasing. Side three-quarter view facing RIGHT, in a clear mid-WALK stride with one leg forward and one leg behind, arms gently swinging, hands empty; will be animated in a continuous walking loop. Exact character only, generous empty padding around all sides, entire feet and backpack visible. Fully transparent background with true alpha; no ground, no floor, no contact shadow, no vignette, no text, no frame, no labels, no other objects. Make subject suitable for a 96 by 128 pixel source after nearest-neighbor sizing. Preserve clear outline and restrained material detail, mature kind character not an infant, match rich navy-and-amber handcrafted pixel campus art.",
+      "source_asset_id": "5c958981-2866-4579-9e6d-aef51cd65cc7",
+      "animation_asset_id": "ebbdb5a6-89b8-4a95-b4ee-94340dae2c4e",
+      "animation_job_id": "07353a12-dd5b-4c3a-9ec8-82e6458fff14",
+      "frame_metadata": {
+        "frame_count": 8,
+        "fps": 8,
+        "frame_width": 164,
+        "frame_height": 164,
+        "animation_mode": "pixel"
+      },
+      "credits": 20
+    },
+    {
+      "name": "vera",
+      "still_prompt": "Use case: stylized-concept. Asset type: a single isolated production character sprite for the game 26063, a cozy Russian scientific weather campus. Vera Pavlovna Ladozhskaya, 58 year old senior meteorologist: kind attentive mature face with subtle age lines, thin metal-frame glasses, greying dark-brown hair in a neat bun. Full body, dark navy knitted cardigan over cream blouse, charcoal slacks, sensible dark shoes. Holding one closed slim blue weather-chart folder lightly against her waist with both hands. Compact expressive proportions of beautifully crafted detailed pixel adventure game: head about one quarter total height, slightly stout grounded silhouette, fine deliberate crisp stepped pixel clusters, navy cool shadows and subtle amber highlights. Front three-quarter view facing a little to the LEFT, relaxed upright idle pose, feet securely planted, calm gentle smile; intended to breathe and blink softly in an idle loop. Entire figure centered with generous empty transparent padding around every edge. TRUE transparent alpha background, no ground or shadow, no setting, no extra objects, no text, no grid, no labels, no soft gradients or smooth painting, no anti-aliasing. Suitable for a 96 by 128 pixel source after nearest-neighbor sizing. Consistent with refined navy/amber pixel-art scientific campus.",
+      "source_asset_id": "1602ffa6-cd66-4454-8ab1-c341b3b53cc9",
+      "animation_asset_id": "8378bacb-7fe6-492d-a9b5-6903f5fe458e",
+      "animation_job_id": "f5013ada-cde5-4cd5-8f43-fc6449397c52",
+      "frame_metadata": {
+        "frame_count": 6,
+        "fps": 8,
+        "frame_width": 164,
+        "frame_height": 164,
+        "animation_mode": "pixel"
+      },
+      "credits": 20
+    },
+    {
+      "name": "pascal",
+      "still_prompt": "Use case: stylized-concept. Asset type: a single isolated production animal sprite for 26063 Russian weather-campus pixel adventure game. Pascal the station cat: plump fluffy ginger-and-white adult house cat, white chest and white front paws, a tiny notch on the tip of HIS left ear, small pink nose, green eyes half closed with a contented sleepy expression. Sitting comfortably on its haunches facing three-quarter LEFT, front paws together resting on an invisible level ground plane, fluffy orange tail curling beside the paws. Deliberate crisp pixel clusters and sharply stepped silhouette like a high quality detailed pixel adventure game, compact readable body, warm muted amber fur, ivory white patches, cool navy colored outline and shadows, sparse highlights. Keep a calm grounded starting pose ready for a subtle blinking/breathing loop with tiny tail-tip movement. The single cat only, entire tail and ears and feet visible, centered with generous empty margins. TRUE alpha transparent background, NO floor, NO shadow, no rug, no furniture, no clothing, no collar, no text, no checkerboard, no glow, no surrounding scene. Suitable for a 96 by 96 pixel game sprite after nearest-neighbor sizing, intentionally clustered pixels and no anti-aliasing.",
+      "source_asset_id": "d94f82fb-c959-40f8-986a-4a4632fb89d4",
+      "animation_asset_id": "28daea1a-54eb-4498-9e3d-4e48833c8750",
+      "animation_job_id": "269e9718-4810-4257-ad0b-14270c780cfc",
+      "frame_metadata": {
+        "frame_count": 6,
+        "fps": 8,
+        "frame_width": 128,
+        "frame_height": 128,
+        "animation_mode": "pixel"
+      },
+      "credits": 20
+    }
+  ],
+  "campus_ui_collection_id": "ed734855-679a-4f57-89ea-23b69a563c64",
+  "existing_spritecook_assets_reused": 34,
+  "existing_inventory_icons_reused": 25,
+  "replacement_inventory_icons": "assets/manifests/ui.inventory-r01.json"
+}

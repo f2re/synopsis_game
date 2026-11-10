@@ -108,6 +108,52 @@ export interface ShiftTask {
   };
 }
 export interface ShiftProgress { answered: number; correct: number; current: number; total: number; }
+
+export interface EquipmentEffects { reference: number; retry: number; }
+export interface EquipmentSnapshot {
+  badgeId: string | null;
+  badgeName: string | null;
+  heldItem: string;
+  enabled: boolean;
+  charges: EquipmentEffects;
+  remaining: EquipmentEffects;
+  assistedTasks: number;
+}
+export interface EquipmentBadge {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  effectDescription: string;
+  effects: EquipmentEffects;
+  unlocked: boolean;
+  equipped: boolean;
+  unlock: { current: number; target: number; description: string };
+  earnedAt?: string;
+}
+
+export interface EquipmentResponse {
+  loadout: { badgeId: string | null };
+  catalog: EquipmentBadge[];
+  stats: { completedShifts: number; unassistedCorrect: number; practiceDays: number };
+  nextShift: EquipmentSnapshot;
+  rules: { chargeCap: number; description: string };
+  tools: Array<{ id: string; effects: EquipmentEffects; effectDescription: string }>;
+}
+
+export interface ShiftReference {
+  instanceId: string;
+  explanation: string;
+  sources: Array<{ sourceId: string; title: string; locator: string }>;
+  assisted: true;
+}
+export interface ShiftReward {
+  newBadges: EquipmentBadge[];
+  completedShifts: number;
+  unassistedCorrect: number;
+  practiceDays: number;
+}
+
 export interface ShiftStartResponse {
   shiftId: string;
   mode: string;
@@ -115,20 +161,30 @@ export interface ShiftStartResponse {
   contentStatus: string;
   task: ShiftTask;
   progress: ShiftProgress;
+  equipment: EquipmentSnapshot;
+  retryAvailable: boolean;
+  reference?: ShiftReference;
 }
 export interface ShiftAnswerResponse {
+  status: 'answered' | 'retry-offered';
+  retryAvailable: boolean;
   feedback: {
     correct: boolean;
-    correctAnswer: unknown;
+    firstAttemptCorrect: boolean;
+    correctAnswer?: unknown;
     details?: ShiftFeedbackDetails | null;
     explanation: string;
     principleTags: string[];
     sources: Array<{ sourceId: string; title: string; locator: string }>;
+    retried?: boolean;
+    assisted?: boolean;
   };
   answered: number;
   completed: boolean;
   nextTask: ShiftTask | null;
   progress: ShiftProgress;
+  equipment: EquipmentSnapshot;
+  reward?: ShiftReward;
 }
 
 const TOKEN_KEY = 'synopsis.session.token';
@@ -171,10 +227,14 @@ export const api = {
   async logout(): Promise<void> { try { await request('/api/identity/logout', { method: 'POST' }, true); } finally { setSessionToken(null); } },
   async me(): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', {}, true)).user; },
   async updateAvatar(avatar: AvatarProfile): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }) }, true)).user; },
+  async equipment(): Promise<EquipmentResponse> { return request('/api/equipment', {}, true); },
+  async selectEquipmentBadge(badgeId: string | null): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }) }, true); },
   async startShift(): Promise<ShiftStartResponse> { return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true); },
-  async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true); },
-  async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown): Promise<ShiftAnswerResponse> { return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, { method: 'POST', body: JSON.stringify({ shiftId, answer }) }, true); },
-  async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true); },
+  async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress; equipment: EquipmentSnapshot; retryAvailable: boolean; reference?: ShiftReference }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true); },
+  async shiftReference(shiftId: string, instanceId: string): Promise<ShiftReference & { equipment: EquipmentSnapshot }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/reference`, { method: 'POST', body: JSON.stringify({ instanceId }) }, true); },
+  async revealShiftAnswer(shiftId: string, instanceId: string): Promise<ShiftAnswerResponse> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/reveal`, { method: 'POST', body: JSON.stringify({ instanceId }) }, true); },
+  async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown, attempt: 1 | 2 = 1): Promise<ShiftAnswerResponse> { return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, { method: 'POST', body: JSON.stringify({ shiftId, answer, attempt }) }, true); },
+  async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number; equipment: EquipmentSnapshot; reward?: ShiftReward }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true); },
   async adminUsers(): Promise<AdminUser[]> { return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users; },
   async createUser(input: { displayName: string; groupId: string; roles?: UserRole[]; initialCode?: string }): Promise<AdminUser> { return (await request<{ user: AdminUser }>('/api/admin/users', { method: 'POST', body: JSON.stringify(input) }, true)).user; },
   async batchCreateUsers(input: { groupId: string; roles?: UserRole[]; users: Array<{ displayName: string; initialCode?: string }> }): Promise<{ groupId: string; count: number; created: Array<AdminUser & { initialCode: string }> }> { return request('/api/admin/users/batch', { method: 'POST', body: JSON.stringify(input) }, true); },

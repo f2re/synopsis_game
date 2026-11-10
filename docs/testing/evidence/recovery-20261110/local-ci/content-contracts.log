@@ -1,0 +1,4 @@
+Command: python tools/validate_content_contracts.py
+Working directory: .
+
+Контракты согласованы: 40 заданий, 2 методических профилей, 1 уровней.

@@ -1,120 +1,106 @@
-import type { AvatarProfile } from '../../api';
-import { OPTIONS, type OptionItem, type TabKey } from './avatarOptions';
+import type { AvatarProfile, EquipmentResponse } from '../../api';
+import {
+  EQUIPMENT_SLOTS, INVENTORY_CATEGORIES, INVENTORY_ITEMS, OPTIONS,
+  type EquipmentSlot, type InventoryCategory, type InventoryItem,
+} from './avatarOptions';
 
 interface AvatarOptionGridProps {
-  activeTab: TabKey;
   avatar: AvatarProfile;
-  onSelectOption: (key: keyof AvatarProfile, value: string) => void;
+  selectedId: string;
+  category: InventoryCategory;
+  query: string;
+  equippedOnly: boolean;
+  tools?: EquipmentResponse['tools'];
+  onSelect: (item: InventoryItem) => void;
+  onCategoryChange: (category: InventoryCategory) => void;
+  onQueryChange: (query: string) => void;
+  onEquippedOnlyChange: (value: boolean) => void;
+  onEquip: (slot: EquipmentSlot, id: string) => void;
 }
 
-export function AvatarOptionGrid({ activeTab, avatar, onSelectOption }: AvatarOptionGridProps) {
-  function renderSection(title: string, note: string, key: keyof AvatarProfile, items: OptionItem[]) {
-    return (
-      <div className="wardrobe-section" key={key}>
-        <div className="section-title-row">
-          <h3>{title}</h3>
-          <span className="section-note">{note}</span>
+export function AvatarOptionGrid({ avatar, selectedId, category, query, equippedOnly, tools, onSelect, onCategoryChange, onQueryChange, onEquippedOnlyChange, onEquip }: AvatarOptionGridProps) {
+  const normalizedQuery = query.trim().toLocaleLowerCase('ru');
+  const items = INVENTORY_ITEMS.filter((item) =>
+    (category === 'all' || item.category === category) &&
+    (!equippedOnly || avatar[item.slot] === item.id) &&
+    (!normalizedQuery || `${item.name} ${item.desc}`.toLocaleLowerCase('ru').includes(normalizedQuery)),
+  );
+  const selected = items.find((item) => item.id === selectedId) ?? items[0] ?? INVENTORY_ITEMS[0];
+  const slot = EQUIPMENT_SLOTS.find((entry) => entry.id === selected.slot)!;
+  const equipped = avatar[selected.slot] === selected.id;
+  const equipLabel = selected.slot === 'companion' ? 'Позвать спутника' : selected.slot === 'heldItem' ? 'Взять в руки' : selected.slot === 'badge' ? 'Прикрепить' : 'Надеть';
+  const removeLabel = selected.slot === 'companion' ? 'Оставить в кампусе' : selected.slot === 'heldItem' ? 'Убрать из рук' : 'Снять';
+  const selectedTool = tools?.find((tool) => tool.id === selected.id);
+
+  return (
+    <div className="inventory-catalog-layout">
+      <section className="inventory-catalog" aria-label="Каталог вещей">
+        <div className="inventory-category-bar" aria-label="Категории вещей">
+          {INVENTORY_CATEGORIES.map((entry) => (
+            <button key={entry.id} type="button" className={`inventory-category ${category === entry.id ? 'is-active' : ''}`} aria-pressed={category === entry.id} onClick={() => onCategoryChange(entry.id)}>
+              {entry.label}<span>{INVENTORY_ITEMS.filter((item) => entry.id === 'all' || entry.id === item.category).length}</span>
+            </button>
+          ))}
         </div>
-        <div className="options-grid">
+        <div className="inventory-filter-bar">
+          <label className="inventory-search">
+            <span>Найти предмет</span>
+            <input type="search" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder="Название или описание" autoComplete="off" />
+          </label>
+          <label className="inventory-equipped-filter"><input type="checkbox" checked={equippedOnly} onChange={(event) => onEquippedOnlyChange(event.target.checked)} />На персонаже</label>
+        </div>
+        <p className="inventory-result-count" aria-live="polite">{items.length} из {INVENTORY_ITEMS.length} предметов · стартовый набор</p>
+        <div className="inventory-item-grid">
           {items.map((item) => {
-            const isSelected = avatar[key] === item.id;
+            const isEquipped = avatar[item.slot] === item.id;
+            const isSelected = selected.id === item.id;
+            const tool = tools?.find((entry) => entry.id === item.id);
             return (
-              <button
-                key={item.id}
-                type="button"
-                className={`option-card ${isSelected ? 'active' : ''}`}
-                onClick={() => onSelectOption(key, item.id)}
-              >
-                <div className="option-visual">
-                  {item.image ? (
-                    <img src={item.image} alt={item.name} className="item-thumbnail" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                  ) : (
-                    <span className="option-icon">{item.icon || '✦'}</span>
-                  )}
-                  {isSelected && <span className="selection-badge">✓</span>}
-                </div>
-                <div className="option-info">
-                  <div className="option-title-row">
-                    <span className="option-name">{item.name}</span>
-                    {item.styleTag && <span className="option-tag">{item.styleTag}</span>}
-                  </div>
-                  <p className="option-desc">{item.desc}</p>
-                </div>
+              <button key={item.id} type="button" className={`inventory-item ${isSelected ? 'is-selected' : ''} ${isEquipped ? 'is-equipped' : ''}`} aria-pressed={isSelected} aria-label={`${item.name}${isEquipped ? ', на персонаже' : ''}. Открыть описание`} onClick={() => onSelect(item)}>
+                <span className="inventory-item__art">{item.image ? <img src={item.image} alt="" width={128} height={128} loading="lazy" decoding="async" /> : <span className="inventory-art-token" aria-hidden="true">{item.iconLabel}</span>}</span>
+                <span className="inventory-item__name">{item.name}</span>
+                <span className="inventory-item__state">{isEquipped ? '✓ На персонаже' : EQUIPMENT_SLOTS.find((entry) => entry.id === item.slot)?.label}</span>
+                {tool && <span className="inventory-item__effect">{tool.effects.reference > 0 ? `+${tool.effects.reference} справка` : `+${tool.effects.retry} повтор`}</span>}
               </button>
             );
           })}
         </div>
-      </div>
-    );
-  }
-
-  function renderSwatches(title: string, note: string, key: keyof AvatarProfile, items: OptionItem[]) {
-    return (
-      <div className="wardrobe-section" key={key}>
-        <div className="section-title-row">
-          <h3>{title}</h3>
-          <span className="section-note">{note}</span>
+        {items.length === 0 && <div className="inventory-empty" role="status"><p>Таких предметов в наборе нет.</p><button type="button" className="inventory-button" onClick={() => { onQueryChange(''); onCategoryChange('all'); onEquippedOnlyChange(false); }}>Сбросить фильтры</button></div>}
+      </section>
+      {items.length > 0 && <aside className="inventory-detail" aria-labelledby="inventory-item-title">
+        <span className="inventory-eyebrow">{slot.label}</span>
+        <div className="inventory-detail__art">{selected.image ? <img src={selected.image} alt="" width={128} height={128} decoding="async" /> : <span className="inventory-art-token" aria-hidden="true">{selected.iconLabel}</span>}</div>
+        <h2 id="inventory-item-title">{selected.name}</h2>
+        <p>{selected.desc}</p>
+        {selectedTool && <div className="inventory-tool-effect"><span>В учебной смене</span><strong>{selectedTool.effectDescription}</strong><p>Эффект фиксируется при начале смены после сохранения образа.</p></div>}
+        <dl className="inventory-item-facts"><div><dt>Набор</dt><dd>Стартовый</dd></div><div><dt>Слот</dt><dd>{slot.label}</dd></div><div><dt>Статус</dt><dd>{equipped ? 'На персонаже' : 'В инвентаре'}</dd></div></dl>
+        <div className="inventory-detail__actions">
+          <button type="button" className="inventory-button inventory-button--primary" disabled={equipped} onClick={() => onEquip(selected.slot, selected.id)}>{equipped ? 'На персонаже' : equipLabel}</button>
+          {equipped && slot.empty && <button type="button" className="inventory-button" onClick={() => onEquip(selected.slot, slot.empty!)}>{removeLabel}</button>}
         </div>
-        <div className="swatches-grid">
-          {items.map((item) => {
-            const isSelected = avatar[key] === item.id;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                className={`swatch-card ${isSelected ? 'active' : ''}`}
-                onClick={() => onSelectOption(key, item.id)}
-                title={item.desc}
-              >
-                <span className="swatch-color-box" style={{ backgroundColor: item.color }} />
-                <span className="swatch-name">{item.name}</span>
-                {isSelected && <span className="swatch-check">✓</span>}
+        <p className="inventory-detail__note">{selected.slot === 'heldItem' ? 'Заряды действуют только в учебной смене. Помощь отмечается в результате.' : selected.slot === 'badge' ? 'Декоративный значок. Учебные усиления находятся во вкладке «Знаки отличия».' : 'Меняет внешний вид. Базовые вещи доступны сразу.'}</p>
+      </aside>}
+    </div>
+  );
+}
+
+export function AvatarAppearance({ avatar, onSelect }: { avatar: AvatarProfile; onSelect: (slot: keyof AvatarProfile, id: string) => void }) {
+  return (
+    <div className="inventory-appearance">
+      {([['skinTone', 'Тон кожи'], ['hairColor', 'Цвет волос'], ['hair', 'Причёска']] as const).map(([slot, label]) => (
+        <section className="inventory-appearance-section" key={slot} aria-labelledby={`appearance-${slot}`}>
+          <h2 id={`appearance-${slot}`}>{label}</h2>
+          <div className="inventory-appearance-options">
+            {OPTIONS[slot].map((item) => (
+              <button type="button" key={item.id} className={`inventory-appearance-option ${avatar[slot] === item.id ? 'is-selected' : ''}`} aria-pressed={avatar[slot] === item.id} onClick={() => onSelect(slot, item.id)}>
+                {item.color ? <span className="inventory-swatch" style={{ backgroundColor: item.color }} /> : <img src={item.image} alt="" width={72} height={72} />}
+                <span>{item.name}</span>
+                {avatar[slot] === item.id && <span aria-hidden="true">✓</span>}
               </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  if (activeTab === 'identity') {
-    return (
-      <div className="wardrobe-tab-content">
-        {renderSwatches('Тон кожи', 'Естественные северные оттенки', 'skinTone', OPTIONS.skinTone)}
-        {renderSwatches('Цвет волос', 'Канонические палитры станции', 'hairColor', OPTIONS.hairColor)}
-        {renderSection('Причёска', 'Уставные и походные стрижки', 'hair', OPTIONS.hair)}
-      </div>
-    );
-  }
-
-  if (activeTab === 'wardrobe') {
-    return (
-      <div className="wardrobe-tab-content">
-        {renderSection('Головной убор', 'Защита от балтийского ветра', 'headwear', OPTIONS.headwear)}
-        {renderSection('Верхняя одежда', 'Форменная экипировка метеоролога', 'top', OPTIONS.top)}
-        {renderSection('Брюки / Комбинезон', 'Служебная полевая и кабинетная форма', 'bottom', OPTIONS.bottom)}
-        {renderSection('Обувь', 'Надёжная подошва для метеоплощадки', 'footwear', OPTIONS.footwear)}
-      </div>
-    );
-  }
-
-  if (activeTab === 'gear') {
-    return (
-      <div className="wardrobe-tab-content">
-        {renderSection('Сумка / Радиостанция', 'Носимое оборудование', 'backpack', OPTIONS.backpack)}
-        {renderSection('Предмет в руках', 'Инструменты синоптика', 'heldItem', OPTIONS.heldItem)}
-        {renderSection('Служебный знак', 'Ведомственные петлицы и регалии', 'badge', OPTIONS.badge)}
-      </div>
-    );
-  }
-
-  if (activeTab === 'companion') {
-    return (
-      <div className="wardrobe-tab-content">
-        {renderSection('Спутник на плече', 'Живые обитатели кампуса Станции 26063', 'companion', OPTIONS.companion)}
-      </div>
-    );
-  }
-
-  return null;
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
 }

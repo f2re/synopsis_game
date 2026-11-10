@@ -1,0 +1,372 @@
+{
+  "id": "characters.r01",
+  "schemaVersion": 1,
+  "art_status": "pass",
+  "art_review": "docs/art/reviews/2026-11-10-characters-inventory-review.md",
+  "source_format": "aseprite-rgba-frames-tags-v1",
+  "class": "R01 detailed campus NPCs; separate from modular world_character32x48",
+  "rights": "Generated for the selected project using built-in ImageGen; animated in the user-connected SpriteCook account. No third-party photographs or game art.",
+  "actors": [
+    {
+      "id": "character.r01.observer",
+      "name": "observer",
+      "label": "Наблюдатель кампуса",
+      "role": "npc",
+      "displayHeight": 64,
+      "pivot": [
+        0.5,
+        0.9555555555555556
+      ],
+      "positions": {
+        "landscape": [
+          370,
+          486
+        ],
+        "portrait": [
+          210,
+          700
+        ]
+      },
+      "source": "assets/source/characters/r01/observer.aseprite",
+      "provider_sheet": "assets/source/characters/r01/provider/observer-animation.png",
+      "provider_frame_size": [
+        164,
+        164
+      ],
+      "provider_frame_count": 8,
+      "frame_duration_ms": 125,
+      "normalization": {
+        "padding": 8,
+        "align": "bottom-alpha-support-line",
+        "resampling": "none"
+      },
+      "tags": {
+        "idle": [
+          0,
+          0
+        ],
+        "walk": [
+          0,
+          7
+        ]
+      },
+      "asset_id": "ebbdb5a6-89b8-4a95-b4ee-94340dae2c4e",
+      "source_asset_id": "5c958981-2866-4579-9e6d-aef51cd65cc7",
+      "job_id": "07353a12-dd5b-4c3a-9ec8-82e6458fff14",
+      "credits_used": 20,
+      "reduced_motion": "paused walk frame at visible path anchor",
+      "motion": {
+        "type": "walk-across",
+        "direction": "right",
+        "speed": 22
+      },
+      "outputs": {
+        "idle": {
+          "sha256": "44bdd7e75eef87a449b7d65b2ae8553bdacf83a29fc92ad6451df3b056ad5a3f",
+          "bytes": 7760,
+          "frameSize": [
+            180,
+            180
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            125
+          ],
+          "frameBounds": [
+            [
+              52,
+              28,
+              128,
+              172
+            ]
+          ]
+        },
+        "walk": {
+          "sha256": "f34d679f2718e66d091110e094cba212d4009a3e8aea15ac970fe3a821c470f9",
+          "bytes": 48894,
+          "frameSize": [
+            180,
+            180
+          ],
+          "frameCount": 8,
+          "durationsMs": [
+            125,
+            125,
+            125,
+            125,
+            125,
+            125,
+            125,
+            125
+          ],
+          "frameBounds": [
+            [
+              52,
+              28,
+              128,
+              172
+            ],
+            [
+              56,
+              29,
+              116,
+              172
+            ],
+            [
+              58,
+              25,
+              109,
+              172
+            ],
+            [
+              57,
+              25,
+              113,
+              172
+            ],
+            [
+              52,
+              30,
+              131,
+              172
+            ],
+            [
+              48,
+              32,
+              120,
+              172
+            ],
+            [
+              56,
+              28,
+              110,
+              172
+            ],
+            [
+              58,
+              26,
+              109,
+              172
+            ]
+          ]
+        }
+      },
+      "sourceSha256": "aaa6f3b17c0b08cec6e4dc7e17338d20e624b5e7f97b05b2ac89736da267a64a",
+      "providerSha256": "79bbf62de8c71a4bcc08d4731d0e9e8e5fef2e8355d5e1daad549aabaa54d8f4"
+    },
+    {
+      "id": "npc.r01.vera",
+      "name": "vera",
+      "label": "Вера Павловна Ладожская",
+      "role": "npc",
+      "displayHeight": 60,
+      "pivot": [
+        0.5,
+        0.9555555555555556
+      ],
+      "positions": {
+        "landscape": [
+          386,
+          412
+        ],
+        "portrait": [
+          250,
+          485
+        ]
+      },
+      "source": "assets/source/characters/r01/vera.aseprite",
+      "provider_sheet": "assets/source/characters/r01/provider/vera-animation.png",
+      "provider_frame_size": [
+        164,
+        164
+      ],
+      "provider_frame_count": 6,
+      "frame_duration_ms": 280,
+      "normalization": {
+        "padding": 8,
+        "align": "bottom-alpha-support-line",
+        "resampling": "none"
+      },
+      "tags": {
+        "idle": [
+          0,
+          5
+        ]
+      },
+      "asset_id": "8378bacb-7fe6-492d-a9b5-6903f5fe458e",
+      "source_asset_id": "1602ffa6-cd66-4454-8ab1-c341b3b53cc9",
+      "job_id": "f5013ada-cde5-4cd5-8f43-fc6449397c52",
+      "credits_used": 20,
+      "reduced_motion": "first idle frame, no timer",
+      "outputs": {
+        "idle": {
+          "sha256": "7fc8dfcad85df3db6eb115ad88b79803202bc3e8b8508345a785e05cbe12c25a",
+          "bytes": 19879,
+          "frameSize": [
+            180,
+            180
+          ],
+          "frameCount": 6,
+          "durationsMs": [
+            280,
+            280,
+            280,
+            280,
+            280,
+            280
+          ],
+          "frameBounds": [
+            [
+              66,
+              28,
+              112,
+              172
+            ],
+            [
+              66,
+              28,
+              112,
+              172
+            ],
+            [
+              66,
+              28,
+              112,
+              172
+            ],
+            [
+              66,
+              29,
+              112,
+              172
+            ],
+            [
+              66,
+              29,
+              112,
+              172
+            ],
+            [
+              66,
+              29,
+              112,
+              172
+            ]
+          ]
+        }
+      },
+      "sourceSha256": "b352a0c6df1c34fe28797150c1cfb50b599b1bd69837df4ae6513d042b912fd0",
+      "providerSha256": "300255e887fe3567bfef69c094ce8713e546edddd7beafd58d6dff729fa8aa88"
+    },
+    {
+      "id": "companion.r01.pascal",
+      "name": "pascal",
+      "label": "Кот Паскаль",
+      "role": "npc",
+      "displayHeight": 30,
+      "pivot": [
+        0.5,
+        0.9444444444444444
+      ],
+      "positions": {
+        "landscape": [
+          405,
+          489
+        ],
+        "portrait": [
+          219,
+          653
+        ]
+      },
+      "source": "assets/source/characters/r01/pascal.aseprite",
+      "provider_sheet": "assets/source/characters/r01/provider/pascal-animation.png",
+      "provider_frame_size": [
+        128,
+        128
+      ],
+      "provider_frame_count": 6,
+      "frame_duration_ms": 260,
+      "normalization": {
+        "padding": 8,
+        "align": "bottom-alpha-support-line",
+        "resampling": "none"
+      },
+      "tags": {
+        "idle": [
+          0,
+          5
+        ]
+      },
+      "asset_id": "28daea1a-54eb-4498-9e3d-4e48833c8750",
+      "source_asset_id": "d94f82fb-c959-40f8-986a-4a4632fb89d4",
+      "job_id": "269e9718-4810-4257-ad0b-14270c780cfc",
+      "credits_used": 20,
+      "reduced_motion": "first idle frame, no timer",
+      "outputs": {
+        "idle": {
+          "sha256": "56117bcd43df4b89a84de2c20666c86926eb2caa9ac7cb46be83b6763156d01b",
+          "bytes": 14490,
+          "frameSize": [
+            144,
+            144
+          ],
+          "frameCount": 6,
+          "durationsMs": [
+            260,
+            260,
+            260,
+            260,
+            260,
+            260
+          ],
+          "frameBounds": [
+            [
+              27,
+              24,
+              119,
+              136
+            ],
+            [
+              27,
+              24,
+              119,
+              136
+            ],
+            [
+              27,
+              25,
+              119,
+              136
+            ],
+            [
+              27,
+              24,
+              119,
+              136
+            ],
+            [
+              27,
+              24,
+              119,
+              136
+            ],
+            [
+              27,
+              24,
+              119,
+              136
+            ]
+          ]
+        }
+      },
+      "sourceSha256": "e878d2873b5b7be105a004fd0be511c48a22b784cf18e5009385801df0568124",
+      "providerSha256": "ca0cc39769c07b45428c688d2ee454541c145b48840c0b7564f6247c773563ee"
+    }
+  ],
+  "budget": {
+    "compressedPngBytes": 91023,
+    "decodedRgbaBytes": 2441664,
+    "animatedActors": 3,
+    "maximumDecodedRgbaBytes": 4194304
+  }
+}

@@ -7,6 +7,8 @@
  * - Только дискретные команды (смена фазы, получение состояний зданий от сервера, клик по объекту).
  */
 
+import { normalizeAvatarPresentation, type WorldAvatarPresentation } from '../runtime/characterAssets';
+
 export type DayPhase = 'night' | 'dawn' | 'day' | 'golden_hour' | 'twilight' | 'white_nights';
 
 export type BuildingStateId = 'locked' | 'available' | 'active' | 'just_unlocked';
@@ -21,6 +23,7 @@ export type WorldEventCallback<T = any> = (data: T) => void;
 export class WorldBridge {
   private static instance: WorldBridge | null = null;
   private listeners: Map<string, Set<WorldEventCallback>> = new Map();
+  private avatarPresentation: WorldAvatarPresentation = normalizeAvatarPresentation(null);
 
   static getInstance(): WorldBridge {
     if (!WorldBridge.instance) {
@@ -47,6 +50,16 @@ export class WorldBridge {
     if (handlers) {
       handlers.forEach((fn) => fn(data));
     }
+  }
+
+  /** Presentation only: use the saved account profile, not an unsaved editor draft. */
+  setAvatarPresentation(value: unknown): void {
+    this.avatarPresentation = normalizeAvatarPresentation(value);
+    this.emit('ui:avatar_presentation', this.getAvatarPresentation());
+  }
+
+  getAvatarPresentation(): WorldAvatarPresentation {
+    return { ...this.avatarPresentation };
   }
 
   // Команды от сервера/React в Phaser
@@ -91,6 +104,7 @@ export class WorldBridge {
 
   clear(): void {
     this.listeners.clear();
+    this.avatarPresentation = normalizeAvatarPresentation(null);
   }
 }
 

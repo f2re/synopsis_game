@@ -1,0 +1,14 @@
+Command: bash -n <each deploy/release shell script>
+Working directory: .
+
+bash -n deploy/scripts/backup.sh
+bash -n deploy/scripts/configure.sh
+bash -n deploy/scripts/ensure-host-deps.sh
+bash -n deploy/scripts/healthcheck.sh
+bash -n deploy/scripts/install.sh
+bash -n deploy/scripts/render-web-config.sh
+bash -n scripts/release/build-release.sh
+bash -n scripts/release/test-astra17.sh
+bash -n scripts/release/validate-release.sh
+
+Checked scripts: 9

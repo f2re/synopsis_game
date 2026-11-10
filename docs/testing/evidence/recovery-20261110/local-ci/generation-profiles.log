@@ -1,0 +1,5 @@
+Command: python tools/assets/check_generation_profiles.py
+Working directory: .
+
+Generation profile regression check: PASS
+Protected 14 distinct art classes from destructive normalization regressions.

@@ -1,0 +1,21 @@
+{
+  "viewport": {
+    "width": 1363,
+    "height": 936
+  },
+  "sample": {
+    "actualFps": "1",
+    "canvasHeight": "936",
+    "canvasWidth": "1363",
+    "context": "ready",
+    "fpsLimit": "60",
+    "lowPower": "false",
+    "reducedMotion": "false",
+    "renderFps": "1",
+    "renderer": "canvas",
+    "scene": "hub",
+    "soundMuted": "true",
+    "visibility": "visible"
+  },
+  "note": "Cloud browser, Canvas fallback; one observed sample, not a target-device benchmark."
+}

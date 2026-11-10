@@ -1,0 +1,15 @@
+{
+  "catalogParity": true,
+  "supportedSlots": 11,
+  "supportedValues": 42,
+  "inventoryItems": 24,
+  "validImages": 29,
+  "validPresets": 3,
+  "draftRecovery": {
+    "isolatedAccounts": true,
+    "validOptionsOnly": true,
+    "newerServerFieldsPreserved": true,
+    "explicitConflicts": true,
+    "storageFailureSafe": true
+  }
+}

@@ -1,4 +1,4 @@
-import { randomInt, randomUUID } from 'node:crypto';
+import { createHash, randomInt, randomUUID } from 'node:crypto';
 import { appendFile, mkdir, readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import {
@@ -9,6 +9,9 @@ import {
   type TaskDefinition,
 } from '@synopsis/content-engine';
 import { decodeGroup, KN01_RULESET_ID, type SupportedKn01Group } from '@synopsis/kn01-codec';
+import { DEFAULT_AVATAR, type AvatarProfile } from '../identity/model.js';
+import { EquipmentService, effectsAllowed } from '../equipment/equipmentService.js';
+import type { EquipmentSnapshot, ReferenceView, TrainingReward, TrainingShift, TrainingState } from '../equipment/model.js';
 
 interface ContentPack {
   id: string;
@@ -37,14 +40,28 @@ interface MethodProfile {
   dependency_graphs?: Record<string, DependencyGraphProfile>;
 }
 
-interface ShiftState {
-  id: string;
-  userId: string;
-  seed: number;
-  taskIds: string[];
-  currentIndex: number;
-  correct: number;
-  createdAt: string;
+type ShiftState = TrainingShift;
+
+export interface ShiftAnswerResult {
+  status: 'answered' | 'retry-offered';
+  retryAvailable: boolean;
+  feedback: {
+    correct: boolean;
+    correctAnswer?: unknown;
+    details: unknown;
+    explanation: string;
+    principleTags: string[];
+    sources: Array<{ sourceId: string; title: string; locator: string }>;
+    assisted: boolean;
+    retried: boolean;
+    firstAttemptCorrect: boolean;
+  };
+  answered: number;
+  completed: boolean;
+  nextTask: PublicTaskInstance | null;
+  progress: { answered: number; correct: number; current: number; total: number };
+  equipment: EquipmentSnapshot;
+  reward?: TrainingReward;
 }
 
 export class ShiftError extends Error {
@@ -56,18 +73,24 @@ export class ShiftError extends Error {
 export interface ShiftServiceOptions {
   contentRoot: string;
   attemptLogPath: string;
+  equipment?: EquipmentService;
+  /** Server time only; injected clock is used by deterministic tests. */
+  now?: () => Date;
 }
 
 export class ShiftService {
   private readonly tasks = new Map<string, TaskDefinition>();
   private readonly sources = new Map<string, SourceRecord>();
   private readonly methodProfiles = new Map<string, MethodProfile>();
-  private readonly shifts = new Map<string, ShiftState>();
+  readonly equipment: EquipmentService;
+  private auditQueue: Promise<void> = Promise.resolve();
+  private readonly auditIds = new Set<string>();
   private pack: ContentPack | null = null;
 
-  constructor(private readonly options: ShiftServiceOptions) {}
+  constructor(private readonly options: ShiftServiceOptions) { this.equipment = options.equipment ?? new EquipmentService(); }
 
   async init(): Promise<void> {
+    await this.equipment.init();
     const [taskFiles, methodFiles, pack, sourceFile] = await Promise.all([
       this.readTaskFiles(),
       this.readMethodProfileFiles(),
@@ -92,75 +115,117 @@ export class ShiftService {
     for (const source of sourceFile.sources) this.sources.set(source.id, source);
     this.pack = pack;
     this.validateContent();
+    try {
+      const log = await readFile(this.options.attemptLogPath, 'utf8');
+      for (const line of log.split('\n')) {
+        if (!line.trim()) continue;
+        try { const entry = JSON.parse(line) as { eventId?: string }; if (entry.eventId) this.auditIds.add(entry.eventId); } catch { /* Legacy malformed audit lines cannot erase canonical evidence. */ }
+      }
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') console.warn('Журнал попыток недоступен; канонические записи сохранены в хранилище смен.');
+    }
+    await this.flushAudit();
   }
 
-  startShift(userId: string) {
+  async startShift(userId: string, avatar: AvatarProfile = DEFAULT_AVATAR) {
     const pack = this.requirePack();
-    const state: ShiftState = {
-      id: randomUUID(),
-      userId,
-      seed: randomInt(1, 0x7fffffff),
-      taskIds: [...pack.tasks],
-      currentIndex: 0,
-      correct: 0,
-      createdAt: new Date().toISOString(),
-    };
-    this.shifts.set(state.id, state);
-    return {
-      shiftId: state.id,
-      mode: pack.status === 'published' ? 'practice' : 'practice-draft',
-      contentPack: this.contentPackId(pack),
-      contentStatus: pack.status,
-      task: this.buildCurrentTask(state).publicTask,
-      progress: this.progress(state),
-    };
+    return this.equipment.store.transaction((draft) => {
+      const active = Object.values(draft.shifts).find((shift) => shift.userId === userId && shift.currentIndex < shift.taskIds.length);
+      if (active) {
+        if (active.contentPack !== this.contentPackId(pack)) throw new ShiftError(409, 'Учебный пакет изменился. Незавершённая смена требует восстановления прежней версии пакета.', 'content_version_changed');
+        return this.startResponse(active);
+      }
+      const mode = pack.status === 'published' ? 'practice' : 'practice-draft';
+      const state: ShiftState = {
+        id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...pack.tasks],
+        currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: this.now(),
+        mode, contentPack: this.contentPackId(pack), contentStatus: pack.status,
+        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), avatar, mode),
+        assistedTaskIds: [], references: {}, responses: {},
+      };
+      draft.shifts[state.id] = state;
+      return this.startResponse(state);
+    });
   }
 
   getCurrentTask(userId: string, shiftId: string) {
     const state = this.requireShift(userId, shiftId);
     if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
-    return { task: this.buildCurrentTask(state).publicTask, progress: this.progress(state) };
+    if (state.contentPack !== this.contentPackId(this.requirePack())) throw new ShiftError(409, 'Версия учебного пакета изменилась', 'content_version_changed');
+    return this.startResponse(state);
   }
 
-  async submitAnswer(userId: string, shiftId: string, instanceId: string, submitted: unknown) {
-    const state = this.requireShift(userId, shiftId);
-    if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
-    const current = this.buildCurrentTask(state);
-    if (current.publicTask.instanceId !== instanceId) throw new ShiftError(409, 'Ответ относится не к текущему заданию', 'task_instance_mismatch');
+  async submitAnswer(userId: string, shiftId: string, instanceId: string, submitted: unknown, attempt: unknown = 1): Promise<ShiftAnswerResult> {
+    if (attempt !== 1 && attempt !== 2) throw new ShiftError(400, 'Допустимы только первая и повторная попытки', 'invalid_attempt');
+    const fingerprint = this.fingerprint(submitted);
+    const result = await this.equipment.store.transaction((draft) => {
+      const state = this.requireShift(userId, shiftId, draft);
+      const key = `${instanceId}:${attempt}`;
+      const previous = state.responses[key];
+      if (previous) {
+        if (previous.fingerprint !== fingerprint) throw new ShiftError(409, 'Эта попытка уже зафиксирована с другим ответом', 'answer_already_recorded');
+        return previous.response as ShiftAnswerResult;
+      }
+      const current = this.requireCurrentTask(state, instanceId);
+      if (attempt === 2 && (!state.pendingRetry || state.pendingRetry.instanceId !== instanceId || state.equipment.remaining.retry < 1 || !effectsAllowed(state.mode))) {
+        throw new ShiftError(409, 'Повторная попытка недоступна', 'retry_unavailable');
+      }
+      if (attempt === 1 && state.pendingRetry) throw new ShiftError(409, 'Выберите повтор или откройте разбор', 'retry_decision_required');
+      const validation = validateTaskAnswer(current.definition, current.validationContext, submitted);
+      if (attempt === 2) {
+        state.equipment.remaining.retry -= 1;
+        this.markAssisted(state, instanceId);
+      }
+      const assisted = state.assistedTaskIds.includes(instanceId);
+      draft.attempts.push({ eventId: `${state.id}:${state.currentIndex + 1}:attempt:${attempt}`, occurredAt: this.now(),
+        userId, shiftId, instanceId, definitionId: current.definition.id, contentPack: state.contentPack,
+        rulesetId: KN01_RULESET_ID, answer: validation.normalizedAnswer, correct: validation.correct,
+        attempt, assisted, });
 
-    const validation = validateTaskAnswer(current.definition, current.validationContext, submitted);
-    if (validation.correct) state.correct += 1;
-    const answeredIndex = state.currentIndex;
-    state.currentIndex += 1;
-
-    await this.appendAttempt({
-      occurredAt: new Date().toISOString(),
-      userId,
-      shiftId,
-      instanceId,
-      definitionId: current.definition.id,
-      contentPack: this.contentPackId(this.requirePack()),
-      rulesetId: KN01_RULESET_ID,
-      answer: validation.normalizedAnswer,
-      correct: validation.correct,
+      let response: ShiftAnswerResult;
+      if (attempt === 1 && !validation.correct && state.equipment.remaining.retry > 0 && effectsAllowed(state.mode)) {
+        state.pendingRetry = { instanceId, firstAnswer: structuredClone(submitted) };
+        response = { status: 'retry-offered', retryAvailable: true,
+          feedback: { correct: false, details: null, explanation: '', principleTags: [], sources: [], assisted, retried: false, firstAttemptCorrect: false },
+          answered: state.currentIndex, completed: false, nextTask: null, progress: this.progress(state), equipment: structuredClone(state.equipment) };
+      } else {
+        response = this.finishTask(draft, state, current.definition, validation, attempt === 1 && validation.correct, attempt === 2);
+      }
+      state.responses[key] = { fingerprint, response };
+      return response;
     });
+    await this.flushAudit();
+    return result;
+  }
 
-    const completed = state.currentIndex >= state.taskIds.length;
-    const nextTask = completed ? null : this.buildCurrentTask(state).publicTask;
-    return {
-      feedback: {
-        correct: validation.correct,
-        correctAnswer: validation.correctAnswer,
-        details: (validation as unknown as { details?: unknown }).details ?? null,
-        explanation: current.definition.explanation ?? '',
-        principleTags: current.definition.principle_tags ?? [],
-        sources: this.resolveSources(current.definition),
-      },
-      answered: answeredIndex + 1,
-      completed,
-      nextTask,
-      progress: this.progress(state),
-    };
+  async openReference(userId: string, shiftId: string, instanceId: string) {
+    return this.equipment.store.transaction((draft) => {
+      const state = this.requireShift(userId, shiftId, draft);
+      const current = this.requireCurrentTask(state, instanceId);
+      if (state.references[instanceId]) return { ...state.references[instanceId], equipment: state.equipment };
+      if (!effectsAllowed(state.mode) || state.equipment.remaining.reference < 1) throw new ShiftError(409, 'В этой смене больше нет обращений к справке', 'reference_unavailable');
+      const explanation = String(current.definition.explanation ?? '');
+      if (!explanation) throw new ShiftError(409, 'Для этого задания ещё нет авторской справки', 'reference_missing');
+      const reference: ReferenceView = { instanceId, explanation, sources: this.resolveSources(current.definition), assisted: true };
+      state.references[instanceId] = reference;
+      state.equipment.remaining.reference -= 1;
+      this.markAssisted(state, instanceId);
+      return { ...reference, equipment: state.equipment };
+    });
+  }
+
+  async revealAnswer(userId: string, shiftId: string, instanceId: string): Promise<ShiftAnswerResult> {
+    return this.equipment.store.transaction((draft) => {
+      const state = this.requireShift(userId, shiftId, draft);
+      const key = `${instanceId}:reveal`;
+      if (state.responses[key]) return state.responses[key].response as ShiftAnswerResult;
+      const current = this.requireCurrentTask(state, instanceId);
+      if (!state.pendingRetry || state.pendingRetry.instanceId !== instanceId) throw new ShiftError(409, 'Сначала отправьте ответ на задание', 'reveal_unavailable');
+      const validation = validateTaskAnswer(current.definition, current.validationContext, state.pendingRetry.firstAnswer);
+      const response = this.finishTask(draft, state, current.definition, validation, false, false);
+      state.responses[key] = { fingerprint: 'reveal', response };
+      return response;
+    });
   }
 
   getResult(userId: string, shiftId: string) {
@@ -172,9 +237,58 @@ export class ShiftService {
       correct: state.correct,
       total: state.taskIds.length,
       startedAt: state.createdAt,
-      contentPack: this.contentPackId(this.requirePack()),
+      contentPack: state.contentPack,
+      equipment: state.equipment,
+      unassistedCorrect: state.unassistedCorrect,
+      ...(state.reward ? { reward: state.reward } : {}),
     };
   }
+
+  private finishTask(draft: TrainingState, state: ShiftState, definition: TaskDefinition,
+    validation: ReturnType<typeof validateTaskAnswer>, firstCorrect: boolean, retried: boolean): ShiftAnswerResult {
+    const instanceId = `${state.id}:${state.currentIndex + 1}`;
+    const assisted = state.assistedTaskIds.includes(instanceId);
+    if (firstCorrect) state.correct += 1;
+    if (firstCorrect && !assisted) state.unassistedCorrect += 1;
+    delete state.pendingRetry;
+    state.currentIndex += 1;
+    const completed = state.currentIndex === state.taskIds.length;
+    if (completed) this.equipment.complete(draft, state, this.now());
+    return { status: 'answered', retryAvailable: false,
+      feedback: { correct: validation.correct, correctAnswer: validation.correctAnswer,
+        details: (validation as unknown as { details?: unknown }).details ?? null,
+        explanation: definition.explanation ?? '', principleTags: definition.principle_tags ?? [],
+        sources: this.resolveSources(definition), assisted, retried, firstAttemptCorrect: firstCorrect },
+      answered: state.currentIndex, completed, nextTask: completed ? null : this.buildCurrentTask(state).publicTask,
+      progress: this.progress(state), equipment: structuredClone(state.equipment),
+      ...(state.reward ? { reward: structuredClone(state.reward) } : {}),
+    };
+  }
+
+  private startResponse(state: ShiftState) {
+    const task = this.buildCurrentTask(state).publicTask;
+    return { shiftId: state.id, mode: state.mode, contentPack: state.contentPack, contentStatus: state.contentStatus,
+      task, progress: this.progress(state), equipment: state.equipment,
+      retryAvailable: Boolean(state.pendingRetry),
+      ...(state.references[task.instanceId] ? { reference: state.references[task.instanceId] } : {}),
+    };
+  }
+
+  private requireCurrentTask(state: ShiftState, instanceId: string) {
+    if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
+    if (state.contentPack !== this.contentPackId(this.requirePack())) throw new ShiftError(409, 'Версия учебного пакета изменилась', 'content_version_changed');
+    const current = this.buildCurrentTask(state);
+    if (current.publicTask.instanceId !== instanceId) throw new ShiftError(409, 'Ответ относится не к текущему заданию', 'task_instance_mismatch');
+    return current;
+  }
+
+  private markAssisted(state: ShiftState, instanceId: string) {
+    if (!state.assistedTaskIds.includes(instanceId)) state.assistedTaskIds.push(instanceId);
+    state.equipment.assistedTasks = state.assistedTaskIds.length;
+  }
+
+  private now(): string { return (this.options.now?.() ?? new Date()).toISOString(); }
+  private fingerprint(input: unknown): string { return createHash('sha256').update(JSON.stringify(input) ?? 'undefined').digest('hex'); }
 
   private resolveTaskDefinition(task: TaskDefinition): TaskDefinition {
     if (task.type !== 'dependencySequence') return task;
@@ -256,8 +370,8 @@ export class ShiftService {
     return this.pack;
   }
 
-  private requireShift(userId: string, shiftId: string): ShiftState {
-    const state = this.shifts.get(shiftId);
+  private requireShift(userId: string, shiftId: string, data = this.equipment.store.read()): ShiftState {
+    const state = data.shifts[shiftId];
     if (!state || state.userId !== userId) throw new ShiftError(404, 'Смена не найдена', 'shift_not_found');
     return state;
   }
@@ -267,6 +381,25 @@ export class ShiftService {
   private async appendAttempt(record: Record<string, unknown>): Promise<void> {
     await mkdir(dirname(this.options.attemptLogPath), { recursive: true });
     await appendFile(this.options.attemptLogPath, `${JSON.stringify(record)}\n`, { encoding: 'utf8', mode: 0o600 });
+  }
+
+  private async flushAudit(): Promise<void> {
+    const flush = async () => {
+      for (const record of this.equipment.store.read().attempts) {
+        if (this.auditIds.has(record.eventId)) continue;
+        try {
+          await this.appendAttempt(record);
+          this.auditIds.add(record.eventId);
+        } catch {
+          // The atomic training store remains authoritative. Retry projection on
+          // the next answer or restart; never turn a committed answer into a 500.
+          console.warn('Копия журнала попыток временно недоступна; запись сохранена в хранилище смен.');
+          return;
+        }
+      }
+    };
+    this.auditQueue = this.auditQueue.then(flush, flush);
+    await this.auditQueue;
   }
 
   private async readTaskFiles(): Promise<Array<{ tasks: TaskDefinition[] }>> {

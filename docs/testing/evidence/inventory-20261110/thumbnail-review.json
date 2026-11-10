@@ -1,0 +1,359 @@
+{
+  "date": "2026-11-10",
+  "reviewer": "independent_review",
+  "scope": "Existing UI thumbnails only; not new world-sprite craft approval",
+  "count": 29,
+  "publicEqual": true,
+  "fractionalAlpha": 22,
+  "rejectedNamedThumbnails": 4,
+  "images": [
+    {
+      "file": "backpack_city.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "7b8171161fb279969e6d5786432fb3c9a41ddaa58f5c555958cdac6c85961af5",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "backpack_field.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "78e4f3a18c5f0589ae0fa9ed58881a9bd9da7b06d8bd31263c9edad4404289cd",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "badge_aerology.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "a8d26793bc4baae89e687d4c3bb4ff8d12f1226fca4b99ac2e9733098af3e8c6",
+      "publicEqual": true,
+      "semanticReview": "REJECT_FOR_NAMED_ITEM",
+      "note": "Contains whole shirt, not badge"
+    },
+    {
+      "file": "badge_meteo.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "1c87f342c6bc56a0847ae5e1112614e543e0108325a035b5bbe736f672c14088",
+      "publicEqual": true,
+      "semanticReview": "REJECT_FOR_NAMED_ITEM",
+      "note": "Contains whole shirt, not badge"
+    },
+    {
+      "file": "bottom_dark_trousers.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "c0be9265e49e584c1719f0c5415a5446caef359b2c76cfd7583a136e3bbe48e0",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "bottom_field_trousers.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "a57bb66917d251d76d82bc32d9220dc3c86ea41885c62ec810f3e9394f593b08",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "bottom_jeans.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "51fd5cde025e6397194aacbac211abc822fd2d01a4b236690260e2b52c8f63d1",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "companion_squirrel.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "11a3e5d3ab66587bf10c8aff6691697a544c65567641dd25960cec63fbb6688d",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "companion_tit.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "17a3fe6a60844463d8cc24b7d55936ece5a11a7d2d69d0a94953527778cc79c1",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "footwear_boots.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "b2e89f7adefb60154e9d5b33ffffbeee52a51ad89373133bbe2d7ab87602b38e",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "footwear_shoes.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "2c4954b05da9e93a8793f89b79be7f321d754e801ef258c0405a819e341432ee",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "footwear_sneakers.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "4e620613402b8f54207ad5e32ba52f9e3b43fe0dd127441be69d84765d19d32e",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "hair_bob.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "e3ae41c056b6c3693d7f2f08c891380cc190cfae7822e0a5a6cad7ec332b13fd",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "hair_curl.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "a86f078aae1d666bd181c5e06bd235d7fa3bf23c5e2c1f0957e47fbadd2936dd",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "hair_long.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "14ea0644c84bd7fb7c0d24aec05bb3090e140ccd763284a2223e97e9ec0f7c0c",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "hair_short.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "7e15490375c461510e257e28fda14399c4c835a86ebd083cde79190f0429263e",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "hair_wave.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "binary",
+      "sha256": "2744955eaa98766a50e8ab43c7b27694fdf5c5a0acc2b810d20724b89158b688",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "headwear_beanie.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "45086aff183b9758f64ff66cbfeb160e15f8258753cbab503d0736874e462a72",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "headwear_cap.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "767c545eefab7008229bcd3b3e694a846c7542ca87c544e65becfffaed35da36",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "headwear_goggles.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "891f156fbcdcbccf074fa0953fbb7c08c5b69e166191c954efe046c3efc29633",
+      "publicEqual": true,
+      "semanticReview": "REJECT_FOR_NAMED_ITEM",
+      "note": "Contains tablet, not goggles"
+    },
+    {
+      "file": "headwear_scarf.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "d05cac803f577d2637f81eb9594dc9637558c7eb2aecc23df0a7936b566ce7d2",
+      "publicEqual": true,
+      "semanticReview": "REJECT_FOR_NAMED_ITEM",
+      "note": "Contains pencil, not scarf"
+    },
+    {
+      "file": "held_map_folder.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "72cbdee9b3078eb7dd624caf4904acd90021b8c66452949472a910a9403a6b69",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "held_pencil.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "2fc1fe0820af23307fada15f3584025306a767a119d07cb41189fdcc57181055",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "held_tablet.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "78a475839506f6eb6d0e0424b427e57f467b6dcdc75143c9097224e59df426a4",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "top_center_jacket.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "f8a3b791cca2eab902e4bfe26824079c80967ea368962ba22a01837a5a5ee28b",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "top_field_jacket.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "8dc724bf8cda8a863b21afcd34d103cc5aeffcb9a35ca92b9f2d794078284bd5",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "top_hoodie.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "129f1d90ebdbf7cf38fac5e901d2b34e665023c6beaf78f0cb61bd98802b6de0",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "top_shirt.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "13bc85af98d422199e292912f4a0c66c8297b2de5db2e2726f447d6ecf7fbcb9",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    },
+    {
+      "file": "top_sweater.png",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": "fractional",
+      "sha256": "beceb1ef8629c28514c3eccdd9e1f4b7c19395135fd03cd17470e39ecefd462d",
+      "publicEqual": true,
+      "semanticReview": "PASS_EXISTING_UI_REUSE",
+      "note": "Recognizable intended item / hair in independent visual contact-sheet inspection"
+    }
+  ]
+}

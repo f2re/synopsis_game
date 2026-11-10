@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { PixelCard } from '../../ui';
 
 export interface DigitSegment {
   digits: string;
@@ -15,9 +14,10 @@ interface DigitAnatomyProps {
   isCorrect?: boolean;
   userAnswer?: string;
   explanation?: string;
+  resolvedValue?: number;
 }
 
-export function parseGroupAnatomy(group: string, groupType: string = ''): DigitSegment[] {
+export function parseGroupAnatomy(group: string, groupType: string = '', resolvedValue?: number): DigitSegment[] {
   const g = group.trim();
 
   // Nddff
@@ -53,10 +53,14 @@ export function parseGroupAnatomy(group: string, groupType: string = ''): DigitS
 
   // 3PoPoPoPo
   if (g.startsWith('3') && g.length === 5) {
-    const val = (Number(g.slice(1, 5)) / 10).toFixed(1);
+    // Station pressure must use the task's server-resolved value, including
+    // its station context, rather than displaying the shortened code as hPa.
+    const decodedValue = typeof resolvedValue === 'number' && Number.isFinite(resolvedValue)
+      ? `${resolvedValue.toFixed(1)} гПа`
+      : 'Расшифровка недоступна';
     return [
       { digits: '3', symbol: '3', title: 'Индикатор давления на станции', decodedValue: 'Давление на станции', colorRole: 'blue' },
-      { digits: g.slice(1, 5), symbol: 'PoPoPoPo', title: 'Давление на станции', decodedValue: `${val} гПа`, colorRole: 'purple' },
+      { digits: g.slice(1, 5), symbol: 'PoPoPoPo', title: 'Давление на станции', decodedValue, colorRole: 'purple' },
     ];
   }
 
@@ -100,8 +104,9 @@ export function DigitAnatomy({
   isCorrect = true,
   userAnswer,
   explanation,
+  resolvedValue,
 }: DigitAnatomyProps) {
-  const segments = useMemo(() => parseGroupAnatomy(codeGroup, groupType), [codeGroup, groupType]);
+  const segments = useMemo(() => parseGroupAnatomy(codeGroup, groupType, resolvedValue), [codeGroup, groupType, resolvedValue]);
 
   return (
     <div className="digit-anatomy" style={{

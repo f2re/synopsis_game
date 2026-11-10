@@ -1,0 +1,212 @@
+{
+  "id": "hub.r01-props",
+  "schema": "spritecook-props/v1",
+  "title": "Растения и предметы кампуса R01",
+  "source": "assets/source/environment/hub/r01/props.aseprite",
+  "sourceSheet": "assets/source/environment/hub/r01/props-detailed-sheet.png",
+  "spritecookAssetId": "31beff8e-4472-4789-82ae-0fd392043ca5",
+  "reference": "design/pixel-art/v2/01_hub.png",
+  "model": "gpt-image-2",
+  "sourceTreatment": "Native cutout sprites; binary alpha at 130, no resize or palette reduction.",
+  "art_status": "pass",
+  "provenance": {
+    "origin": "SpriteCook generation referenced to project R01",
+    "license": "project-generated; retain provider and reference provenance"
+  },
+  "assets": [
+    {
+      "id": "hub.r01.prop.pine",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "layer": "pine",
+      "label": "prop-pine",
+      "source_png": "assets/source/environment/hub/r01/components/prop-pine.png",
+      "source_rect": {
+        "x": 36,
+        "y": 49,
+        "width": 281,
+        "height": 462
+      },
+      "logicalSize": {
+        "width": 281,
+        "height": 462
+      },
+      "pivot": {
+        "x": 140,
+        "y": 460
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/prop-pine.png",
+      "publicPath": "/hub/r01/prop-pine.png",
+      "sha256": "7855c227de3ec78e4119557ac8ee1dd9eb7696ff0ad6ff80e07d2d9304e4c3fe",
+      "sha12": "7855c227de3e",
+      "bytes": 154772,
+      "sourceSha256": "a717174aeb18036cb4887b471c15410c3a3b162144e8d3bbe22a8972b005b70d"
+    },
+    {
+      "id": "hub.r01.prop.tree",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "layer": "tree",
+      "label": "prop-tree",
+      "source_png": "assets/source/environment/hub/r01/components/prop-tree.png",
+      "source_rect": {
+        "x": 341,
+        "y": 86,
+        "width": 339,
+        "height": 421
+      },
+      "logicalSize": {
+        "width": 339,
+        "height": 421
+      },
+      "pivot": {
+        "x": 169,
+        "y": 419
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/prop-tree.png",
+      "publicPath": "/hub/r01/prop-tree.png",
+      "sha256": "21cbe2212ae6e2ea65c2b74553254a9ec09a34df6c07e30ffebc1580b6f7ef30",
+      "sha12": "21cbe2212ae6",
+      "bytes": 181442,
+      "sourceSha256": "ee21ef99e0476e3fc7d5b86896dcd05bc97de42f54aaf6936a9995aa5f087ad0",
+      "sourceEdits": [
+        {
+          "operation": "clear_detached_alpha_component",
+          "rect": {
+            "x": 338,
+            "y": 370,
+            "width": 1,
+            "height": 16
+          },
+          "reason": "Independent art reviewer found a stray edge component; edited the Aseprite tree layer, preserving canvas and pivot."
+        }
+      ]
+    },
+    {
+      "id": "hub.r01.prop.hedge",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "layer": "hedge",
+      "label": "prop-hedge",
+      "source_png": "assets/source/environment/hub/r01/components/prop-hedge.png",
+      "source_rect": {
+        "x": 680,
+        "y": 285,
+        "width": 316,
+        "height": 226
+      },
+      "logicalSize": {
+        "width": 316,
+        "height": 226
+      },
+      "pivot": {
+        "x": 158,
+        "y": 224
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/prop-hedge.png",
+      "publicPath": "/hub/r01/prop-hedge.png",
+      "sha256": "58d1b0d914d4b842ffe9086d8ec97be3b9d0cad2bef7412dd9204ab70d90630d",
+      "sha12": "58d1b0d914d4",
+      "bytes": 125672,
+      "sourceSha256": "e4b8410a4e3520261f4e7e1832275c2bfefeb1baed8e470fe3b8ebfe7131ade2"
+    },
+    {
+      "id": "hub.r01.prop.lamp",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "layer": "lamp",
+      "label": "prop-lamp",
+      "source_png": "assets/source/environment/hub/r01/components/prop-lamp.png",
+      "source_rect": {
+        "x": 111,
+        "y": 556,
+        "width": 87,
+        "height": 352
+      },
+      "logicalSize": {
+        "width": 87,
+        "height": 352
+      },
+      "pivot": {
+        "x": 43,
+        "y": 350
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/prop-lamp.png",
+      "publicPath": "/hub/r01/prop-lamp.png",
+      "sha256": "9de9f553a8eaec1bcdb67eb65080a61337d4cd58b98464f364480f1b8ae569be",
+      "sha12": "9de9f553a8ea",
+      "bytes": 28069,
+      "sourceSha256": "73d40c12926e97614017fbca75ae5621ed21b2d2cd434ee8b0201f619097a8ec"
+    },
+    {
+      "id": "hub.r01.prop.bench",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "layer": "bench",
+      "label": "prop-bench",
+      "source_png": "assets/source/environment/hub/r01/components/prop-bench.png",
+      "source_rect": {
+        "x": 274,
+        "y": 698,
+        "width": 357,
+        "height": 234
+      },
+      "logicalSize": {
+        "width": 357,
+        "height": 234
+      },
+      "pivot": {
+        "x": 178,
+        "y": 232
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/prop-bench.png",
+      "publicPath": "/hub/r01/prop-bench.png",
+      "sha256": "82dc057c2f4c989d1bd633da47074568349ab4ef61dadd33117c4aa4bdb17e3c",
+      "sha12": "82dc057c2f4c",
+      "bytes": 104187,
+      "sourceSha256": "08ea411533f13033f5774c34b2ad4523e1fdf46c04729b27408e6d5e9b77e413"
+    },
+    {
+      "id": "hub.r01.prop.fountain",
+      "asset_id": "31beff8e-4472-4789-82ae-0fd392043ca5",
+      "layer": "fountain",
+      "label": "prop-fountain",
+      "source_png": "assets/source/environment/hub/r01/components/prop-fountain.png",
+      "source_rect": {
+        "x": 686,
+        "y": 617,
+        "width": 296,
+        "height": 304
+      },
+      "logicalSize": {
+        "width": 296,
+        "height": 304
+      },
+      "pivot": {
+        "x": 148,
+        "y": 302
+      },
+      "kind": "environment",
+      "state": "idle",
+      "alphaCutoff": 130,
+      "generated": "assets/generated/hub/r01/prop-fountain.png",
+      "publicPath": "/hub/r01/prop-fountain.png",
+      "sha256": "d8b723f82fa52d8365c32f54efca3902a011b56aa4c3c02122db03750c24c6a2",
+      "sha12": "d8b723f82fa5",
+      "bytes": 130012,
+      "sourceSha256": "ca27fba0bbc06af8bd69e4dd8f6a119339ee8163f37f213913f93ff6ae0fb5fe"
+    }
+  ],
+  "sourceSha256": "08b3b8eef5d825d9ba3b7e14c0ec2392485231d883ccdef08bfc403451efb484",
+  "art_review": "docs/art/reviews/2026-11-09-spritecook-r01-review.md"
+}

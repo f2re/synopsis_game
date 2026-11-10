@@ -1,297 +1,131 @@
 import type { AvatarProfile } from '../../api';
 
-export type TabKey = 'identity' | 'wardrobe' | 'gear' | 'companion';
+export type EquipmentSlot = Exclude<keyof AvatarProfile, 'skinTone' | 'hair' | 'hairColor'>;
+export type InventoryCategory = 'all' | 'wardrobe' | 'gear' | 'companion';
 
 export interface OptionItem {
   id: string;
   name: string;
-  icon?: string;
   image?: string;
+  iconLabel?: string;
   desc: string;
-  styleTag?: string;
   color?: string;
 }
 
 export interface StylePreset {
   id: string;
   name: string;
-  icon: string;
-  desc: string;
+  image: string;
   avatar: Partial<AvatarProfile>;
 }
 
-export const TABS: Array<{ id: TabKey; label: string; icon: string }> = [
-  { id: 'identity', label: 'Внешность', icon: '👤' },
-  { id: 'wardrobe', label: 'Одежда', icon: '🧥' },
-  { id: 'gear', label: 'Снаряжение', icon: '🎒' },
-  { id: 'companion', label: 'Спутники', icon: '🐦' },
+/** IDs are the persisted identity contract, not display labels or image filenames. */
+export const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
+  skinTone: [
+    { id: 'skin.light', name: 'Светлый', color: '#f0c3a5', desc: 'Светлый тон кожи' },
+    { id: 'skin.warm', name: 'Тёплый', color: '#dca37d', desc: 'Тёплый тон кожи' },
+    { id: 'skin.medium', name: 'Смуглый', color: '#b67852', desc: 'Смуглый тон кожи' },
+    { id: 'skin.deep', name: 'Тёмный', color: '#754a36', desc: 'Тёмный тон кожи' },
+  ],
+  hairColor: [
+    { id: 'haircolor.brown', name: 'Каштановый', color: '#704630', desc: 'Каштановые волосы' },
+    { id: 'haircolor.black', name: 'Тёмный', color: '#27232b', desc: 'Тёмные волосы' },
+    { id: 'haircolor.blond', name: 'Светлый', color: '#c9a96a', desc: 'Светлые волосы' },
+    { id: 'haircolor.auburn', name: 'Рыжий', color: '#a65432', desc: 'Рыжие волосы' },
+  ],
+  hair: [
+    { id: 'hair.short', name: 'Короткая стрижка', image: '/assets/items/hair_short.png', desc: 'Аккуратная короткая стрижка' },
+    { id: 'hair.wave', name: 'Волнистые', image: '/assets/items/hair_wave.png', desc: 'Короткие волнистые волосы' },
+    { id: 'hair.bob', name: 'Каре', image: '/assets/items/hair_bob.png', desc: 'Прямое каре' },
+    { id: 'hair.curl', name: 'Кудри', image: '/assets/items/hair_curl.png', desc: 'Короткие кудрявые волосы' },
+    { id: 'hair.long', name: 'Длинные', image: '/assets/items/hair_long.png', desc: 'Длинные волосы' },
+  ],
+  headwear: [
+    { id: 'headwear.none', name: 'Без головного убора', desc: 'Снять головной убор' },
+    { id: 'headwear.cap', name: 'Кепка наблюдателя', image: '/assets/items/headwear_cap.png', desc: 'Кепка с козырьком для прогулки по метеоплощадке.' },
+    { id: 'headwear.beanie', name: 'Вязаная шапка', image: '/assets/items/headwear_beanie.png', desc: 'Тёплая вязаная шапка с отворотом.' },
+    // Independently reviewed replacements; legacy filenames depict unrelated objects.
+    { id: 'headwear.scarf', name: 'Шарф', image: '/assets/items/scarf_reviewed.png', iconLabel: 'Шарф', desc: 'Мягкий шарф для прохладного вечера у залива.' },
+    { id: 'headwear.goggles', name: 'Защитные очки', image: '/assets/items/goggles_reviewed.png', iconLabel: 'Очки', desc: 'Очки с широким ремешком.' },
+  ],
+  top: [
+    { id: 'top.center-jacket', name: 'Куртка центра', image: '/assets/items/top_center_jacket.png', desc: 'Синяя куртка сотрудника Станции 26063 с тёплой отделкой.' },
+    { id: 'top.field-jacket', name: 'Полевая куртка', image: '/assets/items/top_field_jacket.png', desc: 'Куртка с накладными карманами для работы на площадке.' },
+    { id: 'top.hoodie', name: 'Толстовка', image: '/assets/items/top_hoodie.png', desc: 'Свободная толстовка с капюшоном.' },
+    { id: 'top.sweater', name: 'Свитер', image: '/assets/items/top_sweater.png', desc: 'Вязаный свитер для спокойной смены в центре.' },
+    { id: 'top.shirt', name: 'Рубашка', image: '/assets/items/top_shirt.png', desc: 'Светлая рабочая рубашка.' },
+  ],
+  bottom: [
+    { id: 'bottom.dark-trousers', name: 'Тёмные брюки', image: '/assets/items/bottom_dark_trousers.png', desc: 'Прямые тёмные брюки для работы в центре.' },
+    { id: 'bottom.field-trousers', name: 'Полевые брюки', image: '/assets/items/bottom_field_trousers.png', desc: 'Брюки с дополнительными карманами.' },
+    { id: 'bottom.jeans', name: 'Джинсы', image: '/assets/items/bottom_jeans.png', desc: 'Повседневные синие джинсы.' },
+  ],
+  footwear: [
+    { id: 'footwear.sneakers', name: 'Кроссовки', image: '/assets/items/footwear_sneakers.png', desc: 'Лёгкие кроссовки с контрастной подошвой.' },
+    { id: 'footwear.boots', name: 'Полевые ботинки', image: '/assets/items/footwear_boots.png', desc: 'Высокие ботинки для прогулки по территории станции.' },
+    { id: 'footwear.shoes', name: 'Туфли', image: '/assets/items/footwear_shoes.png', desc: 'Закрытая обувь для работы в помещении.' },
+  ],
+  backpack: [
+    { id: 'backpack.none', name: 'Без рюкзака', desc: 'Снять рюкзак' },
+    { id: 'backpack.city', name: 'Городской рюкзак', image: '/assets/items/backpack_city.png', desc: 'Небольшой рюкзак для повседневных вещей.' },
+    { id: 'backpack.field', name: 'Полевой рюкзак', image: '/assets/items/backpack_field.png', desc: 'Вместительный рюкзак с наружными карманами.' },
+  ],
+  heldItem: [
+    { id: 'held.none', name: 'Свободные руки', desc: 'Убрать предмет' },
+    { id: 'held.tablet', name: 'Планшет наблюдателя', image: '/assets/items/held_tablet.png', desc: 'Планшет для записей во время обхода станции.' },
+    { id: 'held.map-folder', name: 'Папка карт', image: '/assets/items/held_map_folder.png', desc: 'Папка для рабочих карт и заметок синоптика.' },
+    { id: 'held.pencil', name: 'Карандаш синоптика', image: '/assets/items/held_pencil.png', desc: 'Двухцветный карандаш для работы с бумажными картами.' },
+  ],
+  companion: [
+    { id: 'companion.none', name: 'Без спутника', desc: 'Оставить спутника в кампусе' },
+    { id: 'companion.tit', name: 'Синичка', image: '/assets/items/companion_tit.png', desc: 'Маленькая любопытная обитательница станционного сада.' },
+    { id: 'companion.squirrel', name: 'Белка', image: '/assets/items/companion_squirrel.png', desc: 'Рыжая жительница сосен возле архива.' },
+  ],
+  badge: [
+    { id: 'badge.none', name: 'Без значка', desc: 'Снять значок' },
+    { id: 'badge.meteo', name: 'Значок метеоролога', image: '/assets/items/badge_meteo_reviewed.png', iconLabel: 'М', desc: 'Декоративный значок с эмблемой погоды.' },
+    { id: 'badge.aerology', name: 'Значок аэролога', image: '/assets/items/badge_aerology_reviewed.png', iconLabel: 'А', desc: 'Декоративный значок с аэрологическим мотивом.' },
+  ],
+};
+
+export const EQUIPMENT_SLOTS: Array<{ id: EquipmentSlot; label: string; category: Exclude<InventoryCategory, 'all'>; empty?: string }> = [
+  { id: 'headwear', label: 'Голова', category: 'wardrobe', empty: 'headwear.none' },
+  { id: 'top', label: 'Верх', category: 'wardrobe' },
+  { id: 'bottom', label: 'Брюки', category: 'wardrobe' },
+  { id: 'footwear', label: 'Обувь', category: 'wardrobe' },
+  { id: 'backpack', label: 'Рюкзак', category: 'gear', empty: 'backpack.none' },
+  { id: 'heldItem', label: 'В руках', category: 'gear', empty: 'held.none' },
+  { id: 'badge', label: 'Значок', category: 'gear', empty: 'badge.none' },
+  { id: 'companion', label: 'Спутник', category: 'companion', empty: 'companion.none' },
 ];
+
+export const INVENTORY_CATEGORIES: Array<{ id: InventoryCategory; label: string }> = [
+  { id: 'all', label: 'Всё' },
+  { id: 'wardrobe', label: 'Одежда' },
+  { id: 'gear', label: 'Снаряжение' },
+  { id: 'companion', label: 'Спутники' },
+];
+
+export interface InventoryItem extends OptionItem {
+  slot: EquipmentSlot;
+  category: Exclude<InventoryCategory, 'all'>;
+}
+
+export const INVENTORY_ITEMS: InventoryItem[] = EQUIPMENT_SLOTS.flatMap((slot) =>
+  OPTIONS[slot.id].filter((item) => item.id !== slot.empty).map((item) => ({ ...item, slot: slot.id, category: slot.category })),
+);
 
 export const STYLE_PRESETS: StylePreset[] = [
   {
-    id: 'preset.field',
-    name: 'Полевой замер',
-    icon: '🏕️',
-    desc: 'Штормовка, карго, берцы и походный рюкзак с карандашом',
-    avatar: {
-      headwear: 'headwear.cap',
-      top: 'top.field-jacket',
-      bottom: 'bottom.field-trousers',
-      footwear: 'footwear.boots',
-      backpack: 'backpack.field',
-      heldItem: 'held.pencil',
-      badge: 'badge.meteo',
-      companion: 'companion.squirrel',
-    },
+    id: 'preset.center', name: 'В центре', image: '/assets/items/top_center_jacket.png',
+    avatar: { headwear: 'headwear.none', top: 'top.center-jacket', bottom: 'bottom.dark-trousers', footwear: 'footwear.shoes', backpack: 'backpack.none', heldItem: 'held.map-folder', badge: 'badge.meteo', companion: 'companion.none' },
   },
   {
-    id: 'preset.lab',
-    name: 'Лаборант 26063',
-    icon: '🔬',
-    desc: 'Белый халат, свитер, очки и рабочий планшет с синичкой',
-    avatar: {
-      headwear: 'headwear.glasses',
-      top: 'top.lab-coat',
-      bottom: 'bottom.slacks',
-      footwear: 'footwear.shoes',
-      backpack: 'backpack.satchel',
-      heldItem: 'held.clipboard',
-      badge: 'badge.aerology',
-      companion: 'companion.tit',
-    },
+    id: 'preset.field', name: 'На площадке', image: '/assets/items/top_field_jacket.png',
+    avatar: { headwear: 'headwear.cap', top: 'top.field-jacket', bottom: 'bottom.field-trousers', footwear: 'footwear.boots', backpack: 'backpack.field', heldItem: 'held.pencil', badge: 'badge.meteo', companion: 'companion.none' },
   },
   {
-    id: 'preset.arctic',
-    name: 'Штормовая вахта',
-    icon: '❄️',
-    desc: 'Тёплая парка, ушанка, варежки и сигнальный фонарь синоптика',
-    avatar: {
-      headwear: 'headwear.ushanka',
-      top: 'top.parka',
-      bottom: 'bottom.overalls',
-      footwear: 'footwear.boots',
-      backpack: 'backpack.radio',
-      heldItem: 'held.flashlight',
-      badge: 'badge.meteo',
-      companion: 'companion.none',
-    },
+    id: 'preset.rest', name: 'После смены', image: '/assets/items/top_sweater.png',
+    avatar: { headwear: 'headwear.beanie', top: 'top.sweater', bottom: 'bottom.jeans', footwear: 'footwear.sneakers', backpack: 'backpack.city', heldItem: 'held.none', badge: 'badge.none', companion: 'companion.tit' },
   },
 ];
-
-export const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
-  skinTone: [
-    { id: 'skin.nordic-fair', name: 'Северный светлый', color: '#F7D6B5', desc: 'Светлый оттенок кожи с розоватым подтоном' },
-    { id: 'skin.baltic-peach', name: 'Балтийский персик', color: '#E8B991', desc: 'Теплый умеренный тон прибалтийского региона' },
-    { id: 'skin.taiga-tan', name: 'Таёжный загар', color: '#C99369', desc: 'Здоровый загар от работы на открытой метеоплощадке' },
-    { id: 'skin.polar-wind', name: 'Свежий румянец', color: '#FAD5C0', desc: 'Светлая кожа со свежим морозным румянцем' },
-  ],
-  hairColor: [
-    { id: 'hair.raven', name: 'Вороново крыло', color: '#1B1C22', desc: 'Глубокий тёмно-графитовый оттенок' },
-    { id: 'hair.chestnut', name: 'Каштан', color: '#543621', desc: 'Классический орехово-коричневый тон' },
-    { id: 'hair.copper', name: 'Медная заря', color: '#A64823', desc: 'Яркий рыжеватый оттенок балтийского заката' },
-    { id: 'hair.linen', name: 'Лён', color: '#D4B886', desc: 'Светло-русый натуральный цвет льна' },
-    { id: 'hair.silver', name: 'Седина ветерана', color: '#9AA4AE', desc: 'Благородный серебристый тон опытного метеоролога' },
-  ],
-  hair: [
-    { id: 'hair.short', name: 'Уставная стрижка', icon: '✂️', desc: 'Аккуратная короткая причёска с боковым пробором' },
-    { id: 'hair.bob', name: 'Каре синоптика', icon: '💇', desc: 'Прямое строгое каре до линии плеч' },
-    { id: 'hair.braid', name: 'Походная коса', icon: '🌾', desc: 'Надёжная плотная коса, не мешающая порывам ветра' },
-    { id: 'hair.curly', name: 'Циклонические кудри', icon: '🌀', desc: 'Объёмные непослушные вьющиеся локоны' },
-  ],
-  headwear: [
-    { id: 'headwear.none', name: 'Без убора', icon: '🚫', desc: 'Открытая голова для работы в помещении бюро' },
-    {
-      id: 'headwear.ushanka',
-      name: 'Ушанка полярная',
-      image: '/assets/items/headwear_ushanka.png',
-      styleTag: 'Зима',
-      desc: 'Тёплая меховая шапка с опущенными ушами для штормовых ветров',
-    },
-    {
-      id: 'headwear.cap',
-      name: 'Кепи наблюдателя',
-      image: '/assets/items/headwear_cap.png',
-      styleTag: 'Лето',
-      desc: 'Козырёк с фирменной латунной кокардой станции 26063',
-    },
-    {
-      id: 'headwear.glasses',
-      name: 'Очки исследователя',
-      image: '/assets/items/headwear_glasses.png',
-      styleTag: 'Оптика',
-      desc: 'Линзы в тонкой металлической оправе для прецизионного чтения лент',
-    },
-  ],
-  top: [
-    {
-      id: 'top.lab-coat',
-      name: 'Халат метеолаборанта',
-      image: '/assets/items/top_lab_coat.png',
-      styleTag: 'Лаборатория',
-      desc: 'Белый хлопковый халат с глубокими карманами под таблицы КН-01',
-    },
-    {
-      id: 'top.field-jacket',
-      name: 'Штормовка «Бриз»',
-      image: '/assets/items/top_field_jacket.png',
-      styleTag: 'Площадка',
-      desc: 'Ветрозащитная брезентовая куртка защитного хвойного цвета',
-    },
-    {
-      id: 'top.parka',
-      name: 'Арктическая парка 26063',
-      image: '/assets/items/top_parka.png',
-      styleTag: 'Шторм',
-      desc: 'Тяжёлая пуховая парка синего ведомственного сукна с капюшоном',
-    },
-    {
-      id: 'top.sweater',
-      name: 'Свитер «Изобара»',
-      image: '/assets/items/top_sweater.png',
-      styleTag: 'Уют',
-      desc: 'Плотный шерстяной свитер с традиционным узором геопотенциала',
-    },
-  ],
-  bottom: [
-    {
-      id: 'bottom.field-trousers',
-      name: 'Полевые карго',
-      image: '/assets/items/bottom_cargo.png',
-      styleTag: 'Площадка',
-      desc: 'Прочные армированные брюки с накладными карманами для инструментов',
-    },
-    {
-      id: 'bottom.slacks',
-      name: 'Форменные брюки',
-      image: '/assets/items/bottom_slacks.png',
-      styleTag: 'Классика',
-      desc: 'Строгие форменные брюки службы прогнозов тёмно-синего цвета',
-    },
-    {
-      id: 'bottom.overalls',
-      name: 'Утеплённый полукомбинезон',
-      image: '/assets/items/bottom_overalls.png',
-      styleTag: 'Зима',
-      desc: 'Непромокаемый комбинезон с усиленными наколенниками для сугробов',
-    },
-  ],
-  footwear: [
-    {
-      id: 'footwear.boots',
-      name: 'Берцы «Тайфун»',
-      image: '/assets/items/footwear_boots.png',
-      styleTag: 'Грунт',
-      desc: 'Высокие кожаные ботинки с протектором для влажной почвы метеополя',
-    },
-    {
-      id: 'footwear.shoes',
-      name: 'Служебные туфли',
-      image: '/assets/items/footwear_shoes.png',
-      styleTag: 'Кабинет',
-      desc: 'Удобная дежурная обувь с мягкой подошвой для деревянных полов поста',
-    },
-    {
-      id: 'footwear.felt',
-      name: 'Валенки с галошами',
-      image: '/assets/items/footwear_felt.png',
-      styleTag: 'Мороз',
-      desc: 'Традиционная проверенная обувь для ночных сроков при -30°C',
-    },
-  ],
-  backpack: [
-    { id: 'backpack.none', name: 'Без сумки', icon: '🚫', desc: 'Свободные плечи во время работы за пультом' },
-    {
-      id: 'backpack.satchel',
-      name: 'Планшетка наблюдателя',
-      image: '/assets/items/backpack_satchel.png',
-      styleTag: 'Документы',
-      desc: 'Кожаная сержантская сумка через плечо для журнала ТМС и таблиц',
-    },
-    {
-      id: 'backpack.field',
-      name: 'Экспедиционный ранец',
-      image: '/assets/items/backpack_field.png',
-      styleTag: 'Снаряжение',
-      desc: 'Компактный брезентовый рюкзак с креплением для ручного анемометра',
-    },
-    {
-      id: 'backpack.radio',
-      name: 'Радиостанция «Алмаз»',
-      image: '/assets/items/backpack_radio.png',
-      styleTag: 'Связь',
-      desc: 'Портативный КВ-трансивер для аварийной передачи синоптических сводок',
-    },
-  ],
-  heldItem: [
-    { id: 'held.none', name: 'Руки свободны', icon: '🚫', desc: 'Готовность к ручной калибровке приборов' },
-    {
-      id: 'held.pencil',
-      name: 'Цветной карандаш «Кохинор»',
-      image: '/assets/items/held_pencil.png',
-      styleTag: 'Картография',
-      desc: 'Двухсторонний красно-синий карандаш для нанесения теплых и холодных фронтов',
-    },
-    {
-      id: 'held.clipboard',
-      name: 'Клипборд КН-01',
-      image: '/assets/items/held_clipboard.png',
-      styleTag: 'Бланк',
-      desc: 'Металлический планшет с бланками первичных наблюдений формы КХ-01',
-    },
-    {
-      id: 'held.anemometer',
-      name: 'Ручной анемометр АРИ-49',
-      image: '/assets/items/held_anemometer.png',
-      styleTag: 'Прибор',
-      desc: 'Чашечный прибор с механическим счётчиком оборотов для замера скорости ветра',
-    },
-    {
-      id: 'held.flashlight',
-      name: 'Фонарь наблюдателя',
-      image: '/assets/items/held_flashlight.png',
-      styleTag: 'Свет',
-      desc: 'Узконаправленный сигнальный фонарь для проверки осадкомера в ночной срок',
-    },
-    {
-      id: 'held.folder',
-      name: 'Папка синоптика',
-      image: '/assets/items/held_map_folder.png',
-      styleTag: 'Инструмент',
-      desc: 'Планшет с кольцевыми синоптическими картами и вычерченными изобарами',
-    },
-  ],
-  companion: [
-    { id: 'companion.none', name: 'Без спутника', icon: '🚫', desc: 'Сосредоточенное уединённое дежурство' },
-    {
-      id: 'companion.tit',
-      name: 'Синичка-лазоревка',
-      image: '/assets/items/companion_tit.png',
-      styleTag: 'Спутник',
-      desc: 'Ручная птица станции 26063, безошибочно чувствует скачки давления',
-    },
-    {
-      id: 'companion.squirrel',
-      name: 'Кампусная белка',
-      image: '/assets/items/companion_squirrel.png',
-      styleTag: 'Спутник',
-      desc: 'Любопытная жительница вековых сосен у корпуса метеорологического архива',
-    },
-  ],
-  badge: [
-    { id: 'badge.none', name: 'Без знака', icon: '🚫', desc: 'Лацкан без внешних знаков отличия' },
-    {
-      id: 'badge.meteo',
-      name: 'Знак Метеоролога',
-      image: '/assets/items/badge_meteo.png',
-      styleTag: 'Регалия',
-      desc: 'Золотой барометрический знак за штормовую бдительность',
-    },
-    {
-      id: 'badge.aerology',
-      name: 'Знак Аэролога',
-      image: '/assets/items/badge_aerology.png',
-      styleTag: 'Регалия',
-      desc: 'Лазурная петличка исследователя высотных слоёв тропосферы',
-    },
-  ],
-};

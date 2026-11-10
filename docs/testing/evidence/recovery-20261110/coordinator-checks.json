@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-10",
+  "reviewer": "/root",
+  "node": "v24.22.1",
+  "webBuildIndexSha256": "9766098a359bf11b56fa37b0561e425c0e4856b4bc3ba86c5c7aa3853594f148",
+  "results": [
+    {
+      "check": "server compiled tests",
+      "result": "PASS",
+      "passed": 48,
+      "failed": 0
+    },
+    {
+      "check": "web TypeScript and production build after final source edits",
+      "result": "PASS"
+    },
+    {
+      "check": "avatar inventory catalog + isolated HTTP API + restart",
+      "result": "PASS",
+      "fields": 11,
+      "values": 42,
+      "items": 24,
+      "images": 29,
+      "presets": 3
+    },
+    {
+      "check": "equipment real HTTP API + restart + concurrent charges + full shift + account isolation",
+      "result": "PASS",
+      "evidence": "equipment-api.json"
+    },
+    {
+      "check": "additional required local CI commands",
+      "result": "PASS",
+      "commands": 26,
+      "evidence": "local-ci/report.json"
+    }
+  ],
+  "notes": [
+    "Results summarize tool outputs observed during this integration; only separately linked evidence files are raw execution logs.",
+    "Local Node24 results do not substitute for GitHub CI on pinned Node22 or Linux/Astra release packaging."
+  ]
+}

@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { GAME_MARK } from '../../brand';
+import type { ShiftProgress, ShiftReward } from '../../api';
 import { PixelIcon } from '../ui';
+import { AwardBadgeAnimation } from './AwardBadgeAnimation';
 import {
   ShiftWorkspace,
   type ShiftAnswerEvent,
@@ -22,18 +24,24 @@ type MentorReaction = {
   text: string;
 };
 
-export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
+export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void; onEquipment?: () => void }) {
   const [phase, setPhase] = useState<ShiftFlowPhase>('handover');
   const [mentorOpen, setMentorOpen] = useState(false);
   const [mentorTopicId, setMentorTopicId] = useState<string>(MENTOR_TOPICS[0].id);
   const [journal, setJournal] = useState<ShiftAnswerEvent[]>([]);
   const [mentorReaction, setMentorReaction] = useState<MentorReaction | null>(null);
   const [debriefReason, setDebriefReason] = useState<Exclude<ShiftExitReason, 'startup-error'> | null>(null);
+  const [serverProgress, setServerProgress] = useState<ShiftProgress | null>(null);
+  const [assistedTasks, setAssistedTasks] = useState(0);
+  const [reward, setReward] = useState<ShiftReward | null>(null);
+  const debriefDialog = useRef<HTMLDialogElement>(null);
   const rhythm = useMemo(() => getSynopticRhythm(), []);
   const journalActive = mentorTopicId === 'journal';
   const mentorTopic = MENTOR_TOPICS.find((topic) => topic.id === mentorTopicId) ?? MENTOR_TOPICS[0];
-  const mistakes = journal.filter((entry) => !entry.correct);
-  const lastProgress = journal.at(-1);
+  const mistakes = journal.filter((entry) => !entry.firstAttemptCorrect);
+  useEffect(() => {
+    if (debriefReason && debriefDialog.current && !debriefDialog.current.open) debriefDialog.current.showModal();
+  }, [debriefReason]);
 
   function handleShiftExit(reason: ShiftExitReason) {
     if (reason === 'startup-error') {
@@ -46,6 +54,7 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
   }
 
   function handleAnswerEvaluated(event: ShiftAnswerEvent) {
+    if (event.reward) setReward(event.reward);
     setJournal((current) => {
       const withoutDuplicate = current.filter((item) => item.instanceId !== event.instanceId);
       return [...withoutDuplicate, event];
@@ -54,7 +63,7 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
     if (event.correct) {
       setMentorReaction({
         correct: true,
-        text: 'Принято. Теперь свяжи цифру с процессом и не теряй ход анализа.',
+        text: event.retried ? 'Повтор помог исправить ответ. Первую ошибку сохраним в разборе смены.' : 'Принято. Теперь свяжи цифру с процессом и не теряй ход анализа.',
       });
       return;
     }
@@ -104,11 +113,13 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
     );
   }
 
-  const completed = debriefReason === 'completed';
+  // The server may finish the last answer while the early-exit dialog is open.
+  // Both exit buttons must show the same final result and earned badges.
+  const completed = debriefReason === 'completed' || Boolean(serverProgress && serverProgress.total > 0 && serverProgress.answered >= serverProgress.total);
 
   return (
     <div className="seamless-shift-host">
-      <ShiftWorkspace onExit={handleShiftExit} onAnswerEvaluated={handleAnswerEvaluated} />
+      <ShiftWorkspace onExit={handleShiftExit} onAnswerEvaluated={handleAnswerEvaluated} onProgressChanged={(progress, assisted) => { setServerProgress(progress); setAssistedTasks(assisted); }} />
 
       {mentorReaction && !mentorOpen && !debriefReason && (
         <button
@@ -134,7 +145,7 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
       >
         <PixelIcon name="guide" size="sm" />
         <span>Спросить Ольхина</span>
-        {mistakes.length > 0 && <b className="shift-mentor-count" aria-label={`Ошибок в разборе: ${mistakes.length}`}>{mistakes.length}</b>}
+        {mistakes.length > 0 && <b className="shift-mentor-count" aria-label={`Ошибок первой попытки в разборе: ${mistakes.length}`}>{mistakes.length}</b>}
       </button>
 
       {mentorOpen && !debriefReason && (
@@ -175,14 +186,14 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
             <section className="shift-mentor-page shift-journal-page">
               <h2>Разбор текущей смены</h2>
               {journal.length === 0 ? (
-                <p>Здесь появятся проверенные задания. Ошибки сохраняются вместе с объяснением принципа, чтобы к ним можно было вернуться без выхода из смены.</p>
+                <p>Здесь появятся задания, разобранные в этом посещении. Итоговый прогресс смены сохраняется на сервере.</p>
               ) : (
                 <div className="shift-journal-list">
                   {[...journal].reverse().map((entry) => (
                     <article key={entry.instanceId} className={`shift-journal-entry ${entry.correct ? 'is-correct' : 'is-wrong'}`}>
                       <header>
                         <strong>Задание {entry.answered}</strong>
-                        <span>{entry.correct ? 'принято' : 'нужен разбор'}</span>
+                        <span>{entry.correct ? entry.retried ? 'исправлено повтором' : entry.assisted ? 'с помощью' : 'принято' : 'нужен разбор'}</span>
                       </header>
                       <p>{entry.question}</p>
                       <div className="shift-journal-explanation">{entry.explanation}</div>
@@ -210,7 +221,7 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
       )}
 
       {debriefReason && (
-        <div className="shift-debrief-overlay" role="dialog" aria-modal="true" aria-labelledby="shift-debrief-title">
+        <dialog ref={debriefDialog} className="shift-debrief-overlay" aria-labelledby="shift-debrief-title" onCancel={(event) => { event.preventDefault(); if (completed) onExit(); else setDebriefReason(null); }}>
           <section className="shift-lore-card shift-debrief-card">
             <div className="shift-lore-eyebrow">
               <PixelIcon name="guide" size="sm" />
@@ -226,20 +237,23 @@ export function SeamlessShiftFlow({ onExit }: { onExit: () => void }) {
             <p className="shift-debrief-next">
               {completed
                 ? SHIFT_DEBRIEF.next
-                : 'Рабочее состояние сохранено на этом экране. Можно продолжить ту же смену без повторного запуска.'}
+                : 'Проверенные ответы, текущее задание и оставшиеся заряды сохранены на сервере. Можно продолжить сейчас или вернуться к этой смене позже.'}
             </p>
             <div className="shift-term-strip">
               <span>Текущий цикл: {rhythm.previousTermUtc} → {rhythm.nextTermUtc}</span>
-              <span>Ответов: {lastProgress?.answered ?? 0} · верных: {lastProgress?.correctCount ?? 0} · на разборе: {mistakes.length}</span>
+              <span>Ответов: {serverProgress?.answered ?? 0} · верно с первой попытки: {serverProgress?.correct ?? 0}</span>
+              <span>Заданий с помощью: {assistedTasks}</span>
             </div>
+            {completed && reward && <section className="shift-earned" aria-labelledby="shift-earned-title"><h2 id="shift-earned-title">{reward.newBadges.length > 0 ? 'Новые знаки в вашей коллекции' : 'Учебный журнал обновлён'}</h2>{reward.newBadges.length > 0 && <div className="shift-earned__badges">{reward.newBadges.map((badge) => <article key={badge.id}><AwardBadgeAnimation badgeId={badge.id} image={badge.image} size={88} /><div><strong>{badge.name}</strong><span>{badge.effectDescription}</span></div></article>)}</div>}<p>Завершено смен: {reward.completedShifts} · верно самостоятельно: {reward.unassistedCorrect} · учебных дней: {reward.practiceDays}.</p><p>Выберите учебный знак перед новой сменой. Снаряжение не влияет на рейтинговые результаты.</p></section>}
             <div className="shift-lore-actions">
               <button type="button" className="shift-primary" onClick={onExit}>Вернуться в центр</button>
+              {completed && onEquipment && <button type="button" className="secondary-button" onClick={onEquipment}>{reward?.newBadges.length ? 'Выбрать полученный знак' : 'Открыть снаряжение'}</button>}
               {!completed && (
                 <button type="button" className="secondary-button" onClick={() => setDebriefReason(null)}>Продолжить эту смену</button>
               )}
             </div>
           </section>
-        </div>
+        </dialog>
       )}
     </div>
   );

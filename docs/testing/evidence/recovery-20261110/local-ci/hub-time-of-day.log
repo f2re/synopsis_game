@@ -1,0 +1,16 @@
+Command: node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
+Working directory: .
+
+✔ 1. HubTimeOfDay инициализируется фазой из реального времени (1.863999ms)
+✔ 2. Положение Солнца: зимний день, ночное небо и белые ночи Санкт-Петербурга (0.614744ms)
+✔ 2a. Солнечная высота физически связана с широтой, долготой и UTC, не с часовым поясом устройства (0.398541ms)
+✔ 3. Ускоренная демонстрация переключает фазы каждые 5 секунд (0.234832ms)
+✔ 4. Цвета фаз соответствуют токенам палитры (0.224681ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 168.565697

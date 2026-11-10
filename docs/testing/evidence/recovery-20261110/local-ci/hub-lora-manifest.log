@@ -1,0 +1,4 @@
+Command: python scripts/validate_hub_lora_manifest.py
+Working directory: .
+
+OK: synopsis_hub_diorama manifest — 30 independent samples, 20 train, 10 validation, 1 prompt -> 1 image

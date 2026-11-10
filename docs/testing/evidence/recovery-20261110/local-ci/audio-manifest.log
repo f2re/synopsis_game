@@ -1,0 +1,4 @@
+Command: node packages/world-engine/scripts/syncAudioManifest.mjs --check
+Working directory: .
+
+Audio runtime projection verified: 43 canonical IDs and public file paths.

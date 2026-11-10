@@ -12,8 +12,8 @@ export interface CreateWorldGameOptions {
 
 export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
   const parent = typeof options.parent === 'string' ? document.querySelector<HTMLElement>(options.parent) : options.parent;
-  const initialWidth = Math.max(parent?.clientWidth ?? WORLD_LOGICAL_WIDTH, WORLD_LOGICAL_WIDTH);
-  const initialHeight = Math.max(parent?.clientHeight ?? WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_HEIGHT);
+  const initialWidth = Math.max(parent?.clientWidth ?? WORLD_LOGICAL_WIDTH, 1);
+  const initialHeight = Math.max(parent?.clientHeight ?? WORLD_LOGICAL_HEIGHT, 1);
 
   return new Phaser.Game({
     type: Phaser.AUTO,
@@ -22,6 +22,7 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
     height: initialHeight,
     transparent: options.transparent ?? false,
     backgroundColor: '#08152f',
+    fps: { target: 60, limit: 60 },
     render: {
       antialias: false,
       pixelArt: true,
