@@ -1,3 +1,5 @@
+import { parseModularAvatarProfile, type ModularAvatarProfile } from './modularAvatarManifest.ts';
+
 /** Public, semantic contract for the authored R01 character pack.
  * R01 uses its own presentation scale; this is not the four-direction modular
  * 32×48 avatar family specified for the later character production milestone.
@@ -44,6 +46,7 @@ export interface WorldCharacterManifest {
 export interface WorldAvatarPresentation {
   heldItem: string;
   companion: string;
+  profile?: ModularAvatarProfile;
 }
 
 const HELD_ITEMS = new Set(['held.none', 'held.tablet', 'held.map-folder', 'held.pencil']);
@@ -51,9 +54,11 @@ const COMPANIONS = new Set(['companion.none', 'companion.tit', 'companion.squirr
 
 export function normalizeAvatarPresentation(value: unknown): WorldAvatarPresentation {
   const data = record(value);
+  const profile = parseModularAvatarProfile(data?.profile ?? value);
   return {
     heldItem: typeof data?.heldItem === 'string' && HELD_ITEMS.has(data.heldItem) ? data.heldItem : 'held.none',
     companion: typeof data?.companion === 'string' && COMPANIONS.has(data.companion) ? data.companion : 'companion.none',
+    ...(profile ? { profile } : {}),
   };
 }
 

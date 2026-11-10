@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>26063 — проверка модульного персонажа R01</title>
+  <style>
+    :root { color-scheme: dark; --ink:#e9eef3; --muted:#aebccb; --line:#344657; --panel:#172735; --accent:#f2c369; --zoom:2; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#0e1a25; font:15px/1.55 system-ui,sans-serif; }
+    main { max-width:1344px; margin:auto; padding:28px 24px 56px; }
+    h1,h2,h3,p { margin:0; }
+    h1 { font-size:clamp(25px,3vw,38px); line-height:1.2; letter-spacing:-.025em; margin:9px 0 12px; }
+    h2 { font-size:22px; margin-bottom:8px; }
+    h3 { font-size:16px; }
+    p+p { margin-top:8px; }
+    a { color:#9dcdf3; text-underline-offset:3px; }
+    code { font-size:.9em; overflow-wrap:anywhere; }
+    .eyebrow { color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+    .lede { max-width:960px; color:var(--muted); }
+    .status { display:inline-block; border:1px solid #866a34; background:#392e1e; color:#ffdc93; border-radius:5px; padding:4px 9px; font-size:12px; margin-right:8px; }
+    .notice { margin:20px 0 28px; padding:14px 18px; border-left:3px solid var(--accent); background:#1c2a35; }
+    .notice strong { color:#ffdc93; }
+    section { margin-top:30px; }
+    .muted,.hint { color:var(--muted); }
+    .hint { font-size:13px; }
+    .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; margin:18px 0; padding:14px 16px; border:1px solid var(--line); border-radius:8px; background:var(--panel); }
+    .control { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+    .control-label { font-size:13px; color:var(--muted); margin-right:3px; }
+    button,select { font:inherit; color:var(--ink); background:#233a4c; border:1px solid #536b7f; border-radius:5px; padding:6px 11px; cursor:pointer; }
+    button[aria-pressed="true"] { color:#13202c; background:var(--accent); border-color:var(--accent); }
+    button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible { outline:3px solid #8fcdf5; outline-offset:3px; }
+    label { cursor:pointer; }
+    input { accent-color:var(--accent); }
+    .views { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    figure { margin:0; min-width:0; }
+    .view { border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--panel); }
+    .view header { padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .view header span { color:var(--muted); font-size:12px; }
+    .surface { min-height:calc(144px * var(--zoom) + 32px); padding:16px; display:flex; align-items:center; justify-content:center; overflow:auto; background:#dce2d9; }
+    .views[data-background="dark"] .surface { background:#1d2b35; }
+    .views[data-background="checker"] .surface { background-color:#cbd2d5; background-image:conic-gradient(#e6e9e8 25%,transparent 0 50%,#e6e9e8 0 75%,transparent 0); background-size:20px 20px; }
+    .sprite-frame { width:calc(96px * var(--zoom)); height:calc(144px * var(--zoom)); position:relative; flex:none; }
+    .sprite { display:block; width:100%; height:100%; image-rendering:pixelated; object-fit:contain; }
+    .sprite-frame::before,.sprite-frame::after { content:""; position:absolute; pointer-events:none; display:none; }
+    .show-guides .sprite-frame::before { display:block; top:calc(136px * var(--zoom)); left:0; right:0; border-top:1px dashed #e84c63; }
+    .show-guides .sprite-frame::after { display:block; left:calc(48px * var(--zoom)); top:0; bottom:0; border-left:1px dashed #2387c4; }
+    .view figcaption { padding:11px 14px 14px; font-size:12px; color:var(--muted); overflow-wrap:anywhere; }
+    .load-error { border:2px dashed #e66e83; background:#432333; }
+    .load-error::before { content:"Изображение не загружено"; padding:12px; color:#ffd1d9; display:block; }
+    .checks { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+    .check { padding:16px; border:1px solid var(--line); border-radius:8px; background:var(--panel); }
+    .check p { color:var(--muted); margin-top:6px; font-size:14px; }
+    .references { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+    .reference { border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--panel); }
+    .reference img { display:block; width:100%; height:auto; }
+    .reference figcaption { padding:15px 18px; }
+    .reference p { color:var(--muted); font-size:14px; margin-top:5px; }
+    .context-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+    .context { border:1px solid var(--line); border-radius:8px; padding:18px; background:var(--panel); }
+    .campus-strip { min-height:130px; display:flex; gap:34px; align-items:flex-end; justify-content:center; margin:16px 0; padding:18px; border-radius:5px; background:linear-gradient(#bcc4b8 0 75%,#8a9382 75%); }
+    .campus-strip img { display:block; object-fit:contain; image-rendering:pixelated; }
+    .campus-player { width:48px; height:72px; }
+    .campus-npc { width:51.2px; height:64px; }
+    .actor-example { text-align:center; }
+    .actor-example small { display:block; margin-top:9px; font-size:11px; color:#132327; }
+    .portrait-row { display:flex; align-items:center; gap:18px; margin:16px 0; }
+    .portrait { width:96px; height:96px; flex:none; overflow:hidden; border:2px solid #577a95; background:#243849; }
+    .portrait img { display:block; width:192px; height:288px; max-width:none; transform:translate(-48px,-8px); image-rendering:pixelated; }
+    .context p { color:var(--muted); font-size:14px; }
+    .limits { padding:18px 20px; border:1px solid var(--line); background:var(--panel); border-radius:8px; }
+    .limits ul { margin:10px 0 0; padding-left:20px; color:var(--muted); }
+    .limits li+li { margin-top:6px; }
+    footer { margin-top:30px; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:13px; }
+    @media(max-width:1100px) { .views { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:720px) { main { padding:22px 14px 36px; } .references,.context-row,.checks { grid-template-columns:1fr; } .toolbar { gap:12px; } }
+    @media(max-width:440px) { .views { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">MODULAR-PLAYER-R01 · визуальный стенд</div>
+    <h1>Один персонаж, совместимые части</h1>
+    <p class="lede">Стенд для сравнения подготовленной фигуры с художественными ориентирами кампуса и инвентаря. Это отдельный документ проверки, не экран игры и не новая игровая функция.</p>
+    <div class="notice"><span class="status">Принят набор стойки</span><strong>30 семейств · 42 значения · 4 ракурса · только idle.</strong> Получен <a href="2026-11-10-modular-player-r01-art-review.md">независимый художественный допуск</a>. Здесь загружается стандартный комплект принятого набора. Сам стенд не подтверждает интеграцию в игру, ходьбу или работу браузера на мобильном устройстве.</div>
+  </header>
+
+  <section aria-labelledby="views-title">
+    <h2 id="views-title">Четыре ракурса на общей сетке</h2>
+    <p class="muted">Кадр 96×144, опора (48,136). Направляющие показывают центр и линию контакта; они не являются частью изображения.</p>
+    <div class="toolbar">
+      <div class="control" role="group" aria-label="Масштаб изображения">
+        <span class="control-label">Масштаб</span>
+        <button type="button" data-zoom="1" aria-pressed="false">1×</button>
+        <button type="button" data-zoom="2" aria-pressed="true">2×</button>
+        <button type="button" data-zoom="3" aria-pressed="false">3×</button>
+      </div>
+      <div class="control">
+        <label class="control-label" for="background">Фон</label>
+        <select id="background"><option value="light">Светлый</option><option value="dark">Тёмный</option><option value="checker">Прозрачность</option></select>
+      </div>
+      <label class="hint"><input type="checkbox" id="guides"> Показать опору и центр</label>
+    </div>
+    <div class="views" id="views" data-background="light">
+      <figure class="view">
+        <header><h3>Спереди</h3><span>down / front</span></header>
+        <div class="surface"><div class="sprite-frame"><img class="sprite" src="../../../assets/source/characters/player-r01/prepared/preview-default-down.png" width="96" height="144" alt="Стандартный комплект, вид спереди"></div></div>
+        <figcaption><span class="size">Размер проверяется после загрузки</span><br><code>preview-default-down.png</code></figcaption>
+      </figure>
+      <figure class="view">
+        <header><h3>Вправо</h3><span>right</span></header>
+        <div class="surface"><div class="sprite-frame"><img class="sprite" src="../../../assets/source/characters/player-r01/prepared/preview-default-right.png" width="96" height="144" alt="Стандартный комплект, вид вправо"></div></div>
+        <figcaption><span class="size">Размер проверяется после загрузки</span><br><code>preview-default-right.png</code></figcaption>
+      </figure>
+      <figure class="view">
+        <header><h3>Со спины</h3><span>up / back</span></header>
+        <div class="surface"><div class="sprite-frame"><img class="sprite" src="../../../assets/source/characters/player-r01/prepared/preview-default-up.png" width="96" height="144" alt="Стандартный комплект, вид со спины"></div></div>
+        <figcaption><span class="size">Размер проверяется после загрузки</span><br><code>preview-default-up.png</code></figcaption>
+      </figure>
+      <figure class="view">
+        <header><h3>Влево</h3><span>left</span></header>
+        <div class="surface"><div class="sprite-frame"><img class="sprite" src="../../../assets/source/characters/player-r01/prepared/preview-default-left.png" width="96" height="144" alt="Стандартный комплект, вид влево"></div></div>
+        <figcaption><span class="size">Размер проверяется после загрузки</span><br><code>preview-default-left.png</code></figcaption>
+      </figure>
+    </div>
+    <div class="checks">
+      <div class="check"><h3>Лицо и материалы</h3><p>Читаются ли глаза и выражение на нативной сетке? Сохранились ли ткань, швы, волосы и обувь после сокращения палитры?</p></div>
+      <div class="check"><h3>Посадка и свободное место</h3><p>Есть ли запас сверху, целые кисти, непрерывная шея и стыки одежды? Поместятся ли головной убор, инструмент и движение?</p></div>
+      <div class="check"><h3>Согласованность ракурсов</h3><p>Сохраняются ли рост, плечи, талия, обувь и опора? Разворот не должен менять анатомическую руку или сторону значка.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="context-title">
+    <h2 id="context-title">Проверка контекстного размера</h2>
+    <p class="muted">Условные композиционные примеры. Они не подтверждают интеграцию в Phaser, подключение к аккаунту или работу смены.</p>
+    <div class="context-row">
+      <div class="context">
+        <h3>Небольшая фигура рядом с ориентиром R01</h3>
+        <div class="campus-strip">
+          <div class="actor-example"><img class="campus-player" src="../../../assets/source/characters/player-r01/prepared/preview-default-right.png" alt="Кандидат игрока в размере 48 на 72 пикселя"><small>Игрок · 48×72</small></div>
+          <div class="actor-example"><img class="campus-npc" src="../../../assets/source/characters/r01/prepared/observer.png" alt="Ранее принятый исходный наблюдатель R01"><small>R01 · ориентир стиля</small></div>
+        </div>
+        <p>Игрок показан с уменьшением ½. Наблюдатель — исходная подготовленная поза, не кадр действующей сцены. Сравниваются характер силуэта и плотность деталей; окончательный масштаб требует настоящего снимка кампуса.</p>
+      </div>
+      <div class="context">
+        <h3>Композиция головы и плеч</h3>
+        <div class="portrait-row"><div class="portrait"><img src="../../../assets/source/characters/player-r01/prepared/preview-default-down.png" alt="Пробный кадр головы и плеч из стандартной фигуры"></div><p>Та же внешность в небольшой рамке. Это демонстрационный кадр фигуры, не готовый самостоятельный авторский портрет.</p></div>
+        <p>Крупный портрет оценивается отдельно: узнаваемость образа общая, художественные требования к лицу и детализации различаются.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="reference-title">
+    <h2 id="reference-title">Утверждённые художественные ориентиры</h2>
+    <p class="muted">Оригиналы пользовательских концептов. Их разрешение не является логической сеткой персонажа. Надписи, ресурсы и механики на концептах не переносятся автоматически.</p>
+    <div class="references">
+      <figure class="reference"><a href="../../../design/pixel-art/v2/01_hub.png"><img src="../../../design/pixel-art/v2/01_hub.png" width="1672" height="941" alt="Полноразмерный художественный ориентир R01 — кампус"></a><figcaption><h3>R01 · кампус</h3><p>Масштаб людей, тёплые детали, спокойная научная среда, читаемость фигуры среди окружения.</p></figcaption></figure>
+      <figure class="reference"><a href="../../../design/pixel-art/v2/04_inventory.png"><img src="../../../design/pixel-art/v2/04_inventory.png" width="1672" height="941" alt="Полноразмерный художественный ориентир R04 — инвентарь"></a><figcaption><h3>R04 · инвентарь</h3><p>Выразительные волосы и лицо, одежда с материальными деталями, узнаваемые инструменты, крупная фигура.</p></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="limits" aria-labelledby="limits-title">
+    <h2 id="limits-title">Границы принятого набора</h2>
+    <ul>
+      <li>Просмотрены отдельные варианты и рискованные сочетания: <a href="../../testing/evidence/modular-player-r01-art/actual-presets.png">комплекты интерфейса</a>, <a href="../../testing/evidence/modular-player-r01-art/stress-combinations.png">волосы, сумки и инструменты</a>, <a href="../../testing/evidence/modular-player-r01-art/palette-combinations.png">палитры</a>, <a href="../../testing/evidence/modular-player-r01-art/companions.png">спутники</a>.</li>
+      <li>Стойка содержит четыре временные фазы с двумя высотами верхней части при неподвижных стопах. Спутники статичны; ходьба, осмотр и активные реакции не приняты.</li>
+      <li>Настоящие инвентарь, кампус и смена, изоляция черновика, уменьшенное движение и расходы памяти проверяются отдельно от этих картинок.</li>
+      <li>Решение и контрольные суммы записаны в отдельном протоколе. Этот стенд не выставляет автоматический PASS и не утверждает, что просмотрены все 1 944 000 сочетаний.</li>
+    </ul>
+  </section>
+  <footer>Контракт: <a href="../../design/MODULAR_CHARACTER_SYSTEM.md">Модульный персонаж игрока R01</a> · Ориентиры: <a href="../../design/SCREEN_REFERENCE_SET_V2_20261105.md">R01–R06</a> · Только локальные материалы репозитория; внешних библиотек, генераций и анимационных циклов нет.</footer>
+</main>
+<script>
+  const views = document.getElementById('views');
+  const zoomButtons = [...document.querySelectorAll('[data-zoom]')];
+  zoomButtons.forEach(button => button.addEventListener('click', () => {
+    document.documentElement.style.setProperty('--zoom', button.dataset.zoom);
+    zoomButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  }));
+  document.getElementById('background').addEventListener('change', event => { views.dataset.background = event.target.value; });
+  document.getElementById('guides').addEventListener('change', event => { views.classList.toggle('show-guides', event.target.checked); });
+  document.querySelectorAll('.sprite').forEach(img => {
+    const status = img.closest('figure').querySelector('.size');
+    function describe() {
+      if (!img.naturalWidth) { status.textContent = 'Не загружено — проверка невозможна'; img.parentElement.classList.add('load-error'); return; }
+      status.textContent = `${img.naturalWidth}×${img.naturalHeight} · исходное изображение`;
+    }
+    img.addEventListener('load', describe);
+    img.addEventListener('error', describe);
+    if (img.complete) describe();
+  });
+</script>
+</body>
+</html>

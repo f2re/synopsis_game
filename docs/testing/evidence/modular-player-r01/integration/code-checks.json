@@ -1,0 +1,111 @@
+{
+  "reviewer": "/root/integration_release",
+  "task": "MODULAR-PLAYER-R01",
+  "date": "2026-11-10",
+  "stage": "code-and-art-approved-pipeline",
+  "checks": [
+    {
+      "command": "node --experimental-strip-types --test packages/world-engine/src/runtime/modularAvatar.test.ts packages/world-engine/src/runtime/characterAssets.test.ts",
+      "result": "PASS",
+      "passed": 17
+    },
+    {
+      "command": "node tools/test_modular_avatar.cjs",
+      "result": "PASS"
+    },
+    {
+      "command": "python tools/assets/build_modular_player_r01.py --check",
+      "result": "PASS",
+      "acceptanceAtLatestRun": "PASS"
+    },
+    {
+      "command": "python tools/validate_repo.py",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "browser": "PASS_FIRST_IDLE_PACK",
+  "remoteCI": "PENDING",
+  "release": "PENDING",
+  "files": {
+    "packages/world-engine/src/runtime/modularAvatarManifest.ts": {
+      "sha256": "6f0142ff9570a760ce8a483cf5ef259f3e84568bdd4dea87b620e6139e62142a",
+      "bytes": 15015
+    },
+    "packages/world-engine/src/runtime/modularAvatarCompositor.ts": {
+      "sha256": "a69a42a6a80e6cc72df530da0b5e123a5e519dbc78bf4ab83cac9154568d9a97",
+      "bytes": 11406
+    },
+    "packages/world-engine/src/scenes/hub/HubModularAvatarLayer.ts": {
+      "sha256": "25b15b13cf7da028a6db949f38f646701a2a0bf686158800855d39e327349e66",
+      "bytes": 9626
+    },
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": {
+      "sha256": "24b18e17d060818b83bdbb15d552db20f595efa0fce5c9e688786e0627313496",
+      "bytes": 15155
+    },
+    "packages/world-engine/src/scenes/hub/HubScene.ts": {
+      "sha256": "a540aa59be194df853a2dd77d18e8abff2e249d8d1a582af7d26a2f50e9fb833",
+      "bytes": 14962
+    },
+    "packages/world-engine/src/bridge/WorldBridge.ts": {
+      "sha256": "17cc974ecb693b7a6082b579c5a8d169c75df233bdc454c49b2338985efab49a",
+      "bytes": 3840
+    },
+    "apps/web/src/features/avatar/AvatarPreview.tsx": {
+      "sha256": "fd3eaa4b830addd259ebd2e9d86e056f0400b7ea12fe5f1c2b952257da03d8c9",
+      "bytes": 6054
+    },
+    "apps/web/src/features/avatar/AvatarEditor.tsx": {
+      "sha256": "b75b7c9031e486011fbe892730a82c81b020846895b3a56cf44c59b6e9fe0775",
+      "bytes": 24240
+    },
+    "apps/web/src/features/shift/ShiftWorkspace.tsx": {
+      "sha256": "8603a11c3609004379d9f14ee12385495db148a22da725c34a880f8c28bc5aaf",
+      "bytes": 27781
+    },
+    "apps/web/src/game/WorldCanvas.tsx": {
+      "sha256": "9e48301dcc8f188aae97911f3639f604c9539ac1d8bb24d3f30887ea20b50133",
+      "bytes": 9091
+    },
+    "tools/assets/build_modular_player_r01.py": {
+      "sha256": "87fc637a1755793aa7386aae8bb2113691ae804e1f501630c07e622a54d4a345",
+      "bytes": 16185
+    },
+    ".github/workflows/ci.yml": {
+      "sha256": "a8f5b0bab44d43aaed47924bbd219ddcf4d7ac1f49bd12e9085f5b9a872149b8",
+      "bytes": 4822
+    },
+    ".github/workflows/release.yml": {
+      "sha256": "8e3e92c4db629d0a9521a16a56aa1ee50b2a28b8946cc6f5c3a423715e9b7204",
+      "bytes": 4144
+    },
+    "assets/generated/characters/player-r01/manifest.json": {
+      "sha256": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf",
+      "bytes": 187793
+    },
+    "assets/generated/characters/player-r01/atlas.png": {
+      "sha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+      "bytes": 167734
+    }
+  },
+  "webPerformance": "PASS_FIRST_IDLE_PACK",
+  "localIntegration": "PASS_SUBJECT_TO_REMOTE_CI",
+  "browserEvidence": {
+    "path": "docs/testing/evidence/modular-player-r01/browser/modular-browser-evidence.json",
+    "sha256": "c5b5832f2b5dc4fb2579aff403bb5d450c97ff2c12f617b7f6dcadf86563cfb6",
+    "observationCount": 20,
+    "screenshotsReviewed": 7,
+    "operator": "/root",
+    "independentEvidenceReviewer": "/root/integration_release"
+  },
+  "limitations": [
+    "No physical mobile GPU, p50/p95 frame-time or prolonged projector measurement.",
+    "CSS narrow viewport 545x374 was achieved through browser zoom; no physical phone claim.",
+    "Browser reload occurred between preset cycling and final cache snapshot; final bytes are not a warm-cache endurance measurement.",
+    "Remote CI and Linux/Astra release remain subsequent gates."
+  ]
+}

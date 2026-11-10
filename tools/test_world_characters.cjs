@@ -21,7 +21,8 @@ class Events {
   emit(name, ...values) { for (const listener of [...this.events.get(name) ?? []]) { if (listener.once) this.off(name, listener.fn); listener.fn.apply(listener.context, values); } }
   listenerCount() { return [...this.events.values()].reduce((n, list) => n + list.length, 0); }
 }
-const assets = moduleFrom('runtime/characterAssets.ts');
+const modularManifest = moduleFrom('runtime/modularAvatarManifest.ts');
+const assets = moduleFrom('runtime/characterAssets.ts', { './modularAvatarManifest.ts': modularManifest });
 const preferences = moduleFrom('runtime/uiPreferences.ts');
 const bridgeModule = moduleFrom('bridge/WorldBridge.ts', { '../runtime/characterAssets': assets });
 const { worldBridge } = bridgeModule;

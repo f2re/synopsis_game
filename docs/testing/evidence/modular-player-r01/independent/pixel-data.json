@@ -1,0 +1,829 @@
+{
+  "status": "DATA_CHECKS_PASS",
+  "artAcceptance": "NOT_GRANTED_BY_SCRIPT",
+  "manifestSha256": "5be877061d9eb7aa0dfe3ec34305f5fea11440119a73544254b463a6ae264857",
+  "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+  "atlasSize": [
+    512,
+    448
+  ],
+  "atlasBytes": 167734,
+  "atlasDecodedBytes": 917504,
+  "sourceFamilies": 30,
+  "sourceFrames": 120,
+  "catalogValues": 42,
+  "directions": [
+    "down",
+    "right",
+    "up",
+    "left"
+  ],
+  "clips": [
+    "idle"
+  ],
+  "sourceHashes": [
+    {
+      "id": "body",
+      "sha256": "d7ececac1b031ceaa273606552c9a131878fff274d3861e4a9deb6c5534fa222",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "hair.short",
+      "sha256": "678bfc60a4006ce4ccf7df9fa5fdd6f9c54d0641268b1f423ed5cb0ae33ca4a2",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "hair.wave",
+      "sha256": "605f1c626db9ad1dee5401d2db3c219a7e393189010bb35277e60f385be7f799",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "hair.bob",
+      "sha256": "58bc99ff488fa99014d7b57d17a4aac2e9717b66f553d6ec15898eb3169b52e2",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "hair.curl",
+      "sha256": "1b4b348b63ecd6feb94acf83e2364a8fefd743cac5c10c61e857df12a2e12b94",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "hair.long",
+      "sha256": "f9bdc41f6a66a673af9fb8d68335dbb9416afaa9a5a1563ae80386c51b690138",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "headwear.cap",
+      "sha256": "f6c1707c60c22fbf379dd8af7dd695185afe9c55c7f1b041ac80792346cfab36",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "headwear.beanie",
+      "sha256": "afc80c647a44716f7b4827fd0f98e1f00b1976437047ac773730124d1866c3a4",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "headwear.scarf",
+      "sha256": "7e1cb90a9b27f0671d48b463e868ad6e93d51f28f9c7c41ae8da9030686c9cd9",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "headwear.goggles",
+      "sha256": "17025c244e3d6d4c45bd0be59f47801f4e7dfdabc02efb91db0afed4b197bbfb",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "top.center-jacket",
+      "sha256": "654785bf471ffb4c15313bcc3782c4822f06048cfcb45c090b7c9c8c63312d86",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "top.field-jacket",
+      "sha256": "5d669075cbb3b520ee59359ab60efa86e81e39c3b92a536dd22077f3ec8ee42e",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "top.hoodie",
+      "sha256": "38b72c0aa24ec19daa5bcf614b3cf1e4c17383eb5f40ac04d8406d057e331d3c",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "top.sweater",
+      "sha256": "db0079109ad0788183a76b4e7998c49fa643da5e56dca260a703cba79bfcc0b5",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "top.shirt",
+      "sha256": "18bbd59f1dd6a1f71c0d9c7ec74293a865afb55714f757face76d164323f1459",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "bottom.dark-trousers",
+      "sha256": "c3c53bd5d622473ed150d67c049348fafe5739af42c329507d83c8e65f970849",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "bottom.field-trousers",
+      "sha256": "0313cf86cab7309cce59b85226a597cbf25990ea0aa3009e9b49b1495977cbf6",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "bottom.jeans",
+      "sha256": "0ae8e2af9c0f178655dfb14c5ff33c85dec89fe840bf4036e6e28fa60b6411b2",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "footwear.sneakers",
+      "sha256": "df31d3fb050c2289ef71236c2ee958d6cecf12d99501837c46e11d569abb3bf6",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "footwear.boots",
+      "sha256": "7a8b140bb1fc88288a686b699b2826667135f7f681f2f672c5d9b5aa91bfd065",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "footwear.shoes",
+      "sha256": "f46dc595b86659a2920ed2baae6fc31a1070788d10353c5baed69bef8fcd604c",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "backpack.city",
+      "sha256": "4e842199578327821832b9b0c40ba2db8d16a3c7c66a953ca8acd1e1f396618b",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "backpack.field",
+      "sha256": "39c945ba7f7e0c72882f121d736fe234676d02f6f8eee9b7ece4503c97e2a37d",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "held.tablet",
+      "sha256": "560ec3f198374f4744ef024365fd4ae6d999c76f2cd49a602387053e10630c2b",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "held.map-folder",
+      "sha256": "19c0406b6101782fa84b5c7eeaf8d7d11ede411ca0b40133edc34619ab81ad0c",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "held.pencil",
+      "sha256": "14ccb35ef0743249d5955c72b96e78a1f17ea446995126f1cc7b57e55570ac52",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "badge.meteo",
+      "sha256": "8992912d889e8a99c22b09f76cb82fee2a1ae027ddae69dd8caef01a34c12e53",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "badge.aerology",
+      "sha256": "a93ea6adbf67fb059597cdffba656b13e4f147b08c5ff05f92cd6da6036e23b6",
+      "frames": 4,
+      "nativeSize": [
+        96,
+        144
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "companion.tit",
+      "sha256": "4c9055c6135f63616df89a1e0532d047fabb039b3809ebde70cc229c37314637",
+      "frames": 4,
+      "nativeSize": [
+        64,
+        64
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "companion.squirrel",
+      "sha256": "a58c735c9218a0d599faac5b628c1551b17e24a5a5c32c001644926327904d94",
+      "frames": 4,
+      "nativeSize": [
+        64,
+        64
+      ],
+      "alpha": [
+        0,
+        255
+      ]
+    }
+  ],
+  "referencedCels": 500,
+  "uniqueRects": 125,
+  "celsHaveOpaquePixels": true,
+  "binaryAlpha": true,
+  "paddingClean": true,
+  "paletteRoleCels": {
+    "skin": 64,
+    "hair": 80,
+    "fixed": 356
+  },
+  "eyeChecks": [
+    {
+      "direction": "down",
+      "xy": [
+        52,
+        23
+      ],
+      "rgba": [
+        255,
+        250,
+        239,
+        255
+      ],
+      "variantsChecked": 16
+    },
+    {
+      "direction": "down",
+      "xy": [
+        42,
+        23
+      ],
+      "rgba": [
+        255,
+        250,
+        239,
+        255
+      ],
+      "variantsChecked": 16
+    },
+    {
+      "direction": "right",
+      "xy": [
+        53,
+        22
+      ],
+      "rgba": [
+        255,
+        250,
+        239,
+        255
+      ],
+      "variantsChecked": 16
+    },
+    {
+      "direction": "left",
+      "xy": [
+        41,
+        22
+      ],
+      "rgba": [
+        255,
+        250,
+        239,
+        255
+      ],
+      "variantsChecked": 16
+    }
+  ],
+  "singleValuePoseChecks": 624,
+  "hairHeadwearPoseChecks": 400,
+  "hiddenRecords": [
+    [
+      "held.tablet",
+      "left",
+      0,
+      "occlusion"
+    ],
+    [
+      "held.tablet",
+      "left",
+      1,
+      "occlusion"
+    ],
+    [
+      "held.tablet",
+      "left",
+      2,
+      "occlusion"
+    ],
+    [
+      "held.tablet",
+      "left",
+      3,
+      "occlusion"
+    ],
+    [
+      "held.map-folder",
+      "left",
+      0,
+      "occlusion"
+    ],
+    [
+      "held.map-folder",
+      "left",
+      1,
+      "occlusion"
+    ],
+    [
+      "held.map-folder",
+      "left",
+      2,
+      "occlusion"
+    ],
+    [
+      "held.map-folder",
+      "left",
+      3,
+      "occlusion"
+    ],
+    [
+      "held.pencil",
+      "left",
+      0,
+      "occlusion"
+    ],
+    [
+      "held.pencil",
+      "left",
+      1,
+      "occlusion"
+    ],
+    [
+      "held.pencil",
+      "left",
+      2,
+      "occlusion"
+    ],
+    [
+      "held.pencil",
+      "left",
+      3,
+      "occlusion"
+    ],
+    [
+      "badge.meteo",
+      "right",
+      0,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "right",
+      1,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "right",
+      2,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "right",
+      3,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "up",
+      0,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "up",
+      1,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "up",
+      2,
+      "direction"
+    ],
+    [
+      "badge.meteo",
+      "up",
+      3,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "right",
+      0,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "right",
+      1,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "right",
+      2,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "right",
+      3,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "up",
+      0,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "up",
+      1,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "up",
+      2,
+      "direction"
+    ],
+    [
+      "badge.aerology",
+      "up",
+      3,
+      "direction"
+    ]
+  ],
+  "skinPreviewStats": [
+    {
+      "skin": "skin.light",
+      "direction": "down",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.light",
+      "direction": "right",
+      "opaqueColors": 75
+    },
+    {
+      "skin": "skin.light",
+      "direction": "up",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.light",
+      "direction": "left",
+      "opaqueColors": 73
+    },
+    {
+      "skin": "skin.warm",
+      "direction": "down",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.warm",
+      "direction": "right",
+      "opaqueColors": 75
+    },
+    {
+      "skin": "skin.warm",
+      "direction": "up",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.warm",
+      "direction": "left",
+      "opaqueColors": 73
+    },
+    {
+      "skin": "skin.medium",
+      "direction": "down",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.medium",
+      "direction": "right",
+      "opaqueColors": 75
+    },
+    {
+      "skin": "skin.medium",
+      "direction": "up",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.medium",
+      "direction": "left",
+      "opaqueColors": 73
+    },
+    {
+      "skin": "skin.deep",
+      "direction": "down",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.deep",
+      "direction": "right",
+      "opaqueColors": 75
+    },
+    {
+      "skin": "skin.deep",
+      "direction": "up",
+      "opaqueColors": 81
+    },
+    {
+      "skin": "skin.deep",
+      "direction": "left",
+      "opaqueColors": 73
+    }
+  ],
+  "companions": [
+    {
+      "id": "companion.tit",
+      "direction": "down",
+      "bbox": [
+        21,
+        32,
+        43,
+        60
+      ],
+      "colors": 26
+    },
+    {
+      "id": "companion.tit",
+      "direction": "right",
+      "bbox": [
+        17,
+        36,
+        46,
+        60
+      ],
+      "colors": 26
+    },
+    {
+      "id": "companion.tit",
+      "direction": "up",
+      "bbox": [
+        22,
+        32,
+        42,
+        60
+      ],
+      "colors": 27
+    },
+    {
+      "id": "companion.tit",
+      "direction": "left",
+      "bbox": [
+        17,
+        35,
+        46,
+        60
+      ],
+      "colors": 27
+    },
+    {
+      "id": "companion.squirrel",
+      "direction": "down",
+      "bbox": [
+        17,
+        14,
+        47,
+        60
+      ],
+      "colors": 28
+    },
+    {
+      "id": "companion.squirrel",
+      "direction": "right",
+      "bbox": [
+        11,
+        15,
+        53,
+        60
+      ],
+      "colors": 27
+    },
+    {
+      "id": "companion.squirrel",
+      "direction": "up",
+      "bbox": [
+        19,
+        14,
+        45,
+        60
+      ],
+      "colors": 27
+    },
+    {
+      "id": "companion.squirrel",
+      "direction": "left",
+      "bbox": [
+        11,
+        15,
+        53,
+        60
+      ],
+      "colors": 28
+    }
+  ],
+  "productionCopiesByteIdentical": true
+}

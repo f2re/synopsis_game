@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "task": "MODULAR-PLAYER-R01",
+  "created": "2026-11-10",
+  "rights": "User-commissioned AI generated project art; reference images are existing project-owned generated art. No third-party artwork or external branding incorporated. Provider terms apply; no claim of exclusive copyright.",
+  "native_images": [
+    {
+      "file": "assets/source/characters/player-r01/provider/base-turnaround.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "cc92beee-44db-42c8-a8d2-8768f8ad0b9e",
+      "reference": "r01/prepared/observer.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four coherent full-body views of the same neutral adult in fitted blue-grey undersuit, bald head, no carried items; front/right/back/left, transparent background. Shared silhouette reference, not an outfit variant.",
+      "measured_size": [
+        2048,
+        768
+      ],
+      "sha256": "30ad584cb720c06ebe537c37d2813b2d05dc0b736d37cbd07fcb668e13348a7d"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/default-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "e0bb7375-1035-45c2-9422-5bc7d5c324af",
+      "reference": "base-turnaround.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four columns front/right/back/left; rows short hair, navy campus jacket with cream collar, charcoal trousers, brown/cream sneakers. Isolated wearable layers, no person, transparent openings.",
+      "measured_size": [
+        1254,
+        1254
+      ],
+      "sha256": "b8cb9cc2e98612213ca9ba0595471b193c39c5414021a49f43ee2e49cb8b255d"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/tops-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "54184319-ef1f-44b1-81bf-60c82bea8bb5",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directional columns; olive field jacket, deep teal hoodie, rust knitted sweater, cream-blue short-sleeved field shirt. Same modular proportions, relaxed arms, isolated clothes only.",
+      "measured_size": [
+        1254,
+        1254
+      ],
+      "sha256": "69ffe1173edd3a8f72036b4a5e0161f1cefff89ffa5bc16fd50d60a97c875a9c"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/hair-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "e7dbe4f3-ecd6-44a9-ab0b-d545df4f41d6",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directional columns; swept wave, chin bob, short natural curls, long shoulder-length hair. Brown source ramp, transparent face opening, no skin/mannequin.",
+      "measured_size": [
+        1254,
+        1254
+      ],
+      "sha256": "3751f6b92152c7d9109f7243fc35f75b7e247ac5d0733c4525699e4070b56335"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/legs-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "d20f4657-5237-4607-a771-3e9e355af680",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directional columns; olive cargo trousers, indigo straight jeans, chestnut ankle hiking boots, dark low work shoes. Pairs aligned to neutral stance, no legs/feet.",
+      "measured_size": [
+        1254,
+        1254
+      ],
+      "sha256": "aade35f8234efc7841bab5aa2b03bc707101d5f1afd45af2e97e13a173a17168"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/headwear-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "c70ef4d2-6a09-4639-99e6-73526da84e1e",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directional columns; navy soft field cap, rust knit beanie, teal neck scarf, weather goggles. No hair or head; goggles back view is strap only.",
+      "measured_size": [
+        1254,
+        1254
+      ],
+      "sha256": "8f2979a9f849f5c3a67c712ddbd4c63f00db2b5f376ffea5ba078a23ba80b1af"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/gear-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "1a909af5-5569-4748-88d6-4f5aed1e3af1",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directional columns; city backpack and field backpack (front straps only, side bag behind wearer, back full bag); vertical blue tablet and tan map folder carried by anatomical right hand; no person.",
+      "measured_size": [
+        1254,
+        1254
+      ],
+      "sha256": "07ca2a436ffa5840d35180fd09f9dc8dde1014989cd914d7d1511943064daa20"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/small-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "14e3d1aa-4154-45a7-b8c4-db3aec66fb2b",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directional columns; ochre pencil, small navy decorative cloud/sun patch, teal decorative weather-balloon patch. No text, no exact educational diagram; back patches authoring-only and hidden in character.",
+      "measured_size": [
+        1448,
+        1086
+      ],
+      "sha256": "15502f19d72a307e0219ccc796b0e49671c8d3c3b14abd78177d7de897b3a84b"
+    },
+    {
+      "file": "assets/source/characters/player-r01/provider/companions-kit.png",
+      "generator": "built-in imagegen",
+      "generation_file_id": "861c2d4a-294d-425d-907a-a22da86ec82c",
+      "reference": "default-kit.png",
+      "transparent_background_requested": true,
+      "prompt_brief": "Four directions for great tit with characteristic cap, white cheek, yellow chest/black stripe/olive back, and European red squirrel with cream belly and tufted ears. Calm independent companion actors, no scenery or human clothes.",
+      "measured_size": [
+        1774,
+        887
+      ],
+      "sha256": "7eb93cec9d4036bd39e0e686f26b46335bb2acef535eefe9e41aa50cb2c26435"
+    }
+  ],
+  "spritecook": {
+    "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+    "collection_id": "c1a9513a-e50b-4721-8b37-6b36f3b3ff02",
+    "credits_before": 700,
+    "credits_after": 668,
+    "credits_spent": 32,
+    "assets": [
+      {
+        "id": "64fdedd1-774d-46a9-83f6-ac090bae0117",
+        "operation": "upload",
+        "source": "provider/base-turnaround.png",
+        "credits": 0,
+        "sha256": "30ad584cb720c06ebe537c37d2813b2d05dc0b736d37cbd07fcb668e13348a7d"
+      },
+      {
+        "id": "d69db792-9fec-45bc-95d4-20eeae14373b",
+        "operation": "import",
+        "source": "prepared/body-right.png at initial 132px candidate revision",
+        "credits": 0,
+        "note": "Preserved in SpriteCook as initial neutral motion reference; current accepted source geometry is separate."
+      },
+      {
+        "id": "ffff1954-980c-4f1a-a2cd-dbed55b9d93c",
+        "operation": "generate_game_art edit",
+        "job_id": "5a51bc0e-89b4-48c3-92e1-d98b39c7fe91",
+        "model": "gemini-nano-banana-2.1",
+        "source": "provider/stride-guide.png",
+        "credits": 12,
+        "alpha_cutoff": 130,
+        "note": "Prepared right-facing mid-stride guide. Cutoffs96/130/160 compared from preserved source; no material improvement, retained saved130 without paid re-removal.",
+        "sha256": "3fbcd5e874e4e5cb88c7f9f66ebd8e0e839681e9ebadc0ec32f039193c0c3e56"
+      },
+      {
+        "id": "4df0cb13-6074-4156-8b96-161ba05ac433",
+        "operation": "animate_game_art",
+        "job_id": "1efe5371-6c37-4edb-85d9-0145281ca0c5",
+        "model": "pixel-engine-v1.1",
+        "source": "provider/walk-guide.png",
+        "preview": "provider/walk-guide.webp",
+        "frames": 6,
+        "provider_frame_size": [
+          170,
+          170
+        ],
+        "credits": 20,
+        "removebg": "Basic",
+        "outline_repair": true,
+        "alpha_cutoff": 96,
+        "status": "candidate motion guide only; not a published modular clip",
+        "sha256": "5c3d9e1463ba1c4052156c51a51dfa5e0cbb26f28904bbc02c7514343dd9e1bd",
+        "editable_reference": "motion-guide-right.aseprite",
+        "frame_reference_manifest": "motion-guide.json"
+      },
+      {
+        "id": "7a31598a-37b9-495b-bfea-021de104c6d0",
+        "operation": "import + auto_slice_asset",
+        "source": "provider/default-parts-import.png",
+        "credits": 0,
+        "slices": "spritecook-reusable-parts.json",
+        "count": 16,
+        "sha256": "d27fbe8f0284d6c4f45f531df50f68f3764dc888593351d21966eb83520752c1"
+      }
+    ]
+  },
+  "preparation": {
+    "alpha_cutoff": 96,
+    "sampling": "nearest",
+    "body_visible_height": 126,
+    "frame": [
+      96,
+      144
+    ],
+    "pivot": [
+      48,
+      136
+    ],
+    "source_format": "Four editable direction-tagged RGBA Aseprite frames per family",
+    "material_reduction": "Local near-RGB consolidation per material only; separate protected neutral face-detail ramp; exact4-color skin and hair ramps. No global scene posterization.",
+    "runtime_animation": "Authored restrained idle upper-body breathing [0,-1,-1,0]; lower body planted. No walk/inspect in published pack."
+  },
+  "canonical_sources": "editable/*.aseprite + rig.json; provider and prepared files preserve provenance/review and are not hand-edited runtime outputs."
+}

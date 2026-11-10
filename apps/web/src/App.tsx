@@ -116,7 +116,7 @@ export function App() {
   }
 
   if (path === '/shift') {
-    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} /></Suspense>;
+    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow avatar={user?.avatar} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} /></Suspense>;
   }
 
   function startShift() {

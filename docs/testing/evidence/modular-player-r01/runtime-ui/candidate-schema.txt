@@ -1,0 +1,3 @@
+Actual public manifest retains artAcceptance=PENDING. Production parser rejected it as required.
+For schema compatibility only, an in-memory clone with artAcceptance=PASS was parsed; no file was changed and this does not grant artistic acceptance.
+Result: PASS; idle only; 31 visual part IDs; 3 companion IDs (including none); atlas 512x448; all 16 default-outfit direction/idle poses contain cels.

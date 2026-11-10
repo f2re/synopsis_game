@@ -74,7 +74,7 @@ export const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
     { id: 'held.none', name: 'Свободные руки', desc: 'Убрать предмет' },
     { id: 'held.tablet', name: 'Планшет наблюдателя', image: '/assets/items/held_tablet.png', desc: 'Планшет для записей во время обхода станции.' },
     { id: 'held.map-folder', name: 'Папка карт', image: '/assets/items/held_map_folder.png', desc: 'Папка для рабочих карт и заметок синоптика.' },
-    { id: 'held.pencil', name: 'Карандаш синоптика', image: '/assets/items/held_pencil.png', desc: 'Двухцветный карандаш для работы с бумажными картами.' },
+    { id: 'held.pencil', name: 'Карандаш синоптика', image: '/assets/items/held_pencil.png', desc: 'Карандаш для работы с бумажными картами.' },
   ],
   companion: [
     { id: 'companion.none', name: 'Без спутника', desc: 'Оставить спутника в кампусе' },

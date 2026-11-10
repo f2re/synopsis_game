@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GAME_MARK } from '../../brand';
-import type { ShiftProgress, ShiftReward } from '../../api';
+import type { AvatarProfile, ShiftProgress, ShiftReward } from '../../api';
 import { PixelIcon } from '../ui';
 import { AwardBadgeAnimation } from './AwardBadgeAnimation';
 import {
@@ -24,7 +24,7 @@ type MentorReaction = {
   text: string;
 };
 
-export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void; onEquipment?: () => void }) {
+export function SeamlessShiftFlow({ avatar, onExit, onEquipment }: { avatar?: AvatarProfile; onExit: () => void; onEquipment?: () => void }) {
   const [phase, setPhase] = useState<ShiftFlowPhase>('handover');
   const [mentorOpen, setMentorOpen] = useState(false);
   const [mentorTopicId, setMentorTopicId] = useState<string>(MENTOR_TOPICS[0].id);
@@ -119,7 +119,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
 
   return (
     <div className="seamless-shift-host">
-      <ShiftWorkspace onExit={handleShiftExit} onAnswerEvaluated={handleAnswerEvaluated} onProgressChanged={(progress, assisted) => { setServerProgress(progress); setAssistedTasks(assisted); }} />
+      <ShiftWorkspace avatar={avatar} onExit={handleShiftExit} onAnswerEvaluated={handleAnswerEvaluated} onProgressChanged={(progress, assisted) => { setServerProgress(progress); setAssistedTasks(assisted); }} />
 
       {mentorReaction && !mentorOpen && !debriefReason && (
         <button
