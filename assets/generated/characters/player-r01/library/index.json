@@ -1,0 +1,1538 @@
+{
+  "version": 1,
+  "rigId": "player.modular.r01.v1",
+  "layout": "2x2",
+  "purpose": "Exact directional reference sheets, not animation inputs",
+  "families": [
+    {
+      "id": "body",
+      "source": "assets/source/characters/player-r01/editable/body.aseprite",
+      "sourceSha256": "d7ececac1b031ceaa273606552c9a131878fff274d3861e4a9deb6c5534fa222",
+      "file": "assets/generated/characters/player-r01/library/body.png",
+      "sha256": "e76907cf912ee69484a95aa4ca79c440b100b0a3a7d658f5e5c0ae45bce368bf",
+      "sha12": "e76907cf912e",
+      "bytes": 13817,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.short",
+      "source": "assets/source/characters/player-r01/editable/hair.short.aseprite",
+      "sourceSha256": "678bfc60a4006ce4ccf7df9fa5fdd6f9c54d0641268b1f423ed5cb0ae33ca4a2",
+      "file": "assets/generated/characters/player-r01/library/hair.short.png",
+      "sha256": "604681e17f5fb086b9632247302b84353a7e54bc68d8c4a56be0e3b69c9f1eac",
+      "sha12": "604681e17f5f",
+      "bytes": 1752,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.wave",
+      "source": "assets/source/characters/player-r01/editable/hair.wave.aseprite",
+      "sourceSha256": "605f1c626db9ad1dee5401d2db3c219a7e393189010bb35277e60f385be7f799",
+      "file": "assets/generated/characters/player-r01/library/hair.wave.png",
+      "sha256": "c70403121e6dce09b74f985fcc5a2c9701ab23f8e9f034842b0d9a8f9959d832",
+      "sha12": "c70403121e6d",
+      "bytes": 2353,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.bob",
+      "source": "assets/source/characters/player-r01/editable/hair.bob.aseprite",
+      "sourceSha256": "58bc99ff488fa99014d7b57d17a4aac2e9717b66f553d6ec15898eb3169b52e2",
+      "file": "assets/generated/characters/player-r01/library/hair.bob.png",
+      "sha256": "3b2860c5c71420479d40fb8d5d377f3a8a90f3b73417a931c2da4ef35274f30e",
+      "sha12": "3b2860c5c714",
+      "bytes": 2370,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.curl",
+      "source": "assets/source/characters/player-r01/editable/hair.curl.aseprite",
+      "sourceSha256": "1b4b348b63ecd6feb94acf83e2364a8fefd743cac5c10c61e857df12a2e12b94",
+      "file": "assets/generated/characters/player-r01/library/hair.curl.png",
+      "sha256": "8ffccac82c65904c424522c005d94da55d7fbee8b5488e80c83124e3bf7c2089",
+      "sha12": "8ffccac82c65",
+      "bytes": 2624,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.long",
+      "source": "assets/source/characters/player-r01/editable/hair.long.aseprite",
+      "sourceSha256": "f9bdc41f6a66a673af9fb8d68335dbb9416afaa9a5a1563ae80386c51b690138",
+      "file": "assets/generated/characters/player-r01/library/hair.long.png",
+      "sha256": "4874816333894c1ec7f86d889878e407c10ca6fcd7e955463e3aae78d7dfb217",
+      "sha12": "487481633389",
+      "bytes": 2600,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.cap",
+      "source": "assets/source/characters/player-r01/editable/headwear.cap.aseprite",
+      "sourceSha256": "f6c1707c60c22fbf379dd8af7dd695185afe9c55c7f1b041ac80792346cfab36",
+      "file": "assets/generated/characters/player-r01/library/headwear.cap.png",
+      "sha256": "4cb09735212a979e2eebe68eec2d8c5d5dd2496fb6540164952ada5387d12a30",
+      "sha12": "4cb09735212a",
+      "bytes": 4932,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.beanie",
+      "source": "assets/source/characters/player-r01/editable/headwear.beanie.aseprite",
+      "sourceSha256": "afc80c647a44716f7b4827fd0f98e1f00b1976437047ac773730124d1866c3a4",
+      "file": "assets/generated/characters/player-r01/library/headwear.beanie.png",
+      "sha256": "adae023add741cb360a5cdb594ba6ecfef2f07bf46999001a980956c9904691d",
+      "sha12": "adae023add74",
+      "bytes": 5630,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.scarf",
+      "source": "assets/source/characters/player-r01/editable/headwear.scarf.aseprite",
+      "sourceSha256": "7e1cb90a9b27f0671d48b463e868ad6e93d51f28f9c7c41ae8da9030686c9cd9",
+      "file": "assets/generated/characters/player-r01/library/headwear.scarf.png",
+      "sha256": "9e68027a9e5d0361405e55203deb7e08c39624267a7a65a48d148b0d3d48daa8",
+      "sha12": "9e68027a9e5d",
+      "bytes": 5079,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.goggles",
+      "source": "assets/source/characters/player-r01/editable/headwear.goggles.aseprite",
+      "sourceSha256": "17025c244e3d6d4c45bd0be59f47801f4e7dfdabc02efb91db0afed4b197bbfb",
+      "file": "assets/generated/characters/player-r01/library/headwear.goggles.png",
+      "sha256": "58bb45c3cb810555250e73d0e4c93ee755b4726c46fd5cbf884db41976d2096f",
+      "sha12": "58bb45c3cb81",
+      "bytes": 1978,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.center-jacket",
+      "source": "assets/source/characters/player-r01/editable/top.center-jacket.aseprite",
+      "sourceSha256": "654785bf471ffb4c15313bcc3782c4822f06048cfcb45c090b7c9c8c63312d86",
+      "file": "assets/generated/characters/player-r01/library/top.center-jacket.png",
+      "sha256": "57ea7848e32a531af94c7eb0dba42cb651f976014e7f60533a82bb4d0a137c0c",
+      "sha12": "57ea7848e32a",
+      "bytes": 12183,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.field-jacket",
+      "source": "assets/source/characters/player-r01/editable/top.field-jacket.aseprite",
+      "sourceSha256": "5d669075cbb3b520ee59359ab60efa86e81e39c3b92a536dd22077f3ec8ee42e",
+      "file": "assets/generated/characters/player-r01/library/top.field-jacket.png",
+      "sha256": "e690a4e0f2c6c1c6adffe8a3e683e2b32de226b6d77305771167140cc800f358",
+      "sha12": "e690a4e0f2c6",
+      "bytes": 13038,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.hoodie",
+      "source": "assets/source/characters/player-r01/editable/top.hoodie.aseprite",
+      "sourceSha256": "38b72c0aa24ec19daa5bcf614b3cf1e4c17383eb5f40ac04d8406d057e331d3c",
+      "file": "assets/generated/characters/player-r01/library/top.hoodie.png",
+      "sha256": "39f080dffb682206cd6cbbeda074f22a15fb69186c11e479e31296288931997c",
+      "sha12": "39f080dffb68",
+      "bytes": 12451,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.sweater",
+      "source": "assets/source/characters/player-r01/editable/top.sweater.aseprite",
+      "sourceSha256": "db0079109ad0788183a76b4e7998c49fa643da5e56dca260a703cba79bfcc0b5",
+      "file": "assets/generated/characters/player-r01/library/top.sweater.png",
+      "sha256": "91184941cf8f39c7b3d3b805448e1800481a2e1d9dabf2d25e6f62722b96984f",
+      "sha12": "91184941cf8f",
+      "bytes": 12936,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.shirt",
+      "source": "assets/source/characters/player-r01/editable/top.shirt.aseprite",
+      "sourceSha256": "18bbd59f1dd6a1f71c0d9c7ec74293a865afb55714f757face76d164323f1459",
+      "file": "assets/generated/characters/player-r01/library/top.shirt.png",
+      "sha256": "e354a4a8bc3620a9de051f5c5207eee112cb85908cdad920427b62723afd5973",
+      "sha12": "e354a4a8bc36",
+      "bytes": 9770,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bottom.dark-trousers",
+      "source": "assets/source/characters/player-r01/editable/bottom.dark-trousers.aseprite",
+      "sourceSha256": "c3c53bd5d622473ed150d67c049348fafe5739af42c329507d83c8e65f970849",
+      "file": "assets/generated/characters/player-r01/library/bottom.dark-trousers.png",
+      "sha256": "4d53d693b07a06a16fb18b296b72638520776aa2846a8d6f2ce8dd861cc7a289",
+      "sha12": "4d53d693b07a",
+      "bytes": 8852,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bottom.field-trousers",
+      "source": "assets/source/characters/player-r01/editable/bottom.field-trousers.aseprite",
+      "sourceSha256": "0313cf86cab7309cce59b85226a597cbf25990ea0aa3009e9b49b1495977cbf6",
+      "file": "assets/generated/characters/player-r01/library/bottom.field-trousers.png",
+      "sha256": "2fc2c728f3582876308b1dfd6fff43ce8637147f6fdbe7d449aa496d60307425",
+      "sha12": "2fc2c728f358",
+      "bytes": 10492,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bottom.jeans",
+      "source": "assets/source/characters/player-r01/editable/bottom.jeans.aseprite",
+      "sourceSha256": "0ae8e2af9c0f178655dfb14c5ff33c85dec89fe840bf4036e6e28fa60b6411b2",
+      "file": "assets/generated/characters/player-r01/library/bottom.jeans.png",
+      "sha256": "ecb59fdc67aeff91f748efc503b7a17ab92a3a26ee2b6825c311eb75ad0c6139",
+      "sha12": "ecb59fdc67ae",
+      "bytes": 9623,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footwear.sneakers",
+      "source": "assets/source/characters/player-r01/editable/footwear.sneakers.aseprite",
+      "sourceSha256": "df31d3fb050c2289ef71236c2ee958d6cecf12d99501837c46e11d569abb3bf6",
+      "file": "assets/generated/characters/player-r01/library/footwear.sneakers.png",
+      "sha256": "72035cccc539091a3abd102be1f705f812d83c75bb3407116f663d061e5bedef",
+      "sha12": "72035cccc539",
+      "bytes": 3968,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footwear.boots",
+      "source": "assets/source/characters/player-r01/editable/footwear.boots.aseprite",
+      "sourceSha256": "7a8b140bb1fc88288a686b699b2826667135f7f681f2f672c5d9b5aa91bfd065",
+      "file": "assets/generated/characters/player-r01/library/footwear.boots.png",
+      "sha256": "88a668260b097c5fcfe794ab146336fa741ec5e88099dc2c523cf3b8fbde4f14",
+      "sha12": "88a668260b09",
+      "bytes": 5150,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footwear.shoes",
+      "source": "assets/source/characters/player-r01/editable/footwear.shoes.aseprite",
+      "sourceSha256": "f46dc595b86659a2920ed2baae6fc31a1070788d10353c5baed69bef8fcd604c",
+      "file": "assets/generated/characters/player-r01/library/footwear.shoes.png",
+      "sha256": "bddff35e800f8faa79423e7d71e29823c682976520bf698d7ca44958f1c38d69",
+      "sha12": "bddff35e800f",
+      "bytes": 3450,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backpack.city",
+      "source": "assets/source/characters/player-r01/editable/backpack.city.aseprite",
+      "sourceSha256": "4e842199578327821832b9b0c40ba2db8d16a3c7c66a953ca8acd1e1f396618b",
+      "file": "assets/generated/characters/player-r01/library/backpack.city.png",
+      "sha256": "c9fb156191c03117472e2591d80e95657f222e9b3c1ac11aeb00a35a982a6219",
+      "sha12": "c9fb156191c0",
+      "bytes": 6691,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backpack.field",
+      "source": "assets/source/characters/player-r01/editable/backpack.field.aseprite",
+      "sourceSha256": "39c945ba7f7e0c72882f121d736fe234676d02f6f8eee9b7ece4503c97e2a37d",
+      "file": "assets/generated/characters/player-r01/library/backpack.field.png",
+      "sha256": "413c8982435331579c958bc2de3f1ba969ccc2580558f8a0e4ab72f5db3591f3",
+      "sha12": "413c89824353",
+      "bytes": 7837,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "held.tablet",
+      "source": "assets/source/characters/player-r01/editable/held.tablet.aseprite",
+      "sourceSha256": "560ec3f198374f4744ef024365fd4ae6d999c76f2cd49a602387053e10630c2b",
+      "file": "assets/generated/characters/player-r01/library/held.tablet.png",
+      "sha256": "3798ebc74de7d66c895f6d38e774764f9001aee88c76670616ee8d769b92338f",
+      "sha12": "3798ebc74de7",
+      "bytes": 2309,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "held.map-folder",
+      "source": "assets/source/characters/player-r01/editable/held.map-folder.aseprite",
+      "sourceSha256": "19c0406b6101782fa84b5c7eeaf8d7d11ede411ca0b40133edc34619ab81ad0c",
+      "file": "assets/generated/characters/player-r01/library/held.map-folder.png",
+      "sha256": "f22b59e50fc2f2c413bdb986729d0df7cd3f31833d265c22d801823fdac65908",
+      "sha12": "f22b59e50fc2",
+      "bytes": 2341,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "held.pencil",
+      "source": "assets/source/characters/player-r01/editable/held.pencil.aseprite",
+      "sourceSha256": "14ccb35ef0743249d5955c72b96e78a1f17ea446995126f1cc7b57e55570ac52",
+      "file": "assets/generated/characters/player-r01/library/held.pencil.png",
+      "sha256": "729198510ec3d30c11d80ca880f67de63aaa73bc9f69cb092ff5a583f4ad1666",
+      "sha12": "729198510ec3",
+      "bytes": 1122,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "badge.meteo",
+      "source": "assets/source/characters/player-r01/editable/badge.meteo.aseprite",
+      "sourceSha256": "8992912d889e8a99c22b09f76cb82fee2a1ae027ddae69dd8caef01a34c12e53",
+      "file": "assets/generated/characters/player-r01/library/badge.meteo.png",
+      "sha256": "7b71a17b2edf91d8ecdb5b8e9ee76d3a02ea41d94b6feb268e49d713113d7a66",
+      "sha12": "7b71a17b2edf",
+      "bytes": 934,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "badge.aerology",
+      "source": "assets/source/characters/player-r01/editable/badge.aerology.aseprite",
+      "sourceSha256": "a93ea6adbf67fb059597cdffba656b13e4f147b08c5ff05f92cd6da6036e23b6",
+      "file": "assets/generated/characters/player-r01/library/badge.aerology.png",
+      "sha256": "9eeab3a4ae23d28711307c53d61c953a43e8c5fd092d170b79ff26db0aeb98a4",
+      "sha12": "9eeab3a4ae23",
+      "bytes": 961,
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "companion.tit",
+      "source": "assets/source/characters/player-r01/editable/companion.tit.aseprite",
+      "sourceSha256": "4c9055c6135f63616df89a1e0532d047fabb039b3809ebde70cc229c37314637",
+      "file": "assets/generated/characters/player-r01/library/companion.tit.png",
+      "sha256": "fb474dccd3fb66fa724a5640b6e87dcb7c36ab9e00b6bb3564873b29011850e5",
+      "sha12": "fb474dccd3fb",
+      "bytes": 4740,
+      "frameSize": [
+        64,
+        64
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            64,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            64,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            64,
+            64,
+            64,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": "companion.squirrel",
+      "source": "assets/source/characters/player-r01/editable/companion.squirrel.aseprite",
+      "sourceSha256": "a58c735c9218a0d599faac5b628c1551b17e24a5a5c32c001644926327904d94",
+      "file": "assets/generated/characters/player-r01/library/companion.squirrel.png",
+      "sha256": "f55b1b456f9ed43312a72c85dcb71cfd81505458ad3f14388555df6789d570fd",
+      "sha12": "f55b1b456f9e",
+      "bytes": 11373,
+      "frameSize": [
+        64,
+        64
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            64,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            64,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            64,
+            64,
+            64,
+            64
+          ]
+        }
+      ]
+    }
+  ]
+}

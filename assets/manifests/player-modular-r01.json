@@ -795,7 +795,7 @@
       }
     }
   },
-  "rigSha256": "5ca4bd22b2288d8289ac813613e36a6a1bdd694d7b12c04ffbb359aceedf4863",
+  "rigSha256": "7b1f9dc79db85779e88e01a8d6374e7b8866e6a199cc74171cfa8ef233ba279d",
   "budget": {
     "compressedAtlasBytes": 167734,
     "decodedAtlasBytes": 917504,
@@ -823,5 +823,28 @@
   "outputs": {
     "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
     "manifestSha256": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf"
+  },
+  "acceptedFingerprint": {
+    "version": 1,
+    "scope": "Existing R01 idle pixels and composition, plus the R02 explicit source-contract migration. Pins are written only after independent review; the build never updates this record.",
+    "fingerprints": {
+      "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+      "compositionSha256": "f9dc46abc5b9d12ca630b0d31395042f5e76e12e48cf46b2b6eb8fe66df8b707",
+      "sourceContractSha256": "02666d4e7806158e35a6abe9dd0b7eb8bb5dfa0c24221c9e396bed1e2ea7e56f"
+    },
+    "reviews": {
+      "pixelArt": "docs/testing/2026-11-10-modular-player-independent-review.md",
+      "artDirection": "docs/art/reviews/2026-11-10-modular-player-r01-art-review.md",
+      "sourceContract": "docs/testing/2026-11-11-modular-source-contract-review.md"
+    }
+  },
+  "currentAcceptance": {
+    "status": "PASS",
+    "fingerprints": {
+      "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+      "compositionSha256": "f9dc46abc5b9d12ca630b0d31395042f5e76e12e48cf46b2b6eb8fe66df8b707",
+      "sourceContractSha256": "02666d4e7806158e35a6abe9dd0b7eb8bb5dfa0c24221c9e396bed1e2ea7e56f"
+    },
+    "reasons": []
   }
 }

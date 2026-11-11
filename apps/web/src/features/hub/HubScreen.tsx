@@ -149,7 +149,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
       <header className="hub-topbar" aria-label="Состояние станции">
         <button type="button" className="hub-profile-button" onClick={() => setActiveModal('profile')} aria-haspopup="dialog" aria-label={user ? `Профиль: ${user.displayName}` : 'Профиль наблюдателя и вход'}>
           <span className="hub-profile-button__portrait">
-            {user ? <AvatarPreview avatar={user.avatar} size={40} /> : <HubIcon name="observer" size={40} />}
+            {user ? <AvatarPreview avatar={user.avatar} context="campus" size={40} /> : <HubIcon name="observer" size={40} />}
           </span>
           <span className="hub-profile-button__copy"><strong>{user?.displayName ?? 'Наблюдатель'}</strong><small>{user ? user.groupId : 'Войти в учебную группу'}</small></span>
           <span className="hub-profile-button__chevron" aria-hidden="true">⌄</span>

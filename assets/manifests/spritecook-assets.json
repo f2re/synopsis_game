@@ -354,6 +354,186 @@
       "asset_id": "9a2e69f9-4f40-4ff2-800c-447681878c00",
       "sha12": "fc2c27840189",
       "label": "Значок аэрологии"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/body.png",
+      "asset_id": "6633da16-fe90-4623-9917-6f68dcdac10d",
+      "sha12": "e76907cf912e",
+      "label": "26063 · body · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/hair.short.png",
+      "asset_id": "a7d6d45a-bb9e-4425-be1f-3414cd593f16",
+      "sha12": "604681e17f5f",
+      "label": "26063 · hair.short · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/hair.wave.png",
+      "asset_id": "8358296f-97d9-43c8-858c-01021596ece1",
+      "sha12": "c70403121e6d",
+      "label": "26063 · hair.wave · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/hair.bob.png",
+      "asset_id": "c0be1e13-9f85-42c5-bf61-f911ebc6e79a",
+      "sha12": "3b2860c5c714",
+      "label": "26063 · hair.bob · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/hair.curl.png",
+      "asset_id": "8cbe3e0d-935a-4a5f-bfe9-c9c496ec6432",
+      "sha12": "8ffccac82c65",
+      "label": "26063 · hair.curl · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/hair.long.png",
+      "asset_id": "c1b7a82a-fda8-4762-bea0-e8766afc4a93",
+      "sha12": "487481633389",
+      "label": "26063 · hair.long · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/headwear.cap.png",
+      "asset_id": "1f1c4cc9-fac9-4c8c-b5ab-8a0432771814",
+      "sha12": "4cb09735212a",
+      "label": "26063 · headwear.cap · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/headwear.beanie.png",
+      "asset_id": "1b301fa2-405b-40bf-a085-d1b6fc246ad6",
+      "sha12": "adae023add74",
+      "label": "26063 · headwear.beanie · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/headwear.scarf.png",
+      "asset_id": "e7e0120a-f441-4aa0-84f2-fbbba64aad49",
+      "sha12": "9e68027a9e5d",
+      "label": "26063 · headwear.scarf · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/headwear.goggles.png",
+      "asset_id": "94360315-d7eb-4bbe-aee4-17025cc30b3e",
+      "sha12": "58bb45c3cb81",
+      "label": "26063 · headwear.goggles · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/top.center-jacket.png",
+      "asset_id": "6d3be27d-e17d-4577-a831-5c4199102419",
+      "sha12": "57ea7848e32a",
+      "label": "26063 · top.center-jacket · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/top.field-jacket.png",
+      "asset_id": "f18c63dd-980d-4ab1-94c0-33b911379433",
+      "sha12": "e690a4e0f2c6",
+      "label": "26063 · top.field-jacket · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/top.hoodie.png",
+      "asset_id": "baa194a9-5348-4518-8530-aae4a61e8c6c",
+      "sha12": "39f080dffb68",
+      "label": "26063 · top.hoodie · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/top.sweater.png",
+      "asset_id": "3b3b5410-e760-4301-bcac-331262c77ad2",
+      "sha12": "91184941cf8f",
+      "label": "26063 · top.sweater · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/top.shirt.png",
+      "asset_id": "153c5324-b9f7-4053-8b65-1fbaa401c082",
+      "sha12": "e354a4a8bc36",
+      "label": "26063 · top.shirt · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/bottom.dark-trousers.png",
+      "asset_id": "23d67b62-7b4c-4c5d-ac92-498606efd808",
+      "sha12": "4d53d693b07a",
+      "label": "26063 · bottom.dark-trousers · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/bottom.field-trousers.png",
+      "asset_id": "12267108-1e27-4f3e-af18-ba8d8ad93731",
+      "sha12": "2fc2c728f358",
+      "label": "26063 · bottom.field-trousers · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/bottom.jeans.png",
+      "asset_id": "e32075c7-a331-4bce-b4cc-fbf07a26813a",
+      "sha12": "ecb59fdc67ae",
+      "label": "26063 · bottom.jeans · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/footwear.sneakers.png",
+      "asset_id": "47ebb3d6-4f75-4554-9b47-62203c589ec9",
+      "sha12": "72035cccc539",
+      "label": "26063 · footwear.sneakers · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/footwear.boots.png",
+      "asset_id": "fc015b50-3ac6-4c1f-b61e-33c4fcd28fe1",
+      "sha12": "88a668260b09",
+      "label": "26063 · footwear.boots · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/footwear.shoes.png",
+      "asset_id": "4fa43d78-8753-480b-89a6-5af9c51d251e",
+      "sha12": "bddff35e800f",
+      "label": "26063 · footwear.shoes · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/backpack.city.png",
+      "asset_id": "980334ee-6b3f-4d2e-b1a4-a7a20be7956b",
+      "sha12": "c9fb156191c0",
+      "label": "26063 · backpack.city · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/backpack.field.png",
+      "asset_id": "1a07072a-0d4d-451a-bee0-2a6d5bb42da5",
+      "sha12": "413c89824353",
+      "label": "26063 · backpack.field · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/held.tablet.png",
+      "asset_id": "ca65d617-caa0-4b43-b8e2-5379931f097c",
+      "sha12": "3798ebc74de7",
+      "label": "26063 · held.tablet · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/held.map-folder.png",
+      "asset_id": "9b93f745-41b2-4a2c-968c-3b8c35925045",
+      "sha12": "f22b59e50fc2",
+      "label": "26063 · held.map-folder · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/held.pencil.png",
+      "asset_id": "1130d00c-9bbb-43b2-a6a3-b7727b325019",
+      "sha12": "729198510ec3",
+      "label": "26063 · held.pencil · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/badge.meteo.png",
+      "asset_id": "dd807139-aa20-4b3f-88d2-94e6e993cfda",
+      "sha12": "7b71a17b2edf",
+      "label": "26063 · badge.meteo · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/badge.aerology.png",
+      "asset_id": "1a9a43b2-4d3c-46a9-adf4-02dc40acfe42",
+      "sha12": "9eeab3a4ae23",
+      "label": "26063 · badge.aerology · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/companion.tit.png",
+      "asset_id": "b927e9e2-1ec9-49de-98a7-f1ddfb790c72",
+      "sha12": "fb474dccd3fb",
+      "label": "26063 · companion.tit · four directions · R01"
+    },
+    {
+      "id": "assets/generated/characters/player-r01/library/companion.squirrel.png",
+      "asset_id": "3f92695e-c920-4e8a-8a30-31de436b6116",
+      "sha12": "f55b1b456f9e",
+      "label": "26063 · companion.squirrel · four directions · R01"
     }
   ]
 }

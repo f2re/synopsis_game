@@ -1,6 +1,8 @@
-/* Browser layout probe, using a synthetic manifest only inside intercepted test requests.
+/* R02 wardrobe geometry probe, using a synthetic manifest only inside intercepted test requests.
  * Start the Vite dev server first; no candidate/production artwork is accepted by this test.
  * MODULAR_AVATAR_TEST_URL=http://127.0.0.1:5192 node tools/test_modular_avatar_layout.cjs
+ * For actual accepted artwork and all four situations, open the separate dev-only
+ * /tools/review/modular-player.html stand. This probe is not in the CI workflow.
  */
 'use strict';
 const assert = require('node:assert/strict');
@@ -26,7 +28,7 @@ const manifest = {
   companions: { 'companion.none': null, ...Object.fromEntries(['companion.tit', 'companion.squirrel'].map((id) => [id, { frame: { width: 64, height: 64, pivot: [32, 60] }, anchor: [-34, 0], frames: emptyOrPixel(false) }])) },
 };
 contract.exports.parseModularAvatarManifest(manifest);
-const output = 'docs/testing/evidence/modular-player-r01/runtime-ui';
+const output = 'docs/testing/evidence/modular-player-r02/layout-probe';
 fs.mkdirSync(output, { recursive: true });
 
 (async () => {
@@ -43,11 +45,15 @@ fs.mkdirSync(output, { recursive: true });
     await page.evaluate(async (avatar) => {
       const React = await import('/node_modules/.vite/deps/react.js');
       const { createRoot } = await import('/node_modules/.vite/deps/react-dom_client.js');
-      const { AvatarPreview } = await import('/src/features/avatar/AvatarPreview.tsx');
+      const { AvatarSituationPreview } = await import('/src/features/avatar/AvatarSituationPreview.tsx');
       const host = document.createElement('main'); host.className = 'inventory-screen'; document.body.append(host);
-      host.innerHTML = '<section class="inventory-workspace"><aside class="inventory-observer"><div class="inventory-observer__heading">Layout fixture</div><div class="inventory-portrait" id="layout-target"></div></aside></section>';
+      host.innerHTML = '<section class="inventory-workspace"><aside class="inventory-observer"><div class="inventory-observer__heading">Layout fixture</div><div id="layout-target"></div></aside></section>';
       const root = createRoot(document.querySelector('#layout-target'));
-      window.renderTestAvatar = (companion) => root.render(React.createElement(AvatarPreview, { avatar: { ...avatar, companion }, size: 192, showBackdrop: false }));
+      window.renderTestAvatar = (companion) => root.render(React.createElement(AvatarSituationPreview, {
+        avatar: { ...avatar, companion }, context: 'wardrobe', direction: 'down', animation: 'idle', dirty: false,
+        keyboardLabel: 'Geometry fixture', onContextChange() {}, onPreviewKeys() {},
+        onAnimationComplete() {}, onAvailableAnimations() {},
+      }));
     }, DEFAULT_MODULAR_AVATAR);
     const results = [];
     for (const width of [375, 680, 1000, 1440]) {
@@ -79,7 +85,7 @@ fs.mkdirSync(output, { recursive: true });
       assert.deepEqual(none.intrinsic, child.intrinsic, 'Companion changes must not resize the native viewport');
     }
     assert.deepEqual(errors, []);
-    const result = { status: 'PASS', test: 'actual AvatarPreview + inventory CSS, synthetic intercepted manifest', artAcceptance: 'NOT_TESTED', cases: results, pageErrors: errors };
+    const result = { status: 'PASS', test: 'actual R02 AvatarSituationPreview wardrobe structure + inventory CSS, synthetic intercepted manifest', artAcceptance: 'NOT_TESTED', actualArtStand: '/tools/review/modular-player.html', cases: results, pageErrors: errors };
     fs.writeFileSync(path.join(output, 'browser-layout.json'), JSON.stringify(result, null, 2) + '\n');
     console.log(JSON.stringify({ status: result.status, cases: results.length, output: `${output}/browser-layout.json`, pageErrors: errors.length }));
   } finally { await browser.close(); }

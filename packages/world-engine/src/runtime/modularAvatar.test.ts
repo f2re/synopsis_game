@@ -10,6 +10,7 @@ import {
 } from './modularAvatarManifest.ts';
 import { AvatarResourceCache, avatarPreviewBounds, drawAvatarComposite, remapAvatarPalette, type AvatarComposite } from './modularAvatarCompositor.ts';
 import { normalizeAvatarPresentation } from './characterAssets.ts';
+import { resolveAvatarPresentation } from './modularAvatarPresentation.ts';
 
 const ramp: AvatarPaletteRamp = [[240, 200, 180], [200, 150, 110], [150, 90, 60], [70, 40, 20]];
 const cel = (z: number, paletteRole?: AvatarCel['paletteRole']): AvatarCel => ({ rect: [0, 0, 1, 1], at: [48, 100], z, ...(paletteRole ? { paletteRole } : {}) });
@@ -168,6 +169,56 @@ test('saved identity survives bridge normalization; shift uses the server snapsh
   for (const context of ['wardrobe', 'campus', 'blitz-preview'] as const) {
     assert.equal(avatarProfileKey(avatarForContext(profile, context)), avatarProfileKey(profile));
   }
+});
+
+test('situations preserve the full outfit and intersect their actions with accepted clips', () => {
+  const profile = Object.freeze({ ...DEFAULT_AVATAR, top: 'top.field-jacket', companion: 'companion.squirrel', heldItem: 'held.tablet' });
+  const idleOnly = parseModularAvatarManifest({ ...fixture(), clips: { idle: fixture().clips.idle } });
+  const accepted = AVATAR_ACTIONS.filter((action) => Boolean(idleOnly.clips[action]));
+  for (const context of ['wardrobe', 'campus', 'shift', 'blitz-preview'] as const) {
+    const result = resolveAvatarPresentation(profile, { context, action: 'walk' }, accepted);
+    assert.deepEqual(result.profile, profile, `${context} must not rewrite an equipped companion or clothing`);
+    assert.notEqual(result.profile, profile);
+    assert.deepEqual(result.availableActions, ['idle']);
+    assert.equal(result.action, 'idle');
+    assert.equal(result.equipmentSource, 'profile');
+  }
+  const campus = resolveAvatarPresentation(profile, { context: 'campus', action: 'walk' }, AVATAR_ACTIONS);
+  assert.equal(campus.direction, 'down');
+  assert.equal(campus.action, 'walk');
+  assert.equal(campus.companionVisible, true);
+  assert.equal(campus.animate, true);
+  const shift = resolveAvatarPresentation(profile, { context: 'shift', action: 'walk' }, AVATAR_ACTIONS);
+  assert.deepEqual(shift.availableActions, ['idle', 'inspect']);
+  assert.equal(shift.direction, 'right');
+  assert.equal(shift.action, 'idle');
+  assert.equal(shift.companionVisible, false);
+  assert.equal(shift.animate, false, 'quiet task panels do not animate a decorative idle');
+  const inspecting = resolveAvatarPresentation(profile, { context: 'shift', action: 'inspect', direction: 'left' }, AVATAR_ACTIONS);
+  assert.equal(inspecting.action, 'inspect'); assert.equal(inspecting.direction, 'left'); assert.equal(inspecting.animate, true);
+  const blitz = resolveAvatarPresentation(profile, { context: 'blitz-preview', action: 'inspect' }, AVATAR_ACTIONS);
+  assert.deepEqual(blitz.availableActions, ['idle']);
+  assert.equal(blitz.action, 'idle'); assert.equal(blitz.animate, false); assert.equal(blitz.companionVisible, false);
+  assert.throws(() => resolveAvatarPresentation(profile, {}, ['walk']), /accepted idle/);
+});
+
+test('only a supplied shift snapshot selects its instrument; fitting and blitz stay cosmetic', () => {
+  const profile = Object.freeze({ ...DEFAULT_AVATAR, heldItem: 'held.tablet', companion: 'companion.tit' });
+  const equipment = Object.freeze({ heldItem: 'held.pencil' });
+  const shift = resolveAvatarPresentation(profile, { context: 'shift', equipment });
+  assert.equal(shift.profile.heldItem, 'held.pencil');
+  assert.equal(shift.profile.companion, 'companion.tit', 'hiding the child is presentation, not an unequip mutation');
+  assert.equal(shift.equipmentSource, 'shift-snapshot');
+  assert.deepEqual({ ...shift.profile, heldItem: profile.heldItem }, profile);
+  assert.equal(resolveAvatarPresentation(profile, { context: 'shift' }).profile.heldItem, 'held.tablet');
+  for (const context of ['wardrobe', 'campus', 'blitz-preview'] as const) {
+    const result = resolveAvatarPresentation(profile, { context, equipment });
+    assert.equal(result.profile.heldItem, 'held.tablet');
+    assert.equal(result.equipmentSource, 'profile');
+  }
+  assert.equal(resolveAvatarPresentation(profile, { context: 'shift', equipment: { heldItem: 'untrusted.value' } }).profile.heldItem, 'held.none');
+  assert.equal(profile.heldItem, 'held.tablet');
+  assert.equal(equipment.heldItem, 'held.pencil');
 });
 
 test('preview and Phaser share exact frame rectangles and foot-relative companion placement', () => {

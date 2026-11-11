@@ -36,7 +36,9 @@ The asynchronous regression covers stale profile loads, logout, scene destroy, l
 
 ## Browser and remaining gates
 
-`tools/test_modular_avatar_layout.cjs` is a repeatable real-component layout probe for viewport widths 375, 680, 1000 and 1440, with and without a companion. It intercepts a synthetic manifest only in its test page and reuses existing PNG bytes; it does not accept or publish any character art. Local Chromium launch was blocked by the executor's process-singleton socket restriction (`EPERM`). The Cloud Browser could not reach that executor's localhost. **No browser-layout PASS is claimed here.** Root will use the existing native HTTP review stand on port 5181 for the actual candidate and responsive layout.
+`tools/test_modular_avatar_layout.cjs` was prepared as a real-component layout probe for viewport widths 375, 680, 1000 and 1440, with and without a companion. It intercepted a synthetic manifest only in its test page and reused existing PNG bytes; it did not accept or publish any character art. Local Chromium launch was blocked by the executor's process-singleton socket restriction (`EPERM`). The Cloud Browser could not reach that executor's localhost. **No browser-layout PASS is claimed here.** The native HTTP review stand on port 5181 was the planned R01 fallback.
+
+R02 update (2026-11-11): the script now mounts the actual `AvatarSituationPreview` wardrobe structure and writes only to the separate R02 evidence directory. It is not a CI gate. Current accepted-art inspection uses `/tools/review/modular-player.html`; see the [R02 UI handoff](../../../2026-11-11-modular-situations-ui.md). This update does not change the historical R01 test outcome above.
 
 Art Director/technical pixel review, real browser/GPU measurements, all hair/headwear overlaps and final Integration & Release acceptance are still required before activation. Current art stays gated independently of successful code tests.
 

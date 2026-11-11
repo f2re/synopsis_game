@@ -1,8 +1,9 @@
 import {
-  MODULAR_AVATAR_URL, avatarPoseCels, avatarProfileKey, parseModularAvatarManifest, parseModularAvatarProfile, resolveAvatarAction,
+  AVATAR_ACTIONS, MODULAR_AVATAR_URL, avatarPoseCels, avatarProfileKey, parseModularAvatarManifest, parseModularAvatarProfile, resolveAvatarAction,
   type AvatarAction, type AvatarCel, type AvatarClip, type AvatarDirection, type AvatarFrameBox,
   type AvatarPaletteRamp, type ModularAvatarManifest, type ModularAvatarProfile,
 } from './modularAvatarManifest.ts';
+import { resolveAvatarPresentation, type AvatarPresentation, type AvatarPresentationOptions } from './modularAvatarPresentation.ts';
 
 /** Shared CPU budgets. Phaser uploads only the currently leased body/child sheets. */
 export const AVATAR_CACHE_BUDGET = { composites: 12 * 1024 * 1024, paletteCels: 4 * 1024 * 1024 } as const;
@@ -94,9 +95,14 @@ class ModularAvatarCompositor {
     if (!this.packPromise) {
       this.failureAt = 0;
       this.packPromise = (async () => {
-        const response = await fetch(MODULAR_AVATAR_URL, { credentials: 'same-origin' });
-        if (!response.ok) throw new Error(`Modular avatar: manifest HTTP ${response.status}`);
-        const manifest = parseModularAvatarManifest(await response.json());
+        const abort = new AbortController();
+        const manifestTimeout = window.setTimeout(() => abort.abort(), 20_000);
+        let manifest: ModularAvatarManifest;
+        try {
+          const response = await fetch(MODULAR_AVATAR_URL, { credentials: 'same-origin', signal: abort.signal });
+          if (!response.ok) throw new Error(`Modular avatar: manifest HTTP ${response.status}`);
+          manifest = parseModularAvatarManifest(await response.json());
+        } finally { window.clearTimeout(manifestTimeout); }
         const atlas = await new Promise<HTMLImageElement>((resolve, reject) => {
           const image = new Image();
           const timeout = window.setTimeout(() => { image.onload = image.onerror = null; image.src = ''; reject(new Error('Modular avatar: atlas timed out')); }, 20_000);
@@ -111,17 +117,28 @@ class ModularAvatarCompositor {
     return this.packPromise;
   }
 
-  async acquire(profileValue: ModularAvatarProfile, direction: AvatarDirection, requestedAction: AvatarAction): Promise<AvatarLease<AvatarComposite>> {
+  async acquirePresentation(profile: ModularAvatarProfile, options: AvatarPresentationOptions = {}): Promise<{
+    presentation: AvatarPresentation; lease: AvatarLease<AvatarComposite>;
+  }> {
+    const { manifest } = await this.load();
+    const presentation = resolveAvatarPresentation(profile, options, AVATAR_ACTIONS.filter((action) => Boolean(manifest.clips[action])));
+    const lease = await this.acquire(presentation.profile, presentation.direction, presentation.action, { companionVisible: presentation.companionVisible });
+    return { presentation, lease };
+  }
+
+  async acquire(profileValue: ModularAvatarProfile, direction: AvatarDirection, requestedAction: AvatarAction,
+    display: { companionVisible?: boolean } = {}): Promise<AvatarLease<AvatarComposite>> {
     const profile = parseModularAvatarProfile(profileValue);
     if (!profile) throw new Error('Modular avatar: invalid saved profile');
     const { manifest, atlas } = await this.load();
     const action = resolveAvatarAction(manifest, requestedAction);
-    const key = `${manifest.rigId}:${manifest.revision}:${avatarProfileKey(profile)}:${direction}:${action}`;
+    const companionVisible = display.companionVisible !== false;
+    const key = `${manifest.rigId}:${manifest.revision}:${avatarProfileKey(profile)}:${direction}:${action}${companionVisible ? '' : ':companion-hidden'}`;
     return this.composites.acquire(key, () => {
       const clip = manifest.clips[action]!;
       const count = clip.durationsMs.length;
       const body = canvas(manifest.frame.width * count, manifest.frame.height);
-      const selectedCompanion = manifest.companions[profile.companion];
+      const selectedCompanion = companionVisible ? manifest.companions[profile.companion] : null;
       const child = selectedCompanion ? canvas(selectedCompanion.frame.width * count, selectedCompanion.frame.height) : null;
       try {
         const draw = (context: CanvasRenderingContext2D, cel: AvatarCel, frameOffset: number) => {

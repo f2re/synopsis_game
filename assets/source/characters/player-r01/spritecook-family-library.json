@@ -1,0 +1,1495 @@
+{
+  "version": 1,
+  "task": "MODULAR-PLAYER-R02",
+  "date": "2026-11-11",
+  "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "collection_id": "c1a9513a-e50b-4721-8b37-6b36f3b3ff02",
+  "rigId": "player.modular.r01.v1",
+  "layout": "2x2",
+  "directionRows": [
+    [
+      "down",
+      "right"
+    ],
+    [
+      "up",
+      "left"
+    ]
+  ],
+  "purpose": "Exact four-direction reference sheets for reuse and targeted edits; not direct animation inputs.",
+  "credits_before": 668,
+  "credits_after": 668,
+  "credits_spent": 0,
+  "families": [
+    {
+      "id": "body",
+      "file": "assets/generated/characters/player-r01/library/body.png",
+      "sha12": "e76907cf912e",
+      "asset_id": "6633da16-fe90-4623-9917-6f68dcdac10d",
+      "label": "26063 · body · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.short",
+      "file": "assets/generated/characters/player-r01/library/hair.short.png",
+      "sha12": "604681e17f5f",
+      "asset_id": "a7d6d45a-bb9e-4425-be1f-3414cd593f16",
+      "label": "26063 · hair.short · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.wave",
+      "file": "assets/generated/characters/player-r01/library/hair.wave.png",
+      "sha12": "c70403121e6d",
+      "asset_id": "8358296f-97d9-43c8-858c-01021596ece1",
+      "label": "26063 · hair.wave · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.bob",
+      "file": "assets/generated/characters/player-r01/library/hair.bob.png",
+      "sha12": "3b2860c5c714",
+      "asset_id": "c0be1e13-9f85-42c5-bf61-f911ebc6e79a",
+      "label": "26063 · hair.bob · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.curl",
+      "file": "assets/generated/characters/player-r01/library/hair.curl.png",
+      "sha12": "8ffccac82c65",
+      "asset_id": "8cbe3e0d-935a-4a5f-bfe9-c9c496ec6432",
+      "label": "26063 · hair.curl · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hair.long",
+      "file": "assets/generated/characters/player-r01/library/hair.long.png",
+      "sha12": "487481633389",
+      "asset_id": "c1b7a82a-fda8-4762-bea0-e8766afc4a93",
+      "label": "26063 · hair.long · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.cap",
+      "file": "assets/generated/characters/player-r01/library/headwear.cap.png",
+      "sha12": "4cb09735212a",
+      "asset_id": "1f1c4cc9-fac9-4c8c-b5ab-8a0432771814",
+      "label": "26063 · headwear.cap · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.beanie",
+      "file": "assets/generated/characters/player-r01/library/headwear.beanie.png",
+      "sha12": "adae023add74",
+      "asset_id": "1b301fa2-405b-40bf-a085-d1b6fc246ad6",
+      "label": "26063 · headwear.beanie · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.scarf",
+      "file": "assets/generated/characters/player-r01/library/headwear.scarf.png",
+      "sha12": "9e68027a9e5d",
+      "asset_id": "e7e0120a-f441-4aa0-84f2-fbbba64aad49",
+      "label": "26063 · headwear.scarf · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headwear.goggles",
+      "file": "assets/generated/characters/player-r01/library/headwear.goggles.png",
+      "sha12": "58bb45c3cb81",
+      "asset_id": "94360315-d7eb-4bbe-aee4-17025cc30b3e",
+      "label": "26063 · headwear.goggles · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.center-jacket",
+      "file": "assets/generated/characters/player-r01/library/top.center-jacket.png",
+      "sha12": "57ea7848e32a",
+      "asset_id": "6d3be27d-e17d-4577-a831-5c4199102419",
+      "label": "26063 · top.center-jacket · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.field-jacket",
+      "file": "assets/generated/characters/player-r01/library/top.field-jacket.png",
+      "sha12": "e690a4e0f2c6",
+      "asset_id": "f18c63dd-980d-4ab1-94c0-33b911379433",
+      "label": "26063 · top.field-jacket · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.hoodie",
+      "file": "assets/generated/characters/player-r01/library/top.hoodie.png",
+      "sha12": "39f080dffb68",
+      "asset_id": "baa194a9-5348-4518-8530-aae4a61e8c6c",
+      "label": "26063 · top.hoodie · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.sweater",
+      "file": "assets/generated/characters/player-r01/library/top.sweater.png",
+      "sha12": "91184941cf8f",
+      "asset_id": "3b3b5410-e760-4301-bcac-331262c77ad2",
+      "label": "26063 · top.sweater · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top.shirt",
+      "file": "assets/generated/characters/player-r01/library/top.shirt.png",
+      "sha12": "e354a4a8bc36",
+      "asset_id": "153c5324-b9f7-4053-8b65-1fbaa401c082",
+      "label": "26063 · top.shirt · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bottom.dark-trousers",
+      "file": "assets/generated/characters/player-r01/library/bottom.dark-trousers.png",
+      "sha12": "4d53d693b07a",
+      "asset_id": "23d67b62-7b4c-4c5d-ac92-498606efd808",
+      "label": "26063 · bottom.dark-trousers · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bottom.field-trousers",
+      "file": "assets/generated/characters/player-r01/library/bottom.field-trousers.png",
+      "sha12": "2fc2c728f358",
+      "asset_id": "12267108-1e27-4f3e-af18-ba8d8ad93731",
+      "label": "26063 · bottom.field-trousers · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bottom.jeans",
+      "file": "assets/generated/characters/player-r01/library/bottom.jeans.png",
+      "sha12": "ecb59fdc67ae",
+      "asset_id": "e32075c7-a331-4bce-b4cc-fbf07a26813a",
+      "label": "26063 · bottom.jeans · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footwear.sneakers",
+      "file": "assets/generated/characters/player-r01/library/footwear.sneakers.png",
+      "sha12": "72035cccc539",
+      "asset_id": "47ebb3d6-4f75-4554-9b47-62203c589ec9",
+      "label": "26063 · footwear.sneakers · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footwear.boots",
+      "file": "assets/generated/characters/player-r01/library/footwear.boots.png",
+      "sha12": "88a668260b09",
+      "asset_id": "fc015b50-3ac6-4c1f-b61e-33c4fcd28fe1",
+      "label": "26063 · footwear.boots · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footwear.shoes",
+      "file": "assets/generated/characters/player-r01/library/footwear.shoes.png",
+      "sha12": "bddff35e800f",
+      "asset_id": "4fa43d78-8753-480b-89a6-5af9c51d251e",
+      "label": "26063 · footwear.shoes · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backpack.city",
+      "file": "assets/generated/characters/player-r01/library/backpack.city.png",
+      "sha12": "c9fb156191c0",
+      "asset_id": "980334ee-6b3f-4d2e-b1a4-a7a20be7956b",
+      "label": "26063 · backpack.city · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backpack.field",
+      "file": "assets/generated/characters/player-r01/library/backpack.field.png",
+      "sha12": "413c89824353",
+      "asset_id": "1a07072a-0d4d-451a-bee0-2a6d5bb42da5",
+      "label": "26063 · backpack.field · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "held.tablet",
+      "file": "assets/generated/characters/player-r01/library/held.tablet.png",
+      "sha12": "3798ebc74de7",
+      "asset_id": "ca65d617-caa0-4b43-b8e2-5379931f097c",
+      "label": "26063 · held.tablet · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "held.map-folder",
+      "file": "assets/generated/characters/player-r01/library/held.map-folder.png",
+      "sha12": "f22b59e50fc2",
+      "asset_id": "9b93f745-41b2-4a2c-968c-3b8c35925045",
+      "label": "26063 · held.map-folder · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "held.pencil",
+      "file": "assets/generated/characters/player-r01/library/held.pencil.png",
+      "sha12": "729198510ec3",
+      "asset_id": "1130d00c-9bbb-43b2-a6a3-b7727b325019",
+      "label": "26063 · held.pencil · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "badge.meteo",
+      "file": "assets/generated/characters/player-r01/library/badge.meteo.png",
+      "sha12": "7b71a17b2edf",
+      "asset_id": "dd807139-aa20-4b3f-88d2-94e6e993cfda",
+      "label": "26063 · badge.meteo · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "badge.aerology",
+      "file": "assets/generated/characters/player-r01/library/badge.aerology.png",
+      "sha12": "9eeab3a4ae23",
+      "asset_id": "1a9a43b2-4d3c-46a9-adf4-02dc40acfe42",
+      "label": "26063 · badge.aerology · four directions · R01",
+      "frameSize": [
+        96,
+        144
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            96,
+            0,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            144,
+            96,
+            144
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            96,
+            144,
+            96,
+            144
+          ]
+        }
+      ]
+    },
+    {
+      "id": "companion.tit",
+      "file": "assets/generated/characters/player-r01/library/companion.tit.png",
+      "sha12": "fb474dccd3fb",
+      "asset_id": "b927e9e2-1ec9-49de-98a7-f1ddfb790c72",
+      "label": "26063 · companion.tit · four directions · R01",
+      "frameSize": [
+        64,
+        64
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            64,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            64,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            64,
+            64,
+            64,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": "companion.squirrel",
+      "file": "assets/generated/characters/player-r01/library/companion.squirrel.png",
+      "sha12": "f55b1b456f9e",
+      "asset_id": "3f92695e-c920-4e8a-8a30-31de436b6116",
+      "label": "26063 · companion.squirrel · four directions · R01",
+      "frameSize": [
+        64,
+        64
+      ],
+      "cells": [
+        {
+          "direction": "down",
+          "rect": [
+            0,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "right",
+          "rect": [
+            64,
+            0,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "up",
+          "rect": [
+            0,
+            64,
+            64,
+            64
+          ]
+        },
+        {
+          "direction": "left",
+          "rect": [
+            64,
+            64,
+            64,
+            64
+          ]
+        }
+      ]
+    }
+  ]
+}

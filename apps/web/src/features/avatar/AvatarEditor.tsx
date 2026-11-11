@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { worldAudio } from '@synopsis/world-engine';
+import type { AvatarContext } from '@synopsis/world-engine/avatar';
 import { api, type AvatarProfile, type EquipmentResponse, type SessionUser } from '../../api';
-import { AvatarPreview, type AvatarDirection, type AvatarAnimation } from './AvatarPreview';
+import type { AvatarDirection, AvatarAnimation } from './AvatarPreview';
+import { AvatarSituationPreview } from './AvatarSituationPreview';
 import { AvatarAppearance, AvatarOptionGrid } from './AvatarOptionGrid';
 import { EQUIPMENT_SLOTS, INVENTORY_ITEMS, OPTIONS, STYLE_PRESETS, type InventoryCategory, type InventoryItem } from './avatarOptions';
 import { HUB_PREFERENCES_EVENT, readHubPreferences } from '../hub/hubPreferences';
@@ -30,6 +32,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const [equippedOnly, setEquippedOnly] = useState(false);
   const [selectedId, setSelectedId] = useState(user.avatar.heldItem !== 'held.none' ? user.avatar.heldItem : user.avatar.top);
   const [direction, setDirection] = useState<AvatarDirection>('down');
+  const [previewContext, setPreviewContext] = useState<AvatarContext>('wardrobe');
   const [animation, setAnimation] = useState<AvatarAnimation>('idle');
   const [availableAnimations, setAvailableAnimations] = useState<readonly AvatarAnimation[]>(['idle']);
   const [notice, setNotice] = useState<Notice>(null);
@@ -60,7 +63,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     setQuery(''); setEquippedOnly(false);
     setCategory('all'); setSection(initialSection);
     setConfirmExit(false);
-    setSaving(false); setDirection('down'); setAnimation('idle');
+    setSaving(false); setPreviewContext('wardrobe'); setDirection('down'); setAnimation('idle');
     const draft = readAvatarDraft(avatarDraftStorage(), user.id);
     setPendingDraft(draft && !sameAvatar(mergeAvatarDraft(draft, user.avatar), user.avatar) ? draft : null);
     setDraftOwner(user.id); setDraftStored(false);
@@ -157,6 +160,15 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     if (availableAnimations.includes(value)) setAnimation(value);
   }
 
+  function changePreviewContext(context: AvatarContext) {
+    if (context === previewContext) return;
+    setPreviewContext(context);
+    setDirection(context === 'shift' || context === 'blitz-preview' ? 'right' : 'down');
+    setAnimation('idle');
+    // Do not advertise an action from the previous scene while its policy loads.
+    setAvailableAnimations(['idle']);
+  }
+
   function updateOption(slot: keyof AvatarProfile, value: string) {
     setAvatar((current) => ({ ...current, [slot]: value }));
     setNotice(null);
@@ -243,12 +255,14 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         <fieldset className="inventory-workspace" disabled={busy || Boolean(pendingDraft)} aria-label="Настройка персонажа">
           <aside className="inventory-observer" aria-label="Ваш персонаж и надетые вещи">
             <div className="inventory-observer__heading"><span className="inventory-eyebrow">Дежурный синоптик</span><strong>{user.displayName}</strong></div>
-            <div className="inventory-portrait" tabIndex={0} role="group" aria-label={`Предпросмотр персонажа. Стрелки — поворот${availableAnimations.includes('walk') ? ', пробел — шаг' : ''}${availableAnimations.includes('inspect') ? ', E — осмотр' : ''}`} onKeyDown={handlePreviewKeys}>
-              <AvatarPreview avatar={avatar} direction={direction} animation={animation} size={192} showBackdrop={false} onAnimationComplete={() => setAnimation('idle')} onAvailableAnimations={setAvailableAnimations} />
-              <span className="inventory-portrait__caption">{dirty ? 'Примерка' : 'Сохранённый образ'}</span>
+            <AvatarSituationPreview avatar={avatar} context={previewContext} direction={direction} animation={animation} dirty={dirty}
+              keyboardLabel={`Стрелки — поворот${availableAnimations.includes('walk') ? ', пробел — шаг' : ''}${availableAnimations.includes('inspect') ? ', E — осмотр' : ''}`}
+              onContextChange={changePreviewContext} onPreviewKeys={handlePreviewKeys}
+              onAnimationComplete={() => setAnimation('idle')} onAvailableAnimations={setAvailableAnimations} />
+            <div className="inventory-preview-controls">
+              <div className="inventory-directions" aria-label="Ракурс персонажа">{DIRECTIONS.map((value) => <button type="button" key={value} className="inventory-segment" aria-pressed={direction === value} onClick={() => setDirection(value)}>{DIRECTION_LABELS[value]}</button>)}</div>
+              <div className="inventory-motions" aria-label="Действие персонажа">{([['idle', 'Стойка'], ['walk', 'Шаг'], ['inspect', 'Осмотр']] as const).filter(([value]) => availableAnimations.includes(value)).map(([value, label]) => <button key={value} type="button" className="inventory-segment" aria-pressed={animation === value} onClick={() => setMotion(value)}>{label}</button>)}</div>
             </div>
-            <div className="inventory-directions" aria-label="Ракурс персонажа">{DIRECTIONS.map((value) => <button type="button" key={value} className="inventory-segment" aria-pressed={direction === value} onClick={() => setDirection(value)}>{DIRECTION_LABELS[value]}</button>)}</div>
-            <div className="inventory-motions" aria-label="Действие персонажа">{([['idle', 'Стойка'], ['walk', 'Шаг'], ['inspect', 'Осмотр']] as const).filter(([value]) => availableAnimations.includes(value)).map(([value, label]) => <button key={value} type="button" className="inventory-segment" aria-pressed={animation === value} onClick={() => setMotion(value)}>{label}</button>)}</div>
             <p className="inventory-preview-hint">В фокусе персонажа: ← → поворот{availableAnimations.includes('walk') ? ' · пробел — шаг' : ''}{availableAnimations.includes('inspect') ? ' · E — осмотр' : ''}</p>
             {reducedMotion && <p className="inventory-motion-status" role="status">Движение уменьшено: показана неподвижная поза.</p>}
             <h2 className="inventory-subtitle">На персонаже</h2>

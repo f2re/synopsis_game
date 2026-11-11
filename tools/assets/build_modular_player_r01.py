@@ -15,54 +15,50 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from build_characters_r01 import clean, png, read_aseprite, save
+from modular_player_contract import acceptance_result, layer_offset, validate_rig
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'assets/source/characters/player-r01'
 MANIFEST = ROOT / 'assets/manifests/player-modular-r01.json'
 GENERATED = ROOT / 'assets/generated/characters/player-r01'
 PUBLIC = ROOT / 'apps/web/public/assets/avatar/modular-r01'
-DIRS = ['down', 'right', 'up', 'left']
-OPTIONS = {
-    'hair': ['short', 'wave', 'bob', 'curl', 'long'],
-    'headwear': ['none', 'cap', 'beanie', 'scarf', 'goggles'],
-    'top': ['center-jacket', 'field-jacket', 'hoodie', 'sweater', 'shirt'],
-    'bottom': ['dark-trousers', 'field-trousers', 'jeans'],
-    'footwear': ['sneakers', 'boots', 'shoes'],
-    'backpack': ['none', 'city', 'field'],
-    'held': ['none', 'tablet', 'map-folder', 'pencil'],
-    'badge': ['none', 'meteo', 'aerology'],
-}
+RIG = validate_rig(json.loads((SOURCE / 'rig.json').read_text()))
+DIRS = RIG['directions']
+OPTIONS = {group: slot['values'] for group, slot in RIG['slots'].items()}
 DEFAULT = {key: f'{key}.{values[0]}' for key, values in OPTIONS.items()}
-HAND_BOXES = {'down': [(21, 80, 30, 91), (66, 80, 76, 91)], 'right': [(38, 79, 51, 91)],
-    'up': [(21, 80, 31, 91), (65, 80, 76, 91)], 'left': [(47, 79, 61, 91)]}
 
 
 def sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
 def json_bytes(value: object) -> bytes: return (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode()
 
 
-def frame_source(name: str) -> tuple[dict[str, Image.Image], dict]:
+def frame_source(name: str, rig: dict = RIG) -> tuple[dict[str, Image.Image], dict]:
     path = SOURCE / 'editable' / f'{name}.aseprite'
     frames, durations, tags = read_aseprite(path)
-    expected_size = (64, 64) if name.startswith('companion.') else (96, 144)
-    if len(frames) != 4 or any(f.size != expected_size for f in frames) or durations != [320] * 4:
+    geometry = rig['companionFrame'] if name.startswith('companion.') else rig['frame']
+    expected_size = (geometry['width'], geometry['height'])
+    source = rig['sourceCels']
+    if len(frames) != source['count'] or any(f.size != expected_size for f in frames) or durations != [source['durationMs']] * source['count']:
         raise ValueError(f'{name}: four 320ms editable directional source cels required')
-    if tags != {f'{d}.idle': [i, i] for i, d in enumerate(DIRS)}:
+    if tags != {f'{d}.{source["tagAction"]}': [i, i] for i, d in enumerate(rig['directions'])}:
         raise ValueError(f'{name}: direction tags differ')
     for frame in frames:
         box = frame.getbbox()
-        if not box or box[0] < 1 or box[1] < 2 or box[2] >= frame.width or box[3] > (60 if frame.width == 64 else 136):
+        if not box or box[0] < source['minimumMargin'][0] or box[1] < source['minimumMargin'][1] or box[2] >= frame.width or box[3] > geometry['pivot'][1]:
             raise ValueError(f'{name}: missing content or no safe frame margin: {box}')
-    return dict(zip(DIRS, frames)), {'source': str(path.relative_to(ROOT)), 'sha256': sha(path.read_bytes()),
+    return dict(zip(rig['directions'], frames)), {'source': str(path.relative_to(ROOT)), 'sha256': sha(path.read_bytes()),
         'frameSize': list(expected_size), 'tags': tags}
 
 
-def hands(frame: Image.Image, direction: str, skin_colors: list, boxes: list | None = None) -> tuple[Image.Image, list[Image.Image]]:
+def hands(frame: Image.Image, direction: str, rig: dict, masks: list[str]) -> tuple[Image.Image, list[Image.Image]]:
     """Extract authored wrist regions; never paste undersuit patches over clothes."""
     base = frame.copy()
-    skin = {tuple(rgb) for rgb in skin_colors}
+    skin = {tuple(rgb) for rgb in rig['palettes']['skin']['source']}
+    pose = rig['assembly']['poses'][direction]
+    selection = rig['assembly']['skinMaskSelection']
     layers = []
-    for box in (HAND_BOXES[direction] if boxes is None else boxes):
+    for name in masks:
+        box = pose['masks'][name]['bounds']
         layer = Image.new('RGBA', frame.size)
         selected = set()
         for y in range(box[1], box[3]):
@@ -72,11 +68,11 @@ def hands(frame: Image.Image, direction: str, skin_colors: list, boxes: list | N
         # Only a one-pixel dark warm contour adjacent to a selected skin pixel.
         # Blue trouser pixels are excluded even if they are inside the rectangle.
         for x, y in list(selected):
-            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+            for dx, dy in selection['neighbours']:
                 nx, ny = x + dx, y + dy
                 if not (box[0] <= nx < box[2] and box[1] <= ny < box[3]): continue
                 r, g, b, a = frame.getpixel((nx, ny))
-                if a and max(r, g, b) < 110 and r >= b * .95: selected.add((nx, ny))
+                if a and max(r, g, b) < selection['contourMaxChannelExclusive'] and r >= b * selection['contourRedToBlueMinimum']: selected.add((nx, ny))
         if not selected: raise ValueError(f'Missing skin hand in {direction}/{box}')
         for x, y in selected:
             layer.putpixel((x, y), frame.getpixel((x, y)))
@@ -90,7 +86,7 @@ class Atlas:
         self.images: list[Image.Image] = []
         self.ids: dict[str, int] = {}
 
-    def cel(self, layer: Image.Image, z: int, dy: int = 0, role: str | None = None) -> dict:
+    def cel(self, layer: Image.Image, z: int, offset: tuple[int, int] = (0, 0), role: str | None = None) -> dict:
         bounds = layer.getbbox()
         if not bounds: raise ValueError('Empty cel')
         image = clean(layer.crop(bounds))
@@ -98,8 +94,8 @@ class Atlas:
         if key not in self.ids:
             self.ids[key] = len(self.images)
             self.images.append(image)
-        result = {'_image': self.ids[key], 'at': [bounds[0], bounds[1] + dy], 'z': z}
-        if result['at'][1] < 1 or result['at'][1] + image.height > layer.height:
+        result = {'_image': self.ids[key], 'at': [bounds[0] + offset[0], bounds[1] + offset[1]], 'z': z}
+        if result['at'][0] < 0 or result['at'][0] + image.width > layer.width or result['at'][1] < 1 or result['at'][1] + image.height > layer.height:
             raise ValueError('Authored motion clips a part')
         if role: result['paletteRole'] = role
         return result
@@ -122,28 +118,31 @@ class Atlas:
         return clean(result), rects
 
 
+def attached_cel(atlas: Atlas, image: Image.Image, rig: dict, direction: str,
+                 layer_name: str, phase: int, attachment: str | None = None) -> dict:
+    layer = rig['assembly']['layers'][layer_name]
+    order = rig['assembly']['poses'][direction]['layerOrder'][layer_name]
+    return atlas.cel(image, order, layer_offset(rig, direction, layer_name, phase, attachment), layer.get('paletteRole'))
+
+
 def part_frames(source: dict[str, Image.Image], part_id: str, atlas: Atlas, rig: dict, body_source: dict | None = None) -> dict:
     result = {}
-    for direction in DIRS:
+    group = part_id.split('.')[0]
+    layer_name = rig['slots'][group]['layer'] if group in rig['slots'] else 'companion'
+    attachment = rig['assembly']['partAttachments'].get(part_id)
+    for direction in rig['directions']:
+        pose = rig['assembly']['poses'][direction]
         poses = []
-        for phase in rig['idleUpperDy']:
-            if part_id.startswith('badge.') and direction in ('up', 'right'):
-                poses.append({'cels': [], 'hidden': 'direction'}); continue
-            if part_id.startswith('held.') and direction == 'left':
-                poses.append({'cels': [], 'hidden': 'occlusion'}); continue
-            group = part_id.split('.')[0]
-            z = {'bottom': 10, 'footwear': 20, 'top': 30, 'backpack': 40, 'badge': 45,
-                'hair': 50, 'headwear': 60, 'held': 65, 'companion': 0}[group]
-            if group == 'backpack' and direction in ('left', 'right'): z = -5
-            dy = phase if group not in ('bottom', 'footwear', 'companion') else 0
-            cels = [atlas.cel(source[direction], z, dy, 'hair' if group == 'hair' else None)]
-            if part_id == 'top.shirt' and direction in ('left', 'right'):
-                # The near bare forearm is in front of the torso on a side view.
-                # Only this short-sleeve family reveals it; other tops keep sleeves.
+        for phase in range(len(rig['clips']['idle']['durationsMs'])):
+            hidden = pose['hiddenLayers'].get(layer_name)
+            if hidden:
+                poses.append({'cels': [], 'hidden': hidden}); continue
+            cels = [attached_cel(atlas, source[direction], rig, direction, layer_name, phase, attachment)]
+            for supplement in pose['extraBodyMasks'].get(part_id, []):
                 assert body_source is not None
-                box = (38, 62, 53, 81) if direction == 'right' else (45, 62, 61, 81)
-                _, arms = hands(body_source[direction], direction, rig['palettes']['skin']['source'], [box])
-                cels += [atlas.cel(arm, 35, dy, 'skin') for arm in arms]
+                _, arms = hands(body_source[direction], direction, rig, [supplement['mask']])
+                mask_attachment = pose['masks'][supplement['mask']]['attachment']
+                cels += [attached_cel(atlas, arm, rig, direction, supplement['layer'], phase, mask_attachment) for arm in arms]
             poses.append({'cels': cels})
         result[direction] = {'idle': poses}
     return result
@@ -152,12 +151,17 @@ def part_frames(source: dict[str, Image.Image], part_id: str, atlas: Atlas, rig:
 def body_frames(source: dict[str, Image.Image], atlas: Atlas, rig: dict) -> dict:
     result = {}
     for direction, frame in source.items():
-        base, hand_layers = hands(frame, direction, rig['palettes']['skin']['source'])
+        pose = rig['assembly']['poses'][direction]
+        masks = pose['handMasks']
+        base, hand_layers = hands(frame, direction, rig, masks)
+        split_y = pose['anchors'][pose['bodySplitAnchor']]['sourceAt'][1]
         upper, lower = base.copy(), base.copy()
-        upper.paste((0, 0, 0, 0), (0, 80, 96, 144))
-        lower.paste((0, 0, 0, 0), (0, 0, 96, 80))
-        result[direction] = {'idle': [{'cels': [atlas.cel(upper, 0, dy, 'skin'), atlas.cel(lower, 0, 0, 'skin')]
-            + [atlas.cel(hand, 70, dy, 'skin') for hand in hand_layers]} for dy in rig['idleUpperDy']]}
+        upper.paste((0, 0, 0, 0), (0, split_y, frame.width, frame.height))
+        lower.paste((0, 0, 0, 0), (0, 0, frame.width, split_y))
+        result[direction] = {'idle': [{'cels': [attached_cel(atlas, upper, rig, direction, 'bodyUpper', phase),
+            attached_cel(atlas, lower, rig, direction, 'bodyLower', phase)]
+            + [attached_cel(atlas, hand, rig, direction, 'hands', phase, pose['masks'][name]['attachment'])
+               for name, hand in zip(masks, hand_layers)]} for phase in range(len(rig['clips']['idle']['durationsMs']))]}
     return result
 
 
@@ -226,42 +230,48 @@ def contacts(runtime: dict, atlas: Image.Image, check: bool) -> None:
     save(GENERATED/'outfit-contact.png',png(outfit_sheet),check)
 
 
-def build(check: bool) -> None:
-    rig = json.loads((SOURCE / 'rig.json').read_text())
-    if rig['rigId'] != 'player.modular.r01.v1' or rig['idleUpperDy'] != [0, -1, -1, 0]:
-        raise ValueError('Unexpected rig contract')
-    source_manifest = json.loads(MANIFEST.read_text())
-    prior = json_bytes(source_manifest)
+def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
+    """Compile without writing files or changing the independent acceptance record."""
+    validate_rig(rig)
     atlas = Atlas(); sources = {}
-    body, sources['body'] = frame_source('body')
-    runtime = {'version': 1, 'rigId': rig['rigId'], 'revision': 'r01-idle4-20261110', 'complete': True,
-        'artAcceptance': 'PASS' if source_manifest['art_status'] == 'pass' and source_manifest['technical_status'] == 'pass' else 'PENDING',
-        'frame': {'width': 96, 'height': 144, 'pivot': [48, 136]},
-        'clips': {'idle': {'durationsMs': [320] * 4, 'loop': True}}, 'palettes': rig['palettes'],
+    body, sources['body'] = frame_source('body', rig)
+    runtime = {'version': 1, 'rigId': rig['rigId'], 'revision': rig['runtimeRevision'], 'complete': True,
+        'artAcceptance': 'PENDING', 'frame': rig['frame'], 'clips': rig['clips'], 'palettes': rig['palettes'],
         'body': body_frames(body, atlas, rig), 'parts': {}, 'companions': {'companion.none': None}}
-    for group, values in OPTIONS.items():
-        for value in values:
+    for group, slot in rig['slots'].items():
+        for value in slot['values']:
             name = f'{group}.{value}'
             if value == 'none':
-                runtime['parts'][name] = {d: {'idle': [{'cels': []} for _ in range(4)]} for d in DIRS}
+                runtime['parts'][name] = {d: {'idle': [{'cels': []} for _ in rig['clips']['idle']['durationsMs']]} for d in rig['directions']}
             else:
-                frames, sources[name] = frame_source(name)
+                frames, sources[name] = frame_source(name, rig)
                 if group == 'hair':
                     colors = {pixel[:3] for frame in frames.values() for pixel in frame.get_flattened_data() if pixel[3]}
                     if not colors.issubset({tuple(p) for p in rig['palettes']['hair']['source']}): raise ValueError('Hair escapes exact ramp')
                 runtime['parts'][name] = part_frames(frames, name, atlas, rig, body)
-    for name in ['companion.tit', 'companion.squirrel']:
-        frames, sources[name] = frame_source(name)
-        runtime['companions'][name] = {'frame': {'width': 64, 'height': 64, 'pivot': [32, 60]},
-            'anchor': [-40, 0], 'frames': part_frames(frames, name, atlas, rig)}
+    for name in rig['companionIds']:
+        frames, sources[name] = frame_source(name, rig)
+        runtime['companions'][name] = {'frame': rig['companionFrame'],
+            'anchor': rig['assembly']['companionOffset'], 'frames': part_frames(frames, name, atlas, rig)}
     packed, rects = atlas.pack(); resolve_rects(runtime, rects)
     runtime['atlas'] = {'assetId': 'player.modular.r01.atlas', 'url': '/assets/avatar/modular-r01/atlas.png',
         'width': packed.width, 'height': packed.height}
     data = png(packed)
+    return runtime, packed, data, sources, len(atlas.images)
+
+
+def build(check: bool) -> None:
+    rig = validate_rig(json.loads((SOURCE / 'rig.json').read_text()))
+    source_manifest = json.loads(MANIFEST.read_text())
+    prior = json_bytes(source_manifest)
+    runtime, packed, data, sources, unique_cels = compile_pack(rig)
+    admission = acceptance_result(source_manifest, rig, runtime, data, ROOT)
+    runtime['artAcceptance'] = admission['status']
+    source_manifest['currentAcceptance'] = admission
     source_manifest['sources'] = sources
     source_manifest['rigSha256'] = sha((SOURCE / 'rig.json').read_bytes())
     source_manifest['budget'] = {'compressedAtlasBytes': len(data), 'decodedAtlasBytes': packed.width * packed.height * 4,
-        'atlasSize': list(packed.size), 'uniqueCels': len(atlas.images), 'sourceFamilies': len(sources),
+        'atlasSize': list(packed.size), 'uniqueCels': unique_cels, 'sourceFamilies': len(sources),
         'catalogValues': 42, 'appearanceCombinations': 1944000, 'publishedDirections': DIRS,
         'publishedClips': ['idle'], 'playerCompositeRgbaBytesPerDirection': 96 * 144 * 4 * 4,
         'companionCompositeRgbaBytesPerDirection': 64 * 64 * 4 * 4,
@@ -273,6 +283,10 @@ def build(check: bool) -> None:
     contacts(runtime, packed, check)
     if not check: MANIFEST.write_bytes(json_bytes(source_manifest))
     print(f"Modular player: {len(sources)} families, 42 values, idle4 × 4 directions; {len(data)} PNG bytes, {packed.width * packed.height * 4} decoded; art={runtime['artAcceptance']}; {'verified' if check else 'built'}")
+    if admission['reasons']:
+        print('Admission pending: ' + '; '.join(admission['reasons']))
+        if check:
+            raise ValueError('The published modular pack does not have matching independent acceptance')
 
 
 if __name__ == '__main__':

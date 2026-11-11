@@ -11,6 +11,7 @@ export interface AvatarPreviewProps {
   direction?: AvatarDirection;
   animation?: AvatarAnimation;
   showBackdrop?: boolean;
+  animate?: boolean;
   onAnimationComplete?: () => void;
 }
 
@@ -66,6 +67,7 @@ export function LegacyAvatarPreview({
   direction = 'down',
   animation = 'idle',
   showBackdrop = true,
+  animate = true,
   onAnimationComplete,
 }: AvatarPreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -571,7 +573,7 @@ export function LegacyAvatarPreview({
       timer = undefined;
       frame = 0;
       const preferences = readHubPreferences();
-      const paused = document.hidden || preferences.reducedMotion || media?.matches === true;
+      const paused = !animate || document.hidden || preferences.reducedMotion || media?.matches === true;
       canvas.dataset.animationPaused = String(paused);
       draw(paused && animation === 'inspect' ? 1 : 0);
       if (!paused) {
@@ -599,7 +601,7 @@ export function LegacyAvatarPreview({
       window.removeEventListener(HUB_PREFERENCES_EVENT, sync);
       window.removeEventListener('storage', sync);
     };
-  }, [avatar, size, direction, animation, showBackdrop]);
+  }, [avatar, size, direction, animation, showBackdrop, animate]);
 
   return (
     <canvas
