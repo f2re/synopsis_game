@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "reviewer": "/root",
+  "date": "2026-11-11",
+  "scope": "SpriteCook reference identity and registry integrity; not runtime motion or browser acceptance",
+  "source": "assets/generated/characters/player-r01/library/body.png",
+  "exactOwnedSlices": [
+    {
+      "direction": "down",
+      "size": [
+        59,
+        132
+      ],
+      "rgbaExactMatch": true
+    },
+    {
+      "direction": "right",
+      "size": [
+        31,
+        132
+      ],
+      "rgbaExactMatch": true
+    },
+    {
+      "direction": "up",
+      "size": [
+        60,
+        132
+      ],
+      "rgbaExactMatch": true
+    },
+    {
+      "direction": "left",
+      "size": [
+        31,
+        132
+      ],
+      "rgbaExactMatch": true
+    }
+  ],
+  "oldEntriesPreserved": 89,
+  "newUniqueAssets": 7,
+  "totalRegistryEntries": 96,
+  "referenceFilesVerified": 17,
+  "credits": {
+    "before": 668,
+    "after": 610,
+    "spent": 58
+  },
+  "providerClips": "REFERENCE_ONLY_NOT_PLAYABLE",
+  "provenanceSha256": "a7ff604dcb8be0189e3974cee826899a42562544eeecceae48633c3cb0e62c57"
+}

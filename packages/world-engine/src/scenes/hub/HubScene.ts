@@ -248,7 +248,6 @@ export class HubScene extends Phaser.Scene {
       ({ x, y }: { x: number; y: number }) => {
         this.npcLayer?.walkAvatarTo(x, y);
         this.characterLayer?.walkAvatarTo(x, y);
-        this.modularAvatarLayer?.walkAvatarTo(x, y);
       },
     );
 

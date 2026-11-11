@@ -175,7 +175,7 @@ test('situations preserve the full outfit and intersect their actions with accep
   const profile = Object.freeze({ ...DEFAULT_AVATAR, top: 'top.field-jacket', companion: 'companion.squirrel', heldItem: 'held.tablet' });
   const idleOnly = parseModularAvatarManifest({ ...fixture(), clips: { idle: fixture().clips.idle } });
   const accepted = AVATAR_ACTIONS.filter((action) => Boolean(idleOnly.clips[action]));
-  for (const context of ['wardrobe', 'campus', 'shift', 'blitz-preview'] as const) {
+  for (const context of ['wardrobe', 'campus', 'shift', 'blitz-preview', 'blitz-practice'] as const) {
     const result = resolveAvatarPresentation(profile, { context, action: 'walk' }, accepted);
     assert.deepEqual(result.profile, profile, `${context} must not rewrite an equipped companion or clothing`);
     assert.notEqual(result.profile, profile);
@@ -199,6 +199,10 @@ test('situations preserve the full outfit and intersect their actions with accep
   const blitz = resolveAvatarPresentation(profile, { context: 'blitz-preview', action: 'inspect' }, AVATAR_ACTIONS);
   assert.deepEqual(blitz.availableActions, ['idle']);
   assert.equal(blitz.action, 'idle'); assert.equal(blitz.animate, false); assert.equal(blitz.companionVisible, false);
+  const practice = resolveAvatarPresentation(profile, { context: 'blitz-practice', action: 'inspect' }, AVATAR_ACTIONS);
+  assert.deepEqual(practice.availableActions, ['idle']);
+  assert.equal(practice.action, 'idle'); assert.equal(practice.animate, false); assert.equal(practice.companionVisible, false);
+  assert.deepEqual(practice.profile, profile, 'An actual blitz keeps the complete server-supplied outfit snapshot');
   assert.throws(() => resolveAvatarPresentation(profile, {}, ['walk']), /accepted idle/);
 });
 
@@ -211,7 +215,7 @@ test('only a supplied shift snapshot selects its instrument; fitting and blitz s
   assert.equal(shift.equipmentSource, 'shift-snapshot');
   assert.deepEqual({ ...shift.profile, heldItem: profile.heldItem }, profile);
   assert.equal(resolveAvatarPresentation(profile, { context: 'shift' }).profile.heldItem, 'held.tablet');
-  for (const context of ['wardrobe', 'campus', 'blitz-preview'] as const) {
+  for (const context of ['wardrobe', 'campus', 'blitz-preview', 'blitz-practice'] as const) {
     const result = resolveAvatarPresentation(profile, { context, equipment });
     assert.equal(result.profile.heldItem, 'held.tablet');
     assert.equal(result.equipmentSource, 'profile');

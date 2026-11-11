@@ -1,0 +1,1876 @@
+{
+  "version": 1,
+  "rigId": "player.modular.r01.v1",
+  "revision": "r03-motion6-20261111",
+  "motionRigSha256": "7f8b339bf184e854eb9bf0a491c9e12a6408e662a6a8608917f489daf4aa1965",
+  "authoring": {
+    "script": "tools/assets/author_modular_player_motion.py",
+    "sha256": "a75d18abddd5af2dba7dea2ec45e3978f35df8574d7e294004d7490780031a4c",
+    "method": "authored directional segment meshes; no mirrored or generated outfit combinations",
+    "referenceOnly": [
+      "motion-guide-right.aseprite",
+      "motion-reference/inspect-right-guide.png",
+      "motion-reference/walk-down-guide.png"
+    ],
+    "previousSourceIndexSha256": "de66cd474cf0e44a39b7fe396ca22790585f43330db9a4616d736498690b15f5"
+  },
+  "companionPolicy": "Independent static companions retain their accepted directional pixels; shared player phases do not claim animal locomotion.",
+  "families": {
+    "body.base": {
+      "walk": {
+        "source": "body.base.walk.aseprite",
+        "sha256": "8649b100bbdd5ba21d9f4b5fa8cab495903e7553042ae2c645748b4b9acdbf6a",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "body.base.inspect.aseprite",
+        "sha256": "723c02892475fd18e650d1b4b17d1ad0ef950c5f9595951c1d7c432239e2e8c8",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "body.hands": {
+      "walk": {
+        "source": "body.hands.walk.aseprite",
+        "sha256": "128715afd2457be93fbc7c251b9328a7491a4044c074ad89819cc69dacb55871",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "body.hands.inspect.aseprite",
+        "sha256": "ffb71d9f140ea8efa67141eda280a9b693fcb3854e00b34dac9fc75ee9cf17e5",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "body.forearm": {
+      "walk": {
+        "source": "body.forearm.walk.aseprite",
+        "sha256": "14b7d996afb61737892028e2b53d1ca68ec5968c1237d19f048fed47fac05ad7",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "body.forearm.inspect.aseprite",
+        "sha256": "38ba5a770a08b7ff84ef31614760e5801be4f680e906e2ce7f52b07ab6829208",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "hair.short": {
+      "walk": {
+        "source": "hair.short.walk.aseprite",
+        "sha256": "217c84e581a4c295f61489d2450652db8b1be0f00a6dbd59bfbf379c2ab8dfaa",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "hair.short.inspect.aseprite",
+        "sha256": "47a14f7eb131e87a98556b2a55bf4bf21affc1ce623454564e066c5eb15d2c67",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "hair.wave": {
+      "walk": {
+        "source": "hair.wave.walk.aseprite",
+        "sha256": "eeecf49769d17cd4979d603c17bbc01cf2501e702d75cc1dd0d74239dbe74036",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "hair.wave.inspect.aseprite",
+        "sha256": "e83d197e15dc53e587e04d46fe7a4ea1e199f64d295db029497fe2d155596966",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "hair.bob": {
+      "walk": {
+        "source": "hair.bob.walk.aseprite",
+        "sha256": "cbdada7d6126f32547513029213bcde134c9bb14767b614ffbc710d1a2a41774",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "hair.bob.inspect.aseprite",
+        "sha256": "ab2663d839a07db0225d8a5d9aa15b21c9416efbf93b3f24d56ba31b8e9df9ea",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "hair.curl": {
+      "walk": {
+        "source": "hair.curl.walk.aseprite",
+        "sha256": "339feb9a1064b8ac8697fa5a5fe7b447287113ee11cf6ec107edb962d396d183",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "hair.curl.inspect.aseprite",
+        "sha256": "53cf6e1f204330a43d9a9e70754a486fd7f9e5d6c6029c90bb49a1f1626116d3",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "hair.long": {
+      "walk": {
+        "source": "hair.long.walk.aseprite",
+        "sha256": "52283e746b219b78363b0c07af3cfbf166c85fbaf0b64755486ac7cc1622619a",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "hair.long.inspect.aseprite",
+        "sha256": "ca168bf45e2c0d7f6a7b858f1407d616e1cb797695bae15316eabfd3e55fac88",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "headwear.cap": {
+      "walk": {
+        "source": "headwear.cap.walk.aseprite",
+        "sha256": "18fc85dd0b0855ace436ac2bf22b32cae43fa43defd18bec53009f172317e546",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "headwear.cap.inspect.aseprite",
+        "sha256": "4697a7d9c31c1923ccf727fd8306b5ca55c1cf1ae39899b930e37b5928a79073",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "headwear.beanie": {
+      "walk": {
+        "source": "headwear.beanie.walk.aseprite",
+        "sha256": "f6e3b134600df69a5c95dfa11753fccfca84eea89491e00a45ff628a5e87761e",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "headwear.beanie.inspect.aseprite",
+        "sha256": "57f58d625a65c649decfb20a4a3eab43ecd182366923e09b81740e99e65b6073",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "headwear.scarf": {
+      "walk": {
+        "source": "headwear.scarf.walk.aseprite",
+        "sha256": "50c3aef98fe2c7eaf435d8c9a88a5fb60c06e132d283e29f6bd723eb8d5b2acc",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "headwear.scarf.inspect.aseprite",
+        "sha256": "6c04c1003bc23f0c2bf74aff4b2152fd8191fa0199e3f468b54d2f38b73797f0",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "headwear.goggles": {
+      "walk": {
+        "source": "headwear.goggles.walk.aseprite",
+        "sha256": "96384599eb2bcb4157bec84d80a3d6c9fef93c603efa33730fedd7e3dd4ab554",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "headwear.goggles.inspect.aseprite",
+        "sha256": "1e04b23c38d851859e74ee09d59044f62d5be463a327f8759974e2acf4160909",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "top.center-jacket": {
+      "walk": {
+        "source": "top.center-jacket.walk.aseprite",
+        "sha256": "44b94c66110fb1c194d1a925d423ffdb2171dac47c6315b0b6f8c3f11b4fee7d",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "top.center-jacket.inspect.aseprite",
+        "sha256": "127b85bd070e9a5e53298d3cf5342967d161b6e59e2156d5f8cbaf3e9289eff3",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "top.field-jacket": {
+      "walk": {
+        "source": "top.field-jacket.walk.aseprite",
+        "sha256": "ef0c0ea6acc9fef58ab17a08c31b3f68f7444528522470bd007e4f1cf3e28b87",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "top.field-jacket.inspect.aseprite",
+        "sha256": "8d1d273c8f625a6fb2c433cb7b76053322a26f9305c170156b85a4c07c7f0f86",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "top.hoodie": {
+      "walk": {
+        "source": "top.hoodie.walk.aseprite",
+        "sha256": "e95a8829418257010cd2c08e8de2dac3a22f6481c46bdcd1c9298d8535a66fcb",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "top.hoodie.inspect.aseprite",
+        "sha256": "4a55687cae2ce1275822d25564282c7bba7ed5c6cdddd852311b7ca022856a80",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "top.sweater": {
+      "walk": {
+        "source": "top.sweater.walk.aseprite",
+        "sha256": "1b5515b2d54c3bde8f363a825b567114847405ec32bc7c7bb335d764e731480e",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "top.sweater.inspect.aseprite",
+        "sha256": "c04dfa82dc3e2aa572accd70082d9156c214bac9d921443630903bf239412aba",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "top.shirt": {
+      "walk": {
+        "source": "top.shirt.walk.aseprite",
+        "sha256": "6f9115df3a1220d94824c355f70edcaaaabad711bf88d630faf006f007507b8c",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "top.shirt.inspect.aseprite",
+        "sha256": "24b45565454be7f5a3b769f98069c02c7bce3c51016df4c20769576cad7be24f",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "bottom.dark-trousers": {
+      "walk": {
+        "source": "bottom.dark-trousers.walk.aseprite",
+        "sha256": "fb0c40e8a3b993751261e55868a87f078fa26eba74f333a478b27be4cfa0d63d",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "bottom.dark-trousers.inspect.aseprite",
+        "sha256": "b467ec5506f8e447fb75fd063eada02ed7884bcc33dcdecf85067ed2b7eee3a5",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "bottom.field-trousers": {
+      "walk": {
+        "source": "bottom.field-trousers.walk.aseprite",
+        "sha256": "ee8342556298483aa6962be47f43c3627e4597cb74eb3abeb45a1c85359ca3b5",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "bottom.field-trousers.inspect.aseprite",
+        "sha256": "d0dde82058a90db35ed51f49868ff5dd0d8e1652876de2d264eecb0b5724ade7",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "bottom.jeans": {
+      "walk": {
+        "source": "bottom.jeans.walk.aseprite",
+        "sha256": "6c8aeb69ace7af70b4c95e601693663395975e9f945bfe441df418be749ee92c",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "bottom.jeans.inspect.aseprite",
+        "sha256": "b49f161dd224cb44523c43e15e98da5faf34a453930332b0daf98afc53850034",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "footwear.sneakers": {
+      "walk": {
+        "source": "footwear.sneakers.walk.aseprite",
+        "sha256": "f6a065607a331898dcfeb8a37249ee1d8497de2105a633f300350373099bdb89",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "footwear.sneakers.inspect.aseprite",
+        "sha256": "ba30c5bd4d8ace9b1ec280a7bc979fa3d07d9e6e19917a5d5a08059049f5f9dc",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "footwear.boots": {
+      "walk": {
+        "source": "footwear.boots.walk.aseprite",
+        "sha256": "9653e42cae6ee99761a2c2dac6b01d36c83f1eb7e090b16d8c59a54bbf1d343c",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "footwear.boots.inspect.aseprite",
+        "sha256": "88f056fc291c451b968a0b860279243804ce40dc577f59d85af598d670917928",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "footwear.shoes": {
+      "walk": {
+        "source": "footwear.shoes.walk.aseprite",
+        "sha256": "150d2a7096a49465531dc1cd01c55aad0a1083229bf53e1c14a52200a97fa50b",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "footwear.shoes.inspect.aseprite",
+        "sha256": "78d63986314d45d94427de2a82905b02a13e5a741797fa2681b1abaf798ee642",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "backpack.city": {
+      "walk": {
+        "source": "backpack.city.walk.aseprite",
+        "sha256": "249781df36d6e634f53e369c73349a410d05712430e4d688c5825ce810d5adc9",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "backpack.city.inspect.aseprite",
+        "sha256": "88edde93e72abeea0a22ea930ddaeb9eb32ce4edfe9d77a484989089930dc2e5",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "backpack.field": {
+      "walk": {
+        "source": "backpack.field.walk.aseprite",
+        "sha256": "47c1c7cb02508c6402c0472f3d6756493651adbcb90f8b92b7aaf11486ac52cd",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "backpack.field.inspect.aseprite",
+        "sha256": "6a3eeda966f64c9a469cbdcc6e37dda1063a00c258c95d2d55b7efaac7bafa22",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "held.tablet": {
+      "walk": {
+        "source": "held.tablet.walk.aseprite",
+        "sha256": "aecd330fb65f47e239956f8e2e316b26091ac59f6e98bd6162f094a2e0db678d",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "held.tablet.inspect.aseprite",
+        "sha256": "b63e448358353261629e7528c654e7fe20aa5a666935f333abef25fa5a1862fc",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "held.map-folder": {
+      "walk": {
+        "source": "held.map-folder.walk.aseprite",
+        "sha256": "64081d8fa9207ca3cbccf4c6c1e430d9e31132125ec0c135fe0a30b3e0879a53",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "held.map-folder.inspect.aseprite",
+        "sha256": "f550713c462452621a1157bb31ec2b8c18ba05976f471733dc5bf09d48811411",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "held.pencil": {
+      "walk": {
+        "source": "held.pencil.walk.aseprite",
+        "sha256": "6eeb3bd68b47409c380a78f7eab80d352ffa7f416726e0f38622ea4d25afa9ad",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "held.pencil.inspect.aseprite",
+        "sha256": "46e43e22dfa514c7f206a482596adf99c723e575905d796ff37d7792b34eb35a",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "badge.meteo": {
+      "walk": {
+        "source": "badge.meteo.walk.aseprite",
+        "sha256": "36c5f59bca7a4c3da38836b650fac0e7f1f61f632c62cff6e1d84072f1098647",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "badge.meteo.inspect.aseprite",
+        "sha256": "fb1719c03cc6fd6315934d0448ecb6ee5ab598f54f554e8ed5979f09e101a065",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "badge.aerology": {
+      "walk": {
+        "source": "badge.aerology.walk.aseprite",
+        "sha256": "0e18de213f2a03074967e303d4a1abc5883fea5054972775dba0acf711a585e7",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "badge.aerology.inspect.aseprite",
+        "sha256": "42ea6529dc5e5f925755a8e5bd429d439697651dca59171dfc1c51134b001757",
+        "frameSize": [
+          96,
+          144
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "companion.tit": {
+      "walk": {
+        "source": "companion.tit.walk.aseprite",
+        "sha256": "5f9b342102ec0a2850def53b7282452045853fb06fa75e01ae72e96c366c9fcd",
+        "frameSize": [
+          64,
+          64
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "companion.tit.inspect.aseprite",
+        "sha256": "efa5b6dc5e6a9b206c69066f5e9a54213e9d7f52b4de39dbe46c79af8c8befee",
+        "frameSize": [
+          64,
+          64
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    },
+    "companion.squirrel": {
+      "walk": {
+        "source": "companion.squirrel.walk.aseprite",
+        "sha256": "1711c87cd5c52960c0aee16b1690398300840f0303d4b8b6f0678911a03100ce",
+        "frameSize": [
+          64,
+          64
+        ],
+        "count": 24,
+        "durationMs": 140,
+        "tags": {
+          "down.walk": [
+            0,
+            5
+          ],
+          "right.walk": [
+            6,
+            11
+          ],
+          "up.walk": [
+            12,
+            17
+          ],
+          "left.walk": [
+            18,
+            23
+          ]
+        }
+      },
+      "inspect": {
+        "source": "companion.squirrel.inspect.aseprite",
+        "sha256": "96840d947ae3d27b7d65be941e9e70d03aaad1d5541738c79cbef8217997efdb",
+        "frameSize": [
+          64,
+          64
+        ],
+        "count": 24,
+        "durationMs": 240,
+        "tags": {
+          "down.inspect": [
+            0,
+            5
+          ],
+          "right.inspect": [
+            6,
+            11
+          ],
+          "up.inspect": [
+            12,
+            17
+          ],
+          "left.inspect": [
+            18,
+            23
+          ]
+        }
+      }
+    }
+  }
+}

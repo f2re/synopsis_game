@@ -1,0 +1,106 @@
+{
+  "status": "REQUEST_CHANGES",
+  "reviewer": "runtime_motion",
+  "method": "independent packed-cel compositor and pixel ownership/contact checks",
+  "baselineCommit": "64b19acb7f8d1facdb49f880be8a21282dbdccbc",
+  "candidate": "artifacts/player-r03-motion/full-candidate",
+  "candidateRevision": "r03-motion6-20261111",
+  "sha256": {
+    "manifest": "719d6d302a725865fab92fdad339b24808b2c8739bba3c1c71bc89290074d9fe",
+    "atlas": "f2171a2203f93b32dd062ec3ab6d8096d7acc703d18f14eb31fbf3fc496e97b0",
+    "baselineManifest": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf",
+    "baselineAtlas": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73"
+  },
+  "measurements": {
+    "decodedAtlasBytes": 4128768,
+    "compressedAtlasBytes": 742036,
+    "maximumCelsPerPlane": 11,
+    "armTorsoNegativeSpaceChanges": 51,
+    "posesWithAcceptedStyleUnderlayEdgePixels": 402,
+    "maxUnderlayEdgePixelsPerPose": 47
+  },
+  "counts": {
+    "unchangedIdleCompositions": 640,
+    "inspectEndpointCompositions": 320,
+    "bottomFootwearPoses": 432,
+    "visibleHandheldPoses": 108,
+    "explicitlyOccludedHandheldPoses": 36,
+    "independentCompanionFrames": 96
+  },
+  "failures": [
+    {
+      "check": "new-skin-separated-from-cuff-hands",
+      "details": [
+        [
+          "top.center-jacket",
+          "up",
+          "inspect",
+          2,
+          6,
+          3
+        ],
+        [
+          "top.center-jacket",
+          "up",
+          "inspect",
+          3,
+          6,
+          3
+        ],
+        [
+          "top.field-jacket",
+          "up",
+          "inspect",
+          2,
+          6,
+          3
+        ],
+        [
+          "top.field-jacket",
+          "up",
+          "inspect",
+          3,
+          6,
+          3
+        ],
+        [
+          "top.hoodie",
+          "up",
+          "inspect",
+          2,
+          6,
+          3
+        ],
+        [
+          "top.hoodie",
+          "up",
+          "inspect",
+          3,
+          6,
+          3
+        ],
+        [
+          "top.sweater",
+          "up",
+          "inspect",
+          2,
+          6,
+          3
+        ],
+        [
+          "top.sweater",
+          "up",
+          "inspect",
+          3,
+          6,
+          3
+        ]
+      ]
+    }
+  ],
+  "limits": [
+    "Pixel checks do not grant visual composition approval or measure browser/GPU performance.",
+    "Cuff-edge skin is compared to accepted R02 with at least a three-pixel hand envelope; pre-existing dark underlay edges and changing arm/torso negative spaces require visual review.",
+    "Explicit left-view occlusion preserves the anatomical right hand; no mirrored view is inferred."
+  ]
+}

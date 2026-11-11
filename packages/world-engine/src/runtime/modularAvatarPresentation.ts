@@ -9,6 +9,7 @@ export const AVATAR_SITUATION_POLICY = {
   campus: { direction: 'down', actions: ['idle', 'walk', 'inspect'], companionVisible: true, motion: 'ambient' },
   shift: { direction: 'right', actions: ['idle', 'inspect'], companionVisible: false, motion: 'quiet' },
   'blitz-preview': { direction: 'right', actions: ['idle'], companionVisible: false, motion: 'quiet' },
+  'blitz-practice': { direction: 'right', actions: ['idle'], companionVisible: false, motion: 'quiet' },
 } as const satisfies Record<AvatarContext, {
   direction: AvatarDirection; actions: readonly AvatarAction[]; companionVisible: boolean; motion: 'ambient' | 'quiet';
 }>;

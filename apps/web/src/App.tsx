@@ -8,6 +8,7 @@ import { HubScreen } from './features/hub/HubScreen';
 import { HubModalLayer } from './features/hub/HubModalLayer';
 
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
+const BlitzWorkspace = lazy(() => import('./features/shift/BlitzWorkspace').then((module) => ({ default: module.BlitzWorkspace })));
 
 function navigate(path: string): void {
   window.history.pushState({}, '', path);
@@ -54,7 +55,7 @@ export function App() {
   const [booting, setBooting] = useState(true);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [setCodeModalOpen, setSetCodeModalOpen] = useState(false);
-  const [pendingShift, setPendingShift] = useState(false);
+  const [pendingDestination, setPendingDestination] = useState<'/shift' | '/blitz' | null>(null);
 
   useEffect(() => {
     const onPopState = () => setPath(window.location.pathname);
@@ -119,10 +120,23 @@ export function App() {
     return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow avatar={user?.avatar} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} /></Suspense>;
   }
 
+  if (path === '/blitz') {
+    if (!user) return <LoginScreen onLogin={(loggedIn) => setUser(loggedIn)} onClose={() => navigate('/')} />;
+    return <Suspense fallback={<LoadingScreen text="Открываем блиц-практику…" />}><BlitzWorkspace key={user.id} user={user} onExit={() => navigate('/')} onStartPractice={() => navigate('/shift')} /></Suspense>;
+  }
+
   function startShift() {
     if (user) navigate('/shift');
     else {
-      setPendingShift(true);
+      setPendingDestination('/shift');
+      setLoginModalOpen(true);
+    }
+  }
+
+  function startBlitz() {
+    if (user) navigate('/blitz');
+    else {
+      setPendingDestination('/blitz');
       setLoginModalOpen(true);
     }
   }
@@ -135,20 +149,21 @@ export function App() {
         onLogout={() => void logout()}
         onOpenSetCode={() => setSetCodeModalOpen(true)}
         onStartShift={startShift}
+        onStartBlitz={startBlitz}
         onOpenAvatar={() => navigate('/profile/avatar')}
         onOpenAdmin={() => navigate('/admin')}
         externalModalOpen={loginModalOpen || setCodeModalOpen}
       />
       {loginModalOpen && (
-        <HubModalLayer label="Вход в учебную группу" onClose={() => { setLoginModalOpen(false); setPendingShift(false); }}>
+        <HubModalLayer label="Вход в учебную группу" onClose={() => { setLoginModalOpen(false); setPendingDestination(null); }}>
         <LoginScreen
           onLogin={(loggedIn) => {
             setUser(loggedIn);
             setLoginModalOpen(false);
-            if (pendingShift) navigate('/shift');
-            setPendingShift(false);
+            if (pendingDestination) navigate(pendingDestination);
+            setPendingDestination(null);
           }}
-          onClose={() => { setLoginModalOpen(false); setPendingShift(false); }}
+          onClose={() => { setLoginModalOpen(false); setPendingDestination(null); }}
           isModal
         />
         </HubModalLayer>

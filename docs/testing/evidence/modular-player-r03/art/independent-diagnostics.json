@@ -1,0 +1,12 @@
+{
+  "status": "REVIEW_EVIDENCE_NOT_APPROVAL",
+  "manifestSha256": "dc2782161f5fffbfa724ab89aa172924919955010cd5aef1767c4ba0a0bfeaca",
+  "atlasSha256": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+  "method": "Independent packed-cel compositor; all five tops; held.none; unchanged nearest pixel sampling",
+  "files": {
+    "inspect-empty-hand-native.png": "45e0221a1de5ae73895e8b8669dc3e55e9625b6c818100ab2d2032b2a8ac25cb",
+    "inspect-empty-hand-2x.png": "bc5652a3dbc41533f90e5331d316b9bf0a783ea4073fc71398b3ae8099d05d2b",
+    "walk-side-empty-hand-native.png": "5667cff0b5068743df37ec5eb187f5a3f1777a517add439a8f4b58e6f02ea9cb",
+    "walk-side-empty-hand-2x.png": "dadf1ce5798eb0018c9991bf9684d6979f4e31cde94cdf9a2652db4ff331e5b2"
+  }
+}

@@ -1,0 +1,1 @@
+PASS: modular actor identity/lease disposal, accepted-only path navigation, focused input, modal cancellation, visibility pause, reduced-motion pending-load cancellation, inspect one-shot return, unavailable-art gate, low-power sampling, Phaser-owned uploads.

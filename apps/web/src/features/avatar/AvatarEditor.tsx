@@ -160,6 +160,11 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     if (availableAnimations.includes(value)) setAnimation(value);
   }
 
+  function updateAvailableAnimations(actions: readonly AvatarAnimation[]) {
+    setAvailableAnimations(actions);
+    setAnimation((current) => actions.includes(current) ? current : 'idle');
+  }
+
   function changePreviewContext(context: AvatarContext) {
     if (context === previewContext) return;
     setPreviewContext(context);
@@ -258,7 +263,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
             <AvatarSituationPreview avatar={avatar} context={previewContext} direction={direction} animation={animation} dirty={dirty}
               keyboardLabel={`Стрелки — поворот${availableAnimations.includes('walk') ? ', пробел — шаг' : ''}${availableAnimations.includes('inspect') ? ', E — осмотр' : ''}`}
               onContextChange={changePreviewContext} onPreviewKeys={handlePreviewKeys}
-              onAnimationComplete={() => setAnimation('idle')} onAvailableAnimations={setAvailableAnimations} />
+              onAnimationComplete={() => setAnimation('idle')} onAvailableAnimations={updateAvailableAnimations} />
             <div className="inventory-preview-controls">
               <div className="inventory-directions" aria-label="Ракурс персонажа">{DIRECTIONS.map((value) => <button type="button" key={value} className="inventory-segment" aria-pressed={direction === value} onClick={() => setDirection(value)}>{DIRECTION_LABELS[value]}</button>)}</div>
               <div className="inventory-motions" aria-label="Действие персонажа">{([['idle', 'Стойка'], ['walk', 'Шаг'], ['inspect', 'Осмотр']] as const).filter(([value]) => availableAnimations.includes(value)).map(([value, label]) => <button key={value} type="button" className="inventory-segment" aria-pressed={animation === value} onClick={() => setMotion(value)}>{label}</button>)}</div>

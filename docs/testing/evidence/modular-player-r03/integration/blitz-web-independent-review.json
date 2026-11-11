@@ -1,0 +1,32 @@
+{
+  "status": "PASS_FOR_CODE_AND_LIFECYCLE_ONLY",
+  "reviewer": "/root",
+  "author": "/root/blitz_flow",
+  "date": "2026-11-11",
+  "command": "node tools/test_blitz_lifecycle.cjs",
+  "exitCode": 0,
+  "cases": [
+    "StrictMode stale initial response",
+    "old and equal serverNow do not extend display timer",
+    "identity clears session and clock",
+    "old account poll and answer ignored",
+    "late start/load after unmount ignored",
+    "interval and reconnect listener cleanup"
+  ],
+  "resolvedFindings": [
+    "Native16px Cyrillic UI,32px headings,24px numeric pixel timer; no new10–13px production labels.",
+    "Scoped responsive header, compact48×72 mobile portrait,44px sequence controls and code wrapping.",
+    "Identity epoch and effect cleanup reject stale initial load, poll, answer and start; account-specific component key.",
+    "Old/equal server timestamps cannot restart the display clock or roll progress backwards."
+  ],
+  "sources": {
+    "apps/web/src/App.tsx": "4a5dc790ccdd72c097f7df08067bd4ae511b0f00709628523207a4f1ad9cc32d",
+    "apps/web/src/features/shift/BlitzWorkspace.tsx": "2332f2bc41ca65c30e37754efad2dd44132dd50ccc0e465b12eeb2561375c2f3",
+    "apps/web/src/features/shift/BlitzWorkspace.css": "342574807f6cfd3c7a1fad6f87478d8073c0e325da7ce5e3f2d8395fe64912c0",
+    "tools/test_blitz_lifecycle.cjs": "c0fa965992f25a955796081eadd1aa615eb7e6f9ee1c896b1f3fe1a8255c5bbb"
+  },
+  "notAccepted": [
+    "Actual browser layout and screen composition; browser blocked by environment policies.",
+    "Physical-device or GPU performance."
+  ]
+}

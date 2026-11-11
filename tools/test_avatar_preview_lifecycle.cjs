@@ -19,7 +19,7 @@ class Events {
   emit(key) { for (const fn of this.listeners.get(key) ?? []) fn(); }
   count() { return [...this.listeners.values()].reduce((sum, list) => sum + list.length, 0); }
 }
-function run({ animate, legacy = false, withObserver = true }) {
+function run({ animate, legacy = false, withObserver = true, action = 'idle', reduceInspect = false }) {
   let now = 0, sequence = 0, cleanup, complete = 0;
   const draws = [], timers = new Map();
   const doc = Object.assign(new Events(), { hidden: false });
@@ -61,14 +61,31 @@ function run({ animate, legacy = false, withObserver = true }) {
     assert.equal(timers.size, 0, 'Fallback stays still when user preferences change');
   } else {
     const composite = { manifest: { rigId: 'fixture', revision: 'fixture' },
-      clip: { durationsMs: [320, 320, 320, 320], loop: true }, direction: 'down', action: 'idle', key: 'fixture' };
+      clip: { durationsMs: action === 'inspect' ? Array(6).fill(240) : [320, 320, 320, 320], loop: action !== 'inspect' }, direction: 'down', action, key: 'fixture' };
     exports.testCanvas({ composite, presentation: { context: animate ? 'wardrobe' : 'shift', profile: contract.exports.DEFAULT_MODULAR_AVATAR,
-      requestedAction: 'idle', motion: animate ? 'ambient' : 'quiet', animate }, size: 192, showBackdrop: false, onAnimationComplete: () => complete++ });
+      requestedAction: action, motion: animate ? 'ambient' : 'quiet', animate }, size: 192, showBackdrop: false, onAnimationComplete: () => complete++ });
     assert.equal(draws.length, 1);
     assert.equal(timers.size, withObserver || !animate ? 0 : 1, 'Only visible ambient previews may schedule');
     observer?.visible(true);
     const tick = (time) => { now = time; const timer = [...timers.values()][0]; assert(timer); timer.fn(); };
-    if (animate) {
+    if (action === 'inspect') {
+      tick(240); assert.equal(canvas.dataset.frame, '1');
+      doc.hidden = true; doc.emit('visibilitychange'); assert.equal(timers.size, 0);
+      now = 40240; doc.hidden = false; doc.emit('visibilitychange');
+      assert.equal(canvas.dataset.frame, '1', 'A one-shot preserves its remaining time while hidden');
+      if (reduceInspect) {
+        prefs.reducedMotion = true; win.emit('prefs');
+        assert.equal(canvas.dataset.frame, '0'); assert.equal(complete, 1); assert.equal(timers.size, 0);
+        prefs.reducedMotion = false; win.emit('prefs');
+        assert.equal(timers.size, 0, 'A cancelled one-shot cannot restart after reduced motion is disabled');
+      } else {
+        for (let i = 0; i < 5; i++) tick(now + 240);
+        assert.equal(complete, 1, 'Exactly one inspect completion returns control to the parent');
+        assert.equal(timers.size, 0);
+      }
+      doc.emit('visibilitychange'); win.emit('prefs'); media.emit('change');
+      assert.equal(complete, 1, 'Later lifecycle signals do not repeat one-shot completion');
+    } else if (animate) {
       assert.equal(timers.size, 1); tick(320); assert.equal(canvas.dataset.frame, '1');
       if (withObserver) {
         now = 400; observer.visible(false); assert.equal(timers.size, 0); assert.equal(canvas.dataset.animationPaused, 'true');
@@ -86,9 +103,10 @@ function run({ animate, legacy = false, withObserver = true }) {
   const drawCount = draws.length;
   cleanup(); assert.equal(timers.size, 0); assert.equal(doc.count() + win.count() + media.count(), 0);
   if (observer) { assert(observer.disconnected); observer.visible(true); assert.equal(draws.length, drawCount, 'Late observer callbacks after disposal do nothing'); }
-  assert.equal(complete, 0);
-  return { mode: legacy ? 'legacy-fallback' : animate ? 'ambient' : 'quiet', withObserver, draws: drawCount, cleanup: 'PASS' };
+  assert.equal(complete, action === 'inspect' ? 1 : 0);
+  return { mode: legacy ? 'legacy-fallback' : action === 'inspect' ? reduceInspect ? 'inspect-reduced-cancel' : 'inspect-one-shot' : animate ? 'ambient' : 'quiet', withObserver, draws: drawCount, cleanup: 'PASS' };
 }
 console.log(JSON.stringify({ status: 'PASS', test: 'actual Canvas effects with deterministic DOM/event doubles', cases: [
   run({ animate: true }), run({ animate: false }), run({ animate: true, withObserver: false }), run({ animate: false, legacy: true }),
+  run({ animate: true, action: 'inspect' }), run({ animate: true, action: 'inspect', reduceInspect: true }),
 ] }));

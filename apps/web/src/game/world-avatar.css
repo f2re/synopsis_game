@@ -1,0 +1,44 @@
+/* Native 16px UI; a focused, explicit control mode leaves building buttons intact. */
+.campus-avatar-controls {
+  position: absolute;
+  z-index: 12;
+  top: max(88px, calc(env(safe-area-inset-top) + 80px));
+  left: 16px;
+  max-width: min(320px, calc(100% - 32px));
+  color: var(--color-birch-and-snow-3);
+  font-family: var(--font-pixel-ui);
+  font-size: 16px;
+  line-height: 1.4;
+}
+.campus-avatar-controls button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 7px 12px;
+  margin: 0;
+  border: 2px solid var(--color-sky-night-4);
+  border-radius: 0;
+  background: var(--color-sky-night-1);
+  color: inherit;
+  font: inherit;
+}
+.campus-avatar-controls button:hover:not(:disabled),
+.campus-avatar-controls button:focus-visible { border-color: var(--color-window-light-3); }
+.campus-avatar-controls button:focus-visible { outline: 2px solid var(--color-window-light-3); outline-offset: 2px; }
+.campus-avatar-controls button:disabled { opacity: .65; }
+.campus-avatar-controls__body {
+  padding: 10px;
+  border: 2px solid var(--color-sky-night-4);
+  background: var(--color-sky-night-1);
+}
+.campus-avatar-controls__directions,
+.campus-avatar-controls__actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.campus-avatar-controls__actions { margin-top: 6px; }
+.campus-avatar-controls p { margin: 8px 0; font-size: 16px; line-height: 1.4; }
+.campus-avatar-controls__state { color: var(--color-window-light-2); }
+@media (max-width: 760px) {
+  .campus-avatar-controls { left: 12px; top: max(110px, calc(env(safe-area-inset-top) + 102px)); max-width: min(296px, calc(100% - 24px)); }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .campus-avatar-controls { top: 64px; max-width: 300px; }
+  .campus-avatar-controls__body { max-height: calc(100dvh - 176px); overflow: auto; }
+}

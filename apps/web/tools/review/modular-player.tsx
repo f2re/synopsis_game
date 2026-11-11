@@ -92,7 +92,7 @@ function ReviewHarness() {
     </header>
     {view === 'editor'
       ? <AvatarEditor key={revision} user={currentUser} onSaved={setCurrentUser} onBack={() => setView('campus')} />
-      : <HubScreen user={currentUser} onLoginClick={noGame} onLogout={noGame} onOpenSetCode={noGame} onStartShift={noGame} onOpenAvatar={() => setView('editor')} onOpenAdmin={noGame} />}
+      : <HubScreen user={currentUser} onLoginClick={noGame} onLogout={noGame} onOpenSetCode={noGame} onStartShift={noGame} onStartBlitz={noGame} onOpenAvatar={() => setView('editor')} onOpenAdmin={noGame} />}
   </>;
 }
 

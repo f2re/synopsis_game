@@ -1,0 +1,13 @@
+{
+  "name": "web-typecheck",
+  "command": [
+    "apps/web/node_modules/.bin/tsc",
+    "-p",
+    "/workspace/scratch/3a71d9be4756/tsconfig-r03-web.json",
+    "--noEmit"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 10.034,
+  "stdout": "",
+  "stderr": ""
+}

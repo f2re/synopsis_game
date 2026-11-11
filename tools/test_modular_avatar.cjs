@@ -23,6 +23,7 @@ const contract = load('runtime/modularAvatarManifest.ts');
 const assets = load('runtime/characterAssets.ts', { './modularAvatarManifest.ts': contract });
 const bridge = load('bridge/WorldBridge.ts', { '../runtime/characterAssets': assets });
 const preferences = load('runtime/uiPreferences.ts');
+const walkway = load('scenes/hub/avatarWalkway.ts');
 const pending = [];
 const releases = [];
 const compositor = { acquire(profile, direction, action) { return new Promise((resolve, reject) => pending.push({ profile, direction, action, resolve, reject })); }, diagnostics() { return { test: true }; } };
@@ -32,7 +33,9 @@ const { HubModularAvatarLayer } = load('scenes/hub/HubModularAvatarLayer.ts', {
   '../../runtime/modularAvatarManifest': contract,
   '../../runtime/modularAvatarCompositor': { modularAvatarCompositor: compositor },
   '../../runtime/uiPreferences': preferences,
-  './r01Layout': { getR01Layout(w, h) { return { width: w < h ? 480 : 960, height: w < h ? 780 : 540, portrait: w < h, shore: 190 }; } },
+  '../../theme/tokens': { WORLD_PALETTE: { windowLight2: 0xffeeaa } },
+  './avatarWalkway': walkway,
+  './r01Layout': { getR01Layout(w, h) { return { width: w < h ? 480 : 960, height: w < h ? 780 : 540, portrait: w < h, shore: 190, zoom: 1 }; } },
 });
 function scene() {
   const store = new Map(), textures = new Map(), images = [];
@@ -48,7 +51,7 @@ function scene() {
       },
       remove(key) { const value = textures.get(key); value.width = value.height = 0; textures.delete(key); },
     },
-    add: { image(x, y, key, frame) {
+    add: { graphics() { return { setDepth() { return this; }, clear() {}, lineStyle() {}, lineBetween() {}, strokeRect() {}, destroy() { this.destroyed = true; } }; }, image(x, y, key, frame) {
       const image = { x, y, key, frame, writes: 0, destroyed: false,
         setOrigin(x, y) { this.origin = [x, y]; return this; }, setScale(value) { this.scale = value; return this; },
         setPosition(x, y) { this.x = x; this.y = y; return this; }, setDepth(value) { this.depth = value; return this; },
@@ -57,12 +60,12 @@ function scene() {
     } },
   };
 }
-function resolve(request, action = request.action) {
+function resolve(request, action = request.action, accepted = ['idle', 'walk', 'inspect']) {
   const count = action === 'idle' ? 4 : 6;
   const body = { canvas: { width: 96 * count, height: 144 }, frame: { width: 96, height: 144, pivot: [48, 136] } };
   const value = { key: `${contract.avatarProfileKey(request.profile)}:${request.direction}:${action}`,
-    manifest: { rigId: contract.MODULAR_AVATAR_RIG, revision: 'fixture' }, action, direction: request.direction,
-    clip: { durationsMs: Array(count).fill(action === 'idle' ? 320 : 140), loop: true }, body,
+    manifest: { rigId: contract.MODULAR_AVATAR_RIG, revision: 'fixture', clips: Object.fromEntries(accepted.map((clip) => [clip, {}])) }, action, direction: request.direction,
+    clip: { durationsMs: Array(count).fill(action === 'idle' ? 320 : action === 'walk' ? 140 : 240), loop: action !== 'inspect' }, body,
     companion: request.profile.companion === 'companion.none' ? null : { canvas: { width: 64 * count, height: 64 }, frame: { width: 64, height: 64, pivot: [32, 60] }, anchor: [-34, 0] },
   };
   const release = { count: 0, value };
@@ -109,23 +112,97 @@ const flush = async () => { await Promise.resolve(); await Promise.resolve(); };
   layer.update(100); layer.update(100); layer.update(100); layer.update(100);
   assert.equal(body.frame, 1);
   world.events.emit('ui:preferences', { reducedMotion: false });
-  layer.walkAvatarTo(600, 490);
+  layer.walkAvatarTo(544, 454);
   const walk = pending.shift();
-  assert.equal(walk.direction, 'right'); assert.equal(walk.action, 'walk');
+  assert.equal(walk.direction, 'up'); assert.equal(walk.action, 'walk');
   resolve(walk); await flush();
   assert.equal(activeLease.count, 1);
   assert.equal(activeLease.value.body.canvas.width, 384, 'Texture removal must preserve another consumer’s cached canvas');
   const walker = world.images.at(-2);
   for (let i = 0; i < 10; i++) layer.update(100);
-  assert.equal(walker.x, 600);
+  assert.equal(walker.x, 544); assert.equal(walker.y, 454);
   const idle = pending.shift(); assert.equal(idle.action, 'idle'); resolve(idle); await flush();
 
-  layer.walkAvatarTo(550, 490);
+  layer.walkAvatarTo(544, 490);
   const unavailableWalk = pending.shift(); resolve(unavailableWalk, 'idle'); await flush();
   const resting = world.images.at(-2);
   for (let i = 0; i < 4; i++) layer.update(100);
-  assert.equal(resting.x, 600, 'Missing authored walk cannot become sliding idle');
+  assert.equal(resting.y, 454, 'Missing authored walk cannot become sliding idle');
   assert.match(world.store.get('world.avatar.diagnostics').error, /not accepted/);
+
+  layer.walkAvatarTo(700, 400);
+  assert.equal(pending.length, 0, 'A building and unmarked ground cannot become a route');
+  layer.walkAvatarTo(544, 490);
+  const cancelledWalk = pending.shift();
+  world.events.emit('ui:preferences', { reducedMotion: true });
+  assert.equal(resting.y, 454, 'Changing preferences never completes an unrendered walk');
+  assert.equal(resolve(cancelledWalk).count, 0); await flush();
+  assert.equal(releases.at(-1).count, 1, 'A walk cancelled before async load cannot activate afterwards');
+  assert.equal(world.store.get('world.avatar.diagnostics').action, 'idle');
+  world.events.emit('ui:preferences', { reducedMotion: false });
+
+  layer.inspectAvatar();
+  const inspectRequest = pending.shift(); assert.equal(inspectRequest.action, 'inspect');
+  resolve(inspectRequest); await flush();
+  const inspecting = world.images.at(-2);
+  layer.update(100); layer.update(100); layer.update(100);
+  const inspectFrame = inspecting.frame;
+  bridge.worldBridge.emit('ui:world_visible', false);
+  for (let i = 0; i < 40; i++) layer.update(100);
+  assert.equal(inspecting.frame, inspectFrame, 'A hidden world does not spend the one-shot clock');
+  assert.equal(pending.length, 0);
+  bridge.worldBridge.emit('ui:world_visible', true);
+  for (let i = 0; i < 12; i++) layer.update(100);
+  assert.equal(pending.length, 1, 'One completed inspect returns to idle once');
+  assert.equal(pending[0].action, 'idle'); resolve(pending.shift()); await flush();
+
+  bridge.worldBridge.emit('ui:avatar_command', { kind: 'step', direction: 'down' });
+  assert.equal(pending.length, 0, 'Unfocused controls cannot move a character');
+  bridge.worldBridge.emit('ui:avatar_command', { kind: 'controls', open: true });
+  bridge.worldBridge.emit('ui:avatar_command', { kind: 'step', direction: 'down' });
+  const focusedWalk = pending.shift(); assert.equal(focusedWalk.action, 'walk'); resolve(focusedWalk); await flush();
+  layer.update(100);
+  const beforeModal = world.images.at(-2).y;
+  bridge.worldBridge.emit('ui:modal_open', true);
+  const modalIdle = pending.shift(); resolve(modalIdle); await flush();
+  for (let i = 0; i < 30; i++) layer.update(100);
+  assert.equal(world.images.at(-2).y, beforeModal, 'Opening learning UI cancels movement at its present point');
+  bridge.worldBridge.emit('ui:avatar_command', { kind: 'controls', open: true });
+  bridge.worldBridge.emit('ui:avatar_command', { kind: 'step', direction: 'down' });
+  assert.equal(pending.length, 0, 'Modal blocks even a directly emitted command');
+  bridge.worldBridge.emit('ui:modal_open', false);
+
+  layer.walkAvatarTo(400, 490);
+  resolve(pending.shift()); await flush();
+  layer.update(100); layer.update(100); layer.update(100);
+  const retainedFrame = world.images.at(-2).frame;
+  layer.walkAvatarTo(400, 490);
+  assert.equal(pending.length, 0, 'Retargeting the same walk direction reuses the current upload and stride');
+  assert.equal(world.images.at(-2).frame, retainedFrame);
+  let previous = { x: world.images.at(-2).x, y: world.images.at(-2).y };
+  for (let i = 0; i < 90; i++) {
+    layer.update(100);
+    if (pending.length) { resolve(pending.shift()); await flush(); }
+    const player = world.images.at(-2);
+    assert.ok(Math.hypot(player.x - previous.x, player.y - previous.y) <= 6, 'Corners cannot teleport or cut through the fountain');
+    previous = { x: player.x, y: player.y };
+  }
+  assert.equal(previous.x, 400); assert.equal(previous.y, 490);
+  assert.equal(world.store.get('world.avatar.diagnostics').action, 'idle');
+
+  bridge.worldBridge.setAvatarPresentation({ ...first, top: 'top.hoodie' });
+  assert.equal(world.store.get('world.avatar.diagnostics').ready, false, 'A changed profile immediately removes the previous navigation capabilities');
+  assert.deepEqual(Array.from(world.store.get('world.avatar.diagnostics').acceptedActions), []);
+  resolve(pending.shift(), 'idle', ['idle']); await flush();
+  const idleOnly = world.images.at(-1);
+  layer.walkAvatarTo(544, 460); layer.inspectAvatar();
+  world.events.emit('ui:preferences', { reducedMotion: true });
+  layer.walkAvatarTo(544, 460);
+  assert.equal(pending.length, 0, 'An idle-only accepted manifest cannot unlock walk or inspect, including reduced motion');
+  assert.equal(idleOnly.y, 490, 'Reduced motion cannot bypass the accepted walk gate');
+  assert.deepEqual(Array.from(world.store.get('world.avatar.diagnostics').acceptedActions), ['idle']);
+  world.scale.width = 390; world.scale.height = 844; world.scale.emit('resize');
+  assert.equal(idleOnly.x, 241); assert.equal(idleOnly.y, 595, 'Orientation changes use the portrait path spawn');
 
   bridge.worldBridge.setAvatarPresentation({ ...first, top: 'top.sweater' });
   const afterSave = pending.shift();
@@ -149,5 +226,5 @@ const flush = async () => { await Promise.resolve(); await Promise.resolve(); };
   assert.equal(world.events.count(), 0); assert.equal(world.scale.count(), 0);
   assert.equal(world.texturesMap.size, 0);
   assert.ok(releases.every((lease) => lease.count === 1), 'Each pending/current composition lease is released exactly once');
-  console.log('PASS: modular actor stale account/load disposal, full saved identity, exact foot pivots/cels, independent companion, shared animation reservation, reduced motion/low power, authored walk-to-idle, unavailable-action diagnostic, missing-art fallback, Phaser-owned upload cleanup.');
+  console.log('PASS: modular actor identity/lease disposal, accepted-only path navigation, focused input, modal cancellation, visibility pause, reduced-motion pending-load cancellation, inspect one-shot return, unavailable-art gate, low-power sampling, Phaser-owned uploads.');
 })().catch((error) => { console.error(error); process.exitCode = 1; });

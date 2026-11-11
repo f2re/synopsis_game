@@ -1,0 +1,14 @@
+test_all_families_share_the_frame_clock_and_fit_the_runtime_limit (__main__.ModularPlayerMotionTests.test_all_families_share_the_frame_clock_and_fit_the_runtime_limit) ... ok
+test_candidate_output_cannot_publish_or_rewrite_acceptance (__main__.ModularPlayerMotionTests.test_candidate_output_cannot_publish_or_rewrite_acceptance) ... ok
+test_changed_index_and_rig_bytes_cannot_use_stale_source_hashes (__main__.ModularPlayerMotionTests.test_changed_index_and_rig_bytes_cannot_use_stale_source_hashes) ... ok
+test_even_the_occluded_item_source_is_checked_before_packing (__main__.ModularPlayerMotionTests.test_even_the_occluded_item_source_is_checked_before_packing) ... ok
+test_interpolated_alpha_and_unmapped_hair_colour_are_rejected (__main__.ModularPlayerMotionTests.test_interpolated_alpha_and_unmapped_hair_colour_are_rejected) ... ok
+test_latent_geometry_change_is_bound_even_when_pixel_outputs_match (__main__.ModularPlayerMotionTests.test_latent_geometry_change_is_bound_even_when_pixel_outputs_match) ... ok
+test_planted_inspect_feet_and_noncollapsed_bones_are_required (__main__.ModularPlayerMotionTests.test_planted_inspect_feet_and_noncollapsed_bones_are_required) ... ok
+test_source_direction_tags_and_frame_durations_are_not_trusted_from_index_alone (__main__.ModularPlayerMotionTests.test_source_direction_tags_and_frame_durations_are_not_trusted_from_index_alone) ... ok
+test_unsupported_clip_counts_timing_and_budget_are_rejected (__main__.ModularPlayerMotionTests.test_unsupported_clip_counts_timing_and_budget_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 35.861s
+
+OK

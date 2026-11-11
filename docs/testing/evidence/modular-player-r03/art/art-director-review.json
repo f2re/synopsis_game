@@ -1,0 +1,43 @@
+{
+  "status": "PASS_FOR_SOURCE_ART_AND_COMPOSITION_ONLY",
+  "reviewer": "/root",
+  "role": "art-director",
+  "author": "/root/motion_pipeline",
+  "date": "2026-11-11",
+  "technicalPrerequisite": "docs/testing/2026-11-11-modular-player-r03-art-pipeline-review.md",
+  "fingerprints": {
+    "atlasSha256": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+    "compositionSha256": "0c737499b85dc18f87332ff31b73ca8163afc1a69af44d3bde07509cb8daf70f",
+    "sourceContractSha256": "99a7db7e70e152b5cf62bcb70d3f1d683da4a62ede31fe1db398896332e518be"
+  },
+  "method": "Direct visual review of final phase contact sheets; no browser playback claim",
+  "viewedFiles": {
+    "walk-default-2x.png": "0cd518314da0c949abf85f526b8abc21016846378038ac611001df91208e53a1",
+    "inspect-default-2x.png": "811c6c4433450c070eff9c64057bfa03a4a0dcf8d69ad2754612042842a801bf",
+    "walk-dark-stress.png": "c2734c22561131f3d625a1564e16308a1114bffac5aded8cc4da7f13647be406",
+    "inspect-dark-stress.png": "9f04029e67450515e36c3f560423cd92281625cd7acb9a49248569203b56f825",
+    "inspect-empty-hand-2x.png": "bc5652a3dbc41533f90e5331d316b9bf0a783ea4073fc71398b3ae8099d05d2b",
+    "walk-side-empty-hand-2x.png": "dadf1ce5798eb0018c9991bf9684d6979f4e31cde94cdf9a2652db4ff331e5b2",
+    "walk-legs-right.png": "2816f0fe52a67f9807b66951a307b4bcb499d2a370c1e99dcc8416597a3c4783",
+    "walk-legs-up.png": "07b4e4d07f03d74f5b198c124549f3ef109248226d145aaf950a6044e951ba5e",
+    "walk-legs-down.png": "9c6c2d3eac0e07336a541983321127dead419ae59cbb3449d01a61a612ae8ba9",
+    "walk-legs-left.png": "71087fbde7f042c55f3949d378442dc6517cd7b987cdf8178213309f87e0bb1f",
+    "inspect-held-right.png": "47a8f85d104d4c93f2ed15c2b78ffa74c5cb79d71d39bec83436cefc2b5d4c56",
+    "inspect-held-up.png": "8495a5d519fe035c6de052681c20566b084de3a3f5f6321328fc5d564e9da764",
+    "inspect-hair-headwear-down.png": "5c0412ad3bf07319ddbd67aa4a8dcd40dee229c86e460f15b9aa7c92b3700c1e",
+    "inspect-hair-headwear-right.png": "b44716b99c003202187dad3f7a2dc699facccbd8986d080677f72b41f925c952",
+    "inspect-hair-headwear-up.png": "078e99951fb53f8962727dfc9851f320ea8bbffaa3a48559747c72d517e4863c",
+    "inspect-hair-headwear-left.png": "d505eb6012428b8151361f8296d82db1084c193f6691d68b58c43086d6134a98",
+    "walk-stress-down.png": "de29502fd17fba86654a9f64dd9ea7982203b9e0b2d000974dc05ade33dab1fc",
+    "walk-stress-right.png": "0acc645712b9f3e5d8dfff7580795f82fc6a31fe1b286d267b658f6af5cb4a30",
+    "inspect-stress-up.png": "63bd418bf4dbeebd18deb2ab8bfe34dcf96b519358ddea996397a33ac5c859b1",
+    "inspect-stress-left.png": "fa437a492fb8b1464d1dc0b7b3455f9bca5f80a5cbfaf95ad66c792948ccdc2f",
+    "walk-default-campus.png": "0dd59f829367196a7a650514d22a80561e96aad63d1c306607b3ddbf3dd97c5e",
+    "inspect-default-campus.png": "4a277ba4f68a10b987e498b41aed1a14b60ae29d2c61f62e176d18d08a83a332"
+  },
+  "notAccepted": [
+    "Browser screen composition and interactions",
+    "GPU, p50/p95 and physical-device performance",
+    "Release or merge approval"
+  ]
+}

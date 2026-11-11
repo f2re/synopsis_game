@@ -239,8 +239,8 @@ export function resolveAvatarAction(manifest: ModularAvatarManifest, action: Ava
   return manifest.clips[action] ? action : 'idle';
 }
 
-/** Pure adapter; blitz-preview is presentation only and does not create a game mode. */
-export type AvatarContext = 'wardrobe' | 'campus' | 'shift' | 'blitz-preview';
+/** Pure adapter. A situation never changes the saved outfit or learning rules. */
+export type AvatarContext = 'wardrobe' | 'campus' | 'shift' | 'blitz-preview' | 'blitz-practice';
 export function avatarForContext(profile: ModularAvatarProfile, context: AvatarContext, equipment?: { heldItem: string } | null): ModularAvatarProfile {
   if (context !== 'shift' || !equipment) return { ...profile };
   const heldItem = (MODULAR_AVATAR_OPTIONS.heldItem as readonly string[]).includes(equipment.heldItem) ? equipment.heldItem : 'held.none';

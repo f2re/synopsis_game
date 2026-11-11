@@ -9,7 +9,7 @@
 [![Сборка](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml)
 [![Документация](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 [![Выпуск](https://github.com/f2re/synopsis_game/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/release.yml)
-[![Версия](https://img.shields.io/badge/версия-0.3.0-2563eb)](package.json)
+[![Кандидат](https://img.shields.io/badge/кандидат-0.5.0-d9a441)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520.19-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34.8-F69220?logo=pnpm&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](apps/web/package.json)
@@ -76,9 +76,13 @@
 
 ### Срез от 11 ноября 2026 года
 
-Версия **0.4.1** развивает тот же модульный набор: в гардеробе один образ можно примерить в четырёх ситуациях — полный рост, кампус, рабочий стол и макет блица. Все 30 семейств деталей зарегистрированы в SpriteCook для повторного использования; импорт не потребовал кредитов. Крепления и маски вынесены в [исходный контракт рига](docs/design/MODULAR_CHARACTER_SOURCE_CONTRACT.md), а изменение графики или композиции требует нового независимого допуска. Снимки, результаты проверок и ограничения собраны в [передаче R02](docs/testing/2026-11-11-modular-player-r02-release.md).
+Кандидат **0.5.0 / R03** продолжает модульного игрока: общие движения `walk` и `inspect` используют те же 30 семейств тела и вещей. Гардероб показывает совместимые позы, в кампусе работает управляемая прогулка по дорожкам, а `/blitz` открывает отдельную **блиц-практику на 90 секунд**. Сервер закрепляет срок и полный образ из 11 полей; новая вкладка или перезапуск не продлевают раунд. Блиц использует шесть существующих черновых заданий и не даёт наград, рейтинга или квалификации. [Концепция R03](docs/design/MODULAR_CHARACTER_MOTION_AND_BLITZ_R03.md) описывает повторное использование, [правила блица](docs/gameplay/BLITZ_PRACTICE.md) — отдельный игровой сценарий.
 
-Версия **0.4.0** добавляет [модульного персонажа игрока](docs/design/MODULAR_CHARACTER_SYSTEM.md): тело, волосы, одежда, обувь и вещи собираются из 30 редактируемых семейств. Один сохранённый образ используется в гардеробе, кампусе и учебной смене. Набор покрывает все 42 значения текущего каталога, четыре ракурса и спокойную четырёхкадровую стойку. Ходьба и осмотр пока не входят в принятый набор; общий образец шага SpriteCook сохранён для дальнейшей подготовки совместимых деталей. Отдельный игровой режим блица этим изменением не создаётся.
+**Статус кандидата:** исходники, код и автоматические проверки подготовлены к независимой приёмке. Новая браузерная компоновка, взаимодействие с кампусом и профиль производительности требуют проверки в доступной графической среде; текущая среда блокирует её. Это ограничение и точные доказательства перечислены в [передаче R03](docs/testing/2026-11-11-modular-player-r03-handoff.md). Кандидат не объявлен завершённым выпуском.
+
+Предыдущая версия **0.4.1** добавила ситуационную примерку: полный рост, кампус, рабочий стол и макет блица. Все 30 семейств деталей зарегистрированы в SpriteCook для повторного использования; импорт не потребовал кредитов. Крепления и маски вынесены в [исходный контракт рига](docs/design/MODULAR_CHARACTER_SOURCE_CONTRACT.md), а изменение графики или композиции требует нового независимого допуска. Снимки, результаты проверок и ограничения собраны в [передаче R02](docs/testing/2026-11-11-modular-player-r02-release.md).
+
+Версия **0.4.0** добавила [модульного персонажа игрока](docs/design/MODULAR_CHARACTER_SYSTEM.md): тело, волосы, одежда, обувь и вещи собираются из 30 редактируемых семейств. Один сохранённый образ используется в гардеробе, кампусе и учебной смене. Первый набор покрывал все 42 значения текущего каталога, четыре ракурса и спокойную четырёхкадровую стойку; ходьба, осмотр и игровой блиц в тот выпуск не входили.
 
 Предыдущая версия **0.3.0** объединила восстановленные исходники, графику, инвентарь и учебные усиления. История восстановления сохранена в [передаче интеграции](docs/testing/2026-11-10-recovered-inventory-release.md). Несохранённую примерку можно восстановить после перехода назад; успешный повтор ответа сохраняет первую ошибку в разборе.
 
@@ -101,14 +105,22 @@
 
 Проверка воспроизводимости графики:
 
+Для полного набора команд ниже используйте закреплённые в CI **Node 22.23.4** и **pnpm 10.34.8**. Проверки TypeScript с `--experimental-strip-types` требуют этой среды; общий минимум приложения указан отдельно в `package.json`.
+
 ```bash
 python -m pip install -r tools/assets/requirements-r01.txt
 python tools/assets/build_hub_r01.py --check
 python tools/assets/build_characters_r01.py --check
 python tools/assets/build_inventory_icons_r01.py --check
 python tools/assets/build_equipment_r01.py --check
+python tools/assets/build_modular_player_r01.py --check
+python tools/assets/test_modular_player_contract.py
+python tools/assets/test_modular_player_motion.py
+python tools/assets/export_modular_player_library.py --check --require-registry
 node tools/test_avatar_inventory.cjs --api
 node tools/test_equipment_api.mjs
+node tools/test_blitz_api.mjs
+node tools/test_blitz_lifecycle.cjs
 node tools/test_digit_anatomy.cjs
 node --experimental-strip-types --test packages/world-engine/src/runtime/characterAssets.test.ts
 node tools/test_world_characters.cjs
@@ -116,7 +128,7 @@ node tools/test_world_characters.cjs
 
 Для проверок API предварительно соберите сервер. Итоговые доказательства: [интеграционная проверка экипировки](docs/testing/2026-11-10-equipment-integration-review.md), [независимая проверка графики и анимации](docs/testing/2026-11-10-equipment-final-art-runtime-review.md). Предыдущий этап описан в [передаче инвентаря](docs/testing/2026-11-10-inventory-handoff.md).
 
-**Границы среза:** сотрудники кампуса имеют собственные образы. Сохранённый личный персонаж собран из переиспользуемых частей и отображается в гардеробе, кампусе и учебной смене. Приняты четыре ракурса и спокойная стойка; совместимые фазы ходьбы и осмотра ещё не готовы. Учебный пакет остаётся черновым; игровые значки не означают методическую публикацию или квалификацию. Режимы дуэлей, турниров, сезонных наград и остальные учебные модули не объявляются завершёнными.
+**Границы среза:** сотрудники кампуса имеют собственные образы. Личный персонаж собирается из переиспользуемых частей; новые общие фазы движения и блиц входят в кандидат R03. Допуск конкретных исходных кадров не заменяет браузерную приёмку нового экрана или измерение GPU. Учебный пакет остаётся черновым; игровые значки не означают методическую публикацию или квалификацию. Режимы дуэлей, турниров, сезонных наград и остальные учебные модули не объявляются завершёнными.
 
 **Снимки работающей сборки от 10 ноября:**
 

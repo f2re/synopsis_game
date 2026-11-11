@@ -1,0 +1,15 @@
+{
+  "name": "unit",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "packages/world-engine/src/scenes/hub/avatarWalkway.test.ts",
+    "packages/world-engine/src/runtime/modularAvatar.test.ts",
+    "packages/world-engine/src/runtime/characterAssets.test.ts"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 2.242,
+  "stdout": "✔ accepted local manifest retains authored pivot, duration and semantic IDs (5.590351ms)\n✔ frame boundaries and full-loop wrap follow source durations independently of frame rate (1.616549ms)\n✔ missing approval, unsafe external paths and malformed frame counts cannot enter loader (6.869247ms)\n✔ duplicate identities, incompatible idle/walk frame boxes and unbounded texture packs are rejected (9.336893ms)\n✔ presentation keeps only actual account equipment IDs and resets on sign-out (0.794776ms)\n✔ ambient walking requires NPC role, matching authored direction and a bounded speed (1.089231ms)\n✔ all 42 server options and default saved profile match the reusable render contract (54.655854ms)\n✔ the actual compiled source pack matches the consumer schema, PNG and acceptance gate (18.119451ms)\n✔ only complete accepted catalogs load, with bounds, none semantics and every declared pose (223.522043ms)\n✔ optional accessories may be explicitly hidden by a direction; required body/clothes cannot (12.286852ms)\n✔ an accepted idle-only catalog does not claim walk or inspect readiness (24.812678ms)\n✔ back and front fragments use one global z order; companion is excluded from body (10.720249ms)\n✔ RGB remapping preserves alpha, transparent pixels and authored non-palette colors (0.936212ms)\n✔ inspect ends only after all six frames; authored cadence and reduced-motion are deterministic (10.94967ms)\n✔ cache bounds include active leases; scene disposal does not evict a second consumer (1.149163ms)\n✔ saved identity survives bridge normalization; shift uses the server snapshot without mutating profile (1.08057ms)\n✔ situations preserve the full outfit and intersect their actions with accepted clips (14.034413ms)\n✔ only a supplied shift snapshot selects its instrument; fitting and blitz stay cosmetic (0.286274ms)\n✔ preview and Phaser share exact frame rectangles and foot-relative companion placement (19.478862ms)\n✔ the fountain route goes around its footprint and rejects unmarked ground (7.865483ms)\n✔ keyboard steps follow their direction on the path and stop at a corner (1.143814ms)\n✔ landscape path has clearance from every authored building and ground prop (86.044173ms)\n✔ portrait path has clearance from every authored building and ground prop (11.581898ms)\nℹ tests 23\nℹ suites 0\nℹ pass 23\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1698.877274\n",
+  "stderr": ""
+}

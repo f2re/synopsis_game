@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw
 
 from build_characters_r01 import clean, png, read_aseprite, save
 from modular_player_contract import acceptance_result, layer_offset, validate_rig
+from modular_player_motion import append_motion, read_motion
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'assets/source/characters/player-r01'
@@ -82,14 +83,22 @@ def hands(frame: Image.Image, direction: str, rig: dict, masks: list[str]) -> tu
 
 
 class Atlas:
-    def __init__(self) -> None:
+    def __init__(self, maximum_bytes: int = 2097152, compact: bool = False) -> None:
         self.images: list[Image.Image] = []
         self.ids: dict[str, int] = {}
+        self.maximum_bytes = maximum_bytes
+        self.compact = compact
 
     def cel(self, layer: Image.Image, z: int, offset: tuple[int, int] = (0, 0), role: str | None = None) -> dict:
         bounds = layer.getbbox()
         if not bounds: raise ValueError('Empty cel')
-        image = clean(layer.crop(bounds))
+        image = layer.crop(bounds).convert('RGBA')
+        alpha = set(image.getchannel('A').tobytes())
+        if not alpha <= {0, 255} or 255 not in alpha:
+            raise ValueError('Atlas cels require visible binary-alpha pixels')
+        # A lossless tile entirely inside a garment may be fully opaque. The
+        # complete editable actor frame still requires a transparent margin.
+        if 0 in alpha: image = clean(image)
         key = f'{image.width}:{image.height}:{sha(image.tobytes())}'
         if key not in self.ids:
             self.ids[key] = len(self.images)
@@ -105,14 +114,29 @@ class Atlas:
         # is used by the consumers, but the padding also prevents atlas bleed.
         width, x, y, shelf = 512, 1, 1, 0
         rects = {}
-        for index, image in enumerate(self.images):
-            if x + image.width + 1 > width:
-                x, y, shelf = 1, y + shelf + 2, 0
-            rects[index] = [x, y, image.width, image.height]
-            x += image.width + 2
-            shelf = max(shelf, image.height)
-        height = ((y + shelf + 2 + 31) // 32) * 32
-        if width * height * 4 > 2 * 1024 * 1024: raise ValueError('Raw parts exceed the 2MiB decoded budget')
+        if self.compact:
+            shelves = []
+            ordered = sorted(enumerate(self.images), key=lambda item: (-item[1].height, -item[1].width, item[0]))
+            for index, image in ordered:
+                candidates = [s for s in shelves if image.height <= s['height'] and s['x'] + image.width + 1 <= width]
+                if candidates:
+                    selected = min(candidates, key=lambda s: (width-s['x']-image.width, s['height']-image.height, s['y']))
+                else:
+                    selected = {'x': 1, 'y': 1 if not shelves else shelves[-1]['y']+shelves[-1]['height']+2, 'height': image.height}
+                    shelves.append(selected)
+                rects[index] = [selected['x'], selected['y'], image.width, image.height]
+                selected['x'] += image.width+2
+            used_height = shelves[-1]['y']+shelves[-1]['height']+2
+        else:
+            for index, image in enumerate(self.images):
+                if x + image.width + 1 > width:
+                    x, y, shelf = 1, y + shelf + 2, 0
+                rects[index] = [x, y, image.width, image.height]
+                x += image.width + 2
+                shelf = max(shelf, image.height)
+            used_height = y+shelf+2
+        height = ((used_height+31)//32)*32
+        if width * height * 4 > self.maximum_bytes: raise ValueError(f'Raw parts exceed the {self.maximum_bytes} byte decoded budget')
         result = Image.new('RGBA', (width, height))
         for index, image in enumerate(self.images): result.paste(image, tuple(rects[index][:2]))
         return clean(result), rects
@@ -173,10 +197,10 @@ def resolve_rects(value: object, rects: dict) -> None:
         for item in value: resolve_rects(item, rects)
 
 
-def render(runtime: dict, atlas: Image.Image, profile: dict, direction: str = 'down', phase: int = 0) -> Image.Image:
+def render(runtime: dict, atlas: Image.Image, profile: dict, direction: str = 'down', phase: int = 0, action: str = 'idle') -> Image.Image:
     result = Image.new('RGBA', (96, 144))
-    cels = runtime['body'][direction]['idle'][phase]['cels'][:]
-    for group in OPTIONS: cels += runtime['parts'][profile[group]][direction]['idle'][phase]['cels']
+    cels = runtime['body'][direction][action][phase]['cels'][:]
+    for group in OPTIONS: cels += runtime['parts'][profile[group]][direction][action][phase]['cels']
     for cel in sorted(cels, key=lambda c: c['z']):
         x, y, w, h = cel['rect']; part = atlas.crop((x, y, x + w, y + h))
         if cel.get('paletteRole'):
@@ -233,7 +257,7 @@ def contacts(runtime: dict, atlas: Image.Image, check: bool) -> None:
 def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
     """Compile without writing files or changing the independent acceptance record."""
     validate_rig(rig)
-    atlas = Atlas(); sources = {}
+    atlas = Atlas(rig.get('motion', {}).get('maximumDecodedAtlasBytes', 2097152), compact='motion' in rig); sources = {}
     body, sources['body'] = frame_source('body', rig)
     runtime = {'version': 1, 'rigId': rig['rigId'], 'revision': rig['runtimeRevision'], 'complete': True,
         'artAcceptance': 'PENDING', 'frame': rig['frame'], 'clips': rig['clips'], 'palettes': rig['palettes'],
@@ -253,6 +277,12 @@ def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
         frames, sources[name] = frame_source(name, rig)
         runtime['companions'][name] = {'frame': rig['companionFrame'],
             'anchor': rig['assembly']['companionOffset'], 'frames': part_frames(frames, name, atlas, rig)}
+    if 'motion' in rig:
+        motion_frames, motion_metadata = read_motion(rig, SOURCE, ROOT)
+        append_motion(runtime, atlas, rig, motion_frames)
+        sources['body']['motion'] = {plane: motion_metadata[f'body.{plane}'] for plane in ('base', 'hands', 'forearm')}
+        for name in sources:
+            if name != 'body': sources[name]['motion'] = motion_metadata[name]
     packed, rects = atlas.pack(); resolve_rects(runtime, rects)
     runtime['atlas'] = {'assetId': 'player.modular.r01.atlas', 'url': '/assets/avatar/modular-r01/atlas.png',
         'width': packed.width, 'height': packed.height}
@@ -273,23 +303,50 @@ def build(check: bool) -> None:
     source_manifest['budget'] = {'compressedAtlasBytes': len(data), 'decodedAtlasBytes': packed.width * packed.height * 4,
         'atlasSize': list(packed.size), 'uniqueCels': unique_cels, 'sourceFamilies': len(sources),
         'catalogValues': 42, 'appearanceCombinations': 1944000, 'publishedDirections': DIRS,
-        'publishedClips': ['idle'], 'playerCompositeRgbaBytesPerDirection': 96 * 144 * 4 * 4,
-        'companionCompositeRgbaBytesPerDirection': 64 * 64 * 4 * 4,
-        'maximumDecodedAtlasBytes': 2097152}
+        'publishedClips': list(runtime['clips']), 'playerCompositeRgbaBytesPerDirection': 96 * 144 * 4 * sum(len(c['durationsMs']) for c in runtime['clips'].values()),
+        'companionCompositeRgbaBytesPerDirection': 64 * 64 * 4 * sum(len(c['durationsMs']) for c in runtime['clips'].values()),
+        'maximumDecodedAtlasBytes': rig.get('motion', {}).get('maximumDecodedAtlasBytes', 2097152)}
     source_manifest['outputs'] = {'atlasSha256': sha(data), 'manifestSha256': sha(json_bytes(runtime))}
     if check and json_bytes(source_manifest) != prior: raise ValueError('Source manifest hashes or budgets are stale')
     for directory in [GENERATED, PUBLIC]:
         save(directory / 'atlas.png', data, check); save(directory / 'manifest.json', json_bytes(runtime), check)
     contacts(runtime, packed, check)
     if not check: MANIFEST.write_bytes(json_bytes(source_manifest))
-    print(f"Modular player: {len(sources)} families, 42 values, idle4 × 4 directions; {len(data)} PNG bytes, {packed.width * packed.height * 4} decoded; art={runtime['artAcceptance']}; {'verified' if check else 'built'}")
+    clips = ', '.join(f'{name}{len(clip["durationsMs"])}' for name, clip in runtime['clips'].items())
+    print(f"Modular player: {len(sources)} families, 42 values, {clips} × 4 directions; {len(data)} PNG bytes, {packed.width * packed.height * 4} decoded; art={runtime['artAcceptance']}; {'verified' if check else 'built'}")
     if admission['reasons']:
         print('Admission pending: ' + '; '.join(admission['reasons']))
         if check:
             raise ValueError('The published modular pack does not have matching independent acceptance')
 
 
+def build_candidate(rig_path: Path, output: Path, check: bool) -> None:
+    """Produce reviewable artifacts without publishing or editing acceptance."""
+    if not output.resolve().is_relative_to((ROOT/'artifacts').resolve()):
+        raise ValueError('Candidate output must stay under artifacts/, outside public/generated assets')
+    rig = validate_rig(json.loads(rig_path.read_text()))
+    runtime, packed, data, sources, unique_cels = compile_pack(rig)
+    admission = acceptance_result(json.loads(MANIFEST.read_text()), rig, runtime, data, ROOT)
+    runtime['artAcceptance'] = admission['status']
+    evidence = {'status': 'CANDIDATE_NOT_ADMITTED', 'fingerprints': admission['fingerprints'],
+        'sourceFamilies': len(sources), 'uniqueCels': unique_cels, 'atlasSize': list(packed.size),
+        'compressedAtlasBytes': len(data), 'decodedAtlasBytes': packed.width*packed.height*4,
+        'clips': runtime['clips'], 'currentAcceptance': admission}
+    save(output/'atlas.png', data, check)
+    save(output/'manifest.json', json_bytes(runtime), check)
+    save(output/'candidate-evidence.json', json_bytes(evidence), check)
+    print(f"Motion candidate: {unique_cels} cels, {packed.width}×{packed.height}, {len(data)} PNG bytes; {'verified' if check else 'written'} outside production")
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
-    build(parser.parse_args().check)
+    parser.add_argument('--rig', type=Path, help='Explicit source contract for an artifacts-only candidate')
+    parser.add_argument('--candidate', type=Path, help='Write review outputs under artifacts/, without publishing')
+    args = parser.parse_args()
+    if args.candidate:
+        build_candidate(args.rig or SOURCE/'rig.json', args.candidate, args.check)
+    elif args.rig:
+        parser.error('--rig is only available with --candidate')
+    else:
+        build(args.check)

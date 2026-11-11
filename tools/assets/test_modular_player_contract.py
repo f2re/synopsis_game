@@ -24,13 +24,20 @@ class ModularPlayerContractTests(unittest.TestCase):
         return acceptance_result(source or self.source, rig or self.rig, runtime or self.runtime,
                                  data or self.png, root or builder.ROOT)
 
-    def test_migration_preserves_the_reviewed_r01_atlas_and_all_composition_bytes(self):
-        self.assertEqual(digest(self.png), 'a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73')
-        runtime = copy.deepcopy(self.runtime)
+    def test_legacy_idle_pixels_remain_bit_identical_after_motion_extension(self):
+        legacy = copy.deepcopy(self.rig)
+        legacy['version'] = 2
+        legacy['runtimeRevision'] = 'r01-idle4-20261110'
+        legacy['clips'] = {'idle': {'durationsMs': [320]*4, 'loop': True}}
+        legacy.pop('motion', None)
+        runtime, _, data, _, count = builder.compile_pack(legacy)
+        self.assertEqual(digest(data), 'a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73')
         runtime['artAcceptance'] = 'PASS'
         # This is the actual R01 public JSON accepted before the source migration.
         self.assertEqual(digest(builder.json_bytes(runtime)), 'f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf')
-        self.assertEqual(self.cel_count, 125)
+        self.assertEqual(count, 125)
+        self.assertEqual(fingerprints(legacy, runtime, data)['sourceContractSha256'],
+            '02666d4e7806158e35a6abe9dd0b7eb8bb5dfa0c24221c9e396bed1e2ea7e56f')
         self.assertEqual(len(self.sources), 30)
         self.assertEqual(fingerprints(self.rig, self.runtime, self.png), self.source['acceptedFingerprint']['fingerprints'])
 

@@ -1,0 +1,919 @@
+{
+  "source": "ShiftService; core_ru_001@0.6.0; local public visual fixture; 2026-11-11",
+  "avatar": {
+    "skinTone": "skin.warm",
+    "hair": "hair.short",
+    "hairColor": "haircolor.brown",
+    "headwear": "headwear.none",
+    "top": "top.field-jacket",
+    "bottom": "bottom.dark-trousers",
+    "footwear": "footwear.boots",
+    "backpack": "backpack.field",
+    "heldItem": "held.tablet",
+    "companion": "companion.none",
+    "badge": "badge.none"
+  },
+  "locked": {
+    "mode": "blitz-practice",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "total": 6,
+    "eligible": false,
+    "completedShifts": 0,
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "session": null
+  },
+  "ready": {
+    "mode": "blitz-practice",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "total": 6,
+    "eligible": true,
+    "completedShifts": 1,
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "session": null
+  },
+  "active": [
+    {
+      "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0
+      },
+      "progress": {
+        "answered": 0,
+        "correct": 0,
+        "current": 1,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+        "definitionId": "kn01_temp_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "decode",
+        "difficulty": 1,
+        "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+        "response": {
+          "kind": "numeric",
+          "unit": "degC"
+        },
+        "payload": {
+          "group": "1snTTT",
+          "encoded": "10234"
+        }
+      },
+      "review": []
+    },
+    {
+      "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0
+      },
+      "progress": {
+        "answered": 1,
+        "correct": 0,
+        "current": 2,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:2",
+        "definitionId": "kn01_dewpoint_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "decode",
+        "difficulty": 1,
+        "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+        "response": {
+          "kind": "numeric",
+          "unit": "degC"
+        },
+        "payload": {
+          "group": "2snTdTdTd",
+          "encoded": "21052"
+        }
+      },
+      "review": [
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0
+      },
+      "progress": {
+        "answered": 2,
+        "correct": 0,
+        "current": 3,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:3",
+        "definitionId": "kn01_station_pressure_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "decode",
+        "difficulty": 1,
+        "question": "Какое давление на уровне станции закодировано группой 30218?",
+        "response": {
+          "kind": "numeric",
+          "unit": "hPa"
+        },
+        "payload": {
+          "group": "3PoPoPoPo",
+          "encoded": "30218"
+        }
+      },
+      "review": [
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0
+      },
+      "progress": {
+        "answered": 3,
+        "correct": 0,
+        "current": 4,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:4",
+        "definitionId": "kn01_tendency_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "choice",
+        "difficulty": 2,
+        "question": "Что означает группа 57103 КН-01 SYNOP?",
+        "response": {
+          "kind": "choice"
+        },
+        "payload": {
+          "options": [
+            {
+              "id": 0,
+              "label": "Равномерное падение давления; за последние 3 часа давление понизилось на 10,3 гПа"
+            },
+            {
+              "id": 1,
+              "label": "Равномерный рост давления; за последние 3 часа давление повысилось на 10,3 гПа"
+            },
+            {
+              "id": 2,
+              "label": "Давление не изменилось за последние 3 часа"
+            },
+            {
+              "id": 3,
+              "label": "Падение давления на 1,03 гПа за последний час"
+            }
+          ]
+        }
+      },
+      "review": [
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:3",
+          "question": "Какое давление на уровне станции закодировано группой 30218?",
+          "correct": false,
+          "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0
+      },
+      "progress": {
+        "answered": 4,
+        "correct": 1,
+        "current": 5,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:5",
+        "definitionId": "kn01_section1_order_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "sequence",
+        "difficulty": 2,
+        "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+        "response": {
+          "kind": "sequence"
+        },
+        "payload": {
+          "steps": [
+            {
+              "id": 0,
+              "label": "5appp"
+            },
+            {
+              "id": 1,
+              "label": "2snTdTdTd"
+            },
+            {
+              "id": 2,
+              "label": "iRixhVV"
+            },
+            {
+              "id": 3,
+              "label": "1snTTT"
+            },
+            {
+              "id": 4,
+              "label": "3PoPoPoPo"
+            },
+            {
+              "id": 5,
+              "label": "Nddff"
+            },
+            {
+              "id": 6,
+              "label": "4PPPP или 4a3hhh"
+            }
+          ]
+        }
+      },
+      "review": [
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:3",
+          "question": "Какое давление на уровне станции закодировано группой 30218?",
+          "correct": false,
+          "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:4",
+          "question": "Что означает группа 57103 КН-01 SYNOP?",
+          "correct": true,
+          "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 5appp; пример 57103"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0
+      },
+      "progress": {
+        "answered": 5,
+        "correct": 1,
+        "current": 6,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:6",
+        "definitionId": "station_plot_basic_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "stationPlot",
+        "difficulty": 2,
+        "question": "Нанесите четыре базовых элемента наблюдения на схему приземной станции.",
+        "response": {
+          "kind": "stationPlot"
+        },
+        "payload": {
+          "profile": "RUS_SURFACE_STATION_V1",
+          "station": {
+            "id": "TRAINING-001",
+            "name": "Учебная станция"
+          },
+          "observations": [
+            {
+              "id": "obs_t",
+              "label": "Температура воздуха T",
+              "value": "+12,4 °C",
+              "display": "12,4"
+            },
+            {
+              "id": "obs_td",
+              "label": "Точка росы Td",
+              "value": "+7,9 °C",
+              "display": "7,9"
+            },
+            {
+              "id": "obs_p",
+              "label": "Давление, приведённое к уровню моря p",
+              "value": "1016,2 гПа",
+              "display": "162"
+            },
+            {
+              "id": "obs_wind",
+              "label": "Ветер dd/ff",
+              "value": "240°, 8 м/с",
+              "wind": {
+                "directionDeg": 240,
+                "speedMs": 8
+              }
+            }
+          ],
+          "slots": [
+            {
+              "id": "slot_01",
+              "x": 300,
+              "y": 300,
+              "kind": "text"
+            },
+            {
+              "id": "slot_02",
+              "x": 300,
+              "y": 700,
+              "kind": "text"
+            },
+            {
+              "id": "slot_03",
+              "x": 700,
+              "y": 300,
+              "kind": "text"
+            },
+            {
+              "id": "slot_04",
+              "x": 500,
+              "y": 500,
+              "kind": "wind"
+            }
+          ],
+          "canvas": {
+            "width": 1000,
+            "height": 1000
+          }
+        }
+      },
+      "review": [
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:3",
+          "question": "Какое давление на уровне станции закодировано группой 30218?",
+          "correct": false,
+          "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:4",
+          "question": "Что означает группа 57103 КН-01 SYNOP?",
+          "correct": true,
+          "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 5appp; пример 57103"
+            }
+          ]
+        },
+        {
+          "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:5",
+          "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+          "correct": false,
+          "explanation": "Кодовые группы в сводке должны располагаться в порядке, заданном схемой КН-01. Отсутствующая по правилам группа может не передаваться, но порядок присутствующих групп не меняется.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "схема кода, раздел 1; с. 6 файла PDF"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "completed": {
+    "id": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8",
+    "mode": "blitz-practice",
+    "status": "completed",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "startedAt": "2026-11-11T12:00:00.000Z",
+    "deadlineAt": "2026-11-11T12:01:30.000Z",
+    "serverNow": "2026-11-11T12:00:00.000Z",
+    "completedAt": "2026-11-11T12:00:00.000Z",
+    "finishReason": "answered",
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "avatarSnapshot": {
+      "skinTone": "skin.warm",
+      "hair": "hair.short",
+      "hairColor": "haircolor.brown",
+      "headwear": "headwear.none",
+      "top": "top.field-jacket",
+      "bottom": "bottom.dark-trousers",
+      "footwear": "footwear.boots",
+      "backpack": "backpack.field",
+      "heldItem": "held.tablet",
+      "companion": "companion.none",
+      "badge": "badge.none"
+    },
+    "equipment": {
+      "badgeId": "badge.training_starter",
+      "badgeName": "На связи",
+      "heldItem": "held.tablet",
+      "enabled": false,
+      "charges": {
+        "reference": 0,
+        "retry": 0
+      },
+      "remaining": {
+        "reference": 0,
+        "retry": 0
+      },
+      "assistedTasks": 0
+    },
+    "progress": {
+      "answered": 6,
+      "correct": 2,
+      "current": 6,
+      "total": 6
+    },
+    "task": null,
+    "review": [
+      {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:1",
+        "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+        "correct": false,
+        "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+          }
+        ]
+      },
+      {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:2",
+        "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+        "correct": false,
+        "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+          }
+        ]
+      },
+      {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:3",
+        "question": "Какое давление на уровне станции закодировано группой 30218?",
+        "correct": false,
+        "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+          }
+        ]
+      },
+      {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:4",
+        "question": "Что означает группа 57103 КН-01 SYNOP?",
+        "correct": true,
+        "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 5appp; пример 57103"
+          }
+        ]
+      },
+      {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:5",
+        "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+        "correct": false,
+        "explanation": "Кодовые группы в сводке должны располагаться в порядке, заданном схемой КН-01. Отсутствующая по правилам группа может не передаваться, но порядок присутствующих групп не меняется.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "схема кода, раздел 1; с. 6 файла PDF"
+          }
+        ]
+      },
+      {
+        "instanceId": "e7f0759f-ce6d-4dc3-9072-8e28ba2995a8:6",
+        "question": "Нанесите четыре базовых элемента наблюдения на схему приземной станции.",
+        "correct": true,
+        "explanation": "В базовой станционной модели температура T располагается слева сверху от кружка станции, точка росы Td — слева снизу, давление p — справа сверху. Знак ветра начинается в центре станции и ориентирован в сторону, откуда дует ветер. Текущий профиль является учебным черновиком и до публикации проходит независимую проверку российской синоптической школой.",
+        "sources": [
+          {
+            "sourceId": "WMO_485_2024_RU",
+            "title": "Наставление по Комплексной системе обработки и прогнозирования ВМО",
+            "locator": "пп. 2.1.8.4.2.1–2.1.8.4.2.2: стандартные символы и модели; отсылка к ВМО-№ 306, том I.1, добавление IV"
+          },
+          {
+            "sourceId": "ZVEREV_1977",
+            "title": "Синоптическая метеорология",
+            "locator": "раздел о приземных синоптических картах и схеме нанесения; страница уточняется при независимой методической приёмке"
+          }
+        ]
+      }
+    ]
+  },
+  "timeout": {
+    "id": "132db550-82ee-4c88-9689-8127dab4f32d",
+    "mode": "blitz-practice",
+    "status": "completed",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "startedAt": "2026-11-11T12:00:00.000Z",
+    "deadlineAt": "2026-11-11T12:01:30.000Z",
+    "serverNow": "2026-11-11T12:01:30.000Z",
+    "completedAt": "2026-11-11T12:01:30.000Z",
+    "finishReason": "timeout",
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "avatarSnapshot": {
+      "skinTone": "skin.warm",
+      "hair": "hair.short",
+      "hairColor": "haircolor.brown",
+      "headwear": "headwear.none",
+      "top": "top.field-jacket",
+      "bottom": "bottom.dark-trousers",
+      "footwear": "footwear.boots",
+      "backpack": "backpack.field",
+      "heldItem": "held.tablet",
+      "companion": "companion.none",
+      "badge": "badge.none"
+    },
+    "equipment": {
+      "badgeId": "badge.training_starter",
+      "badgeName": "На связи",
+      "heldItem": "held.tablet",
+      "enabled": false,
+      "charges": {
+        "reference": 0,
+        "retry": 0
+      },
+      "remaining": {
+        "reference": 0,
+        "retry": 0
+      },
+      "assistedTasks": 0
+    },
+    "progress": {
+      "answered": 1,
+      "correct": 0,
+      "current": 2,
+      "total": 6
+    },
+    "task": null,
+    "review": [
+      {
+        "instanceId": "132db550-82ee-4c88-9689-8127dab4f32d:1",
+        "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+        "correct": false,
+        "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+          }
+        ]
+      }
+    ]
+  }
+}

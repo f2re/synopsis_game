@@ -1,0 +1,16 @@
+{
+  "extends": "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@synopsis/world-engine": [
+        "/workspace/scratch/3a71d9be4756/synopsis_game/packages/world-engine/src/index.ts"
+      ],
+      "@synopsis/world-engine/avatar": [
+        "/workspace/scratch/3a71d9be4756/synopsis_game/packages/world-engine/src/avatar.ts"
+      ]
+    },
+    "types": [
+      "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web/node_modules/vite/client.d.ts"
+    ]
+  }
+}

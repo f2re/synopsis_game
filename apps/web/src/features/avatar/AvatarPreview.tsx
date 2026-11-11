@@ -72,7 +72,7 @@ function ModularAvatarCanvas({ composite, presentation, size, showBackdrop, onAn
       if (playing) elapsed += Math.max(0, now - sampledAt);
       sampledAt = now;
       const visible = !document.hidden && inView;
-      const still = reduced || !presentation.animate;
+      const still = reduced || !presentation.animate || (done && !composite.clip.loop);
       const state = avatarFrameAtTime(composite.clip, elapsed, still);
       playing = visible && !still && !state.complete;
       if (state.frame !== displayedFrame) {

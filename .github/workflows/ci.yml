@@ -37,6 +37,7 @@ jobs:
           python tools/assets/build_equipment_r01.py --check
           python tools/assets/build_modular_player_r01.py --check
           python tools/assets/test_modular_player_contract.py
+          python tools/assets/test_modular_player_motion.py
           python tools/assets/export_modular_player_library.py --check --require-registry
           node tools/assets/scripts/audit-hub-runtime.mjs
           python tools/assets/check_generation_profiles.py
@@ -63,9 +64,12 @@ jobs:
           node tools/test_world_audio_controls.cjs
           node --experimental-strip-types --test packages/world-engine/src/runtime/characterAssets.test.ts
           node --experimental-strip-types --test packages/world-engine/src/runtime/modularAvatar.test.ts
+          node --experimental-strip-types --test packages/world-engine/src/scenes/hub/avatarWalkway.test.ts
           node tools/test_world_characters.cjs
           node tools/test_modular_avatar.cjs
           node tools/test_avatar_preview_lifecycle.cjs
+          node tools/test_avatar_world_boundary.cjs
+          node tools/test_blitz_lifecycle.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
@@ -73,6 +77,7 @@ jobs:
           pnpm build
           node tools/test_avatar_inventory.cjs --api
           node tools/test_equipment_api.mjs
+          node tools/test_blitz_api.mjs
       - name: Проверить production-сервер
         run: |
           SYNOPSIS_IDENTITY_STORE=/tmp/synopsis-identity-ci.json API_BIND=127.0.0.1 API_PORT=4174 node apps/server/dist/index.js >/tmp/synopsis-server.log 2>&1 &

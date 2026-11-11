@@ -1,0 +1,81 @@
+{
+  "task": "20261111-modular-player-r03-completion",
+  "reviewer": "/root/blitz_flow",
+  "implementationOwner": "/root/runtime_motion",
+  "generatedAt": "2026-11-11T17:46:32.392462+00:00",
+  "node": "v24.22.1",
+  "verdict": "PASS: code and deterministic React/Phaser boundary checks only",
+  "notCovered": [
+    "Browser layout",
+    "physical GPU pressure",
+    "p50/p95 frames",
+    "long session",
+    "art acceptance"
+  ],
+  "fixedFinding": "setProfile now immediately publishes ready=false and acceptedActions=[] before asynchronous composition; independently rechecked",
+  "sha256": {
+    "packages/world-engine/src/scenes/hub/HubModularAvatarLayer.ts": "f491be47bbf1a5db49cc59301876d4c0c7c6a6b883a316cbd029650420e1fde8",
+    "packages/world-engine/src/scenes/hub/avatarWalkway.ts": "d23dfaf199abcc31d2c79103a3808454ef97fed1be9e4def32f7c34c75826ad1",
+    "packages/world-engine/src/runtime/avatarNavigation.ts": "526e89895e1829eb88b335dc71b09b0091c31715c0dc30510e4d4469b7568498",
+    "packages/world-engine/src/runtime/modularAvatarPresentation.ts": "5a7954d942fe29dc71fca4143ba299172deab663ad665a51f0014a004369b2b7",
+    "apps/web/src/game/WorldCanvas.tsx": "44499ad65ebc66d2290f0a7ec45c875ce5da5c2102989f097c3279e3845dd801",
+    "apps/web/src/game/world-avatar.css": "01877935af560a9feb0cd3a489f2086170cd413400b5fabb4c9eef6320299d30",
+    "apps/web/src/features/avatar/AvatarPreview.tsx": "6fb0a00322164c0bf696003b258e1c70fb6617ff77d4dea0ecaa96178e0f5532",
+    "apps/web/src/features/avatar/AvatarEditor.tsx": "bb37a547b0c35aaaf9a5abf4abc83f0bea620df23a14382eb2d6a210c22b3c62",
+    "tools/test_modular_avatar.cjs": "3d9532ff8b81ca780eb5df4a90ac5806ce589ec9182c82e122840457a154618b",
+    "tools/test_avatar_world_boundary.cjs": "da350808bf7ae074ffb3a0e0773efad63a151aa935284f9d36276232192b6c9a"
+  },
+  "checks": [
+    {
+      "command": [
+        "node",
+        "tools/test_avatar_world_boundary.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"status\":\"PASS\",\"reviewer\":\"blitz_flow\",\"boundary\":\"real WorldCanvas code with deterministic event doubles\",\"checks\":[\"focused keyboard and Cyrillic layout\",\"no global key interception\",\"native Tab/Enter/Space intact\",\"Canvas-only coordinate mapping\",\"context-loss and hidden restore\",\"modal input pause\",\"reduced-motion and 30fps preference\",\"all listeners and game disposed\"],\"limits\":\"Not a browser layout, measured GPU or art acceptance result.\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tools/test_modular_avatar.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: modular actor identity/lease disposal, accepted-only path navigation, focused input, modal cancellation, visibility pause, reduced-motion pending-load cancellation, inspect one-shot return, unavailable-art gate, low-power sampling, Phaser-owned uploads.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tools/test_avatar_preview_lifecycle.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"status\":\"PASS\",\"test\":\"actual Canvas effects with deterministic DOM/event doubles\",\"cases\":[{\"mode\":\"ambient\",\"withObserver\":true,\"draws\":5,\"cleanup\":\"PASS\"},{\"mode\":\"quiet\",\"withObserver\":true,\"draws\":1,\"cleanup\":\"PASS\"},{\"mode\":\"ambient\",\"withObserver\":false,\"draws\":4,\"cleanup\":\"PASS\"},{\"mode\":\"legacy-fallback\",\"withObserver\":true,\"draws\":4,\"cleanup\":\"PASS\"},{\"mode\":\"inspect-one-shot\",\"withObserver\":true,\"draws\":7,\"cleanup\":\"PASS\"},{\"mode\":\"inspect-reduced-cancel\",\"withObserver\":true,\"draws\":3,\"cleanup\":\"PASS\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "packages/world-engine/src/scenes/hub/avatarWalkway.test.ts",
+        "packages/world-engine/src/runtime/modularAvatar.test.ts",
+        "packages/world-engine/src/runtime/characterAssets.test.ts"
+      ],
+      "exitCode": 0,
+      "stdout": "✔ accepted local manifest retains authored pivot, duration and semantic IDs (2.574059ms)\n✔ frame boundaries and full-loop wrap follow source durations independently of frame rate (0.378591ms)\n✔ missing approval, unsafe external paths and malformed frame counts cannot enter loader (0.783411ms)\n✔ duplicate identities, incompatible idle/walk frame boxes and unbounded texture packs are rejected (0.510059ms)\n✔ presentation keeps only actual account equipment IDs and resets on sign-out (0.430233ms)\n✔ ambient walking requires NPC role, matching authored direction and a bounded speed (0.678679ms)\n✔ all 42 server options and default saved profile match the reusable render contract (26.477796ms)\n✔ the actual compiled source pack matches the consumer schema, PNG and acceptance gate (10.0941ms)\n✔ only complete accepted catalogs load, with bounds, none semantics and every declared pose (100.231256ms)\n✔ optional accessories may be explicitly hidden by a direction; required body/clothes cannot (13.210006ms)\n✔ an accepted idle-only catalog does not claim walk or inspect readiness (7.987755ms)\n✔ back and front fragments use one global z order; companion is excluded from body (12.674795ms)\n✔ RGB remapping preserves alpha, transparent pixels and authored non-palette colors (0.674209ms)\n✔ inspect ends only after all six frames; authored cadence and reduced-motion are deterministic (9.169768ms)\n✔ cache bounds include active leases; scene disposal does not evict a second consumer (1.585534ms)\n✔ saved identity survives bridge normalization; shift uses the server snapshot without mutating profile (0.815029ms)\n✔ situations preserve the full outfit and intersect their actions with accepted clips (15.496363ms)\n✔ only a supplied shift snapshot selects its instrument; fitting and blitz stay cosmetic (5.489279ms)\n✔ preview and Phaser share exact frame rectangles and foot-relative companion placement (5.577006ms)\n✔ the fountain route goes around its footprint and rejects unmarked ground (4.574639ms)\n✔ keyboard steps follow their direction on the path and stop at a corner (0.464896ms)\n✔ landscape path has clearance from every authored building and ground prop (21.891711ms)\n✔ portrait path has clearance from every authored building and ground prop (2.876899ms)\nℹ tests 23\nℹ suites 0\nℹ pass 23\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 512.196871\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "apps/web/node_modules/.bin/tsc",
+        "-p",
+        "/workspace/scratch/3a71d9be4756/tsconfig-r03-web.json",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

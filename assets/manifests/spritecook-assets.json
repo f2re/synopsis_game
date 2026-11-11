@@ -534,6 +534,48 @@
       "asset_id": "3f92695e-c920-4e8a-8a30-31de436b6116",
       "sha12": "f55b1b456f9e",
       "label": "26063 · companion.squirrel · four directions · R01"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/body-down-spritecook.png",
+      "asset_id": "276782e8-41da-4281-a4bf-80038c03d121",
+      "sha12": "927c0b93e771",
+      "label": "26063 R03 motion reference only: down"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/body-right-spritecook.png",
+      "asset_id": "0748a47c-f321-4984-b7fb-073247d93b89",
+      "sha12": "8602ff938f18",
+      "label": "26063 R03 motion reference only: right"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/body-up-spritecook.png",
+      "asset_id": "fb136a1b-ae40-4064-b75f-016c0a1e0f69",
+      "sha12": "bd53ec125d0f",
+      "label": "26063 R03 motion reference only: up"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/body-left-spritecook.png",
+      "asset_id": "857b9b75-166c-4650-83fc-87cb399df005",
+      "sha12": "42f5dec7bccf",
+      "label": "26063 R03 motion reference only: left"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/front-stride-guide-polished.png",
+      "asset_id": "837d856c-5f63-4e5b-81b1-e10b3a8c8c18",
+      "sha12": "2190a35c589d",
+      "label": "26063 R03 motion reference only: front-stride-guide-polished.png"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/inspect-right-guide.png",
+      "asset_id": "64d89d74-d801-4455-88cb-5d755e0e932d",
+      "sha12": "e4fb15dc24ce",
+      "label": "26063 R03 motion reference only: inspect-right-guide.png"
+    },
+    {
+      "id": "assets/source/characters/player-r01/motion-reference/walk-down-guide.png",
+      "asset_id": "eb922b54-dccb-4a03-895f-4293b96fa155",
+      "sha12": "d8ccb7f5c85c",
+      "label": "26063 R03 motion reference only: walk-down-guide.png"
     }
   ]
 }

@@ -1,0 +1,143 @@
+{
+  "status": "PASS",
+  "reviewer": "/root",
+  "date": "2026-11-11T18:09:37.734467+00:00",
+  "node": "v24.22.1",
+  "sourceRevision": "r03-motion6-20261111",
+  "checks": [
+    {
+      "name": "asset-contract",
+      "command": [
+        "python",
+        "tools/assets/test_modular_player_contract.py"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 48.405,
+      "log": "docs/testing/evidence/modular-player-r03/integration/asset-contract.txt"
+    },
+    {
+      "name": "asset-motion",
+      "command": [
+        "python",
+        "tools/assets/test_modular_player_motion.py"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 36.206,
+      "log": "docs/testing/evidence/modular-player-r03/integration/asset-motion.txt"
+    },
+    {
+      "name": "asset-reproduce",
+      "command": [
+        "python",
+        "tools/assets/build_modular_player_r01.py",
+        "--check"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 11.581,
+      "log": "docs/testing/evidence/modular-player-r03/integration/asset-reproduce.txt"
+    },
+    {
+      "name": "avatar-unit",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "packages/world-engine/src/runtime/modularAvatar.test.ts",
+        "packages/world-engine/src/scenes/hub/avatarWalkway.test.ts"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 0.613,
+      "log": "docs/testing/evidence/modular-player-r03/integration/avatar-unit.txt"
+    },
+    {
+      "name": "blitz-lifecycle",
+      "command": [
+        "node",
+        "tools/test_blitz_lifecycle.cjs"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 0.556,
+      "log": "docs/testing/evidence/modular-player-r03/integration/blitz-lifecycle.txt"
+    },
+    {
+      "name": "canvas-boundary",
+      "command": [
+        "node",
+        "tools/test_avatar_world_boundary.cjs"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 0.545,
+      "log": "docs/testing/evidence/modular-player-r03/integration/canvas-boundary.txt"
+    },
+    {
+      "name": "canvas-lifecycle",
+      "command": [
+        "node",
+        "tools/test_avatar_preview_lifecycle.cjs"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 0.905,
+      "log": "docs/testing/evidence/modular-player-r03/integration/canvas-lifecycle.txt"
+    },
+    {
+      "name": "phaser-lifecycle",
+      "command": [
+        "node",
+        "tools/test_modular_avatar.cjs"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 0.754,
+      "log": "docs/testing/evidence/modular-player-r03/integration/phaser-lifecycle.txt"
+    },
+    {
+      "name": "spritecook-library",
+      "command": [
+        "python",
+        "tools/assets/export_modular_player_library.py",
+        "--check",
+        "--require-registry"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 1.145,
+      "log": "docs/testing/evidence/modular-player-r03/integration/spritecook-library.txt"
+    },
+    {
+      "name": "web-build",
+      "command": [
+        "node_modules/.bin/vite",
+        "build"
+      ],
+      "cwd": "apps/web",
+      "exitCode": 0,
+      "durationSeconds": 2.063,
+      "log": "docs/testing/evidence/modular-player-r03/integration/web-build.txt"
+    },
+    {
+      "name": "web-typecheck",
+      "command": [
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web/node_modules/.bin/tsc",
+        "--project",
+        "/workspace/scratch/3a71d9be4756/tsconfig-r03-web.json",
+        "--noEmit"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "durationSeconds": 7.536,
+      "log": "docs/testing/evidence/modular-player-r03/integration/web-typecheck.txt"
+    }
+  ],
+  "limits": [
+    "Local verification uses Node 24.22.1; CI uses pinned Node 22.23.4.",
+    "No browser layout, GPU or physical-device acceptance."
+  ],
+  "logNormalization": "Trailing whitespace removed from Vite output for repository whitespace checks; command, output text and exit status unchanged."
+}

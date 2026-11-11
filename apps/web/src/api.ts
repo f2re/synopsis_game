@@ -187,6 +187,44 @@ export interface ShiftAnswerResponse {
   reward?: ShiftReward;
 }
 
+export interface BlitzSession {
+  id: string;
+  mode: 'blitz-practice';
+  status: 'active' | 'completed';
+  rulesVersion: string;
+  durationSeconds: number;
+  startedAt: string;
+  deadlineAt: string;
+  serverNow: string;
+  completedAt?: string;
+  finishReason?: 'answered' | 'timeout';
+  contentPack: string;
+  contentStatus: string;
+  avatarSnapshot: AvatarProfile;
+  equipment: EquipmentSnapshot;
+  progress: ShiftProgress;
+  task: ShiftTask | null;
+  review: Array<{ instanceId: string; question: string; correct: boolean; explanation: string; sources: Array<{ sourceId: string; title: string; locator: string }> }>;
+}
+
+export interface BlitzLobby {
+  mode: 'blitz-practice';
+  rulesVersion: string;
+  durationSeconds: number;
+  total: number;
+  eligible: boolean;
+  completedShifts: number;
+  contentPack: string;
+  contentStatus: string;
+  session: BlitzSession | null;
+}
+
+export interface BlitzAnswerResponse {
+  accepted: boolean;
+  feedback?: ShiftAnswerResponse['feedback'];
+  session: BlitzSession;
+}
+
 const TOKEN_KEY = 'synopsis.session.token';
 
 export class ApiError extends Error {
@@ -235,6 +273,10 @@ export const api = {
   async revealShiftAnswer(shiftId: string, instanceId: string): Promise<ShiftAnswerResponse> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/reveal`, { method: 'POST', body: JSON.stringify({ instanceId }) }, true); },
   async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown, attempt: 1 | 2 = 1): Promise<ShiftAnswerResponse> { return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, { method: 'POST', body: JSON.stringify({ shiftId, answer, attempt }) }, true); },
   async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number; equipment: EquipmentSnapshot; reward?: ShiftReward }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true); },
+  async blitzLobby(): Promise<BlitzLobby> { return request('/api/blitz-practice', {}, true); },
+  async startBlitz(requestId: string): Promise<BlitzSession> { return request('/api/blitz-practice', { method: 'POST', body: JSON.stringify({ requestId }) }, true); },
+  async blitzSession(id: string): Promise<BlitzSession> { return request(`/api/blitz-practice/${encodeURIComponent(id)}`, {}, true); },
+  async submitBlitzAnswer(id: string, instanceId: string, answer: unknown): Promise<BlitzAnswerResponse> { return request(`/api/blitz-practice/${encodeURIComponent(id)}/answer`, { method: 'POST', body: JSON.stringify({ instanceId, answer }) }, true); },
   async adminUsers(): Promise<AdminUser[]> { return (await request<{ users: AdminUser[] }>('/api/admin/users', {}, true)).users; },
   async createUser(input: { displayName: string; groupId: string; roles?: UserRole[]; initialCode?: string }): Promise<AdminUser> { return (await request<{ user: AdminUser }>('/api/admin/users', { method: 'POST', body: JSON.stringify(input) }, true)).user; },
   async batchCreateUsers(input: { groupId: string; roles?: UserRole[]; users: Array<{ displayName: string; initialCode?: string }> }): Promise<{ groupId: string; count: number; created: Array<AdminUser & { initialCode: string }> }> { return request('/api/admin/users/batch', { method: 'POST', body: JSON.stringify(input) }, true); },

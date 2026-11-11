@@ -1,3 +1,5 @@
+import type { BlitzState } from '../shift/blitzRules.js';
+
 export interface EffectCharges { reference: number; retry: number }
 
 export interface EquipmentSnapshot {
@@ -67,6 +69,8 @@ export interface TrainingShift {
   pendingRetry?: { instanceId: string; firstAnswer: unknown };
   responses: Record<string, { fingerprint: string; response: unknown }>;
   reward?: TrainingReward;
+  /** Server-owned clock, outfit and accepted answers for the timed practice mode. */
+  blitz?: BlitzState;
 }
 
 export interface TrainingState {

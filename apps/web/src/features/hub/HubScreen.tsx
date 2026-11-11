@@ -19,6 +19,7 @@ interface HubScreenProps {
   onLogout: () => void;
   onOpenSetCode: () => void;
   onStartShift: () => void;
+  onStartBlitz: () => void;
   onOpenAvatar: () => void;
   onOpenAdmin: () => void;
   externalModalOpen?: boolean;
@@ -39,7 +40,7 @@ const facilities: Record<string, { title: string; icon: string; description: str
   hall: { title: 'Турнирный зал', icon: 'trophy', description: 'Дуэли, турниры и рейтинговые матчи пока не доступны в этой версии.' },
 };
 
-export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onOpenAvatar, onOpenAdmin, externalModalOpen = false }: HubScreenProps) {
+export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onStartBlitz, onOpenAvatar, onOpenAdmin, externalModalOpen = false }: HubScreenProps) {
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
   const [preferences, setPreferences] = useState<HubPreferences>(readHubPreferences);
   const [systemReducedMotion, setSystemReducedMotion] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true);
@@ -185,7 +186,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           icon={facilities[selectedFacility].icon}
           onClose={() => setSelectedFacility(null)}
           footer={facilities[selectedFacility].action === 'shift'
-            ? <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onStartShift)}>Начать смену</button>
+            ? <><button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onStartShift)}>Начать смену</button><button type="button" className="hub-action" onClick={() => closeThen(onStartBlitz)}>Блиц-практика · 90 с</button></>
             : facilities[selectedFacility].action === 'archive'
               ? <button type="button" className="hub-action hub-action--primary" onClick={() => openScene('archive')}>Войти в архив</button>
               : <button type="button" className="hub-action" onClick={() => setSelectedFacility(null)}>Вернуться на площадь</button>}
@@ -203,6 +204,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
             <div><dt><kbd>Esc</kbd></dt><dd>Закрыть окно и вернуться к элементу, который его открыл.</dd></div>
           </dl>
           <p>Архив можно посетить из нижней панели. Кнопка «На площадь» вернёт вас в кампус. В настройках доступны звук, уменьшенное движение и экономия ресурсов.</p>
+          <p>После одной завершённой учебной смены доступен «Блиц-практика»: шесть заданий за 90 секунд. Откройте его через маршрут или Кодовый пост. Время продолжает идти после выхода.</p>
         </HubDialog>
       )}
 
@@ -210,6 +212,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         <HubDialog title="Маршрут по кампусу" subtitle="Доступные занятия и следующие этапы" icon="cartography" onClose={() => setActiveModal(null)}>
           <div className="hub-route-list">
             <button type="button" className="hub-route-card" onClick={() => closeThen(onStartShift)}><PixelIcon name="kn01" size={40} alt="" /><span><strong>Дежурная смена КН-01</strong><small>Учебные задания с проверкой и разбором</small></span><b>Начать ›</b></button>
+            <button type="button" className="hub-route-card" onClick={() => closeThen(onStartBlitz)}><PixelIcon name="trend" size={40} alt="" /><span><strong>Блиц-практика · 90 с</strong><small>6 заданий · после одной завершённой смены · без рейтинга</small></span><b>Открыть ›</b></button>
             <button type="button" className="hub-route-card" disabled={!sceneReady} onClick={() => openScene('archive')}><PixelIcon name="archive" size={40} alt="" /><span><strong>Архив наблюдений</strong><small>Посетить открытый читальный зал</small></span><b>Войти ›</b></button>
             {plannedLocations.map((location) => <div className="hub-route-card hub-route-card--planned" key={location.title}><PixelIcon name={location.icon} size={40} alt="" /><span><strong>{location.title}</strong><small>{location.description}</small></span><b>В разработке</b></div>)}
           </div>

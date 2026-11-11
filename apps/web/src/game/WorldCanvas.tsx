@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { AvatarProfile } from '../api';
 import {
   createWorldGame,
@@ -6,17 +6,31 @@ import {
   worldAudio,
   worldBridge,
   type WorldInteractionTarget,
+  type WorldAvatarCommand,
+  type WorldAvatarNavigationState,
   type WorldUiPreferences,
 } from '@synopsis/world-engine';
 import { readHubPreferences, HUB_PREFERENCES_EVENT } from '../features/hub/hubPreferences';
+import './world-avatar.css';
+
+const INITIAL_NAVIGATION: WorldAvatarNavigationState = { ready: false, acceptedActions: [], requestedAction: 'idle', paused: false, moving: false };
+const STEP_KEYS = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', ц: 'up', ы: 'down', ф: 'left', в: 'right' } as const;
 
 export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
+  const [navigation, setNavigation] = useState(INITIAL_NAVIGATION);
+  const [controlsOpen, setControlsOpen] = useState(false);
+  const controlsRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     worldBridge.setAvatarPresentation(avatar);
+    setControlsOpen(false);
   }, [avatar]);
+
+  useEffect(() => {
+    worldBridge.emit<WorldAvatarCommand>('ui:avatar_command', { kind: 'controls', open: controlsOpen });
+  }, [controlsOpen]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -24,21 +38,23 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
 
     let preferences = normalizeWorldPreferences(readHubPreferences());
     let modalOpen = false;
+    let rendererReady = true;
     let activeScene = 'hub';
     let disposed = false;
     worldAudio.setMuted(!preferences.soundEnabled);
     const game = createWorldGame({ parent: host });
 
     const applyInput = () => {
-      if (game.input) game.input.enabled = !modalOpen;
+      game.registry.set('ui.modal_open', modalOpen);
+      if (game.input) game.input.enabled = !modalOpen && !document.hidden && rendererReady;
       for (const scene of game.scene.getScenes(true)) {
-        scene.input.enabled = !modalOpen;
-        if (scene.input.keyboard) scene.input.keyboard.enabled = !modalOpen;
+        scene.input.enabled = !modalOpen && !document.hidden && rendererReady;
+        if (scene.input.keyboard) scene.input.keyboard.enabled = !modalOpen && !document.hidden && rendererReady;
       }
     };
 
     const applyAudio = () => {
-      const audible = preferences.soundEnabled && !document.hidden;
+      const audible = preferences.soundEnabled && !document.hidden && rendererReady;
       worldAudio.setMuted(!audible);
       worldAudio.setReducedSensory(preferences.reducedMotion);
       worldAudio.setLowPower(preferences.lowPower);
@@ -82,6 +98,7 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       worldBridge.on<WorldUiPreferences>('ui:preferences', applyPreferences),
       worldBridge.on<boolean>('ui:modal_open', (open) => {
         modalOpen = open === true;
+        if (modalOpen) setControlsOpen(false);
         applyInput();
       }),
       worldBridge.on<{ scene: string }>('ui:open_scene', ({ scene }) => {
@@ -96,13 +113,16 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
         applyInput();
         applyAudio();
         host.dataset.scene = scene;
-        if (scene !== 'hub') setTargets([]);
+        if (scene !== 'hub') { setTargets([]); setControlsOpen(false); setNavigation(INITIAL_NAVIGATION); }
       }),
       worldBridge.on<Record<string, unknown>>('world:characters_ready', (diagnostic) => {
         host.dataset.characters = JSON.stringify(diagnostic);
       }),
       worldBridge.on<Record<string, unknown>>('world:avatar_ready', (diagnostic) => {
         host.dataset.avatar = JSON.stringify(diagnostic);
+      }),
+      worldBridge.on<WorldAvatarNavigationState>('world:avatar_navigation', (state) => {
+        if (!disposed) setNavigation(state);
       }),
       worldBridge.on<WorldInteractionTarget[]>('world:interaction_layout', (layout) => {
         if (!disposed) setTargets(layout);
@@ -117,15 +137,20 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       applyPreferences((event as CustomEvent<WorldUiPreferences>).detail ?? readHubPreferences());
     };
     const handleVisibility = () => {
-      if (document.hidden) game.loop.sleep();
+      const visible = !document.hidden && rendererReady;
+      game.registry.set('ui.world_visible', visible);
+      worldBridge.emit('ui:world_visible', visible);
+      if (!visible) game.loop.sleep();
       else game.loop.wake();
+      applyInput();
       applyAudio();
     };
-    const handleContextLost = () => { host.dataset.context = 'lost'; };
+    const handleContextLost = () => { rendererReady = false; host.dataset.context = 'lost'; handleVisibility(); };
     const handleContextRestored = () => {
+      rendererReady = true;
       host.dataset.context = 'ready';
-      applyInput();
       applyPreferences(preferences);
+      handleVisibility();
     };
     let rendererEventsBound = false;
     const bindRendererEvents = () => {
@@ -137,6 +162,7 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       host.dataset.context = 'ready';
     };
     applyPreferences(preferences);
+    game.registry.set('ui.world_visible', !document.hidden);
     window.addEventListener(HUB_PREFERENCES_EVENT, handleStoredPreferences);
     document.addEventListener('visibilitychange', handleVisibility);
     game.events.once('ready', bindRendererEvents);
@@ -180,8 +206,30 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
     };
   }, []);
 
+  const canWalk = navigation.ready && navigation.acceptedActions.includes('walk');
+  const canInspect = navigation.ready && navigation.acceptedActions.includes('inspect');
+  const command = (value: WorldAvatarCommand) => worldBridge.emit('ui:avatar_command', value);
+  const handleMovementKeys = (event: KeyboardEvent<HTMLElement>) => {
+    if (!controlsOpen || navigation.paused || event.altKey || event.ctrlKey || event.metaKey) return;
+    const direction = STEP_KEYS[event.key as keyof typeof STEP_KEYS] ?? STEP_KEYS[event.key.toLowerCase() as keyof typeof STEP_KEYS];
+    if (direction && canWalk) {
+      event.preventDefault();
+      if (!event.repeat) command({ kind: 'step', direction });
+    } else if (['e', 'у'].includes(event.key.toLowerCase()) && canInspect) {
+      event.preventDefault();
+      if (!event.repeat) command({ kind: 'inspect' });
+    } else if (event.key === 'Escape') {
+      event.preventDefault(); setControlsOpen(false); controlsRef.current?.focus();
+    }
+  };
+
   return (
-    <div className="world-canvas-host" role="group" aria-label="Интерактивный кампус. Tab — выбор здания; Enter или пробел — открыть описание.">
+    <div className="world-canvas-host" role="group" aria-label="Интерактивный кампус. Tab — выбор здания; Enter или пробел — открыть описание."
+      onPointerDown={(event) => {
+        if (!controlsOpen || !canWalk || navigation.paused || event.button !== 0 || !(event.target instanceof HTMLCanvasElement)) return;
+        const box = hostRef.current?.getBoundingClientRect();
+        if (box) command({ kind: 'point', x: event.clientX - box.left, y: event.clientY - box.top });
+      }}>
       <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
       {targets.map((target) => (
         <button
@@ -203,6 +251,24 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
           }}
         />
       ))}
+      {(canWalk || canInspect) && <aside className="campus-avatar-controls" aria-label="Управление персонажем" onKeyDown={handleMovementKeys}>
+        <button ref={controlsRef} type="button" className="campus-avatar-controls__toggle" aria-expanded={controlsOpen}
+          aria-controls="campus-avatar-movement" disabled={navigation.paused} onClick={() => setControlsOpen((open) => !open)}>
+          {controlsOpen ? 'Закрыть управление' : canWalk ? 'Прогулка по площади' : 'Осмотр персонажа'}
+        </button>
+        {controlsOpen && <div id="campus-avatar-movement" className="campus-avatar-controls__body">
+          {canWalk && <div className="campus-avatar-controls__directions" role="group" aria-label="Шаг по дорожке">
+            {([['left', '←', 'Влево по дорожке'], ['up', '↑', 'Вверх по дорожке'], ['down', '↓', 'Вниз по дорожке'], ['right', '→', 'Вправо по дорожке']] as const).map(([direction, icon, label]) =>
+              <button key={direction} type="button" disabled={navigation.paused} aria-label={label} onClick={() => command({ kind: 'step', direction })}>{icon}</button>)}
+          </div>}
+          <div className="campus-avatar-controls__actions">
+            {canInspect && <button type="button" disabled={navigation.paused} onClick={() => command({ kind: 'inspect' })}>Осмотр</button>}
+            <button type="button" disabled={navigation.paused} onClick={() => command({ kind: 'stop' })}>Стоп</button>
+          </div>
+          <p>{canWalk ? 'Стрелки / WASD — по дорожке. Клик по дорожке — к точке.' : 'Осмотр — одно движение.'}{canInspect ? ' E — осмотр.' : ''}</p>
+          <span className="campus-avatar-controls__state" role="status">{navigation.moving ? 'Идёт по площади' : navigation.requestedAction === 'inspect' ? 'Осмотр' : 'Стойка'}</span>
+        </div>}
+      </aside>}
     </div>
   );
 }

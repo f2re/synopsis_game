@@ -191,6 +191,29 @@ const server = createServer(async (request, response) => {
       return;
     }
 
+    if (request.method === 'GET' && path === '/api/blitz-practice') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, await shifts.blitzLobby(user.id));
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/blitz-practice') {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      sendJson(response, 201, await shifts.startBlitz(user.id, user.avatar, body.requestId));
+      return;
+    }
+    const blitzMatch = path.match(/^\/api\/blitz-practice\/([^/]+)(\/answer)?$/);
+    if (blitzMatch && (request.method === 'GET' && !blitzMatch[2] || request.method === 'POST' && blitzMatch[2])) {
+      const user = identity.me(bearer(request));
+      const blitzId = decodeURIComponent(blitzMatch[1]);
+      if (request.method === 'GET') sendJson(response, 200, await shifts.getBlitz(user.id, blitzId));
+      else {
+        const body = await readJson(request);
+        sendJson(response, 200, await shifts.submitBlitzAnswer(user.id, blitzId, typeof body.instanceId === 'string' ? body.instanceId : '', body.answer));
+      }
+      return;
+    }
+
     if (request.method === 'POST' && path === '/api/shifts') {
       const user = identity.me(bearer(request));
       sendJson(response, 201, await shifts.startShift(user.id, user.avatar));
