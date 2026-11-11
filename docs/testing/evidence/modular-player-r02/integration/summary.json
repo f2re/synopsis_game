@@ -1,0 +1,199 @@
+{
+  "task": "MODULAR-PLAYER-R02",
+  "status": "PASS",
+  "date": "2026-11-11",
+  "environment": {
+    "node": "v24.22.1",
+    "vite": "8.3.5",
+    "typescript": "5.9.3",
+    "ciPinnedNode": "22.23.4",
+    "ciOrAstraRunClaimed": false
+  },
+  "commands": [
+    {
+      "name": "web-build",
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build"
+      ],
+      "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web",
+      "startedAtUtc": "2026-11-11T03:32:26.429266+00:00",
+      "durationSeconds": 2.222,
+      "exitCode": 0,
+      "inputBefore": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "inputAfter": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "log": "docs/testing/evidence/modular-player-r02/integration/web-build.log"
+    },
+    {
+      "name": "web-typecheck",
+      "command": [
+        "node",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web/node_modules/typescript/bin/tsc",
+        "-p",
+        "/workspace/scratch/3a71d9be4756/web-tsconfig-modular-r02.json",
+        "--noEmit"
+      ],
+      "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game",
+      "startedAtUtc": "2026-11-11T03:32:26.449761+00:00",
+      "durationSeconds": 4.889,
+      "exitCode": 0,
+      "inputBefore": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "inputAfter": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "log": "docs/testing/evidence/modular-player-r02/integration/web-typecheck.log"
+    },
+    {
+      "name": "server-compile",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server",
+      "startedAtUtc": "2026-11-11T03:32:26.450546+00:00",
+      "durationSeconds": 2.141,
+      "exitCode": 0,
+      "inputBefore": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "inputAfter": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "log": "docs/testing/evidence/modular-player-r02/integration/server-compile.log"
+    },
+    {
+      "name": "server-tests",
+      "command": [
+        "node",
+        "--test",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/identity/identityService.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/identity/testRoster.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/kn01Live/kn01LiveService.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/progression/progressionMutationPolicy.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/progression/progressionService.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftModes.test.js",
+        "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js"
+      ],
+      "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server",
+      "startedAtUtc": "2026-11-11T03:32:59.182770+00:00",
+      "durationSeconds": 1.949,
+      "exitCode": 0,
+      "inputBefore": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "inputAfter": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "log": "docs/testing/evidence/modular-player-r02/integration/server-tests.log"
+    },
+    {
+      "name": "avatar-api",
+      "command": [
+        "node",
+        "tools/test_avatar_inventory.cjs",
+        "--api"
+      ],
+      "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game",
+      "startedAtUtc": "2026-11-11T03:32:44.823706+00:00",
+      "durationSeconds": 1.304,
+      "exitCode": 0,
+      "inputBefore": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "inputAfter": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "log": "docs/testing/evidence/modular-player-r02/integration/avatar-api.log"
+    },
+    {
+      "name": "equipment-api",
+      "command": [
+        "node",
+        "tools/test_equipment_api.mjs"
+      ],
+      "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game",
+      "startedAtUtc": "2026-11-11T03:32:44.823747+00:00",
+      "durationSeconds": 1.276,
+      "exitCode": 0,
+      "inputBefore": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "inputAfter": {
+        "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+        "files": 148
+      },
+      "log": "docs/testing/evidence/modular-player-r02/integration/equipment-api.log"
+    }
+  ],
+  "serverTests": {
+    "total": 48,
+    "passed": 48,
+    "failed": 0
+  },
+  "avatarHttp": {
+    "catalogParity": true,
+    "supportedSlots": 11,
+    "supportedValues": 42,
+    "inventoryItems": 24,
+    "validImages": 29,
+    "validPresets": 3,
+    "draftRecovery": {
+      "isolatedAccounts": true,
+      "validOptionsOnly": true,
+      "newerServerFieldsPreserved": true,
+      "explicitConflicts": true,
+      "storageFailureSafe": true
+    },
+    "api": {
+      "allCatalogValuesAccepted": true,
+      "persistedAcrossServerRestart": true,
+      "anotherAccountUnchanged": true,
+      "invalidIdRejected": true,
+      "anonymousSaveRejected": true
+    }
+  },
+  "equipmentHttp": {
+    "status": "PASS",
+    "executedAt": "2026-11-11T03:32:46.078Z",
+    "node": "v24.22.1",
+    "checks": [
+      "anonymous, ownership, locked/unknown badge, forged charge/mode, legacy progression guards PASS",
+      "start/resume idempotent and immutable equipment snapshot PASS",
+      "concurrent hint/retry charge idempotency, no solution in retry offer, restart with pending retry, independent score excludes retry PASS",
+      "complete real ten-task shift, once-only rewards, cross-account isolation, earned selection and restart persistence PASS",
+      "durable canonical/audit evidence matches with 11 unique attempts PASS",
+      "invalid JSON shapes rejected at input boundary PASS"
+    ]
+  },
+  "initialHarnessCorrection": {
+    "log": "server-tests-wrong-cwd.initial.log",
+    "reason": "Initial runner invoked the cwd-relative server fixtures from repository root. Reran from apps/server, as package test script requires; no product-source changes were made."
+  },
+  "buildWarnings": [
+    "world-engine is imported both statically and dynamically; same warning exists in accepted R01 build log",
+    "Main JS chunk is 1831.07 kB, gzip 492.51 kB; no physical-device GPU/FPS claim"
+  ],
+  "browserServersTouched": false,
+  "trackedSourceFilesChangedByThisVerification": false
+}

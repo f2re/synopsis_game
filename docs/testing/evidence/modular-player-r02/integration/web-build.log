@@ -1,0 +1,20 @@
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 102 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                 0.81 kB │ gzip:   0.44 kB
+dist/assets/SeamlessShiftFlow-CK-T2D3Y.css     28.37 kB │ gzip:   6.51 kB
+dist/assets/index-BEq77eva.css                 89.79 kB │ gzip:  16.87 kB
+dist/assets/WorldCanvas-BR-mCGNX.js             3.78 kB │ gzip:   1.76 kB
+dist/assets/SeamlessShiftFlow-ilaOpTU3.js      49.36 kB │ gzip:  14.54 kB
+dist/assets/index-CmdJP2Cv.js               1,831.07 kB │ gzip: 492.51 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0m../../packages/world-engine/src/index.ts is dynamically imported by src/features/hub/HubScreen.tsx but also statically imported by src/features/avatar/AvatarEditor.tsx, src/features/shift/ShiftWorkspace.tsx, src/game/WorldCanvas.tsx, src/game/worldBridge.ts, dynamic import will not move module into another chunk.
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.78s

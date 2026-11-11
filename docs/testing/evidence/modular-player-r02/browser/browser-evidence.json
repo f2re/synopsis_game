@@ -1,0 +1,409 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual React/Phaser components and accepted art; public fixture harness, sessionStorage only, no real login or server persistence claim",
+  "desktopCases": [
+    {
+      "canvas": [
+        {
+          "animationPaused": "false",
+          "avatarAction": "idle",
+          "avatarCompanionVisible": "true",
+          "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+          "avatarContext": "wardrobe",
+          "avatarDirection": "down",
+          "avatarEquipmentSource": "profile",
+          "avatarMotion": "ambient",
+          "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+          "avatarRenderer": "modular-r01",
+          "avatarRequestedAction": "idle",
+          "avatarRevision": "r01-idle4-20261110",
+          "avatarRig": "player.modular.r01.v1",
+          "frame": "0",
+          "lowPower": "false",
+          "offscreen": "false",
+          "reducedMotion": "false"
+        }
+      ],
+      "documentWidth": 1348,
+      "state": {
+        "avatarSituation": "wardrobe",
+        "outfitState": "draft"
+      },
+      "width": 1363
+    },
+    {
+      "canvas": [
+        {
+          "animationPaused": "false",
+          "avatarAction": "idle",
+          "avatarCompanionVisible": "true",
+          "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+          "avatarContext": "campus",
+          "avatarDirection": "down",
+          "avatarEquipmentSource": "profile",
+          "avatarMotion": "ambient",
+          "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+          "avatarRenderer": "modular-r01",
+          "avatarRequestedAction": "idle",
+          "avatarRevision": "r01-idle4-20261110",
+          "avatarRig": "player.modular.r01.v1",
+          "frame": "0",
+          "lowPower": "false",
+          "offscreen": "false",
+          "reducedMotion": "false"
+        }
+      ],
+      "documentWidth": 1348,
+      "state": {
+        "avatarSituation": "campus",
+        "outfitState": "draft"
+      },
+      "width": 1363
+    },
+    {
+      "canvas": [
+        {
+          "animationPaused": "true",
+          "avatarAction": "idle",
+          "avatarCompanionVisible": "false",
+          "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:right:idle:companion-hidden",
+          "avatarContext": "shift",
+          "avatarDirection": "right",
+          "avatarEquipmentSource": "profile",
+          "avatarMotion": "quiet",
+          "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+          "avatarRenderer": "modular-r01",
+          "avatarRequestedAction": "idle",
+          "avatarRevision": "r01-idle4-20261110",
+          "avatarRig": "player.modular.r01.v1",
+          "frame": "0",
+          "lowPower": "false",
+          "offscreen": "false",
+          "reducedMotion": "false"
+        }
+      ],
+      "documentWidth": 1348,
+      "state": {
+        "avatarSituation": "shift",
+        "outfitState": "draft"
+      },
+      "width": 1363
+    },
+    {
+      "canvas": [
+        {
+          "animationPaused": "true",
+          "avatarAction": "idle",
+          "avatarCompanionVisible": "false",
+          "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:right:idle:companion-hidden",
+          "avatarContext": "blitz-preview",
+          "avatarDirection": "right",
+          "avatarEquipmentSource": "profile",
+          "avatarMotion": "quiet",
+          "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+          "avatarRenderer": "modular-r01",
+          "avatarRequestedAction": "idle",
+          "avatarRevision": "r01-idle4-20261110",
+          "avatarRig": "player.modular.r01.v1",
+          "frame": "0",
+          "lowPower": "false",
+          "offscreen": "false",
+          "reducedMotion": "false"
+        }
+      ],
+      "documentWidth": 1348,
+      "state": {
+        "avatarSituation": "blitz-preview",
+        "outfitState": "draft"
+      },
+      "width": 1363
+    }
+  ],
+  "narrowViewport": {
+    "method": "Same-origin development iframe at browser zoom100%",
+    "cases": [
+      {
+        "context": "wardrobe",
+        "canvas": [
+          {
+            "animationPaused": "false",
+            "avatarAction": "idle",
+            "avatarCompanionVisible": "true",
+            "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+            "avatarContext": "wardrobe",
+            "avatarDirection": "down",
+            "avatarEquipmentSource": "profile",
+            "avatarMotion": "ambient",
+            "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+            "avatarRenderer": "modular-r01",
+            "avatarRequestedAction": "idle",
+            "avatarRevision": "r01-idle4-20261110",
+            "avatarRig": "player.modular.r01.v1",
+            "frame": "3",
+            "lowPower": "false",
+            "offscreen": "false",
+            "reducedMotion": "false"
+          }
+        ],
+        "documentWidth": 375,
+        "height": 844,
+        "labels": [
+          {
+            "fontSize": "16px",
+            "text": "Где примерить образ"
+          },
+          {
+            "fontSize": "16px",
+            "text": "Гардероб"
+          },
+          {
+            "fontSize": "16px",
+            "text": "Кампус"
+          },
+          {
+            "fontSize": "16px",
+            "text": "Рабочее место"
+          },
+          {
+            "fontSize": "16px",
+            "text": "Блиц"
+          },
+          {
+            "fontSize": "16px",
+            "text": "Полный рост. Поверните персонажа, чтобы проверить одежду, обувь и рюкзак."
+          }
+        ],
+        "width": 390
+      },
+      {
+        "context": "campus",
+        "canvas": [
+          {
+            "animationPaused": "false",
+            "avatarAction": "idle",
+            "avatarCompanionVisible": "true",
+            "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+            "avatarContext": "campus",
+            "avatarDirection": "down",
+            "avatarEquipmentSource": "profile",
+            "avatarMotion": "ambient",
+            "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+            "avatarRenderer": "modular-r01",
+            "avatarRequestedAction": "idle",
+            "avatarRevision": "r01-idle4-20261110",
+            "avatarRig": "player.modular.r01.v1",
+            "frame": "2",
+            "lowPower": "false",
+            "offscreen": "false",
+            "reducedMotion": "false"
+          }
+        ],
+        "documentWidth": 375,
+        "height": 844,
+        "width": 390
+      },
+      {
+        "context": "shift",
+        "canvas": [
+          {
+            "animationPaused": "true",
+            "avatarAction": "idle",
+            "avatarCompanionVisible": "false",
+            "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:right:idle:companion-hidden",
+            "avatarContext": "shift",
+            "avatarDirection": "right",
+            "avatarEquipmentSource": "profile",
+            "avatarMotion": "quiet",
+            "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+            "avatarRenderer": "modular-r01",
+            "avatarRequestedAction": "idle",
+            "avatarRevision": "r01-idle4-20261110",
+            "avatarRig": "player.modular.r01.v1",
+            "frame": "0",
+            "lowPower": "false",
+            "offscreen": "false",
+            "reducedMotion": "false"
+          }
+        ],
+        "documentWidth": 375,
+        "height": 844,
+        "width": 390
+      },
+      {
+        "context": "blitz-preview",
+        "canvas": [
+          {
+            "animationPaused": "true",
+            "avatarAction": "idle",
+            "avatarCompanionVisible": "false",
+            "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:right:idle:companion-hidden",
+            "avatarContext": "blitz-preview",
+            "avatarDirection": "right",
+            "avatarEquipmentSource": "profile",
+            "avatarMotion": "quiet",
+            "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+            "avatarRenderer": "modular-r01",
+            "avatarRequestedAction": "idle",
+            "avatarRevision": "r01-idle4-20261110",
+            "avatarRig": "player.modular.r01.v1",
+            "frame": "0",
+            "lowPower": "false",
+            "offscreen": "false",
+            "reducedMotion": "false"
+          }
+        ],
+        "documentWidth": 375,
+        "height": 844,
+        "width": 390
+      }
+    ]
+  },
+  "saveReload": {
+    "before": {
+      "animationPaused": "true",
+      "avatarAction": "idle",
+      "avatarCompanionVisible": "false",
+      "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:right:idle:companion-hidden",
+      "avatarContext": "blitz-preview",
+      "avatarDirection": "right",
+      "avatarEquipmentSource": "profile",
+      "avatarMotion": "quiet",
+      "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+      "avatarRenderer": "modular-r01",
+      "avatarRequestedAction": "idle",
+      "avatarRevision": "r01-idle4-20261110",
+      "avatarRig": "player.modular.r01.v1",
+      "frame": "0",
+      "lowPower": "false",
+      "offscreen": "false",
+      "reducedMotion": "false"
+    },
+    "after": {
+      "animationPaused": "false",
+      "avatarAction": "idle",
+      "avatarCompanionVisible": "true",
+      "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+      "avatarContext": "wardrobe",
+      "avatarDirection": "down",
+      "avatarEquipmentSource": "profile",
+      "avatarMotion": "ambient",
+      "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+      "avatarRenderer": "modular-r01",
+      "avatarRequestedAction": "idle",
+      "avatarRevision": "r01-idle4-20261110",
+      "avatarRig": "player.modular.r01.v1",
+      "frame": "0",
+      "lowPower": "false",
+      "offscreen": "false",
+      "reducedMotion": "false"
+    },
+    "profilePreserved": true
+  },
+  "actualCampus": {
+    "canvases": [
+      {
+        "height": 936,
+        "width": 1363
+      },
+      {
+        "animationPaused": "false",
+        "avatarAction": "idle",
+        "avatarCompanionVisible": "true",
+        "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+        "avatarContext": "campus",
+        "avatarDirection": "down",
+        "avatarEquipmentSource": "profile",
+        "avatarMotion": "ambient",
+        "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+        "avatarRenderer": "modular-r01",
+        "avatarRequestedAction": "idle",
+        "avatarRevision": "r01-idle4-20261110",
+        "avatarRig": "player.modular.r01.v1",
+        "frame": "0",
+        "height": 144,
+        "lowPower": "false",
+        "offscreen": "false",
+        "reducedMotion": "false",
+        "width": 120
+      }
+    ],
+    "documentWidth": 1363,
+    "height": 936,
+    "width": 1363
+  },
+  "offscreen": {
+    "hidden": {
+      "animationPaused": "true",
+      "avatarAction": "idle",
+      "avatarCompanionVisible": "true",
+      "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+      "avatarContext": "wardrobe",
+      "avatarDirection": "down",
+      "avatarEquipmentSource": "profile",
+      "avatarMotion": "ambient",
+      "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+      "avatarRenderer": "modular-r01",
+      "avatarRequestedAction": "idle",
+      "avatarRevision": "r01-idle4-20261110",
+      "avatarRig": "player.modular.r01.v1",
+      "frame": "0",
+      "lowPower": "false",
+      "offscreen": "true",
+      "reducedMotion": "false"
+    },
+    "resumed": {
+      "animationPaused": "false",
+      "avatarAction": "idle",
+      "avatarCompanionVisible": "true",
+      "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:down:idle",
+      "avatarContext": "wardrobe",
+      "avatarDirection": "down",
+      "avatarEquipmentSource": "profile",
+      "avatarMotion": "ambient",
+      "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+      "avatarRenderer": "modular-r01",
+      "avatarRequestedAction": "idle",
+      "avatarRevision": "r01-idle4-20261110",
+      "avatarRig": "player.modular.r01.v1",
+      "frame": "2",
+      "lowPower": "false",
+      "offscreen": "false",
+      "reducedMotion": "false"
+    }
+  },
+  "backView": {
+    "animationPaused": "false",
+    "avatarAction": "idle",
+    "avatarCompanionVisible": "true",
+    "avatarComposite": "player.modular.r01.v1:r01-idle4-20261110:skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo:up:idle",
+    "avatarContext": "wardrobe",
+    "avatarDirection": "up",
+    "avatarEquipmentSource": "profile",
+    "avatarMotion": "ambient",
+    "avatarProfile": "skin.warm|hair.short|haircolor.brown|headwear.cap|top.field-jacket|bottom.field-trousers|footwear.boots|backpack.field|held.tablet|companion.squirrel|badge.meteo",
+    "avatarRenderer": "modular-r01",
+    "avatarRequestedAction": "idle",
+    "avatarRevision": "r01-idle4-20261110",
+    "avatarRig": "player.modular.r01.v1",
+    "frame": "0",
+    "lowPower": "false",
+    "offscreen": "false",
+    "reducedMotion": "false"
+  },
+  "console": {
+    "observedLastEntries": 54,
+    "extensionEntriesExcluded": 54,
+    "applicationEntries": []
+  },
+  "assertions": {
+    "sameProfileAcrossAllContexts": true,
+    "oneActivePreview": true,
+    "noHorizontalOverflow": true,
+    "offscreenPause": true
+  },
+  "limitations": [
+    "No physical-device/GPU benchmark",
+    "Blitz is an explicitly labeled scene preview; no blitz gameplay activation",
+    "Reduced motion and hidden-document cleanup covered by lifecycle tests separately"
+  ]
+}

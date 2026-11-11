@@ -1,0 +1,256 @@
+{
+  "task": "MODULAR-PLAYER-R02",
+  "date": "2026-11-11",
+  "purpose": "Canonical SpriteCook PNG downloads compared with selected exact directional exports. PNG compression may differ; all RGBA pixels must match.",
+  "downloadComparisons": [
+    {
+      "id": "hair.long",
+      "localSize": [
+        192,
+        288
+      ],
+      "downloadSize": [
+        192,
+        288
+      ],
+      "rgbaIdentical": true,
+      "localSha12": "487481633389",
+      "downloadSha12": "f897fbe12f29",
+      "rgbaSha256": "8f17a67fd8be493f804e049610ac0c8bff5ccba1234d813ce126a833189453ed"
+    },
+    {
+      "id": "top.center-jacket",
+      "localSize": [
+        192,
+        288
+      ],
+      "downloadSize": [
+        192,
+        288
+      ],
+      "rgbaIdentical": true,
+      "localSha12": "57ea7848e32a",
+      "downloadSha12": "fc8dfc5b250d",
+      "rgbaSha256": "1d2a5392af40c99207d3ac8fe9de1d517fe7352099c80c67d59435b4b1ed688d"
+    },
+    {
+      "id": "footwear.boots",
+      "localSize": [
+        192,
+        288
+      ],
+      "downloadSize": [
+        192,
+        288
+      ],
+      "rgbaIdentical": true,
+      "localSha12": "88a668260b09",
+      "downloadSha12": "38f82402b356",
+      "rgbaSha256": "872a8d2aff3d6a6292652a86b51fc5266fea32d5fdfd514cc4ab058849cd500f"
+    },
+    {
+      "id": "companion.tit",
+      "localSize": [
+        128,
+        128
+      ],
+      "downloadSize": [
+        128,
+        128
+      ],
+      "rgbaIdentical": true,
+      "localSha12": "fb474dccd3fb",
+      "downloadSha12": "40209d3fbd17",
+      "rgbaSha256": "b5953acb3bb46cdde67ad5db022d872c628c8657aae71f81a3f82c0b96a48879"
+    }
+  ],
+  "credits_before": 668,
+  "credits_after": 668,
+  "credits_spent": 0,
+  "metadataChecked": [
+    {
+      "id": "body",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "hair.short",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "hair.wave",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "hair.bob",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "hair.curl",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "headwear.cap",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "headwear.beanie",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "headwear.scarf",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "headwear.goggles",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "top.field-jacket",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "top.hoodie",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "top.sweater",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "top.shirt",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "bottom.dark-trousers",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "bottom.field-trousers",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "bottom.jeans",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "footwear.sneakers",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "footwear.shoes",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "backpack.city",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "backpack.field",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "held.tablet",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "held.map-folder",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "held.pencil",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "badge.meteo",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "badge.aerology",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "companion.squirrel",
+      "width": 128,
+      "height": 128,
+      "pixel": true
+    },
+    {
+      "id": "hair.long",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "top.center-jacket",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "footwear.boots",
+      "width": 192,
+      "height": 288,
+      "pixel": true
+    },
+    {
+      "id": "companion.tit",
+      "width": 128,
+      "height": 128,
+      "pixel": true
+    }
+  ],
+  "metadataCount": 30,
+  "uploadedFamilies": 30,
+  "sourceDirections": 120,
+  "operation": "create_asset_upload -> HTTP PUT -> finalize_asset_upload; generation and background removal were not invoked"
+}

@@ -1,25 +1,214 @@
 {
-  "version": 1,
+  "version": 2,
   "rigId": "player.modular.r01.v1",
-  "description": "Four-view modular standing family; a restrained upper-body breathing cycle. Feet and lower body remain planted. Walk/inspect are not published by this revision.",
+  "runtimeRevision": "r01-idle4-20261110",
+  "description": "Source assembly contract for the accepted four-view idle family. Attachment points describe this standing artwork only; they are not a skeleton or evidence of walk/inspect readiness.",
+  "directions": ["down", "right", "up", "left"],
+  "frame": {"width": 96, "height": 144, "pivot": [48, 136]},
+  "companionFrame": {"width": 64, "height": 64, "pivot": [32, 60]},
+  "sourceCels": {"count": 4, "durationMs": 320, "tagAction": "idle", "minimumMargin": [1, 2]},
+  "clips": {"idle": {"durationsMs": [320, 320, 320, 320], "loop": true}},
   "idleUpperDy": [0, -1, -1, 0],
+  "tracks": {"upper": [[0, 0], [0, -1], [0, -1], [0, 0]], "planted": [[0, 0], [0, 0], [0, 0], [0, 0]]},
+  "slots": {
+    "hair": {"profileField": "hair", "values": ["short", "wave", "bob", "curl", "long"], "layer": "hair", "optional": false},
+    "headwear": {"profileField": "headwear", "values": ["none", "cap", "beanie", "scarf", "goggles"], "layer": "headwear", "optional": true},
+    "top": {
+      "profileField": "top",
+      "values": ["center-jacket", "field-jacket", "hoodie", "sweater", "shirt"],
+      "layer": "top",
+      "optional": false
+    },
+    "bottom": {"profileField": "bottom", "values": ["dark-trousers", "field-trousers", "jeans"], "layer": "bottom", "optional": false},
+    "footwear": {"profileField": "footwear", "values": ["sneakers", "boots", "shoes"], "layer": "footwear", "optional": false},
+    "backpack": {"profileField": "backpack", "values": ["none", "city", "field"], "layer": "backpack", "optional": true},
+    "held": {"profileField": "heldItem", "values": ["none", "tablet", "map-folder", "pencil"], "layer": "held", "optional": true},
+    "badge": {"profileField": "badge", "values": ["none", "meteo", "aerology"], "layer": "badge", "optional": true}
+  },
+  "companionIds": ["companion.tit", "companion.squirrel"],
+  "assembly": {
+    "layers": {
+      "hair": {"attachment": "head", "paletteRole": "hair"},
+      "headwear": {"attachment": "head"},
+      "top": {"attachment": "torso"},
+      "bottom": {"attachment": "pelvis"},
+      "footwear": {"attachment": "ground"},
+      "backpack": {"attachment": "torso"},
+      "held": {"attachment": "handRight"},
+      "badge": {"attachment": "chest"},
+      "bodyUpper": {"attachment": "torso", "paletteRole": "skin"},
+      "bodyLower": {"attachment": "pelvis", "paletteRole": "skin"},
+      "hands": {"attachment": "mask", "paletteRole": "skin"},
+      "forearm": {"attachment": "mask", "paletteRole": "skin"},
+      "companion": {"attachment": "companionGround"}
+    },
+    "partAttachments": {"headwear.scarf": "neck", "headwear.goggles": "head"},
+    "skinMaskSelection": {"contourMaxChannelExclusive": 110, "contourRedToBlueMinimum": 0.95, "neighbours": [[0, -1], [0, 1], [-1, 0], [1, 0]]},
+    "companionOffset": [-40, 0],
+    "poses": {
+      "down": {
+        "anchors": {
+          "head": {"sourceAt": [48, 23], "at": [48, 23], "track": "upper"},
+          "neck": {"sourceAt": [48, 36], "at": [48, 36], "track": "upper"},
+          "torso": {"sourceAt": [48, 58], "at": [48, 58], "track": "upper"},
+          "chest": {"sourceAt": [57, 52], "at": [57, 52], "track": "upper"},
+          "pelvis": {"sourceAt": [48, 80], "at": [48, 80], "track": "planted"},
+          "ground": {"sourceAt": [48, 136], "at": [48, 136], "track": "planted"},
+          "handRight": {"sourceAt": [25, 85], "at": [25, 85], "track": "upper"},
+          "handLeft": {"sourceAt": [71, 85], "at": [71, 85], "track": "upper"},
+          "companionGround": {"sourceAt": [32, 60], "at": [32, 60], "track": "planted"}
+        },
+        "masks": {
+          "handRight": {"bounds": [21, 80, 30, 91], "attachment": "handRight"},
+          "handLeft": {"bounds": [66, 80, 76, 91], "attachment": "handLeft"}
+        },
+        "handMasks": ["handRight", "handLeft"],
+        "bodySplitAnchor": "pelvis",
+        "layerOrder": {
+          "bodyUpper": 0,
+          "bodyLower": 0,
+          "bottom": 10,
+          "footwear": 20,
+          "top": 30,
+          "forearm": 35,
+          "backpack": 40,
+          "badge": 45,
+          "hair": 50,
+          "headwear": 60,
+          "held": 65,
+          "hands": 70,
+          "companion": 0
+        },
+        "hiddenLayers": {},
+        "extraBodyMasks": {}
+      },
+      "right": {
+        "anchors": {
+          "head": {"sourceAt": [49, 23], "at": [49, 23], "track": "upper"},
+          "neck": {"sourceAt": [48, 36], "at": [48, 36], "track": "upper"},
+          "torso": {"sourceAt": [48, 58], "at": [48, 58], "track": "upper"},
+          "chest": {"sourceAt": [61, 51], "at": [61, 51], "track": "upper"},
+          "pelvis": {"sourceAt": [48, 80], "at": [48, 80], "track": "planted"},
+          "ground": {"sourceAt": [48, 136], "at": [48, 136], "track": "planted"},
+          "handRight": {"sourceAt": [44, 85], "at": [44, 85], "track": "upper"},
+          "handLeft": {"sourceAt": [48, 85], "at": [48, 85], "track": "upper"},
+          "companionGround": {"sourceAt": [32, 60], "at": [32, 60], "track": "planted"}
+        },
+        "masks": {
+          "handRight": {"bounds": [38, 79, 51, 91], "attachment": "handRight"},
+          "shirtForearm": {"bounds": [38, 62, 53, 81], "attachment": "handRight"}
+        },
+        "handMasks": ["handRight"],
+        "bodySplitAnchor": "pelvis",
+        "layerOrder": {
+          "bodyUpper": 0,
+          "bodyLower": 0,
+          "bottom": 10,
+          "footwear": 20,
+          "top": 30,
+          "forearm": 35,
+          "backpack": -5,
+          "badge": 45,
+          "hair": 50,
+          "headwear": 60,
+          "held": 65,
+          "hands": 70,
+          "companion": 0
+        },
+        "hiddenLayers": {"badge": "direction"},
+        "extraBodyMasks": {"top.shirt": [{"mask": "shirtForearm", "layer": "forearm"}]}
+      },
+      "up": {
+        "anchors": {
+          "head": {"sourceAt": [48, 23], "at": [48, 23], "track": "upper"},
+          "neck": {"sourceAt": [48, 36], "at": [48, 36], "track": "upper"},
+          "torso": {"sourceAt": [48, 58], "at": [48, 58], "track": "upper"},
+          "chest": {"sourceAt": [37, 52], "at": [37, 52], "track": "upper"},
+          "pelvis": {"sourceAt": [48, 80], "at": [48, 80], "track": "planted"},
+          "ground": {"sourceAt": [48, 136], "at": [48, 136], "track": "planted"},
+          "handRight": {"sourceAt": [70, 85], "at": [70, 85], "track": "upper"},
+          "handLeft": {"sourceAt": [26, 85], "at": [26, 85], "track": "upper"},
+          "companionGround": {"sourceAt": [32, 60], "at": [32, 60], "track": "planted"}
+        },
+        "masks": {
+          "handLeft": {"bounds": [21, 80, 31, 91], "attachment": "handLeft"},
+          "handRight": {"bounds": [65, 80, 76, 91], "attachment": "handRight"}
+        },
+        "handMasks": ["handLeft", "handRight"],
+        "bodySplitAnchor": "pelvis",
+        "layerOrder": {
+          "bodyUpper": 0,
+          "bodyLower": 0,
+          "bottom": 10,
+          "footwear": 20,
+          "top": 30,
+          "forearm": 35,
+          "backpack": 40,
+          "badge": 45,
+          "hair": 50,
+          "headwear": 60,
+          "held": 65,
+          "hands": 70,
+          "companion": 0
+        },
+        "hiddenLayers": {"badge": "direction"},
+        "extraBodyMasks": {}
+      },
+      "left": {
+        "anchors": {
+          "head": {"sourceAt": [47, 23], "at": [47, 23], "track": "upper"},
+          "neck": {"sourceAt": [48, 36], "at": [48, 36], "track": "upper"},
+          "torso": {"sourceAt": [48, 58], "at": [48, 58], "track": "upper"},
+          "chest": {"sourceAt": [34, 51], "at": [34, 51], "track": "upper"},
+          "pelvis": {"sourceAt": [48, 80], "at": [48, 80], "track": "planted"},
+          "ground": {"sourceAt": [48, 136], "at": [48, 136], "track": "planted"},
+          "handRight": {"sourceAt": [48, 85], "at": [48, 85], "track": "upper"},
+          "handLeft": {"sourceAt": [54, 85], "at": [54, 85], "track": "upper"},
+          "companionGround": {"sourceAt": [32, 60], "at": [32, 60], "track": "planted"}
+        },
+        "masks": {
+          "handLeft": {"bounds": [47, 79, 61, 91], "attachment": "handLeft"},
+          "shirtForearm": {"bounds": [45, 62, 61, 81], "attachment": "handLeft"}
+        },
+        "handMasks": ["handLeft"],
+        "bodySplitAnchor": "pelvis",
+        "layerOrder": {
+          "bodyUpper": 0,
+          "bodyLower": 0,
+          "bottom": 10,
+          "footwear": 20,
+          "top": 30,
+          "forearm": 35,
+          "backpack": -5,
+          "badge": 45,
+          "hair": 50,
+          "headwear": 60,
+          "held": 65,
+          "hands": 70,
+          "companion": 0
+        },
+        "hiddenLayers": {"held": "occlusion"},
+        "extraBodyMasks": {"top.shirt": [{"mask": "shirtForearm", "layer": "forearm"}]}
+      }
+    }
+  },
   "palettes": {
     "skin": {
-      "source": [[112,69,48],[174,112,74],[225,159,105],[255,205,154]],
+      "source": [[112, 69, 48], [174, 112, 74], [225, 159, 105], [255, 205, 154]],
       "variants": {
-        "skin.light": [[151,99,78],[206,151,114],[242,190,150],[255,224,185]],
-        "skin.warm": [[112,69,48],[174,112,74],[225,159,105],[255,205,154]],
-        "skin.medium": [[81,47,34],[130,77,49],[180,117,73],[220,160,107]],
-        "skin.deep": [[48,31,30],[82,50,40],[124,77,54],[166,111,77]]
+        "skin.light": [[151, 99, 78], [206, 151, 114], [242, 190, 150], [255, 224, 185]],
+        "skin.warm": [[112, 69, 48], [174, 112, 74], [225, 159, 105], [255, 205, 154]],
+        "skin.medium": [[81, 47, 34], [130, 77, 49], [180, 117, 73], [220, 160, 107]],
+        "skin.deep": [[48, 31, 30], [82, 50, 40], [124, 77, 54], [166, 111, 77]]
       }
     },
     "hair": {
-      "source": [[35,27,31],[66,46,44],[103,72,57],[147,107,78]],
+      "source": [[35, 27, 31], [66, 46, 44], [103, 72, 57], [147, 107, 78]],
       "variants": {
-        "haircolor.brown": [[35,27,31],[66,46,44],[103,72,57],[147,107,78]],
-        "haircolor.black": [[22,22,29],[34,34,44],[52,52,65],[80,80,93]],
-        "haircolor.blond": [[74,52,40],[135,94,53],[195,151,80],[237,199,125]],
-        "haircolor.auburn": [[52,27,30],[100,47,37],[154,75,46],[205,119,66]]
+        "haircolor.brown": [[35, 27, 31], [66, 46, 44], [103, 72, 57], [147, 107, 78]],
+        "haircolor.black": [[22, 22, 29], [34, 34, 44], [52, 52, 65], [80, 80, 93]],
+        "haircolor.blond": [[74, 52, 40], [135, 94, 53], [195, 151, 80], [237, 199, 125]],
+        "haircolor.auburn": [[52, 27, 30], [100, 47, 37], [154, 75, 46], [205, 119, 66]]
       }
     }
   }

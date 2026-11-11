@@ -1,0 +1,23 @@
+{
+  "name": "web-typecheck",
+  "command": [
+    "node",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web/node_modules/typescript/bin/tsc",
+    "-p",
+    "/workspace/scratch/3a71d9be4756/web-tsconfig-modular-r02.json",
+    "--noEmit"
+  ],
+  "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game",
+  "startedAtUtc": "2026-11-11T03:32:26.449761+00:00",
+  "durationSeconds": 4.889,
+  "exitCode": 0,
+  "inputBefore": {
+    "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+    "files": 148
+  },
+  "inputAfter": {
+    "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+    "files": 148
+  },
+  "log": "docs/testing/evidence/modular-player-r02/integration/web-typecheck.log"
+}

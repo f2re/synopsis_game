@@ -1,0 +1,322 @@
+✔ ownership is server-only; locked badges and unknown IDs fail; all non-practice modes have zero effects (15.485386ms)
+✖ concurrent starts resume one active shift and keep the saved starting loadout snapshot (8.591598ms)
+✖ reference consumes once under race, persists on restart and excludes the task from independent achievement (3.016748ms)
+✖ retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score (2.549687ms)
+✖ reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback (4.440872ms)
+✖ completion and earned badges commit together; result/answer replay and restart never grant twice (2.321194ms)
+✖ regularity counts distinct server UTC dates and does not require consecutive days (2.271727ms)
+✖ a failed completion write preserves the current task and rewards; next write and replay recover safely (3.896009ms)
+✔ real atomic rename failure rolls back memory; malformed existing store fails closed (22.735735ms)
+✖ audit-file outage does not lose a committed answer; restart reconstructs its audit projection once (2.210389ms)
+✖ corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file (3.166812ms)
+✔ bootstrap admin, create user and persist avatar without exposing verifier (412.581688ms)
+✔ repeated wrong code produces temporary lockout (160.597374ms)
+✔ batch create users from list with auto-generated and custom codes (287.649353ms)
+✔ failed avatar save keeps committed equipment visible and later writes recover after a real rename failure (127.881446ms)
+✔ concurrent avatar saves return their own committed loadouts and a later admin snapshot preserves the latest one (180.279996ms)
+✔ testRoster: in public profile, seeding is strictly rejected (14.606608ms)
+✔ testRoster: without explicit enabled flag, seeding is rejected (4.531129ms)
+✔ testRoster: in trusted profile with enabled flag, seeds correctly and allows e2e login + shift workflow (198.380562ms)
+✔ принимает известную станцию и сохраняет неизменяемый raw и provenance (24.782869ms)
+✔ канонически одинаковая телеграмма не создаёт второй raw-record (13.087271ms)
+✔ дедупликация восстанавливается после перезапуска сервиса (17.987192ms)
+✔ неизвестная станция отклоняется без выдумывания координат (17.34036ms)
+✔ повреждённый заголовок сохраняется в rejected с диагностикой (8.30607ms)
+✔ file inbox перемещает принятые и отклонённые сообщения в разные корзины (20.151891ms)
+✔ локальная входящая очередь не следует символическим ссылкам (3.776591ms)
+✔ SEC-01: небезопасная запись смены и экзамена отвергается до изменения прогрессии (2.120265ms)
+✔ 1. Математические формулы прироста, штрафа и затухания освоения (2.440575ms)
+✔ 2. Начальное состояние и блокировка неразрешённых смен (3.818107ms)
+✔ 3. Последовательная разблокировка смен С1 -> С2 -> С3 -> С4 -> С5 и выдача наград (5.619973ms)
+✔ 4. Журнал ошибок: повторы, фиксация кода причины и авторазрешение (0.525391ms)
+✔ 5. Серия правильных ответов (streak) и награда «Лампа дежурного» (0.636634ms)
+✔ 6. Расчёт допуска к экзамену: критерии 10 элементов >= 80% и общий >= 85% (1.694202ms)
+✔ 7. Квалификационный экзамен: сдача, несдача, кулдаун и разблокировка локаций (2.512778ms)
+✔ 8. Персистентность состояния прогрессии (saveState / loadState) (22.604197ms)
+✔ 9. Вызов applyDecay и мягкое затухание по прошествии времени (0.707418ms)
+✔ 1. Проверка доступности режимов смены по пройденным этапам (1.588817ms)
+✔ 2. Серверный таймер в режиме «Блиц 90 с» (0.473729ms)
+✔ 3. Запрет открытия справочника в режиме «Блиц» (0.284861ms)
+✔ 4. Учёт справочника в режиме «Самостоятельно»: штраф только на текущее задание (0.397531ms)
+✔ 5. Режим «С наставником»: справочник открыт постоянно с множителем 0.6 (0.244376ms)
+✖ первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал (13.330075ms)
+✖ задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте (3.943443ms)
+✖ stationPlot переводит к планшону на три станции (3.80393ms)
+✖ трёхстанционный планшон переводит к плотному планшону (2.073932ms)
+✖ плотный планшон ведёт к физическому контролю (4.403551ms)
+✖ findError не раскрывает station_id и после ответа ведёт к конструктору анализа (2.264248ms)
+✖ dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок (4.426432ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 32
+ℹ fail 16
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1313.457776
+
+✖ failing tests:
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:91:1
+✖ concurrent starts resume one active shift and keep the saved starting loadout snapshot (8.591598ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:92:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:108:1
+✖ reference consumes once under race, persists on restart and excludes the task from independent achievement (3.016748ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:109:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:139:1
+✖ retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score (2.549687ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:140:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:173:1
+✖ reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback (4.440872ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:174:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:204:1
+✖ completion and earned badges commit together; result/answer replay and restart never grant twice (2.321194ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:205:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:233:1
+✖ regularity counts distinct server UTC dates and does not require consecutive days (2.271727ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/method-profiles'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readMethodProfileFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:364:24)
+      at async Promise.all (index 1)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:235:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/method-profiles'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:252:1
+✖ a failed completion write preserves the current task and rewards; next write and replay recover safely (3.896009ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:260:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:307:1
+✖ audit-file outage does not lose a committed answer; restart reconstructs its audit projection once (2.210389ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:308:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/equipment/equipmentService.test.js:329:1
+✖ corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file (3.166812ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/method-profiles'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readMethodProfileFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:364:24)
+      at async Promise.all (index 1)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async fixture (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:17:5)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js:330:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/method-profiles'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:7:1
+✖ первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал (13.330075ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:12:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:29:1
+✖ задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте (3.943443ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:33:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:97:1
+✖ stationPlot переводит к планшону на три станции (3.80393ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:101:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:112:1
+✖ трёхстанционный планшон переводит к плотному планшону (2.073932ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:116:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:126:1
+✖ плотный планшон ведёт к физическому контролю (4.403551ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:130:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:145:1
+✖ findError не раскрывает station_id и после ответа ведёт к конструктору анализа (2.264248ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:149:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }
+
+test at apps/server/dist/modules/shift/shiftService.test.js:162:1
+✖ dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок (4.426432ms)
+  Error: ENOENT: no such file or directory, scandir '/workspace/scratch/content/tasks'
+      at async readdir (node:internal/fs/promises:1668:18)
+      at async ShiftService.readTaskFiles (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:357:24)
+      at async Promise.all (index 0)
+      at async ShiftService.init (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.js:32:60)
+      at async TestContext.<anonymous> (file:///workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js:166:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'scandir',
+    path: '/workspace/scratch/content/tasks'
+  }

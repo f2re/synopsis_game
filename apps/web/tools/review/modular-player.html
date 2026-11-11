@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>26063 · Тестовый стенд внешности</title>
+    <style>
+      .review-banner { position: relative; z-index: 2000; display: flex; gap: 12px 24px; flex-wrap: wrap; align-items: center; padding: 12px 20px; background: #101d30; border-bottom: 3px solid #f2c75c; color: #eef4e4; font: 14px/1.45 var(--font-pixel-ui, monospace); }
+      .review-banner > div:first-child { display: grid; gap: 3px; flex: 1 1 400px; }
+      .review-banner strong { color: #ffdd83; font-size: 18px; font-weight: normal; }
+      .review-banner small { font-size: 13px; }
+      .review-banner__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .review-banner button { min-height: 44px; padding: 8px 12px; background: #1b374c; border: 1px solid #7895a7; color: #eef4e4; font: inherit; cursor: pointer; }
+      .review-banner button:focus-visible { outline: 3px solid #ffdd83; outline-offset: 2px; }
+      .review-banner__notice { flex-basis: 100%; margin: 0; color: #ffdd83; }
+    </style>
+  </head>
+  <body>
+    <div id="review-root"></div>
+    <script type="module" src="./modular-player.tsx"></script>
+  </body>
+</html>

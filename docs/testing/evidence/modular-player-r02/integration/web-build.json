@@ -1,0 +1,21 @@
+{
+  "name": "web-build",
+  "command": [
+    "node",
+    "node_modules/vite/bin/vite.js",
+    "build"
+  ],
+  "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game/apps/web",
+  "startedAtUtc": "2026-11-11T03:32:26.429266+00:00",
+  "durationSeconds": 2.222,
+  "exitCode": 0,
+  "inputBefore": {
+    "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+    "files": 148
+  },
+  "inputAfter": {
+    "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+    "files": 148
+  },
+  "log": "docs/testing/evidence/modular-player-r02/integration/web-build.log"
+}

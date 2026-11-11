@@ -1,0 +1,28 @@
+{
+  "name": "server-tests",
+  "command": [
+    "node",
+    "--test",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/equipment/equipmentService.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/identity/identityService.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/identity/testRoster.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/kn01Live/kn01LiveService.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/progression/progressionMutationPolicy.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/progression/progressionService.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftModes.test.js",
+    "/workspace/scratch/3a71d9be4756/synopsis_game/apps/server/dist/modules/shift/shiftService.test.js"
+  ],
+  "cwd": "/workspace/scratch/3a71d9be4756/synopsis_game",
+  "startedAtUtc": "2026-11-11T03:32:44.820828+00:00",
+  "durationSeconds": 1.415,
+  "exitCode": 1,
+  "inputBefore": {
+    "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+    "files": 148
+  },
+  "inputAfter": {
+    "sha256": "977859f6c55fb858c2fd0699f03b0904ffd507c09b8c503bca09a902308fc537",
+    "files": 148
+  },
+  "log": "docs/testing/evidence/modular-player-r02/integration/server-tests.log"
+}
