@@ -291,6 +291,7 @@ async function waitForCampus(page) {
   await exitPage.close();
   await page.bringToFront();
   await page.getByRole('button', { name: 'Вернуться в центр', exact: true }).click(); await waitForCampus(page);
+  assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Campus must reuse the station audio context');
   assert.equal(await page.locator('.world-canvas-host > div').first().getAttribute('data-fps-limit'), '60');
   await measurePresentation(page, 'campus-full-motion-performance');
   await page.getByRole('button', { name: `Профиль: ${fixture.users[0].displayName}`, exact: true }).click();
@@ -298,6 +299,7 @@ async function waitForCampus(page) {
   await page.getByRole('dialog', { name: 'Завершить сеанс?' }).getByRole('button', { name: 'Выйти из игры', exact: true }).click();
   await page.getByRole('heading', { name: 'До следующей смены' }).waitFor();
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators === 0 && window.__stationAudioProbe.buffers === 0);
+  assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Exit must not have allocated another audio context');
   assert.equal(await page.evaluate(() => sessionStorage.getItem('synopsis.session.token')), null);
   const revoked = await context.request.get(base + '/api/identity/me', { headers: { authorization: `Bearer ${sessionToken}` } });
   assert.equal(revoked.status(), 401, 'Real server session revoked');
