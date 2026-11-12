@@ -14,6 +14,7 @@ import {
 } from '../../api';
 import { GAME_MARK } from '../../brand';
 import { PixelIcon, PixelProgressBar } from '../ui';
+import { handleRadioGroupKeyDown } from '../ui/radioGroupKeys';
 import { FindErrorTask } from './FindErrorTask';
 import { StationBoardTask } from './StationBoardTask';
 import { StationPlotTask } from './StationPlotTask';
@@ -355,8 +356,8 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
           )}
 
           {!feedback && !retryOffered && task.response.kind === 'choice' && (
-            <div className="shift-options" role="radiogroup" aria-label="Варианты ответа">
-              {(task.payload?.options ?? []).map((option) => <button key={option.id} disabled={answerBlocked} type="button" role="radio" aria-checked={choiceIndex === option.id} className={choiceIndex === option.id ? 'is-selected' : ''} onClick={() => setChoiceIndex(option.id)}><span>{String.fromCharCode(65 + option.id)}</span>{option.label}</button>)}
+            <div className="shift-options" role="radiogroup" aria-label="Варианты ответа" onKeyDown={handleRadioGroupKeyDown}>
+              {(task.payload?.options ?? []).map((option) => <button key={option.id} disabled={answerBlocked} type="button" role="radio" tabIndex={!answerBlocked && (choiceIndex ?? task.payload?.options?.[0]?.id) === option.id ? 0 : -1} aria-checked={choiceIndex === option.id} className={choiceIndex === option.id ? 'is-selected' : ''} onClick={() => setChoiceIndex(option.id)}><span>{String.fromCharCode(65 + option.id)}</span>{option.label}</button>)}
             </div>
           )}
 

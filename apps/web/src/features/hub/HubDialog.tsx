@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import type { PixelIconName } from '../ui/PixelIcon';
 import { keepTabInDialog } from '../ui/modalFocus';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
 import { HubIcon } from './HubIcon';
 
 interface HubDialogProps {
@@ -53,7 +54,7 @@ export function HubDialog({ title, subtitle, icon, onClose, children, footer }: 
         </div>
         <button type="button" className="hub-icon-button hub-dialog__close" onClick={onClose} aria-label="Закрыть окно" autoFocus>×</button>
       </header>
-      <div className="hub-dialog__body">{children}</div>
+      <PixelScrollArea label={`Содержимое окна «${title}»`} viewportClassName="hub-dialog__body">{children}</PixelScrollArea>
       {footer && <footer className="hub-dialog__footer">{footer}</footer>}
     </dialog>
   );

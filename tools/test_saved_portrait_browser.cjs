@@ -332,4 +332,4 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await restoredContext.close();
   }
 }
-module.exports = { runSavedPortraitChecks };
+module.exports = { runSavedPortraitChecks, login };

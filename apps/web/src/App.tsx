@@ -3,6 +3,7 @@ import { api, ApiError, cancelPendingLogin, getSessionToken, setSessionToken, ty
 import { GAME_MARK, GAME_TITLE } from './brand';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
 import { PixelIcon, PixelCard } from './features/ui';
+import { PixelScrollArea } from './features/ui/PixelScrollArea';
 import { HubModalLayer } from './features/hub/HubModalLayer';
 import { HubDialog } from './features/hub/HubDialog';
 import { WorldLoadBoundary } from './features/hub/WorldLoadBoundary';
@@ -80,7 +81,6 @@ export function App() {
 
   useEffect(() => {
     document.title = `${SCREEN_TITLES[path] ?? 'Страница не найдена'} · ${GAME_TITLE}`;
-    window.scrollTo(0, 0);
   }, [path]);
 
   useEffect(() => {
@@ -181,9 +181,11 @@ export function App() {
   else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь на станцию: там доступны занятия, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>На станцию</button></section></main>;
 
   const focusKey = ['/shift', '/blitz', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
+  const stationWorld = path === '/' || path === '/campus';
+  const routeContent = <><RouteHeadingFocus key={focusKey} />{screen}</>;
   return <AtmosphereProvider surface={exiting ? 'silent' : screenSurface(path)}>
     <WorldLoadBoundary key={path} fallback={<main className="app-shell app-loading"><section className="panel compact-panel" role="alert"><h1>Не удалось открыть экран</h1><p>Проверьте соединение и перезагрузите страницу.</p><div className="hub-profile-actions"><button type="button" className="hub-action hub-action--primary" onClick={() => window.location.reload()}>Перезагрузить страницу</button><button type="button" className="hub-action" onClick={() => navigate('/help')}>Открыть помощь</button></div></section></main>}>
-      <Suspense fallback={<LoadingScreen text="Открываем станцию…" />}><RouteHeadingFocus key={focusKey} />{screen}</Suspense>
+      <Suspense fallback={<LoadingScreen text="Открываем станцию…" />}>{stationWorld || path === '/codebook' ? routeContent : <PixelScrollArea key={focusKey} label={SCREEN_TITLES[path] ?? 'Страница'} className="app-page-scroll" viewportClassName="app-page-viewport">{routeContent}</PixelScrollArea>}</Suspense>
     </WorldLoadBoundary>
     {loginModalOpen && <HubModalLayer label="Вход в учебную группу" onClose={closeLogin}><LoginScreen onLogin={finishLogin} onClose={closeLogin} isModal /></HubModalLayer>}
     {setCodeModalOpen && user && <HubModalLayer label="Персональный код входа" onClose={() => setSetCodeModalOpen(false)}><SetCodeModal user={user} onSuccess={acceptUpdatedProfile} onClose={() => setSetCodeModalOpen(false)} /></HubModalLayer>}

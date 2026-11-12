@@ -43,19 +43,12 @@
   background: rgba(235, 245, 238, 0.95);
 }
 
-.station-observation i {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(53, 72, 84, 0.08);
-  font-style: normal;
-}
+.station-observation-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 6px; }
+.station-observation-clear { align-self: center; min-width: 44px; min-height: 44px; padding: 4px; border: 2px solid var(--ui-chrome-edge); border-radius: 0; background: var(--ui-chrome-raised); color: var(--ui-text-primary); font: 24px/1 var(--font-pixel-ui); cursor: pointer; }
+.station-observation { min-height: 58px; padding-right: 14px; border-width: 2px; }
+.station-observation:hover:not(:disabled), .station-observation-clear:hover:not(:disabled) { border-color: var(--color-action-accent-1); }
+.station-observation:active:not(:disabled), .station-observation-clear:active:not(:disabled) { box-shadow: var(--ui-control-pressed); }
+.station-slot[aria-disabled="true"] { cursor: default; }
 
 .station-plot-panel {
   min-width: 0;
@@ -115,8 +108,8 @@
   transition: fill 120ms ease, stroke 120ms ease;
 }
 
-.station-slot:hover .station-slot-hit,
-.station-slot:focus .station-slot-hit {
+.station-slot:not([aria-disabled="true"]):hover .station-slot-hit,
+.station-slot:not([aria-disabled="true"]):focus-visible .station-slot-hit {
   fill: rgba(46, 115, 150, 0.08);
   stroke: #2e7396;
 }

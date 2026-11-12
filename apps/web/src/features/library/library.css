@@ -32,9 +32,10 @@
 .library-catalog-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 16px;  }
 .library-catalog-heading h2 { margin: 0; font-size: 18px; color: #e2d6b6; }
 .library-catalog-heading span { color: #b9c8c6; font-family: var(--font-pixel-dense); }
-.library-results { max-height: 780px; max-height: min(780px, 74dvh); list-style: none; margin: 0; padding: 6px; overflow-y: auto; scrollbar-gutter: stable; }
+.library-catalog-scroll { max-height: min(780px, 74dvh); padding: 6px; }
+.library-results { list-style: none; margin: 0; padding: 0; }
 .library-results li { margin: 0; }
-.library-result { display: grid; gap: 6px; width: 100%; min-height: 72px; padding: 14px 12px; background: transparent; color: #e9e4d6; border: 1px solid transparent; border-left: 4px solid transparent; text-align: left; cursor: pointer; font: inherit; }
+.library-result { display: grid; gap: 6px; width: 100%; min-height: 72px; padding: 14px 12px; background: transparent; color: #e9e4d6; border: 2px solid transparent; border-left: 4px solid transparent; text-align: left; cursor: pointer; font: inherit; }
 .library-result:hover { background: #143f4c; }
 .library-result[aria-current="true"] { background: #193f46; border-color: #476561; border-left-color: #f2c75c; }
 .library-result-title { color: #f3ecd8; }
@@ -42,7 +43,7 @@
 .library-result-description { color: #adc1c2; font-family: var(--font-pixel-dense); font-size: 16px; line-height: 1.375; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .library-reader { min-width: 0; padding: clamp(20px, 3vw, 36px); background: #f3ecd8; color: #1e2430; box-shadow: inset 8px 0 0 #e2d6b6; overflow-wrap: anywhere; }
 .library-article-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 0 20px; color: #665038; font-family: var(--font-pixel-dense); }
-.library-favorite { flex-shrink: 0; min-height: 44px; border: 1px solid #a28a61; padding: 8px 12px; font: inherit; background: #e9ddbd; color: #483a24; cursor: pointer; }
+.library-favorite { flex-shrink: 0; min-height: 44px; border: 2px solid #a28a61; padding: 8px 12px; font: inherit; background: #e9ddbd; color: #483a24; cursor: pointer; }
 .library-favorite:hover { background: #e2c177; }
 .library-favorite[aria-pressed="true"] { background: #d5b574; border-color: #6b5731; color: #302a20; }
 .library-reader h2 { font: 28px/1.3 var(--font-pixel-display); margin: 0 0 18px; color: #1e2430; }
@@ -63,7 +64,7 @@
 .library-sources > p { color: #4b5263; font: 16px/1.375 var(--font-pixel-dense); }
 .library-related { margin-top: 24px; }
 .library-related > div { display: flex; flex-wrap: wrap; gap: 8px; }
-.library-related button { min-height: 44px; font: 16px/1.4 var(--font-pixel-ui); text-align: left; color: #143f4c; background: #ece1c8; border: 1px solid #bfaF8a; padding: 8px 12px; cursor: pointer; }
+.library-related button { min-height: 44px; font: 16px/1.4 var(--font-pixel-ui); text-align: left; color: #143f4c; background: #ece1c8; border: 2px solid #bfaF8a; padding: 8px 12px; cursor: pointer; }
 .library-related button:hover { background: #e2d6b6; border-color: #7c896f; }
 .library-reader button:focus-visible, .library-reader a:focus-visible { outline-color: #143f4c; }
 .library-reader-back { display: none; }
@@ -89,7 +90,7 @@
   .library-categories button { padding: 8px 10px; flex: 1 0 auto; }
   .library-body { display: block; }
   .library-catalog { border: 0; }
-  .library-results { max-height: none; }
+  .library-catalog-scroll { max-height: 66dvh; }
   .library-reader { display: none; padding: 20px 16px; box-shadow: inset 4px 0 0 #e2d6b6; }
   .library-screen[data-reading="true"] .library-catalog { display: none; }
   .library-screen[data-reading="true"] .library-reader { display: block; }
@@ -105,3 +106,6 @@
 
 .library-catalog-scene{padding:10px 10px 0;background:#0c2a33}
 @media(max-width:760px){.library-catalog-scene{display:none}}
+
+.library-screen :is(.library-result, .library-categories button, .library-favorite, .library-related button, .library-reader-back):active:not(:disabled) { box-shadow: var(--ui-control-pressed); transform: none; }
+.library-catalog-scroll :is(button, a):focus-visible { outline-offset: -2px; }

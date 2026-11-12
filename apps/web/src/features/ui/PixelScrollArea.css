@@ -1,0 +1,65 @@
+/* The content keeps native wheel, touch and keyboard scrolling. The two tracks
+   are controls, never overlays on text, and reserve their own space in the frame. */
+.pixel-scroll-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0;
+  grid-template-rows: minmax(0, 1fr) 0;
+  gap: 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.pixel-scroll-area[data-overflow-y="true"] { grid-template-columns: minmax(0, 1fr) 18px; column-gap: 6px; }
+.pixel-scroll-area[data-overflow-x="true"] { grid-template-rows: minmax(0, 1fr) 18px; row-gap: 6px; }
+.pixel-scroll-area__viewport {
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-padding: 8px;
+  scrollbar-width: none !important;
+  scrollbar-gutter: auto !important;
+}
+.pixel-scroll-area--vertical > .pixel-scroll-area__viewport { overflow-x: hidden; }
+.pixel-scroll-area--horizontal > .pixel-scroll-area__viewport { overflow-y: hidden; }
+.pixel-scroll-area__viewport::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.pixel-scroll-area__viewport:focus-visible { outline-offset: -2px; }
+.pixel-scroll-area__content { display: flow-root; min-width: 0; }
+.pixel-scroll-area__track {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid var(--ui-chrome-edge, #3a5383);
+  background: var(--ui-scroll-track, #070d1e);
+  touch-action: none;
+  user-select: none;
+  cursor: pointer;
+}
+.pixel-scroll-area__track--vertical { grid-area: 1 / 2; }
+.pixel-scroll-area__track--horizontal { grid-area: 2 / 1; }
+.pixel-scroll-area__track[data-overflow="false"] { display: none; }
+.pixel-scroll-area__track:focus-visible { outline-offset: -2px; }
+.pixel-scroll-area__thumb {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  background: var(--ui-scroll-thumb, #5e8fc4);
+  box-shadow: inset 2px 2px 0 #ffffff38, inset -2px -2px 0 #0005;
+  cursor: grab;
+}
+.pixel-scroll-area__track--vertical > .pixel-scroll-area__thumb { width: 100%; }
+.pixel-scroll-area__track--horizontal > .pixel-scroll-area__thumb { height: 100%; }
+.pixel-scroll-area__track:hover > .pixel-scroll-area__thumb,
+.pixel-scroll-area__track:focus-visible > .pixel-scroll-area__thumb,
+.pixel-scroll-area__track[data-dragging="true"] > .pixel-scroll-area__thumb { background: var(--ui-scroll-hover, #f2c75c); }
+.pixel-scroll-area__track[data-dragging="true"] > .pixel-scroll-area__thumb { cursor: grabbing; box-shadow: inset 2px 2px 0 #0004; }
+@media (forced-colors: active) {
+  .pixel-scroll-area { display: block; }
+  .pixel-scroll-area__viewport { height: 100%; max-height: inherit; scrollbar-width: auto !important; }
+  .pixel-scroll-area__viewport::-webkit-scrollbar { display: block; width: auto; height: auto; }
+  .pixel-scroll-area__track { display: none; }
+}

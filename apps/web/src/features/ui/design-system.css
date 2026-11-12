@@ -65,14 +65,17 @@
 
 .pixel-tape__groups {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .pixel-tape__group {
   font-family: var(--font-family-dense, monospace);
-  font-size: 12px;
+  font-size: 16px;
+  min-width: 44px;
+  min-height: 44px;
   background: transparent;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   padding: 2px 6px;
   cursor: pointer;
   color: var(--color-ink-telecode-0, #1E2430);
@@ -104,7 +107,7 @@
   font-family: var(--font-family-display, 'PixCyrillic', monospace);
   height: 44px;
   background-color: var(--color-stone-concrete-1, #464C58);
-  border: 1px solid var(--color-stone-concrete-3, #8D939C);
+  border: 2px solid var(--color-stone-concrete-3, #8D939C);
   color: var(--color-birch-and-snow-3, #F4F7FA);
   cursor: pointer;
 }
@@ -121,11 +124,19 @@
   gap: 8px;
   padding: 8px 12px;
   background-color: var(--color-paper-tape-2, #F3ECD8);
-  border: 1px solid var(--color-paper-tape-0, #BFAF8A);
+  min-height: 44px;
+  font-size: 16px;
+  line-height: 1.4;
+  border: 2px solid var(--color-paper-tape-0, #BFAF8A);
   color: var(--color-ink-telecode-0, #1E2430);
   cursor: pointer;
   font-family: var(--font-family-display, 'PixCyrillic', monospace);
 }
+
+.pixel-tape__group:hover:not(:disabled), .pixel-choice-card:hover:not(:disabled) { border-color: var(--color-action-accent-0, #B88626); }
+.pixel-keypad__key:hover:not(:disabled) { border-color: var(--color-action-accent-2, #FFDD83); }
+.pixel-tape__group:active:not(:disabled), .pixel-choice-card:active:not(:disabled) { box-shadow: var(--ui-control-pressed); }
+.pixel-keypad__key:disabled, .pixel-choice-card:disabled, .pixel-tape__group:disabled { cursor: default; opacity: .6; }
 
 .pixel-choice-card--selected {
   border-color: var(--color-action-accent-0, #B88626);
@@ -207,23 +218,18 @@
 }
 
 /* 11. Dialog */
-.pixel-dialog-backdrop {
-  position: fixed;
-  inset: 0;
+.pixel-dialog-container::backdrop {
   background-color: rgba(7, 13, 30, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
 }
 
-.pixel-dialog-container { width: min(480px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); display: grid; grid-template-rows: auto minmax(0, 1fr); padding: 20px; }
+.pixel-dialog-container { width: min(480px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); margin: auto; padding: 20px; overflow: hidden; font: 16px/1.4 var(--font-pixel-ui); }
+.pixel-dialog-container[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
 
 .pixel-dialog-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
 
 .pixel-dialog-title { font-size: 22px; line-height: 1.35; font-weight: normal; margin: 0; }
 
-.pixel-dialog-close { background: transparent; border: 2px solid var(--ui-chrome-edge); color: var(--ui-text-primary); font-size: 24px; min-width: 44px; min-height: 44px; cursor: pointer; }
+.pixel-dialog-close { flex: 0 0 44px; }
 
 /* 12. Digit Anatomy */
 .pixel-digit-anatomy {

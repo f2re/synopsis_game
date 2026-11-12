@@ -6,6 +6,8 @@ import { isSavedAvatarPortrait, SavedAvatarPortrait } from './SavedAvatarPortrai
 import { AvatarAppearance, AvatarOptionGrid } from './AvatarOptionGrid';
 import { EQUIPMENT_SLOTS, INVENTORY_ITEMS, OPTIONS, STYLE_PRESETS, type InventoryCategory, type InventoryItem } from './avatarOptions';
 import { readHubPreferences } from '../hub/hubPreferences';
+import { keepTabInDialog } from '../ui/modalFocus';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
 import { EquipmentBadges, EquipmentSummary } from './EquipmentBadges';
 import { avatarDraftConflicts, avatarDraftStorage, clearAvatarDraft, mergeAvatarDraft, readAvatarDraft, sameAvatar, writeAvatarDraft, type AvatarDraft } from './avatarDraft';
 import './inventory.css';
@@ -45,6 +47,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const [draftStored, setDraftStored] = useState(false);
   const equipmentRequest = useRef(0);
   const avatarRequest = useRef(0);
+  const avatarSave = useRef<{ abort: AbortController; timer: number } | null>(null);
   const accountId = useRef(user.id);
   accountId.current = user.id;
   const exitDialog = useRef<HTMLDialogElement>(null);
@@ -67,7 +70,10 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     setDraftOwner(user.id); setDraftStored(false);
     setNotice(null);
     // A different account must never inherit an unsaved outfit from the previous one.
-    return () => { avatarRequest.current += 1; };
+    return () => {
+      avatarRequest.current += 1;
+      if (avatarSave.current) { window.clearTimeout(avatarSave.current.timer); avatarSave.current.abort.abort(); avatarSave.current = null; }
+    };
   }, [user.id]);
 
   useEffect(() => {
@@ -92,8 +98,14 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   }, [dirty]);
 
   useEffect(() => {
-    if (confirmExit) exitDialog.current?.showModal();
-    else exitDialog.current?.close();
+    const dialog = exitDialog.current;
+    if (!confirmExit || !dialog) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialog.showModal();
+    return () => {
+      dialog.close();
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
+    };
   }, [confirmExit]);
 
   function playClick() {
@@ -173,13 +185,16 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   }
 
   async function save(exitAfter = false) {
-    if (busy || pendingDraft) return;
+    if (busy || pendingDraft || avatarSave.current) return;
     if (!dirty && portraitSaved) { if (exitAfter) onBack(); return; }
     const requestId = ++avatarRequest.current;
     const owner = user.id;
+    const pending = { abort: new AbortController(), timer: 0 };
+    pending.timer = window.setTimeout(() => pending.abort.abort(), 8_000);
+    avatarSave.current = pending;
     setSaving(true); setNotice(null);
     try {
-      const updated = await api.updateAvatar({ ...avatar });
+      const updated = await api.updateAvatar({ ...avatar }, pending.abort.signal);
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
       if (updated.id !== owner || !isSavedAvatarPortrait(updated.avatarPortrait)) {
         throw new Error('Сервер не подтвердил сохранение портрета. Изменения остались в примерке; повторите попытку.');
@@ -195,10 +210,16 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
       setConfirmExit(false);
       const message = reason instanceof Error ? reason.message : '';
-      setNotice({ kind: 'error', text: /failed to fetch|networkerror|load failed/i.test(message)
+      setNotice({ kind: 'error', text: pending.abort.signal.aborted
+        ? 'Сервер не подтвердил сохранение вовремя. Примерка осталась в этой вкладке. Проверьте связь и повторите сохранение.'
+        : /failed to fetch|networkerror|load failed/i.test(message)
         ? 'Нет связи с сервером. Изменения остались в примерке. Проверьте соединение и сохраните образ ещё раз.'
         : message || 'Не удалось сохранить. Изменения остались в примерке. Попробуйте ещё раз.' });
-    } finally { if (requestId === avatarRequest.current && accountId.current === owner) setSaving(false); }
+    } finally {
+      window.clearTimeout(pending.timer);
+      if (avatarSave.current === pending) avatarSave.current = null;
+      if (requestId === avatarRequest.current && accountId.current === owner) setSaving(false);
+    }
   }
 
   // React keys the editor by account in App; this also protects embedded consumers
@@ -286,9 +307,11 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         </footer>
         {notice && <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
       </div>
-      <dialog ref={exitDialog} className="inventory-exit-dialog" onCancel={() => setConfirmExit(false)} aria-labelledby="inventory-exit-title">
+      <dialog ref={exitDialog} className="inventory-exit-dialog" tabIndex={-1} onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (!saving) setConfirmExit(false); }} aria-labelledby="inventory-exit-title">
+        <PixelScrollArea label="Несохранённая примерка" className="inventory-exit-scroll">
         <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед возвращением на станцию его можно сохранить.</p>
-        <div><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save(true)}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
+        <div className="inventory-exit-actions"><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save(true)}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
+        </PixelScrollArea>
       </dialog>
     </main>
   );

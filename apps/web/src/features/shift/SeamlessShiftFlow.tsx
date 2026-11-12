@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { GAME_MARK } from '../../brand';
 import type { ShiftProgress, ShiftReward } from '../../api';
 import { PixelIcon } from '../ui';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
+import { keepTabInDialog } from '../ui/modalFocus';
 import { AwardBadgeAnimation } from './AwardBadgeAnimation';
 import {
   ShiftWorkspace,
@@ -35,13 +37,32 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
   const [assistedTasks, setAssistedTasks] = useState(0);
   const [reward, setReward] = useState<ShiftReward | null>(null);
   const debriefDialog = useRef<HTMLDialogElement>(null);
+  const mentorTrigger = useRef<HTMLButtonElement>(null);
+  const mentorClose = useRef<HTMLButtonElement>(null);
+  const mentorViewport = useRef<HTMLDivElement>(null);
   const rhythm = useMemo(() => getSynopticRhythm(), []);
   const journalActive = mentorTopicId === 'journal';
   const mentorTopic = MENTOR_TOPICS.find((topic) => topic.id === mentorTopicId) ?? MENTOR_TOPICS[0];
   const mistakes = journal.filter((entry) => !entry.firstAttemptCorrect);
   useEffect(() => {
-    if (debriefReason && debriefDialog.current && !debriefDialog.current.open) debriefDialog.current.showModal();
+    const dialog = debriefDialog.current;
+    if (!debriefReason || !dialog) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    if (!dialog.open) dialog.showModal();
+    return () => { dialog.close(); if (opener?.isConnected) opener.focus({ preventScroll: true }); };
   }, [debriefReason]);
+  useEffect(() => { if (mentorOpen) mentorClose.current?.focus(); }, [mentorOpen]);
+  useEffect(() => { mentorViewport.current?.scrollTo({ top: 0, behavior: 'instant' }); }, [mentorTopicId]);
+
+  function closeMentor() { setMentorOpen(false); mentorTrigger.current?.focus({ preventScroll: true }); }
+  function handleMentorTabs(event: KeyboardEvent<HTMLDivElement>) {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const ids = [...MENTOR_TOPICS.map(topic => topic.id), 'journal'];
+    const index = ids.indexOf(mentorTopicId);
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? ids.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + ids.length) % ids.length;
+    event.preventDefault(); setMentorTopicId(ids[next]);
+    event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+  }
 
   function handleShiftExit(reason: ShiftExitReason) {
     if (reason === 'startup-error') {
@@ -134,12 +155,13 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
       )}
 
       <button
+        ref={mentorTrigger}
         type="button"
         className="shift-mentor-trigger"
         aria-expanded={mentorOpen}
         aria-controls="shift-mentor-panel"
         onClick={() => {
-          if (mentorOpen) setMentorOpen(false);
+          if (mentorOpen) closeMentor();
           else openMentor();
         }}
       >
@@ -149,21 +171,25 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
       </button>
 
       {mentorOpen && !debriefReason && (
-        <aside id="shift-mentor-panel" className="shift-mentor-panel" aria-label="Клеёнчатая тетрадь Иннокентия Борисовича">
+        <aside id="shift-mentor-panel" className="shift-mentor-panel" aria-label="Клеёнчатая тетрадь Иннокентия Борисовича" onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeMentor(); } }}>
           <header>
             <div>
               <span>Клеёнчатая тетрадь</span>
               <strong>Иннокентий Борисович Ольхин</strong>
             </div>
-            <button type="button" onClick={() => setMentorOpen(false)} aria-label="Закрыть тетрадь">×</button>
+            <button ref={mentorClose} type="button" onClick={closeMentor} aria-label="Закрыть тетрадь">×</button>
           </header>
+          <PixelScrollArea label="Тетрадь наставника" className="shift-mentor-scroll" viewportRef={mentorViewport}>
           <p className="shift-mentor-greeting">«Не бойся спросить до того, как провёл линию. Ластик бумагу трёт, а разговор — мысль чистит».</p>
-          <div className="shift-mentor-tabs" role="tablist" aria-label="Закладки тетради">
+          <div className="shift-mentor-tabs" role="tablist" aria-label="Закладки тетради" onKeyDown={handleMentorTabs}>
             {MENTOR_TOPICS.map((topic) => (
               <button
                 key={topic.id}
                 type="button"
                 role="tab"
+                id={`mentor-tab-${topic.id}`}
+                aria-controls="mentor-topic-panel"
+                tabIndex={mentorTopicId === topic.id ? 0 : -1}
                 aria-selected={!journalActive && topic.id === mentorTopic.id}
                 className={!journalActive && topic.id === mentorTopic.id ? 'is-active' : ''}
                 onClick={() => setMentorTopicId(topic.id)}
@@ -174,6 +200,9 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
             <button
               type="button"
               role="tab"
+              id="mentor-tab-journal"
+              aria-controls="mentor-topic-panel"
+              tabIndex={journalActive ? 0 : -1}
               aria-selected={journalActive}
               className={journalActive ? 'is-active' : ''}
               onClick={() => setMentorTopicId('journal')}
@@ -183,7 +212,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
           </div>
 
           {journalActive ? (
-            <section className="shift-mentor-page shift-journal-page">
+            <section id="mentor-topic-panel" role="tabpanel" aria-labelledby="mentor-tab-journal" className="shift-mentor-page shift-journal-page">
               <h2>Разбор текущей смены</h2>
               {journal.length === 0 ? (
                 <p>Здесь появятся задания, разобранные в этом посещении. Итоговый прогресс смены сохраняется на сервере.</p>
@@ -206,7 +235,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
               )}
             </section>
           ) : (
-            <section className="shift-mentor-page">
+            <section id="mentor-topic-panel" role="tabpanel" aria-labelledby={`mentor-tab-${mentorTopic.id}`} className="shift-mentor-page">
               <h2>{mentorTopic.title}</h2>
               <p>{mentorTopic.body}</p>
               <div><strong>Правило:</strong> {mentorTopic.rule}</div>
@@ -217,12 +246,14 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
             <span>Срок {rhythm.previousTermUtc}</span>
             <span>Подсказка объясняет принцип и не раскрывает ответ до проверки.</span>
           </footer>
+          </PixelScrollArea>
         </aside>
       )}
 
       {debriefReason && (
-        <dialog ref={debriefDialog} className="shift-debrief-overlay" aria-labelledby="shift-debrief-title" onCancel={(event) => { event.preventDefault(); if (completed) onExit(); else setDebriefReason(null); }}>
+        <dialog ref={debriefDialog} className="shift-debrief-overlay" tabIndex={-1} aria-labelledby="shift-debrief-title" onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (completed) onExit(); else setDebriefReason(null); }}>
           <section className="shift-lore-card shift-debrief-card">
+            <PixelScrollArea label="Итоги смены" className="shift-debrief-scroll">
             <div className="shift-lore-eyebrow">
               <PixelIcon name="guide" size="sm" />
               <span>{GAME_MARK} · сдача смены</span>
@@ -252,6 +283,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
                 <button type="button" className="secondary-button" onClick={() => setDebriefReason(null)}>Продолжить эту смену</button>
               )}
             </div>
+            </PixelScrollArea>
           </section>
         </dialog>
       )}

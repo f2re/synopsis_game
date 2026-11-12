@@ -31,6 +31,8 @@ jobs:
           node tools/test_world_audio_controls.cjs
           node tools/test_session_navigation.cjs
           node tools/test_study_journal.cjs
+          node tools/test_identity_ui_lifecycle.cjs
+          node tools/test_radio_keyboard.cjs
       - name: Собрать настоящую рабочую версию
         run: pnpm build
       - name: Подготовить браузер

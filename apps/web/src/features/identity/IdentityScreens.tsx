@@ -1,6 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from 'react';
-import { api, ApiError, type AdminUser, type RosterUser, type SessionUser, type UserRole } from '../../api';
+import { api, ApiError, cancelPendingLogin, getSessionToken, type AdminUser, type RosterUser, type SessionUser, type UserRole } from '../../api';
 import { PixelSwitch } from '../ui/PixelSwitch';
+import { HubModalLayer } from '../hub/HubModalLayer';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
 
 function highlightMatch(text: string, query: string) {
   const trimmed = query.trim();
@@ -35,42 +37,86 @@ export function LoginScreen({
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [rosterLoading, setRosterLoading] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [reload, setReload] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const mounted = useRef(true);
 
   useEffect(() => {
-    api.groups()
-      .then((items) => {
-        setGroups(items);
-        if (items[0]) setGroupId(items[0]);
-      })
-      .catch(() => setError('Не удалось связаться со станцией. Проверьте подключение или обратитесь к преподавателю.'))
-      .finally(() => setLoading(false));
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      if (submittingRef.current) cancelPendingLogin();
+    };
   }, []);
 
   useEffect(() => {
+    let disposed = false;
+    const abort = new AbortController();
+    const timeout = window.setTimeout(() => abort.abort(), 8_000);
+    setLoading(true); setLoadError(false); setError('');
+    setGroups([]); setGroupId(''); setUsers([]); setUserId(''); setCode('');
+    api.groups(abort.signal)
+      .then((items) => {
+        if (disposed) return;
+        setGroups(items);
+        if (items[0]) setGroupId(items[0]);
+      })
+      .catch(() => {
+        if (disposed) return;
+        setLoadError(true);
+        setError('Не удалось загрузить учебные группы. Проверьте соединение и повторите загрузку.');
+      })
+      .finally(() => { window.clearTimeout(timeout); if (!disposed) setLoading(false); });
+    return () => { disposed = true; window.clearTimeout(timeout); abort.abort(); };
+  }, [reload]);
+
+  useEffect(() => {
+    setUsers([]); setUserId(''); setCode('');
     if (!groupId) {
-      setUsers([]);
-      setUserId('');
+      setRosterLoading(false);
       return;
     }
-    api.roster(groupId)
+    let disposed = false;
+    const abort = new AbortController();
+    const timeout = window.setTimeout(() => abort.abort(), 8_000);
+    setRosterLoading(true); setLoadError(false); setError('');
+    api.roster(groupId, abort.signal)
       .then((items) => {
+        if (disposed) return;
         setUsers(items);
         setUserId(items[0]?.id ?? '');
-        setCode('');
       })
-      .catch((reason) => setError(reason instanceof Error ? reason.message : 'Не удалось получить список'));
+      .catch(() => {
+        if (disposed) return;
+        setLoadError(true);
+        setError('Не удалось загрузить список группы. Проверьте соединение и повторите загрузку.');
+      })
+      .finally(() => { window.clearTimeout(timeout); if (!disposed) setRosterLoading(false); });
+    return () => { disposed = true; window.clearTimeout(timeout); abort.abort(); };
   }, [groupId]);
 
   const selectedUser = users.find((u) => u.id === userId);
   const isFirstTime = selectedUser ? selectedUser.hasCode === false : false;
+  const canSubmit = !loading && !rosterLoading && Boolean(selectedUser && selectedUser.groupId === groupId) && (isFirstTime || Boolean(code));
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    setError('');
+    if (submittingRef.current || !canSubmit) return;
+    submittingRef.current = true;
+    setSubmitting(true); setError('');
     try {
-      onLogin(await api.login(userId, code));
+      const profile = await api.login(userId, code);
+      if (!mounted.current) return;
+      submittingRef.current = false;
+      onLogin(profile);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Не удалось войти');
+      if (mounted.current) setError(reason instanceof Error ? reason.message : 'Не удалось войти');
+    } finally {
+      submittingRef.current = false;
+      if (mounted.current) setSubmitting(false);
     }
   }
 
@@ -91,16 +137,16 @@ export function LoginScreen({
       <h1 id="login-title">Вход в систему</h1>
       <p className="muted">Выберите свою учебную группу и имя, затем введите код входа.</p>
 
-      <form className="form-stack" onSubmit={submit}>
+      <form className="form-stack" onSubmit={submit} aria-busy={loading || rosterLoading || submitting}>
         <div className="login-field">
           <label htmlFor={`${fieldId}-group`}>Группа</label>
-          <select id={`${fieldId}-group`} value={groupId} onChange={(e) => setGroupId(e.target.value)} disabled={loading || groups.length === 0}>
+          <select id={`${fieldId}-group`} value={groupId} onChange={(e) => { setUsers([]); setUserId(''); setCode(''); setRosterLoading(true); setGroupId(e.target.value); }} disabled={loading || submitting || groups.length === 0}>
             {groups.map((group) => <option key={group} value={group}>{group}</option>)}
           </select>
         </div>
         <div className="login-field">
           <label htmlFor={`${fieldId}-user`}>Пользователь</label>
-          <select id={`${fieldId}-user`} value={userId} onChange={(e) => { setUserId(e.target.value); setCode(''); }} disabled={users.length === 0}>
+          <select id={`${fieldId}-user`} value={userId} onChange={(e) => { setUserId(e.target.value); setCode(''); setError(''); }} disabled={loading || rosterLoading || submitting || users.length === 0}>
             {users.map((user) => <option key={user.id} value={user.id}>{user.displayName}</option>)}
           </select>
         </div>
@@ -119,6 +165,7 @@ export function LoginScreen({
                 type="password"
                 inputMode="numeric"
                 maxLength={12}
+                disabled={loading || rosterLoading || submitting}
                 placeholder="Придумайте код или оставьте пустым"
               />
             </label>
@@ -133,12 +180,16 @@ export function LoginScreen({
               type="password"
               inputMode="numeric"
               maxLength={12}
+              disabled={loading || rosterLoading || submitting}
               placeholder="Введите код, который задали ранее"
             />
           </label>
         )}
 
         {error && <div className="form-error" role="alert">{error}</div>}
+        {loadError && <button type="button" className="secondary-button" onClick={() => setReload(value => value + 1)} disabled={loading || rosterLoading}>Повторить загрузку списка</button>}
+        {(loading || rosterLoading) && <p className="form-note" role="status">{loading ? 'Открываем учебные группы…' : 'Открываем список группы…'}</p>}
+        {!loading && !rosterLoading && groupId && users.length === 0 && !loadError && <p className="form-note" role="status">В этой группе пока нет доступных пользователей. Выберите другую группу или обратитесь к преподавателю.</p>}
         {groups.length === 0 && !loading && !error && (
           <div className="form-note">
             Список учебных групп пока пуст. Ожидайте добавления преподавателем.
@@ -149,9 +200,9 @@ export function LoginScreen({
           <button
             className="primary-button"
             type="submit"
-            disabled={!userId || (!isFirstTime && !code)}
+            disabled={!canSubmit || submitting}
           >
-            Войти
+            {submitting ? 'Входим…' : 'Войти'}
           </button>
           {onClose && (
             <button className="ghost-button" type="button" onClick={onClose}>
@@ -186,18 +237,33 @@ export function AdminLoginScreen({
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const submittingRef = useRef(false);
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      if (submittingRef.current) cancelPendingLogin();
+    };
+  }, []);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (submittingRef.current || !code) return;
+    submittingRef.current = true;
     setError('');
     setLoading(true);
     try {
       const user = await api.adminLogin(code);
+      if (!mounted.current) return;
+      submittingRef.current = false;
       onLogin(user);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Неверный код администратора');
+      if (mounted.current) setError(reason instanceof Error ? reason.message : 'Неверный код администратора');
     } finally {
-      setLoading(false);
+      submittingRef.current = false;
+      if (mounted.current) setLoading(false);
     }
   }
 
@@ -207,7 +273,7 @@ export function AdminLoginScreen({
         <div className="login-header-row">
           <div className="brand-mark" aria-hidden="true">
             <img src="/ui/ui_station_crest_badge_v2.png" alt="" width={56} height={64} className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; if (e.currentTarget.parentElement) e.currentTarget.parentElement.dataset.imageFailed = 'true'; }} />
-            <span className="brand-mark-fallback">⚙</span>
+            <span className="brand-mark-fallback">26063</span>
           </div>
           <button type="button" className="ghost-button login-close-button" onClick={onBack} aria-label="Назад" title="Вернуться на главную">
             ✕
@@ -224,7 +290,7 @@ export function AdminLoginScreen({
           </div>
         )}
 
-        <form className="form-stack" onSubmit={submit}>
+        <form className="form-stack" onSubmit={submit} aria-busy={loading}>
           <label>
             Код администратора
             <input
@@ -233,6 +299,7 @@ export function AdminLoginScreen({
               autoComplete="current-password"
               type="password"
               maxLength={24}
+              disabled={loading}
               placeholder="Введите код доступа"
               autoFocus
             />
@@ -268,25 +335,42 @@ export function SetCodeModal({
   const [confirmCode, setConfirmCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const submittingRef = useRef(false);
+  const mounted = useRef(true);
+  const ownerId = useRef(user.id);
+  ownerId.current = user.id;
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
 
   const hasCode = Boolean(user.codeSet);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (submittingRef.current || !newCode || !confirmCode || (hasCode && !currentCode)) return;
     setError('');
     if (newCode !== confirmCode) {
       setError('Новые коды не совпадают');
       return;
     }
+    const requestOwner = user.id;
+    const requestSession = getSessionToken();
+    submittingRef.current = true;
     setLoading(true);
     try {
       const updated = await api.setCode(newCode, hasCode ? currentCode : undefined);
+      if (!requestSession || getSessionToken() !== requestSession || ownerId.current !== requestOwner || updated.id !== requestOwner) return;
+      // Closing the form does not undo a confirmed server update. Keep the
+      // owning profile current, without letting an old form close a new one.
       onSuccess(updated);
-      onClose();
+      if (mounted.current) onClose();
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Не удалось установить код');
+      if (mounted.current && ownerId.current === requestOwner) setError(reason instanceof Error ? reason.message : 'Не удалось установить код');
     } finally {
-      setLoading(false);
+      submittingRef.current = false;
+      if (mounted.current && ownerId.current === requestOwner) setLoading(false);
     }
   }
 
@@ -307,7 +391,7 @@ export function SetCodeModal({
             ? 'Введите текущий код и задайте новый код для входа в систему.'
             : 'Задайте персональный код для защиты вашего профиля при последующих входах.'}
         </p>
-        <form className="form-stack" onSubmit={submit} style={{ marginTop: 14 }}>
+        <form className="form-stack" onSubmit={submit} style={{ marginTop: 14 }} aria-busy={loading}>
           {hasCode && (
             <label>
               Текущий код
@@ -315,6 +399,8 @@ export function SetCodeModal({
                 type="password"
                 value={currentCode}
                 onChange={(e) => setCurrentCode(e.target.value)}
+                autoComplete="current-password"
+                disabled={loading}
                 required
               />
             </label>
@@ -325,6 +411,8 @@ export function SetCodeModal({
               type="password"
               value={newCode}
               onChange={(e) => setNewCode(e.target.value)}
+              autoComplete="new-password"
+              disabled={loading}
               required
               minLength={2}
               maxLength={12}
@@ -337,6 +425,8 @@ export function SetCodeModal({
               type="password"
               value={confirmCode}
               onChange={(e) => setConfirmCode(e.target.value)}
+              autoComplete="new-password"
+              disabled={loading}
               required
               minLength={2}
               maxLength={12}
@@ -347,8 +437,8 @@ export function SetCodeModal({
             <button className="primary-button" type="submit" disabled={loading || !newCode || !confirmCode}>
               {loading ? 'Сохранение…' : 'Сохранить код'}
             </button>
-            <button className="ghost-button" type="button" onClick={onClose} disabled={loading}>
-              Отмена
+            <button className="ghost-button" type="button" onClick={onClose}>
+              {loading ? 'Закрыть окно' : 'Отмена'}
             </button>
           </div>
         </form>
@@ -359,6 +449,7 @@ export function SetCodeModal({
 
 export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser; onBack: () => void }) {
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [usersLoading, setUsersLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('');
@@ -381,21 +472,46 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
 
   // Поиск по ФИО
   const [searchQuery, setSearchQuery] = useState('');
+  const rosterSearch = useRef<HTMLInputElement>(null);
+  const importFileInput = useRef<HTMLInputElement>(null);
 
   // Модальное окно смены кода администратора
   const [adminCodeModalOpen, setAdminCodeModalOpen] = useState(false);
 
   // Сброс кода пользователя
   const [resetTarget, setResetTarget] = useState<AdminUser | null>(null);
+  const [resetError, setResetError] = useState('');
+  const [resetting, setResetting] = useState(false);
+  const resetFlight = useRef(false);
+  const resetTargetId = useRef<string | null>(null);
+  resetTargetId.current = resetTarget?.id ?? null;
+  const [pendingUserIds, setPendingUserIds] = useState<string[]>([]);
+  const statusFlights = useRef(new Set<string>());
+  const mounted = useRef(true);
+  const refreshGeneration = useRef(0);
+  const singleFlight = useRef(false);
+  const batchFlight = useRef(false);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; refreshGeneration.current += 1; };
+  }, []);
 
   const isAdmin = currentUser.roles.includes('admin');
 
   async function refresh() {
+    const generation = ++refreshGeneration.current;
+    setUsersLoading(true);
     try {
-      setUsers(await api.adminUsers());
+      const result = await api.adminUsers();
+      if (!mounted.current || generation !== refreshGeneration.current) return;
+      setUsers(result);
       setError('');
     } catch (reason) {
+      if (!mounted.current || generation !== refreshGeneration.current) return;
       setError(reason instanceof Error ? reason.message : 'Не удалось загрузить пользователей');
+    } finally {
+      if (mounted.current && generation === refreshGeneration.current) setUsersLoading(false);
     }
   }
 
@@ -479,20 +595,22 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
   async function handleCreateSingle(event: FormEvent) {
     event.preventDefault();
     const name = singleName.trim();
-    if (!name || !selectedGroup) return;
+    if (!name || !selectedGroup || singleFlight.current) return;
+    singleFlight.current = true;
     setError('');
     setSuccess('');
     setSingleLoading(true);
     try {
       await api.createUser({ displayName: name, groupId: selectedGroup });
+      if (!mounted.current) return;
       setSingleName('');
       setSuccess(`«${name}» успешно добавлен в группу ${selectedGroup}`);
-      setTimeout(() => setSuccess(''), 3000);
       await refresh();
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Не удалось добавить пользователя');
+      if (mounted.current) setError(reason instanceof Error ? reason.message : 'Не удалось добавить пользователя');
     } finally {
-      setSingleLoading(false);
+      singleFlight.current = false;
+      if (mounted.current) setSingleLoading(false);
     }
   }
 
@@ -503,7 +621,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result;
-      if (typeof text === 'string') {
+      if (mounted.current && typeof text === 'string') {
         setBatchText((prev) => (prev ? `${prev}\n${text}` : text));
       }
     };
@@ -514,11 +632,12 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
   // Пакетный импорт (только ФИО!)
   async function handleBatchImport(event: FormEvent) {
     event.preventDefault();
-    if (!selectedGroup) return;
+    if (!selectedGroup || batchFlight.current) return;
     if (parsedBatchNames.length === 0) {
       setError('Список пуст. Введите хотя бы одно ФИО.');
       return;
     }
+    batchFlight.current = true;
     setError('');
     setSuccess('');
     setBatchLoading(true);
@@ -527,37 +646,53 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
         groupId: selectedGroup,
         users: parsedBatchNames.map((displayName) => ({ displayName })),
       });
+      if (!mounted.current) return;
       setBatchText('');
       setSuccess(`Успешно добавлено ${result.count} чел. в группу «${selectedGroup}»`);
-      setTimeout(() => setSuccess(''), 4000);
       await refresh();
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Ошибка при импорте');
+      if (mounted.current) setError(reason instanceof Error ? reason.message : 'Ошибка при импорте');
     } finally {
-      setBatchLoading(false);
+      batchFlight.current = false;
+      if (mounted.current) setBatchLoading(false);
     }
   }
 
   // Переключение активности
   async function toggleStatus(user: AdminUser) {
+    if (statusFlights.current.has(user.id)) return;
+    statusFlights.current.add(user.id);
+    setPendingUserIds([...statusFlights.current]);
     try {
       await api.setUserStatus(user.id, user.status === 'active' ? 'disabled' : 'active');
-      await refresh();
+      if (mounted.current) await refresh();
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Не удалось изменить статус');
+      if (mounted.current) setError(reason instanceof Error ? reason.message : 'Не удалось изменить статус');
+    } finally {
+      statusFlights.current.delete(user.id);
+      if (mounted.current) setPendingUserIds([...statusFlights.current]);
     }
   }
 
   // Сброс кода на вход без кода
   async function handleResetCode(user: AdminUser) {
+    if (resetFlight.current) return;
+    resetFlight.current = true;
+    setResetting(true); setResetError('');
     try {
       await api.resetCode(user.id);
-      setResetTarget(null);
+      if (!mounted.current) return;
+      if (resetTargetId.current === user.id) setResetTarget(null);
       setSuccess(`Код для «${user.displayName}» сброшен. При следующем входе код не потребуется.`);
-      setTimeout(() => setSuccess(''), 3500);
       await refresh();
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Не удалось сбросить код');
+      if (!mounted.current) return;
+      const message = reason instanceof Error ? reason.message : 'Не удалось сбросить код';
+      if (resetTargetId.current === user.id) setResetError(message);
+      else setError(message);
+    } finally {
+      resetFlight.current = false;
+      if (mounted.current) setResetting(false);
     }
   }
 
@@ -582,7 +717,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
           </div>
           <div className="row-actions">
             <button className="ghost-button" onClick={() => setAdminCodeModalOpen(true)}>
-              ⚙ Сменить код администратора
+              Сменить код администратора
             </button>
             <button className="secondary-button" onClick={onBack}>
               ← На станцию
@@ -590,8 +725,9 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
           </div>
         </header>
 
-        {error && <div className="form-error" role="alert" style={{ marginBottom: 14 }}>{error}</div>}
+        {error && <div className="form-error" role="alert" style={{ marginBottom: 14 }}>{error}<button type="button" className="secondary-button" onClick={() => void refresh()}>Обновить список</button></div>}
         {success && <div className="form-success" role="status" style={{ marginBottom: 14 }}>{success}</div>}
+        {usersLoading && <p className="form-note" role="status">Обновляем список учащихся…</p>}
 
         <div className="admin-groups-layout">
           {/* Левая панель: Список групп */}
@@ -601,7 +737,6 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
               {!isCreatingGroup && (
                 <button
                   className="primary-button"
-                  style={{ minHeight: 32, padding: '4px 10px', fontSize: '0.84rem' }}
                   onClick={() => setIsCreatingGroup(true)}
                 >
                   + Группа
@@ -623,7 +758,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                 </label>
                 <div className="row-actions" style={{ justifyContent: 'flex-start' }}>
                   <button className="primary-button" type="submit" disabled={!newGroupName.trim()}>
-                    Создать
+                    Продолжить
                   </button>
                   <button
                     className="ghost-button"
@@ -636,8 +771,8 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
               </form>
             )}
 
-            <div className="group-list" role="tablist" aria-label="Список учебных групп">
-              {groups.length === 0 && (
+            <PixelScrollArea className="admin-group-scroll" label="Учебные группы"><div className="group-list" role="group" aria-label="Список учебных групп">
+              {groups.length === 0 && !usersLoading && (
                 <div className="muted tiny" style={{ padding: '12px 6px', textAlign: 'center' }}>
                   Групп пока нет. Нажмите «+ Группа», чтобы создать первую.
                 </div>
@@ -649,17 +784,16 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                   <button
                     key={group}
                     type="button"
-                    role="tab"
-                    aria-selected={isActive}
+                    aria-pressed={isActive}
                     className={`group-nav-btn ${isActive ? 'is-active' : ''}`}
-                    onClick={() => setSelectedGroup(group)}
+                    onClick={() => { setSelectedGroup(group); setSearchQuery(''); }}
                   >
                     <span>{group}</span>
                     <span className="group-pill-count">{count} чел.</span>
                   </button>
                 );
               })}
-            </div>
+            </div></PixelScrollArea>
           </aside>
 
           {/* Правая панель: Содержимое выбранной группы */}
@@ -678,6 +812,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                     <button
                       type="button"
                       className={`admin-tab ${addMode === 'single' ? 'is-active' : ''}`}
+                      aria-pressed={addMode === 'single'}
                       onClick={() => setAddMode('single')}
                     >
                       + Добавить одного
@@ -685,12 +820,15 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                     <button
                       type="button"
                       className={`admin-tab ${addMode === 'batch' ? 'is-active' : ''}`}
+                      aria-pressed={addMode === 'batch'}
                       onClick={() => setAddMode('batch')}
                     >
-                      📋 Импорт списком
+                      Импорт списком
                     </button>
                   </div>
                 </div>
+
+                {!currentGroupUsers.length && customGroups.includes(selectedGroup) && <p className="form-note" role="status">Группа сохранится после добавления первого учащегося. Введите ФИО или загрузите список.</p>}
 
                 {/* Форма добавления (только ФИО!) */}
                 <div className="group-add-box">
@@ -699,6 +837,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                       <div className="quick-add-row">
                         <input
                           value={singleName}
+                          aria-label="ФИО нового учащегося"
                           onChange={(e) => setSingleName(e.target.value)}
                           placeholder="Введите ФИО (например: Иванов Иван Иванович)"
                           maxLength={80}
@@ -718,17 +857,19 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                     </form>
                   ) : (
                     <form onSubmit={handleBatchImport} style={{ display: 'grid', gap: 10 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div className="admin-import-toolbar">
                         <span className="tiny muted">
                           Вставьте список ФИО — по одной записи на строку:
                         </span>
-                        <label className="ghost-button" style={{ cursor: 'pointer', padding: '4px 10px', fontSize: '0.8rem' }}>
-                          📎 Загрузить файл (.txt / .csv)
-                          <input type="file" accept=".txt,.csv" onChange={handleFileUpload} style={{ display: 'none' }} />
-                        </label>
+                        <button type="button" className="ghost-button" disabled={batchLoading} onClick={() => importFileInput.current?.click()}>
+                          Загрузить файл (.txt / .csv)
+                        </button>
+                        <input ref={importFileInput} type="file" accept=".txt,.csv" onChange={handleFileUpload} hidden tabIndex={-1} aria-label="Файл со списком учащихся" />
                       </div>
                       <textarea
                         className="import-textarea"
+                        aria-label="Список учащихся для добавления"
+                        disabled={batchLoading}
                         value={batchText}
                         onChange={(e) => setBatchText(e.target.value)}
                         placeholder={`Иванов Иван Иванович\nПетрова Анна Сергеевна\nСидоров Алексей Дмитриевич`}
@@ -754,8 +895,8 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                 <div>
                   <div className="roster-toolbar">
                     <div className="roster-search-box">
-                      <span className="search-icon" aria-hidden="true">🔍</span>
                       <input
+                        ref={rosterSearch}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Поиск по ФИО в группе…"
@@ -766,7 +907,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                         <button
                           type="button"
                           className="search-clear-btn"
-                          onClick={() => setSearchQuery('')}
+                          onClick={() => { setSearchQuery(''); rosterSearch.current?.focus(); }}
                           aria-label="Очистить поиск"
                           title="Очистить поиск"
                         >
@@ -797,8 +938,8 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                           <button
                             type="button"
                             className="secondary-button"
-                            style={{ minHeight: 30, padding: '4px 12px', fontSize: '0.8rem', marginTop: 10 }}
-                            onClick={() => setSearchQuery('')}
+                            style={{ marginTop: 10 }}
+                            onClick={() => { setSearchQuery(''); rosterSearch.current?.focus(); }}
                           >
                             Сбросить поиск
                           </button>
@@ -806,7 +947,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                       )}
                     </div>
                   ) : (
-                    <div className="roster-table-container" role="region" aria-label={`Журнал группы ${selectedGroup}`}>
+                    <PixelScrollArea className="roster-table-container" orientation="both" label={`Журнал группы ${selectedGroup}`}>
                       <table className="roster-table">
                         <thead>
                           <tr>
@@ -831,15 +972,12 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                               </td>
                               <td className="col-status">
                                 <span className={`roster-badge ${user.status}`}>
-                                  <span className={`status-dot ${user.status === 'active' ? 'green' : 'gray'}`} aria-hidden="true">
-                                    {user.status === 'active' ? '●' : '○'}
-                                  </span>
                                   {user.status === 'active' ? 'Активен' : 'Отключён'}
                                 </span>
                               </td>
                               <td className="col-code">
                                 <span className={`roster-badge ${user.codeSet ? 'code-set' : 'code-unset'}`}>
-                                  {user.codeSet ? '🔑 Задан' : '— Не задан'}
+                                  {user.codeSet ? 'Задан' : 'Не задан'}
                                 </span>
                               </td>
                               <td className="col-actions">
@@ -847,7 +985,8 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                                   <button
                                     type="button"
                                     className="table-btn-reset"
-                                    onClick={() => setResetTarget(user)}
+                                    onClick={() => { setResetError(''); setResetTarget(user); }}
+                                    disabled={resetting}
                                     title="Сбросить код, чтобы учащийся снова мог войти без кода"
                                   >
                                     ↺ Сброс
@@ -855,6 +994,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                                   <div title={user.status === 'active' ? 'Отключить доступ' : 'Включить доступ'}>
                                     <PixelSwitch
                                       checked={user.status === 'active'}
+                                      disabled={pendingUserIds.includes(user.id)}
                                       onChange={() => void toggleStatus(user)}
                                       ariaLabel={user.status === 'active' ? `Отключить ${user.displayName}` : `Включить ${user.displayName}`}
                                     />
@@ -865,7 +1005,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                           ))}
                         </tbody>
                       </table>
-                    </div>
+                    </PixelScrollArea>
                   )}
                 </div>
               </>
@@ -881,8 +1021,9 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
 
       {/* Модальное окно подтверждения сброса кода */}
       {resetTarget && (
+        <HubModalLayer label="Сброс кода доступа" onClose={() => setResetTarget(null)}>
         <div className="modal-backdrop" role="presentation" onClick={(e) => { if (e.target === e.currentTarget) setResetTarget(null); }}>
-          <section className="panel reset-modal form-stack" role="dialog" aria-labelledby="reset-modal-title">
+          <section className="panel reset-modal form-stack" aria-labelledby="reset-modal-title">
             <h2 id="reset-modal-title">Сброс кода доступа</h2>
             <p className="tiny muted">
               Пользователь: <strong>{resetTarget.displayName}</strong> (группа {resetTarget.groupId})
@@ -890,13 +1031,15 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
             <div className="form-note">
               После сброса учащийся сможет войти в систему <strong>без ввода кода</strong> и заново установить персональный код при входе или в профиле.
             </div>
+            {resetError && <p className="form-error" role="alert">{resetError}</p>}
             <div className="row-actions" style={{ marginTop: 10 }}>
               <button
                 type="button"
                 className="primary-button"
+                disabled={resetting}
                 onClick={() => void handleResetCode(resetTarget)}
               >
-                Подтвердить сброс
+                {resetting ? 'Сбрасываем код…' : 'Подтвердить сброс'}
               </button>
               <button
                 type="button"
@@ -908,18 +1051,20 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
             </div>
           </section>
         </div>
+        </HubModalLayer>
       )}
 
       {/* Модальное окно смены кода администратора */}
       {adminCodeModalOpen && (
+        <HubModalLayer label="Код администратора" onClose={() => setAdminCodeModalOpen(false)}>
         <SetCodeModal
           user={currentUser}
           onSuccess={() => {
-            setSuccess('Код администратора успешно обновлён');
-            setTimeout(() => setSuccess(''), 3000);
+            if (mounted.current) setSuccess('Код администратора успешно обновлён');
           }}
           onClose={() => setAdminCodeModalOpen(false)}
         />
+        </HubModalLayer>
       )}
     </main>
   );

@@ -34,7 +34,7 @@ async function startServers() {
   const baseApi = `http://127.0.0.1:${port}`;
   apiProcess = spawn(process.execPath, ['apps/server/dist/index.js'], { cwd: repo, env: {
     ...process.env, API_BIND: '127.0.0.1', API_PORT: String(port), SYNOPSIS_SECURITY_PROFILE: 'trusted',
-    SYNOPSIS_BOOTSTRAP_ADMIN_CODE: '', SYNOPSIS_ENABLE_TEST_ROSTER: 'true', SYNOPSIS_TEST_ROSTER_FILE: path.join(repo, 'config/test-roster.example.json'),
+    SYNOPSIS_BOOTSTRAP_ADMIN_CODE: '26063review', SYNOPSIS_ENABLE_TEST_ROSTER: 'true', SYNOPSIS_TEST_ROSTER_FILE: path.join(repo, 'config/test-roster.example.json'),
     SYNOPSIS_IDENTITY_STORE: path.join(temp, 'identity.json'), SYNOPSIS_EQUIPMENT_STORE: path.join(temp, 'equipment.json'),
     SYNOPSIS_PROGRESSION_STORE: path.join(temp, 'progression.json'), SYNOPSIS_ATTEMPT_LOG: path.join(temp, 'attempts.jsonl'), SYNOPSIS_CONTENT_ROOT: path.join(repo, 'content'),
   }, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -99,9 +99,14 @@ async function capture(page, name) {
     brokenImages: [...document.images].filter(img => img.getBoundingClientRect().width > 0 && img.complete && img.naturalWidth === 0).map(img => new URL(img.src).pathname),
     heading: document.querySelector('main h1,dialog h2')?.textContent,
     canvasCount: document.querySelectorAll('canvas').length,
+    pageOverflow: [...document.querySelectorAll('.app-page-viewport')].filter(node => node.clientWidth > 0 && node.scrollWidth > node.clientWidth + 2).map(node => ({ width: node.clientWidth, total: node.scrollWidth })),
+    visibleText: document.body.innerText,
   }));
   assert.ok(metric.scrollWidth <= metric.viewport[0] + 2, `${name}: horizontal overflow ${JSON.stringify(metric)}`);
   assert.deepEqual(metric.brokenImages, [], `${name}: broken artwork`);
+  assert.deepEqual(metric.pageOverflow, [], `${name}: content overflows its page frame`);
+  assert.doesNotMatch(metric.visibleText, /кампус|эмуляци|симуляци|художественный закат|не фактическ/iu, `${name}: visible interface language`);
+  delete metric.visibleText;
   await page.screenshot({ path: path.join(output, `${name}.png`), fullPage: true });
   report.screenshots.push(`${name}.png`); report.cases.push({ name, ...metric });
 }
@@ -239,7 +244,10 @@ async function waitForCampus(page) {
     await context.close();
   }
   await require('./test_station_ui_browser.cjs').checkWorldLoading({ base, browser, report, capture, waitForCampus });
+  await require('./test_all_screens_browser.cjs').runAdditionalScreenChecks({ base, browser, report, capture, waitForCampus });
   await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
+  await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
+  await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
   // Firefox exercises the same production screens, input and portrait flows above.
   // Native CDP visibility/audio observation is available only in Chromium.
   if (browserName === 'firefox') {

@@ -134,7 +134,7 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
 .hub-profile-identity { display: flex; align-items: flex-start; gap: 16px; }
 .hub-profile-identity p { margin: 0; font-size: 16px; line-height: 1.5; }
 .hub-profile-navigation { padding-bottom: 16px; margin-bottom: 8px; }
-.hub-auth-dialog { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: auto; color: var(--ui-text-primary); }
+.hub-auth-dialog { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: hidden; color: var(--ui-text-primary); }
 .hub-auth-dialog::backdrop { background: transparent; }
 .hub-journal { display: grid; gap: 20px; }
 .hub-journal h2 { margin: 4px 0 0; font-size: 20px; font-weight: normal; }

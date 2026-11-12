@@ -100,8 +100,9 @@
 }
 
 .shift-debrief-overlay .shift-debrief-card {
-  max-height: calc(100vh - 32px);
-  overflow: auto;
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
+  padding: 20px;
 }
 
 @media (max-width: 640px) {
@@ -112,4 +113,11 @@
   }
 
   .shift-debrief-overlay { padding: 10px; }
+}
+
+.shift-debrief-scroll { max-height: calc(100dvh - 128px); }
+.shift-debrief-scroll > .pixel-scroll-area__viewport { padding: 6px; }
+@media (max-width: 640px) {
+  .shift-debrief-overlay .shift-debrief-card { padding: 12px; }
+  .shift-debrief-scroll { max-height: calc(100dvh - 64px); }
 }

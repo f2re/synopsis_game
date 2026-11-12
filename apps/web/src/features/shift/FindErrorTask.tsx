@@ -20,7 +20,7 @@ export function FindErrorTask({ payload, selectedStationId, onSelect, disabled =
   return (
     <div className="find-error-workspace">
       {payload.rule && <div className="find-error-rule"><strong>Физический контроль</strong><span>{payload.rule}</span></div>}
-      <svg className="find-error-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" aria-label="Планшет контроля наблюдений">
+      <svg role="group" className="find-error-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" aria-label="Планшет контроля наблюдений">
         <rect className="find-error-paper" x="12" y="12" width="976" height="976" rx="24" />
         <path className="find-error-guide" d="M70 190 C250 120 430 165 570 115 S820 95 935 185" />
         <path className="find-error-guide secondary" d="M65 770 C250 655 365 725 500 650 S760 600 935 730" />
@@ -42,11 +42,13 @@ export function FindErrorTask({ payload, selectedStationId, onSelect, disabled =
               key={station.id}
               className={className}
               role="button"
+              aria-disabled={disabled}
+              aria-pressed={isSelected}
               tabIndex={disabled ? -1 : 0}
               aria-label={`Станция ${station.name}: T ${t?.value ?? '—'}, Td ${td?.value ?? '—'}`}
               onClick={() => !disabled && onSelect(station.id)}
               onKeyDown={(event) => {
-                if (!disabled && (event.key === 'Enter' || event.key === ' ')) onSelect(station.id);
+                if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (!disabled) onSelect(station.id); }
               }}
             >
               <circle className="find-error-hit" cx={station.x} cy={station.y} r="92" />

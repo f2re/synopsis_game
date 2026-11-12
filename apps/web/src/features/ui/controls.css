@@ -18,7 +18,7 @@
 :is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
     .hub-action, .inventory-button, .library-button, .station-settings__button,
     .station-menu-button, .station-back, .station-sound-button, .codebook-button,
-    .shift-exit, .shift-primary) {
+    .shift-exit, .shift-primary, .pixel-dialog-close) {
   --control-fill: var(--ui-chrome-raised);
   --control-hover: var(--ui-chrome-hover);
   --control-border: var(--ui-chrome-edge);
@@ -58,7 +58,7 @@
 :is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
     .hub-action, .inventory-button, .library-button, .station-settings__button,
     .station-menu-button, .station-back, .station-sound-button, .codebook-button,
-    .shift-exit, .shift-primary):hover:not(:disabled) {
+    .shift-exit, .shift-primary, .pixel-dialog-close):hover:not(:disabled) {
   border-color: var(--color-action-accent-2);
   background: var(--control-hover);
   filter: none;
@@ -68,7 +68,7 @@
 :is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
     .hub-action, .inventory-button, .library-button, .station-settings__button,
     .station-menu-button, .station-back, .station-sound-button, .codebook-button,
-    .shift-exit, .shift-primary):active:not(:disabled) {
+    .shift-exit, .shift-primary, .pixel-dialog-close):active:not(:disabled) {
   box-shadow: var(--ui-control-pressed);
   transform: none;
 }
@@ -76,7 +76,7 @@
 :is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
     .hub-action, .inventory-button, .library-button, .station-settings__button,
     .station-menu-button, .station-back, .station-sound-button, .codebook-button,
-    .shift-exit, .shift-primary):disabled {
+    .shift-exit, .shift-primary, .pixel-dialog-close):disabled {
   color: var(--color-stone-concrete-4);
   background: var(--color-sky-night-1);
   border-color: var(--color-sky-night-4);
@@ -169,3 +169,9 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 20px; border: 2px s
 @keyframes station-loading-pulse { 0%, 66%, 100% { opacity: .4; } 33% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .app-loading__signal i { animation: none; opacity: 1; } }
 :root[data-reduced-motion="true"] .app-loading__signal i, :root[data-low-power="true"] .app-loading__signal i { animation: none; opacity: 1; }
+
+/* Loading keeps both the label and the control rectangle stable. */
+.pixel-btn { position: relative; }
+.pixel-spinner { position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; background: currentColor; }
+.pixel-btn--loading { cursor: progress; }
+.pixel-dialog-close { padding: 6px; font-size: 24px; }

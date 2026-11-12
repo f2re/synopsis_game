@@ -207,3 +207,20 @@ input:focus, select:focus, textarea:focus {
     scroll-behavior: auto !important;
   }
 }
+
+/* Page scrolling belongs to the application's frame, including Firefox.
+   In-window areas retain their own bounded viewport without a second browser rail. */
+.app-page-scroll {
+  height: 100dvh;
+  min-width: 0;
+  gap: 0;
+  background: var(--ui-chrome);
+}
+.app-page-scroll[data-overflow-y="true"] { column-gap: 4px; padding-right: 4px; }
+.app-page-viewport > .pixel-scroll-area__content { min-height: 100%; }
+.app-page-scroll > .pixel-scroll-area__track { margin-block: 4px; }
+.app-page-scroll .station-page,
+.app-page-scroll .station-settings,
+.app-page-scroll .library-screen,
+.app-page-scroll .inventory-screen,
+.app-page-scroll .shift-shell { min-width: 0; }

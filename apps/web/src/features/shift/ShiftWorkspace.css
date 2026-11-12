@@ -68,7 +68,7 @@
 .shift-options { display: grid; gap: 10px; margin: 26px 0; }
 .shift-options button { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: center; text-align: left; min-height: 58px; padding: 10px 14px; border: 2px solid var(--ui-chrome-edge); border-radius: 0; color: #dce7e7; background: rgba(255,255,255,.045); }
 .shift-options button span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 0; color: #9bb2ba; background: rgba(255,255,255,.08); font-weight: 900; }
-.shift-options button:hover, .shift-options button.is-selected { border-color: #d8b55b; background: rgba(216,181,91,.1); }
+.shift-options button:hover:not(:disabled), .shift-options button.is-selected { border-color: #d8b55b; background: rgba(216,181,91,.1); }
 .shift-options button.is-selected span { color: #182d36; background: #e5c568; }
 .shift-sequence { display: grid; gap: 8px; margin: 26px 0; }
 .shift-sequence-row { display: grid; grid-template-columns: 32px 1fr auto; gap: 12px; align-items: center; min-height: 54px; padding: 8px 10px; border: 2px solid var(--ui-chrome-edge); border-radius: 0; background: rgba(255,255,255,.035); }
@@ -169,3 +169,7 @@
   .shift-retry { padding: 12px; }
   .shift-retry .shift-assistance__button { width: 100%; justify-content: center; }
 }
+
+.shift-shell :is(.shift-options button, .shift-sequence-row button):active:not(:disabled) { box-shadow: var(--ui-control-pressed); }
+.shift-sequence-row button:hover:not(:disabled) { border-color: var(--color-action-accent-2); background: var(--ui-chrome-hover); }
+.shift-numeric input { min-width: 0; width: 100%; }

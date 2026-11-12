@@ -6,8 +6,10 @@ const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const ts = require('../apps/web/node_modules/typescript');
 let owner;
+let nextId = 0;
 const jsx = (type, props, key) => ({ type, props, key });
 const react = {
+  useId() { const hook = owner.hooks[owner.cursor++] ??= { kind: 'id', value: `test-field-${++nextId}` }; return hook.value; },
   useRef(value) { const hook = owner.hooks[owner.cursor++] ??= { kind: 'ref', value: { current: value } }; return hook.value; },
   useState(value) {
     const runner = owner;

@@ -23,33 +23,16 @@ async function checkDialog(page, viewport, report, capture, name) {
   assert.ok(geometry[0].hit && !geometry[0].clipped, `${name}: close remains reachable`);
   assert.ok(geometry[0].width >= 44 && geometry[0].height >= 44, `${name}: close target >= 44px`);
   const body = dialog.locator('.hub-dialog__body');
-  const scroll = await body.evaluate(node => {
-    const s = getComputedStyle(node), b = node.getBoundingClientRect();
-    const thumb = getComputedStyle(node, '::-webkit-scrollbar-thumb');
-    return { height: node.clientHeight, total: node.scrollHeight, top: node.scrollTop, color: s.scrollbarColor,
-      customThumb: { color: thumb.backgroundColor, radius: thumb.borderRadius },
-      gutter: node.offsetWidth - node.clientWidth - parseFloat(s.borderLeftWidth) - parseFloat(s.borderRightWidth),
-      box: { x: b.x, y: b.y, width: b.width, height: b.height } };
-  });
-  if (report.engine === 'firefox') assert.ok(scroll.color && scroll.color !== 'auto', `${name}: Firefox scrollbar uses the interface palette`);
-  else assert.ok((scroll.color && scroll.color !== 'auto') || (/^rgba?\(/.test(scroll.customThumb.color) && scroll.customThumb.color !== 'rgba(0, 0, 0, 0)'), `${name}: scrollbar uses the interface palette`);
+  const scroll = await body.evaluate(node => ({ height: node.clientHeight, total: node.scrollHeight, top: node.scrollTop }));
+  const closeBefore = await dialog.locator('.hub-dialog__close').boundingBox();
+  await require('./test_all_screens_browser.cjs').exerciseScrollbar(page, dialog.locator('.pixel-scroll-area').first(), report, `${name}-scroll-${viewport.width}`);
+  assert.deepEqual(await dialog.locator('.hub-dialog__close').boundingBox(), closeBefore, 'Scroll keeps the header/close in place');
   await capture(page, `${name}-${viewport.width}`);
   if (scroll.total > scroll.height + 2) {
-    const closeBefore = await dialog.locator('.hub-dialog__close').boundingBox();
-    await body.hover(); await page.mouse.wheel(0, 700);
-    await page.waitForFunction(() => document.querySelector('.hub-dialog[open] .hub-dialog__body').scrollTop > 0);
-    assert.deepEqual(await dialog.locator('.hub-dialog__close').boundingBox(), closeBefore, 'Scroll keeps the header/close in place');
+    const rail = dialog.locator('[role="scrollbar"][aria-orientation="vertical"]');
+    await rail.focus(); await rail.press('End');
     await capture(page, `${name}-scrolled-${viewport.width}`);
-    await body.hover(); await page.mouse.wheel(0, -10000);
-    await page.waitForFunction(() => document.querySelector('.hub-dialog[open] .hub-dialog__body').scrollTop === 0);
-    if (scroll.gutter > 0) {
-      const x = scroll.box.x + scroll.box.width - scroll.gutter / 2;
-      const y = scroll.box.y + Math.min(16, scroll.box.height / 4);
-      await page.mouse.move(x, y); await page.mouse.down();
-      await page.mouse.move(x, scroll.box.y + scroll.box.height * .75, { steps: 12 });
-      await page.mouse.up();
-      assert.ok(await body.evaluate(node => node.scrollTop > 0), 'Dragging the native thumb scrolls the dialog');
-    }
+    await rail.press('Home');
   }
   await dialog.locator('.hub-dialog__close').focus();
   await page.keyboard.press('Shift+Tab');

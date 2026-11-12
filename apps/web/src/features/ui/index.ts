@@ -4,3 +4,4 @@ export * from './PixelCard';
 export * from './PixelSwitch';
 export * from './StationNavDock';
 export * from './DesignSystem';
+export * from './PixelScrollArea';

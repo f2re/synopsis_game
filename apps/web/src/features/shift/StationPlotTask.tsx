@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { stationPositionLabel } from './stationPositionLabel';
 import type {
   StationPlotComponentResult,
   StationPlotObservation,
@@ -80,38 +81,40 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
         {observations.map((observation) => {
           const placed = placements[observation.id];
           return (
+            <div className="station-observation-row" key={observation.id}>
             <button
               key={observation.id}
               type="button"
               className={`station-observation ${selectedObservationId === observation.id ? 'is-selected' : ''} ${placed ? 'is-placed' : ''}`}
               onClick={() => setSelectedObservationId(observation.id)}
               disabled={disabled}
+              aria-pressed={selectedObservationId === observation.id}
             >
               <span>{observation.label}</span>
               <strong>{observation.value}</strong>
-              {placed && !disabled && (
-                <i
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Снять ${observation.label}`}
-                  onClick={(event) => { event.stopPropagation(); clearObservation(observation.id); }}
-                  onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') clearObservation(observation.id); }}
-                >×</i>
-              )}
             </button>
+              {placed && !disabled && (
+                <button
+                  type="button"
+                  className="station-observation-clear"
+                  aria-label={`Снять ${observation.label}`}
+                  onClick={(event) => { (event.currentTarget.previousElementSibling as HTMLButtonElement | null)?.focus(); clearObservation(observation.id); }}
+                >×</button>
+              )}
+            </div>
           );
         })}
       </div>
 
       <div className="station-plot-panel">
         <div className="station-plot-caption">
-          <span>{payload.profile ?? 'RUS_SURFACE_STATION_V1'}</span>
+          <span>Станционная модель</span>
           <strong>{payload.station?.name ?? 'Учебная станция'}</strong>
         </div>
         <svg
           className="station-plot-svg"
           viewBox="0 0 1000 1000"
-          role="img"
+          role="group"
           aria-label="Интерактивная станционная модель"
           preserveAspectRatio="xMidYMid meet"
         >
@@ -120,6 +123,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
 
           {slots.map((slot) => {
             const observation = assignedObservation(observations, placements, slot.id);
+            const position = stationPositionLabel(slot.x, slot.y);
             const status = statusForSlot(slot, placements, results);
             const className = ['station-slot', observation ? 'is-filled' : '', status ? `is-${status}` : ''].filter(Boolean).join(' ');
 
@@ -131,10 +135,11 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                   key={slot.id}
                   className={className}
                   role="button"
+                  aria-disabled={disabled}
                   tabIndex={disabled ? -1 : 0}
-                  aria-label={observation ? `Размещено: ${observation.label}` : 'Позиция станционной модели'}
+                  aria-label={`Позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
                   onClick={() => assign(slot.id)}
-                  onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') assign(slot.id); }}
+                  onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
                 >
                   <circle className="station-slot-hit wind-hit" cx="500" cy="500" r="125" />
                   <line className="station-wind-line" x1="500" y1="500" x2={end.x} y2={end.y} />
@@ -153,10 +158,11 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                 key={slot.id}
                 className={className}
                 role="button"
+                aria-disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
-                aria-label={observation ? `Размещено: ${observation.label}` : 'Позиция станционной модели'}
+                aria-label={`Позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
                 onClick={() => assign(slot.id)}
-                onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') assign(slot.id); }}
+                onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
               >
                 <rect className="station-slot-hit" x={slot.x - 115} y={slot.y - 55} width="230" height="110" rx="22" />
                 <text className="station-slot-text" x={slot.x} y={slot.y + 12} textAnchor="middle">
