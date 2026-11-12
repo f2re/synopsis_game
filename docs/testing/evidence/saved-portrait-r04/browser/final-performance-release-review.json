@@ -1,0 +1,803 @@
+{
+  "review": "saved-portrait-r04-independent-performance-release",
+  "reviewerAgent": "/root/portrait_release_check",
+  "roles": [
+    "web-performance-engineer",
+    "integration-release-engineer"
+  ],
+  "roleRegistry": "agents/registry.yaml",
+  "recordedAtUtc": "2026-11-12T10:13:15.316027+00:00",
+  "independentOfProductImplementation": true,
+  "verdict": "PASS_SCOPED_CI_LIFECYCLE_AND_PREMERGE_CANDIDATE",
+  "openBlockingFindingsInReviewedScope": [],
+  "source": {
+    "repository": "f2re/synopsis_game",
+    "pullRequest": 126,
+    "sourceSha": "91555d6a1cd958c17eb7164161573c2112548add",
+    "testedMergeSha": "455e1e5fea843013bedca304d8e1e572b5923d85",
+    "sourceTree": "307eefc54ade4b60b66f8980f10b448352132c4f",
+    "testedMergeTree": "307eefc54ade4b60b66f8980f10b448352132c4f",
+    "treesEqual": true,
+    "lineageVerification": "Both git/commits endpoints independently retrieved through GitHub connector; artifact name contains tested merge SHA.",
+    "baseSha": "4db6517e0070578c7380afffa6dcaa9d7da3c596",
+    "sourceFingerprintsSha256": {
+      "apps/web/src/features/shift/SeamlessShiftFlow.css": "e04ecd855768a088508bc3507ac104787bf4f5fd316bdc117067cba37bddfb97",
+      "apps/web/src/features/avatar/inventory.css": "75c2dda752b957647ebfa186c7d4c97006474f4b5f67b7eecaef90d5c60fa67e",
+      "apps/web/src/features/avatar/AvatarPreview.tsx": "7828bdcbf9c70e1919bb3d5d32921467df3b04cd727909f7284ee401114eda8f",
+      "apps/web/src/features/avatar/SavedAvatarPortrait.tsx": "1232bad5e6d4228b4fd28595a9c9c22b7ed7326b045a1e6a8fa9de79bc5264f4",
+      "packages/world-engine/src/runtime/modularAvatarCompositor.ts": "b52da689655859eb397da7742debf90fd2b45d6b9cfed3a945d977a3b1892e77",
+      "apps/web/src/App.tsx": "ff51ef7e1343bbb89022b5f86fd92d1c6166846fb5aeb3265d750045f5da6ff0",
+      "apps/web/src/game/WorldCanvas.tsx": "c9c668ba4d67b8daa642521e2f5f130a08b070d517d45b926bf758c3c7e9afcb",
+      "apps/web/src/features/hub/HubScreen.tsx": "bc0aebfe4a2b302127527762a1d40202f3ef74a96de505f17dae473b23fec29d",
+      "packages/world-engine/src/runtime/createWorldGame.ts": "ef1b009df715c9dd06ea920286fcb882415e2bf29c3bbcb79c1cfdcb6acbabf8",
+      "packages/world-engine/src/scenes/hub/HubScene.ts": "220dad62cd3e5e6ed54fd0770e59f6c482946a26a2ab77f8458027076f380d6b",
+      "tools/test_saved_portrait_browser.cjs": "7ef106a1e4bdf5e3bae13c5d5eba33830105e83bf014ba49e31e7119a3604b36",
+      "tools/test_station_screens.cjs": "79f3d264a5f32d5da72e61f014c652fe60cfbedd36ac116f2fc292d2e6d19a8b",
+      ".github/workflows/station-screens.yml": "6ea661ab0e95c94d0e2eb3dc62084d676728cc8210b1697f5bfab5ceca36d760",
+      ".github/workflows/release.yml": "8e3e92c4db629d0a9521a16a56aa1ee50b2a28b8946cc6f5c3a423715e9b7204"
+    }
+  },
+  "browserEvidence": {
+    "runId": 43196550696,
+    "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43196550696",
+    "jobId": 131108878790,
+    "artifactId": 13933142680,
+    "artifactName": "station-screens-455e1e5fea843013bedca304d8e1e572b5923d85",
+    "archiveSha256": "5d74af1b2ebfe284c235b438846f61d35d3fde30fb6f5b4830650ab3d76a5371",
+    "archiveBytes": 21336433,
+    "digestMatchesGitHubMetadata": true,
+    "reportFile": "browser-report.json",
+    "reportSha256": "3160ca490c67ba88c95efffb21da0c697ade88a30f20e698c741ce6e1c94ea74",
+    "browser": "151.0.7922.34",
+    "status": "PASS",
+    "cases": 88,
+    "screenshots": 55,
+    "uncaughtErrors": 0,
+    "productionAssets": true,
+    "realServer": true,
+    "nativeLifecycle": {
+      "focusEmulation": false,
+      "isolatedProfile": true,
+      "realVisibility": true
+    },
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "screenshotsPersonallyViewedThisRun": {
+      "portrait-shift-pinned-390.png": "675b70e2d4f67f972a97bb24fa4410331aa74398c360e12a00fc7d013b0c2ffb",
+      "portrait-shift-feedback-844.png": "c79fe4a30b23073d0a45aa21f7efd1deb65289c60082ecacf136875145bd0654",
+      "portrait-editor-saved-844.png": "41fe2762a8bbdbb7940fda2c9d28aa4056ba61f186686197c4480c36773d0565"
+    }
+  },
+  "scopes": {
+    "performance": {
+      "verdict": "PASS_FOR_RESOURCE_BOUNDARIES_AND_LIFECYCLE_ONLY",
+      "sourceFindings": [
+        "Wardrobe is lazy; static frame0 fitting has no RAF or animation loop.",
+        "Compositor leases and cache limits remain bounded to12MiB composites +4MiB palette cels; atlas not loaded before wardrobe.",
+        "Saved portraits use server PNG img, no composition outside editor.",
+        "WorldCanvas retained main visibility/context-loss/input cleanup and game.destroy(true).",
+        "Phaser noAudio:true retains one station AudioContext.",
+        "No personal world player or avatar bridge; fixed campus NPCs remain independent.",
+        "New production fix changes2CSS files only; no timers,JS state,assets or dependencies added."
+      ],
+      "actualMeasurements": [
+        {
+          "name": "home-performance-1440",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.699999999999818,
+            "p95": 16.700000000000273,
+            "samples": 119
+          },
+          "jsHeapBytes": 3453872,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": null,
+          "reducedMotion": "true",
+          "lowPower": "false",
+          "resourceBytes": 841748
+        },
+        {
+          "name": "campus-performance-1440",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 66.59999999999991,
+            "p95": 100,
+            "samples": 119
+          },
+          "jsHeapBytes": 29213065,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": "30",
+          "reducedMotion": "true",
+          "lowPower": "true",
+          "resourceBytes": 11621617
+        },
+        {
+          "name": "home-performance-390",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.699999999999932,
+            "p95": 16.700000000000273,
+            "samples": 119
+          },
+          "jsHeapBytes": 3785610,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": null,
+          "reducedMotion": "true",
+          "lowPower": "false",
+          "resourceBytes": 841748
+        },
+        {
+          "name": "campus-performance-390",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.699999999999818,
+            "p95": 16.799999999999727,
+            "samples": 119
+          },
+          "jsHeapBytes": 28950202,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": "30",
+          "reducedMotion": "true",
+          "lowPower": "true",
+          "resourceBytes": 11619761
+        },
+        {
+          "name": "home-performance-844",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.699999999999932,
+            "p95": 16.700000000000273,
+            "samples": 119
+          },
+          "jsHeapBytes": 3785921,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": null,
+          "reducedMotion": "true",
+          "lowPower": "false",
+          "resourceBytes": 841748
+        },
+        {
+          "name": "campus-performance-844",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.699999999999818,
+            "p95": 16.799999999999727,
+            "samples": 119
+          },
+          "jsHeapBytes": 29204325,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": "30",
+          "reducedMotion": "true",
+          "lowPower": "true",
+          "resourceBytes": 11619761
+        },
+        {
+          "name": "home-full-motion-performance",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.69999999999999,
+            "p95": 33.40000000000009,
+            "samples": 119
+          },
+          "jsHeapBytes": 4189992,
+          "decorativeDrops": 12,
+          "animatedDrops": 12,
+          "fpsLimit": null,
+          "reducedMotion": "false",
+          "lowPower": "false",
+          "resourceBytes": 841748
+        },
+        {
+          "name": "home-low-power-only-performance",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.400000000000546,
+            "samples": 119
+          },
+          "jsHeapBytes": 4330781,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": null,
+          "reducedMotion": "false",
+          "lowPower": "true",
+          "resourceBytes": 841748
+        },
+        {
+          "name": "campus-full-motion-performance",
+          "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+          "rafCadenceMs": {
+            "p50": 66.59999999999854,
+            "p95": 66.70000000000073,
+            "samples": 119
+          },
+          "jsHeapBytes": 20636855,
+          "decorativeDrops": 0,
+          "animatedDrops": 0,
+          "fpsLimit": "60",
+          "reducedMotion": "false",
+          "lowPower": "false",
+          "resourceBytes": 13510810
+        }
+      ],
+      "limitations": [
+        "CI runs headed Chromium under Xvfb with software rendering enabled; it is not a physical GPU or target-device benchmark.",
+        "RAF cadence measures browser callbacks, not Phaser postrender throughput or GPU memory.",
+        "Observed desktop campus RAF p95 is100ms lowpower and66.7ms fullmotion in this run; no60FPS claim is made.",
+        "No new target-laptop/mobile hardware, projector uptime, input-latency percentile, texture-pressure or context-loss fault-injection result is asserted.",
+        "Differences between shared CI runs do not establish a performance regression or speedup without controlled hardware."
+      ]
+    },
+    "portraitBehavior": {
+      "verdict": "PASS_IN_REAL_CHROMIUM",
+      "noEditorResourceCases": [
+        {
+          "name": "portrait-no-editor-resources-1440",
+          "atlasRequests": 0,
+          "sha256": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069"
+        },
+        {
+          "name": "portrait-no-editor-resources-390",
+          "atlasRequests": 0,
+          "sha256": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069"
+        },
+        {
+          "name": "portrait-no-editor-resources-844",
+          "atlasRequests": 0,
+          "sha256": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069"
+        }
+      ],
+      "staticEditorCases": [
+        {
+          "name": "portrait-editor-static-1440",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "2aa35229d1f0ff71dfe5d9fbab06eb7047223ab5cb62e842eb8f77362eaf09a2",
+            "up": "e84679dc621ed8b743ba6ef50c8c010c47708b9ceb5d935da376803110339dd9",
+            "right": "7a737d4d1497b31f458c59e3d0b9441f23e29a0f04c42448a193a9107827d430",
+            "down": "86323082d51e31e5a725ba9ac477b5b3aa0cf6cd7bb19757927966ccf7d54c49"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 66,
+              "scrollWidth": 66
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 66,
+              "scrollWidth": 66
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 66,
+              "scrollWidth": 66
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 66,
+              "scrollWidth": 66
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/atlas.png"
+          ]
+        },
+        {
+          "name": "portrait-editor-static-390",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "2aa35229d1f0ff71dfe5d9fbab06eb7047223ab5cb62e842eb8f77362eaf09a2",
+            "up": "e84679dc621ed8b743ba6ef50c8c010c47708b9ceb5d935da376803110339dd9",
+            "right": "7a737d4d1497b31f458c59e3d0b9441f23e29a0f04c42448a193a9107827d430",
+            "down": "86323082d51e31e5a725ba9ac477b5b3aa0cf6cd7bb19757927966ccf7d54c49"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 78,
+              "scrollWidth": 78
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 78,
+              "scrollWidth": 78
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 78,
+              "scrollWidth": 78
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 78,
+              "scrollWidth": 78
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/atlas.png"
+          ]
+        },
+        {
+          "name": "portrait-editor-static-844",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "2aa35229d1f0ff71dfe5d9fbab06eb7047223ab5cb62e842eb8f77362eaf09a2",
+            "up": "e84679dc621ed8b743ba6ef50c8c010c47708b9ceb5d935da376803110339dd9",
+            "right": "7a737d4d1497b31f458c59e3d0b9441f23e29a0f04c42448a193a9107827d430",
+            "down": "86323082d51e31e5a725ba9ac477b5b3aa0cf6cd7bb19757927966ccf7d54c49"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 122,
+              "scrollWidth": 122
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 122,
+              "scrollWidth": 122
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 122,
+              "scrollWidth": 122
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 122,
+              "scrollWidth": 122
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/atlas.png"
+          ]
+        }
+      ],
+      "historicalSnapshotCases": [
+        {
+          "name": "portrait-session-snapshots-1440",
+          "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+          "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+          "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-session-snapshots-390",
+          "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+          "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+          "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-session-snapshots-844",
+          "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+          "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+          "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        }
+      ],
+      "freshLoginCases": [
+        {
+          "name": "portrait-fresh-login-1440",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662"
+        },
+        {
+          "name": "portrait-fresh-login-390",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662"
+        },
+        {
+          "name": "portrait-fresh-login-844",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662"
+        }
+      ],
+      "geometryAndRealInputCases": [
+        {
+          "name": "portrait-shift-input-1440",
+          "initialGeometry": {
+            "controls": [
+              {
+                "left": 562,
+                "top": 627.09375,
+                "right": 1228,
+                "bottom": 687.09375
+              },
+              {
+                "left": 562,
+                "top": 788.875,
+                "right": 1228,
+                "bottom": 838.875
+              }
+            ],
+            "helpers": [
+              {
+                "left": 1231,
+                "top": 938,
+                "right": 1422,
+                "bottom": 982
+              }
+            ],
+            "overlap": false
+          },
+          "scrolledGeometry": {
+            "controls": [
+              {
+                "left": 562,
+                "top": 627.09375,
+                "right": 1228,
+                "bottom": 687.09375
+              },
+              {
+                "left": 562,
+                "top": 788.875,
+                "right": 1228,
+                "bottom": 838.875
+              }
+            ],
+            "helpers": [
+              {
+                "left": 1231,
+                "top": 938,
+                "right": 1422,
+                "bottom": 982
+              }
+            ],
+            "overlap": false
+          },
+          "mentorOpenClose": true,
+          "numericInput": "0",
+          "realAnswerStatus": 200
+        },
+        {
+          "name": "portrait-shift-input-390",
+          "initialGeometry": {
+            "controls": [
+              {
+                "left": 29,
+                "top": 784.8125,
+                "right": 346,
+                "bottom": 844.8125
+              },
+              {
+                "left": 29,
+                "top": 1013.15625,
+                "right": 346,
+                "bottom": 1063.15625
+              }
+            ],
+            "helpers": [
+              {
+                "left": 16,
+                "top": 1148.78125,
+                "right": 359,
+                "bottom": 1194.78125
+              }
+            ],
+            "overlap": false
+          },
+          "scrolledGeometry": {
+            "controls": [
+              {
+                "left": 29,
+                "top": 784.8125,
+                "right": 346,
+                "bottom": 844.8125
+              },
+              {
+                "left": 29,
+                "top": 1013.15625,
+                "right": 346,
+                "bottom": 1063.15625
+              }
+            ],
+            "helpers": [
+              {
+                "left": 16,
+                "top": 1148.78125,
+                "right": 359,
+                "bottom": 1194.78125
+              }
+            ],
+            "overlap": false
+          },
+          "mentorOpenClose": true,
+          "numericInput": "0",
+          "realAnswerStatus": 200
+        },
+        {
+          "name": "portrait-shift-input-844",
+          "initialGeometry": {
+            "controls": [
+              {
+                "left": 372.9375,
+                "top": 212.625,
+                "right": 778.25,
+                "bottom": 272.625
+              },
+              {
+                "left": 372.9375,
+                "top": 391.375,
+                "right": 778.25,
+                "bottom": 441.375
+              }
+            ],
+            "helpers": [
+              {
+                "left": 34.5,
+                "top": 520.125,
+                "right": 794.5,
+                "bottom": 566.125
+              }
+            ],
+            "overlap": false
+          },
+          "scrolledGeometry": {
+            "controls": [
+              {
+                "left": 372.9375,
+                "top": 212.625,
+                "right": 778.25,
+                "bottom": 272.625
+              },
+              {
+                "left": 372.9375,
+                "top": 391.375,
+                "right": 778.25,
+                "bottom": 441.375
+              }
+            ],
+            "helpers": [
+              {
+                "left": 34.5,
+                "top": 520.125,
+                "right": 794.5,
+                "bottom": 566.125
+              }
+            ],
+            "overlap": false
+          },
+          "mentorOpenClose": true,
+          "numericInput": "0",
+          "realAnswerStatus": 200
+        }
+      ],
+      "allCaptureCasesNoHorizontalOverflow": true,
+      "allCaptureCasesNoBrokenImages": true,
+      "lifecycleCases": [
+        {
+          "name": "hidden-tab-pause",
+          "visibility": "hidden",
+          "contexts": 1,
+          "oscillators": 0,
+          "buffers": 0,
+          "animatedDrops": 0
+        },
+        {
+          "name": "study-background-silent",
+          "contexts": 1,
+          "oscillators": 0,
+          "buffers": 0
+        },
+        {
+          "name": "authenticated-exit-audio",
+          "serverRevocation": 401,
+          "contexts": 1,
+          "oscillators": 0,
+          "buffers": 0
+        }
+      ]
+    },
+    "security": {
+      "status": "PRIOR_INDEPENDENT_SERVER_REVIEW_CARRIED_FORWARD_WITH_EXACT_FINGERPRINT_MATCH",
+      "evidence": "docs/testing/evidence/saved-portrait-r04/integration/server-independent-review.json",
+      "priorReviewer": "portrait_asset_editor",
+      "priorVerdict": "PASS",
+      "sourceFingerprintMatches": {
+        "apps/server/src/index.ts": true,
+        "apps/server/src/modules/identity/model.ts": true,
+        "apps/server/src/modules/identity/avatarPortrait.ts": true,
+        "apps/server/src/modules/identity/portraitPng.ts": true,
+        "apps/server/src/modules/identity/identityService.ts": true,
+        "apps/server/src/modules/equipment/model.ts": true,
+        "apps/server/src/modules/equipment/equipmentService.ts": true,
+        "apps/server/src/modules/equipment/trainingStore.ts": true,
+        "apps/server/src/modules/shift/shiftService.ts": true,
+        "apps/server/src/modules/identity/avatarPortrait.test.ts": true,
+        "apps/server/src/modules/identity/identityService.test.ts": true,
+        "apps/server/src/modules/shift/blitzPractice.test.ts": true
+      },
+      "serverSourceChangesFromBc751f9": [],
+      "mainSessionReview": "docs/testing/2026-11-12-station-session-security-review.md",
+      "integrationObservation": "Current browser verifies actual logout revocation401 and preserves profile/snapshot identity across real API flows.",
+      "boundary": "This review does not replace the prior specialist security review or assert a new whole-application security certification."
+    },
+    "spriteCookRegistry": {
+      "verdict": "PASS_EXACT_UNION",
+      "path": "assets/manifests/spritecook-assets.json",
+      "sha256": "6740b9d29cf37e4802c9f41415531aa4e76724d90002650ed40194b8a277f5ca",
+      "featureCount": 96,
+      "mainCount": 90,
+      "commonEntries": 89,
+      "resolvedCount": 97,
+      "commonEntriesDeepEqual": true,
+      "resolvedEqualsExactUnion": true,
+      "uuidAndProvenanceFieldsUnchanged": true,
+      "newSpriteCookCallsByReviewer": 0
+    },
+    "integration": {
+      "verdict": "PASS_FOR_SOURCE_CANDIDATE",
+      "exactHeadChecks": [
+        {
+          "runId": 43196550555,
+          "kind": "documentation",
+          "event": "pull_request",
+          "headSha": "91555d6a1cd958c17eb7164161573c2112548add",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/f2re/synopsis_game/actions/runs/43196550555"
+        },
+        {
+          "runId": 43196550611,
+          "kind": "assets",
+          "event": "pull_request",
+          "headSha": "91555d6a1cd958c17eb7164161573c2112548add",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/f2re/synopsis_game/actions/runs/43196550611"
+        },
+        {
+          "runId": 43196550696,
+          "kind": "browser",
+          "event": "pull_request",
+          "headSha": "91555d6a1cd958c17eb7164161573c2112548add",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/f2re/synopsis_game/actions/runs/43196550696"
+        },
+        {
+          "runId": 43196550713,
+          "kind": "integration",
+          "event": "pull_request",
+          "headSha": "91555d6a1cd958c17eb7164161573c2112548add",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/f2re/synopsis_game/actions/runs/43196550713"
+        },
+        {
+          "runId": 43196543265,
+          "kind": "documentation",
+          "event": "push",
+          "headSha": "91555d6a1cd958c17eb7164161573c2112548add",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/f2re/synopsis_game/actions/runs/43196543265"
+        },
+        {
+          "runId": 43196544378,
+          "kind": "integration",
+          "event": "push",
+          "headSha": "91555d6a1cd958c17eb7164161573c2112548add",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/f2re/synopsis_game/actions/runs/43196544378"
+        }
+      ],
+      "linuxAstraEvidence": {
+        "runId": 43196550713,
+        "jobId": 131108878704,
+        "linuxReleaseCandidateStep": {
+          "number": 10,
+          "conclusion": "success"
+        },
+        "astraLinux17Step": {
+          "number": 11,
+          "conclusion": "success"
+        }
+      },
+      "releaseImplication": "Existing release.yml triggers on main push and publishes package version if its Git tag is absent; the candidate package version is0.5.0. No release or merge was performed by this reviewer.",
+      "finalMergeGate": "Parent must verify final docs-only diff and exact final-head checks, then own merge/release observation."
+    }
+  },
+  "resolvedReviewFindings": [
+    {
+      "id": "MENTOR-INPUT-OVERLAP-390",
+      "priorSource": "a09aaffb9fedd708fae50e0206ddaff282261362",
+      "resolution": "Normal document flow at narrow/short viewport; actual390PNG viewed, geometry and UI answerPOST200 passed in all3viewports."
+    },
+    {
+      "id": "DIRECTION-LABEL-CLIPPING-844",
+      "resolution": "Direction controls2columns at existing breakpoint; actual844PNG viewed and all direction label scrollWidth<=clientWidth."
+    },
+    {
+      "id": "BROWSER-LOCATOR-C46",
+      "resolution": "Exact-name test locator omitted decorative icon accessible prefix; regex locator fixes test only; full rerun91555d6 passes."
+    }
+  ],
+  "historicalEvidenceBoundary": "Run43194578824 on a09aaff passed82automated cases but later visual review found mobile overlap. Run43195905553 on c46df927 failed a locator before mobile validation. Only run43196550696 is the final accepted browser source here.",
+  "separateArtUxReview": {
+    "path": "final-art-ux-review.json",
+    "sha256": "fa16d4a37a7fd41824e2e2ccac8e038fec018a2b602bba7c37686263a93e216e",
+    "reviewer": "/root/portrait_merge_review",
+    "verdict": "PASS_SCOPED",
+    "boundary": "Art reviewer personally inspected9newPNG after all24prior portraitPNG; this JSON records that separate evidence rather than claiming those views as this reviewer own."
+  },
+  "reviewerMutations": "Read-only repository,Git refs,index,PR and product. Only downloaded CI artifacts and this evidence JSON written under scratch."
+}

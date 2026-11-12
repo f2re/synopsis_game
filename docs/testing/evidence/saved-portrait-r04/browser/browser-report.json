@@ -1,0 +1,1258 @@
+{
+  "status": "PASS",
+  "browser": "151.0.7922.34",
+  "productionAssets": true,
+  "realServer": true,
+  "cases": [
+    {
+      "name": "home-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-performance-1440",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999818,
+        "p95": 16.700000000000273,
+        "samples": 119
+      },
+      "jsHeapBytes": 3453872,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": null,
+      "reducedMotion": "true",
+      "lowPower": "false",
+      "resourceBytes": 841748
+    },
+    {
+      "name": "home-resources-1440",
+      "javascriptRequests": [
+        "/assets/index-vpEqG6cK.js",
+        "/assets/jsx-runtime-Wy9s6hX0.js"
+      ],
+      "deferredWorldChunks": [
+        "/assets/src-Bv3Pt6kl.js"
+      ]
+    },
+    {
+      "name": "library-opening-1440",
+      "automationNavigationMs": 863.6999999999971
+    },
+    {
+      "name": "library-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "codebook-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "help-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Помощь и управление",
+      "canvasCount": 0
+    },
+    {
+      "name": "settings-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Настройки",
+      "canvasCount": 0
+    },
+    {
+      "name": "campus-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "campus-performance-1440",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 66.59999999999991,
+        "p95": 100,
+        "samples": 119
+      },
+      "jsHeapBytes": 29213065,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": "30",
+      "reducedMotion": "true",
+      "lowPower": "true",
+      "resourceBytes": 11621617
+    },
+    {
+      "name": "archive-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "Читальный зал архива",
+      "canvasCount": 0
+    },
+    {
+      "name": "login-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "exit-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "До следующей смены",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-performance-390",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999932,
+        "p95": 16.700000000000273,
+        "samples": 119
+      },
+      "jsHeapBytes": 3785610,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": null,
+      "reducedMotion": "true",
+      "lowPower": "false",
+      "resourceBytes": 841748
+    },
+    {
+      "name": "home-resources-390",
+      "javascriptRequests": [
+        "/assets/index-vpEqG6cK.js",
+        "/assets/jsx-runtime-Wy9s6hX0.js"
+      ],
+      "deferredWorldChunks": [
+        "/assets/src-Bv3Pt6kl.js"
+      ]
+    },
+    {
+      "name": "library-opening-390",
+      "automationNavigationMs": 383.8999999999942
+    },
+    {
+      "name": "library-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "codebook-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "help-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Помощь и управление",
+      "canvasCount": 0
+    },
+    {
+      "name": "settings-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Настройки",
+      "canvasCount": 0
+    },
+    {
+      "name": "campus-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "campus-performance-390",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999818,
+        "p95": 16.799999999999727,
+        "samples": 119
+      },
+      "jsHeapBytes": 28950202,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": "30",
+      "reducedMotion": "true",
+      "lowPower": "true",
+      "resourceBytes": 11619761
+    },
+    {
+      "name": "archive-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Читальный зал архива",
+      "canvasCount": 0
+    },
+    {
+      "name": "login-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "exit-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "heading": "До следующей смены",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-performance-844",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999932,
+        "p95": 16.700000000000273,
+        "samples": 119
+      },
+      "jsHeapBytes": 3785921,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": null,
+      "reducedMotion": "true",
+      "lowPower": "false",
+      "resourceBytes": 841748
+    },
+    {
+      "name": "home-resources-844",
+      "javascriptRequests": [
+        "/assets/index-vpEqG6cK.js",
+        "/assets/jsx-runtime-Wy9s6hX0.js"
+      ],
+      "deferredWorldChunks": [
+        "/assets/src-Bv3Pt6kl.js"
+      ]
+    },
+    {
+      "name": "library-opening-844",
+      "automationNavigationMs": 847.3000000000029
+    },
+    {
+      "name": "library-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "codebook-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "help-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Помощь и управление",
+      "canvasCount": 0
+    },
+    {
+      "name": "settings-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Настройки",
+      "canvasCount": 0
+    },
+    {
+      "name": "campus-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 844,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "campus-performance-844",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999818,
+        "p95": 16.799999999999727,
+        "samples": 119
+      },
+      "jsHeapBytes": 29204325,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": "30",
+      "reducedMotion": "true",
+      "lowPower": "true",
+      "resourceBytes": 11619761
+    },
+    {
+      "name": "archive-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Читальный зал архива",
+      "canvasCount": 0
+    },
+    {
+      "name": "login-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "exit-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "До следующей смены",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-no-editor-resources-1440",
+      "atlasRequests": 0,
+      "sha256": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069"
+    },
+    {
+      "name": "portrait-editor-saved-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-editor-static-1440",
+      "observedStaticMs": 400,
+      "directions": {
+        "left": "2aa35229d1f0ff71dfe5d9fbab06eb7047223ab5cb62e842eb8f77362eaf09a2",
+        "up": "e84679dc621ed8b743ba6ef50c8c010c47708b9ceb5d935da376803110339dd9",
+        "right": "7a737d4d1497b31f458c59e3d0b9441f23e29a0f04c42448a193a9107827d430",
+        "down": "86323082d51e31e5a725ba9ac477b5b3aa0cf6cd7bb19757927966ccf7d54c49"
+      },
+      "directionLabels": [
+        {
+          "label": "Спереди",
+          "clientWidth": 66,
+          "scrollWidth": 66
+        },
+        {
+          "label": "Слева",
+          "clientWidth": 66,
+          "scrollWidth": 66
+        },
+        {
+          "label": "Сзади",
+          "clientWidth": 66,
+          "scrollWidth": 66
+        },
+        {
+          "label": "Справа",
+          "clientWidth": 66,
+          "scrollWidth": 66
+        }
+      ],
+      "savedFields": {
+        "skinTone": "skin.deep",
+        "hair": "hair.curl",
+        "hairColor": "haircolor.auburn",
+        "headwear": "headwear.cap",
+        "top": "top.field-jacket",
+        "bottom": "bottom.field-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.pencil",
+        "companion": "companion.none",
+        "badge": "badge.meteo"
+      },
+      "sha256": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+      "fittingAtlasRequests": [
+        "/assets/avatar/modular-r01/manifest.json",
+        "/assets/avatar/modular-r01/atlas.png"
+      ]
+    },
+    {
+      "name": "portrait-save-network-failure-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-campus-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-title-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-pinned-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-feedback-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-input-1440",
+      "initialGeometry": {
+        "controls": [
+          {
+            "left": 562,
+            "top": 627.09375,
+            "right": 1228,
+            "bottom": 687.09375
+          },
+          {
+            "left": 562,
+            "top": 788.875,
+            "right": 1228,
+            "bottom": 838.875
+          }
+        ],
+        "helpers": [
+          {
+            "left": 1231,
+            "top": 938,
+            "right": 1422,
+            "bottom": 982
+          }
+        ],
+        "overlap": false
+      },
+      "scrolledGeometry": {
+        "controls": [
+          {
+            "left": 562,
+            "top": 627.09375,
+            "right": 1228,
+            "bottom": 687.09375
+          },
+          {
+            "left": 562,
+            "top": 788.875,
+            "right": 1228,
+            "bottom": 838.875
+          }
+        ],
+        "helpers": [
+          {
+            "left": 1231,
+            "top": 938,
+            "right": 1422,
+            "bottom": 982
+          }
+        ],
+        "overlap": false
+      },
+      "mentorOpenClose": true,
+      "numericInput": "0",
+      "realAnswerStatus": 200
+    },
+    {
+      "name": "portrait-blitz-pinned-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-blitz-result-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Раунд завершён",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-session-snapshots-1440",
+      "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+      "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+      "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+      "ordinaryCompleted": true,
+      "blitzCompleted": "completed",
+      "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+    },
+    {
+      "name": "portrait-editor-restored-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-fresh-login-1440",
+      "restoredAllElevenFields": true,
+      "restoredOffCropBoots": true,
+      "atlasRequestsBeforeEditor": 0,
+      "sha256": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662"
+    },
+    {
+      "name": "portrait-no-editor-resources-390",
+      "atlasRequests": 0,
+      "sha256": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069"
+    },
+    {
+      "name": "portrait-editor-saved-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-editor-static-390",
+      "observedStaticMs": 400,
+      "directions": {
+        "left": "2aa35229d1f0ff71dfe5d9fbab06eb7047223ab5cb62e842eb8f77362eaf09a2",
+        "up": "e84679dc621ed8b743ba6ef50c8c010c47708b9ceb5d935da376803110339dd9",
+        "right": "7a737d4d1497b31f458c59e3d0b9441f23e29a0f04c42448a193a9107827d430",
+        "down": "86323082d51e31e5a725ba9ac477b5b3aa0cf6cd7bb19757927966ccf7d54c49"
+      },
+      "directionLabels": [
+        {
+          "label": "Спереди",
+          "clientWidth": 78,
+          "scrollWidth": 78
+        },
+        {
+          "label": "Слева",
+          "clientWidth": 78,
+          "scrollWidth": 78
+        },
+        {
+          "label": "Сзади",
+          "clientWidth": 78,
+          "scrollWidth": 78
+        },
+        {
+          "label": "Справа",
+          "clientWidth": 78,
+          "scrollWidth": 78
+        }
+      ],
+      "savedFields": {
+        "skinTone": "skin.deep",
+        "hair": "hair.curl",
+        "hairColor": "haircolor.auburn",
+        "headwear": "headwear.cap",
+        "top": "top.field-jacket",
+        "bottom": "bottom.field-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.pencil",
+        "companion": "companion.none",
+        "badge": "badge.meteo"
+      },
+      "sha256": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+      "fittingAtlasRequests": [
+        "/assets/avatar/modular-r01/manifest.json",
+        "/assets/avatar/modular-r01/atlas.png"
+      ]
+    },
+    {
+      "name": "portrait-save-network-failure-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-campus-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-title-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-pinned-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-feedback-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-input-390",
+      "initialGeometry": {
+        "controls": [
+          {
+            "left": 29,
+            "top": 784.8125,
+            "right": 346,
+            "bottom": 844.8125
+          },
+          {
+            "left": 29,
+            "top": 1013.15625,
+            "right": 346,
+            "bottom": 1063.15625
+          }
+        ],
+        "helpers": [
+          {
+            "left": 16,
+            "top": 1148.78125,
+            "right": 359,
+            "bottom": 1194.78125
+          }
+        ],
+        "overlap": false
+      },
+      "scrolledGeometry": {
+        "controls": [
+          {
+            "left": 29,
+            "top": 784.8125,
+            "right": 346,
+            "bottom": 844.8125
+          },
+          {
+            "left": 29,
+            "top": 1013.15625,
+            "right": 346,
+            "bottom": 1063.15625
+          }
+        ],
+        "helpers": [
+          {
+            "left": 16,
+            "top": 1148.78125,
+            "right": 359,
+            "bottom": 1194.78125
+          }
+        ],
+        "overlap": false
+      },
+      "mentorOpenClose": true,
+      "numericInput": "0",
+      "realAnswerStatus": 200
+    },
+    {
+      "name": "portrait-blitz-pinned-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-blitz-result-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Раунд завершён",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-session-snapshots-390",
+      "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+      "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+      "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+      "ordinaryCompleted": true,
+      "blitzCompleted": "completed",
+      "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+    },
+    {
+      "name": "portrait-editor-restored-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-fresh-login-390",
+      "restoredAllElevenFields": true,
+      "restoredOffCropBoots": true,
+      "atlasRequestsBeforeEditor": 0,
+      "sha256": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662"
+    },
+    {
+      "name": "portrait-no-editor-resources-844",
+      "atlasRequests": 0,
+      "sha256": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069"
+    },
+    {
+      "name": "portrait-editor-saved-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-editor-static-844",
+      "observedStaticMs": 400,
+      "directions": {
+        "left": "2aa35229d1f0ff71dfe5d9fbab06eb7047223ab5cb62e842eb8f77362eaf09a2",
+        "up": "e84679dc621ed8b743ba6ef50c8c010c47708b9ceb5d935da376803110339dd9",
+        "right": "7a737d4d1497b31f458c59e3d0b9441f23e29a0f04c42448a193a9107827d430",
+        "down": "86323082d51e31e5a725ba9ac477b5b3aa0cf6cd7bb19757927966ccf7d54c49"
+      },
+      "directionLabels": [
+        {
+          "label": "Спереди",
+          "clientWidth": 122,
+          "scrollWidth": 122
+        },
+        {
+          "label": "Слева",
+          "clientWidth": 122,
+          "scrollWidth": 122
+        },
+        {
+          "label": "Сзади",
+          "clientWidth": 122,
+          "scrollWidth": 122
+        },
+        {
+          "label": "Справа",
+          "clientWidth": 122,
+          "scrollWidth": 122
+        }
+      ],
+      "savedFields": {
+        "skinTone": "skin.deep",
+        "hair": "hair.curl",
+        "hairColor": "haircolor.auburn",
+        "headwear": "headwear.cap",
+        "top": "top.field-jacket",
+        "bottom": "bottom.field-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.pencil",
+        "companion": "companion.none",
+        "badge": "badge.meteo"
+      },
+      "sha256": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+      "fittingAtlasRequests": [
+        "/assets/avatar/modular-r01/manifest.json",
+        "/assets/avatar/modular-r01/atlas.png"
+      ]
+    },
+    {
+      "name": "portrait-save-network-failure-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-campus-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 844,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-title-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-pinned-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-feedback-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-shift-input-844",
+      "initialGeometry": {
+        "controls": [
+          {
+            "left": 372.9375,
+            "top": 212.625,
+            "right": 778.25,
+            "bottom": 272.625
+          },
+          {
+            "left": 372.9375,
+            "top": 391.375,
+            "right": 778.25,
+            "bottom": 441.375
+          }
+        ],
+        "helpers": [
+          {
+            "left": 34.5,
+            "top": 520.125,
+            "right": 794.5,
+            "bottom": 566.125
+          }
+        ],
+        "overlap": false
+      },
+      "scrolledGeometry": {
+        "controls": [
+          {
+            "left": 372.9375,
+            "top": 212.625,
+            "right": 778.25,
+            "bottom": 272.625
+          },
+          {
+            "left": 372.9375,
+            "top": 391.375,
+            "right": 778.25,
+            "bottom": 441.375
+          }
+        ],
+        "helpers": [
+          {
+            "left": 34.5,
+            "top": 520.125,
+            "right": 794.5,
+            "bottom": 566.125
+          }
+        ],
+        "overlap": false
+      },
+      "mentorOpenClose": true,
+      "numericInput": "0",
+      "realAnswerStatus": 200
+    },
+    {
+      "name": "portrait-blitz-pinned-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-blitz-result-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Раунд завершён",
+      "canvasCount": 0
+    },
+    {
+      "name": "portrait-session-snapshots-844",
+      "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+      "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+      "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+      "ordinaryCompleted": true,
+      "blitzCompleted": "completed",
+      "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+    },
+    {
+      "name": "portrait-editor-restored-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 829,
+      "brokenImages": [],
+      "heading": "Персонаж и инвентарь",
+      "canvasCount": 1
+    },
+    {
+      "name": "portrait-fresh-login-844",
+      "restoredAllElevenFields": true,
+      "restoredOffCropBoots": true,
+      "atlasRequestsBeforeEditor": 0,
+      "sha256": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662"
+    },
+    {
+      "name": "home-full-motion-performance",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.69999999999999,
+        "p95": 33.40000000000009,
+        "samples": 119
+      },
+      "jsHeapBytes": 4189992,
+      "decorativeDrops": 12,
+      "animatedDrops": 12,
+      "fpsLimit": null,
+      "reducedMotion": "false",
+      "lowPower": "false",
+      "resourceBytes": 841748
+    },
+    {
+      "name": "home-low-power-only-performance",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999818,
+        "p95": 33.400000000000546,
+        "samples": 119
+      },
+      "jsHeapBytes": 4330781,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": null,
+      "reducedMotion": "false",
+      "lowPower": "true",
+      "resourceBytes": 841748
+    },
+    {
+      "name": "hidden-tab-pause",
+      "visibility": "hidden",
+      "contexts": 1,
+      "oscillators": 0,
+      "buffers": 0,
+      "animatedDrops": 0
+    },
+    {
+      "name": "study-background-silent",
+      "contexts": 1,
+      "oscillators": 0,
+      "buffers": 0
+    },
+    {
+      "name": "shift-handover-authenticated",
+      "viewport": [
+        1280,
+        900
+      ],
+      "scrollWidth": 1280,
+      "brokenImages": [],
+      "heading": "Записка на краю стола",
+      "canvasCount": 0
+    },
+    {
+      "name": "campus-full-motion-performance",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 66.59999999999854,
+        "p95": 66.70000000000073,
+        "samples": 119
+      },
+      "jsHeapBytes": 20636855,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": "60",
+      "reducedMotion": "false",
+      "lowPower": "false",
+      "resourceBytes": 13510810
+    },
+    {
+      "name": "authenticated-exit-audio",
+      "serverRevocation": 401,
+      "contexts": 1,
+      "oscillators": 0,
+      "buffers": 0
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "home-1440.png",
+    "library-1440.png",
+    "codebook-1440.png",
+    "help-1440.png",
+    "settings-1440.png",
+    "campus-1440.png",
+    "archive-1440.png",
+    "login-1440.png",
+    "exit-1440.png",
+    "home-390.png",
+    "library-390.png",
+    "codebook-390.png",
+    "help-390.png",
+    "settings-390.png",
+    "campus-390.png",
+    "archive-390.png",
+    "login-390.png",
+    "exit-390.png",
+    "home-844.png",
+    "library-844.png",
+    "codebook-844.png",
+    "help-844.png",
+    "settings-844.png",
+    "campus-844.png",
+    "archive-844.png",
+    "login-844.png",
+    "exit-844.png",
+    "portrait-editor-saved-1440.png",
+    "portrait-save-network-failure-1440.png",
+    "portrait-campus-1440.png",
+    "portrait-title-1440.png",
+    "portrait-shift-pinned-1440.png",
+    "portrait-shift-feedback-1440.png",
+    "portrait-blitz-pinned-1440.png",
+    "portrait-blitz-result-1440.png",
+    "portrait-editor-restored-1440.png",
+    "portrait-editor-saved-390.png",
+    "portrait-save-network-failure-390.png",
+    "portrait-campus-390.png",
+    "portrait-title-390.png",
+    "portrait-shift-pinned-390.png",
+    "portrait-shift-feedback-390.png",
+    "portrait-blitz-pinned-390.png",
+    "portrait-blitz-result-390.png",
+    "portrait-editor-restored-390.png",
+    "portrait-editor-saved-844.png",
+    "portrait-save-network-failure-844.png",
+    "portrait-campus-844.png",
+    "portrait-title-844.png",
+    "portrait-shift-pinned-844.png",
+    "portrait-shift-feedback-844.png",
+    "portrait-blitz-pinned-844.png",
+    "portrait-blitz-result-844.png",
+    "portrait-editor-restored-844.png",
+    "shift-handover-authenticated.png"
+  ],
+  "nativeLifecycle": {
+    "focusEmulation": false,
+    "isolatedProfile": true,
+    "realVisibility": true
+  }
+}
