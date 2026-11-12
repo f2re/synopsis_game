@@ -19,7 +19,7 @@
 .inventory-screen button, .inventory-screen input { font: inherit; }
 .inventory-screen button { cursor: pointer; }
 .inventory-screen button:disabled { cursor: default; opacity: 0.55; }
-.inventory-screen button:focus-visible, .inventory-screen input:focus-visible, .inventory-situation__stage:focus-visible {
+.inventory-screen button:focus-visible, .inventory-screen input:focus-visible, .inventory-fitting__stage:focus-visible {
   outline: 3px solid var(--color-window-light-3);
   outline-offset: 3px;
 }
@@ -52,39 +52,12 @@
 .inventory-observer { padding: 16px; }
 .inventory-observer__heading { display: grid; gap: 2px; text-align: center; padding: 0 0 10px; }
 .inventory-observer__heading strong { font-size: 20px; font-weight: normal; overflow-wrap: anywhere; }
-.inventory-situation { min-width: 0; margin-bottom: 12px; }
-.inventory-situation__label { font-size: 16px; color: var(--inventory-muted); font-weight: normal; margin-bottom: 7px !important; }
-.inventory-situation__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin-bottom: 10px; }
-.inventory-situation__choices .inventory-segment { padding: 7px 8px; font-size: 16px !important; }
-.inventory-situation__stage { position: relative; isolation: isolate; height: 330px; overflow: hidden; border: 1px solid var(--inventory-line); border-radius: 3px; image-rendering: pixelated; background: linear-gradient(#07122425, #07122420), url('/assets/ui/equipment/wardrobe-room.png') 25% center / auto 100%; }
-.inventory-situation__scene-title { position: absolute; z-index: 5; top: 9px; left: 9px; max-width: calc(100% - 18px); padding: 5px 8px; font-size: 16px; line-height: 1.35; color: var(--inventory-text); background: #071224e8; border: 1px solid var(--inventory-line); }
-.inventory-situation__figure { position: absolute; z-index: 2; bottom: 20px; left: 50%; transform: translateX(-50%); line-height: 0; }
-.inventory-situation__figure .avatar-preview { display: block; max-width: none; }
-.inventory-situation__outfit-state { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding: 5px 8px; text-align: center; font-size: 16px; line-height: 1.4; background: #071224e8; color: var(--inventory-text); border-top: 1px solid var(--inventory-line); }
-.inventory-situation__stage[data-outfit-state='draft'] .inventory-situation__outfit-state { color: var(--inventory-gold-light); }
-.inventory-situation__description { color: var(--inventory-muted); font-size: 16px; line-height: 1.45; padding-top: 9px; min-height: 68px; }
-.inventory-situation__stage--campus { background: url('/hub/r01/coastal-sky.png') 48% 45% / auto 100%; }
-.inventory-situation__campus { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.inventory-situation__campus .inventory-situation__ground { position: absolute; bottom: 0; left: 0; width: 100%; height: 170px; object-fit: cover; }
-.inventory-situation__building { position: absolute; width: 180px; height: 180px; right: -10px; bottom: 92px; }
-.inventory-situation__tree { position: absolute; width: 105px; height: 160px; left: -28px; bottom: 72px; }
-.inventory-situation__stage--campus .inventory-situation__figure { bottom: 29px; left: 45%; }
-.inventory-situation__stage--shift, .inventory-situation__stage--blitz-preview { background-position: 70% center; }
-.inventory-situation__stage--shift .inventory-situation__figure, .inventory-situation__stage--blitz-preview .inventory-situation__figure { bottom: 25px; left: 45%; }
-.inventory-situation__desk { position: absolute; z-index: 3; bottom: 0; left: 0; right: 0; height: 80px; border-top: 7px solid var(--color-action-accent-1); box-shadow: 0 -3px 0 #574331, inset 0 4px 0 #5b3e2c; background: linear-gradient(90deg, #203149, #172a40); }
-.inventory-situation__desk-folder { position: absolute; right: 15px; top: -35px; width: 58px; height: 44px; }
-.inventory-situation__desk-drawer { position: absolute; left: 24px; top: 17px; right: 24px; height: 22px; border: 2px solid var(--inventory-line); box-shadow: inset 0 2px 0 #071224; }
-.inventory-situation__desk-drawer::after { content: ''; position: absolute; left: calc(50% - 9px); top: 7px; width: 18px; height: 3px; background: var(--inventory-gold); }
-.inventory-situation__stage--blitz-preview { background-image: linear-gradient(#07122450, #07122455), url('/assets/ui/equipment/wardrobe-room.png'); }
-.inventory-situation__stage--blitz-preview .inventory-situation__desk { border-top-color: var(--inventory-edge); }
 .inventory-preview-controls { min-width: 0; }
 .inventory-directions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
-.inventory-motions { display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; gap: 4px; margin-top: 6px; }
 .inventory-segment { min-height: 44px; padding: 6px 2px; border: 1px solid var(--inventory-line); border-radius: 3px; background: var(--inventory-panel); color: var(--inventory-text); font-size: 13px !important; }
 .inventory-segment:hover { border-color: var(--inventory-gold); }
 .inventory-segment[aria-pressed='true'] { color: var(--inventory-gold-light); border-color: var(--inventory-gold); box-shadow: inset 0 -2px 0 var(--inventory-gold); }
 .inventory-preview-hint { color: var(--inventory-muted); font-size: 13px; padding-top: 7px; line-height: 1.4; }
-.inventory-motion-status { grid-column: 1 / -1; color: var(--inventory-muted); font-size: 13px; padding-top: 7px; line-height: 1.4; }
 .inventory-subtitle { font-size: 18px; font-weight: normal; padding: 16px 0 8px; }
 .inventory-slots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
 .inventory-slot { min-width: 0; display: grid; gap: 3px; justify-items: center; padding: 4px 2px; color: var(--inventory-muted); font-size: 13px !important; border: 1px solid var(--inventory-line); border-radius: 3px; background: var(--inventory-panel); }
@@ -174,6 +147,7 @@
   .inventory-screen { padding: 18px; }
   .inventory-workspace { grid-template-columns: 280px minmax(0, 1fr); gap: 14px; }
   .inventory-observer { padding: 12px; }
+  .inventory-directions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .inventory-catalog-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .inventory-detail { border-left: 0; border-top: 1px solid var(--inventory-line); padding: 18px 0 0; grid-template-columns: 120px minmax(0, 1fr); gap: 8px 14px; }
   .inventory-detail > .inventory-eyebrow { grid-column: 1 / -1; }
@@ -194,9 +168,6 @@
   .inventory-workspace { grid-template-columns: minmax(0, 1fr); }
   .inventory-observer { display: block; }
   .inventory-observer__heading { padding: 0 0 10px; text-align: left; }
-  .inventory-situation__choices { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .inventory-situation__stage { height: 310px; }
-  .inventory-situation__description { min-height: 0; }
   .inventory-directions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .inventory-preview-hint { display: none; }
   .inventory-subtitle { padding: 12px 0 8px; font-size: 16px; }
@@ -221,10 +192,6 @@
   .inventory-heading { flex: 1 1 210px; }
   .inventory-header > button { margin-left: auto; }
   .inventory-observer { padding: 10px; }
-  .inventory-situation__choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .inventory-situation__stage { height: 310px; }
-  .inventory-motions { gap: 3px; }
-  .inventory-motions .inventory-segment { min-height: 44px; padding: 6px; }
   .inventory-slots { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-column: 1 / -1; }
   .inventory-subtitle { padding-top: 12px; }
   .inventory-slot { font-size: 13px !important; }
@@ -380,3 +347,18 @@
   .inventory-header { padding: 10px; }
   .inventory-screen { background-attachment: scroll; }
 }
+
+
+/* The body is a static fitting tool. Only the saved dressed portrait leaves this screen. */
+.inventory-fitting { min-width: 0; margin-bottom: 12px; }
+.inventory-fitting__label { margin-bottom: 8px !important; font-size: 16px; font-weight: normal; color: var(--inventory-muted); }
+.inventory-fitting__stage { position: relative; min-height: 328px; padding: 10px 0 30px; display: grid; place-items: center; overflow: hidden; border: 2px solid var(--inventory-line); background: linear-gradient(#07122445, #07122455), url('/assets/ui/equipment/wardrobe-room.png') 25% center / auto 100%; }
+.inventory-fitting__state { position: absolute; bottom: 0; left: 0; right: 0; padding: 4px 8px; color: var(--inventory-text); background: #071224ee; border-top: 1px solid var(--inventory-line); text-align: center; font-size: 16px; }
+.inventory-fitting__stage[data-outfit-state='draft'] .inventory-fitting__state { color: var(--inventory-gold-light); }
+.inventory-fitting__description { margin-top: 8px !important; color: var(--inventory-muted); font-size: 16px; line-height: 1.5; }
+.inventory-preview-placeholder { width: 100%; padding: 16px; color: var(--inventory-text); font-size: 16px; line-height: 1.5; text-align: center; }
+.inventory-saved-portrait { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; align-items: start; margin-top: 16px; padding: 12px 0; border-block: 1px solid var(--inventory-line); }
+.inventory-saved-portrait h2 { font-size: 16px; font-weight: normal; line-height: 1.5; }
+.inventory-saved-portrait p { margin-top: 8px !important; color: var(--inventory-muted); font-size: 16px; line-height: 1.5; }
+.inventory-directions .inventory-segment { font-size: 16px !important; }
+.inventory-preview-hint { font-size: 16px; }

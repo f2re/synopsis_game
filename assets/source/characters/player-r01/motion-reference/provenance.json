@@ -1,0 +1,258 @@
+{
+  "version": 1,
+  "task": "MODULAR-PLAYER-R03",
+  "date": "2026-11-11",
+  "status": "REFERENCE_ONLY_NOT_PLAYABLE",
+  "publishedInRuntime": false,
+  "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "collection_id": "c1a9513a-e50b-4721-8b37-6b36f3b3ff02",
+  "credits_before": 668,
+  "credits_after": 610,
+  "credits_spent": 58,
+  "source_family_asset_id": "6633da16-fe90-4623-9917-6f68dcdac10d",
+  "slicing": {
+    "operation": "auto_slice_asset",
+    "credits": 0,
+    "alpha_threshold": 96,
+    "min_area": 100,
+    "padding": 3,
+    "merge_distance": 4
+  },
+  "slices": [
+    {
+      "direction": "down",
+      "asset_id": "276782e8-41da-4281-a4bf-80038c03d121",
+      "file": "body-down-spritecook.png",
+      "size": [
+        59,
+        132
+      ],
+      "rectangle": {
+        "x": 21,
+        "y": 10,
+        "width": 53,
+        "height": 126,
+        "name": "Slice 1"
+      }
+    },
+    {
+      "direction": "right",
+      "asset_id": "0748a47c-f321-4984-b7fb-073247d93b89",
+      "file": "body-right-spritecook.png",
+      "size": [
+        31,
+        132
+      ],
+      "rectangle": {
+        "x": 131,
+        "y": 10,
+        "width": 25,
+        "height": 126,
+        "name": "Slice 2"
+      }
+    },
+    {
+      "direction": "up",
+      "asset_id": "fb136a1b-ae40-4064-b75f-016c0a1e0f69",
+      "file": "body-up-spritecook.png",
+      "size": [
+        60,
+        132
+      ],
+      "rectangle": {
+        "x": 21,
+        "y": 154,
+        "width": 54,
+        "height": 126,
+        "name": "Slice 3"
+      }
+    },
+    {
+      "direction": "left",
+      "asset_id": "857b9b75-166c-4650-83fc-87cb399df005",
+      "file": "body-left-spritecook.png",
+      "size": [
+        31,
+        132
+      ],
+      "rectangle": {
+        "x": 131,
+        "y": 154,
+        "width": 25,
+        "height": 126,
+        "name": "Slice 4"
+      }
+    }
+  ],
+  "generated": [
+    {
+      "asset_id": "837d856c-5f63-4e5b-81b1-e10b3a8c8c18",
+      "job_id": "bb6408c3-0dd4-4afd-a31a-5cc7ebaee9b4",
+      "operation": "generate_game_art",
+      "source_asset_id": "276782e8-41da-4281-a4bf-80038c03d121",
+      "prompt": "Prepare ONE front-facing walk contact pose of the exact neutral adult meteorologist shown in the source. Full body, centered, facing the viewer without turning. Preserve the bald head, face identity, blue-grey fitted neutral clothes, low-resolution pixel grid, original proportions and palette. The anatomical left leg steps forward with the foot planted lower; the right leg trails with heel raised; knees are subtly bent. Arms swing gently opposite the legs. This is a single balanced mid-stride contact pose suitable as the first frame of a looping front walk, not idle. No props, no new clothes, no extra hands, no duplicate person, no scene or text. Clear closed outline, transparent background. Motion reference only.",
+      "model": "gemini-nano-banana-2.1",
+      "width": 96,
+      "height": 144,
+      "credits": 12,
+      "file": "front-stride-guide-polished.png",
+      "providerSize": [
+        128,
+        131
+      ],
+      "alphaCleanup": {
+        "cutoffsCompared": [
+          96,
+          130,
+          180,
+          220
+        ],
+        "selected": 130,
+        "credits": 0,
+        "source": "front-stride-alpha-source.png",
+        "comparison": "front-alpha-comparison.png",
+        "note": "Outline is complete at130; render RGBA composited on an opaque background to inspect actual transparency. Saved cutoff keeps provider geometry, not rig geometry."
+      }
+    },
+    {
+      "asset_id": "64d89d74-d801-4455-88cb-5d755e0e932d",
+      "job_id": "f69d7c3e-5177-4f58-b3ae-9a0a03e6b91f",
+      "operation": "animate_game_art",
+      "source_asset_id": "d69db792-9fec-45bc-95d4-20eeae14373b",
+      "prompt": "A single adult meteorologist in strict right-facing side view, in the exact blue-grey fitted neutral clothes of the source. Six-frame one-shot inspection gesture: start relaxed with feet planted, bend the visible anatomical right elbow and lift the forearm toward chest height as if consulting a small instrument, hold briefly with a very subtle head tilt, then lower the same forearm and return to the exact relaxed starting stance. Hands remain empty; preserve the source silhouette, bald head, facial profile, palette, pixel grid, body proportions and stationary hip and feet. The upper arm rotates at the shoulder and the elbow bends naturally. No camera motion, no walking, no body sliding, no new clothing, no new objects, no turn, no mirroring. Clear closed outlines and transparent background. This is one articulated body motion reference, not an outfit variation.",
+      "model": "pixel-engine-v1.5",
+      "output_frames": 6,
+      "credits": 26,
+      "file": "inspect-right-guide.png",
+      "frameSize": [
+        160,
+        160
+      ],
+      "actualFrames": 6,
+      "providerDurationMs": 125,
+      "review": "Useful shoulder/elbow trajectory only. Provider invented a small held object and did not return to the initial pose. Do not publish as inspect clip."
+    },
+    {
+      "asset_id": "eb922b54-dccb-4a03-895f-4293b96fa155",
+      "job_id": "2834899a-8481-4334-9c6d-bd4bd6f092de",
+      "operation": "animate_game_art",
+      "source_asset_id": "837d856c-5f63-4e5b-81b1-e10b3a8c8c18",
+      "prompt": "Looping front-view walk in place of the exact one adult meteorologist in the source: six clear frames with alternating left and right foot contact, passing poses, subtle knee bends and gentle opposite-phase arm swing. The viewer sees the front throughout. Both legs take equal steps over the full loop. Keep the bald head, face, blue-grey fitted clothes, original proportions, pixel density and palette fixed. Hips remain centered on one world origin, head bob at most two pixels, grounded contact foot, no drifting or sliding the entire figure, no turn, no mirroring, no prop or new outfit. The first frame is the supplied mid-stride pose and the last flows into it. Clean silhouette and transparent background. This is a common body motion reference, not a finished modular clothing clip.",
+      "model": "pixel-engine-v1.1",
+      "output_frames": 6,
+      "credits": 20,
+      "file": "walk-down-guide.png",
+      "frameSize": [
+        150,
+        150
+      ],
+      "actualFrames": 6,
+      "providerDurationMs": 125,
+      "review": "Alternating front contact/passing guide. Facial identity and shoulder width drift; no automatic transfer of generated pixels into the modular rig."
+    }
+  ],
+  "rejectedRequest": {
+    "operation": "animate_game_art",
+    "source_asset_id": "0748a47c-f321-4984-b7fb-073247d93b89",
+    "reason": "invalid_request: source aspect ratio outside1:2..2:1",
+    "jobCreated": false,
+    "credits": 0,
+    "fallback": "Previously owned96x144 neutral right guide d69db792-9fec-45bc-95d4-20eeae14373b"
+  },
+  "localCompositeReferences": {
+    "files": [
+      "accepted-tablet-right.png",
+      "accepted-tablet-down.png"
+    ],
+    "uploaded": false,
+    "note": "New local uploads were not authorized by automatic approval review. Motion research used already-owned SpriteCook references instead; no alternate upload route was used."
+  },
+  "runtimeRule": "Authored compatible cels and shared joint masks receive independent technical/art acceptance. Provider images are never silently resized, mirrored or promoted into runtime motion.",
+  "files": [
+    {
+      "file": "accepted-tablet-down.png",
+      "bytes": 9090,
+      "sha256": "3153967c5c75db8a86ed3b4eb45e38cc3ce21a8a3b7a4828d286d55475e02af4"
+    },
+    {
+      "file": "accepted-tablet-right.png",
+      "bytes": 5906,
+      "sha256": "42fc2198350448ce3a6f969951b7dc774b050098a23f75360c73fa5985820042"
+    },
+    {
+      "file": "body-down-spritecook.png",
+      "bytes": 4555,
+      "sha256": "927c0b93e7711124680afbfeabd233fc061e85e3df38a72d6b13be27bc558b5f"
+    },
+    {
+      "file": "body-left-spritecook.png",
+      "bytes": 2546,
+      "sha256": "42f5dec7bccf57335f55900fa23ce5188d07b3f1902cb1af010598ba64f7edee"
+    },
+    {
+      "file": "body-right-initial-spritecook.png",
+      "bytes": 6451,
+      "sha256": "a67948f49c3a9976f6ddc52bdba194fa3d083405afdbc30e4276d46cf7bbc066"
+    },
+    {
+      "file": "body-right-spritecook.png",
+      "bytes": 2656,
+      "sha256": "8602ff938f189f37b5e81ed37593e9f2cfbbce478214eea68e8f2e56a5622c06"
+    },
+    {
+      "file": "body-up-spritecook.png",
+      "bytes": 4308,
+      "sha256": "bd53ec125d0fead97f3d94f2e3bbdbde9132d4c4c6bd2307edd62a2da440779e"
+    },
+    {
+      "file": "front-alpha-comparison.png",
+      "bytes": 11922,
+      "sha256": "d559334ef0fe0abf1c8acc50239ec2bd3433e95b05c78da383610de6366383cb"
+    },
+    {
+      "file": "front-stride-alpha-source.png",
+      "bytes": 27935,
+      "sha256": "0caf83ddf076179518e830c3f9d2a03f7286b04fae3baeaa87c330d26c608dc9"
+    },
+    {
+      "file": "front-stride-guide-opaque-review.png",
+      "bytes": 7883,
+      "sha256": "3d4b785a764ed00ff33b8967a59ea56d5c54c3ca3bb1e6a03f93e1d0857b4a99"
+    },
+    {
+      "file": "front-stride-guide-polished-opaque-review.png",
+      "bytes": 7930,
+      "sha256": "552666a7edc108e85a1b82eb8c1ecde1c630662abd200392127098f3216f906b"
+    },
+    {
+      "file": "front-stride-guide-polished.png",
+      "bytes": 21058,
+      "sha256": "2190a35c589d0979d6b070d2337a401d3faa35bd01d2e4f39cb305ff98e07a14"
+    },
+    {
+      "file": "front-stride-guide.png",
+      "bytes": 14000,
+      "sha256": "508f0f13e25d42f63fa49ed01b3659fdea746f5808b46d9c7312335b7fea89b0"
+    },
+    {
+      "file": "inspect-right-guide-opaque-review.png",
+      "bytes": 10180,
+      "sha256": "224eefb5c805ae1b6139a5961a840539ba8a8e491334261275a6aeaf2323930a"
+    },
+    {
+      "file": "inspect-right-guide.png",
+      "bytes": 10850,
+      "sha256": "e4fb15dc24ce8f6b548a0ea81cab4b778daec67d25da6908d75df4058cc33116"
+    },
+    {
+      "file": "walk-down-guide-opaque-review.png",
+      "bytes": 15851,
+      "sha256": "a69223780b7005558443ab0fdbb48af9cf3d777a54df3dc1b72ec802606943e1"
+    },
+    {
+      "file": "walk-down-guide.png",
+      "bytes": 17221,
+      "sha256": "d8ccb7f5c85ccc93c2e9cda287342ee54478bd0acc814b1b566ede442f3b9a26"
+    }
+  ]
+}

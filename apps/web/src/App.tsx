@@ -17,6 +17,7 @@ const HubScreen = lazy(() => import('./features/hub/HubScreen').then((module) =>
 const AvatarEditor = lazy(() => import('./features/avatar/AvatarEditor').then((module) => ({ default: module.AvatarEditor })));
 const LibraryScreen = lazy(() => import('./features/library/LibraryScreen').then((module) => ({ default: module.LibraryScreen })));
 const Codebook = lazy(() => import('./features/codebook/Codebook').then((module) => ({ default: module.Codebook })));
+const BlitzWorkspace = lazy(() => import('./features/shift/BlitzWorkspace').then((module) => ({ default: module.BlitzWorkspace })));
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
 
 function currentLocation(): string { return window.location.pathname + window.location.search; }
@@ -57,7 +58,7 @@ export function App() {
   const [sessionNotice, setSessionNotice] = useState('');
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [setCodeModalOpen, setSetCodeModalOpen] = useState(false);
-  const [pendingShift, setPendingShift] = useState(false);
+  const [pendingDestination, setPendingDestination] = useState<'/shift' | '/blitz' | null>(null);
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [exitNotice, setExitNotice] = useState('');
@@ -70,7 +71,7 @@ export function App() {
       setLocation(currentLocation());
       setLoginModalOpen(false);
       setSetCodeModalOpen(false);
-      setPendingShift(false);
+      setPendingDestination(null);
       if (!exitInFlight.current) setExitDialogOpen(false);
     };
     window.addEventListener('popstate', onPopState);
@@ -103,13 +104,17 @@ export function App() {
 
   function startShift() {
     if (user) navigate('/shift');
-    else { setPendingShift(true); setLoginModalOpen(true); }
+    else { setPendingDestination('/shift'); setLoginModalOpen(true); }
   }
-  function closeLogin() { cancelPendingLogin(); setLoginModalOpen(false); setPendingShift(false); }
+  function startBlitz() {
+    if (user) navigate('/blitz');
+    else { setPendingDestination('/blitz'); setLoginModalOpen(true); }
+  }
+  function closeLogin() { cancelPendingLogin(); setLoginModalOpen(false); setPendingDestination(null); }
   function finishLogin(profile: SessionUser) {
     setUser(profile); setSessionNotice(''); setLoginModalOpen(false);
-    if (pendingShift) navigate('/shift');
-    setPendingShift(false);
+    if (pendingDestination) navigate(pendingDestination);
+    setPendingDestination(null);
   }
   function requestExit() { setExitDialogOpen(true); }
   async function finishExit() {
@@ -126,7 +131,7 @@ export function App() {
     } finally {
       window.clearTimeout(timer);
       setUser(null); setSessionNotice(''); setBooting(false);
-      setLoginModalOpen(false); setSetCodeModalOpen(false); setPendingShift(false); setExitDialogOpen(false);
+      setLoginModalOpen(false); setSetCodeModalOpen(false); setPendingDestination(null); setExitDialogOpen(false);
       setExiting(false); exitInFlight.current = false;
       navigate('/exit', true);
     }
@@ -155,15 +160,17 @@ export function App() {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : user?.roles.includes('admin')
       ? <AdminScreen currentUser={user} onBack={() => navigate('/campus')} />
       : <AdminLoginScreen currentUser={user} onLogin={(adminUser) => { setUser(adminUser); navigate('/admin', true); }} onBack={() => navigate('/')} />;
-  } else if (path === '/profile/avatar' || path === '/shift') {
+  } else if (path === '/profile/avatar' || path === '/shift' || path === '/blitz') {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : !user
       ? <LoginScreen onLogin={(profile) => { setUser(profile); setSessionNotice(''); }} onClose={() => navigate('/')} />
       : path === '/profile/avatar'
-        ? <AvatarEditor user={user} onSaved={acceptUpdatedProfile} onBack={() => navigate('/campus')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />
-        : <SeamlessShiftFlow avatar={user.avatar} onExit={() => navigate('/campus')} onEquipment={() => navigate('/profile/avatar?section=badges')} />;
+        ? <AvatarEditor key={user.id} user={user} onSaved={acceptUpdatedProfile} onBack={() => navigate('/campus')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />
+        : path === '/blitz'
+          ? <BlitzWorkspace key={user.id} user={user} onExit={() => navigate('/campus')} onStartPractice={() => navigate('/shift')} />
+          : <SeamlessShiftFlow key={user.id} onExit={() => navigate('/campus')} onEquipment={() => navigate('/profile/avatar?section=badges')} />;
   } else if (path === '/campus') screen = <HubScreen
     user={user} onLoginClick={() => setLoginModalOpen(true)} onLogout={requestExit}
-    onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift}
+    onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift} onStartBlitz={startBlitz}
     onOpenAvatar={() => navigate('/profile/avatar')} onOpenAdmin={() => navigate('/admin')}
     onOpenHome={() => navigate('/')} onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
@@ -171,7 +178,7 @@ export function App() {
   />;
   else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь в главное меню: оттуда доступны кампус, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>Главное меню</button></section></main>;
 
-  const focusKey = ['/shift', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
+  const focusKey = ['/shift', '/blitz', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
   return <AtmosphereProvider surface={exiting ? 'silent' : screenSurface(path)}>
     <Suspense fallback={<LoadingScreen text="Открываем комнату…" />}><RouteHeadingFocus key={focusKey} />{screen}</Suspense>
     {loginModalOpen && <HubModalLayer label="Вход в учебную группу" onClose={closeLogin}><LoginScreen onLogin={finishLogin} onClose={closeLogin} isModal /></HubModalLayer>}

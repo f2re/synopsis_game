@@ -1,0 +1,62 @@
+{
+  "status": "CANDIDATE_NOT_ADMITTED",
+  "fingerprints": {
+    "atlasSha256": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+    "compositionSha256": "0c737499b85dc18f87332ff31b73ca8163afc1a69af44d3bde07509cb8daf70f",
+    "sourceContractSha256": "99a7db7e70e152b5cf62bcb70d3f1d683da4a62ede31fe1db398896332e518be"
+  },
+  "sourceFamilies": 30,
+  "uniqueCels": 1694,
+  "atlasSize": [
+    512,
+    2016
+  ],
+  "compressedAtlasBytes": 742943,
+  "decodedAtlasBytes": 4128768,
+  "clips": {
+    "idle": {
+      "durationsMs": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "loop": true
+    },
+    "walk": {
+      "durationsMs": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140
+      ],
+      "loop": true
+    },
+    "inspect": {
+      "durationsMs": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240
+      ],
+      "loop": false
+    }
+  },
+  "currentAcceptance": {
+    "status": "PENDING",
+    "fingerprints": {
+      "atlasSha256": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+      "compositionSha256": "0c737499b85dc18f87332ff31b73ca8163afc1a69af44d3bde07509cb8daf70f",
+      "sourceContractSha256": "99a7db7e70e152b5cf62bcb70d3f1d683da4a62ede31fe1db398896332e518be"
+    },
+    "reasons": [
+      "changed or unreviewed atlasSha256",
+      "changed or unreviewed compositionSha256",
+      "changed or unreviewed sourceContractSha256"
+    ]
+  }
+}

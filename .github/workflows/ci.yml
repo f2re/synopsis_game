@@ -1,7 +1,7 @@
 name: Сборка и интеграционные проверки
 on:
   push:
-    branches: [main]
+    branches: [main, 'agent/**']
   pull_request:
 permissions:
   contents: read
@@ -67,6 +67,8 @@ jobs:
           node tools/test_world_characters.cjs
           node tools/test_modular_avatar.cjs
           node tools/test_avatar_preview_lifecycle.cjs
+          node tools/test_avatar_world_boundary.cjs
+          node tools/test_blitz_lifecycle.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
@@ -74,6 +76,8 @@ jobs:
           pnpm build
           node tools/test_avatar_inventory.cjs --api
           node tools/test_equipment_api.mjs
+          node tools/test_saved_portrait_api.mjs
+          node tools/test_blitz_api.mjs
       - name: Проверить production-сервер
         run: |
           SYNOPSIS_IDENTITY_STORE=/tmp/synopsis-identity-ci.json API_BIND=127.0.0.1 API_PORT=4174 node apps/server/dist/index.js >/tmp/synopsis-server.log 2>&1 &

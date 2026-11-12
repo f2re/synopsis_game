@@ -66,6 +66,3 @@ export {
   type AmbientCycle,
   type FindingDiscovery,
 } from './world/hubSchedule';
-
-export { normalizeAvatarPresentation } from './runtime/characterAssets';
-export type { WorldAvatarPresentation } from './runtime/characterAssets';

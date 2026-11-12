@@ -82,7 +82,15 @@ async function openNativeLifecycleBrowser() {
   return browser.contexts()[0];
 }
 async function capture(page, name) {
-  await page.evaluate(async () => { await document.fonts.ready; await Promise.all([...document.images].filter(img => img.getBoundingClientRect().width > 0).map(img => img.decode().catch(() => undefined))); });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    // Offscreen lazy inventory thumbnails need not load until the user scrolls.
+    // Waiting for their decode here would deadlock the screenshot itself.
+    await Promise.all([...document.images].filter(img => {
+      const rect = img.getBoundingClientRect();
+      return rect.width > 0 && (img.complete || rect.bottom > 0 && rect.top < innerHeight && rect.right > 0 && rect.left < innerWidth);
+    }).map(img => img.decode().catch(() => undefined)));
+  });
   const metric = await page.evaluate(() => ({
     viewport: [innerWidth, innerHeight], scrollWidth: document.documentElement.scrollWidth,
     brokenImages: [...document.images].filter(img => img.getBoundingClientRect().width > 0 && img.complete && img.naturalWidth === 0).map(img => new URL(img.src).pathname),
@@ -220,6 +228,7 @@ async function waitForCampus(page) {
     assert.equal(await page.locator('canvas').count(), 0);
     await context.close();
   }
+  await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
   // Native audio nodes are observed, not replaced, to prove real gesture/start/stop behavior.
   await browser.close();
   const context = await openNativeLifecycleBrowser();

@@ -1,0 +1,49 @@
+{
+  "task": "MODULAR-PLAYER-R03",
+  "scope": "runtime author checks, not independent review or production art acceptance",
+  "at": "2026-11-11T17:40:05.707417+00:00",
+  "node": "v24.22.1",
+  "publicManifest": "r01-idle4-20261110",
+  "checks": [
+    {
+      "name": "unit",
+      "exitCode": 0,
+      "durationSeconds": 2.242
+    },
+    {
+      "name": "phaser-lifecycle",
+      "exitCode": 0,
+      "durationSeconds": 2.268
+    },
+    {
+      "name": "canvas-lifecycle",
+      "exitCode": 0,
+      "durationSeconds": 4.036
+    },
+    {
+      "name": "web-typecheck",
+      "exitCode": 0,
+      "durationSeconds": 10.034
+    }
+  ],
+  "sha256": {
+    "apps/web/src/game/WorldCanvas.tsx": "44499ad65ebc66d2290f0a7ec45c875ce5da5c2102989f097c3279e3845dd801",
+    "apps/web/src/game/world-avatar.css": "01877935af560a9feb0cd3a489f2086170cd413400b5fabb4c9eef6320299d30",
+    "apps/web/src/features/avatar/AvatarPreview.tsx": "6fb0a00322164c0bf696003b258e1c70fb6617ff77d4dea0ecaa96178e0f5532",
+    "apps/web/src/features/avatar/AvatarEditor.tsx": "bb37a547b0c35aaaf9a5abf4abc83f0bea620df23a14382eb2d6a210c22b3c62",
+    "packages/world-engine/src/scenes/hub/HubModularAvatarLayer.ts": "e3fa13369f87a1f4cee7ddbd1b91663691da0ae0f24a2d226631d1ce16f18c42",
+    "packages/world-engine/src/scenes/hub/avatarWalkway.ts": "d23dfaf199abcc31d2c79103a3808454ef97fed1be9e4def32f7c34c75826ad1",
+    "packages/world-engine/src/scenes/hub/avatarWalkway.test.ts": "02ee4cb5e9334b75b6513a1deecab104711605df383035abb982f1b938128f20",
+    "packages/world-engine/src/runtime/avatarNavigation.ts": "526e89895e1829eb88b335dc71b09b0091c31715c0dc30510e4d4469b7568498",
+    "packages/world-engine/src/runtime/modularAvatarManifest.ts": "4f6522f314ca1ee80c39263ffbb46f65f0e2be47958f316e4641bff8b96d00ed",
+    "packages/world-engine/src/runtime/modularAvatarPresentation.ts": "5a7954d942fe29dc71fca4143ba299172deab663ad665a51f0014a004369b2b7",
+    "packages/world-engine/src/runtime/modularAvatar.test.ts": "19c1761243de07e47807bfc08805fbadb287151d63267336425f2384b68568c3",
+    "tools/test_modular_avatar.cjs": "e959f4a8bb48625c0570054bc16e6b9e5719721eb3c3cfce4d43a025571a62c9",
+    "tools/test_avatar_preview_lifecycle.cjs": "39f3a6b82eeed4bd2b6b2425db1b6cab91dd6f9dfee23c55d239f88af4cea9ac"
+  },
+  "limitations": [
+    "Phaser/Canvas tests use deterministic doubles; they are not physical GPU or browser layout measurements.",
+    "Movement fixtures exercise accepted walk/inspect schema; production capabilities remain gated by the public manifest.",
+    "Runtime code still requires independent review; author cannot grant its final acceptance."
+  ]
+}

@@ -39,6 +39,17 @@ export interface AvatarProfile {
   badge: string;
 }
 
+/** Immutable server-produced picture of one saved, fully dressed profile. */
+export interface AvatarPortrait {
+  version: 1;
+  sourceRevision: string;
+  appearanceKey: string;
+  sha256: string;
+  width: 160;
+  height: 160;
+  pngDataUrl: string;
+}
+
 export const DEFAULT_AVATAR: AvatarProfile = {
   skinTone: 'skin.warm',
   hair: 'hair.short',
@@ -62,6 +73,7 @@ export interface UserRecord {
   loginCodeSalt: string;
   loginCodeHash: string;
   avatar: AvatarProfile;
+  avatarPortrait?: AvatarPortrait;
   createdAt: string;
   codeSet?: boolean;
   disabledAt?: string;
@@ -82,6 +94,7 @@ export interface SessionUser {
   roles: UserRole[];
   status: UserStatus;
   avatar: AvatarProfile;
+  avatarPortrait?: AvatarPortrait;
   createdAt: string;
   codeSet?: boolean;
   lastLoginAt?: string;
@@ -100,6 +113,7 @@ export function toSessionUser(user: UserRecord): SessionUser {
     roles: [...user.roles],
     status: user.status,
     avatar: { ...user.avatar },
+    ...(user.avatarPortrait ? { avatarPortrait: { ...user.avatarPortrait } } : {}),
     createdAt: user.createdAt,
     codeSet: Boolean(user.codeSet),
     lastLoginAt: user.lastLoginAt,

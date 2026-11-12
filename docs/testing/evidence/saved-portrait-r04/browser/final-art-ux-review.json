@@ -1,0 +1,752 @@
+{
+  "reviewVersion": 1,
+  "status": "PASS_SCOPED",
+  "reviewedAt": "2026-11-12T10:09:07.335611+00:00",
+  "reviewerAgent": "/root/portrait_merge_review",
+  "roles": [
+    "art-director",
+    "ux-accessibility-reviewer"
+  ],
+  "roleCardsRead": [
+    "agents/roles/art-director.md",
+    "agents/roles/ux-accessibility-reviewer.md"
+  ],
+  "roleRegistry": "agents/registry.yaml",
+  "provider": "OpenAI delegated independent review agent",
+  "independence": "Reviewer did not author production code, artwork, browser tests or fixes. The reviewer identified both findings from actual browser PNGs. Only this evidence JSON was written by the reviewer during the visual review.",
+  "verdicts": {
+    "artDirector": "PASS_SCOPED",
+    "uxAccessibilityReviewer": "PASS_SCOPED",
+    "unresolvedBlockingFindings": 0
+  },
+  "target": {
+    "repository": "f2re/synopsis_game",
+    "pullRequest": 126,
+    "sourceHead": "91555d6a1cd958c17eb7164161573c2112548add",
+    "testedMerge": "455e1e5fea843013bedca304d8e1e572b5923d85",
+    "sourceAndTestedMergeTree": "307eefc54ade4b60b66f8980f10b448352132c4f",
+    "baseMain": "4db6517e0070578c7380afffa6dcaa9d7da3c596",
+    "lineageVerification": "Source tree independently verified with local git. Source/tested-merge tree equality verified by portrait_release_check through GitHub git/commits API."
+  },
+  "browserArtifact": {
+    "workflowRun": 43196550696,
+    "workflowRunUrl": "https://github.com/f2re/synopsis_game/actions/runs/43196550696",
+    "artifactId": 13933142680,
+    "archiveSha256": "5d74af1b2ebfe284c235b438846f61d35d3fde30fb6f5b4830650ab3d76a5371",
+    "archiveDigestVerifiedBy": "/root/portrait_release_check",
+    "extractedDirectory": "/workspace/scratch/3a71d9be4756/portrait-release-review/run-43196550696",
+    "reportFile": "browser-report.json",
+    "reportSha256": "3160ca490c67ba88c95efffb21da0c697ade88a30f20e698c741ce6e1c94ea74",
+    "reportStatus": "PASS",
+    "browser": "151.0.7922.34",
+    "productionAssets": true,
+    "realServer": true,
+    "cases": 88,
+    "screenshots": 55,
+    "errors": [],
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "deviceScaleFactor": 1,
+    "portraitScenarioReducedMotion": "reduce",
+    "personallyInspectedImages": [
+      {
+        "file": "portrait-shift-pinned-1440.png",
+        "sha256": "b3907e77343d5ac951259ef25596a1bebcc1c3150066328c6dbc345585a669cf",
+        "pixelDimensions": [
+          1440,
+          1000
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-pinned-390.png",
+        "sha256": "675b70e2d4f67f972a97bb24fa4410331aa74398c360e12a00fc7d013b0c2ffb",
+        "pixelDimensions": [
+          375,
+          1244
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-pinned-844.png",
+        "sha256": "d554b2f1180dc849cb6a102d9857a501538e66474479dbd5fa73c2af2e88285c",
+        "pixelDimensions": [
+          829,
+          972
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-feedback-1440.png",
+        "sha256": "4ccc644d68a16eb1f239846bc13f643c9e347b766bb30cef372b77d390590575",
+        "pixelDimensions": [
+          1440,
+          1000
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-feedback-390.png",
+        "sha256": "941889fc3b44e07e342eadc8a72a47f0812d84144f05c39bf31df3c8ea23fab4",
+        "pixelDimensions": [
+          375,
+          1392
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-feedback-844.png",
+        "sha256": "c79fe4a30b23073d0a45aa21f7efd1deb65289c60082ecacf136875145bd0654",
+        "pixelDimensions": [
+          829,
+          1023
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-saved-1440.png",
+        "sha256": "fa929f995048bfa1b42a5b51fd5a797595ad15e7e02f9f1c85dae088101a125c",
+        "pixelDimensions": [
+          1425,
+          1756
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-saved-390.png",
+        "sha256": "0469374686b202db6f1d54242155024d8e0387dbc2839c0c6037c3393d9ec5e3",
+        "pixelDimensions": [
+          375,
+          3323
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-saved-844.png",
+        "sha256": "41fe2762a8bbdbb7940fda2c9d28aa4056ba61f186686197c4480c36773d0565",
+        "pixelDimensions": [
+          829,
+          1927
+        ],
+        "personallyInspected": true
+      }
+    ]
+  },
+  "priorVisualEvidence": {
+    "sourceHead": "a09aaffb9fedd708fae50e0206ddaff282261362",
+    "testedMerge": "4d8ec35af056e1ea5fbb69ee9b3030fba56b5686",
+    "sourceAndTestedMergeTree": "37f62271806190d6ebb848f312e6c1115b86d49c",
+    "workflowRun": 43194578824,
+    "artifactId": 13931738233,
+    "archiveSha256": "f1e9792e2b6d611721aa00c3bee9a0238a94effbe9c65d1b7512fc512c79f882",
+    "extractedDirectory": "/workspace/scratch/3a71d9be4756/portrait-release-review/run-43194578824",
+    "reportSha256": "b59de9ab2f0e635e0505cf648599784676e0cdec709ab0303a21c4a278220046",
+    "personallyInspectedImages": [
+      {
+        "file": "portrait-editor-saved-1440.png",
+        "sha256": "fa929f995048bfa1b42a5b51fd5a797595ad15e7e02f9f1c85dae088101a125c",
+        "pixelDimensions": [
+          1425,
+          1756
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-saved-390.png",
+        "sha256": "0469374686b202db6f1d54242155024d8e0387dbc2839c0c6037c3393d9ec5e3",
+        "pixelDimensions": [
+          375,
+          3323
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-saved-844.png",
+        "sha256": "cce23d4bf652a8231ca1096b0e33fd046b8a40e4f2941b4a008d1b408c7b6771",
+        "pixelDimensions": [
+          829,
+          1879
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-restored-1440.png",
+        "sha256": "43f136a2fdb46bb39fc135e586c75f4ee8a87d2f37e51bc79e5a24322cba6af3",
+        "pixelDimensions": [
+          1425,
+          1702
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-restored-390.png",
+        "sha256": "e5629d0e7b0bebd9cb46d7a4f9dada4563366246e8b298289203966b0e64f769",
+        "pixelDimensions": [
+          375,
+          3224
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-editor-restored-844.png",
+        "sha256": "82ff5fb1856fb1ec18c7956c5af4811a789fb4b6e597200877f9c69901614397",
+        "pixelDimensions": [
+          829,
+          1824
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-save-network-failure-1440.png",
+        "sha256": "087b8f6f3313cc9e818b7a9ef0d7e591fd166dba613ae84a27226323f54d516f",
+        "pixelDimensions": [
+          1425,
+          1804
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-save-network-failure-390.png",
+        "sha256": "990c0b4692ff754e9548c58a353b5d52481ee2308819adc839b8adbd79f63a3f",
+        "pixelDimensions": [
+          375,
+          3391
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-save-network-failure-844.png",
+        "sha256": "90205e69fec4d854f173e9d3ccf9d2f12adc7299474dfeb1070a94c50b5f107c",
+        "pixelDimensions": [
+          829,
+          1925
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-campus-1440.png",
+        "sha256": "3558592491512e5714d0a9730e120242ec52496d868061fb77d72711e676901a",
+        "pixelDimensions": [
+          1440,
+          1000
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-campus-390.png",
+        "sha256": "2fdea23764cd9bcb613863d76dc31efd0a2f5da6d7d075846a751c14b81b0e78",
+        "pixelDimensions": [
+          390,
+          844
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-campus-844.png",
+        "sha256": "52bcb6fc28b2abbc5cc1cf0547e16124fbbdc531e902872c78516119c7c68d80",
+        "pixelDimensions": [
+          844,
+          390
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-title-1440.png",
+        "sha256": "020581907dd6348cdc14d1db640f50c2959ff22da64a8627b1e62d79e8f32d3c",
+        "pixelDimensions": [
+          1440,
+          1000
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-title-390.png",
+        "sha256": "fae6c5d9ecc3dc154e1e7009ef45eaa80db2589d1eece626d8d38e0e011ded2b",
+        "pixelDimensions": [
+          375,
+          1261
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-title-844.png",
+        "sha256": "2798285040b6fa81f28c2ea769b3b1f64ba5e3b7fe003b4d7e28ea24d3b5981c",
+        "pixelDimensions": [
+          829,
+          803
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-pinned-1440.png",
+        "sha256": "f074e902b08c02890f54d740058136ed1fe9faccb4fbcc062ad9afd2553d1116",
+        "pixelDimensions": [
+          1440,
+          1000
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-pinned-390.png",
+        "sha256": "75d134a6552ac89589667db011e0cba54a3a8158801da62b944347da6d10e1a2",
+        "pixelDimensions": [
+          375,
+          1166
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-shift-pinned-844.png",
+        "sha256": "78623fe431d4267de97662acbc2a13ed208cae713df260983ea7843431b6f08e",
+        "pixelDimensions": [
+          829,
+          894
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-blitz-pinned-1440.png",
+        "sha256": "0d1e14e858dee227ce265f54471040c91d8893dd11d58259b45663d007fb8b03",
+        "pixelDimensions": [
+          1440,
+          1000
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-blitz-pinned-390.png",
+        "sha256": "78637caf265b873321771453917c03fb18c779672b636f8692fc597eb9de1130",
+        "pixelDimensions": [
+          375,
+          1226
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-blitz-pinned-844.png",
+        "sha256": "4758b1c0dd38cfb37a3698b75fdd0ee99fd6629c4ec8fc55bd6e2544c36f124e",
+        "pixelDimensions": [
+          829,
+          882
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-blitz-result-1440.png",
+        "sha256": "6bfb884035b6bf9717cfdd04494b31f104b942c05b34b8122278e6e07a131119",
+        "pixelDimensions": [
+          1425,
+          1353
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-blitz-result-390.png",
+        "sha256": "3c283b7e801f8be6f48a8a6ed570cc9730465bcc0b7842520e66519dfa57b967",
+        "pixelDimensions": [
+          375,
+          1778
+        ],
+        "personallyInspected": true
+      },
+      {
+        "file": "portrait-blitz-result-844.png",
+        "sha256": "3592cb2fd00f2c9a2e382597b2dad927fe87d7583643ce64d00b83a519bf494e",
+        "pixelDimensions": [
+          829,
+          1473
+        ],
+        "personallyInspected": true
+      }
+    ],
+    "carryForwardBasis": "All 24 portrait screenshots were personally inspected in the first run. The final source changes production only in the two scoped CSS files listed below; artwork, portrait compositor, saved-image components and activity snapshot logic are unchanged. Nine new screenshots directly cover the two fixes and their desktop/phone/landscape behavior. All saved portrait hashes and snapshot assertions pass again in the final run.",
+    "productionPathsChangedSincePriorVisualReview": [
+      "apps/web/src/features/avatar/inventory.css",
+      "apps/web/src/features/shift/SeamlessShiftFlow.css"
+    ]
+  },
+  "technicalPixelGate": {
+    "priorTechnicalReport": "docs/testing/evidence/saved-portrait-r04/art/portrait-pixel-verification.json",
+    "priorTechnicalReportSha256": "7c89a72c2b247701d48940ebdcf41ca365235e141d6e336f4e97179ae414e88b",
+    "priorVisualReport": "docs/testing/evidence/saved-portrait-r04/art/portrait-visual-review.json",
+    "priorVisualReportSha256": "e523438d124fb99c26518fbc323a24f2e56624f75b7ee2a4bd1987f260d8e62b",
+    "technicalStatus": "PASS",
+    "independentRgbaEqualityCases": 191,
+    "priorArtDirectorStatus": "PASS",
+    "sourceSha256ReverifiedAgainstFinalSource": {
+      "apps/web/public/assets/avatar/modular-r01/atlas.png": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
+      "apps/web/public/assets/avatar/modular-r01/manifest.json": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf",
+      "tools/assets/build_modular_player_r01.py": "42f2fb1498604dd934ee8002eb91e14b2b7b9157170a916575641566ee50964a",
+      "tools/assets/review_saved_avatar_portrait.py": "5628e875bc0da63aa64de1676376d10e5763f0b118e1bc4745b2d1f9b3b5076e",
+      "apps/server/src/modules/identity/avatarPortrait.ts": "7c9c03cd97dd06ee9571b406f3f17336a8626e98dd4a5c4a6ec1af854e8ee08f",
+      "apps/server/src/modules/identity/portraitPng.ts": "af54c5d947b26ee6d2f3f03499b262d1a789013e5b2b4fa7ae2f2706fd1678c1"
+    },
+    "scope": "Existing technical art gate carried forward after verifying source hashes; the 191-case renderer comparison was not rerun during this screenshot review."
+  },
+  "scope": [
+    "Dressed static fitting and saved portrait identity across editor, title, campus, ordinary shift, blitz and blitz result.",
+    "1440x1000 desktop, 390x844 phone and 844x390 landscape visual layout at device scale 1.",
+    "Visible Cyrillic readability, intact clothing silhouette, portrait crop, selection/save/error messaging and non-color-only status cues.",
+    "Independent diagnosis and closure of mentor/answer overlap and clipped direction label.",
+    "Recorded real-browser keyboard direction change, real numeric form submission, mentor panel open/close, confirmed PNG reuse and immutable activity snapshots."
+  ],
+  "observations": [
+    "The inspected field outfit covers the torso and legs; jacket, trousers and boots remain intact. The portrait preserves the head, cap and dressed shoulders.",
+    "Field-kit identity remains consistent between fitting, confirmed portrait, title/campus and ordinary shift. The orange sweater and beanie remain pinned for the blitz and its result after a newer profile is saved.",
+    "Network-failure screenshots clearly distinguish an unsaved fitting from the unchanged confirmed portrait, with textual error and retry/save controls.",
+    "Restored-editor screenshots show the persisted newest long blond hair and field outfit. The final browser report repeats the same exact saved-image hashes on all three viewports.",
+    "Character identity stays in its own UI region and does not cover task data or answer controls. Ordinary-shift input, unit and primary action are now unobstructed on phone and landscape.",
+    "The corrected landscape editor uses two rows for four direction labels without reducing the 16px type. Phone and desktop retain one row, with labels fitting their controls.",
+    "Inspected Cyrillic text and status messages remain readable without missing glyphs. Selection and completion/error states use text/check symbols as well as color.",
+    "Final capture cases report no horizontal overflow and no broken visible artwork; the complete final browser run reports zero page errors."
+  ],
+  "findings": [
+    {
+      "id": "R04-UX-01",
+      "severity": "P2",
+      "status": "RESOLVED",
+      "problem": "At 390x844 the fixed Ask Olkhin helper covered the lower-right numeric input area including the unit region.",
+      "originalEvidence": {
+        "workflowRun": 43194578824,
+        "file": "portrait-shift-pinned-390.png",
+        "sha256": "75d134a6552ac89589667db011e0cba54a3a8158801da62b944347da6d10e1a2"
+      },
+      "fix": "At viewport width <=760px or height <=540px, mentor trigger/reaction/panel occupy normal flow after the task; touch targets remain at least 44px.",
+      "productionFile": "apps/web/src/features/shift/SeamlessShiftFlow.css",
+      "fixSourceCommit": "c46df927d38f140e43e1734cacde093c90ce9df0",
+      "confirmedAtSource": "91555d6a1cd958c17eb7164161573c2112548add",
+      "closureImages": [
+        "portrait-shift-pinned-1440.png",
+        "portrait-shift-pinned-390.png",
+        "portrait-shift-pinned-844.png",
+        "portrait-shift-feedback-1440.png",
+        "portrait-shift-feedback-390.png",
+        "portrait-shift-feedback-844.png"
+      ],
+      "closure": "Personally inspected new input and feedback screenshots at all three widths. Input 0, unit and primary action are unobstructed. Reported control/helper rectangles do not intersect before and after scrollIntoViewIfNeeded; mentor opens/closes; actual browser form submission returns HTTP 200."
+    },
+    {
+      "id": "R04-UX-02",
+      "severity": "P3",
+      "status": "RESOLVED",
+      "problem": "At 844x390 the front direction label was crowded/clipped by the four-column layout in the 280px sidebar.",
+      "originalEvidence": {
+        "workflowRun": 43194578824,
+        "file": "portrait-editor-saved-844.png",
+        "sha256": "cce23d4bf652a8231ca1096b0e33fd046b8a40e4f2941b4a008d1b408c7b6771"
+      },
+      "fix": "The narrow two-column editor sidebar uses a 2x2 direction grid. The existing phone breakpoint restores four columns; large desktop remains four columns. Font size remains 16px.",
+      "productionFile": "apps/web/src/features/avatar/inventory.css",
+      "fixSourceCommit": "c46df927d38f140e43e1734cacde093c90ce9df0",
+      "confirmedAtSource": "91555d6a1cd958c17eb7164161573c2112548add",
+      "closureImages": [
+        "portrait-editor-saved-1440.png",
+        "portrait-editor-saved-390.png",
+        "portrait-editor-saved-844.png"
+      ],
+      "closure": "Personally inspected all four labels on final editor screenshots at three widths. Browser measurements show scrollWidth equals clientWidth for every label: 66px desktop, 78px phone, 122px landscape."
+    }
+  ],
+  "measuredEvidence": {
+    "shiftInputCases": [
+      {
+        "name": "portrait-shift-input-1440",
+        "initialGeometry": {
+          "controls": [
+            {
+              "left": 562,
+              "top": 627.09375,
+              "right": 1228,
+              "bottom": 687.09375
+            },
+            {
+              "left": 562,
+              "top": 788.875,
+              "right": 1228,
+              "bottom": 838.875
+            }
+          ],
+          "helpers": [
+            {
+              "left": 1231,
+              "top": 938,
+              "right": 1422,
+              "bottom": 982
+            }
+          ],
+          "overlap": false
+        },
+        "scrolledGeometry": {
+          "controls": [
+            {
+              "left": 562,
+              "top": 627.09375,
+              "right": 1228,
+              "bottom": 687.09375
+            },
+            {
+              "left": 562,
+              "top": 788.875,
+              "right": 1228,
+              "bottom": 838.875
+            }
+          ],
+          "helpers": [
+            {
+              "left": 1231,
+              "top": 938,
+              "right": 1422,
+              "bottom": 982
+            }
+          ],
+          "overlap": false
+        },
+        "mentorOpenClose": true,
+        "numericInput": "0",
+        "realAnswerStatus": 200
+      },
+      {
+        "name": "portrait-shift-input-390",
+        "initialGeometry": {
+          "controls": [
+            {
+              "left": 29,
+              "top": 784.8125,
+              "right": 346,
+              "bottom": 844.8125
+            },
+            {
+              "left": 29,
+              "top": 1013.15625,
+              "right": 346,
+              "bottom": 1063.15625
+            }
+          ],
+          "helpers": [
+            {
+              "left": 16,
+              "top": 1148.78125,
+              "right": 359,
+              "bottom": 1194.78125
+            }
+          ],
+          "overlap": false
+        },
+        "scrolledGeometry": {
+          "controls": [
+            {
+              "left": 29,
+              "top": 784.8125,
+              "right": 346,
+              "bottom": 844.8125
+            },
+            {
+              "left": 29,
+              "top": 1013.15625,
+              "right": 346,
+              "bottom": 1063.15625
+            }
+          ],
+          "helpers": [
+            {
+              "left": 16,
+              "top": 1148.78125,
+              "right": 359,
+              "bottom": 1194.78125
+            }
+          ],
+          "overlap": false
+        },
+        "mentorOpenClose": true,
+        "numericInput": "0",
+        "realAnswerStatus": 200
+      },
+      {
+        "name": "portrait-shift-input-844",
+        "initialGeometry": {
+          "controls": [
+            {
+              "left": 372.9375,
+              "top": 212.625,
+              "right": 778.25,
+              "bottom": 272.625
+            },
+            {
+              "left": 372.9375,
+              "top": 391.375,
+              "right": 778.25,
+              "bottom": 441.375
+            }
+          ],
+          "helpers": [
+            {
+              "left": 34.5,
+              "top": 520.125,
+              "right": 794.5,
+              "bottom": 566.125
+            }
+          ],
+          "overlap": false
+        },
+        "scrolledGeometry": {
+          "controls": [
+            {
+              "left": 372.9375,
+              "top": 212.625,
+              "right": 778.25,
+              "bottom": 272.625
+            },
+            {
+              "left": 372.9375,
+              "top": 391.375,
+              "right": 778.25,
+              "bottom": 441.375
+            }
+          ],
+          "helpers": [
+            {
+              "left": 34.5,
+              "top": 520.125,
+              "right": 794.5,
+              "bottom": 566.125
+            }
+          ],
+          "overlap": false
+        },
+        "mentorOpenClose": true,
+        "numericInput": "0",
+        "realAnswerStatus": 200
+      }
+    ],
+    "directionLabelCases": [
+      {
+        "name": "portrait-editor-static-1440",
+        "labels": [
+          {
+            "label": "Спереди",
+            "clientWidth": 66,
+            "scrollWidth": 66
+          },
+          {
+            "label": "Слева",
+            "clientWidth": 66,
+            "scrollWidth": 66
+          },
+          {
+            "label": "Сзади",
+            "clientWidth": 66,
+            "scrollWidth": 66
+          },
+          {
+            "label": "Справа",
+            "clientWidth": 66,
+            "scrollWidth": 66
+          }
+        ]
+      },
+      {
+        "name": "portrait-editor-static-390",
+        "labels": [
+          {
+            "label": "Спереди",
+            "clientWidth": 78,
+            "scrollWidth": 78
+          },
+          {
+            "label": "Слева",
+            "clientWidth": 78,
+            "scrollWidth": 78
+          },
+          {
+            "label": "Сзади",
+            "clientWidth": 78,
+            "scrollWidth": 78
+          },
+          {
+            "label": "Справа",
+            "clientWidth": 78,
+            "scrollWidth": 78
+          }
+        ]
+      },
+      {
+        "name": "portrait-editor-static-844",
+        "labels": [
+          {
+            "label": "Спереди",
+            "clientWidth": 122,
+            "scrollWidth": 122
+          },
+          {
+            "label": "Слева",
+            "clientWidth": 122,
+            "scrollWidth": 122
+          },
+          {
+            "label": "Сзади",
+            "clientWidth": 122,
+            "scrollWidth": 122
+          },
+          {
+            "label": "Справа",
+            "clientWidth": 122,
+            "scrollWidth": 122
+          }
+        ]
+      }
+    ],
+    "activitySnapshotCases": [
+      {
+        "name": "portrait-session-snapshots-1440",
+        "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+        "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+        "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+        "ordinaryCompleted": true,
+        "blitzCompleted": "completed",
+        "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+      },
+      {
+        "name": "portrait-session-snapshots-390",
+        "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+        "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+        "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+        "ordinaryCompleted": true,
+        "blitzCompleted": "completed",
+        "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+      },
+      {
+        "name": "portrait-session-snapshots-844",
+        "ordinaryStartAndResultSha": "9f85c953fd74ae2a0b6983f5ea9db6847fa9ec1642290ea3c87bc29a59d47a6d",
+        "blitzStartAndResultSha": "636ceb1d5f9f968613ba74b0f0803b78b49b007fcdfb8c692fabb7de455770b6",
+        "currentProfileSha": "0732649487a79806d5e5285fc06bb0746f5f8d08b9537f4235530872531ad662",
+        "ordinaryCompleted": true,
+        "blitzCompleted": "completed",
+        "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+      }
+    ]
+  },
+  "limitations": [
+    "This is a scoped art/UX acceptance of recorded real Chromium output and the exercised browser scenarios, not an exhaustive accessibility certification.",
+    "No manual screen-reader, assistive-technology, physical touch-device/virtual-keyboard, projector-distance or complete keyboard traversal audit was performed by this reviewer.",
+    "Numeric WCAG contrast ratios and every DPI/zoom combination were not measured. Visual readability was inspected at the three recorded viewports and device scale 1.",
+    "No physical-GPU performance claim is made. Browser RAF/heap/lifecycle acceptance belongs to the independent release check.",
+    "All wardrobe combinations and every direction were not visually reinspected in this final browser pass. Existing technical pixel and source-art acceptance is carried forward through verified unchanged source hashes.",
+    "The scientific correctness of training content and answers is outside this review. The numeric value 0 exercises transport and feedback, not scientific acceptance.",
+    "Source c46df92 browser run failed on an exact accessible-name test locator before phone acceptance. Only the successful final run 43196550696 is used to close these findings."
+  ],
+  "reviewerWrites": [
+    "/workspace/scratch/3a71d9be4756/portrait-release-review/final-art-ux-review.json"
+  ]
+}

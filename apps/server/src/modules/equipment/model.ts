@@ -1,3 +1,6 @@
+import type { BlitzState } from '../shift/blitzRules.js';
+import type { AvatarPortrait, AvatarProfile } from '../identity/model.js';
+
 export interface EffectCharges { reference: number; retry: number }
 
 export interface EquipmentSnapshot {
@@ -8,6 +11,9 @@ export interface EquipmentSnapshot {
   charges: EffectCharges;
   remaining: EffectCharges;
   assistedTasks: number;
+  /** Fixed at activity start; absent only for a legacy activity without a full outfit. */
+  avatarSnapshot?: AvatarProfile;
+  avatarPortrait?: AvatarPortrait;
 }
 
 export interface BadgeView {
@@ -67,6 +73,8 @@ export interface TrainingShift {
   pendingRetry?: { instanceId: string; firstAnswer: unknown };
   responses: Record<string, { fingerprint: string; response: unknown }>;
   reward?: TrainingReward;
+  /** Server-owned clock, outfit and accepted answers for the timed practice mode. */
+  blitz?: BlitzState;
 }
 
 export interface TrainingState {

@@ -1,0 +1,32 @@
+{
+  "review": "saved-portrait-r04",
+  "date": "2026-11-12",
+  "reviewerAgent": "portrait_asset_editor",
+  "independence": "Reviewer did not author server compositor or modify accepted source pixels; R02 source restored byte for byte. Technical review preceded visual art review.",
+  "pixelQualityReviewerStatus": "PASS",
+  "artDirectorStatus": "PASS",
+  "browserUiStatus": "NOT_EVALUATED",
+  "candidateSourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+  "pixelVerificationSha256": "7c89a72c2b247701d48940ebdcf41ca365235e141d6e336f4e97179ae414e88b",
+  "imagesInspected": {
+    "accessories.png": "758353b2067f9edd74ae72da63334bd0b71e26860bc09b21795a0b43e5b0a1b3",
+    "default-server.png": "d78b094fa59ae1586db0e3c8e3dbaaf8f4bd37ceaf436ece35b3fba52b4d4069",
+    "default-source-comparison.png": "a9596e7d9f2060fb077c8026e57c66598430b93b65ed77085492c8c0d3d8648e",
+    "field-kit-server.png": "c8c5900e6eaf6a1a38590d182d138c63bb27b0cb68e9722fa7ecaf702638f16e",
+    "field-kit-source-comparison.png": "1e75a53cbdcd4e08db9a5746db0380751fc0d8bd3eaa41fb4c6e4ee75a110908",
+    "heads-top.center-jacket.png": "fad09edc6f0efec4540d6e527158c684dfeaa198225bcff77dabf711d6a2c1f3",
+    "heads-top.field-jacket.png": "2593e18443d0e0f0d437d76a9446f5845fdfaaf8263b21759eab36830482fd72",
+    "heads-top.hoodie.png": "0643ecdbbd052219a26dcce82b4ec6d11088702a805c958b7fa6d82617f21503",
+    "heads-top.shirt.png": "9c05630336d7f20b48a20c522bd333d5fc1cc11f6b3496edc59b2d7112655d8d",
+    "heads-top.sweater.png": "8c1efe3bc216eaece3762568d2627d393c0d2beb7fff53c74038a6892432df34",
+    "palettes.png": "b73e538c61933dbc6884c76cce73d334e1cfe09e61e584bfd8e1b73b539df9a5"
+  },
+  "notes": [
+    "160x160 native portraits preserve face, full headwear, neck and dressed shoulders; no new animation.",
+    "Headwear top margin is at least 6 output pixels; all hair/headwear pixels are inside crop.",
+    "5 hair x 5 headwear x 5 tops, 16 skin/hair palettes and 36 accessory combinations visually inspected.",
+    "Default and field-kit compared against full accepted source at native, 2x and 4x portrait scales.",
+    "100 opaque colors in field-kit is a reviewed soft-range exception: exact accepted material colors, no newly generated shades or face quantization.",
+    "Lower clothes, footwear and companions retain appearance-key identity even when outside cropped pixels."
+  ]
+}

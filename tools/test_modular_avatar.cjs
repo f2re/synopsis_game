@@ -1,153 +1,198 @@
-/* Adapter regression with scene doubles. Real artwork and GPU acceptance remain separate gates. */
+/* Saved portrait flow: real component handlers, authoritative PNG fixtures and module boundaries.
+ * Deterministic event doubles do not replace browser or art review. */
 'use strict';
-const fs = require('node:fs');
-const vm = require('node:vm');
 const assert = require('node:assert/strict');
-const ts = require('../apps/web/node_modules/typescript');
-function load(file, dependencies = {}) {
-  const exports = {};
-  const code = ts.transpileModule(fs.readFileSync(`packages/world-engine/src/${file}`, 'utf8'), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
-  }).outputText;
-  vm.runInNewContext(code, { exports, Error, require(id) { assert(id in dependencies, `Unexpected dependency ${id}`); return dependencies[id]; } });
-  return exports;
+const fs = require('node:fs');
+const { createHash } = require('node:crypto');
+const { load, Runner, Events, deferred, flush, nodes, text } = require('./ui_test_harness.cjs');
+const { examples } = JSON.parse(fs.readFileSync('apps/web/tools/review/saved-portrait-fixtures.json', 'utf8'));
+const [first, , , , second] = examples;
+const contract = load('packages/world-engine/src/runtime/modularAvatarManifest.ts');
+const options = load('apps/web/src/features/avatar/avatarOptions.ts');
+const portraitModule = load('apps/web/src/features/avatar/SavedAvatarPortrait.tsx', { './saved-avatar-portrait.css': {} });
+const { SavedAvatarPortrait, isSavedAvatarPortrait } = portraitModule;
+const portraitNode = (runner) => nodes(runner.output).find((node) => node.type === SavedAvatarPortrait);
+const image = (portrait, size = 80) => nodes(SavedAvatarPortrait({ portrait, size })).find((node) => node.type === 'img');
+const user = (id, example = first) => ({ id, displayName: `Fixture ${id}`, groupId: 'Review', roles: ['student'], status: 'active', createdAt: '2026-11-12T00:00:00Z', avatar: { ...example.avatar }, avatarPortrait: { ...example.avatarPortrait } });
+
+for (const example of examples) {
+  const value = example.avatarPortrait;
+  assert(isSavedAvatarPortrait(value));
+  const png = Buffer.from(value.pngDataUrl.split(',')[1], 'base64');
+  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.equal(png.readUInt32BE(16), 160); assert.equal(png.readUInt32BE(20), 160);
+  assert.equal(createHash('sha256').update(png).digest('hex'), value.sha256);
+  for (const size of [40, 80, 160]) assert.equal(image(value, size).props.src, value.pngDataUrl, 'Every display size must use identical PNG bytes');
 }
-class Events {
-  listeners = new Map();
-  on(key, fn, context) { const entries = this.listeners.get(key) ?? []; entries.push({ fn, context }); this.listeners.set(key, entries); }
-  off(key, fn) { this.listeners.set(key, (this.listeners.get(key) ?? []).filter((entry) => entry.fn !== fn)); }
-  emit(key, value) { for (const { fn, context } of this.listeners.get(key) ?? []) fn.call(context, value); }
-  count() { return [...this.listeners.values()].reduce((total, entries) => total + entries.length, 0); }
+for (const bad of [undefined, { ...first.avatarPortrait, version: 2 }, { ...first.avatarPortrait, width: 128 }, { ...first.avatarPortrait, pngDataUrl: 'https://example.com/avatar.png' }, { ...first.avatarPortrait, pngDataUrl: 'data:image/svg+xml;base64,AAAA' }, { ...first.avatarPortrait, pngDataUrl: 'data:image/png;base64,' + 'A'.repeat(175000) }]) {
+  assert(!image(bad)); assert.match(text(SavedAvatarPortrait({ portrait: bad }).props['aria-label']), /Сохраните/);
 }
-const contract = load('runtime/modularAvatarManifest.ts');
-const assets = load('runtime/characterAssets.ts', { './modularAvatarManifest.ts': contract });
-const bridge = load('bridge/WorldBridge.ts', { '../runtime/characterAssets': assets });
-const preferences = load('runtime/uiPreferences.ts');
-const pending = [];
-const releases = [];
-const compositor = { acquire(profile, direction, action) { return new Promise((resolve, reject) => pending.push({ profile, direction, action, resolve, reject })); }, diagnostics() { return { test: true }; } };
-const { HubModularAvatarLayer } = load('scenes/hub/HubModularAvatarLayer.ts', {
-  phaser: { Textures: { FilterMode: { NEAREST: 0 } }, Scale: { Events: { RESIZE: 'resize' } } },
-  '../../bridge/WorldBridge': bridge,
-  '../../runtime/modularAvatarManifest': contract,
-  '../../runtime/modularAvatarCompositor': { modularAvatarCompositor: compositor },
-  '../../runtime/uiPreferences': preferences,
-  './r01Layout': { getR01Layout(w, h) { return { width: w < h ? 480 : 960, height: w < h ? 780 : 540, portrait: w < h, shore: 190 }; } },
-});
-function scene() {
-  const store = new Map(), textures = new Map(), images = [];
-  return {
-    store, texturesMap: textures, images, events: new Events(), scale: Object.assign(new Events(), { width: 960, height: 540 }),
-    registry: { get(key) { return store.get(key); }, set(key, value) { store.set(key, value); } },
-    textures: {
-      createCanvas(key, width, height) {
-        assert(!textures.has(key));
-        const texture = { width, height, frames: [], context: { drawImage(source) { texture.source = source; } },
-          add(...args) { this.frames.push(args); }, refresh() {}, setFilter(value) { this.filter = value; } };
-        textures.set(key, texture); return texture;
-      },
-      remove(key) { const value = textures.get(key); value.width = value.height = 0; textures.delete(key); },
-    },
-    add: { image(x, y, key, frame) {
-      const image = { x, y, key, frame, writes: 0, destroyed: false,
-        setOrigin(x, y) { this.origin = [x, y]; return this; }, setScale(value) { this.scale = value; return this; },
-        setPosition(x, y) { this.x = x; this.y = y; return this; }, setDepth(value) { this.depth = value; return this; },
-        setFrame(value) { this.frame = value; this.writes++; return this; }, destroy() { this.destroyed = true; },
-      }; images.push(image); return image;
-    } },
-  };
+const attrs = new Map(), brokenImage = { hidden: false, parentElement: { setAttribute: (key, value) => attrs.set(key, value) } };
+image(first.avatarPortrait).props.onError({ currentTarget: brokenImage });
+assert(brokenImage.hidden); assert.equal(attrs.get('data-portrait-state'), 'unavailable');
+assert.equal(attrs.get('aria-label'), 'Сохранённый портрет недоступен.');
+assert(!attrs.get('aria-label').includes('гардероб'), 'A historical failure must not promise to rewrite the old round');
+
+const values = new Map();
+const window = Object.assign(new Events(), { sessionStorage: { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value), removeItem: (key) => values.delete(key) } });
+const drafts = load('apps/web/src/features/avatar/avatarDraft.ts', { './avatarOptions': options }, { window });
+const equipment = { loadout: { badgeId: null }, catalog: [], stats: { completedShifts: 0, unassistedCorrect: 0, practiceDays: 0 }, nextShift: { badgeId: null, badgeName: null, heldItem: first.avatar.heldItem, enabled: true, charges: { reference: 0, retry: 0 }, remaining: { reference: 0, retry: 0 }, assistedTasks: 0, avatarSnapshot: first.avatar, avatarPortrait: first.avatarPortrait }, rules: { chargeCap: 2, description: '' }, tools: [] };
+const saves = [], savedUsers = [];
+const api = { equipment: async () => structuredClone(equipment), updateAvatar: (avatar) => { const request = { ...deferred(), avatar }; saves.push(request); return request.promise; } };
+const editor = load('apps/web/src/features/avatar/AvatarEditor.tsx', {
+  '../../api': { api }, '@synopsis/world-engine': { worldAudio: { play() {} } },
+  './AvatarPreview': { AvatarPreview: 'StaticFitting' }, './SavedAvatarPortrait': portraitModule,
+  './AvatarOptionGrid': { AvatarAppearance: 'AvatarAppearance', AvatarOptionGrid: 'AvatarOptionGrid' }, './avatarOptions': options,
+  '../hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false }) },
+  './EquipmentBadges': { EquipmentBadges: 'EquipmentBadges', EquipmentSummary: 'EquipmentSummary' },
+  './avatarDraft': drafts, './inventory.css': {},
+}, { window });
+const button = (runner, label) => nodes(runner.output).find((node) => node.type === 'button' && text(node) === label);
+const draft = (runner) => nodes(runner.output).find((node) => node.type === 'StaticFitting').props.avatar;
+function equip(runner, slot, value) { nodes(runner.output).find((node) => node.type === 'AvatarOptionGrid').props.onEquip(slot, value); runner.render(); }
+function save(runner) { const control = button(runner, 'Сохранить персонажа'); assert(control && !control.props.disabled); control.props.onClick(); runner.render(); return saves.at(-1); }
+const makeEditor = (id, example = first) => new Runner(editor.AvatarEditor, { user: user(id, example), onSaved: (value) => savedUsers.push(value), onBack() {} });
+
+async function staticCompositorCheck() {
+  const manifest = JSON.parse(fs.readFileSync('apps/web/public/assets/avatar/modular-r01/manifest.json', 'utf8'));
+  const canvases = [], timers = new Set(); let timerId = 0;
+  const document = { createElement(tag) {
+    assert.equal(tag, 'canvas');
+    const c = { width: 0, height: 0, draws: [], getContext() { return { imageSmoothingEnabled: false, drawImage: (...args) => c.draws.push(args), getImageData: (_x, _y, w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} }; } };
+    canvases.push(c); return c;
+  } };
+  class Image { naturalWidth = manifest.atlas.width; naturalHeight = manifest.atlas.height; set src(value) { assert.equal(value, manifest.atlas.url); this.onload(); } }
+  const compositor = load('packages/world-engine/src/runtime/modularAvatarCompositor.ts', { './modularAvatarManifest.ts': contract }, {
+    document, Image, AbortController, fetch: async (url) => { assert.equal(url, contract.MODULAR_AVATAR_URL); return { ok: true, json: async () => manifest }; },
+    window: { setTimeout: () => { timers.add(++timerId); return timerId; }, clearTimeout: (id) => timers.delete(id) },
+  }).modularAvatarCompositor;
+  for (const direction of contract.AVATAR_DIRECTIONS) {
+    const lease = await compositor.acquireStatic(second.avatar, direction);
+    assert.equal(lease.value.body.canvas.width, manifest.frame.width, 'The fitting cache must contain one frame, not an animation strip');
+    assert.equal(lease.value.clip.durationsMs.length, 1); assert.equal(lease.value.clip.loop, false);
+    const duplicate = await compositor.acquireStatic(second.avatar, direction);
+    assert.equal(lease.value, duplicate.value, 'An unchanged appearance reuses its bounded static frame');
+    lease.release(); duplicate.release();
+  }
+  assert.equal(timers.size, 0, 'Only finite loading timeouts exist; none remain once the atlas is loaded');
+  assert.equal(compositor.diagnostics().composites.leased, 0);
 }
-function resolve(request, action = request.action) {
-  const count = action === 'idle' ? 4 : 6;
-  const body = { canvas: { width: 96 * count, height: 144 }, frame: { width: 96, height: 144, pivot: [48, 136] } };
-  const value = { key: `${contract.avatarProfileKey(request.profile)}:${request.direction}:${action}`,
-    manifest: { rigId: contract.MODULAR_AVATAR_RIG, revision: 'fixture' }, action, direction: request.direction,
-    clip: { durationsMs: Array(count).fill(action === 'idle' ? 320 : 140), loop: true }, body,
-    companion: request.profile.companion === 'companion.none' ? null : { canvas: { width: 64 * count, height: 64 }, frame: { width: 64, height: 64, pivot: [32, 60] }, anchor: [-34, 0] },
-  };
-  const release = { count: 0, value };
-  releases.push(release);
-  request.resolve({ value, release() { release.count++; } });
-  return release;
+
+async function screenChecks() {
+  const title = load('apps/web/src/features/title/TitleScreen.tsx', {
+    '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик' }, '../avatar/SavedAvatarPortrait': portraitModule,
+    '../hub/HubIcon': { HubIcon: 'HubIcon' }, '../ui/PixelIcon': { PixelIcon: 'PixelIcon' },
+    '../atmosphere/StationRoomArt': { StationRoomArt: 'StationRoomArt' }, '../atmosphere/AtmosphereProvider': { useAmbientWeather: () => 'calm' },
+    '../settings/settingsStore': { useSettings: () => ({ soundEnabled: false }), usePresentationPreferences: () => ({}), updateSettings() {} },
+    './station-screens.css': {},
+  });
+  const titleRunner = new Runner(title.TitleScreen, { user: user('title') }, { effects: false });
+  assert.equal(portraitNode(titleRunner).props.size, 40);
+  assert.equal(image(portraitNode(titleRunner).props.portrait).props.src, first.avatarPortrait.pngDataUrl, 'The main menu uses the saved personal portrait');
+  titleRunner.render({ user: user('title', second) });
+  assert.equal(portraitNode(titleRunner).props.portrait.sha256, second.avatarPortrait.sha256);
+  titleRunner.render({ user: { ...user('title'), avatarPortrait: undefined } });
+  assert.equal(portraitNode(titleRunner).props.portrait, undefined, 'An older authenticated profile gets the neutral portrait placeholder');
+  titleRunner.render({ user: null });
+  assert.equal(portraitNode(titleRunner), undefined);
+  assert(nodes(titleRunner.output).some((node) => node.type === 'HubIcon' && node.props.name === 'observer'), 'Guests keep the generic station icon');
+  titleRunner.unmount();
+
+  // The hub's real markup consumes the same confirmed PNG without loading its effects or Phaser.
+  const hub = load('apps/web/src/features/hub/HubScreen.tsx', {
+    '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик', GAME_TITLE: '26063' }, '../avatar/SavedAvatarPortrait': portraitModule,
+    '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' }, '../ui/SynopticDutyTicker': { SynopticDutyTicker: 'SynopticDutyTicker' },
+    './HubDialog': { HubDialog: 'HubDialog' }, './HubIcon': { HubIcon: 'HubIcon' },
+    '../settings/settingsStore': { usePresentationPreferences: () => ({}) },
+  }, { window: { matchMedia: () => ({ matches: false }) } });
+  const hubRunner = new Runner(hub.HubScreen, { user: user('hub') }, { effects: false });
+  assert.equal(image(portraitNode(hubRunner).props.portrait).props.src, first.avatarPortrait.pngDataUrl);
+  hubRunner.render({ user: user('hub', second) });
+  assert.equal(portraitNode(hubRunner).props.portrait.sha256, second.avatarPortrait.sha256);
+  hubRunner.unmount();
+
+  const starts = [];
+  const shift = load('apps/web/src/features/shift/ShiftWorkspace.tsx', {
+    '../../api': { api: { startShift() { const request = deferred(); starts.push(request); return request.promise; } } }, '../../brand': { GAME_MARK: '26063' },
+    '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' }, './FindErrorTask': { FindErrorTask: 'FindErrorTask' }, './StationBoardTask': { StationBoardTask: 'StationBoardTask' }, './StationPlotTask': { StationPlotTask: 'StationPlotTask' },
+    './feedback/DigitAnatomy': { DigitAnatomy: 'DigitAnatomy' }, '../../game/worldBridge': { createCodePostBridge: () => ({}) }, '@synopsis/world-engine': { worldAudio: {} },
+    '../avatar/avatarOptions': options, '../avatar/SavedAvatarPortrait': portraitModule, './ShiftWorkspace.css': {},
+  });
+  const task = JSON.parse(fs.readFileSync('apps/web/tools/review/blitz-practice-fixture.json', 'utf8')).active[0].task;
+  for (const legacy of [false, true]) {
+    const shiftRunner = new Runner(shift.ShiftWorkspace, { onExit() {} });
+    const snapshot = structuredClone(equipment.nextShift);
+    if (legacy) { delete snapshot.avatarPortrait; delete snapshot.avatarSnapshot; }
+    starts.at(-1).resolve({ shiftId: 'round-A', task, progress: { answered: 0, correct: 0, current: 1, total: 6 }, contentStatus: 'draft', equipment: snapshot, retryAvailable: false });
+    await flush(shiftRunner);
+    const portrait = portraitNode(shiftRunner).props.portrait;
+    if (legacy) {
+      assert.equal(portrait, undefined);
+      assert.match(text(shiftRunner.output), /Портрет не сохранён для этой смены/);
+    } else {
+      assert.equal(image(portrait).props.src, first.avatarPortrait.pngDataUrl);
+      shiftRunner.render();
+      assert.equal(portraitNode(shiftRunner).props.portrait.sha256, first.avatarPortrait.sha256, 'A started shift owns its historical PNG');
+    }
+    shiftRunner.unmount();
+  }
 }
-const flush = async () => { await Promise.resolve(); await Promise.resolve(); };
 
 (async () => {
-  bridge.worldBridge.clear();
-  const first = { ...contract.DEFAULT_MODULAR_AVATAR };
-  const second = { ...first, hair: 'hair.long', heldItem: 'held.tablet', companion: 'companion.tit' };
-  bridge.worldBridge.setAvatarPresentation(first);
-  const world = scene(), budgets = [], layer = new HubModularAvatarLayer(world, (count) => budgets.push(count));
-  const old = pending.shift();
-  bridge.worldBridge.setAvatarPresentation(second);
-  const newest = pending.shift();
-  const staleLease = resolve(old); await flush();
-  assert.equal(staleLease.count, 1);
-  assert.equal(world.images.length, 0, 'Stale first-account response must not create a player');
-  const activeLease = resolve(newest); await flush();
-  const [body, child] = world.images;
-  assert.deepEqual(body.origin, [.5, 136 / 144]);
-  assert.equal(body.scale, .5);
-  assert.equal(child.x, body.x - 17);
-  assert.equal(child.y, body.y);
-  assert.equal(budgets.at(-1), 2, 'Child actor reserves its own animation slot');
-  assert.equal(world.store.get('world.avatar.diagnostics').profileKey, contract.avatarProfileKey(second));
-  const upload = world.texturesMap.get(body.key);
-  assert.notEqual(upload, activeLease.value.body.canvas, 'Phaser owns a copy, never the cache canvas');
-  assert.deepEqual(upload.frames[3], ['3', 0, 288, 0, 96, 144]);
+  const runner = makeEditor('save-A'); await flush(runner);
+  equip(runner, 'top', 'top.hoodie');
+  assert.equal(draft(runner).top, 'top.hoodie');
+  assert.equal(portraitNode(runner).props.portrait.sha256, first.avatarPortrait.sha256, 'An unsaved draft cannot replace the confirmed image');
+  const failure = save(runner);
+  assert.equal(failure.avatar.top, 'top.hoodie');
+  failure.reject(new Error('Failed to fetch')); await flush(runner);
+  assert.match(text(runner.output), /Изменения остались в примерке/);
+  assert.equal(draft(runner).top, 'top.hoodie');
+  assert.equal(portraitNode(runner).props.portrait.sha256, first.avatarPortrait.sha256);
+  assert.equal(savedUsers.length, 0);
+  const success = save(runner), accepted = user('save-A', second);
+  success.resolve(accepted); await flush(runner);
+  assert.equal(savedUsers.length, 1); assert.equal(savedUsers[0], accepted);
+  assert.deepEqual({ ...draft(runner) }, second.avatar);
+  assert.equal(portraitNode(runner).props.portrait.pngDataUrl, second.avatarPortrait.pngDataUrl, 'Use the authoritative returned PNG, never a client crop');
+  runner.unmount();
 
-  for (let i = 0; i < 4; i++) layer.update(100);
-  assert.equal(body.frame, 1);
-  world.events.emit('ui:preferences', { reducedMotion: true });
-  const frozen = body.writes;
-  for (let i = 0; i < 10; i++) layer.update(100);
-  assert.equal(body.frame, 0); assert.equal(body.writes, frozen);
-  assert.equal(world.store.get('world.avatar.diagnostics').animatedActors, 0);
-  world.events.emit('ui:preferences', { reducedMotion: false, lowPower: true });
-  layer.update(100); layer.update(100);
-  assert.equal(body.writes, frozen, 'Low power does not sample every display frame');
-  layer.update(100); layer.update(100); layer.update(100); layer.update(100);
-  assert.equal(body.frame, 1);
-  world.events.emit('ui:preferences', { reducedMotion: false });
-  layer.walkAvatarTo(600, 490);
-  const walk = pending.shift();
-  assert.equal(walk.direction, 'right'); assert.equal(walk.action, 'walk');
-  resolve(walk); await flush();
-  assert.equal(activeLease.count, 1);
-  assert.equal(activeLease.value.body.canvas.width, 384, 'Texture removal must preserve another consumer’s cached canvas');
-  const walker = world.images.at(-2);
-  for (let i = 0; i < 10; i++) layer.update(100);
-  assert.equal(walker.x, 600);
-  const idle = pending.shift(); assert.equal(idle.action, 'idle'); resolve(idle); await flush();
+  const race = makeEditor('race-A'); await flush(race);
+  equip(race, 'top', 'top.hoodie'); const old = save(race);
+  race.runEffects = false; race.render({ user: user('race-B', second) });
+  assert.equal(portraitNode(race), undefined, 'Hide a previous account before its reset effect runs');
+  old.resolve(user('race-A')); await flush(race);
+  assert.equal(savedUsers.length, 1, 'An old account response cannot call onSaved after an identity change');
+  race.runEffects = true; race.render(); await flush(race);
+  assert.equal(portraitNode(race).props.portrait.sha256, second.avatarPortrait.sha256);
+  assert.deepEqual({ ...draft(race) }, second.avatar);
+  equip(race, 'top', 'top.shirt'); const late = save(race);
+  race.unmount(); late.resolve(user('race-B')); await flush(race);
+  assert.equal(race.lateWrites, 0); assert.equal(savedUsers.length, 1);
 
-  layer.walkAvatarTo(550, 490);
-  const unavailableWalk = pending.shift(); resolve(unavailableWalk, 'idle'); await flush();
-  const resting = world.images.at(-2);
-  for (let i = 0; i < 4; i++) layer.update(100);
-  assert.equal(resting.x, 600, 'Missing authored walk cannot become sliding idle');
-  assert.match(world.store.get('world.avatar.diagnostics').error, /not accepted/);
+  const missing = new Runner(editor.AvatarEditor, { user: { ...user('missing'), avatarPortrait: undefined }, onSaved: (value) => savedUsers.push(value), onBack() {} });
+  await flush(missing);
+  assert.equal(portraitNode(missing).props.portrait, undefined);
+  const missingSave = save(missing);
+  missingSave.resolve(user('wrong-owner')); await flush(missing);
+  assert.equal(portraitNode(missing).props.portrait, undefined);
+  assert.equal(savedUsers.length, 1, 'A malformed or wrong-owner confirmation is rejected');
+  const missingRetry = save(missing); missingRetry.resolve(user('missing')); await flush(missing);
+  assert.equal(savedUsers.length, 2); missing.unmount();
+  assert.equal(window.count(), 0);
 
-  bridge.worldBridge.setAvatarPresentation({ ...first, top: 'top.sweater' });
-  const afterSave = pending.shift();
-  bridge.worldBridge.setAvatarPresentation(null);
-  assert.equal(world.texturesMap.size, 0);
-  assert.equal(budgets.at(-1), 0);
-  const afterLogoutLease = resolve(afterSave); await flush();
-  assert.equal(afterLogoutLease.count, 1);
-  assert.equal(world.images.filter((image) => !image.destroyed).length, 0);
-  assert.equal(world.store.get('world.avatar.diagnostics').profilePresent, false);
-
-  bridge.worldBridge.setAvatarPresentation(first);
-  pending.shift().reject(new Error('Incomplete catalog')); await flush();
-  assert.equal(world.store.get('world.avatar.diagnostics').ready, false);
-  assert.match(world.store.get('world.avatar.diagnostics').error, /Incomplete/);
-  bridge.worldBridge.setAvatarPresentation(second);
-  const onDestroy = pending.shift();
-  layer.destroy();
-  const destroyedLease = resolve(onDestroy); await flush();
-  assert.equal(destroyedLease.count, 1);
-  assert.equal(world.events.count(), 0); assert.equal(world.scale.count(), 0);
-  assert.equal(world.texturesMap.size, 0);
-  assert.ok(releases.every((lease) => lease.count === 1), 'Each pending/current composition lease is released exactly once');
-  console.log('PASS: modular actor stale account/load disposal, full saved identity, exact foot pivots/cels, independent companion, shared animation reservation, reduced motion/low power, authored walk-to-idle, unavailable-action diagnostic, missing-art fallback, Phaser-owned upload cleanup.');
+  await staticCompositorCheck(); await screenChecks();
+  for (const file of ['apps/web/src/features/title/TitleScreen.tsx', 'apps/web/src/features/hub/HubScreen.tsx', 'apps/web/src/features/shift/ShiftWorkspace.tsx', 'apps/web/src/features/shift/BlitzWorkspace.tsx', 'apps/web/src/game/WorldCanvas.tsx']) {
+    const source = fs.readFileSync(file, 'utf8');
+    assert(!/\bAvatarPreview\b|modularAvatarCompositor|LegacyAvatarPreview|world-engine\/avatar/.test(source), `Fitting compositor leaked into ${file}`);
+  }
+  for (const file of ['packages/world-engine/src/scenes/hub/HubCharacterLayer.ts', 'packages/world-engine/src/scenes/hub/HubNpcLayer.ts', 'packages/world-engine/src/scenes/hub/HubScene.ts', 'packages/world-engine/src/bridge/WorldBridge.ts']) {
+    assert(!/createPlayerAvatar|avatarContainer|setAvatarPresentation|ui:avatar_|modularAvatar/.test(fs.readFileSync(file, 'utf8')), `Personal player leaked into ${file}`);
+  }
+  const app = fs.readFileSync('apps/web/src/App.tsx', 'utf8');
+  assert.match(app, /const AvatarEditor = lazy/); assert.match(app, /<AvatarEditor key=\{user.id\}/);
+  assert.match(app, /activeSessionToken && getSessionToken\(\) === activeSessionToken/);
+  assert.match(app, /current\?\.id === profile.id \? profile : current/);
+  assert.match(app, /<BlitzWorkspace key=\{user.id\}/); assert.match(app, /<SeamlessShiftFlow key=\{user.id\}/);
+  console.log(JSON.stringify({ status: 'PASS', test: 'saved PNG contract and actual editor/title/hub/shift handlers', checks: ['same PNG at 40/80/160', 'bounded PNG-only neutral fallback', 'failed save keeps draft and confirmed portrait', 'authoritative returned portrait', 'account change before effects', 'late save after unmount', 'missing portrait can save without appearance edits', 'same confirmed portrait in title and hub', 'historical shift snapshot and honest legacy placeholder', 'one static cached fitting frame', 'no personal Phaser player including legacy fallback'], limits: 'No real browser, GPU, server-authentication or artwork acceptance claims.' }));
 })().catch((error) => { console.error(error); process.exitCode = 1; });

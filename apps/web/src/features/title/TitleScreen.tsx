@@ -1,5 +1,6 @@
 import { GAME_CALLSIGN, GAME_MARK } from '../../brand';
 import type { SessionUser } from '../../api';
+import { SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { HubIcon } from '../hub/HubIcon';
 import { PixelIcon } from '../ui/PixelIcon';
 import { StationRoomArt } from '../atmosphere/StationRoomArt';
@@ -36,7 +37,7 @@ export function TitleScreen({ user, onOpenCampus, onStartShift, onOpenLogin, onO
           <h1 id="title-main-heading" tabIndex={-1}><span className="visually-hidden">{GAME_MARK}: </span>{GAME_CALLSIGN}</h1>
           <p className="station-home__intro">Наблюдать. Разбираться. Возвращаться к главному.</p>
           <div className="station-home__identity" role="status">
-            <HubIcon name="observer" size={32} />
+            {user ? <SavedAvatarPortrait portrait={user.avatarPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /> : <HubIcon name="observer" size={32} />}
             <span>{sessionPending ? 'Проверяем профиль…' : user ? <><strong>{user.displayName}</strong><small>Группа {user.groupId}</small></> : <>Кампус и библиотека открыты<small>Для смены нужен профиль учебной группы</small></>}</span>
             {!user && !sessionPending && <button type="button" className="station-text-button" onClick={onOpenLogin}>Войти</button>}
           </div>

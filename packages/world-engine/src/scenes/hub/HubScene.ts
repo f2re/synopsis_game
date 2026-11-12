@@ -10,7 +10,6 @@ import approvedAssets from '../../assets/hub/runtime-approval.json';
 import r01Assets from '../../assets/hub/r01-approval.json';
 import { HubR01Layer } from './HubR01Layer';
 import { HubCharacterLayer, preloadHubCharacters } from './HubCharacterLayer';
-import { HubModularAvatarLayer } from './HubModularAvatarLayer';
 import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
 import { HUB_BUILDINGS } from './HubBuildingLayer';
 import { HubEnvironmentLayer } from './HubEnvironmentLayer';
@@ -44,7 +43,6 @@ export class HubScene extends Phaser.Scene {
   private weatherForced = false;
   private r01Layer?: HubR01Layer;
   private characterLayer?: HubCharacterLayer;
-  private modularAvatarLayer?: HubModularAvatarLayer;
   private useR01 = false;
 
   private bridgeUnsubscribers: (() => void)[] = [];
@@ -86,7 +84,6 @@ export class HubScene extends Phaser.Scene {
       if (authoredPhase) this.timeOfDay.setPhase(authoredPhase);
       this.r01Layer = new HubR01Layer(this);
       this.characterLayer = new HubCharacterLayer(this);
-      this.modularAvatarLayer = new HubModularAvatarLayer(this, (actors) => this.characterLayer?.reservePersonalAvatar(actors));
       this.setupBridge();
       this.applyDayPhase(this.timeOfDay.getCurrentPhase());
       const environment = {
@@ -123,7 +120,7 @@ export class HubScene extends Phaser.Scene {
     // 5. Слой L8: Фауна (синица, воробьи, чайка, утка, белка, кот Барограф)
     this.faunaLayer = new HubFaunaLayer(this, this.scheduleManager);
 
-    // 6. Слой L8: Персонажи (Вера Павловна, техник Семён, лаборантка, аватар)
+    // 6. Слой L8: Сотрудники кампуса (Вера Павловна, техник Семён, лаборантка)
     this.npcLayer = new HubNpcLayer(this);
 
     // 7. Слой L10: Атмосферный тинт, частицы погоды и виньетка
@@ -242,16 +239,6 @@ export class HubScene extends Phaser.Scene {
       this.applyStageProgress(Array.isArray(ids) ? ids.filter((x): x is string => typeof x === 'string') : []);
     });
 
-    // 6. Перемещение аватара к выбранному зданию
-    const unsubBuildingClick = worldBridge.on(
-      'hub:walk_to_building',
-      ({ x, y }: { x: number; y: number }) => {
-        this.npcLayer?.walkAvatarTo(x, y);
-        this.characterLayer?.walkAvatarTo(x, y);
-        this.modularAvatarLayer?.walkAvatarTo(x, y);
-      },
-    );
-
     // 7. Фактический клик по зданию открывает досье из текущего 480×270 слоя.
     const unsubFocusBuilding = worldBridge.on<{buildingId: string | null}>('ui:focus_building', ({buildingId}) => {
       this.buildingLayer?.setFocused(buildingId);
@@ -263,7 +250,6 @@ export class HubScene extends Phaser.Scene {
       unsubDemo,
       unsubWeather,
       unsubCalm,
-      unsubBuildingClick,
       unsubFocusBuilding,
       unsubSeason,
       unsubCycleSeason,
@@ -285,7 +271,6 @@ export class HubScene extends Phaser.Scene {
     if (this.r01Layer) {
       this.r01Layer.update(deltaMs);
       this.characterLayer?.update(deltaMs);
-      this.modularAvatarLayer?.update(deltaMs);
       return;
     }
 
@@ -308,8 +293,6 @@ export class HubScene extends Phaser.Scene {
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
     this.scale.off(Phaser.Scale.Events.RESIZE, this.publishLegacyTargets, this);
-    this.modularAvatarLayer?.destroy();
-    this.modularAvatarLayer = undefined;
     this.characterLayer?.destroy();
     this.characterLayer = undefined;
     this.r01Layer?.destroy();

@@ -1,0 +1,27 @@
+{
+  "task": "20261111-modular-player-r03-completion",
+  "author": "/root/blitz_flow",
+  "generatedAt": "2026-11-11T17:56:04.124059+00:00",
+  "status": "web-freeze; server unchanged",
+  "scope": "Final code/CSS after reviewed lifecycle and typography corrections; latest copy edit only makes draft label shorter and explicit.",
+  "checkedBeforeFinalCopyEdit": {
+    "webTypeScript": "PASS with root tsconfig-r03-web.json",
+    "actualEffectsLifecycle": "PASS tools/test_blitz_lifecycle.cjs; repeated independently by root",
+    "fontValidator": "PASS python tools/validate_fonts.py"
+  },
+  "finalCopyEdit": "Черновой учебный пакет. Это тренировка без рейтинга и наград.",
+  "browserLayout": "NOT VERIFIED: browser access blocked by environment policy; dev fixture is available for permitted review.",
+  "sha256": {
+    "apps/web/src/App.tsx": "4a5dc790ccdd72c097f7df08067bd4ae511b0f00709628523207a4f1ad9cc32d",
+    "apps/web/src/api.ts": "59618c9c41bc07b0397e3a7a35b12a982b48c2ac459152b5a0d322960231f063",
+    "apps/web/src/features/hub/HubScreen.tsx": "a59e1907ffc7aff8b427f224dde15eacc1e5cb8821031931f01dbc108255c264",
+    "apps/web/src/features/shift/BlitzWorkspace.tsx": "2332f2bc41ca65c30e37754efad2dd44132dd50ccc0e465b12eeb2561375c2f3",
+    "apps/web/src/features/shift/BlitzWorkspace.css": "342574807f6cfd3c7a1fad6f87478d8073c0e325da7ce5e3f2d8395fe64912c0",
+    "apps/web/tools/review/blitz-practice.html": "e67d7e7a4c2abd4eab1cd0eb1f560e7be71df6e0f270d3072e26578b98e9fef7",
+    "apps/web/tools/review/blitz-practice.tsx": "6f936944a179fd371f785660b964b57774605011523c68ca6c3eff08e1e899e8",
+    "apps/web/tools/review/blitz-practice-narrow.html": "e3c857bb70577e64e8251dd1fbd7c98d86ef60b14a6984b58f795ce1c0db95bc",
+    "apps/web/tools/review/blitz-practice-fixture.json": "7d8c1504335f38c6b710c5af9eb5ed7cebb4024452b9fb97073b35fcbdaa06a6",
+    "apps/web/tools/review/build-blitz-fixture.mjs": "b69822dbdf1b999bbc0b26834c0a6e003b3c04c8287ad1aa55157def637ac7d6",
+    "tools/test_blitz_lifecycle.cjs": "c0fa965992f25a955796081eadd1aa615eb7e6f9ee1c896b1f3fe1a8255c5bbb"
+  }
+}

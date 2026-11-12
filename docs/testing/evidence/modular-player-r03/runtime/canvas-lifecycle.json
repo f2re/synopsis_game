@@ -1,0 +1,11 @@
+{
+  "name": "canvas-lifecycle",
+  "command": [
+    "node",
+    "tools/test_avatar_preview_lifecycle.cjs"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 4.036,
+  "stdout": "{\"status\":\"PASS\",\"test\":\"actual Canvas effects with deterministic DOM/event doubles\",\"cases\":[{\"mode\":\"ambient\",\"withObserver\":true,\"draws\":5,\"cleanup\":\"PASS\"},{\"mode\":\"quiet\",\"withObserver\":true,\"draws\":1,\"cleanup\":\"PASS\"},{\"mode\":\"ambient\",\"withObserver\":false,\"draws\":4,\"cleanup\":\"PASS\"},{\"mode\":\"legacy-fallback\",\"withObserver\":true,\"draws\":4,\"cleanup\":\"PASS\"},{\"mode\":\"inspect-one-shot\",\"withObserver\":true,\"draws\":7,\"cleanup\":\"PASS\"},{\"mode\":\"inspect-reduced-cancel\",\"withObserver\":true,\"draws\":3,\"cleanup\":\"PASS\"}]}\n",
+  "stderr": ""
+}

@@ -12,6 +12,7 @@
 .station-home__intro{color:var(--station-muted);margin:14px 0 18px;font-size:16px}
 .station-home__identity{display:flex;align-items:center;gap:10px;color:#e2d6b6;font-size:14px;min-height:48px;margin:18px 0}
 .station-home__identity>span{flex:1}.station-home__identity strong,.station-home__identity small{display:block}.station-home__identity small{font-size:13px;color:var(--station-muted)}
+.station-home__identity>.saved-avatar-portrait{flex:0 0 auto}
 .station-main-menu{display:grid;gap:10px}
 .station-menu-button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;text-align:left;background:#133a42;color:var(--station-ink);border:1px solid #536963;box-shadow:inset 0 1px #ffffff12,0 3px #06161d;border-radius:3px;transition:background-color .15s}
 .station-menu-button>span{flex:1}.station-menu-button strong{display:block;font-size:18px;font-weight:400}.station-menu-button small{display:block;color:#bacac4;font-size:14px;margin-top:1px}.station-menu-button>b{font-size:26px;font-weight:400;color:#b6c3bc}

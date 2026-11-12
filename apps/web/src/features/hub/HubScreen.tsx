@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { WorldBridge } from '@synopsis/world-engine';
 import type { SessionUser } from '../../api';
 import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from '../../brand';
-import { AvatarPreview } from '../avatar/AvatarPreview';
+import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { PixelIcon } from '../ui/PixelIcon';
 import { StationNavDock, type StationDockModalId } from '../ui/StationNavDock';
 import { SynopticDutyTicker } from '../ui/SynopticDutyTicker';
@@ -18,6 +18,7 @@ interface HubScreenProps {
   onLogout: () => void;
   onOpenSetCode: () => void;
   onStartShift: () => void;
+  onStartBlitz: () => void;
   onOpenAvatar: () => void;
   onOpenAdmin: () => void;
   onOpenHome: () => void;
@@ -44,7 +45,7 @@ const facilities: Record<string, { title: string; icon: string; description: str
   hall: { title: 'Турнирный зал', icon: 'trophy', description: 'Дуэли, турниры и рейтинговые матчи пока не доступны в этой версии.' },
 };
 
-export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onOpenAvatar, onOpenAdmin, onOpenHome, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false }: HubScreenProps) {
+export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onStartBlitz, onOpenAvatar, onOpenAdmin, onOpenHome, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false }: HubScreenProps) {
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
   const preferences = usePresentationPreferences();
   const [currentScene, setCurrentScene] = useState('hub');
@@ -132,14 +133,14 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
 
   return (
     <main className="game-viewport hub-screen" aria-label={GAME_TITLE}>
-      <Suspense fallback={<div className="hub-world-loading" role="status">Открываем кампус…</div>}><WorldCanvas avatar={user?.avatar} /></Suspense>
+      <Suspense fallback={<div className="hub-world-loading" role="status">Открываем кампус…</div>}><WorldCanvas /></Suspense>
 
       <header className="hub-topbar" aria-label="Состояние станции">
         <button type="button" className="hub-profile-button" onClick={() => setActiveModal('profile')} aria-haspopup="dialog" aria-label={user ? `Профиль: ${user.displayName}` : 'Профиль наблюдателя и вход'}>
           <span className="hub-profile-button__portrait">
-            {user ? <AvatarPreview avatar={user.avatar} context="campus" size={40} /> : <HubIcon name="observer" size={40} />}
+            {user ? <SavedAvatarPortrait portrait={user.avatarPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /> : <HubIcon name="observer" size={40} />}
           </span>
-          <span className="hub-profile-button__copy"><strong>{user?.displayName ?? 'Наблюдатель'}</strong><small>{user ? user.groupId : 'Войти в учебную группу'}</small></span>
+          <span className="hub-profile-button__copy"><strong>{user?.displayName ?? 'Наблюдатель'}</strong><small>{user ? isSavedAvatarPortrait(user.avatarPortrait) ? user.groupId : 'Сохраните портрет в гардеробе' : 'Войти в учебную группу'}</small></span>
           <span className="hub-profile-button__chevron" aria-hidden="true">⌄</span>
         </button>
 
@@ -174,7 +175,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           icon={facilities[selectedFacility].icon}
           onClose={() => setSelectedFacility(null)}
           footer={facilities[selectedFacility].action === 'shift'
-            ? <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onStartShift)}>Начать смену</button>
+            ? <><button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onStartShift)}>Начать смену</button><button type="button" className="hub-action" onClick={() => closeThen(onStartBlitz)}>Блиц-практика · 90 с</button></>
             : facilities[selectedFacility].action === 'archive'
               ? <><button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenLibrary)}>Открыть библиотеку</button><button type="button" className="hub-action" onClick={() => openScene('archive')}>Посетить читальный зал</button></>
               : <button type="button" className="hub-action" onClick={() => setSelectedFacility(null)}>Вернуться на площадь</button>}
@@ -188,6 +189,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           <div className="hub-route-list">
             <button type="button" className="hub-route-card" onClick={() => closeThen(onOpenLibrary)}><PixelIcon name="library" size={40} alt="" /><span><strong>Библиотека понятий</strong><small>Поиск, определения, памятки и закладки</small></span><b>Читать ›</b></button>
             <button type="button" className="hub-route-card" onClick={() => closeThen(onStartShift)}><PixelIcon name="kn01" size={40} alt="" /><span><strong>Дежурная смена КН-01</strong><small>Учебные задания с проверкой и разбором</small></span><b>Начать ›</b></button>
+            <button type="button" className="hub-route-card" onClick={() => closeThen(onStartBlitz)}><PixelIcon name="trend" size={40} alt="" /><span><strong>Блиц-практика · 90 с</strong><small>6 заданий · после одной завершённой смены · без рейтинга</small></span><b>Открыть ›</b></button>
             <button type="button" className="hub-route-card" disabled={!sceneReady} onClick={() => openScene('archive')}><PixelIcon name="archive" size={40} alt="" /><span><strong>Архив наблюдений</strong><small>Посетить открытый читальный зал</small></span><b>Войти ›</b></button>
             {plannedLocations.map((location) => <div className="hub-route-card hub-route-card--planned" key={location.title}><PixelIcon name={location.icon} size={40} alt="" /><span><strong>{location.title}</strong><small>{location.description}</small></span><b>В разработке</b></div>)}
           </div>
@@ -207,6 +209,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         <HubDialog title={user ? user.displayName : 'Режим наблюдателя'} subtitle={user ? `Учебная группа: ${user.groupId}` : 'Кампус открыт для знакомства'} icon={user ? 'student' : 'observer'} onClose={() => setActiveModal(null)}>
           <div className="hub-profile-actions hub-profile-navigation"><button type="button" className="hub-action" onClick={() => closeThen(onOpenHome)}>Главное меню</button><button type="button" className="hub-action" onClick={() => closeThen(onOpenLibrary)}>Библиотека</button><button type="button" className="hub-action" onClick={() => closeThen(onOpenHelp)}>Помощь и управление</button></div>
           {user ? <div className="hub-profile-actions">
+            <div className="hub-profile-identity"><SavedAvatarPortrait portrait={user.avatarPortrait} size={80} label={`Сохранённый портрет: ${user.displayName}`} /><p>{isSavedAvatarPortrait(user.avatarPortrait) ? 'Сохранённый портрет используется в кампусе и новых сменах и блицах.' : 'Портрет ещё не сохранён. Откройте гардероб и сохраните персонажа.'}</p></div>
             <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenAvatar)}>Персонаж и инвентарь</button>
             <button type="button" className="hub-action" onClick={() => closeThen(onOpenSetCode)}>{user.codeSet ? 'Сменить код входа' : 'Задать код входа'}</button>
             {user.roles.includes('admin') && <button type="button" className="hub-action" onClick={() => closeThen(onOpenAdmin)}>Управление группами</button>}

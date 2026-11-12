@@ -1,0 +1,42 @@
+✔ ownership is server-only; locked badges and unknown IDs fail; all non-practice modes have zero effects (2.738334ms)
+✔ concurrent starts resume one active shift and keep the saved starting loadout snapshot (76.151328ms)
+✔ reference consumes once under race, persists on restart and excludes the task from independent achievement (29.608276ms)
+✔ retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score (18.602508ms)
+✔ reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback (60.489208ms)
+✔ completion and earned badges commit together; result/answer replay and restart never grant twice (88.179193ms)
+✔ regularity counts distinct server UTC dates and does not require consecutive days (235.043629ms)
+✔ a failed completion write preserves the current task and rewards; next write and replay recover safely (27.382559ms)
+✔ real atomic rename failure rolls back memory; malformed existing store fails closed (3.795246ms)
+Копия журнала попыток временно недоступна; запись сохранена в хранилище смен.
+✔ audit-file outage does not lose a committed answer; restart reconstructs its audit projection once (21.081362ms)
+✔ corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file (23.976573ms)
+✔ saved portrait is deterministic dressed RGBA8, 160 square, with exact nearest-neighbour pixels (101.150171ms)
+✔ PNG codec rejects broken CRC, truncation and unsupported dimensions and round-trips RGBA pixels (1.260108ms)
+✔ a stored portrait cannot supply SVG, a remote URL, another outfit, corrupt bytes or oversized data (5.695678ms)
+✔ renderer refuses unaccepted, missing or out-of-bounds parts and never follows atlas URLs (178.409848ms)
+✔ bootstrap admin, create user and persist avatar without exposing verifier (435.477584ms)
+✔ repeated wrong code produces temporary lockout (142.984741ms)
+✔ batch create users from list with auto-generated and custom codes (252.346765ms)
+✔ failed avatar save keeps committed equipment visible and later writes recover after a real rename failure (117.14728ms)
+✔ concurrent avatar saves return their own committed loadouts and a later admin snapshot preserves the latest one (160.178168ms)
+✔ a saved portrait is copied on reads, survives restart without art assets, and unchanged Save does not write (126.712783ms)
+✔ legacy profiles migrate once; missing assets or corrupted stored PNG never replace the identity file (117.234987ms)
+✔ блиц открывается по завершению настоящей учебной смены; черновой пакет и правила обозначены (125.440846ms)
+✔ параллельные старты дают один раунд, один срок и неизменный полный комплект (84.861897ms)
+✔ повтор и конкурирующая отправка ответа фиксируются ровно один раз; другой ответ и чужой аккаунт отклонены (56.577947ms)
+✔ граница 90 секунд принадлежит серверу; поздний ответ не учитывается, повтор принятого ответа не меняет итог (47.300993ms)
+✔ перезапуск восстанавливает ответы и снимок одежды без добавления времени; закрытая вкладка не ставит паузу (113.012728ms)
+✔ обычная смена и блиц принимают тот же сохранённый PNG; новые вещи не меняют начатые раунды и не требуют atlas (80.90675ms)
+✔ legacy-блиц мигрирует по историческому полному профилю; обычная старая смена не получает выдуманный портрет (41.23003ms)
+✔ restart rejects a corrupted or substituted cached answer portrait; absent legacy copies reuse the historical PNG (57.902487ms)
+✔ шесть исходных заданий завершают блиц без наград, справки, повторов и обхода через API смены (82.837599ms)
+✔ ошибка записи не создаёт фантомный раунд и не принимает недолговечный ответ (31.38408ms)
+✔ повреждённый сохранённый таймер не восстанавливается молча (35.844778ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1466.464917

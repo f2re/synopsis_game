@@ -1,0 +1,74 @@
+{
+  "task": "20261112-saved-portrait-main-integration",
+  "sourceCommit": "91555d6a1cd958c17eb7164161573c2112548add",
+  "sourceTree": "307eefc54ade4b60b66f8980f10b448352132c4f",
+  "mainParent": "4db6517e0070578c7380afffa6dcaa9d7da3c596",
+  "featureAncestor": "bc751f9d15d7e265b84ea49615af658d0f3b057b",
+  "codeReview": {
+    "reviewer": "/root/portrait_merge_review",
+    "verdict": "PASS_FOR_CODE_AND_LIFECYCLE_ONLY",
+    "unchangedReviewedServerFiles": 12,
+    "repeatedChecks": [
+      "test_session_navigation",
+      "test_avatar_world_boundary",
+      "test_modular_avatar",
+      "test_blitz_lifecycle",
+      "test_world_audio_controls",
+      "test_station_atmosphere",
+      "git diff --check"
+    ],
+    "preserved": [
+      "token and account guards",
+      "keyed editor and activities",
+      "new station routes and atmosphere",
+      "saved PNG outside editor",
+      "server-owned historical snapshots"
+    ]
+  },
+  "registryReview": {
+    "reviewer": "/root/portrait_release_check",
+    "verdict": "PASS",
+    "featureEntries": 96,
+    "mainEntries": 90,
+    "identicalSharedEntries": 89,
+    "unionEntries": 97,
+    "allMetadataUnchanged": true
+  },
+  "compactScreenFixReview": {
+    "reviewer": "/root/portrait_merge_review",
+    "sourceVerdict": "ADEQUATE; verified by real browser geometry, labels, mentor open/close and numeric UI submit",
+    "files": [
+      "apps/web/src/features/avatar/inventory.css",
+      "apps/web/src/features/shift/SeamlessShiftFlow.css"
+    ],
+    "initialFinding": "Mentor trigger overlapped numeric input at390; front direction label clipped at844",
+    "newBrowserRun": 43196550696
+  },
+  "sourceSha256": {
+    "apps/web/src/App.tsx": "ff51ef7e1343bbb89022b5f86fd92d1c6166846fb5aeb3265d750045f5da6ff0",
+    "apps/web/src/appNavigation.ts": "b43747b6ee286851902d35c40e380f901c80a528633c642f497ad34c3f18b613",
+    "apps/web/src/api.ts": "93dedf9b34df3c71fb1f5cb87e45f2ae7a7e3b5b6f69fdae1f1ee7fd6738f378",
+    "apps/web/src/features/hub/HubScreen.tsx": "bc0aebfe4a2b302127527762a1d40202f3ef74a96de505f17dae473b23fec29d",
+    "apps/web/src/features/title/TitleScreen.tsx": "7fdf94bde0e37da812fd91907367807482684974c139ef0e1f00e9598158d804",
+    "apps/web/src/features/title/station-screens.css": "44744a76ea466e396d4cc110250421fab699fab2a0cee6400196e936beb2676c",
+    "apps/web/src/game/WorldCanvas.tsx": "c9c668ba4d67b8daa642521e2f5f130a08b070d517d45b926bf758c3c7e9afcb",
+    "apps/web/src/hub-ui.css": "fe5293779dae2c3a12e354e05c6b3077c99b1411a3a70814c36c788151734033",
+    "assets/manifests/spritecook-assets.json": "6740b9d29cf37e4802c9f41415531aa4e76724d90002650ed40194b8a277f5ca",
+    "apps/server/src/index.ts": "c3c307956672c6e768abe201598e3dbe210dfcb17cc2c8bc01e9451e28b7ab23",
+    "apps/server/src/modules/identity/model.ts": "add75810e0376f5ef2732980f9f3ed76d9c499c54e3dae8811d5333869b28b62",
+    "apps/server/src/modules/identity/avatarPortrait.ts": "7c9c03cd97dd06ee9571b406f3f17336a8626e98dd4a5c4a6ec1af854e8ee08f",
+    "apps/server/src/modules/identity/portraitPng.ts": "af54c5d947b26ee6d2f3f03499b262d1a789013e5b2b4fa7ae2f2706fd1678c1",
+    "apps/server/src/modules/identity/identityService.ts": "2198e098c0e8126831604a06172d89c0677adac348fac7553aa64c1a662b69b4",
+    "apps/server/src/modules/equipment/model.ts": "7c11a62fcaeb12666d5aed589ee651d0dc334d46d68fa320ecd3f66d99464ee4",
+    "apps/server/src/modules/equipment/equipmentService.ts": "ee6a9414fac50f448e6b099ad6834c227e9652cf6ad8f413324f608eaf0f4885",
+    "apps/server/src/modules/equipment/trainingStore.ts": "c4818b7a8ea8ed761a1e7e19998f9c83c3d3dda4d90ac68caf50b421697f7584",
+    "apps/server/src/modules/shift/shiftService.ts": "355579f4074baf7dfd76c9179f62c81e60a2fc1fa6ad05326949fbf70ade63ba",
+    "apps/server/src/modules/identity/avatarPortrait.test.ts": "4e4743731ac1f78c02e11baa341269c7489edfc844d6406312817afa8072ae54",
+    "apps/server/src/modules/identity/identityService.test.ts": "da07576a0ad08b52129683e9e4706b214506ca344fe3c777dee11da19a6bddad",
+    "apps/server/src/modules/shift/blitzPractice.test.ts": "a1f15d62526dcae2f26573a1972e0e7c508a257121f03429b1d3711aeb8bf934",
+    "apps/web/src/features/avatar/inventory.css": "75c2dda752b957647ebfa186c7d4c97006474f4b5f67b7eecaef90d5c60fa67e",
+    "apps/web/src/features/shift/SeamlessShiftFlow.css": "e04ecd855768a088508bc3507ac104787bf4f5fd316bdc117067cba37bddfb97",
+    "tools/test_saved_portrait_browser.cjs": "7ef106a1e4bdf5e3bae13c5d5eba33830105e83bf014ba49e31e7119a3604b36",
+    "tools/test_station_screens.cjs": "79f3d264a5f32d5da72e61f014c652fe60cfbedd36ac116f2fc292d2e6d19a8b"
+  }
+}

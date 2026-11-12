@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import type { AvatarProfile } from '../api';
 import {
   createWorldGame,
   normalizeWorldPreferences,
@@ -13,7 +12,8 @@ import { getSettings } from '../features/settings/settingsStore';
 import { useAmbientWeather } from '../features/atmosphere/AtmosphereProvider';
 import { AUDIO_UNLOCK_EVENT, isAudioUnlocked } from '../features/atmosphere/audioGate';
 
-export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
+/** The world contains campus NPCs only; the account portrait belongs to React. */
+export function WorldCanvas() {
   const hostRef = useRef<HTMLDivElement>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
   const weather = useAmbientWeather();
@@ -24,31 +24,29 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
   useEffect(() => { applyAudioRef.current?.(); }, [weather]);
 
   useEffect(() => {
-    worldBridge.setAvatarPresentation(avatar);
-  }, [avatar]);
-
-  useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
 
     let preferences = normalizeWorldPreferences(readHubPreferences());
     let modalOpen = false;
+    let rendererReady = true;
     let activeScene = 'hub';
     let disposed = false;
     worldAudio.setMuted(!preferences.soundEnabled || !isAudioUnlocked() || document.hidden);
     const game = createWorldGame({ parent: host });
 
     const applyInput = () => {
-      if (game.input) game.input.enabled = !modalOpen;
+      game.registry.set('ui.modal_open', modalOpen);
+      if (game.input) game.input.enabled = !modalOpen && !document.hidden && rendererReady;
       for (const scene of game.scene.getScenes(true)) {
-        scene.input.enabled = !modalOpen;
-        if (scene.input.keyboard) scene.input.keyboard.enabled = !modalOpen;
+        scene.input.enabled = !modalOpen && !document.hidden && rendererReady;
+        if (scene.input.keyboard) scene.input.keyboard.enabled = !modalOpen && !document.hidden && rendererReady;
       }
     };
 
     const applyAudio = () => {
       const settings = getSettings();
-      const audible = preferences.soundEnabled && settings.masterVolume > 0 && isAudioUnlocked() && !document.hidden;
+      const audible = preferences.soundEnabled && settings.masterVolume > 0 && isAudioUnlocked() && !document.hidden && rendererReady;
       worldAudio.setMuted(!audible);
       worldAudio.setReducedSensory(preferences.reducedMotion);
       worldAudio.setLowPower(preferences.lowPower);
@@ -112,9 +110,6 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       worldBridge.on<Record<string, unknown>>('world:characters_ready', (diagnostic) => {
         host.dataset.characters = JSON.stringify(diagnostic);
       }),
-      worldBridge.on<Record<string, unknown>>('world:avatar_ready', (diagnostic) => {
-        host.dataset.avatar = JSON.stringify(diagnostic);
-      }),
       worldBridge.on<WorldInteractionTarget[]>('world:interaction_layout', (layout) => {
         if (!disposed) setTargets(layout);
       }),
@@ -128,15 +123,20 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       applyPreferences((event as CustomEvent<WorldUiPreferences>).detail ?? readHubPreferences());
     };
     const handleVisibility = () => {
-      if (document.hidden) game.loop.sleep();
+      const visible = !document.hidden && rendererReady;
+      game.registry.set('ui.world_visible', visible);
+      worldBridge.emit('ui:world_visible', visible);
+      if (!visible) game.loop.sleep();
       else game.loop.wake();
+      applyInput();
       applyAudio();
     };
-    const handleContextLost = () => { host.dataset.context = 'lost'; };
+    const handleContextLost = () => { rendererReady = false; host.dataset.context = 'lost'; handleVisibility(); };
     const handleContextRestored = () => {
+      rendererReady = true;
       host.dataset.context = 'ready';
-      applyInput();
       applyPreferences(preferences);
+      handleVisibility();
     };
     let rendererEventsBound = false;
     const bindRendererEvents = () => {
@@ -148,6 +148,7 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       host.dataset.context = 'ready';
     };
     applyPreferences(preferences);
+    game.registry.set('ui.world_visible', !document.hidden);
     window.addEventListener(HUB_PREFERENCES_EVENT, handleStoredPreferences);
     window.addEventListener(AUDIO_UNLOCK_EVENT, applyAudio);
     document.addEventListener('visibilitychange', handleVisibility);

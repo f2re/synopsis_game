@@ -1,0 +1,57 @@
+{
+  "executedAt": "2026-11-12T05:18:31.435034+00:00",
+  "checks": [
+    {
+      "check": "server-tests",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "server-tests.txt",
+      "cwd": "apps/server"
+    },
+    {
+      "check": "portrait-http",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "portrait-http.txt"
+    },
+    {
+      "check": "avatar-lifecycle",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "avatar-lifecycle.txt"
+    },
+    {
+      "check": "avatar-contract",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "avatar-contract.txt"
+    },
+    {
+      "check": "world-boundary",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "world-boundary.txt"
+    },
+    {
+      "check": "npc-lifecycle",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "npc-lifecycle.txt"
+    },
+    {
+      "check": "blitz-ui-lifecycle",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "blitz-ui-lifecycle.txt"
+    },
+    {
+      "check": "world-avatar-units",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "world-avatar-units.txt"
+    }
+  ],
+  "environmentNotes": [
+    "Server unit tests require cwd apps/server, as defined in its package.json. An initial integration-runner invocation from repo root could not resolve fixture paths; rerun below uses the documented cwd."
+  ]
+}

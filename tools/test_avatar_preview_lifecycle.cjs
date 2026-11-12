@@ -1,94 +1,56 @@
-/* Exercise the real Canvas effects with deterministic DOM/event doubles.
- * This checks scheduling and cleanup, not browser layout or artwork acceptance. */
+/* Static fitting renderer: deferred load disposal, stale draft rejection and one draw only. */
 'use strict';
-const fs = require('node:fs');
-const vm = require('node:vm');
 const assert = require('node:assert/strict');
-const ts = require('../apps/web/node_modules/typescript');
-function compile(file) {
-  return ts.transpileModule(fs.readFileSync(file, 'utf8'), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
-  }).outputText;
+const { load, Runner, deferred, flush, nodes, text } = require('./ui_test_harness.cjs');
+const contract = load('packages/world-engine/src/runtime/modularAvatarManifest.ts');
+const pending = [], draws = [];
+const canvas = { getContext: () => ({}) };
+const api = { ...contract, avatarPreviewBounds: () => ({ width: 114, height: 144 }),
+  drawAvatarComposite(_ctx, composite, frame) { draws.push({ composite, frame }); },
+  modularAvatarCompositor: { acquireStatic(profile, direction) { const request = { ...deferred(), profile, direction }; pending.push(request); return request.promise; } },
+};
+const preview = load('apps/web/src/features/avatar/AvatarPreview.tsx', { '@synopsis/world-engine/avatar': api }, {}, '\nexports.StaticAvatarCanvas = StaticAvatarCanvas;');
+function resolve(request) {
+  const lease = { value: { key: `${contract.avatarProfileKey(request.profile)}:${request.direction}`, direction: request.direction }, releases: 0, release() { this.releases++; } };
+  request.resolve(lease); return lease;
 }
-const contract = { exports: {} };
-vm.runInNewContext(compile('packages/world-engine/src/runtime/modularAvatarManifest.ts'), { exports: contract.exports });
-class Events {
-  listeners = new Map();
-  addEventListener(key, fn) { const list = this.listeners.get(key) ?? []; list.push(fn); this.listeners.set(key, list); }
-  removeEventListener(key, fn) { this.listeners.set(key, (this.listeners.get(key) ?? []).filter((item) => item !== fn)); }
-  emit(key) { for (const fn of this.listeners.get(key) ?? []) fn(); }
-  count() { return [...this.listeners.values()].reduce((sum, list) => sum + list.length, 0); }
-}
-function run({ animate, legacy = false, withObserver = true }) {
-  let now = 0, sequence = 0, cleanup, complete = 0;
-  const draws = [], timers = new Map();
-  const doc = Object.assign(new Events(), { hidden: false });
-  const media = Object.assign(new Events(), { matches: false });
-  const schedule = (fn, delay) => { const id = ++sequence; timers.set(id, { fn, delay }); return id; };
-  const win = Object.assign(new Events(), {
-    matchMedia: () => media, setTimeout: schedule, setInterval: schedule,
-    clearTimeout: (id) => timers.delete(id), clearInterval: (id) => timers.delete(id),
-  });
-  const canvas = { dataset: {}, getContext: () => ({ clearRect() { draws.push(0); }, fillRect() {} }) };
-  const prefs = { reducedMotion: false, lowPower: false };
-  let observer;
-  class Observer {
-    constructor(callback) { this.callback = callback; observer = this; }
-    observe(target) { this.target = target; }
-    disconnect() { this.disconnected = true; }
-    visible(value) { this.callback([{ target: this.target, isIntersecting: value, intersectionRatio: value ? 1 : 0 }]); }
-  }
-  const api = { ...contract.exports, avatarPreviewBounds: () => ({ width: 120, height: 144 }),
-    drawAvatarComposite: (_ctx, _composite, frame) => draws.push(frame) };
-  const exports = {};
-  const dependencies = {
-    react: { useRef: (value) => ({ current: value === null ? canvas : value }), useEffect: (fn) => { cleanup = fn(); },
-      useState: () => { throw new Error('Unexpected state use in frame effect'); } },
-    'react/jsx-runtime': { jsx: (_type, props) => props },
-    '@synopsis/world-engine/avatar': api,
-    '../hub/hubPreferences': { HUB_PREFERENCES_EVENT: 'prefs', readHubPreferences: () => prefs },
-    './LegacyAvatarPreview': {},
-  };
-  const file = legacy ? 'LegacyAvatarPreview' : 'AvatarPreview';
-  vm.runInNewContext(compile(`apps/web/src/features/avatar/${file}.tsx`) + (legacy ? '' : '\nexports.testCanvas = ModularAvatarCanvas;'), {
-    exports, require(id) { assert(id in dependencies, `Unexpected dependency ${id}`); return dependencies[id]; },
-    window: win, document: doc, performance: { now: () => now }, IntersectionObserver: withObserver ? Observer : undefined,
-  });
-  if (legacy) {
-    exports.LegacyAvatarPreview({ avatar: contract.exports.DEFAULT_MODULAR_AVATAR, animate: false });
-    assert.equal(draws.length, 1); assert.equal(timers.size, 0); assert.equal(canvas.dataset.animationPaused, 'true');
-    win.emit('prefs'); doc.emit('visibilitychange'); media.emit('change');
-    assert.equal(timers.size, 0, 'Fallback stays still when user preferences change');
-  } else {
-    const composite = { manifest: { rigId: 'fixture', revision: 'fixture' },
-      clip: { durationsMs: [320, 320, 320, 320], loop: true }, direction: 'down', action: 'idle', key: 'fixture' };
-    exports.testCanvas({ composite, presentation: { context: animate ? 'wardrobe' : 'shift', profile: contract.exports.DEFAULT_MODULAR_AVATAR,
-      requestedAction: 'idle', motion: animate ? 'ambient' : 'quiet', animate }, size: 192, showBackdrop: false, onAnimationComplete: () => complete++ });
-    assert.equal(draws.length, 1);
-    assert.equal(timers.size, withObserver || !animate ? 0 : 1, 'Only visible ambient previews may schedule');
-    observer?.visible(true);
-    const tick = (time) => { now = time; const timer = [...timers.values()][0]; assert(timer); timer.fn(); };
-    if (animate) {
-      assert.equal(timers.size, 1); tick(320); assert.equal(canvas.dataset.frame, '1');
-      if (withObserver) {
-        now = 400; observer.visible(false); assert.equal(timers.size, 0); assert.equal(canvas.dataset.animationPaused, 'true');
-        now = 10400; observer.visible(true); assert.equal(canvas.dataset.frame, '1', 'Offscreen time cannot advance the animation');
-        tick(10640); assert.equal(canvas.dataset.frame, '2');
-      }
-      now += 60; doc.hidden = true; doc.emit('visibilitychange'); assert.equal(timers.size, 0);
-      const pausedFrame = canvas.dataset.frame;
-      now += 40000; doc.hidden = false; doc.emit('visibilitychange'); assert.equal(canvas.dataset.frame, pausedFrame);
-      prefs.reducedMotion = true; win.emit('prefs'); assert.equal(canvas.dataset.frame, '0'); assert.equal(timers.size, 0);
-      prefs.reducedMotion = false; prefs.lowPower = true; win.emit('prefs'); assert.equal(timers.size, 1);
-      assert.ok([...timers.values()][0].delay >= 250);
-    } else { assert.equal(timers.size, 0); assert.equal(canvas.dataset.animationPaused, 'true'); assert.equal(canvas.dataset.frame, '0'); }
-  }
-  const drawCount = draws.length;
-  cleanup(); assert.equal(timers.size, 0); assert.equal(doc.count() + win.count() + media.count(), 0);
-  if (observer) { assert(observer.disconnected); observer.visible(true); assert.equal(draws.length, drawCount, 'Late observer callbacks after disposal do nothing'); }
-  assert.equal(complete, 0);
-  return { mode: legacy ? 'legacy-fallback' : animate ? 'ambient' : 'quiet', withObserver, draws: drawCount, cleanup: 'PASS' };
-}
-console.log(JSON.stringify({ status: 'PASS', test: 'actual Canvas effects with deterministic DOM/event doubles', cases: [
-  run({ animate: true }), run({ animate: false }), run({ animate: true, withObserver: false }), run({ animate: false, legacy: true }),
-] }));
+(async () => {
+  const profile = { ...contract.DEFAULT_MODULAR_AVATAR };
+  const runner = new Runner(preview.AvatarPreview, { avatar: profile });
+  runner.strictRemount();
+  assert.equal(pending.length, 2);
+  const obsolete = resolve(pending[0]); await flush(runner);
+  assert.equal(obsolete.releases, 1);
+  assert.match(text(runner.output), /Открываем примерку/);
+  const first = resolve(pending[1]); await flush(runner);
+  assert.equal(runner.output.type, preview.StaticAvatarCanvas);
+  const changed = { ...profile, top: 'top.hoodie' };
+  runner.render({ avatar: changed, direction: 'left' });
+  assert.equal(first.releases, 1);
+  assert.match(text(runner.output), /Открываем примерку/, 'A changed draft must not display an old composite under new controls');
+  const stale = pending[2];
+  runner.render({ avatar: profile, direction: 'up' });
+  const newer = pending[3];
+  const staleLease = resolve(stale); await flush(runner);
+  assert.equal(staleLease.releases, 1);
+  newer.reject(new Error('Atlas unavailable')); await flush(runner);
+  assert.match(text(runner.output), /Примерка недоступна/);
+  assert(!nodes(runner.output).some((node) => node.type === 'canvas' || node.type === 'img'), 'Load failure cannot invent a second persona');
+  runner.render({ avatar: profile, direction: 'right' });
+  const afterUnmount = pending[4];
+  runner.unmount();
+  const late = resolve(afterUnmount); await flush(runner);
+  assert.equal(late.releases, 1); assert.equal(runner.lateWrites, 0);
+
+  const staticCanvas = new Runner(preview.StaticAvatarCanvas, { composite: { key: 'first', direction: 'down' } }, { effects: false });
+  staticCanvas.hooks[0].value.current = canvas;
+  staticCanvas.runEffects = true; staticCanvas.render();
+  assert.equal(draws.length, 1); assert.equal(draws[0].frame, 0);
+  assert.equal(staticCanvas.output.props.style.width, 228); assert.equal(staticCanvas.output.props.style.height, 288);
+  staticCanvas.render(); assert.equal(draws.length, 1, 'Unchanged fitting rerenders do not redraw or schedule');
+  staticCanvas.render({ composite: { key: 'second', direction: 'up' } });
+  assert.equal(draws.length, 2); assert.equal(draws[1].frame, 0);
+  staticCanvas.unmount();
+  // No window, timers, animation frame or observer was provided to either component.
+  console.log(JSON.stringify({ status: 'PASS', test: 'real static fitting components with deferred leases and hook doubles', checks: ['StrictMode stale load released', 'draft switch hides obsolete composite', 'late response disposal', 'neutral load failure', 'first frame drawn once at integer scale', 'no animation or observer APIs'], limits: 'Not a browser layout or artwork acceptance result.' }));
+})().catch((error) => { console.error(error); process.exitCode = 1; });

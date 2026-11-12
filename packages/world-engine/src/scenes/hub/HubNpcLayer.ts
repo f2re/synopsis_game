@@ -10,7 +10,6 @@ export class HubNpcLayer {
   private mentorContainer!: Phaser.GameObjects.Container;
   private techContainer!: Phaser.GameObjects.Container;
   private labContainer!: Phaser.GameObjects.Container;
-  private avatarContainer!: Phaser.GameObjects.Container;
 
   private mentorBreathTimer = 0;
   private labWalkTimer = 0;
@@ -24,7 +23,6 @@ export class HubNpcLayer {
     this.createMentor();
     this.createTechnician();
     this.createLabAssistant();
-    this.createPlayerAvatar();
   }
 
   // 1. Вера Павловна Ладожская — ведущий синоптик, наставник (x=182, y=156)
@@ -103,44 +101,13 @@ export class HubNpcLayer {
     this.container.add(this.labContainer);
   }
 
-  // 4. Аватар игрока (M1) на центральной аллее (x=218, y=172)
-  private createPlayerAvatar(): void {
-    this.avatarContainer = this.scene.add.container(218, 172);
-
-    // Ноги
-    const legs = this.scene.add.rectangle(0, 11, 7, 9, WORLD_PALETTE.uiTeal0).setOrigin(0.5);
-    // Фирменная штормовка станции 26063
-    const jacket = this.scene.add.rectangle(0, 2, 9, 13, WORLD_PALETTE.uiTeal3).setOrigin(0.5);
-    // Шеврон станции
-    const badge = this.scene.add.rectangle(-2, 0, 2, 3, WORLD_PALETTE.actionAccent1).setOrigin(0.5);
-    // Голова и шапочка-бини
-    const head = this.scene.add.rectangle(0, -8, 6, 6, WORLD_PALETTE.birchAndSnow2).setOrigin(0.5);
-    const beanie = this.scene.add.rectangle(0, -11, 7, 4, WORLD_PALETTE.actionAccent0).setOrigin(0.5);
-
-    this.avatarContainer.add([legs, jacket, badge, head, beanie]);
-    this.container.add(this.avatarContainer);
-  }
-
-  // Перемещение аватара к выбранному зданию
-  walkAvatarTo(x: number, y: number, onComplete?: () => void): void {
-    this.scene.tweens.add({
-      targets: this.avatarContainer,
-      x,
-      y,
-      duration: 1200,
-      ease: 'Power1',
-      onComplete,
-    });
-  }
-
   update(deltaMs: number, _phase: DayPhase): void {
     const deltaSec = deltaMs / 1000;
 
-    // 1. Дыхание наставника и аватара
+    // 1. Дыхание наставника
     this.mentorBreathTimer += deltaMs;
     const breath = 1 + 0.04 * Math.sin(this.mentorBreathTimer / 800);
     this.mentorContainer.setScale(1, breath);
-    this.avatarContainer.setScale(1, breath);
 
     // 2. Движение лаборантки между Архивом и Кодовым постом (x: 84 .. 130)
     this.labWalkTimer += deltaSec;

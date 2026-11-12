@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "reviewer": "runtime_motion",
+  "method": "independent packed-cel compositor and pixel ownership/contact checks",
+  "baselineCommit": "64b19acb7f8d1facdb49f880be8a21282dbdccbc",
+  "candidate": "artifacts/player-r03-motion/full-candidate",
+  "candidateRevision": "r03-motion6-20261111",
+  "sha256": {
+    "manifest": "dc2782161f5fffbfa724ab89aa172924919955010cd5aef1767c4ba0a0bfeaca",
+    "atlas": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+    "baselineManifest": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf",
+    "baselineAtlas": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73"
+  },
+  "measurements": {
+    "decodedAtlasBytes": 4128768,
+    "compressedAtlasBytes": 742943,
+    "maximumCelsPerPlane": 11,
+    "armTorsoNegativeSpaceChanges": 51,
+    "posesWithAcceptedStyleUnderlayEdgePixels": 402,
+    "maxUnderlayEdgePixelsPerPose": 47
+  },
+  "counts": {
+    "unchangedIdleCompositions": 640,
+    "inspectEndpointCompositions": 320,
+    "bottomFootwearPoses": 432,
+    "visibleHandheldPoses": 108,
+    "explicitlyOccludedHandheldPoses": 36,
+    "independentCompanionFrames": 96
+  },
+  "failures": [],
+  "limits": [
+    "Pixel checks do not grant visual composition approval or measure browser/GPU performance.",
+    "Cuff-edge skin is compared to accepted R02 with at least a three-pixel hand envelope; pre-existing dark underlay edges and changing arm/torso negative spaces require visual review.",
+    "Explicit left-view occlusion preserves the anatomical right hand; no mirrored view is inferred."
+  ]
+}

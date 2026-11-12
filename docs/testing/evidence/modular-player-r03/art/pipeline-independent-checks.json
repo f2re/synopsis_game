@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-11",
+  "reviewer": "runtime_motion",
+  "status": "PASS",
+  "scope": "Independent candidate pipeline checks; no production admission or browser performance approval",
+  "checks": [
+    {
+      "command": "python docs/testing/evidence/modular-player-r03/art/verify_motion_pixels.py",
+      "exitCode": 0,
+      "evidence": "pixel-proof.json"
+    },
+    {
+      "command": "python docs/testing/evidence/modular-player-r03/art/verify_motion_sources.py",
+      "exitCode": 0,
+      "evidence": "source-proof.json"
+    },
+    {
+      "command": "python tools/assets/build_modular_player_r01.py --rig artifacts/player-r03-motion/full-candidate/rig-candidate.json --candidate artifacts/player-r03-motion/full-candidate --check",
+      "exitCode": 0,
+      "output": "Motion candidate: 1694 cels, 512×2016, 742943 PNG bytes; verified outside production"
+    },
+    {
+      "command": "python tools/assets/test_modular_player_motion.py",
+      "exitCode": 0,
+      "tests": 9,
+      "durationSeconds": 37.657
+    },
+    {
+      "command": "python -m py_compile docs/testing/evidence/modular-player-r03/art/verify_motion_pixels.py docs/testing/evidence/modular-player-r03/art/verify_motion_sources.py docs/testing/evidence/modular-player-r03/art/render_independent_diagnostics.py",
+      "exitCode": 0,
+      "note": "Argument/fallback update after pixel proof; pixel algorithms unchanged"
+    }
+  ],
+  "fingerprints": {
+    "atlasSha256": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+    "compositionSha256": "0c737499b85dc18f87332ff31b73ca8163afc1a69af44d3bde07509cb8daf70f",
+    "sourceContractSha256": "99a7db7e70e152b5cf62bcb70d3f1d683da4a62ede31fe1db398896332e518be"
+  },
+  "checkedFilesSha256": {
+    "tools/assets/build_modular_player_r01.py": "87d27c801a9a03edb9e822ecb61eb823020468ac3e298262106a8141d4eccca6",
+    "tools/assets/modular_player_contract.py": "664f2a441521f78b1f3d22ba7f55baf1299b0e231c913e984be47a0cca2c3b55",
+    "tools/assets/modular_player_motion.py": "57c5d8a33a0b6686fd6a72e4c2a110a9b68e70f763eea5e6517568c6c35826f0",
+    "tools/assets/test_modular_player_motion.py": "fc4feb386d630d782bb0812d7ef6367fd966dcdacbca9fe53e2d735fa3029473",
+    "assets/source/characters/player-r01/motion-rig.json": "7f8b339bf184e854eb9bf0a491c9e12a6408e662a6a8608917f489daf4aa1965",
+    "assets/source/characters/player-r01/motion/source-index.json": "5b576f23ed972774312bf25d8779ab53a346d112ec56760c4fd79b977ac8868b",
+    "docs/testing/evidence/modular-player-r03/art/verify_motion_pixels.py": "0c347c605e1bec9be61cf6daea101690a6ea1badb82e080e3d185e487c6511fc",
+    "docs/testing/evidence/modular-player-r03/art/verify_motion_sources.py": "0d89cfc0ca0a2eade66ad1fbf916654414513cc2b5404f1047661b7a76cc17a9",
+    "docs/testing/evidence/modular-player-r03/art/render_independent_diagnostics.py": "735360b586e698a211742aa5b5080944789557668112e821723af4f9f76ff103"
+  }
+}

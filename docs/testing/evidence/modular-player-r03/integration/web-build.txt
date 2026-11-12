@@ -1,0 +1,25 @@
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 106 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                 0.81 kB │ gzip:   0.44 kB
+dist/assets/WorldCanvas-Dxq5SIQY.css            1.49 kB │ gzip:   0.58 kB
+dist/assets/BlitzWorkspace-BArfMKk6.css         6.60 kB │ gzip:   1.66 kB
+dist/assets/SeamlessShiftFlow-Qx-4WFQP.css     13.28 kB │ gzip:   3.47 kB
+dist/assets/ShiftWorkspace-DmzKtXDl.css        15.09 kB │ gzip:   3.93 kB
+dist/assets/index-BEq77eva.css                 89.79 kB │ gzip:  16.87 kB
+dist/assets/ShiftWorkspace-DarGDwbT.js          3.69 kB │ gzip:   1.58 kB
+dist/assets/WorldCanvas-Z0-k4HsZ.js             6.83 kB │ gzip:   2.82 kB
+dist/assets/BlitzWorkspace-BOYf_FFH.js         14.14 kB │ gzip:   4.78 kB
+dist/assets/SeamlessShiftFlow-C8XsT5CR.js      45.81 kB │ gzip:  13.78 kB
+dist/assets/index-CsTf-icA.js               1,837.87 kB │ gzip: 494.62 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0m../../packages/world-engine/src/index.ts is dynamically imported by src/features/hub/HubScreen.tsx but also statically imported by src/features/avatar/AvatarEditor.tsx, src/features/shift/ShiftWorkspace.tsx, src/game/WorldCanvas.tsx, src/game/worldBridge.ts, dynamic import will not move module into another chunk.
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.71s

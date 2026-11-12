@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "executedAt": "2026-11-12T05:17:43.904Z",
+  "node": "v24.22.1",
+  "scenario": "Real isolated HTTP server and restart; no browser or scientific validation claim",
+  "portraitSize": [
+    160,
+    160
+  ],
+  "pngBytes": [
+    3151,
+    3944
+  ],
+  "checks": [
+    "Server-owned PNG, 160×160 header/hash, all eleven fields/colors, off-crop shoes, invalid save, idempotent save, client SVG/URL ignored, public roster and account isolation PASS",
+    "Ordinary practice pins actual saved PNG and full outfit at start; later edits, resume, answers and final result preserve it PASS",
+    "Blitz pins server-owned PNG and all outfit fields; forged start images and later profile changes cannot replace session portrait PASS",
+    "Process restart preserves exact PNG bytes, appearance and separate ordinary/blitz historical snapshots on disk PASS"
+  ]
+}

@@ -1,0 +1,1095 @@
+{
+  "source": "ShiftService; core_ru_001@0.6.0; local public visual fixture; 2026-11-11",
+  "avatar": {
+    "skinTone": "skin.warm",
+    "hair": "hair.short",
+    "hairColor": "haircolor.brown",
+    "headwear": "headwear.none",
+    "top": "top.field-jacket",
+    "bottom": "bottom.dark-trousers",
+    "footwear": "footwear.boots",
+    "backpack": "backpack.field",
+    "heldItem": "held.tablet",
+    "companion": "companion.none",
+    "badge": "badge.none"
+  },
+  "locked": {
+    "mode": "blitz-practice",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "total": 6,
+    "eligible": false,
+    "completedShifts": 0,
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "session": null
+  },
+  "ready": {
+    "mode": "blitz-practice",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "total": 6,
+    "eligible": true,
+    "completedShifts": 1,
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "session": null
+  },
+  "active": [
+    {
+      "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0,
+        "avatarSnapshot": {
+          "skinTone": "skin.warm",
+          "hair": "hair.short",
+          "hairColor": "haircolor.brown",
+          "headwear": "headwear.none",
+          "top": "top.field-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.tablet",
+          "companion": "companion.none",
+          "badge": "badge.none"
+        },
+        "avatarPortrait": {
+          "version": 1,
+          "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+          "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+          "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+          "width": 160,
+          "height": 160,
+          "pngDataUrl": "data:image/png;base64,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"
+        }
+      },
+      "progress": {
+        "answered": 0,
+        "correct": 0,
+        "current": 1,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+        "definitionId": "kn01_temp_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "decode",
+        "difficulty": 1,
+        "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+        "response": {
+          "kind": "numeric",
+          "unit": "degC"
+        },
+        "payload": {
+          "group": "1snTTT",
+          "encoded": "10234"
+        }
+      },
+      "review": []
+    },
+    {
+      "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0,
+        "avatarSnapshot": {
+          "skinTone": "skin.warm",
+          "hair": "hair.short",
+          "hairColor": "haircolor.brown",
+          "headwear": "headwear.none",
+          "top": "top.field-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.tablet",
+          "companion": "companion.none",
+          "badge": "badge.none"
+        },
+        "avatarPortrait": {
+          "version": 1,
+          "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+          "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+          "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+          "width": 160,
+          "height": 160,
+          "pngDataUrl": "data:image/png;base64,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"
+        }
+      },
+      "progress": {
+        "answered": 1,
+        "correct": 0,
+        "current": 2,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:2",
+        "definitionId": "kn01_dewpoint_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "decode",
+        "difficulty": 1,
+        "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+        "response": {
+          "kind": "numeric",
+          "unit": "degC"
+        },
+        "payload": {
+          "group": "2snTdTdTd",
+          "encoded": "21052"
+        }
+      },
+      "review": [
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0,
+        "avatarSnapshot": {
+          "skinTone": "skin.warm",
+          "hair": "hair.short",
+          "hairColor": "haircolor.brown",
+          "headwear": "headwear.none",
+          "top": "top.field-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.tablet",
+          "companion": "companion.none",
+          "badge": "badge.none"
+        },
+        "avatarPortrait": {
+          "version": 1,
+          "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+          "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+          "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+          "width": 160,
+          "height": 160,
+          "pngDataUrl": "data:image/png;base64,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"
+        }
+      },
+      "progress": {
+        "answered": 2,
+        "correct": 0,
+        "current": 3,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:3",
+        "definitionId": "kn01_station_pressure_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "decode",
+        "difficulty": 1,
+        "question": "Какое давление на уровне станции закодировано группой 30218?",
+        "response": {
+          "kind": "numeric",
+          "unit": "hPa"
+        },
+        "payload": {
+          "group": "3PoPoPoPo",
+          "encoded": "30218"
+        }
+      },
+      "review": [
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0,
+        "avatarSnapshot": {
+          "skinTone": "skin.warm",
+          "hair": "hair.short",
+          "hairColor": "haircolor.brown",
+          "headwear": "headwear.none",
+          "top": "top.field-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.tablet",
+          "companion": "companion.none",
+          "badge": "badge.none"
+        },
+        "avatarPortrait": {
+          "version": 1,
+          "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+          "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+          "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+          "width": 160,
+          "height": 160,
+          "pngDataUrl": "data:image/png;base64,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"
+        }
+      },
+      "progress": {
+        "answered": 3,
+        "correct": 0,
+        "current": 4,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:4",
+        "definitionId": "kn01_tendency_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "choice",
+        "difficulty": 2,
+        "question": "Что означает группа 57103 КН-01 SYNOP?",
+        "response": {
+          "kind": "choice"
+        },
+        "payload": {
+          "options": [
+            {
+              "id": 0,
+              "label": "Давление не изменилось за последние 3 часа"
+            },
+            {
+              "id": 1,
+              "label": "Равномерный рост давления; за последние 3 часа давление повысилось на 10,3 гПа"
+            },
+            {
+              "id": 2,
+              "label": "Падение давления на 1,03 гПа за последний час"
+            },
+            {
+              "id": 3,
+              "label": "Равномерное падение давления; за последние 3 часа давление понизилось на 10,3 гПа"
+            }
+          ]
+        }
+      },
+      "review": [
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:3",
+          "question": "Какое давление на уровне станции закодировано группой 30218?",
+          "correct": false,
+          "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0,
+        "avatarSnapshot": {
+          "skinTone": "skin.warm",
+          "hair": "hair.short",
+          "hairColor": "haircolor.brown",
+          "headwear": "headwear.none",
+          "top": "top.field-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.tablet",
+          "companion": "companion.none",
+          "badge": "badge.none"
+        },
+        "avatarPortrait": {
+          "version": 1,
+          "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+          "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+          "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+          "width": 160,
+          "height": 160,
+          "pngDataUrl": "data:image/png;base64,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"
+        }
+      },
+      "progress": {
+        "answered": 4,
+        "correct": 0,
+        "current": 5,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:5",
+        "definitionId": "kn01_section1_order_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "sequence",
+        "difficulty": 2,
+        "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+        "response": {
+          "kind": "sequence"
+        },
+        "payload": {
+          "steps": [
+            {
+              "id": 0,
+              "label": "2snTdTdTd"
+            },
+            {
+              "id": 1,
+              "label": "iRixhVV"
+            },
+            {
+              "id": 2,
+              "label": "3PoPoPoPo"
+            },
+            {
+              "id": 3,
+              "label": "1snTTT"
+            },
+            {
+              "id": 4,
+              "label": "5appp"
+            },
+            {
+              "id": 5,
+              "label": "4PPPP или 4a3hhh"
+            },
+            {
+              "id": 6,
+              "label": "Nddff"
+            }
+          ]
+        }
+      },
+      "review": [
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:3",
+          "question": "Какое давление на уровне станции закодировано группой 30218?",
+          "correct": false,
+          "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:4",
+          "question": "Что означает группа 57103 КН-01 SYNOP?",
+          "correct": false,
+          "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 5appp; пример 57103"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+      "mode": "blitz-practice",
+      "status": "active",
+      "rulesVersion": "blitz-practice-v1",
+      "durationSeconds": 90,
+      "startedAt": "2026-11-11T12:00:00.000Z",
+      "deadlineAt": "2026-11-11T12:01:30.000Z",
+      "serverNow": "2026-11-11T12:00:00.000Z",
+      "contentPack": "core_ru_001@0.6.0",
+      "contentStatus": "draft",
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "equipment": {
+        "badgeId": "badge.training_starter",
+        "badgeName": "На связи",
+        "heldItem": "held.tablet",
+        "enabled": false,
+        "charges": {
+          "reference": 0,
+          "retry": 0
+        },
+        "remaining": {
+          "reference": 0,
+          "retry": 0
+        },
+        "assistedTasks": 0,
+        "avatarSnapshot": {
+          "skinTone": "skin.warm",
+          "hair": "hair.short",
+          "hairColor": "haircolor.brown",
+          "headwear": "headwear.none",
+          "top": "top.field-jacket",
+          "bottom": "bottom.dark-trousers",
+          "footwear": "footwear.boots",
+          "backpack": "backpack.field",
+          "heldItem": "held.tablet",
+          "companion": "companion.none",
+          "badge": "badge.none"
+        },
+        "avatarPortrait": {
+          "version": 1,
+          "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+          "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+          "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+          "width": 160,
+          "height": 160,
+          "pngDataUrl": "data:image/png;base64,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"
+        }
+      },
+      "progress": {
+        "answered": 5,
+        "correct": 0,
+        "current": 6,
+        "total": 6
+      },
+      "task": {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:6",
+        "definitionId": "station_plot_basic_001",
+        "contentPack": "core_ru_001@0.6.0",
+        "type": "stationPlot",
+        "difficulty": 2,
+        "question": "Нанесите четыре базовых элемента наблюдения на схему приземной станции.",
+        "response": {
+          "kind": "stationPlot"
+        },
+        "payload": {
+          "profile": "RUS_SURFACE_STATION_V1",
+          "station": {
+            "id": "TRAINING-001",
+            "name": "Учебная станция"
+          },
+          "observations": [
+            {
+              "id": "obs_t",
+              "label": "Температура воздуха T",
+              "value": "+12,4 °C",
+              "display": "12,4"
+            },
+            {
+              "id": "obs_td",
+              "label": "Точка росы Td",
+              "value": "+7,9 °C",
+              "display": "7,9"
+            },
+            {
+              "id": "obs_p",
+              "label": "Давление, приведённое к уровню моря p",
+              "value": "1016,2 гПа",
+              "display": "162"
+            },
+            {
+              "id": "obs_wind",
+              "label": "Ветер dd/ff",
+              "value": "240°, 8 м/с",
+              "wind": {
+                "directionDeg": 240,
+                "speedMs": 8
+              }
+            }
+          ],
+          "slots": [
+            {
+              "id": "slot_01",
+              "x": 300,
+              "y": 300,
+              "kind": "text"
+            },
+            {
+              "id": "slot_02",
+              "x": 300,
+              "y": 700,
+              "kind": "text"
+            },
+            {
+              "id": "slot_03",
+              "x": 700,
+              "y": 300,
+              "kind": "text"
+            },
+            {
+              "id": "slot_04",
+              "x": 500,
+              "y": 500,
+              "kind": "wind"
+            }
+          ],
+          "canvas": {
+            "width": 1000,
+            "height": 1000
+          }
+        }
+      },
+      "review": [
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+          "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+          "correct": false,
+          "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:2",
+          "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+          "correct": false,
+          "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:3",
+          "question": "Какое давление на уровне станции закодировано группой 30218?",
+          "correct": false,
+          "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:4",
+          "question": "Что означает группа 57103 КН-01 SYNOP?",
+          "correct": false,
+          "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "глава 1, таблица 1, группа 5appp; пример 57103"
+            }
+          ]
+        },
+        {
+          "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:5",
+          "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+          "correct": false,
+          "explanation": "Кодовые группы в сводке должны располагаться в порядке, заданном схемой КН-01. Отсутствующая по правилам группа может не передаваться, но порядок присутствующих групп не меняется.",
+          "sources": [
+            {
+              "sourceId": "ROSHYDROMET_KN01_2013",
+              "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+              "locator": "схема кода, раздел 1; с. 6 файла PDF"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "completed": {
+    "id": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c",
+    "mode": "blitz-practice",
+    "status": "completed",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "startedAt": "2026-11-11T12:00:00.000Z",
+    "deadlineAt": "2026-11-11T12:01:30.000Z",
+    "serverNow": "2026-11-11T12:00:00.000Z",
+    "completedAt": "2026-11-11T12:00:00.000Z",
+    "finishReason": "answered",
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "avatarSnapshot": {
+      "skinTone": "skin.warm",
+      "hair": "hair.short",
+      "hairColor": "haircolor.brown",
+      "headwear": "headwear.none",
+      "top": "top.field-jacket",
+      "bottom": "bottom.dark-trousers",
+      "footwear": "footwear.boots",
+      "backpack": "backpack.field",
+      "heldItem": "held.tablet",
+      "companion": "companion.none",
+      "badge": "badge.none"
+    },
+    "equipment": {
+      "badgeId": "badge.training_starter",
+      "badgeName": "На связи",
+      "heldItem": "held.tablet",
+      "enabled": false,
+      "charges": {
+        "reference": 0,
+        "retry": 0
+      },
+      "remaining": {
+        "reference": 0,
+        "retry": 0
+      },
+      "assistedTasks": 0,
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "avatarPortrait": {
+        "version": 1,
+        "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+        "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+        "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+        "width": 160,
+        "height": 160,
+        "pngDataUrl": "data:image/png;base64,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"
+      }
+    },
+    "progress": {
+      "answered": 6,
+      "correct": 1,
+      "current": 6,
+      "total": 6
+    },
+    "task": null,
+    "review": [
+      {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:1",
+        "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+        "correct": false,
+        "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+          }
+        ]
+      },
+      {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:2",
+        "question": "Раскодируйте точку росы из группы КН-01 SYNOP 21052.",
+        "correct": false,
+        "explanation": "Первая цифра 2 обозначает группу точки росы. sn=1 задаёт отрицательный знак, TdTdTd=052 соответствует 5,2 °C, поэтому ответ −5,2 °C.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 2snTdTdTd; с. 11 файла PDF"
+          }
+        ]
+      },
+      {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:3",
+        "question": "Какое давление на уровне станции закодировано группой 30218?",
+        "correct": false,
+        "explanation": "В группе 3PoPoPoPo давление задаётся в гПа с точностью до 0,1 гПа, а цифра тысяч не сообщается. Для 0218 физически восстанавливается 1021,8 гПа; этот пример прямо приведён в КН-01.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 3PoPoPoPo; пример 30218 = 1021,8 гПа"
+          }
+        ]
+      },
+      {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:4",
+        "question": "Что означает группа 57103 КН-01 SYNOP?",
+        "correct": false,
+        "explanation": "КН-01 приводит 57103 как пример равномерного падения давления; ppp=103 соответствует изменению на 10,3 гПа за последние 3 часа.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 5appp; пример 57103"
+          }
+        ]
+      },
+      {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:5",
+        "question": "Расположите указанные группы раздела 1 КН-01 SYNOP в порядке их следования в сводке.",
+        "correct": false,
+        "explanation": "Кодовые группы в сводке должны располагаться в порядке, заданном схемой КН-01. Отсутствующая по правилам группа может не передаваться, но порядок присутствующих групп не меняется.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "схема кода, раздел 1; с. 6 файла PDF"
+          }
+        ]
+      },
+      {
+        "instanceId": "9a4c3534-e3ba-41c7-bad0-b58e5a67348c:6",
+        "question": "Нанесите четыре базовых элемента наблюдения на схему приземной станции.",
+        "correct": true,
+        "explanation": "В базовой станционной модели температура T располагается слева сверху от кружка станции, точка росы Td — слева снизу, давление p — справа сверху. Знак ветра начинается в центре станции и ориентирован в сторону, откуда дует ветер. Текущий профиль является учебным черновиком и до публикации проходит независимую проверку российской синоптической школой.",
+        "sources": [
+          {
+            "sourceId": "WMO_485_2024_RU",
+            "title": "Наставление по Комплексной системе обработки и прогнозирования ВМО",
+            "locator": "пп. 2.1.8.4.2.1–2.1.8.4.2.2: стандартные символы и модели; отсылка к ВМО-№ 306, том I.1, добавление IV"
+          },
+          {
+            "sourceId": "ZVEREV_1977",
+            "title": "Синоптическая метеорология",
+            "locator": "раздел о приземных синоптических картах и схеме нанесения; страница уточняется при независимой методической приёмке"
+          }
+        ]
+      }
+    ]
+  },
+  "timeout": {
+    "id": "a41c504d-a8e0-4f6a-84f3-3795b523b4dd",
+    "mode": "blitz-practice",
+    "status": "completed",
+    "rulesVersion": "blitz-practice-v1",
+    "durationSeconds": 90,
+    "startedAt": "2026-11-11T12:00:00.000Z",
+    "deadlineAt": "2026-11-11T12:01:30.000Z",
+    "serverNow": "2026-11-11T12:01:30.000Z",
+    "completedAt": "2026-11-11T12:01:30.000Z",
+    "finishReason": "timeout",
+    "contentPack": "core_ru_001@0.6.0",
+    "contentStatus": "draft",
+    "avatarSnapshot": {
+      "skinTone": "skin.warm",
+      "hair": "hair.short",
+      "hairColor": "haircolor.brown",
+      "headwear": "headwear.none",
+      "top": "top.field-jacket",
+      "bottom": "bottom.dark-trousers",
+      "footwear": "footwear.boots",
+      "backpack": "backpack.field",
+      "heldItem": "held.tablet",
+      "companion": "companion.none",
+      "badge": "badge.none"
+    },
+    "equipment": {
+      "badgeId": "badge.training_starter",
+      "badgeName": "На связи",
+      "heldItem": "held.tablet",
+      "enabled": false,
+      "charges": {
+        "reference": 0,
+        "retry": 0
+      },
+      "remaining": {
+        "reference": 0,
+        "retry": 0
+      },
+      "assistedTasks": 0,
+      "avatarSnapshot": {
+        "skinTone": "skin.warm",
+        "hair": "hair.short",
+        "hairColor": "haircolor.brown",
+        "headwear": "headwear.none",
+        "top": "top.field-jacket",
+        "bottom": "bottom.dark-trousers",
+        "footwear": "footwear.boots",
+        "backpack": "backpack.field",
+        "heldItem": "held.tablet",
+        "companion": "companion.none",
+        "badge": "badge.none"
+      },
+      "avatarPortrait": {
+        "version": 1,
+        "sourceRevision": "portrait-v1:r01-idle4-20261110:d0ffc95b6e7f1f38",
+        "appearanceKey": "b6019d352bb57ba0f67675d443d377c9cf88df85b4e8ff5b635cdfcbd597364b",
+        "sha256": "2638b5f3211e18ba15f9bca475ca7442632d090b5a66af8fc48a9b99679418a3",
+        "width": 160,
+        "height": 160,
+        "pngDataUrl": "data:image/png;base64,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"
+      }
+    },
+    "progress": {
+      "answered": 1,
+      "correct": 0,
+      "current": 2,
+      "total": 6
+    },
+    "task": null,
+    "review": [
+      {
+        "instanceId": "a41c504d-a8e0-4f6a-84f3-3795b523b4dd:1",
+        "question": "Раскодируйте температуру воздуха из группы КН-01 SYNOP 10234.",
+        "correct": false,
+        "explanation": "Первая цифра 1 обозначает группу температуры. sn=0 означает неотрицательный знак, TTT=234 задаёт 23,4 °C с точностью до десятых долей градуса.",
+        "sources": [
+          {
+            "sourceId": "ROSHYDROMET_KN01_2013",
+            "title": "Код для оперативной передачи данных приземных метеорологических наблюдений с сети станций Росгидромета (КН-01 SYNOP)",
+            "locator": "глава 1, таблица 1, группа 1snTTT; с. 10–11 файла PDF"
+          }
+        ]
+      }
+    ]
+  }
+}

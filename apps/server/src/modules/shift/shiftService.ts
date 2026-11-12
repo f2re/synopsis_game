@@ -9,9 +9,11 @@ import {
   type TaskDefinition,
 } from '@synopsis/content-engine';
 import { decodeGroup, KN01_RULESET_ID, type SupportedKn01Group } from '@synopsis/kn01-codec';
-import { DEFAULT_AVATAR, type AvatarProfile } from '../identity/model.js';
+import { DEFAULT_AVATAR, validateAvatar, type AvatarPortrait, type AvatarProfile } from '../identity/model.js';
+import { composeAvatarPortrait, validateAvatarPortrait } from '../identity/avatarPortrait.js';
 import { EquipmentService, effectsAllowed } from '../equipment/equipmentService.js';
 import type { EquipmentSnapshot, ReferenceView, TrainingReward, TrainingShift, TrainingState } from '../equipment/model.js';
+import { BLITZ_DURATION_MS, BLITZ_MAX_START_KEYS, BLITZ_MODE, BLITZ_REQUEST_ID, BLITZ_RULES_VERSION, BLITZ_TASK_IDS, type BlitzSessionView } from './blitzRules.js';
 
 interface ContentPack {
   id: string;
@@ -74,6 +76,7 @@ export interface ShiftServiceOptions {
   contentRoot: string;
   attemptLogPath: string;
   equipment?: EquipmentService;
+  avatarAssetsRoot?: string;
   /** Server time only; injected clock is used by deterministic tests. */
   now?: () => Date;
 }
@@ -115,6 +118,7 @@ export class ShiftService {
     for (const source of sourceFile.sources) this.sources.set(source.id, source);
     this.pack = pack;
     this.validateContent();
+    await this.migrateActivityPortraits();
     try {
       const log = await readFile(this.options.attemptLogPath, 'utf8');
       for (const line of log.split('\n')) {
@@ -127,20 +131,21 @@ export class ShiftService {
     await this.flushAudit();
   }
 
-  async startShift(userId: string, avatar: AvatarProfile = DEFAULT_AVATAR) {
+  async startShift(userId: string, avatar: AvatarProfile = DEFAULT_AVATAR, avatarPortrait?: AvatarPortrait) {
     const pack = this.requirePack();
-    return this.equipment.store.transaction((draft) => {
-      const active = Object.values(draft.shifts).find((shift) => shift.userId === userId && shift.currentIndex < shift.taskIds.length);
+    return this.equipment.store.transaction(async (draft) => {
+      const active = Object.values(draft.shifts).find((shift) => shift.userId === userId && effectsAllowed(shift.mode) && shift.currentIndex < shift.taskIds.length);
       if (active) {
         if (active.contentPack !== this.contentPackId(pack)) throw new ShiftError(409, 'Учебный пакет изменился. Незавершённая смена требует восстановления прежней версии пакета.', 'content_version_changed');
         return this.startResponse(active);
       }
+      const appearance = await this.activityAppearance(avatar, avatarPortrait);
       const mode = pack.status === 'published' ? 'practice' : 'practice-draft';
       const state: ShiftState = {
         id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...pack.tasks],
         currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: this.now(),
         mode, contentPack: this.contentPackId(pack), contentStatus: pack.status,
-        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), avatar, mode),
+        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), appearance.avatar, mode, appearance.portrait),
         assistedTaskIds: [], references: {}, responses: {},
       };
       draft.shifts[state.id] = state;
@@ -149,7 +154,7 @@ export class ShiftService {
   }
 
   getCurrentTask(userId: string, shiftId: string) {
-    const state = this.requireShift(userId, shiftId);
+    const state = this.requirePracticeShift(userId, shiftId);
     if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
     if (state.contentPack !== this.contentPackId(this.requirePack())) throw new ShiftError(409, 'Версия учебного пакета изменилась', 'content_version_changed');
     return this.startResponse(state);
@@ -159,7 +164,7 @@ export class ShiftService {
     if (attempt !== 1 && attempt !== 2) throw new ShiftError(400, 'Допустимы только первая и повторная попытки', 'invalid_attempt');
     const fingerprint = this.fingerprint(submitted);
     const result = await this.equipment.store.transaction((draft) => {
-      const state = this.requireShift(userId, shiftId, draft);
+      const state = this.requirePracticeShift(userId, shiftId, draft);
       const key = `${instanceId}:${attempt}`;
       const previous = state.responses[key];
       if (previous) {
@@ -200,7 +205,7 @@ export class ShiftService {
 
   async openReference(userId: string, shiftId: string, instanceId: string) {
     return this.equipment.store.transaction((draft) => {
-      const state = this.requireShift(userId, shiftId, draft);
+      const state = this.requirePracticeShift(userId, shiftId, draft);
       const current = this.requireCurrentTask(state, instanceId);
       if (state.references[instanceId]) return { ...state.references[instanceId], equipment: state.equipment };
       if (!effectsAllowed(state.mode) || state.equipment.remaining.reference < 1) throw new ShiftError(409, 'В этой смене больше нет обращений к справке', 'reference_unavailable');
@@ -216,7 +221,7 @@ export class ShiftService {
 
   async revealAnswer(userId: string, shiftId: string, instanceId: string): Promise<ShiftAnswerResult> {
     return this.equipment.store.transaction((draft) => {
-      const state = this.requireShift(userId, shiftId, draft);
+      const state = this.requirePracticeShift(userId, shiftId, draft);
       const key = `${instanceId}:reveal`;
       if (state.responses[key]) return state.responses[key].response as ShiftAnswerResult;
       const current = this.requireCurrentTask(state, instanceId);
@@ -229,7 +234,7 @@ export class ShiftService {
   }
 
   getResult(userId: string, shiftId: string) {
-    const state = this.requireShift(userId, shiftId);
+    const state = this.requirePracticeShift(userId, shiftId);
     return {
       shiftId,
       completed: state.currentIndex >= state.taskIds.length,
@@ -244,8 +249,165 @@ export class ShiftService {
     };
   }
 
+  async blitzLobby(userId: string) {
+    return this.equipment.store.transaction((draft) => {
+      const now = this.now();
+      const sessions = Object.values(draft.shifts).filter((shift) => shift.userId === userId && shift.mode === BLITZ_MODE);
+      for (const session of sessions) this.expireBlitz(session, now);
+      const latest = sessions.at(-1);
+      const completedShifts = draft.users[userId]?.completedShifts ?? 0;
+      return { mode: BLITZ_MODE, rulesVersion: BLITZ_RULES_VERSION, durationSeconds: BLITZ_DURATION_MS / 1000,
+        total: BLITZ_TASK_IDS.length, eligible: completedShifts >= 1, completedShifts,
+        contentPack: this.contentPackId(this.requirePack()), contentStatus: this.requirePack().status,
+        session: latest ? this.blitzView(latest, now) : null };
+    });
+  }
+
+  async startBlitz(userId: string, avatar: AvatarProfile, requestId: unknown, avatarPortrait?: AvatarPortrait): Promise<BlitzSessionView> {
+    if (typeof requestId !== 'string' || !BLITZ_REQUEST_ID.test(requestId)) {
+      throw new ShiftError(400, 'Для начала блица нужен идентификатор запроса', 'invalid_request_id');
+    }
+    return this.equipment.store.transaction(async (draft) => {
+      const now = this.now();
+      const sessions = Object.values(draft.shifts).filter((shift) => shift.userId === userId && shift.mode === BLITZ_MODE);
+      for (const session of sessions) this.expireBlitz(session, now);
+      // Replaying a start after a lost response, even after expiry, never creates a new clock.
+      const replay = sessions.find((shift) => shift.blitz?.requestIds.includes(requestId));
+      if (replay) return this.blitzView(replay, now);
+      const active = sessions.find((shift) => !shift.completedAt);
+      if (active) {
+        if (active.blitz!.requestIds.length >= BLITZ_MAX_START_KEYS) throw new ShiftError(429, 'Для восстановления раунда обновите его состояние', 'blitz_start_limit');
+        // A second tab's start must also replay this same round after it expires.
+        active.blitz!.requestIds.push(requestId);
+        return this.blitzView(active, now);
+      }
+      if ((draft.users[userId]?.completedShifts ?? 0) < 1) {
+        throw new ShiftError(403, 'Сначала завершите одну учебную смену КН-01', 'blitz_practice_locked');
+      }
+      const pack = this.requirePack();
+      if (!BLITZ_TASK_IDS.every((id) => pack.tasks.includes(id))) {
+        throw new ShiftError(503, 'Для этой версии блица недоступен полный набор заданий', 'blitz_content_unavailable');
+      }
+      const appearance = await this.activityAppearance(avatar, avatarPortrait);
+      const state: ShiftState = {
+        id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...BLITZ_TASK_IDS],
+        currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: now,
+        mode: BLITZ_MODE, contentPack: this.contentPackId(pack), contentStatus: pack.status,
+        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), appearance.avatar, BLITZ_MODE, appearance.portrait),
+        assistedTaskIds: [], references: {}, responses: {},
+        blitz: { rulesVersion: BLITZ_RULES_VERSION, requestIds: [requestId], deadlineAt: new Date(Date.parse(now) + BLITZ_DURATION_MS).toISOString(),
+          avatarSnapshot: appearance.avatar, review: [] },
+      };
+      draft.shifts[state.id] = state;
+      return this.blitzView(state, now);
+    });
+  }
+
+  async getBlitz(userId: string, blitzId: string): Promise<BlitzSessionView> {
+    return this.equipment.store.transaction((draft) => {
+      const state = this.requireBlitz(userId, blitzId, draft);
+      const now = this.now();
+      this.expireBlitz(state, now);
+      return this.blitzView(state, now);
+    });
+  }
+
+  async submitBlitzAnswer(userId: string, blitzId: string, instanceId: string, submitted: unknown) {
+    const fingerprint = this.fingerprint(submitted);
+    const result = await this.equipment.store.transaction((draft) => {
+      const state = this.requireBlitz(userId, blitzId, draft);
+      const now = this.now();
+      this.expireBlitz(state, now);
+      const key = `${instanceId}:1`;
+      const previous = state.responses[key];
+      if (previous) {
+        if (previous.fingerprint !== fingerprint) return { conflict: true as const };
+        // The feedback is immutable, but the session is always current (two tabs/reconnect).
+        return { accepted: true, feedback: (previous.response as ShiftAnswerResult).feedback, session: this.blitzView(state, now) };
+      }
+      // Return the persisted result rather than throwing inside the atomic transaction.
+      if (state.completedAt) return { accepted: false, session: this.blitzView(state, now) };
+      const current = this.requireCurrentTask(state, instanceId);
+      const validation = validateTaskAnswer(current.definition, current.validationContext, submitted);
+      draft.attempts.push({ eventId: `${state.id}:${state.currentIndex + 1}:attempt:1`, occurredAt: now,
+        userId, shiftId: blitzId, instanceId, definitionId: current.definition.id, contentPack: state.contentPack,
+        rulesetId: KN01_RULESET_ID, mode: BLITZ_MODE, modeRulesVersion: state.blitz!.rulesVersion,
+        answer: validation.normalizedAnswer, correct: validation.correct, attempt: 1, assisted: false });
+      const response = this.finishTask(draft, state, current.definition, validation, validation.correct, false, now);
+      state.responses[key] = { fingerprint, response };
+      state.blitz!.review.push({ instanceId, question: current.publicTask.question, correct: validation.correct,
+        explanation: response.feedback.explanation, sources: response.feedback.sources });
+      return { accepted: true, feedback: response.feedback, session: this.blitzView(state, now) };
+    });
+    if ('conflict' in result) throw new ShiftError(409, 'Этот ответ уже зафиксирован', 'answer_already_recorded');
+    await this.flushAudit();
+    return result;
+  }
+
+  private expireBlitz(state: ShiftState, now: string): void {
+    if (!state.completedAt && state.blitz && Date.parse(now) >= Date.parse(state.blitz.deadlineAt)) {
+      state.completedAt = state.blitz.deadlineAt;
+      state.blitz.finishReason = 'timeout';
+    }
+  }
+
+  private async activityAppearance(avatar: AvatarProfile, portrait?: AvatarPortrait) {
+    const saved = validateAvatar(avatar);
+    return { avatar: saved, portrait: portrait ? validateAvatarPortrait(portrait, saved)
+      : await composeAvatarPortrait(saved, { assetsRoot: this.options.avatarAssetsRoot }) };
+  }
+
+  private async migrateActivityPortraits(): Promise<void> {
+    await this.equipment.store.transaction(async (draft) => {
+      for (const shift of Object.values(draft.shifts)) {
+        // Never substitute today's clothes for an unknown historical outfit.
+        const profile = shift.equipment.avatarSnapshot ?? shift.blitz?.avatarSnapshot;
+        if (!profile) continue;
+        const appearance = await this.activityAppearance(profile, shift.equipment.avatarPortrait);
+        shift.equipment.avatarSnapshot = appearance.avatar;
+        shift.equipment.avatarPortrait = appearance.portrait;
+        for (const entry of Object.values(shift.responses)) {
+          const response = entry.response as { equipment?: EquipmentSnapshot };
+          if (response.equipment) {
+            // Present cached copies were already validated by TrainingStore.
+            // Only missing legacy copies may be filled from this same historical pair.
+            response.equipment.avatarSnapshot ??= { ...appearance.avatar };
+            response.equipment.avatarPortrait ??= { ...appearance.portrait };
+          }
+        }
+      }
+    });
+  }
+
+  private blitzView(state: ShiftState, now: string): BlitzSessionView {
+    const blitz = state.blitz!;
+    if (!state.completedAt && state.contentPack !== this.contentPackId(this.requirePack())) {
+      throw new ShiftError(409, 'Версия учебного пакета изменилась. Текущий блиц требует прежней версии пакета.', 'content_version_changed');
+    }
+    return { id: state.id, mode: BLITZ_MODE, status: state.completedAt ? 'completed' : 'active',
+      rulesVersion: blitz.rulesVersion, durationSeconds: BLITZ_DURATION_MS / 1000, startedAt: state.createdAt,
+      deadlineAt: blitz.deadlineAt, serverNow: now, ...(state.completedAt ? { completedAt: state.completedAt, finishReason: blitz.finishReason } : {}),
+      contentPack: state.contentPack, contentStatus: state.contentStatus,
+      avatarSnapshot: blitz.avatarSnapshot, equipment: state.equipment, progress: this.progress(state),
+      task: state.completedAt ? null : this.buildCurrentTask(state).publicTask,
+      // The server has accepted these answers already; unopened tasks are never included.
+      review: blitz.review };
+  }
+
+  private requireBlitz(userId: string, blitzId: string, draft: TrainingState): ShiftState {
+    const state = this.requireShift(userId, blitzId, draft);
+    if (state.mode !== BLITZ_MODE || !state.blitz) throw new ShiftError(404, 'Блиц не найден', 'blitz_not_found');
+    return state;
+  }
+
+  private requirePracticeShift(userId: string, shiftId: string, draft = this.equipment.store.read()): ShiftState {
+    const state = this.requireShift(userId, shiftId, draft);
+    if (!effectsAllowed(state.mode)) throw new ShiftError(409, 'Для этого сценария используйте его отдельный маршрут', 'shift_mode_mismatch');
+    return state;
+  }
+
   private finishTask(draft: TrainingState, state: ShiftState, definition: TaskDefinition,
-    validation: ReturnType<typeof validateTaskAnswer>, firstCorrect: boolean, retried: boolean): ShiftAnswerResult {
+    validation: ReturnType<typeof validateTaskAnswer>, firstCorrect: boolean, retried: boolean, completedAt = this.now()): ShiftAnswerResult {
     const instanceId = `${state.id}:${state.currentIndex + 1}`;
     const assisted = state.assistedTaskIds.includes(instanceId);
     if (firstCorrect) state.correct += 1;
@@ -253,7 +415,12 @@ export class ShiftService {
     delete state.pendingRetry;
     state.currentIndex += 1;
     const completed = state.currentIndex === state.taskIds.length;
-    if (completed) this.equipment.complete(draft, state, this.now());
+    if (completed) {
+      if (state.mode === BLITZ_MODE && state.blitz) {
+        state.completedAt = completedAt;
+        state.blitz.finishReason = 'answered';
+      } else this.equipment.complete(draft, state, completedAt);
+    }
     return { status: 'answered', retryAvailable: false,
       feedback: { correct: validation.correct, correctAnswer: validation.correctAnswer,
         details: (validation as unknown as { details?: unknown }).details ?? null,

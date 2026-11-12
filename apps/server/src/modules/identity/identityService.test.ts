@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, readFile, readdir, rename, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import { IdentityError, IdentityService } from './identityService.js';
+import { avatarAppearanceKey, portraitToPngBytes } from './avatarPortrait.js';
 
 async function withService(run: (service: IdentityService) => Promise<void>): Promise<void> {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-identity-'));
@@ -162,8 +163,10 @@ test('failed avatar save keeps committed equipment visible and later writes reco
     await mkdir(storePath);
     const failed = service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.pencil' });
     assert.deepEqual(service.me(login.token).avatar, login.user.avatar);
+    assert.deepEqual(service.me(login.token).avatarPortrait, login.user.avatarPortrait);
     await assert.rejects(() => failed);
     assert.deepEqual(service.me(login.token).avatar, login.user.avatar);
+    assert.deepEqual(service.me(login.token).avatarPortrait, login.user.avatarPortrait);
     assert.equal(await readFile(`${storePath}.saved`, 'utf8'), saved);
     assert.equal((await readdir(directory)).some((name) => name.endsWith('.tmp')), false);
 
@@ -171,6 +174,7 @@ test('failed avatar save keeps committed equipment visible and later writes reco
     await rename(`${storePath}.saved`, storePath);
     const updated = await service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.tablet' });
     assert.equal(updated.avatar.heldItem, 'held.tablet');
+    assert.equal(updated.avatarPortrait?.appearanceKey, avatarAppearanceKey(updated.avatar));
     const restarted = new IdentityService({ storePath, securityProfile: 'trusted' });
     await restarted.init();
     assert.equal((await restarted.adminLogin('1234', '127.0.0.2')).user.avatar.heldItem, 'held.tablet');
@@ -195,14 +199,76 @@ test('concurrent avatar saves return their own committed loadouts and a later ad
     ]);
     assert.equal(first.avatar.heldItem, 'held.pencil');
     assert.equal(second.avatar.heldItem, 'held.map-folder');
+    assert.equal(first.avatarPortrait?.appearanceKey, avatarAppearanceKey(first.avatar));
+    assert.equal(second.avatarPortrait?.appearanceKey, avatarAppearanceKey(second.avatar));
+    assert.deepEqual(service.me(login.token).avatarPortrait, second.avatarPortrait);
     assert.equal(service.me(login.token).avatar.heldItem, 'held.map-folder');
     const restarted = new IdentityService({ storePath, securityProfile: 'trusted' });
     await restarted.init();
     const restoredLogin = await restarted.adminLogin('1234', '127.0.0.2');
     assert.equal(restoredLogin.user.avatar.heldItem, 'held.map-folder');
+    assert.deepEqual(restoredLogin.user.avatarPortrait, second.avatarPortrait);
     assert.equal(restarted.listUsers(restoredLogin.token).find((user) => user.id === student.id)?.status, 'disabled');
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
+});
+
+test('a saved portrait is copied on reads, survives restart without art assets, and unchanged Save does not write', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-portrait-save-'));
+  const storePath = join(directory, 'identity.json');
+  try {
+    const service = new IdentityService({ storePath, securityProfile: 'trusted' });
+    await service.init(); await service.bootstrapAdmin('Администратор', '1234');
+    const login = await service.adminLogin('1234', '127.0.0.1');
+    const outfit = { ...login.user.avatar, hair: 'hair.long', hairColor: 'haircolor.auburn', top: 'top.hoodie', footwear: 'footwear.boots' };
+    const saved = await service.updateAvatar(login.token, { ...outfit, pngDataUrl: 'data:image/svg+xml,<svg/>', avatarPortrait: { pngDataUrl: 'https://example.invalid/a' } });
+    assert.equal(Object.keys(saved.avatar).length, 11);
+    assert.ok(portraitToPngBytes(saved.avatarPortrait!).length > 100);
+    assert.notEqual(saved.avatarPortrait!.sha256, login.user.avatarPortrait!.sha256);
+    const canonical = structuredClone(saved.avatarPortrait);
+    saved.avatar.top = 'top.shirt'; saved.avatarPortrait!.pngDataUrl = 'forged';
+    const list = service.listUsers(login.token); list[0].avatarPortrait!.sha256 = 'forged';
+    assert.deepEqual(service.me(login.token).avatarPortrait, canonical);
+    assert.deepEqual(service.me(login.token).avatar, outfit);
+    // Existing portraits are their own durable data, not a cache of today's atlas.
+    const restarted = new IdentityService({ storePath, securityProfile: 'trusted', avatarAssetsRoot: join(directory, 'missing-art') });
+    await restarted.init();
+    const restored = await restarted.adminLogin('1234', '127.0.0.2');
+    assert.deepEqual(restored.user.avatarPortrait, canonical);
+    await rename(storePath, `${storePath}.saved`); await mkdir(storePath);
+    assert.deepEqual((await restarted.updateAvatar(restored.token, outfit)).avatarPortrait, canonical);
+    assert.deepEqual(restarted.me(restored.token).avatarPortrait, canonical);
+    assert.equal((await readdir(directory)).some((name) => name.endsWith('.tmp')), false);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('legacy profiles migrate once; missing assets or corrupted stored PNG never replace the identity file', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-portrait-migrate-'));
+  const storePath = join(directory, 'identity.json');
+  try {
+    const service = new IdentityService({ storePath, securityProfile: 'trusted' });
+    await service.init(); await service.bootstrapAdmin('Администратор', '1234');
+    const legacy = JSON.parse(await readFile(storePath, 'utf8'));
+    delete legacy.users[0].avatarPortrait;
+    legacy.users[0].avatar.headwear = 'headwear.beanie';
+    const legacyBytes = JSON.stringify(legacy);
+    await writeFile(storePath, legacyBytes);
+    const unavailable = new IdentityService({ storePath, avatarAssetsRoot: join(directory, 'missing-art') });
+    await assert.rejects(unavailable.init());
+    assert.equal(await readFile(storePath, 'utf8'), legacyBytes);
+    const migrated = new IdentityService({ storePath, securityProfile: 'trusted' });
+    await migrated.init();
+    const login = await migrated.adminLogin('1234', '127.0.0.1');
+    assert.equal(login.user.avatarPortrait?.appearanceKey, avatarAppearanceKey(login.user.avatar));
+    const after = await readFile(storePath, 'utf8');
+    const next = new IdentityService({ storePath, avatarAssetsRoot: join(directory, 'still-missing-art') });
+    await next.init();
+    assert.equal(await readFile(storePath, 'utf8'), after);
+    const corrupt = JSON.parse(after); corrupt.users[0].avatarPortrait.pngDataUrl = 'data:image/png;base64,AAAA';
+    const corruptBytes = JSON.stringify(corrupt); await writeFile(storePath, corruptBytes);
+    await assert.rejects(new IdentityService({ storePath }).init(), /checksum/);
+    assert.equal(await readFile(storePath, 'utf8'), corruptBytes);
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });
 

@@ -1,0 +1,71 @@
+{
+  "review": "saved-portrait-r04-server-independent",
+  "date": "2026-11-12",
+  "reviewerAgent": "portrait_asset_editor",
+  "roles": [
+    "security-privacy-reviewer",
+    "integration-release-engineer"
+  ],
+  "roleRegistry": "agents/registry.yaml",
+  "independentOfImplementation": true,
+  "verdict": "PASS",
+  "openBlockingFindings": [],
+  "threatModelDelta": "Server creates and persists one bounded PNG plus validated appearance; client supplies only catalog IDs. Portrait copies cross identity, training snapshots and answer replay storage.",
+  "checks": {
+    "clientPngOrRemoteUrl": "Ignored by avatar route; validateAvatar copies exactly 11 allowlisted fields; server composes from its configured local accepted atlas.",
+    "authorization": "Session required before save and rechecked inside identity write queue; activity starts use authenticated user snapshot.",
+    "pngResourceBounds": "Stored PNG <=128 KiB, exactly160x160 RGBA8 with binary alpha; atlas <=4 MiB/1024 per dimension; inflate output bounded to exact scanlines; chunk CRC/order/end verified; APNG and foreign critical chunks rejected.",
+    "urlAndMetadataBoundary": "Only canonical data:image/png;base64 accepted; encoder emits IHDR/IDAT/IEND without URLs or metadata; source uses local file reads and cannot follow manifest atlas URLs.",
+    "identityAtomicity": "Avatar+PNG written together to 0600 temporary file, file sync then rename, in-memory pair published after success; queue remains usable after write failure.",
+    "activityAtomicity": "Async draft transactions awaited before serialization/commit; returned values cloned; existing session portraits retained across wardrobe edits and restart.",
+    "migration": "Missing identity PNG generated once from stored profile; valid existing PNG needs no atlas; damaged existing PNG fails closed; legacy blitz uses historical full snapshot; old ordinary shift without full profile remains without invented PNG.",
+    "cachedAnswerPortraits": "Every present cached profile/PNG now validated against historical canonical pair; missing legacy copies filled from that pair; corruption never silently replaced.",
+    "publicRosterPrivacy": "Public roster remains id/displayName/groupId/hasCode only; no avatar, PNG, credentials, hashes, roles or login history added."
+  },
+  "resolvedFindings": [
+    {
+      "id": "PORTRAIT-REPLAY-01",
+      "severity": "P2",
+      "status": "FIXED_AND_INDEPENDENTLY_VERIFIED",
+      "finding": "TrainingStore validated canonical shift PNG but did not validate cached response.equipment.avatarPortrait. A corrupted persisted cached URL survived restart and was returned on ordinary answer replay.",
+      "beforeFixReproduction": {
+        "restartAcceptedCorruptCachedPortrait": true,
+        "replayPortrait": "https://example.invalid/corrupt.png"
+      },
+      "fix": "Validate cached profile and PNG, enforce equality with the historical canonical pair, migrate only missing legacy copies.",
+      "afterFixReproduction": {
+        "restartRejectsCorruptCachedPng": true,
+        "corruptedStoreUnchanged": true
+      },
+      "regressionTest": "restart rejects a corrupted or substituted cached answer portrait; absent legacy copies reuse the historical PNG"
+    }
+  ],
+  "independentValidation": {
+    "command": "cd apps/server && node --test dist/modules/identity/avatarPortrait.test.js dist/modules/identity/identityService.test.js dist/modules/shift/blitzPractice.test.js dist/modules/equipment/equipmentService.test.js",
+    "tests": 33,
+    "passed": 33,
+    "failed": 0,
+    "log": "docs/testing/evidence/saved-portrait-r04/integration/server-independent-tests.txt",
+    "additionalProbe": "Real temporary training store, corrupted cached PNG only, restart now rejects and leaves bytes unchanged."
+  },
+  "boundaries": [
+    "Review covers this portrait persistence/rendering delta, not a new global security certification of the application.",
+    "Real HTTP integration is performed separately by orchestrator; this reviewer ran service-level tests and temporary-file reproduction.",
+    "Browser rendering, physical GPU, packaged Linux deployment and power-loss durability were not exercised by this review.",
+    "Existing roster disclosure and login policies are unchanged; no public registration or third-party asset request introduced."
+  ],
+  "sourceSha256": {
+    "apps/server/src/index.ts": "c3c307956672c6e768abe201598e3dbe210dfcb17cc2c8bc01e9451e28b7ab23",
+    "apps/server/src/modules/identity/model.ts": "add75810e0376f5ef2732980f9f3ed76d9c499c54e3dae8811d5333869b28b62",
+    "apps/server/src/modules/identity/avatarPortrait.ts": "7c9c03cd97dd06ee9571b406f3f17336a8626e98dd4a5c4a6ec1af854e8ee08f",
+    "apps/server/src/modules/identity/portraitPng.ts": "af54c5d947b26ee6d2f3f03499b262d1a789013e5b2b4fa7ae2f2706fd1678c1",
+    "apps/server/src/modules/identity/identityService.ts": "2198e098c0e8126831604a06172d89c0677adac348fac7553aa64c1a662b69b4",
+    "apps/server/src/modules/equipment/model.ts": "7c11a62fcaeb12666d5aed589ee651d0dc334d46d68fa320ecd3f66d99464ee4",
+    "apps/server/src/modules/equipment/equipmentService.ts": "ee6a9414fac50f448e6b099ad6834c227e9652cf6ad8f413324f608eaf0f4885",
+    "apps/server/src/modules/equipment/trainingStore.ts": "c4818b7a8ea8ed761a1e7e19998f9c83c3d3dda4d90ac68caf50b421697f7584",
+    "apps/server/src/modules/shift/shiftService.ts": "355579f4074baf7dfd76c9179f62c81e60a2fc1fa6ad05326949fbf70ade63ba",
+    "apps/server/src/modules/identity/avatarPortrait.test.ts": "4e4743731ac1f78c02e11baa341269c7489edfc844d6406312817afa8072ae54",
+    "apps/server/src/modules/identity/identityService.test.ts": "da07576a0ad08b52129683e9e4706b214506ca344fe3c777dee11da19a6bddad",
+    "apps/server/src/modules/shift/blitzPractice.test.ts": "a1f15d62526dcae2f26573a1972e0e7c508a257121f03429b1d3711aeb8bf934"
+  }
+}

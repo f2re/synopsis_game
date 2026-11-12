@@ -1,0 +1,101 @@
+{
+  "review": "saved-portrait-r04",
+  "date": "2026-11-12",
+  "sourceRevision": "r01-idle4-20261110",
+  "crop": {
+    "x": 8,
+    "y": 0,
+    "width": 80,
+    "height": 80
+  },
+  "output": [
+    160,
+    160
+  ],
+  "independentOracle": "accepted R02 Python renderer; no server rendering code used for expected pixels",
+  "cases": 191,
+  "groups": {
+    "accessory": 36,
+    "companion": 3,
+    "head": 125,
+    "lower": 9,
+    "palette": 16,
+    "sample": 2
+  },
+  "rgbaEqualityCases": 191,
+  "alphaValues": [
+    0,
+    255
+  ],
+  "nearest2xCases": 191,
+  "headFamilyBoundsIn96x144": {
+    "hair.short": [
+      33,
+      6,
+      63,
+      30
+    ],
+    "hair.wave": [
+      32,
+      6,
+      64,
+      34
+    ],
+    "hair.bob": [
+      32,
+      6,
+      64,
+      41
+    ],
+    "hair.curl": [
+      31,
+      5,
+      65,
+      33
+    ],
+    "hair.long": [
+      31,
+      6,
+      65,
+      49
+    ],
+    "headwear.none": null,
+    "headwear.cap": [
+      31,
+      3,
+      65,
+      21
+    ],
+    "headwear.beanie": [
+      31,
+      3,
+      65,
+      21
+    ],
+    "headwear.scarf": [
+      34,
+      34,
+      62,
+      57
+    ],
+    "headwear.goggles": [
+      35,
+      20,
+      61,
+      28
+    ]
+  },
+  "opaqueColorRange": [
+    38,
+    100
+  ],
+  "pngByteRange": [
+    2849,
+    3872
+  ],
+  "allHeadFamiliesInsideCropWithPositiveMargin": true,
+  "lowerAndCompanionChangeSavedKeyWithoutChangingCroppedPixels": true,
+  "technicalPixelStatus": "PASS",
+  "visualArtStatus": "REQUIRES_HUMAN_OR_AGENT_IMAGE_INSPECTION",
+  "browserUiAcceptance": "NOT_EVALUATED"
+}

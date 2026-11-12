@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   api,
-  type AvatarProfile,
   type FindErrorPayload,
   type EquipmentSnapshot,
   type ShiftAnswerResponse,
@@ -22,7 +21,7 @@ import { DigitAnatomy } from './feedback/DigitAnatomy';
 import { createCodePostBridge } from '../../game/worldBridge';
 import { worldAudio } from '@synopsis/world-engine';
 import { OPTIONS } from '../avatar/avatarOptions';
-import { AvatarPreview } from '../avatar/AvatarPreview';
+import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import './ShiftWorkspace.css';
 
 function normalizedNumber(value: string): number { return Number(value.trim().replace(',', '.')); }
@@ -53,13 +52,12 @@ export interface ShiftAnswerEvent {
 }
 
 interface ShiftWorkspaceProps {
-  avatar?: AvatarProfile;
   onExit: (reason: ShiftExitReason) => void;
   onAnswerEvaluated?: (event: ShiftAnswerEvent) => void;
   onProgressChanged?: (progress: ShiftProgress, assistedTasks: number) => void;
 }
 
-export function ShiftWorkspace({ avatar, onExit, onAnswerEvaluated, onProgressChanged }: ShiftWorkspaceProps) {
+export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }: ShiftWorkspaceProps) {
   const [shiftId, setShiftId] = useState('');
   const [task, setTask] = useState<ShiftTask | null>(null);
   const [progress, setProgress] = useState({ answered: 0, correct: 0, current: 1, total: 0 });
@@ -311,7 +309,7 @@ export function ShiftWorkspace({ avatar, onExit, onAnswerEvaluated, onProgressCh
       </header>
 
       {equipment && <section className="shift-equipment" aria-label="Снаряжение этой смены">
-        <div className="shift-equipment__identity">{avatar && <AvatarPreview avatar={avatar} context="shift" equipment={equipment} size={48} showBackdrop={false} />}{heldTool?.image && <img src={heldTool.image} alt="" width={44} height={44} />}<div><strong>{heldTool?.name ?? 'Без инструмента'}</strong><span>{equipment.badgeName ?? 'Учебный знак не выбран'}</span></div></div>
+        <div className="shift-equipment__identity"><SavedAvatarPortrait portrait={equipment.avatarPortrait} size={40} label="Портрет на начало смены" missingLabel="Портрет не сохранён для этой смены" />{heldTool?.image && <img src={heldTool.image} alt="" width={44} height={44} />}<div><strong>{heldTool?.name ?? 'Без инструмента'}</strong><span>{equipment.badgeName ?? 'Учебный знак не выбран'}</span><span>{isSavedAvatarPortrait(equipment.avatarPortrait) ? 'Портрет и комплект на начало смены' : 'Портрет не сохранён для этой смены'}</span></div></div>
         <div className="shift-equipment__charges"><span>Справка <strong>{equipment.remaining.reference} / {equipment.charges.reference}</strong></span><span>Повтор <strong>{equipment.remaining.retry} / {equipment.charges.retry}</strong></span></div>
         <p>Комплект на начало смены<span>Помощь учитывается отдельно</span></p>
       </section>}

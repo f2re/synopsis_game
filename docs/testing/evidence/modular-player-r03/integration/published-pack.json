@@ -1,0 +1,22 @@
+{
+  "status": "PASS_FOR_SOURCE_TO_RUNTIME_INTEGRATION",
+  "reviewer": "/root",
+  "pipelineAuthor": "/root/motion_pipeline",
+  "date": "2026-11-11",
+  "runtimeRevision": "r03-motion6-20261111",
+  "fingerprints": {
+    "atlasSha256": "5d1931d289179d070f71b04159e5bb3c380996aa45e0fdf5b03784a900d051cd",
+    "compositionSha256": "0c737499b85dc18f87332ff31b73ca8163afc1a69af44d3bde07509cb8daf70f",
+    "sourceContractSha256": "99a7db7e70e152b5cf62bcb70d3f1d683da4a62ede31fe1db398896332e518be"
+  },
+  "publicArtAcceptance": "PASS",
+  "generatedAndPublicEqual": true,
+  "sourceManifestSha256": "83f30b8a9c578f18718301af43752f14f65ac476ead6981c33b58229e7c725eb",
+  "publicManifestSha256": "1840ef079475545552a57c009a90666f107bf4b65fb587246dfa64e2542f82a2",
+  "checks": "Production rebuild and --check, 11 legacy contract tests, 9 motion mutation tests, exported library identity, final TypeScript/runtime/build checks. Exact commands and results: final-checks.json.",
+  "notAccepted": [
+    "Browser composition",
+    "Actual GPU/performance",
+    "Release"
+  ]
+}

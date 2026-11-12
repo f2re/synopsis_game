@@ -8,7 +8,7 @@
   "provenance": "assets/source/characters/player-r01/provenance.json",
   "source_authoring": "tools/assets/prepare_modular_player_r01.py",
   "build": "tools/assets/build_modular_player_r01.py",
-  "release_scope": "All current appearance values, four views, idle breathing only; walk and inspect remain unaccepted motion-guide work.",
+  "release_scope": "Accepted R02 editable parts for the static character editor and server-side saved portrait only. Use idle phase 0; personal-character animation and per-screen dynamic clothing composition are disabled by the 2026-11-12 portrait decision.",
   "reviews": [
     "docs/testing/2026-11-10-modular-player-independent-review.md",
     "docs/art/reviews/2026-11-10-modular-player-r01-art-review.md"

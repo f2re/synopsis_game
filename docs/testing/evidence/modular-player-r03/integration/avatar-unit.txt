@@ -1,0 +1,25 @@
+✔ all 42 server options and default saved profile match the reusable render contract (26.185231ms)
+✔ the actual compiled source pack matches the consumer schema, PNG and acceptance gate (26.251786ms)
+✔ only complete accepted catalogs load, with bounds, none semantics and every declared pose (140.291829ms)
+✔ optional accessories may be explicitly hidden by a direction; required body/clothes cannot (15.535187ms)
+✔ an accepted idle-only catalog does not claim walk or inspect readiness (9.787703ms)
+✔ back and front fragments use one global z order; companion is excluded from body (7.48085ms)
+✔ RGB remapping preserves alpha, transparent pixels and authored non-palette colors (0.384285ms)
+✔ inspect ends only after all six frames; authored cadence and reduced-motion are deterministic (8.538579ms)
+✔ cache bounds include active leases; scene disposal does not evict a second consumer (0.631974ms)
+✔ saved identity survives bridge normalization; shift uses the server snapshot without mutating profile (0.80424ms)
+✔ situations preserve the full outfit and intersect their actions with accepted clips (14.810472ms)
+✔ only a supplied shift snapshot selects its instrument; fitting and blitz stay cosmetic (0.369223ms)
+✔ preview and Phaser share exact frame rectangles and foot-relative companion placement (7.026034ms)
+✔ the fountain route goes around its footprint and rejects unmarked ground (3.431192ms)
+✔ keyboard steps follow their direction on the path and stop at a corner (0.648658ms)
+✔ landscape path has clearance from every authored building and ground prop (18.922101ms)
+✔ portrait path has clearance from every authored building and ground prop (3.962502ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 515.055143

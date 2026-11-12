@@ -27,6 +27,8 @@ const SECURITY_PROFILE = process.env.SYNOPSIS_SECURITY_PROFILE === 'trusted' ? '
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const CONTENT_ROOT = process.env.SYNOPSIS_CONTENT_ROOT ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/opt/synopsis-game/current/content' : resolve(MODULE_DIR, '../../../content'));
+const AVATAR_ASSETS_ROOT = process.env.SYNOPSIS_AVATAR_ASSETS_ROOT ?? resolve(MODULE_DIR,
+  process.env.SYNOPSIS_VERSION_FILE ? '../web/assets/avatar/modular-r01' : '../../web/public/assets/avatar/modular-r01');
 const ATTEMPT_LOG_PATH = process.env.SYNOPSIS_ATTEMPT_LOG ??
   (process.env.SYNOPSIS_VERSION_FILE ? '/var/lib/synopsis-game/data/attempts.jsonl' : resolve(MODULE_DIR, '../.local/attempts.jsonl'));
 const PROGRESSION_STORE = process.env.SYNOPSIS_PROGRESSION_STORE ??
@@ -41,10 +43,10 @@ const version = process.env.SYNOPSIS_VERSION ?? (() => {
   }
 })();
 
-const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE });
+const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE, avatarAssetsRoot: AVATAR_ASSETS_ROOT });
 await identity.init();
 const equipment = new EquipmentService({ storePath: EQUIPMENT_STORE });
-const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH, equipment });
+const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH, equipment, avatarAssetsRoot: AVATAR_ASSETS_ROOT });
 await shifts.init();
 const progression = new ProgressionService({ storePath: PROGRESSION_STORE });
 await progression.loadState();
@@ -191,9 +193,32 @@ const server = createServer(async (request, response) => {
       return;
     }
 
+    if (request.method === 'GET' && path === '/api/blitz-practice') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, await shifts.blitzLobby(user.id));
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/blitz-practice') {
+      const user = identity.me(bearer(request));
+      const body = await readJson(request);
+      sendJson(response, 201, await shifts.startBlitz(user.id, user.avatar, body.requestId, user.avatarPortrait));
+      return;
+    }
+    const blitzMatch = path.match(/^\/api\/blitz-practice\/([^/]+)(\/answer)?$/);
+    if (blitzMatch && (request.method === 'GET' && !blitzMatch[2] || request.method === 'POST' && blitzMatch[2])) {
+      const user = identity.me(bearer(request));
+      const blitzId = decodeURIComponent(blitzMatch[1]);
+      if (request.method === 'GET') sendJson(response, 200, await shifts.getBlitz(user.id, blitzId));
+      else {
+        const body = await readJson(request);
+        sendJson(response, 200, await shifts.submitBlitzAnswer(user.id, blitzId, typeof body.instanceId === 'string' ? body.instanceId : '', body.answer));
+      }
+      return;
+    }
+
     if (request.method === 'POST' && path === '/api/shifts') {
       const user = identity.me(bearer(request));
-      sendJson(response, 201, await shifts.startShift(user.id, user.avatar));
+      sendJson(response, 201, await shifts.startShift(user.id, user.avatar, user.avatarPortrait));
       return;
     }
     const shiftEffectMatch = path.match(/^\/api\/shifts\/([^/]+)\/(reference|reveal)$/);

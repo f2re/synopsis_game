@@ -1,7 +1,7 @@
-/* R02 wardrobe geometry probe, using a synthetic manifest only inside intercepted test requests.
+/* Static fitting geometry probe, using a synthetic manifest only inside intercepted test requests.
  * Start the Vite dev server first; no candidate/production artwork is accepted by this test.
  * MODULAR_AVATAR_TEST_URL=http://127.0.0.1:5192 node tools/test_modular_avatar_layout.cjs
- * For actual accepted artwork and all four situations, open the separate dev-only
+ * For the accepted static fitting and saved portrait flow, open the separate dev-only
  * /tools/review/modular-player.html stand. This probe is not in the CI workflow.
  */
 'use strict';
@@ -28,7 +28,7 @@ const manifest = {
   companions: { 'companion.none': null, ...Object.fromEntries(['companion.tit', 'companion.squirrel'].map((id) => [id, { frame: { width: 64, height: 64, pivot: [32, 60] }, anchor: [-34, 0], frames: emptyOrPixel(false) }])) },
 };
 contract.exports.parseModularAvatarManifest(manifest);
-const output = 'docs/testing/evidence/modular-player-r02/layout-probe';
+const output = 'docs/testing/evidence/saved-avatar-portrait/layout-probe';
 fs.mkdirSync(output, { recursive: true });
 
 (async () => {
@@ -45,37 +45,34 @@ fs.mkdirSync(output, { recursive: true });
     await page.evaluate(async (avatar) => {
       const React = await import('/node_modules/.vite/deps/react.js');
       const { createRoot } = await import('/node_modules/.vite/deps/react-dom_client.js');
-      const { AvatarSituationPreview } = await import('/src/features/avatar/AvatarSituationPreview.tsx');
+      const { AvatarPreview } = await import('/src/features/avatar/AvatarPreview.tsx');
+      await import('/src/features/avatar/inventory.css');
       const host = document.createElement('main'); host.className = 'inventory-screen'; document.body.append(host);
-      host.innerHTML = '<section class="inventory-workspace"><aside class="inventory-observer"><div class="inventory-observer__heading">Layout fixture</div><div id="layout-target"></div></aside></section>';
+      host.innerHTML = '<section class="inventory-workspace"><aside class="inventory-observer"><div class="inventory-observer__heading">Layout fixture</div><div id="layout-target" class="inventory-fitting__stage"></div></aside></section>';
       const root = createRoot(document.querySelector('#layout-target'));
-      window.renderTestAvatar = (companion) => root.render(React.createElement(AvatarSituationPreview, {
-        avatar: { ...avatar, companion }, context: 'wardrobe', direction: 'down', animation: 'idle', dirty: false,
-        keyboardLabel: 'Geometry fixture', onContextChange() {}, onPreviewKeys() {},
-        onAnimationComplete() {}, onAvailableAnimations() {},
-      }));
+      window.renderTestAvatar = (companion) => root.render(React.createElement(AvatarPreview, { avatar: { ...avatar, companion }, direction: 'down' }));
     }, DEFAULT_MODULAR_AVATAR);
     const results = [];
     for (const width of [375, 680, 1000, 1440]) {
       await page.setViewportSize({ width, height: 950 });
       for (const companion of ['companion.none', 'companion.tit']) {
         await page.evaluate((value) => window.renderTestAvatar(value), companion);
-        await page.waitForFunction((value) => document.querySelector('#layout-target canvas')?.dataset.avatarComposite?.includes(value), companion);
+        await page.waitForFunction((value) => document.querySelector('#layout-target canvas')?.dataset.avatarKey?.includes(value), companion);
         const metric = await page.evaluate(() => {
           const canvas = document.querySelector('#layout-target canvas');
           const style = getComputedStyle(canvas), rect = canvas.getBoundingClientRect();
           // Exact geometry diagnostic, not authored art: blue = body, green = child.
           const context = canvas.getContext('2d'); context.clearRect(0, 0, canvas.width, canvas.height);
           context.fillStyle = '#1155dd'; context.fillRect(18, 0, 96, 144);
-          const hasChild = canvas.dataset.avatarComposite.includes('companion.tit');
+          const hasChild = canvas.dataset.avatarKey.includes('companion.tit');
           if (hasChild) { context.fillStyle = '#22cc55'; context.fillRect(0, 104, 16, 32); }
           return { intrinsic: [canvas.width, canvas.height], box: [rect.width, rect.height], objectFit: style.objectFit,
-            position: [rect.x, rect.y], composite: canvas.dataset.avatarComposite, reducedMotion: canvas.dataset.reducedMotion };
+            position: [rect.x, rect.y], composite: canvas.dataset.avatarKey, frame: canvas.dataset.avatarFrame, imageRendering: style.imageRendering };
         });
         assert.deepEqual(metric.intrinsic, [114, 144]);
-        assert.equal(metric.objectFit, 'contain');
-        assert.equal(metric.reducedMotion, 'true');
-        assert.ok(Math.abs(metric.box[1] / metric.box[0] - 1.5) < .001);
+        assert.equal(metric.frame, '0');
+        assert.equal(metric.imageRendering, 'pixelated');
+        assert.deepEqual(metric.box, [228, 288], 'Static fitting stays at an exact integer scale');
         const filename = `layout-${width}-${companion.split('.')[1]}.png`;
         await page.locator('#layout-target').screenshot({ path: path.join(output, filename) });
         results.push({ width, companion, ...metric, screenshot: filename });
@@ -85,7 +82,7 @@ fs.mkdirSync(output, { recursive: true });
       assert.deepEqual(none.intrinsic, child.intrinsic, 'Companion changes must not resize the native viewport');
     }
     assert.deepEqual(errors, []);
-    const result = { status: 'PASS', test: 'actual R02 AvatarSituationPreview wardrobe structure + inventory CSS, synthetic intercepted manifest', artAcceptance: 'NOT_TESTED', actualArtStand: '/tools/review/modular-player.html', cases: results, pageErrors: errors };
+    const result = { status: 'PASS', test: 'actual static AvatarPreview + inventory CSS, synthetic intercepted manifest', artAcceptance: 'NOT_TESTED', actualArtStand: '/tools/review/modular-player.html', cases: results, pageErrors: errors };
     fs.writeFileSync(path.join(output, 'browser-layout.json'), JSON.stringify(result, null, 2) + '\n');
     console.log(JSON.stringify({ status: result.status, cases: results.length, output: `${output}/browser-layout.json`, pageErrors: errors.length }));
   } finally { await browser.close(); }

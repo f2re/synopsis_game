@@ -195,3 +195,31 @@ dialog.shift-debrief-overlay::backdrop { background: rgba(3, 14, 18, .6); }
   .shift-earned__badges article > img { width: 64px; height: 64px; }
   .shift-lore-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Keep mentor controls after the task when the viewport cannot spare an overlay. */
+@media (max-width: 760px), (max-height: 540px) {
+  .seamless-shift-host { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+
+  .seamless-shift-host > .shift-mentor-trigger,
+  .seamless-shift-host > .shift-mentor-reaction,
+  .seamless-shift-host > .shift-mentor-panel {
+    position: static;
+    inset: auto;
+    z-index: auto;
+    box-sizing: border-box;
+    width: min(760px, calc(100% - 32px));
+    margin: 16px auto 0;
+  }
+
+  .seamless-shift-host > .shift-mentor-trigger {
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  .seamless-shift-host > .shift-mentor-reaction { min-height: 44px; }
+  .seamless-shift-host > .shift-mentor-panel { max-height: none; overflow: visible; }
+  .seamless-shift-host > .shift-mentor-panel > header { position: static; align-items: center; }
+  .seamless-shift-host > .shift-mentor-panel > header > button { flex-shrink: 0; min-width: 44px; min-height: 44px; }
+  .seamless-shift-host > .shift-mentor-panel .shift-mentor-tabs button { min-height: 44px; }
+}

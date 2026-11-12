@@ -1,0 +1,16 @@
+test_actual_pixel_change_cannot_inherit_pass (__main__.ModularPlayerContractTests.test_actual_pixel_change_cannot_inherit_pass) ... ok
+test_attachment_move_repositions_both_the_hand_and_held_item (__main__.ModularPlayerContractTests.test_attachment_move_repositions_both_the_hand_and_held_item) ... ok
+test_build_does_not_change_or_create_acceptance_pins (__main__.ModularPlayerContractTests.test_build_does_not_change_or_create_acceptance_pins) ... ok
+test_current_output_requires_matching_independent_evidence (__main__.ModularPlayerContractTests.test_current_output_requires_matching_independent_evidence) ... ok
+test_hidden_attachment_change_is_not_silently_accepted (__main__.ModularPlayerContractTests.test_hidden_attachment_change_is_not_silently_accepted) ... ok
+test_layer_order_change_reuses_pixels_but_requires_new_admission (__main__.ModularPlayerContractTests.test_layer_order_change_reuses_pixels_but_requires_new_admission) ... ok
+test_legacy_idle_pixels_remain_bit_identical_after_motion_extension (__main__.ModularPlayerContractTests.test_legacy_idle_pixels_remain_bit_identical_after_motion_extension) ... ok
+test_mask_change_requires_new_admission (__main__.ModularPlayerContractTests.test_mask_change_requires_new_admission) ... ok
+test_missing_false_or_mismatched_evidence_is_pending (__main__.ModularPlayerContractTests.test_missing_false_or_mismatched_evidence_is_pending) ... ok
+test_palette_change_cannot_inherit_pass (__main__.ModularPlayerContractTests.test_palette_change_cannot_inherit_pass) ... ok
+test_unbounded_masks_unknown_attachments_and_required_hidden_layers_are_rejected (__main__.ModularPlayerContractTests.test_unbounded_masks_unknown_attachments_and_required_hidden_layers_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 48.131s
+
+OK

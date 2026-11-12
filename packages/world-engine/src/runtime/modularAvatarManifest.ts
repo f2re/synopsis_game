@@ -212,37 +212,12 @@ export function parseModularAvatarManifest(value: unknown): ModularAvatarManifes
     frame: box, atlas: { assetId: atlas.assetId, url: atlas.url, width: atlas.width, height: atlas.height }, clips, palettes, body, parts, companions };
 }
 
-/** Canonical ordering makes wardrobe and world reuse exactly the same composition. */
+/** Canonical ordering identifies the saved appearance and its fitting preview. */
 export function avatarProfileKey(profile: ModularAvatarProfile): string {
   return (Object.keys(MODULAR_AVATAR_OPTIONS) as AvatarSlot[]).map((slot) => profile[slot]).join('|');
-}
-
-export function avatarFrameAtTime(clip: AvatarClip, elapsedMs: number, reducedMotion = false): { frame: number; complete: boolean } {
-  if (reducedMotion) return { frame: 0, complete: !clip.loop };
-  const total = clip.durationsMs.reduce((sum, ms) => sum + ms, 0);
-  const elapsed = Math.max(0, Number.isFinite(elapsedMs) ? elapsedMs : 0);
-  if (!clip.loop && elapsed >= total) return { frame: clip.durationsMs.length - 1, complete: true };
-  let remaining = elapsed % total;
-  for (let frame = 0; frame < clip.durationsMs.length; frame++) {
-    if (remaining < clip.durationsMs[frame]) return { frame, complete: false };
-    remaining -= clip.durationsMs[frame];
-  }
-  return { frame: 0, complete: false };
 }
 
 export function avatarPoseCels(manifest: ModularAvatarManifest, profile: ModularAvatarProfile, direction: AvatarDirection, action: AvatarAction, frame: number): AvatarCel[] {
   return [manifest.body, ...AVATAR_PART_SLOTS.map((slot) => manifest.parts[profile[slot]])]
     .flatMap((part) => part[direction][action]![frame].cels).sort((a, b) => a.z - b.z);
-}
-
-export function resolveAvatarAction(manifest: ModularAvatarManifest, action: AvatarAction): AvatarAction {
-  return manifest.clips[action] ? action : 'idle';
-}
-
-/** Pure adapter; blitz-preview is presentation only and does not create a game mode. */
-export type AvatarContext = 'wardrobe' | 'campus' | 'shift' | 'blitz-preview';
-export function avatarForContext(profile: ModularAvatarProfile, context: AvatarContext, equipment?: { heldItem: string } | null): ModularAvatarProfile {
-  if (context !== 'shift' || !equipment) return { ...profile };
-  const heldItem = (MODULAR_AVATAR_OPTIONS.heldItem as readonly string[]).includes(equipment.heldItem) ? equipment.heldItem : 'held.none';
-  return { ...profile, heldItem };
 }

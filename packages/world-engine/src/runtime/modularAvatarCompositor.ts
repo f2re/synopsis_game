@@ -1,17 +1,16 @@
 import {
-  AVATAR_ACTIONS, MODULAR_AVATAR_URL, avatarPoseCels, avatarProfileKey, parseModularAvatarManifest, parseModularAvatarProfile, resolveAvatarAction,
+  MODULAR_AVATAR_URL, avatarPoseCels, avatarProfileKey, parseModularAvatarManifest, parseModularAvatarProfile,
   type AvatarAction, type AvatarCel, type AvatarClip, type AvatarDirection, type AvatarFrameBox,
   type AvatarPaletteRamp, type ModularAvatarManifest, type ModularAvatarProfile,
 } from './modularAvatarManifest.ts';
-import { resolveAvatarPresentation, type AvatarPresentation, type AvatarPresentationOptions } from './modularAvatarPresentation.ts';
 
-/** Shared CPU budgets. Phaser uploads only the currently leased body/child sheets. */
+/** Bounded CPU resources for the static fitting room only. */
 export const AVATAR_CACHE_BUDGET = { composites: 12 * 1024 * 1024, paletteCels: 4 * 1024 * 1024 } as const;
 
 interface CacheEntry<T> { value: T; bytes: number; references: number; }
 export interface AvatarLease<T> { value: T; release: () => void; }
 
-/** A leased sheet cannot be evicted while a Canvas or Phaser consumer uses it. */
+/** A leased frame cannot be evicted while the fitting preview uses it. */
 export class AvatarResourceCache<T> {
   private entries = new Map<string, CacheEntry<T>>();
   private usedBytes = 0;
@@ -117,28 +116,18 @@ class ModularAvatarCompositor {
     return this.packPromise;
   }
 
-  async acquirePresentation(profile: ModularAvatarProfile, options: AvatarPresentationOptions = {}): Promise<{
-    presentation: AvatarPresentation; lease: AvatarLease<AvatarComposite>;
-  }> {
-    const { manifest } = await this.load();
-    const presentation = resolveAvatarPresentation(profile, options, AVATAR_ACTIONS.filter((action) => Boolean(manifest.clips[action])));
-    const lease = await this.acquire(presentation.profile, presentation.direction, presentation.action, { companionVisible: presentation.companionVisible });
-    return { presentation, lease };
-  }
-
-  async acquire(profileValue: ModularAvatarProfile, direction: AvatarDirection, requestedAction: AvatarAction,
-    display: { companionVisible?: boolean } = {}): Promise<AvatarLease<AvatarComposite>> {
+  /** Compose only the first authored standing frame, never an animation sheet. */
+  async acquireStatic(profileValue: ModularAvatarProfile, direction: AvatarDirection): Promise<AvatarLease<AvatarComposite>> {
     const profile = parseModularAvatarProfile(profileValue);
     if (!profile) throw new Error('Modular avatar: invalid saved profile');
     const { manifest, atlas } = await this.load();
-    const action = resolveAvatarAction(manifest, requestedAction);
-    const companionVisible = display.companionVisible !== false;
-    const key = `${manifest.rigId}:${manifest.revision}:${avatarProfileKey(profile)}:${direction}:${action}${companionVisible ? '' : ':companion-hidden'}`;
+    const action = 'idle';
+    const key = `${manifest.rigId}:${manifest.revision}:${avatarProfileKey(profile)}:${direction}:static0`;
     return this.composites.acquire(key, () => {
-      const clip = manifest.clips[action]!;
-      const count = clip.durationsMs.length;
+      const clip = { durationsMs: [manifest.clips.idle.durationsMs[0]], loop: false };
+      const count = 1;
       const body = canvas(manifest.frame.width * count, manifest.frame.height);
-      const selectedCompanion = companionVisible ? manifest.companions[profile.companion] : null;
+      const selectedCompanion = manifest.companions[profile.companion];
       const child = selectedCompanion ? canvas(selectedCompanion.frame.width * count, selectedCompanion.frame.height) : null;
       try {
         const draw = (context: CanvasRenderingContext2D, cel: AvatarCel, frameOffset: number) => {
@@ -175,7 +164,7 @@ class ModularAvatarCompositor {
   diagnostics() { return { composites: this.composites.stats(), paletteCels: this.cels.stats() }; }
 }
 
-/** One shared loader/cache for all React and Phaser consumers in this document. */
+/** Loaded only by the wardrobe. Saved portraits never call this compositor. */
 export const modularAvatarCompositor = new ModularAvatarCompositor();
 
 export function avatarPreviewBounds(composite: AvatarComposite): { width: number; height: number; bodyAt: [number, number]; childAt: [number, number] } {
@@ -195,7 +184,7 @@ export function avatarPreviewBounds(composite: AvatarComposite): { width: number
     bodyAt: [0 - left, 0 - top], childAt: [cx - left, cy - top] };
 }
 
-/** Draw precomposed sheets only; shared with QA to compare both rendering adapters. */
+/** Draw the precomposed fitting frame without scheduling any further work. */
 export function drawAvatarComposite(context: CanvasRenderingContext2D, composite: AvatarComposite, frame: number): void {
   const bounds = avatarPreviewBounds(composite);
   context.clearRect(0, 0, bounds.width, bounds.height);
