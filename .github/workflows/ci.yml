@@ -1,7 +1,7 @@
 name: Сборка и интеграционные проверки
 on:
   push:
-    branches: [main]
+    branches: [main, 'agent/**']
   pull_request:
 permissions:
   contents: read
