@@ -196,7 +196,7 @@ export function WorldCanvas() {
   }, []);
 
   return (
-    <div className="world-canvas-host" role="group" aria-label="Интерактивный кампус. Tab — выбор здания; Enter или пробел — открыть описание.">
+    <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание.">
       <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
       {targets.map((target) => (
         <button

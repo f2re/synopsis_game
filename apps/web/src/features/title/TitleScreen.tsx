@@ -29,22 +29,22 @@ export function TitleScreen({ user, onOpenCampus, onStartShift, onOpenLogin, onO
     <main className="station-home" aria-labelledby="title-main-heading">
       <header className="station-home__masthead">
         <span className="station-wordmark"><span aria-hidden="true" className="station-signal" />УЧЕБНАЯ СТАНЦИЯ</span>
-        <span>Северо-Запад · вымышленный кампус</span>
+        <span>Северо-Запад</span>
       </header>
       <div className="station-home__layout">
         <section className="station-home__menu">
           <p className="station-home__number" aria-hidden="true">{GAME_MARK}</p>
           <h1 id="title-main-heading" tabIndex={-1}><span className="visually-hidden">{GAME_MARK}: </span>{GAME_CALLSIGN}</h1>
-          <p className="station-home__intro">Наблюдать. Разбираться. Возвращаться к главному.</p>
+          <p className="station-home__intro">Метеорологическая станция 26063</p>
           <div className="station-home__identity" role="status">
             {user ? <SavedAvatarPortrait portrait={user.avatarPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /> : <HubIcon name="observer" size={32} />}
-            <span>{sessionPending ? 'Проверяем профиль…' : user ? <><strong>{user.displayName}</strong><small>Группа {user.groupId}</small></> : <>Кампус и библиотека открыты<small>Для смены нужен профиль учебной группы</small></>}</span>
+            <span>{sessionPending ? 'Проверяем профиль…' : user ? <><strong>{user.displayName}</strong><small>Группа {user.groupId}</small></> : <>Станция и библиотека открыты<small>Для смены нужен профиль учебной группы</small></>}</span>
             {!user && !sessionPending && <button type="button" className="station-text-button" onClick={onOpenLogin}>Войти</button>}
           </div>
           {sessionNotice && <p className="station-notice" role="status">{sessionNotice}</p>}
           <nav className="station-main-menu" aria-label="Главное меню">
             <button className="station-menu-button station-menu-button--primary" type="button" onClick={onOpenCampus}>
-              <HubIcon name="map" size={40} /><span><strong>{user ? 'Продолжить в кампусе' : 'Войти в кампус'}</strong><small>Площадь, архив и кодовый пост</small></span><b aria-hidden="true">→</b>
+              <HubIcon name="map" size={40} /><span><strong>{user ? 'Вернуться на станцию' : 'Открыть станцию'}</strong><small>Площадь, архив и кодовый пост</small></span><b aria-hidden="true">→</b>
             </button>
             <button className="station-menu-button" type="button" onClick={onStartShift} disabled={sessionPending}>
               <PixelIcon name="kn01" size={32} alt="" /><span><strong>Учебная смена</strong><small>Перейти к рабочему месту</small></span><b aria-hidden="true">›</b>

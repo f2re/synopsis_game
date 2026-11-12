@@ -29,7 +29,7 @@ export function AvatarOptionGrid({ avatar, selectedId, category, query, equipped
   const slot = EQUIPMENT_SLOTS.find((entry) => entry.id === selected.slot)!;
   const equipped = avatar[selected.slot] === selected.id;
   const equipLabel = selected.slot === 'companion' ? 'Позвать спутника' : selected.slot === 'heldItem' ? 'Взять в руки' : selected.slot === 'badge' ? 'Прикрепить' : 'Надеть';
-  const removeLabel = selected.slot === 'companion' ? 'Оставить в кампусе' : selected.slot === 'heldItem' ? 'Убрать из рук' : 'Снять';
+  const removeLabel = selected.slot === 'companion' ? 'Оставить на станции' : selected.slot === 'heldItem' ? 'Убрать из рук' : 'Снять';
   const selectedTool = tools?.find((tool) => tool.id === selected.id);
 
   return (

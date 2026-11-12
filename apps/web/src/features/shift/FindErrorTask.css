@@ -8,7 +8,7 @@
   gap: 3px;
   padding: 12px 14px;
   border: 1px solid rgba(216,181,91,.28);
-  border-radius: 12px;
+  border-radius: 0;
   background: rgba(216,181,91,.08);
   color: #b7c6cb;
   font-size: 12px;
@@ -18,7 +18,7 @@
   width: 100%;
   max-height: 620px;
   aspect-ratio: 1 / 1;
-  border-radius: 14px;
+  border-radius: 0;
   background: #e9ece7;
 }
 .find-error-paper { fill: #f7f5ea; stroke: #c9c6b7; stroke-width: 3; }

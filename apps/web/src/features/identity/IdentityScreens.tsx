@@ -89,7 +89,7 @@ export function LoginScreen({
       </div>
       <span className="prototype-kicker">26063 · Вход пользователя</span>
       <h1 id="login-title">Вход в систему</h1>
-      <p className="muted">Выберите свою учебную группу и свой профиль для входа в кампус.</p>
+      <p className="muted">Выберите свою учебную группу и имя, затем введите код входа.</p>
 
       <form className="form-stack" onSubmit={submit}>
         <div className="login-field">
@@ -585,7 +585,7 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
               ⚙ Сменить код администратора
             </button>
             <button className="secondary-button" onClick={onBack}>
-              ← В кампус
+              ← На станцию
             </button>
           </div>
         </header>

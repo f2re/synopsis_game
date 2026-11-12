@@ -12,29 +12,27 @@
 .library-eyebrow { color: #e6c07a; margin: 0 0 8px; }
 .library-header h1 { margin: 0; font: 32px/1.25 var(--font-pixel-display); color: #f3ecd8; }
 .library-lead { max-width: 680px; margin: 12px 0 0; color: #b9c8c6; }
-.library-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 2px solid #367c8b; border-radius: 2px; background: #143f4c; box-shadow: inset 0 2px #367c8b, 0 3px #070d1e; color: #f4f7fa; font: inherit; cursor: pointer; text-decoration: none; }
-.library-button:hover { border-color: #6f9e95; background: #1b5660; }
-.library-button:active { transform: translateY(2px); box-shadow: inset 0 1px #367c8b; }
+
 .library-back { flex: 0 0 auto; }
-.library-screen button:focus-visible, .library-screen a:focus-visible, .library-screen input:focus-visible { outline: 3px solid #ffe7a0; outline-offset: 3px; }
-.library-controls { padding: 20px; border: 2px solid #367c8b; border-bottom-color: #bfa275; background: #0c2a33; box-shadow: inset 0 2px #3c5755; }
+.library-screen button:focus-visible, .library-screen a:focus-visible, .library-screen input:focus-visible { outline: 2px solid #ffe7a0; outline-offset: 4px; }
+.library-controls { padding: 20px; border: 2px solid var(--ui-chrome-edge);  background: #0c2a33; box-shadow: inset 0 2px 0 #ffffff12; }
 .library-search-line { display: flex; align-items: flex-end; gap: 16px; }
 .library-search-label { flex: 1; min-width: 0; display: grid; gap: 8px; color: #e2d6b6; }
-.library-search-label input { width: 100%; min-height: 48px; padding: 12px 14px; border: 2px solid #367c8b; background: #071c24; color: #f4f7fa; font: inherit; border-radius: 2px; }
+.library-search-label input { width: 100%; min-height: 48px; padding: 12px 14px; border: 2px solid var(--ui-chrome-edge); background: #071c24; color: #f4f7fa; font: inherit; border-radius: 0; }
 .library-search-label input::placeholder { color: #a6b9bb; opacity: 1; }
 .library-bookmarks { min-height: 48px; white-space: nowrap; }
 .library-bookmarks[aria-pressed="true"] { border-color: #f2c75c; color: #ffdd83; }
 .library-count { min-width: 24px; text-align: center; color: #ffdd83; }
 .library-categories { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.library-categories button { min-height: 44px; padding: 8px 14px; font: inherit; border: 1px solid #496361; border-radius: 2px; background: #102e38; color: #d3dfdc; cursor: pointer; }
+.library-categories button { min-height: 44px; padding: 8px 14px; font: inherit; border: 2px solid var(--ui-chrome-edge); border-radius: 0; background: #102e38; color: #d3dfdc; cursor: pointer; }
 .library-categories button:hover { background: #1b5660; }
-.library-categories button[aria-pressed="true"] { background: #e2c177; border-color: #f2c75c; color: #1e2430; box-shadow: inset 0 -3px #b88626; }
-.library-body { display: grid; grid-template-columns: minmax(260px, .34fr) minmax(0, .66fr); align-items: stretch; border: 2px solid #367c8b; border-top: 0; box-shadow: 0 8px 0 rgba(0, 0, 0, .18); }
+.library-categories button[aria-pressed="true"] { background: #e2c177; border-color: #f2c75c; color: #1e2430; box-shadow: inset 0 -2px #b88626; }
+.library-body { display: grid; grid-template-columns: minmax(260px, .34fr) minmax(0, .66fr); align-items: stretch; border: 2px solid var(--ui-chrome-edge); border-top: 0; box-shadow: 0 8px 0 rgba(0, 0, 0, .18); }
 .library-catalog { background: #0c2a33; min-width: 0; border-right: 2px solid #405d60; }
-.library-catalog-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 16px; border-bottom: 1px solid #36585c; }
+.library-catalog-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 16px;  }
 .library-catalog-heading h2 { margin: 0; font-size: 18px; color: #e2d6b6; }
 .library-catalog-heading span { color: #b9c8c6; font-family: var(--font-pixel-dense); }
-.library-results { max-height: 780px; max-height: min(780px, 74dvh); list-style: none; margin: 0; padding: 6px; overflow-y: auto; scrollbar-color: #6f9e95 #0c2a33; }
+.library-results { max-height: 780px; max-height: min(780px, 74dvh); list-style: none; margin: 0; padding: 6px; overflow-y: auto; scrollbar-gutter: stable; }
 .library-results li { margin: 0; }
 .library-result { display: grid; gap: 6px; width: 100%; min-height: 72px; padding: 14px 12px; background: transparent; color: #e9e4d6; border: 1px solid transparent; border-left: 4px solid transparent; text-align: left; cursor: pointer; font: inherit; }
 .library-result:hover { background: #143f4c; }

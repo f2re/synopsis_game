@@ -99,7 +99,7 @@ export function RewardReveal({ reward, onConfirm, onSkip }: RewardRevealProps) {
               display: 'inline-block',
               marginBottom: 12
             }}>
-              {reward.category === 'badge' ? 'Нагрудный знак' : reward.category === 'wardrobe' ? 'Элемент формы' : reward.category === 'building' ? 'Объект кампуса' : 'Инструмент'}
+              {reward.category === 'badge' ? 'Нагрудный знак' : reward.category === 'wardrobe' ? 'Элемент формы' : reward.category === 'building' ? 'Объект станции' : 'Инструмент'}
             </span>
 
             <p style={{

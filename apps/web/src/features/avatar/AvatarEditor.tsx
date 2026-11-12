@@ -189,7 +189,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
       setSavedPortrait(updated.avatarPortrait);
       onSaved(updated);
       void loadEquipment();
-      setNotice({ kind: 'success', text: 'Портрет, одежда и цвета сохранены. Этот портрет виден в кампусе и появится в новых сменах и блицах.' });
+      setNotice({ kind: 'success', text: 'Портрет, одежда и цвета сохранены. Этот портрет виден на станции и появится в новых сменах и блицах.' });
       if (exitAfter) { setConfirmExit(false); onBack(); }
     } catch (reason) {
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
@@ -210,7 +210,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
       <div className="inventory-shell">
         <header className="inventory-header">
           <div className="inventory-heading"><img src="/assets/ui/hub-r01/icon-observer.png" alt="" width={44} height={44} /><div><span className="inventory-eyebrow">26063 · {user.displayName}</span><h1 id="inventory-title">Персонаж и инвентарь</h1></div></div>
-          <button type="button" className="inventory-button" disabled={busy} onClick={() => dirty ? setConfirmExit(true) : onBack()}>← В кампус</button>
+          <button type="button" className="inventory-button" disabled={busy} onClick={() => dirty ? setConfirmExit(true) : onBack()}>← На станцию</button>
         </header>
 
         <section className="equipment-ledger" aria-label="Ваш учебный журнал">
@@ -249,7 +249,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
             <section className="inventory-saved-portrait" aria-labelledby="inventory-saved-portrait-title" data-confirmed-portrait={savedPortrait?.sha256}>
               <SavedAvatarPortrait portrait={savedPortrait} size={80} />
               <div><h2 id="inventory-saved-portrait-title">Портрет в профиле</h2>
-                <p>{portraitSaved ? dirty ? 'На игровых экранах пока показан этот сохранённый портрет. Примерка применится после сохранения.' : 'Этот портрет используется в кампусе и новых раундах.' : 'Портрет ещё не сохранён. Нажмите «Сохранить персонажа».'}</p>
+                <p>{portraitSaved ? dirty ? 'На игровых экранах пока показан этот сохранённый портрет. Примерка применится после сохранения.' : 'Этот портрет используется на станции и новых раундах.' : 'Портрет ещё не сохранён. Нажмите «Сохранить персонажа».'}</p>
               </div>
             </section>
             <h2 className="inventory-subtitle">{dirty ? 'В примерке' : 'Сохранённые вещи'}</h2>
@@ -287,7 +287,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         {notice && <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
       </div>
       <dialog ref={exitDialog} className="inventory-exit-dialog" onCancel={() => setConfirmExit(false)} aria-labelledby="inventory-exit-title">
-        <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед возвращением в кампус его можно сохранить.</p>
+        <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед возвращением на станцию его можно сохранить.</p>
         <div><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save(true)}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
       </dialog>
     </main>

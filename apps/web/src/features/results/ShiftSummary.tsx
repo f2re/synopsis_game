@@ -183,7 +183,7 @@ export function ShiftSummary({
                 className="pixel-btn-secondary"
                 onClick={onExitToHub}
               >
-                ← Вернуться в хаб
+                ← На станцию
               </button>
 
               <button

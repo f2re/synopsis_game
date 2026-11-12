@@ -11,6 +11,7 @@ export interface StationNavDockProps {
   className?: string;
   currentScene?: string;
   sceneReady?: boolean;
+  sessionPending?: boolean;
 }
 
 /** R01: the central amber action is the only primary action on the campus. */
@@ -23,10 +24,11 @@ export function StationNavDock({
   className = '',
   currentScene = 'hub',
   sceneReady = false,
+  sessionPending = false,
 }: StationNavDockProps) {
   const inArchive = currentScene === 'archive';
   return (
-    <nav className={`hub-dock ${className}`.trim()} aria-label="Действия кампуса">
+    <nav className={`hub-dock ${className}`.trim()} aria-label="Действия станции">
       <button type="button" className="hub-dock__button hub-dock__guide" onClick={() => onOpenModal('guide')}>
         <HubIcon name="guide" size={40} />
         <span><strong>Управление</strong><small>Клавиши и помощь</small></span>
@@ -37,17 +39,17 @@ export function StationNavDock({
         <span><strong>Маршрут</strong><small>Помещения и задачи</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
-      <button type="button" className="hub-dock__button hub-dock__primary" onClick={onStartShift}>
+      <button type="button" className="hub-dock__button hub-dock__primary" onClick={onStartShift} disabled={sessionPending}>
         <HubIcon name="weather" size={48} />
         <span><strong>Начать смену</strong><small>КН-01 · приём дежурства</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
       <button type="button" className="hub-dock__button hub-dock__archive" onClick={inArchive ? onOpenArchive : onOpenLibrary ?? onOpenArchive} disabled={inArchive && !sceneReady}>
         <HubIcon name={inArchive ? 'map' : 'archive'} size={40} />
-        <span><strong>{inArchive ? 'На площадь' : 'Библиотека'}</strong><small>{inArchive ? 'Вернуться в кампус' : 'Понятия и справочник'}</small></span>
+        <span><strong>{inArchive ? 'На площадь' : 'Библиотека'}</strong><small>{inArchive ? 'Вернуться на площадь' : 'Понятия и справочник'}</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
-      <button type="button" className="hub-dock__button hub-dock__profile" onClick={onOpenProfile}>
+      <button type="button" className="hub-dock__button hub-dock__profile" onClick={onOpenProfile} disabled={sessionPending}>
         <HubIcon name="student" size={40} />
         <span><strong>Инвентарь</strong><small>Персонаж и снаряжение</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>

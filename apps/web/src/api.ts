@@ -313,7 +313,7 @@ export const api = {
   },
   async me(signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', { signal }, true)).user; },
   async updateAvatar(avatar: AvatarProfile): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }) }, true)).user; },
-  async equipment(): Promise<EquipmentResponse> { return request('/api/equipment', {}, true); },
+  async equipment(signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment', { signal }, true); },
   async selectEquipmentBadge(badgeId: string | null): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }) }, true); },
   async startShift(): Promise<ShiftStartResponse> { return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true); },
   async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress; equipment: EquipmentSnapshot; retryAvailable: boolean; reference?: ShiftReference }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true); },

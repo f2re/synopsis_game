@@ -51,3 +51,10 @@ Mandatory sources before designing or modifying UI components:
    - High readability in classroom/projector environments and responsive mobile viewports.
 
 Required reviewers: `art-director` for visual brand and typographic alignment; `ux-accessibility-reviewer` for contrast, Cyrillic legibility and keyboard accessibility; `web-performance-engineer` for smooth frame rate.
+
+
+## Обязательная приёмка интерфейса станции
+
+Следуйте `docs/LANGUAGE_POLICY.md` и разделу «Пользовательский текст и приёмка интерфейса» в `AGENTS.md`. Главное окно — вид станции. Используйте единую сетку для рамок и кнопок, общие состояния управления и встроенную полосу прокрутки. Не наносите декоративные полосы поверх панелей, не маскируйте загрузку выдуманным процентом, не растягивайте растровые углы.
+
+До передачи покажите обычное состояние, наведение, нажатие, клавиатурный фокус и недоступное состояние; проверьте попадание указателя по всей видимой кнопке, прокрутку и закрытие каждого диалога. Тексты должны описывать работающие действия, а счётчики — подтверждённые результаты. Не подменяйте отсутствующую функцию художественной лентой событий.

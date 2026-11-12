@@ -27,7 +27,7 @@ const LEVEL1_DISCOVERIES: DiscoveryItem[] = [
   },
   {
     id: 'squirrel',
-    name: 'Кампусная белка',
+    name: 'Белка у станции',
     category: 'fauna',
     icon: '🐿️',
     image: '/assets/items/companion_squirrel.png',
@@ -120,7 +120,7 @@ export function Discoveries({ onClose, onSelectDiscovery }: DiscoveriesProps) {
             }}>
               <div>
                 <span style={{ fontSize: 11, color: 'var(--color-primary-cyan)', fontFamily: 'var(--font-pixel-ui)' }}>
-                  ЖИВОЙ МИР ХАБА · СТАНЦИЯ 26063
+                  НАХОДКИ НА СТАНЦИИ · 26063
                 </span>
                 <h1 id="discoveries-title" style={{ margin: '4px 0 0', fontSize: 18, fontFamily: 'var(--font-pixel-display)' }}>
                   Полевой дневник находок и фауны
@@ -132,7 +132,7 @@ export function Discoveries({ onClose, onSelectDiscovery }: DiscoveriesProps) {
                 onClick={onClose}
                 style={{ padding: '6px 12px', fontSize: 12 }}
               >
-                ✕ В хаб
+                На станцию
               </button>
             </div>
 
@@ -171,7 +171,7 @@ export function Discoveries({ onClose, onSelectDiscovery }: DiscoveriesProps) {
                           {d.discovered ? d.name : 'Не открыто'}
                         </div>
                         <div style={{ fontSize: 10, color: 'var(--ui-text-muted)' }}>
-                          {d.discovered ? 'Открыто' : 'Ищите в хабе'}
+                          {d.discovered ? 'Открыто' : 'Ищите на станции'}
                         </div>
                       </div>
                     </div>

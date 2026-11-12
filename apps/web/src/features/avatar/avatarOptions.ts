@@ -77,7 +77,7 @@ export const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
     { id: 'held.pencil', name: 'Карандаш синоптика', image: '/assets/items/held_pencil.png', desc: 'Карандаш для работы с бумажными картами.' },
   ],
   companion: [
-    { id: 'companion.none', name: 'Без спутника', desc: 'Оставить спутника в кампусе' },
+    { id: 'companion.none', name: 'Без спутника', desc: 'Оставить спутника на станции' },
     { id: 'companion.tit', name: 'Синичка', image: '/assets/items/companion_tit.png', desc: 'Маленькая любопытная обитательница станционного сада.' },
     { id: 'companion.squirrel', name: 'Белка', image: '/assets/items/companion_squirrel.png', desc: 'Рыжая жительница сосен возле архива.' },
   ],

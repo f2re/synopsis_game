@@ -101,7 +101,8 @@ async function screenChecks() {
   // The hub's real markup consumes the same confirmed PNG without loading its effects or Phaser.
   const hub = load('apps/web/src/features/hub/HubScreen.tsx', {
     '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик', GAME_TITLE: '26063' }, '../avatar/SavedAvatarPortrait': portraitModule,
-    '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' }, '../ui/SynopticDutyTicker': { SynopticDutyTicker: 'SynopticDutyTicker' },
+    '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' },
+    './StudyJournal': { StudyJournal: 'StudyJournal' }, './WorldLoadBoundary': { WorldLoadBoundary: 'WorldLoadBoundary' },
     './HubDialog': { HubDialog: 'HubDialog' }, './HubIcon': { HubIcon: 'HubIcon' },
     '../settings/settingsStore': { usePresentationPreferences: () => ({}) },
   }, { window: { matchMedia: () => ({ matches: false }) } });

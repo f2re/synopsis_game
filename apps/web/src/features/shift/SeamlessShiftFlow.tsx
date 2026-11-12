@@ -106,7 +106,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
           </div>
           <div className="shift-lore-actions">
             <button type="button" className="shift-primary" onClick={() => setPhase('work')}>Принять смену</button>
-            <button type="button" className="secondary-button" onClick={onExit}>Вернуться в центр</button>
+            <button type="button" className="secondary-button" onClick={onExit}>На станцию</button>
           </div>
         </section>
       </main>
@@ -246,7 +246,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
             </div>
             {completed && reward && <section className="shift-earned" aria-labelledby="shift-earned-title"><h2 id="shift-earned-title">{reward.newBadges.length > 0 ? 'Новые знаки в вашей коллекции' : 'Учебный журнал обновлён'}</h2>{reward.newBadges.length > 0 && <div className="shift-earned__badges">{reward.newBadges.map((badge) => <article key={badge.id}><AwardBadgeAnimation badgeId={badge.id} image={badge.image} size={88} /><div><strong>{badge.name}</strong><span>{badge.effectDescription}</span></div></article>)}</div>}<p>Завершено смен: {reward.completedShifts} · верно самостоятельно: {reward.unassistedCorrect} · учебных дней: {reward.practiceDays}.</p><p>Выберите учебный знак перед новой сменой. Снаряжение не влияет на рейтинговые результаты.</p></section>}
             <div className="shift-lore-actions">
-              <button type="button" className="shift-primary" onClick={onExit}>Вернуться в центр</button>
+              <button type="button" className="shift-primary" onClick={onExit}>На станцию</button>
               {completed && onEquipment && <button type="button" className="secondary-button" onClick={onEquipment}>{reward?.newBadges.length ? 'Выбрать полученный знак' : 'Открыть снаряжение'}</button>}
               {!completed && (
                 <button type="button" className="secondary-button" onClick={() => setDebriefReason(null)}>Продолжить эту смену</button>

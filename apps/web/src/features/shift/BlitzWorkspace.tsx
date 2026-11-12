@@ -175,27 +175,27 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
     <header className={`shift-topbar blitz-topbar${active ? ' is-active' : ''}`}>
       <div className="shift-heading"><PixelIcon name="kn01" size="md" /><div className="shift-heading__text"><span className="shift-kicker">{GAME_MARK} · тренировка</span><strong>Блиц-практика · 90 с</strong></div></div>
       {active && <div className={`blitz-timer ${remaining <= 15 ? 'blitz-timer--ending' : ''}`} aria-label={`Осталось ${remaining} секунд`}><span aria-hidden="true">{Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, '0')}</span><small>на весь раунд</small></div>}
-      <button type="button" className="shift-exit" onClick={onExit}><PixelIcon name="logout" size="sm" /><span>В кампус</span></button>
+      <button type="button" className="shift-exit" onClick={onExit}><PixelIcon name="logout" size="sm" /><span>На станцию</span></button>
     </header>
 
     <div className="blitz-layout">
       <aside className="blitz-profile" aria-label="Персонаж в блице">
         <div className="blitz-profile__portrait"><SavedAvatarPortrait portrait={portrait} size={80} label={session ? 'Портрет на начало раунда' : 'Сохранённый портрет'} missingLabel={session ? 'Портрет не сохранён для этого раунда' : 'Сохраните портрет в гардеробе'} /></div>
         <div className="blitz-profile__identity"><strong>{user.displayName}</strong><span>{isSavedAvatarPortrait(portrait) ? session ? 'Портрет и комплект на начало раунда' : 'Ваш сохранённый портрет' : session ? 'Портрет не сохранён для этого раунда' : 'Сохраните портрет в гардеробе'}</span></div>
-        <details className="blitz-profile__details"><summary>Комплект и время</summary><p>Одежда и инструменты сохраняют ваш образ. Справка и повтор в этом сценарии отключены.</p><p>Выход и перезагрузка не останавливают отсчёт. Здесь можно продолжить тот же раунд.</p></details>
+        <details className="blitz-profile__details"><summary>Комплект и время</summary><p>Одежда и инструменты сохраняют ваш образ. В блице одна самостоятельная попытка на задание.</p><p>Выход и перезагрузка не останавливают отсчёт. Здесь можно продолжить тот же раунд.</p></details>
       </aside>
 
       <section className="blitz-content">
-        {draft && <p className="shift-draft">Черновой учебный пакет. Это тренировка без рейтинга и наград.</p>}
+        {draft && <p className="shift-draft">Задания проходят методическую проверку.</p>}
         {loading ? <section className="blitz-card" role="status"><h1>Открываем блиц…</h1><p>Проверяем доступ и сохранённый раунд.</p></section> : <>
           {!session && <section className="blitz-card">
             <span className="blitz-kicker">Короткая самостоятельная тренировка</span>
             <h1>Шесть заданий. Один отсчёт.</h1>
             <p>Дешифрируйте кодовые группы, восстановите порядок и нанесите данные станции. Все задания взяты из текущей учебной смены.</p>
-            <dl className="blitz-rules"><div><dt>90 секунд</dt><dd>На весь раунд, включая переходы.</dd></div><div><dt>Одна попытка</dt><dd>Ответ проверяет сервер. Разбор сохранится после ответа.</dd></div><div><dt>Только практика</dt><dd>Результат не начисляет знаки, рейтинг или допуск.</dd></div></dl>
+            <dl className="blitz-rules"><div><dt>90 секунд</dt><dd>На весь раунд, включая переходы.</dd></div><div><dt>Одна попытка</dt><dd>После ответа открывается разбор.</dd></div><div><dt>Только практика</dt><dd>Личный результат: число верных ответов.</dd></div></dl>
             {lobby?.eligible
               ? <button type="button" className="shift-primary" disabled={busy} onClick={() => void start()}>{busy ? 'Начинаем…' : 'Начать блиц · 90 с'}</button>
-              : lobby && <div className="blitz-locked"><strong>Сначала завершите одну учебную смену КН-01.</strong><p>Блиц откроется после её последнего ответа. Он не заменяет квалификационный допуск.</p><button type="button" className="shift-primary" onClick={onStartPractice}>К учебной смене</button></div>}
+              : lobby && <div className="blitz-locked"><strong>Сначала завершите одну учебную смену КН-01.</strong><p>Блиц откроется после её последнего ответа.</p><button type="button" className="shift-primary" onClick={onStartPractice}>К учебной смене</button></div>}
           </section>}
 
           {active && session.task && <>

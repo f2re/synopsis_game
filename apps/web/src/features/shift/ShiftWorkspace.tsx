@@ -258,7 +258,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
           <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
           <strong>Смена не запущена</strong>
           <p>{error}</p>
-          <button className="secondary-button" onClick={() => onExit('startup-error')} style={{ marginTop: 8 }}>Вернуться в центр</button>
+          <button className="secondary-button" onClick={() => onExit('startup-error')} style={{ marginTop: 8 }}>На станцию</button>
         </section>
       </main>
     );
@@ -331,7 +331,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
                 : stationPlot
                   ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
                   : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
-          {contentStatus !== 'published' && <div className="shift-draft">Учебный пакет проходит независимую методическую приёмку. Рейтинговый режим отключён.</div>}
+          {contentStatus !== 'published' && <div className="shift-draft">Задания проходят методическую проверку.</div>}
         </aside>
 
         <article className={`shift-card ${wideTask ? 'shift-card-wide' : ''}`}>

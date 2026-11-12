@@ -64,7 +64,8 @@ async function assertPortrait(page, selector, user, size) {
 }
 async function login(page, base, fixture, selected) {
   await page.goto(base);
-  await page.getByRole('button', { name: 'Войти', exact: true }).click();
+  await page.locator('.hub-profile-button').click();
+  await page.getByRole('button', { name: 'Войти в учебную группу', exact: true }).click();
   await page.getByRole('dialog', { name: 'Вход в учебную группу' }).waitFor();
   await page.getByLabel('Группа', { exact: true }).selectOption({ label: fixture.groupId });
   await page.getByLabel('Пользователь', { exact: true }).selectOption({ label: selected.displayName });
@@ -117,13 +118,12 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     const initial = (await request('/api/identity/avatar', 'PATCH', { avatar: DEFAULT })).user;
     checkSaved(initial, DEFAULT);
     await page.reload();
-    await assertPortrait(page, '.station-home__identity .saved-avatar-portrait', initial, 40);
-    await page.getByRole('button', { name: /Продолжить в кампусе/ }).click();
+    await assertPortrait(page, '.hub-profile-button .saved-avatar-portrait', initial, 40);
     await waitForCampus(page);
     await assertPortrait(page, '.hub-profile-button .saved-avatar-portrait', initial, 40);
     await page.getByRole('button', { name: `Профиль: ${selected.displayName}`, exact: true }).click();
     await assertPortrait(page, '.hub-profile-identity .saved-avatar-portrait', initial, 80);
-    assert.equal(atlasRequests.length, 0, 'Title, campus and profile must not request the fitting atlas');
+    assert.equal(atlasRequests.length, 0, 'Station home and profile must not request the fitting atlas');
     report.cases.push({ name: `portrait-no-editor-resources-${viewport.width}`, atlasRequests: 0, sha256: initial.avatarPortrait.sha256 });
 
     await page.goto(base + '/profile/avatar');
@@ -183,7 +183,7 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await capture(page, `portrait-save-network-failure-${viewport.width}`);
     await page.unroute('**/api/identity/avatar', abortSave);
     await page.getByRole('button', { name: 'Отменить изменения', exact: true }).click();
-    await page.getByRole('button', { name: '← В кампус', exact: true }).click();
+    await page.getByRole('button', { name: '← На станцию', exact: true }).click();
     await waitForCampus(page);
     await assertPortrait(page, '.hub-profile-button .saved-avatar-portrait', saved, 40);
     assert.equal(await page.locator('canvas').count(), 1, 'Exactly one world after editor unmount');
@@ -191,8 +191,8 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await page.reload(); await waitForCampus(page);
     await assertPortrait(page, '.hub-profile-button .saved-avatar-portrait', saved, 40);
     await page.goto(base);
-    await assertPortrait(page, '.station-home__identity .saved-avatar-portrait', saved, 40);
-    await capture(page, `portrait-title-${viewport.width}`);
+    await assertPortrait(page, '.hub-profile-button .saved-avatar-portrait', saved, 40);
+    await capture(page, `portrait-home-${viewport.width}`);
 
     await page.goto(base + '/shift');
     await page.getByRole('heading', { name: 'Записка на краю стола' }).waitFor();
@@ -285,6 +285,26 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     report.cases.push({ name: `portrait-session-snapshots-${viewport.width}`, ordinaryStartAndResultSha: saved.avatarPortrait.sha256,
       blitzStartAndResultSha: changed.avatarPortrait.sha256, currentProfileSha: latest.avatarPortrait.sha256,
       ordinaryCompleted: result.completed, blitzCompleted: blitz.status, faultInjection: 'One aborted avatar PATCH; confirmed image and server data preserved' });
+    await page.goto(base); await waitForCampus(page);
+    const recorded = await request('/api/equipment');
+    await page.getByRole('button', { name: 'Журнал занятий', exact: true }).click();
+    await page.getByRole('region', { name: 'Результаты занятий', exact: true }).waitFor();
+    const counters = await page.locator('.hub-journal__summary dd').allTextContents();
+    assert.deepEqual(counters.map(Number), [recorded.stats.completedShifts, recorded.stats.unassistedCorrect, recorded.stats.practiceDays]);
+    assert.ok(recorded.stats.completedShifts > 0, 'Journal follows real completed practice');
+    await capture(page, `journal-recorded-${viewport.width}`);
+    await page.keyboard.press('Escape');
+    const abortJournal = route => route.abort('failed');
+    await page.route('**/api/equipment', abortJournal);
+    await page.getByRole('button', { name: 'Журнал занятий', exact: true }).click();
+    await page.getByText('Не удалось открыть журнал.', { exact: true }).waitFor();
+    assert.equal(await page.locator('.hub-journal__summary').count(), 0, 'Failed journal does not report fabricated zero progress');
+    await capture(page, `journal-offline-${viewport.width}`);
+    await page.unroute('**/api/equipment', abortJournal);
+    await page.getByRole('button', { name: 'Повторить загрузку', exact: true }).click();
+    await page.getByRole('region', { name: 'Результаты занятий', exact: true }).waitFor();
+    assert.deepEqual((await page.locator('.hub-journal__summary dd').allTextContents()).map(Number), counters.map(Number));
+    report.cases.push({ name: `journal-server-data-${viewport.width}`, stats: recorded.stats, recoveredAfterNetworkFailure: true });
     await context.close();
 
     // A fresh browser context authenticates normally, with no copied session or cache.
@@ -295,7 +315,7 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     const restoredSession = await login(restored, base, fixture, selected);
     assert.deepEqual(restoredSession.user.avatarPortrait, latest.avatarPortrait);
     checkSaved(restoredSession.user, latestProfile);
-    await assertPortrait(restored, '.station-home__identity .saved-avatar-portrait', latest, 40);
+    await assertPortrait(restored, '.hub-profile-button .saved-avatar-portrait', latest, 40);
     assert.equal(restoredAtlas.length, 0, 'Fresh login renders the stored PNG without loading parts');
     await restored.goto(base + '/profile/avatar');
     await restored.locator('canvas[data-avatar-renderer="editor-static"]').waitFor();
