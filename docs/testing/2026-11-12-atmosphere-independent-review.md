@@ -1,5 +1,7 @@
 # Независимая проверка настроек и атмосферы
 
+**Актуальная браузерная приёмка завершена:** scoped performance PASS для `6949d466879454ea9dbf2e0a0c1b60225fd08d70`; отдельный Phaser-аудиоконтекст обнаружен и устранён. Итоговые реальные измерения и закрытие PERF-01 находятся в [station-screens-performance-review](2026-11-12-station-screens-performance-review.md). Ниже сохранён исходный code/Node-review с его тогдашними границами.
+
 - Проверяющий: `library`, роли `web-performance-engineer` и `security-privacy-reviewer`.
 - Автор проверяемой реализации: `settings_audio`. Проверяющий не писал проверяемые настройки/аудиоконтроллер/WorldCanvas и не редактировал их при устранении замечания.
 - База: main `64b19ac`, задача `COZY-SCREENS-20261112-AUDIO`.
