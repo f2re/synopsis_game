@@ -23,7 +23,7 @@ const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
 const report = { status: 'RUNNING', browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
-let apiProcess, webServer, browser;
+let apiProcess, webServer, browser, nativeChrome;
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function reservePort() { const server = http.createServer(); server.listen(0, '127.0.0.1'); await once(server, 'listening'); const port = server.address().port; await new Promise(resolve => server.close(resolve)); return port; }
 async function startServers() {
@@ -58,6 +58,28 @@ async function startServers() {
   });
   webServer.listen(0, '127.0.0.1'); await once(webServer, 'listening');
   return `http://127.0.0.1:${webServer.address().port}`;
+}
+async function openNativeLifecycleBrowser() {
+  // connectOverCDP(noDefaults) leaves real page visibility intact in the default context.
+  // A second CDP session cannot release Playwright's per-session focus capture handle.
+  const port = await reservePort(), endpoint = `http://127.0.0.1:${port}`;
+  nativeChrome = spawn(process.env.CHROMIUM_PATH || chromium.executablePath(), [
+    '--no-sandbox', '--no-first-run', '--no-default-browser-check', '--enable-unsafe-swiftshader',
+    '--enable-precise-memory-info', '--remote-debugging-address=127.0.0.1', `--remote-debugging-port=${port}`,
+    `--user-data-dir=${path.join(temp, 'native-browser')}`, '--window-size=1280,1000',
+    ...(process.env.STATION_BROWSER_HEADED === 'true' ? [] : ['--headless=new']), 'about:blank',
+  ], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const log = fs.createWriteStream(path.join(output, 'native-browser.log'));
+  nativeChrome.stdout.pipe(log); nativeChrome.stderr.pipe(log);
+  for (let n = 0; n < 80; n++) {
+    if (nativeChrome.exitCode !== null) throw new Error(`Native Chromium exited: ${nativeChrome.exitCode}`);
+    try { if ((await fetch(endpoint + '/json/version')).ok) break; } catch {}
+    if (n === 79) throw new Error('Native Chromium startup timeout');
+    await wait(150);
+  }
+  browser = await chromium.connectOverCDP(endpoint, { noDefaults: true });
+  report.nativeLifecycle = { focusEmulation: false, isolatedProfile: true, realVisibility: true };
+  return browser.contexts()[0];
 }
 async function capture(page, name) {
   await page.evaluate(async () => { await document.fonts.ready; await Promise.all([...document.images].filter(img => img.getBoundingClientRect().width > 0).map(img => img.decode().catch(() => undefined))); });
@@ -167,8 +189,15 @@ async function waitForCampus(page) {
     await measurePresentation(page, `campus-performance-${viewport.width}`);
     await page.locator('.hub-dock__route').click();
     await page.getByRole('button', { name: /Архив наблюдений/ }).click();
-    await page.waitForFunction(() => document.querySelector('.hub-scene-caption')?.textContent.includes('Читальный зал архива'));
+    await page.getByRole('heading', { name: 'Читальный зал архива' }).waitFor();
+    assert.equal(await page.locator('canvas').count(), 0, 'Reading room replaces the fixed-size canvas placeholder');
     await capture(page, `archive-${viewport.width}`);
+    await page.getByRole('button', { name: 'На площадь', exact: false }).click();
+    await waitForCampus(page);
+    assert.equal(await page.locator('canvas').count(), 1, 'Returning mounts exactly one campus');
+    await page.goBack();
+    await page.getByRole('heading', { name: 'Читальный зал архива' }).waitFor();
+    assert.equal(await page.locator('canvas').count(), 0);
     await page.getByRole('button', { name: /Открыть библиотеку/ }).click();
     await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
     await page.goto(base);
@@ -190,7 +219,8 @@ async function waitForCampus(page) {
     await context.close();
   }
   // Native audio nodes are observed, not replaced, to prove real gesture/start/stop behavior.
-  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await browser.close();
+  const context = await openNativeLifecycleBrowser();
   await context.addInitScript(() => {
     const Original = window.AudioContext || window.webkitAudioContext;
     const probe = window.__stationAudioProbe = { contexts: 0, oscillators: 0, buffers: 0 };
@@ -205,7 +235,9 @@ async function waitForCampus(page) {
       return ctx;
     } });
   });
-  const page = await context.newPage(); page.on('pageerror', error => report.errors.push({ scenario: 'session/audio', message: error.message }));
+  const page = context.pages()[0] || await context.newPage();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  page.on('pageerror', error => report.errors.push({ scenario: 'session/audio', message: error.message }));
   await page.goto(base); await page.getByRole('heading', { name: /Позывной/ }).waitFor();
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 0, 'No AudioContext before a gesture');
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
@@ -224,9 +256,7 @@ async function waitForCampus(page) {
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Music and ambience share a context');
   // A real background tab in headed Chromium, not a mocked visibility event.
-  // Playwright enables focus emulation for every page; remove that override first.
-  const lifecycleSession = await context.newCDPSession(page);
-  await lifecycleSession.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+  // This context has no driver focus emulation or visibility mocks.
   const backgroundTab = await context.newPage();
   await backgroundTab.goto('about:blank'); await backgroundTab.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'hidden', undefined, { polling: 100 });
@@ -281,6 +311,7 @@ async function waitForCampus(page) {
 }).finally(async () => {
   fs.writeFileSync(path.join(output, 'browser-report.json'), JSON.stringify(report, null, 2) + '\n');
   if (browser) await browser.close();
+  if (nativeChrome?.exitCode === null) { const done = once(nativeChrome, 'exit'); nativeChrome.kill('SIGTERM'); await done; }
   if (webServer) await new Promise(resolve => webServer.close(resolve));
   if (apiProcess?.exitCode === null) { const done = once(apiProcess, 'exit'); apiProcess.kill('SIGTERM'); await done; }
   fs.rmSync(temp, { recursive: true, force: true });

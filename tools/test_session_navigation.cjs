@@ -55,6 +55,7 @@ function runtime(blocked = false) {
   vm.runInNewContext(ts.transpileModule(fs.readFileSync('apps/web/src/appNavigation.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, { exports: nav });
   for (const unsafe of ['https://example.com', '//example.com', '/shift', '/admin', '/exit', null, {}, '/library/../../admin']) assert.equal(nav.safeReturnPath(unsafe), '/');
   assert.equal(nav.safeReturnPath('/library?q=Td'), '/library?q=Td');
+  assert.equal(nav.safeReturnPath('/archive'), '/archive'); assert.equal(nav.screenSurface('/archive'), 'library');
   assert.equal(nav.screenSurface('/exit'), 'silent'); assert.equal(nav.screenSurface('/shift'), 'study');
   console.log('PASS: stale user/admin login cancellation and revocation; immediate local exit; delayed logout vs new login; offline exit; blocked sessionStorage; safe return routes; study/exit audio surfaces.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

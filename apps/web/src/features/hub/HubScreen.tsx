@@ -22,6 +22,7 @@ interface HubScreenProps {
   onOpenAdmin: () => void;
   onOpenHome: () => void;
   onOpenLibrary: () => void;
+  onVisitArchive: () => void;
   onOpenHelp: () => void;
   onOpenSettings: () => void;
   onExit: () => void;
@@ -43,7 +44,7 @@ const facilities: Record<string, { title: string; icon: string; description: str
   hall: { title: 'Турнирный зал', icon: 'trophy', description: 'Дуэли, турниры и рейтинговые матчи пока не доступны в этой версии.' },
 };
 
-export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onOpenAvatar, onOpenAdmin, onOpenHome, onOpenLibrary, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false }: HubScreenProps) {
+export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onOpenAvatar, onOpenAdmin, onOpenHome, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false }: HubScreenProps) {
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
   const preferences = usePresentationPreferences();
   const [currentScene, setCurrentScene] = useState('hub');
@@ -122,7 +123,8 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
   function openScene(scene: 'hub' | 'archive') {
     setActiveModal(null);
     setSelectedFacility(null);
-    bridge.current?.emit('ui:open_scene', { scene });
+    if (scene === 'archive') onVisitArchive();
+    else bridge.current?.emit('ui:open_scene', { scene });
   }
 
   const utcTime = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
@@ -164,8 +166,6 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         currentScene={currentScene}
         sceneReady={sceneReady}
       />
-
-      {currentScene === 'archive' && <button type="button" className="hub-reading-room-link" onClick={onOpenLibrary}><HubIcon name="guide" size={36} /><span><strong>Открыть библиотеку</strong><small>Понятия, источники и ваши закладки</small></span><b aria-hidden="true">›</b></button>}
 
       {selectedFacility && facilities[selectedFacility] && (
         <HubDialog

@@ -32,10 +32,10 @@ export function Settings({ onClose, isPaused = false, onResume, connectionLost =
       <div className="station-settings__sheet">
         <header className="station-settings__header">
           <div><p className="station-settings__eyebrow">26063 · РАБОЧЕЕ МЕСТО</p><h1 id="settings-title">Настройки</h1><p>Устройтесь поудобнее. Всё сохраняется на этом устройстве.</p></div>
-          <button type="button" className="pixel-btn-secondary" onClick={leave}>← {isPaused ? 'Продолжить' : 'Назад'}</button>
+          <button type="button" className="station-settings__button" onClick={leave}>← {isPaused ? 'Продолжить' : 'Назад'}</button>
         </header>
 
-        {connectionLost && <section className="station-settings__notice" role="status"><strong>Нет связи с сервером станции</strong><p>Настройки доступны без подключения. Результат отправки учебного ответа проверяйте после восстановления связи.</p>{onRetryConnection && <button type="button" className="pixel-btn-secondary" onClick={onRetryConnection}>Проверить соединение</button>}</section>}
+        {connectionLost && <section className="station-settings__notice" role="status"><strong>Нет связи с сервером станции</strong><p>Настройки доступны без подключения. Результат отправки учебного ответа проверяйте после восстановления связи.</p>{onRetryConnection && <button type="button" className="station-settings__button" onClick={onRetryConnection}>Проверить соединение</button>}</section>}
 
         <div className="station-settings__columns">
           <section className="station-settings__section" aria-labelledby="settings-audio-title">
@@ -47,7 +47,7 @@ export function Settings({ onClose, isPaused = false, onResume, connectionLost =
             <div className="station-settings__sliders">
               {volumes.map(([key, label]) => <label className="station-settings__range" key={key} htmlFor={`settings-${key}`}><span>{label}<output htmlFor={`settings-${key}`}>{settings[key]}%</output></span><input id={`settings-${key}`} type="range" min="0" max="100" step="1" value={settings[key]} onChange={(e) => update(key, Number(e.target.value))} /></label>)}
             </div>
-            <button type="button" className="pixel-btn-secondary" disabled={!settings.soundEnabled || settings.masterVolume === 0 || settings.sfxVolume === 0} onClick={() => worldAudio.play('audio.ui.click-soft', { allowVariance: false })}>Послушать сигнал</button>
+            <button type="button" className="station-settings__button" disabled={!settings.soundEnabled || settings.masterVolume === 0 || settings.sfxVolume === 0} onClick={() => worldAudio.play('audio.ui.click-soft', { allowVariance: false })}>Послушать сигнал</button>
             <p className="station-settings__footnote">При скрытии вкладки и выходе из игры звук останавливается. Учебные задания полностью доступны без звука.</p>
           </section>
 
@@ -70,7 +70,7 @@ export function Settings({ onClose, isPaused = false, onResume, connectionLost =
           </div>
         </div>
 
-        <footer className="station-settings__footer"><div role="status" aria-live="polite">{saved === null ? 'Настройки применяются сразу.' : saved ? 'Сохранено на этом устройстве.' : 'Применено на время сеанса. Браузер не разрешил сохранить настройки.'}</div><button type="button" className="pixel-btn-secondary" onClick={() => setSaved(saveSettings({ ...DEFAULT_SETTINGS }))}>По умолчанию</button><button type="button" className="pixel-btn-primary" onClick={leave}>Готово</button></footer>
+        <footer className="station-settings__footer"><div role="status" aria-live="polite">{saved === null ? 'Настройки применяются сразу.' : saved ? 'Сохранено на этом устройстве.' : 'Применено на время сеанса. Браузер не разрешил сохранить настройки.'}</div><button type="button" className="station-settings__button" onClick={() => setSaved(saveSettings({ ...DEFAULT_SETTINGS }))}>По умолчанию</button><button type="button" className="station-settings__button station-settings__button--primary" onClick={leave}>Готово</button></footer>
       </div>
     </main>
   );

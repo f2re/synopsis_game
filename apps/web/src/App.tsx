@@ -8,6 +8,7 @@ import { HubDialog } from './features/hub/HubDialog';
 import { TitleScreen } from './features/title/TitleScreen';
 import { ExitScreen } from './features/title/ExitScreen';
 import { HelpScreen } from './features/help/HelpScreen';
+import { ReadingRoomScreen } from './features/library/ReadingRoomScreen';
 import { Settings } from './features/settings/Settings';
 import { AtmosphereProvider } from './features/atmosphere/AtmosphereProvider';
 import { SCREEN_TITLES, safeReturnPath, screenSurface } from './appNavigation';
@@ -144,6 +145,7 @@ export function App() {
   if (path === '/arena-tv') screen = <ArenaTvPlaceholder />;
   else if (path === '/') screen = <TitleScreen user={user} onOpenCampus={() => navigate('/campus')} onStartShift={startShift} onOpenLogin={() => setLoginModalOpen(true)} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit} sessionPending={booting} sessionNotice={sessionNotice} />;
   else if (path === '/library') screen = <LibraryScreen onBack={returnFromPage} initialQuery={new URLSearchParams(location.split('?')[1] ?? '').get('q') ?? ''} />;
+  else if (path === '/archive') screen = <ReadingRoomScreen onBack={() => navigate('/campus')} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} />;
   else if (path === '/codebook') screen = <Codebook isOpen onClose={returnFromPage} />;
   else if (path === '/help') screen = <HelpScreen onBack={returnFromPage} onOpenLibrary={() => navigate('/library')} onOpenSettings={() => navigate('/settings')} onOpenCampus={() => navigate('/campus')} onStartShift={startShift} />;
   else if (path === '/settings') screen = <Settings onClose={returnFromPage} />;
@@ -165,7 +167,7 @@ export function App() {
     user={user} onLoginClick={() => setLoginModalOpen(true)} onLogout={requestExit}
     onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift}
     onOpenAvatar={() => navigate('/profile/avatar')} onOpenAdmin={() => navigate('/admin')}
-    onOpenHome={() => navigate('/')} onOpenLibrary={() => navigate('/library')}
+    onOpenHome={() => navigate('/')} onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
     externalModalOpen={loginModalOpen || setCodeModalOpen || exitDialogOpen}
   />;
