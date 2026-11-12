@@ -224,6 +224,9 @@ async function waitForCampus(page) {
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Music and ambience share a context');
   // A real background tab in headed Chromium, not a mocked visibility event.
+  // Playwright enables focus emulation for every page; remove that override first.
+  const lifecycleSession = await context.newCDPSession(page);
+  await lifecycleSession.send('Emulation.setFocusEmulationEnabled', { enabled: false });
   const backgroundTab = await context.newPage();
   await backgroundTab.goto('about:blank'); await backgroundTab.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'hidden', undefined, { polling: 100 });
