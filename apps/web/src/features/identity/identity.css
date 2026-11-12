@@ -98,6 +98,13 @@
   position: relative;
 }
 
+.login-panel .form-stack { display: grid; gap: 16px; }
+.login-panel .login-field,
+.login-panel .form-stack > label,
+.login-panel .login-first-time-box > label { display: grid; gap: 7px; min-width: 0; }
+.login-panel input,
+.login-panel select { width: 100%; min-width: 0; min-height: 44px; }
+
 .login-panel h1, .screen-header h1, .admin-create h2, .reset-modal h2 {
   margin: 0;
   color: var(--ui-text-primary);

@@ -172,6 +172,11 @@ async function waitForCampus(page) {
     await page.getByRole('button', { name: /Открыть библиотеку/ }).click();
     await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
     await page.goto(base);
+    await page.getByRole('button', { name: 'Войти', exact: true }).click();
+    await page.getByRole('dialog', { name: 'Вход в учебную группу' }).waitFor();
+    await page.getByLabel('Группа', { exact: true }).waitFor();
+    await capture(page, `login-${viewport.width}`);
+    await page.keyboard.press('Escape');
     const exit = page.getByRole('button', { name: 'Выйти из игры', exact: true }); await exit.click();
     await page.getByRole('dialog', { name: 'Завершить сеанс?' }).waitFor();
     await page.keyboard.press('Tab');
