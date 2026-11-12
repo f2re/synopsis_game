@@ -1,5 +1,7 @@
 # Независимая проверка отображения персонажа R02
 
+**Исторический документ (12.11.2026).** Показанные здесь ситуационная сборка и анимация заменены [сохранённым портретом R04](../design/MODULAR_CHARACTER_SAVED_PORTRAIT_R04.md). Снимки и результаты ниже относятся к предыдущему выпуску.
+
 **Задача:** `MODULAR-PLAYER-R02`. **Дата:** 11.11.2026. **Исполнитель рабочего контура:** `runtime_review`. **Независимый проверяющий:** `screens_audit`, роли `ux-accessibility-reviewer` / `web-performance-engineer`.
 
 **Решение: PASS в указанной области** — политика ситуаций, сохранность профиля, серверный приоритет инструмента, ограниченность ресурсов и жизненный цикл Canvas. Файлы интерфейса, созданные проверяющим, сюда не входят. Художественная композиция сцен, браузерный проход приложения и выпуск принимаются отдельно.
@@ -8,7 +10,7 @@
 
 ## Политика ситуаций и неизменность внешности
 
-Проверен [resolveAvatarPresentation](../../packages/world-engine/src/runtime/modularAvatarPresentation.ts). На входе нормализуется полный профиль; наружу возвращается отдельная копия. Черновик/сохранённый объект не изменяется. Скрытие спутника за рабочим столом выражено отдельным флагом отображения и не снимает спутника с профиля.
+Проверен [resolveAvatarPresentation](https://github.com/f2re/synopsis_game/blob/9573d70e5857f27105f3c14ff896bbad4251f38a/packages/world-engine/src/runtime/modularAvatarPresentation.ts). На входе нормализуется полный профиль; наружу возвращается отдельная копия. Черновик/сохранённый объект не изменяется. Скрытие спутника за рабочим столом выражено отдельным флагом отображения и не снимает спутника с профиля.
 
 | Контекст | Инструмент | Допустимые действия | Спутник | Спокойная стойка |
 |---|---|---|---|---|
@@ -23,7 +25,7 @@
 
 ## Жизненный цикл отображения
 
-Проверен [AvatarPreview](../../apps/web/src/features/avatar/AvatarPreview.tsx), [резервный рендер](../../apps/web/src/features/avatar/LegacyAvatarPreview.tsx), [композитор](../../packages/world-engine/src/runtime/modularAvatarCompositor.ts) и существующий [адаптер кампуса](../../packages/world-engine/src/scenes/hub/HubModularAvatarLayer.ts).
+Проверен [AvatarPreview](../../apps/web/src/features/avatar/AvatarPreview.tsx), [резервный рендер](https://github.com/f2re/synopsis_game/blob/9573d70e5857f27105f3c14ff896bbad4251f38a/apps/web/src/features/avatar/LegacyAvatarPreview.tsx), [композитор](../../packages/world-engine/src/runtime/modularAvatarCompositor.ts) и существующий [адаптер кампуса](https://github.com/f2re/synopsis_game/blob/9573d70e5857f27105f3c14ff896bbad4251f38a/packages/world-engine/src/scenes/hub/HubModularAvatarLayer.ts).
 
 - Ключ потребителя содержит все поля профиля, контекст, направление, запрошенное действие и источник инструмента. После смены ключа запоздавший результат освобождает свой lease и не публикует прежний образ.
 - Режим `quiet` не ставит таймер для декоративной стойки. Будущий принятый однократный `inspect` разрешён в рабочей смене, но не в макете блица.

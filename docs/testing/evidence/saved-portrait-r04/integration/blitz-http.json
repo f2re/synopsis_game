@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "executedAt": "2026-11-12T05:14:52.023Z",
+  "node": "v24.22.1",
+  "scenario": "Real local HTTP server with isolated public fixture; no browser authentication claim",
+  "realDeadlineObserved": true,
+  "durationMs": 90000,
+  "checks": [
+    "Authentication, malformed JSON, canonical completion gate, draft label and 90-second policy PASS",
+    "Concurrent starts, forged clock/mode/equipment ignored, immutable eleven-field outfit, cross-account and legacy API guards PASS",
+    "Concurrent answer exactly once, conflicting answer refused, all six tasks, replay and no progression/reward changes PASS",
+    "Real 90-second expiry, restart/resume without extra time, forged client time ignored, late answer refused, durable result and unique audit PASS"
+  ]
+}

@@ -21,10 +21,9 @@ class Events {
   emit(name, ...values) { for (const listener of [...this.events.get(name) ?? []]) { if (listener.once) this.off(name, listener.fn); listener.fn.apply(listener.context, values); } }
   listenerCount() { return [...this.events.values()].reduce((n, list) => n + list.length, 0); }
 }
-const modularManifest = moduleFrom('runtime/modularAvatarManifest.ts');
-const assets = moduleFrom('runtime/characterAssets.ts', { './modularAvatarManifest.ts': modularManifest });
+const assets = moduleFrom('runtime/characterAssets.ts');
 const preferences = moduleFrom('runtime/uiPreferences.ts');
-const bridgeModule = moduleFrom('bridge/WorldBridge.ts', { '../runtime/characterAssets': assets });
+const bridgeModule = moduleFrom('bridge/WorldBridge.ts');
 const { worldBridge } = bridgeModule;
 const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCharacterLayer.ts', {
   phaser: { Textures: { FilterMode: { NEAREST: 0 } }, Scale: { Events: { RESIZE: 'resize' } }, Scenes: { Events: { SHUTDOWN: 'shutdown' } }, Loader: { Events: { FILE_LOAD_ERROR: 'loaderror', COMPLETE: 'complete' } } },
@@ -34,10 +33,10 @@ const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCh
   './r01Layout': { getR01Layout(w, h) { return { width: w, height: h, portrait: w < h, shore: 150, zoom: 1 }; } },
 });
 const pack = assets.parseCharacterManifest({ version: 1, artAcceptance: 'PASS', actors: [
-  ['character.observer', 'player'], ['character.vera', 'npc'], ['companion.pascal', 'npc'], ['companion.tit', 'companion'],
+  ['character.observer', 'npc'], ['character.vera', 'npc'], ['companion.pascal', 'npc'], ['npc.extra', 'npc'], ['legacy.player', 'player'], ['companion.tit', 'companion'],
 ].map(([id, role]) => ({ id, role, label: id, displayHeight: 64, pivot: [.5, .95], positions: { landscape: [300, 460], portrait: [200, 550] }, clips: {
   idle: { assetId: `${id}.idle`, url: `/hub/characters/${id.replaceAll('.', '-')}.png`, frameWidth: 64, frameHeight: 96, frameCount: 4, durationsMs: [100, 100, 100, 100] },
-  ...(role === 'player' ? { walk: { assetId: `${id}.walk`, facing: 'right', url: '/hub/characters/observer-walk.png', frameWidth: 64, frameHeight: 96, frameCount: 4, durationsMs: [100, 100, 100, 100] } } : {}),
+  ...(id === 'character.observer' ? { walk: { assetId: `${id}.walk`, facing: 'right', url: '/hub/characters/observer-walk.png', frameWidth: 64, frameHeight: 96, frameCount: 4, durationsMs: [100, 100, 100, 100] } } : {}),
 } })), equipment: [ { id: 'held.tablet', assetId: 'item.tablet', url: '/hub/characters/tablet.png', displayHeight: 16, anchor: [.2, -.4] } ] });
 function makeScene(withPack = true) {
   const images = [];
@@ -64,81 +63,56 @@ function makeScene(withPack = true) {
   return scene;
 }
 worldBridge.clear();
-worldBridge.setAvatarPresentation({ heldItem: 'held.tablet', companion: 'companion.none' });
 const scene = makeScene(), layer = new HubCharacterLayer(scene);
-const [player, mentor, cat, tit, tablet] = scene.images;
-assert.equal(tit.visible, false, 'Unselected account companion stays hidden');
-assert.equal(cat.visible, true, 'Pascal remains ambient fauna independent from account equipment');
-assert.equal(tablet.visible, true);
-assert.equal(player.originY, .95, 'Authored foot pivot must survive scene construction');
-layer.update(100); assert.equal(player.frame, 1);
-layer.update(100); assert.equal(player.frame, 2);
+const [observer, mentor, cat, extra] = scene.images;
+assert.equal(scene.images.length, 4, 'Legacy player, selected companion and account equipment are not created');
+assert.equal(observer.originY, .95, 'Authored NPC foot pivot survives scene construction');
+layer.update(100); assert.equal(observer.frame, 1); assert.equal(cat.frame, 1); assert.equal(extra.frame, 0);
+layer.update(100); assert.equal(observer.frame, 2);
+worldBridge.emit('ui:avatar_presentation', { heldItem: 'held.tablet', companion: 'companion.tit' });
+assert.equal(scene.images.length, 4, 'An obsolete profile event cannot spawn a player or equipment');
 scene.events.emit('ui:preferences', { reducedMotion: true });
-assert.equal(player.frame, 0); assert.equal(cat.frame, 0);
-const frozenWrites = player.frameWrites;
+assert.equal(observer.frame, 0); assert.equal(cat.frame, 0);
+const frozenWrites = observer.frameWrites;
 for (let i = 0; i < 12; i++) layer.update(100);
-assert.equal(player.frameWrites, frozenWrites, 'Reduced motion has no animation writes');
+assert.equal(observer.frameWrites, frozenWrites);
 assert.equal(scene.registry.get('world.characters.diagnostics').animatedActors, 0);
 scene.events.emit('ui:preferences', { reducedMotion: false, lowPower: true });
-layer.update(100); layer.update(100); assert.equal(player.frame, 0, 'Low power waits for its bounded sample');
-layer.update(100); assert.equal(player.frame, 3);
+layer.update(100); layer.update(100); assert.equal(observer.frame, 0);
+layer.update(100); assert.equal(observer.frame, 3);
 assert.equal(scene.registry.get('world.characters.diagnostics').animatedActors, 3);
-worldBridge.setAvatarPresentation({ heldItem: 'held.none', companion: 'companion.tit' });
-assert.equal(tablet.visible, false); assert.equal(tit.visible, true);
-for (let i = 0; i < 6; i++) layer.update(100);
-assert.equal(cat.frame, 0, 'Extra ambient actor is static when the account companion takes an animation slot');
-assert.notEqual(tit.frame, 0, 'The selected account companion is prioritized ahead of ambient NPCs');
-scene.events.emit('ui:preferences', { reducedMotion: false });
-layer.walkAvatarTo(350, 470);
-assert.equal(player.key, 'character:character.observer.walk');
-for (let i = 0; i < 20; i++) layer.update(100);
-assert.equal(player.x, 350); assert.equal(player.y, 470);
-assert.equal(player.key, 'character:character.observer.idle', 'An explicit completed walk returns to authored idle');
-assert.equal(player.originY, .95, 'Foot pivot is stable across clip transitions');
-layer.walkAvatarTo(250, 470);
-layer.update(100);
-assert.equal(player.x, 350, 'Asymmetric right-facing art must not moonwalk or mirror toward the left');
+assert.equal(scene.registry.get('world.characters.diagnostics').playerPresent, false);
 scene.scale.width = 480; scene.scale.height = 780; scene.scale.emit('resize');
-assert.equal(player.x, 200); assert.equal(player.y, 550, 'Portrait uses its authored placement');
+assert.equal(observer.x, 200); assert.equal(observer.y, 550);
 layer.destroy();
 assert.ok(scene.images.every((image) => image.destroyed));
 assert.equal(scene.events.listenerCount(), 0); assert.equal(scene.scale.listenerCount(), 0);
-worldBridge.setAvatarPresentation(null);
-assert.equal(worldBridge.getAvatarPresentation().heldItem, 'held.none');
-const nextScene = makeScene(), nextLayer = new HubCharacterLayer(nextScene);
-assert.equal(nextScene.images[4].visible, false, 'Scene restart after sign-out does not reuse the former account item');
-nextLayer.destroy();
 const missing = makeScene(false), missingLayer = new HubCharacterLayer(missing);
-assert.equal(missing.images.length, 0, 'Missing artwork does not become a procedural substitute');
+assert.equal(missing.images.length, 0, 'Missing character art does not create a procedural personal substitute');
 assert.equal(missing.registry.get('world.characters.diagnostics').artAccepted, false);
 missingLayer.destroy();
 
-// An employee strolls in the authored direction; resets happen beyond both edges.
+// Employees still walk in their authored facing; wraps happen beyond both edges.
 const ambientPack = structuredClone(pack);
-ambientPack.actors = [{ ...ambientPack.actors[0], role: 'npc', motion: { type: 'walk-across', direction: 'right', speed: 22 } }];
-worldBridge.setAvatarPresentation({ heldItem: 'held.tablet', companion: 'companion.tit' });
+ambientPack.actors = [{ ...ambientPack.actors[0], motion: { type: 'walk-across', direction: 'right', speed: 22 } }];
 const ambientScene = makeScene();
 ambientScene.registry.set('world.characters.manifest', assets.parseCharacterManifest(ambientPack));
 const ambientLayer = new HubCharacterLayer(ambientScene), walker = ambientScene.images[0];
-assert.equal(ambientScene.images[1].visible, false, 'Account equipment must never attach to a fixed employee NPC');
-assert.equal(ambientScene.registry.get('world.characters.diagnostics').personalizationScope, 'inventory-preview');
-assert.equal(ambientScene.registry.get('world.characters.diagnostics').selectedItemReady, false);
+assert.equal(ambientScene.images.length, 1, 'Account equipment never attaches to a fixed employee NPC');
+assert.equal(ambientScene.registry.get('world.characters.diagnostics').personalizationScope, 'saved-portrait');
 let wrapped = false;
 for (let i = 0; i < 600; i++) {
   const priorX = walker.x;
   ambientLayer.update(100);
   if (walker.x < priorX) { wrapped = true; assert.ok(priorX > 960); assert.ok(walker.x < -40); }
 }
-assert.ok(wrapped, 'Long-running ambient walk must return only outside the viewport');
+assert.ok(wrapped);
 walker.setPosition(1100, walker.y);
 ambientScene.events.emit('ui:preferences', { reducedMotion: true });
-assert.equal(walker.x, 300, 'Reduced motion brings a temporarily offscreen walker to its authored resting position');
+assert.equal(walker.x, 300);
 const stillX = walker.x;
-ambientLayer.update(100);
-assert.equal(walker.x, stillX);
-assert.equal(walker.frame, 0);
+ambientLayer.update(100); assert.equal(walker.x, stillX); assert.equal(walker.frame, 0);
 ambientLayer.destroy();
-worldBridge.setAvatarPresentation(null);
 
 // The async loader must retire callbacks on shutdown and avoid adding stale sheets.
 const loaderScene = makeScene(false);
@@ -151,4 +125,4 @@ loaderScene.events.emit('shutdown');
 assert.equal(loaderScene.load.listenerCount(), 0);
 loaderScene.load.emit('filecomplete-json-hub.characters.manifest.v1', '', '', pack);
 assert.equal(enqueued, 0, 'Late JSON completion after shutdown must not enqueue assets');
-console.log('PASS: authored cadence/pivot, immediate reduced-motion fallback, 3-actor animation budget, low-power sampling, explicit walk→idle, account item/companion selection, portrait placement, fixed-facing offscreen-only NPC wrap, sign-out/restart, missing-art diagnostic and loader/layer cleanup.');
+console.log('PASS: no personal player or account items; NPC cadence/pivot, reduced motion, three-actor budget, low-power sampling, portrait placement, offscreen-only employee wrap, missing-art diagnostic and loader/layer cleanup.');

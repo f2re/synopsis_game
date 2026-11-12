@@ -1,9 +1,10 @@
 /** Dev-only public visual fixture: real component; all API functions replaced locally. */
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { api, type BlitzLobby, type BlitzSession, type SessionUser } from '../../src/api';
+import { api, type AvatarPortrait, type BlitzLobby, type BlitzSession, type SessionUser } from '../../src/api';
 import { BlitzWorkspace } from '../../src/features/shift/BlitzWorkspace';
 import fixture from './blitz-practice-fixture.json';
+import portraits from './saved-portrait-fixtures.json';
 import '../../src/styles.css';
 import '../../src/hub-ui.css';
 
@@ -13,7 +14,7 @@ type View = 'ready' | 'locked' | 'numeric' | 'choice' | 'sequence' | 'station' |
 let view: View = 'ready';
 let startedAt = Date.now();
 let round: BlitzSession | null = null;
-const user: SessionUser = { id: 'fixture.blitz-practice.public', displayName: 'Тестовый синоптик', groupId: 'Открытый стенд', roles: ['student'], status: 'active', createdAt: '2026-11-11T00:00:00.000Z', avatar: fixture.avatar };
+const user: SessionUser = { id: 'fixture.blitz-practice.public', displayName: 'Тестовый синоптик', groupId: 'Открытый стенд', roles: ['student'], status: 'active', createdAt: '2026-11-11T00:00:00.000Z', avatar: portraits.examples[4].avatar, avatarPortrait: portraits.examples[4].avatarPortrait as AvatarPortrait };
 
 function active(index: number): BlitzSession {
   const session = structuredClone(fixture.active[index]) as BlitzSession;
@@ -49,7 +50,7 @@ function Harness() {
   const [notice, setNotice] = useState('');
   const labels: Array<[View, string]> = [['ready', 'До старта'], ['locked', 'Закрытый доступ'], ['numeric', 'Число'], ['choice', 'Выбор'], ['sequence', 'Порядок'], ['station', 'Схема'], ['completed', 'Итог'], ['timeout', 'Время вышло']];
   return <>
-    <header className="blitz-review-banner" data-review-fixture="public-blitz-practice"><strong>Тестовый стенд блица · API подменён</strong><span>Настоящий экран. Публичные состояния получены проверкой текущих учебных заданий через ShiftService. Вход, реальные аккаунты и серверные сохранения не используются. Ввод здесь не оценивается.</span><nav aria-label="Тестовые состояния">{labels.map(([id, label]) => <button key={id} type="button" aria-pressed={selected === id} onClick={() => { select(id); setSelected(id); setRevision((value) => value + 1); setNotice(''); }}>{label}</button>)}</nav>{notice && <p role="status">{notice}</p>}</header>
+    <header className="blitz-review-banner" data-review-fixture="public-blitz-practice"><strong>Тестовый стенд блица · API подменён</strong><span>Настоящий экран. Публичные состояния получены проверкой текущих учебных заданий через ShiftService. Вход, реальные аккаунты и серверные сохранения не используются. Ввод здесь не оценивается. Текущий профиль и портрет начатого раунда различаются: раунд сохраняет свой снимок.</span><nav aria-label="Тестовые состояния">{labels.map(([id, label]) => <button key={id} type="button" aria-pressed={selected === id} onClick={() => { select(id); setSelected(id); setRevision((value) => value + 1); setNotice(''); }}>{label}</button>)}</nav>{notice && <p role="status">{notice}</p>}</header>
     <BlitzWorkspace key={revision} user={user} onExit={() => setNotice('Кампус открывается в основном приложении. Этот стенд показывает только блиц.')} onStartPractice={() => setNotice('Учебная смена доступна в основном приложении после входа.')} />
   </>;
 }

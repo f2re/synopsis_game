@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { api, getSessionToken, setSessionToken, type SessionUser } from './api';
 import { GAME_MARK } from './brand';
-import { AvatarEditor } from './features/avatar/AvatarEditor';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
 import { PixelIcon, PixelCard, PixelProgressBar } from './features/ui';
 import { HubScreen } from './features/hub/HubScreen';
@@ -9,6 +8,7 @@ import { HubModalLayer } from './features/hub/HubModalLayer';
 
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
 const BlitzWorkspace = lazy(() => import('./features/shift/BlitzWorkspace').then((module) => ({ default: module.BlitzWorkspace })));
+const AvatarEditor = lazy(() => import('./features/avatar/AvatarEditor').then((module) => ({ default: module.AvatarEditor })));
 
 function navigate(path: string): void {
   window.history.pushState({}, '', path);
@@ -110,14 +110,14 @@ export function App() {
 
   if (path === '/profile/avatar') {
     if (user) {
-      return <AvatarEditor user={user} onSaved={setUser} onBack={() => navigate('/')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />;
+      return <Suspense fallback={<LoadingScreen text="Открываем гардероб…" />}><AvatarEditor key={user.id} user={user} onSaved={(updated) => setUser((current) => current?.id === updated.id ? updated : current)} onBack={() => navigate('/')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} /></Suspense>;
     }
     navigate('/');
     return null;
   }
 
   if (path === '/shift') {
-    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow avatar={user?.avatar} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} /></Suspense>;
+    return <Suspense fallback={<LoadingScreen text="Открываем рабочее место…" />}><SeamlessShiftFlow key={user?.id ?? 'guest'} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} /></Suspense>;
   }
 
   if (path === '/blitz') {

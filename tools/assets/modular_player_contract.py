@@ -1,7 +1,6 @@
-"""Validated authoring geometry and content-bound admission for modular player.
+"""Validated authoring geometry and content-bound admission for modular player R01.
 
-The idle attachment contract remains unchanged. R03 separately binds editable
-motion frames and the authored segment rig through their complete source index.
+The points describe the accepted idle artwork, not a new skeletal animation rig.
 Only explicit review records can admit a changed composition; builds never update
 the expected fingerprints or create their own acceptance evidence.
 """
@@ -33,26 +32,14 @@ def ints(value: object, count: int, lower: int, upper: int) -> bool:
 
 def validate_rig(rig: dict) -> dict:
     """Fail before reading/packing art when authored source geometry is invalid."""
-    require(rig.get('version') in (2, 3) and rig.get('rigId') == 'player.modular.r01.v1', 'wrong schema or family')
+    require(rig.get('version') == 2 and rig.get('rigId') == 'player.modular.r01.v1', 'wrong schema or family')
     require(rig.get('directions') == ['down', 'right', 'up', 'left'], 'direction identity/order changed')
     require(isinstance(rig.get('runtimeRevision'), str) and bool(re.fullmatch(r'[A-Za-z0-9._-]{1,100}', rig['runtimeRevision'])), 'invalid revision')
     require(rig.get('frame') == {'width': 96, 'height': 144, 'pivot': [48, 136]}, 'human frame requires a new family')
     require(rig.get('companionFrame') == {'width': 64, 'height': 64, 'pivot': [32, 60]}, 'companion frame changed')
     source = rig.get('sourceCels', {})
     require(source == {'count': 4, 'durationMs': 320, 'tagAction': 'idle', 'minimumMargin': [1, 2]}, 'unsupported source layout')
-    expected_clips = {'idle': {'durationsMs': [320] * 4, 'loop': True}}
-    if rig['version'] == 3:
-        expected_clips.update({'walk': {'durationsMs': [140]*6, 'loop': True},
-                              'inspect': {'durationsMs': [240]*6, 'loop': False}})
-        motion = rig.get('motion', {})
-        require(set(motion) == {'rig', 'rigSha256', 'sourceIndex', 'sourceIndexSha256', 'maximumDecodedAtlasBytes'}, 'incomplete motion descriptor')
-        require(motion.get('rig') == 'motion-rig.json' and motion.get('sourceIndex') == 'motion/source-index.json', 'unexpected motion source path')
-        require(all(isinstance(motion.get(key), str) and bool(re.fullmatch(r'[0-9a-f]{64}', motion[key]))
-            for key in ('rigSha256', 'sourceIndexSha256')), 'invalid motion source fingerprint')
-        require(motion.get('maximumDecodedAtlasBytes') in (2097152, 4194304, 8388608), 'invalid explicit motion atlas budget')
-    else:
-        require('motion' not in rig, 'legacy idle schema cannot silently publish motion')
-    require(rig.get('clips') == expected_clips, 'unsupported clip timing or coverage')
+    require(rig.get('clips') == {'idle': {'durationsMs': [320] * 4, 'loop': True}}, 'this builder only publishes idle')
     tracks = rig.get('tracks', {})
     require(set(tracks) == {'upper', 'planted'} and all(isinstance(v, list) and len(v) == 4 and all(ints(p, 2, -12, 12) for p in v) for v in tracks.values()), 'invalid motion tracks')
     require(tracks['planted'] == [[0, 0]] * 4, 'idle feet must remain planted')

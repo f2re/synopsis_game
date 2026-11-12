@@ -11,7 +11,7 @@
 .blitz-shell .shift-exit { justify-self: end; min-width: 44px; padding: 8px 12px; }
 .blitz-layout { display: grid; grid-template-columns: 200px minmax(0, 860px); gap: 28px; width: min(1140px, calc(100% - 48px)); margin: 28px auto; align-items: start; }
 .blitz-profile { display: grid; justify-items: center; gap: 12px; padding: 20px 16px; border: 2px solid #45666b; background: #182d34; color: #e4e8d2; text-align: center; }
-.blitz-profile__portrait { width: 96px; height: 144px; }
+.blitz-profile__portrait { width: 80px; height: 80px; }
 .blitz-profile__identity { min-width: 0; display: grid; gap: 4px; }
 .blitz-profile__identity strong { font: 16px/1.5 var(--font-pixel-ui); }
 .blitz-profile__identity span { font: 16px/1.375 var(--font-pixel-dense); color: #b5c6c3; }
@@ -72,9 +72,7 @@
   .blitz-topbar.is-active .shift-heading { grid-column: 1 / -1; }
   .blitz-topbar.is-active .blitz-timer { grid-column: 1; text-align: left; }
   .blitz-topbar.is-active .shift-exit { grid-column: 2; }
-  .blitz-profile { grid-template-columns: 48px minmax(0, 1fr); gap: 4px 16px; padding: 8px 12px; text-align: left; align-items: center; }
-  .blitz-profile__portrait { width: 48px; height: 72px; }
-  .blitz-profile__portrait .avatar-preview { width: 48px !important; height: 72px !important; }
+  .blitz-profile { grid-template-columns: 80px minmax(0, 1fr); gap: 4px 16px; padding: 8px 12px; text-align: left; align-items: center; }
   .blitz-profile__identity { justify-self: stretch; }
   .blitz-profile__details { grid-column: 1 / -1; padding-top: 4px; }
   .blitz-profile__details summary { padding: 8px 0; }

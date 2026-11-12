@@ -1,0 +1,1 @@
+{"status":"PASS","boundary":"real WorldCanvas code with deterministic event doubles","checks":["no personal player controls or profile channel","native building actions retained","context-loss and hidden restore","modal input pause","reduced-motion and 30fps preference","all listeners and game disposed"],"limits":"Not a browser layout, measured GPU or art acceptance result."}

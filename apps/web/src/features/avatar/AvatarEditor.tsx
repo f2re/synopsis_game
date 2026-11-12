@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { worldAudio } from '@synopsis/world-engine';
-import type { AvatarContext } from '@synopsis/world-engine/avatar';
-import { api, type AvatarProfile, type EquipmentResponse, type SessionUser } from '../../api';
-import type { AvatarDirection, AvatarAnimation } from './AvatarPreview';
-import { AvatarSituationPreview } from './AvatarSituationPreview';
+import { api, type AvatarProfile, type AvatarPortrait, type EquipmentResponse, type SessionUser } from '../../api';
+import { AvatarPreview, type AvatarDirection } from './AvatarPreview';
+import { isSavedAvatarPortrait, SavedAvatarPortrait } from './SavedAvatarPortrait';
 import { AvatarAppearance, AvatarOptionGrid } from './AvatarOptionGrid';
 import { EQUIPMENT_SLOTS, INVENTORY_ITEMS, OPTIONS, STYLE_PRESETS, type InventoryCategory, type InventoryItem } from './avatarOptions';
-import { HUB_PREFERENCES_EVENT, readHubPreferences } from '../hub/hubPreferences';
+import { readHubPreferences } from '../hub/hubPreferences';
 import { EquipmentBadges, EquipmentSummary } from './EquipmentBadges';
 import { avatarDraftConflicts, avatarDraftStorage, clearAvatarDraft, mergeAvatarDraft, readAvatarDraft, sameAvatar, writeAvatarDraft, type AvatarDraft } from './avatarDraft';
 import './inventory.css';
@@ -26,15 +25,13 @@ const SECTIONS = ['inventory', 'badges', 'appearance'] as const;
 export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventory' }: AvatarEditorProps) {
   const [avatar, setAvatar] = useState<AvatarProfile>({ ...user.avatar });
   const [savedAvatar, setSavedAvatar] = useState<AvatarProfile>({ ...user.avatar });
+  const [savedPortrait, setSavedPortrait] = useState<AvatarPortrait | undefined>(user.avatarPortrait);
   const [section, setSection] = useState<typeof SECTIONS[number]>(initialSection);
   const [category, setCategory] = useState<InventoryCategory>('all');
   const [query, setQuery] = useState('');
   const [equippedOnly, setEquippedOnly] = useState(false);
   const [selectedId, setSelectedId] = useState(user.avatar.heldItem !== 'held.none' ? user.avatar.heldItem : user.avatar.top);
   const [direction, setDirection] = useState<AvatarDirection>('down');
-  const [previewContext, setPreviewContext] = useState<AvatarContext>('wardrobe');
-  const [animation, setAnimation] = useState<AvatarAnimation>('idle');
-  const [availableAnimations, setAvailableAnimations] = useState<readonly AvatarAnimation[]>(['idle']);
   const [notice, setNotice] = useState<Notice>(null);
   const [saving, setSaving] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
@@ -46,24 +43,25 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const [pendingDraft, setPendingDraft] = useState<AvatarDraft | null>(null);
   const [draftOwner, setDraftOwner] = useState<string | null>(null);
   const [draftStored, setDraftStored] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(() => readHubPreferences().reducedMotion);
   const equipmentRequest = useRef(0);
   const avatarRequest = useRef(0);
   const accountId = useRef(user.id);
   accountId.current = user.id;
   const exitDialog = useRef<HTMLDialogElement>(null);
   const dirty = !sameAvatar(avatar, savedAvatar);
+  const portraitSaved = isSavedAvatarPortrait(savedPortrait);
   const visibleEquipment = equipmentOwner === user.id ? equipment : null;
   const busy = saving || selectingBadge;
 
   useEffect(() => {
     setAvatar({ ...user.avatar });
     setSavedAvatar({ ...user.avatar });
+    setSavedPortrait(user.avatarPortrait);
     setSelectedId(user.avatar.heldItem !== 'held.none' ? user.avatar.heldItem : user.avatar.top);
     setQuery(''); setEquippedOnly(false);
     setCategory('all'); setSection(initialSection);
     setConfirmExit(false);
-    setSaving(false); setPreviewContext('wardrobe'); setDirection('down'); setAnimation('idle');
+    setSaving(false); setDirection('down');
     const draft = readAvatarDraft(avatarDraftStorage(), user.id);
     setPendingDraft(draft && !sameAvatar(mergeAvatarDraft(draft, user.avatar), user.avatar) ? draft : null);
     setDraftOwner(user.id); setDraftStored(false);
@@ -85,19 +83,6 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     const written = writeAvatarDraft(avatarDraftStorage(), user.id, savedAvatar, avatar);
     setDraftStored(dirty && written);
   }, [avatar, savedAvatar, user.id, draftOwner, pendingDraft, dirty]);
-
-  useEffect(() => {
-    const media = window.matchMedia?.('(prefers-reduced-motion: reduce)');
-    const sync = () => setReducedMotion(readHubPreferences().reducedMotion);
-    media?.addEventListener('change', sync);
-    window.addEventListener(HUB_PREFERENCES_EVENT, sync);
-    window.addEventListener('storage', sync);
-    return () => {
-      media?.removeEventListener('change', sync);
-      window.removeEventListener(HUB_PREFERENCES_EVENT, sync);
-      window.removeEventListener('storage', sync);
-    };
-  }, []);
 
   useEffect(() => {
     if (!dirty) return;
@@ -156,24 +141,6 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     window.requestAnimationFrame(() => document.getElementById('badges-tab')?.focus());
   }
 
-  function setMotion(value: AvatarAnimation) {
-    if (availableAnimations.includes(value)) setAnimation(value);
-  }
-
-  function updateAvailableAnimations(actions: readonly AvatarAnimation[]) {
-    setAvailableAnimations(actions);
-    setAnimation((current) => actions.includes(current) ? current : 'idle');
-  }
-
-  function changePreviewContext(context: AvatarContext) {
-    if (context === previewContext) return;
-    setPreviewContext(context);
-    setDirection(context === 'shift' || context === 'blitz-preview' ? 'right' : 'down');
-    setAnimation('idle');
-    // Do not advertise an action from the previous scene while its policy loads.
-    setAvailableAnimations(['idle']);
-  }
-
   function updateOption(slot: keyof AvatarProfile, value: string) {
     setAvatar((current) => ({ ...current, [slot]: value }));
     setNotice(null);
@@ -189,13 +156,11 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   }
 
   function handlePreviewKeys(event: KeyboardEvent<HTMLDivElement>) {
-    // Shortcuts belong to the preview, so Space and arrows keep their normal form behavior elsewhere.
+    // Rotation belongs to the fitting preview; native form keys keep their behavior elsewhere.
     if (event.altKey || event.ctrlKey || event.metaKey || busy || pendingDraft) return;
     const current = DIRECTIONS.indexOf(direction);
     if (event.code === 'ArrowLeft' || event.code === 'KeyA') { event.preventDefault(); setDirection(DIRECTIONS[(current + 1) % 4]); }
     else if (event.code === 'ArrowRight' || event.code === 'KeyD') { event.preventDefault(); setDirection(DIRECTIONS[(current + 3) % 4]); }
-    else if (event.code === 'Space' && availableAnimations.includes('walk')) { event.preventDefault(); setMotion(animation === 'walk' ? 'idle' : 'walk'); }
-    else if (event.code === 'KeyE' && availableAnimations.includes('inspect')) { event.preventDefault(); setMotion('inspect'); }
   }
 
   function handleSectionKeys(event: KeyboardEvent<HTMLDivElement>) {
@@ -209,18 +174,22 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
 
   async function save(exitAfter = false) {
     if (busy || pendingDraft) return;
-    if (!dirty) { if (exitAfter) onBack(); return; }
+    if (!dirty && portraitSaved) { if (exitAfter) onBack(); return; }
     const requestId = ++avatarRequest.current;
     const owner = user.id;
     setSaving(true); setNotice(null);
     try {
       const updated = await api.updateAvatar({ ...avatar });
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
+      if (updated.id !== owner || !isSavedAvatarPortrait(updated.avatarPortrait)) {
+        throw new Error('Сервер не подтвердил сохранение портрета. Изменения остались в примерке; повторите попытку.');
+      }
       clearAvatarDraft(avatarDraftStorage(), owner);
       setAvatar({ ...updated.avatar }); setSavedAvatar({ ...updated.avatar });
+      setSavedPortrait(updated.avatarPortrait);
       onSaved(updated);
       void loadEquipment();
-      setNotice({ kind: 'success', text: 'Образ и снаряжение сохранены в вашем профиле.' });
+      setNotice({ kind: 'success', text: 'Портрет, одежда и цвета сохранены. Этот портрет виден в кампусе и появится в новых сменах и блицах.' });
       if (exitAfter) { setConfirmExit(false); onBack(); }
     } catch (reason) {
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
@@ -231,6 +200,10 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         : message || 'Не удалось сохранить. Изменения остались в примерке. Попробуйте ещё раз.' });
     } finally { if (requestId === avatarRequest.current && accountId.current === owner) setSaving(false); }
   }
+
+  // React keys the editor by account in App; this also protects embedded consumers
+  // during the render before their identity-reset effect has run.
+  if (draftOwner !== null && draftOwner !== user.id) return <main className="inventory-screen" role="status">Открываем персонажа…</main>;
 
   return (
     <main className="inventory-screen" aria-labelledby="inventory-title">
@@ -260,17 +233,26 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         <fieldset className="inventory-workspace" disabled={busy || Boolean(pendingDraft)} aria-label="Настройка персонажа">
           <aside className="inventory-observer" aria-label="Ваш персонаж и надетые вещи">
             <div className="inventory-observer__heading"><span className="inventory-eyebrow">Дежурный синоптик</span><strong>{user.displayName}</strong></div>
-            <AvatarSituationPreview avatar={avatar} context={previewContext} direction={direction} animation={animation} dirty={dirty}
-              keyboardLabel={`Стрелки — поворот${availableAnimations.includes('walk') ? ', пробел — шаг' : ''}${availableAnimations.includes('inspect') ? ', E — осмотр' : ''}`}
-              onContextChange={changePreviewContext} onPreviewKeys={handlePreviewKeys}
-              onAnimationComplete={() => setAnimation('idle')} onAvailableAnimations={updateAvailableAnimations} />
+            <section className="inventory-fitting" aria-labelledby="inventory-fitting-title">
+              <h2 id="inventory-fitting-title" className="inventory-fitting__label">Примерочная</h2>
+              <div className="inventory-fitting__stage" tabIndex={0} role="group" aria-label="Примерка одежды. Стрелки влево и вправо — поворот."
+                onKeyDown={handlePreviewKeys} data-outfit-state={dirty ? 'draft' : 'saved'}>
+                <AvatarPreview avatar={avatar} direction={direction} />
+                <span className="inventory-fitting__state">{dirty ? 'Несохранённая примерка' : 'Сохранённые параметры'}</span>
+              </div>
+              <p className="inventory-fitting__description">Проверьте одежду, обувь и рюкзак с четырёх сторон. После сохранения портрет будет использоваться на игровых экранах.</p>
+            </section>
             <div className="inventory-preview-controls">
               <div className="inventory-directions" aria-label="Ракурс персонажа">{DIRECTIONS.map((value) => <button type="button" key={value} className="inventory-segment" aria-pressed={direction === value} onClick={() => setDirection(value)}>{DIRECTION_LABELS[value]}</button>)}</div>
-              <div className="inventory-motions" aria-label="Действие персонажа">{([['idle', 'Стойка'], ['walk', 'Шаг'], ['inspect', 'Осмотр']] as const).filter(([value]) => availableAnimations.includes(value)).map(([value, label]) => <button key={value} type="button" className="inventory-segment" aria-pressed={animation === value} onClick={() => setMotion(value)}>{label}</button>)}</div>
             </div>
-            <p className="inventory-preview-hint">В фокусе персонажа: ← → поворот{availableAnimations.includes('walk') ? ' · пробел — шаг' : ''}{availableAnimations.includes('inspect') ? ' · E — осмотр' : ''}</p>
-            {reducedMotion && <p className="inventory-motion-status" role="status">Движение уменьшено: показана неподвижная поза.</p>}
-            <h2 className="inventory-subtitle">На персонаже</h2>
+            <p className="inventory-preview-hint">В фокусе примерочной: ← → поворот</p>
+            <section className="inventory-saved-portrait" aria-labelledby="inventory-saved-portrait-title" data-confirmed-portrait={savedPortrait?.sha256}>
+              <SavedAvatarPortrait portrait={savedPortrait} size={80} />
+              <div><h2 id="inventory-saved-portrait-title">Портрет в профиле</h2>
+                <p>{portraitSaved ? dirty ? 'На игровых экранах пока показан этот сохранённый портрет. Примерка применится после сохранения.' : 'Этот портрет используется в кампусе и новых раундах.' : 'Портрет ещё не сохранён. Нажмите «Сохранить персонажа».'}</p>
+              </div>
+            </section>
+            <h2 className="inventory-subtitle">{dirty ? 'В примерке' : 'Сохранённые вещи'}</h2>
             <div className="inventory-slots">{EQUIPMENT_SLOTS.map((slot) => {
               const item = OPTIONS[slot.id].find((entry) => entry.id === avatar[slot.id]);
               return <button key={slot.id} type="button" className={`inventory-slot ${item && item.id !== slot.empty ? 'has-item' : ''}`} aria-label={`${slot.label}: ${item?.name ?? 'Пусто'}. Выбрать предмет`} onClick={() => focusSlot(slot.id)}><span className="inventory-slot__art">{item?.image ? <img src={item.image} alt="" width={48} height={48} /> : item?.iconLabel ? <span className="inventory-art-token" aria-hidden="true">{item.iconLabel}</span> : <span aria-hidden="true">—</span>}</span><span>{slot.label}</span></button>;
@@ -299,8 +281,8 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         </fieldset>
 
         <footer className="inventory-footer">
-          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : dirty ? 'Есть несохранённые изменения' : 'Образ сохранён'}</strong><span>{dirty ? draftStored ? 'Примерка сохранена в этой вкладке. В профиле она появится после сохранения образа.' : 'Сохраните образ перед уходом: браузер не сохранил черновик.' : 'Сохранённый инструмент действует со следующей смены.'}</span></div>
-          <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={!dirty || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : 'Сохранить образ'}</button></div>
+          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : dirty ? 'Есть несохранённые изменения' : portraitSaved ? 'Персонаж сохранён' : 'Портрет ещё не сохранён'}</strong><span>{dirty ? draftStored ? 'Примерка сохранена в этой вкладке. Одежда, цвета и портрет обновятся после сохранения персонажа.' : 'Сохраните персонажа перед уходом: браузер не сохранил черновик.' : 'Начатые смены и блицы сохраняют портрет и комплект на момент старта.'}</span></div>
+          <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={(!dirty && portraitSaved) || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : 'Сохранить персонажа'}</button></div>
         </footer>
         {notice && <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
       </div>

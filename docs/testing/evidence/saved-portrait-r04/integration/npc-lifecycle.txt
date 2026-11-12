@@ -1,0 +1,1 @@
+PASS: no personal player or account items; NPC cadence/pivot, reduced motion, three-actor budget, low-power sampling, portrait placement, offscreen-only employee wrap, missing-art diagnostic and loader/layer cleanup.

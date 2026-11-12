@@ -1,0 +1,90 @@
+{
+  "status": "PASS_FOR_CODE_AND_LIFECYCLE_ONLY",
+  "reviewer": "/root/saved_portrait_server",
+  "author": "/root/saved_portrait_ui",
+  "role": "security-privacy-reviewer",
+  "roleRegistry": "agents/registry.yaml",
+  "provider": "Codex fallback",
+  "reviewedAt": "2026-11-12T05:17:49.906Z",
+  "scope": "Independent review of frozen UI/world portrait changes. The reviewer authored server code; server implementation is reviewed separately by /root and /root/portrait_asset_editor.",
+  "threatModelDelta": "Gameplay renders a bounded server-produced PNG data URL from the authenticated response. No external image URL, SVG, user-uploaded image, client renderer or personal player enters gameplay. Fitting drafts remain account-local until a confirmed save.",
+  "checks": [
+    "PNG-only display guard enforces 160×160, SHA256 shape, a 175000-character maximum and bounded base64 padding; unavailable images use a neutral placeholder.",
+    "AvatarEditor preserves the saved portrait on failed save, applies only authoritative responses for the same owner, and ignores late responses after account changes or unmount.",
+    "App keys identity consumers by user ID and independently checks the owner when applying saved-user callbacks.",
+    "Hub uses the saved user portrait. Shift and existing Blitz sessions use only their historical equipment portrait; a missing historical image is never replaced with the current user image.",
+    "Both accepted-art and procedural-fallback campus paths have no personal player creation, movement, animation or profile bridge.",
+    "Static fitting preview remains isolated to the editor; lifecycle cleanup releases obsolete composites and schedules no animation."
+  ],
+  "resolvedFindings": [
+    {
+      "id": "UI-R04-01",
+      "issue": "Procedural HubNpcLayer fallback still created and animated a generic player.",
+      "resolution": "Player creation, container, movement and breathing update removed; employee NPCs remain.",
+      "status": "FIXED"
+    },
+    {
+      "id": "UI-R04-02",
+      "issue": "Broken historical portrait suggested a new wardrobe save would repair an old round.",
+      "resolution": "Neutral unavailable label with optional contextual override.",
+      "status": "FIXED"
+    },
+    {
+      "id": "UI-R04-03",
+      "issue": "Display guard had no data URL length limit and allowed arbitrary base64 padding.",
+      "resolution": "175000-character cap and zero to two padding characters.",
+      "status": "FIXED"
+    },
+    {
+      "id": "UI-R04-04",
+      "issue": "App relied solely on editor lifecycle guards when replacing the current account.",
+      "resolution": "Functional onSaved setter applies the response only to the same current user ID.",
+      "status": "FIXED"
+    }
+  ],
+  "commands": [
+    {
+      "command": "node tools/test_avatar_world_boundary.cjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node tools/test_avatar_inventory.cjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node tools/test_avatar_preview_lifecycle.cjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node tools/test_blitz_lifecycle.cjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node tools/test_modular_avatar.cjs",
+      "exitCode": 0
+    }
+  ],
+  "sourcesSha256": {
+    "apps/web/src/api.ts": "3a755977b1768b15c379bcbe3c5d60dd3decbdb222848909c90b965c7c1d819d",
+    "apps/web/src/App.tsx": "ce464ef81ac868cd20a79046944ddbfb891371c135da33f586398d4ce94f9088",
+    "apps/web/src/features/avatar/SavedAvatarPortrait.tsx": "1232bad5e6d4228b4fd28595a9c9c22b7ed7326b045a1e6a8fa9de79bc5264f4",
+    "apps/web/src/features/avatar/AvatarEditor.tsx": "139f4be238703aa00d732eef9900a03b78b4f5f7f9c4549059259147ef9e4465",
+    "apps/web/src/features/avatar/AvatarPreview.tsx": "7828bdcbf9c70e1919bb3d5d32921467df3b04cd727909f7284ee401114eda8f",
+    "apps/web/src/features/avatar/avatarDraft.ts": "e75103472cdf3f1c982ecdfa165370d484baaadc5f47f290848934f0966df4df",
+    "apps/web/src/features/hub/HubScreen.tsx": "750a54bfac0c9dabf7a6aecb1431ad3b38e35a345bcf0144ac4a92fed0e757ff",
+    "apps/web/src/features/shift/ShiftWorkspace.tsx": "4a4a4feea4a7f5e72834643d0bce9ab51405738f51acfd48c9ebaa58b7f63133",
+    "apps/web/src/features/shift/BlitzWorkspace.tsx": "0573e779b78500f3bb16254d306a1965f5de9bf006c63d211c0ea87e52144e51",
+    "apps/web/src/game/WorldCanvas.tsx": "d7625b80abba21291cffc316bb1bd713def5e6f9cb0817920bd29051748cf73b",
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": "31127ec7637d8d9728421679fd6ab8055d85b31bc0cd6b9126bdb7036bd9b063",
+    "packages/world-engine/src/scenes/hub/HubNpcLayer.ts": "16b405a859b41aae8996be8c1ba7c3bb2574364346dcc5af0d89661589ad83ea",
+    "tools/test_avatar_world_boundary.cjs": "0a90bd804dff21ea47104992f579fce5b5dd7d5b8ae41aec7a00497a557aeaa5",
+    "tools/test_avatar_inventory.cjs": "b7a77bcfccf5ca6e20ac625bfa157a92d5e4e5ee4ed60b79fb1bde68cb19fd96",
+    "tools/test_avatar_preview_lifecycle.cjs": "c4264a90ef077f3f57964ea152057f21d3264e0f9fe0d4841bb9dcea4cf39a42",
+    "tools/test_blitz_lifecycle.cjs": "aba4fcd966457c6526c36d7d9cc283b661d4b774a4e9fd2eed737b041bedccc2",
+    "tools/test_modular_avatar.cjs": "c9bed95dde1130a52ffe6d2e5e4a2577586ac42ca29f58a2a383f976b4a950e0"
+  },
+  "limitations": [
+    "Deterministic component and event doubles, not a real browser layout or GPU measurement.",
+    "This report does not claim independent server authentication, PNG decoding or scientific-content validation."
+  ]
+}

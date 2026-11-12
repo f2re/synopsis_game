@@ -1,0 +1,142 @@
+{
+  "task": "20261112-saved-portrait-r04",
+  "executedAt": "2026-11-12T05:19:41.727719+00:00",
+  "baseCommit": "64b19acb7f8d1facdb49f880be8a21282dbdccbc",
+  "replacedCandidate": "9573d70e5857f27105f3c14ff896bbad4251f38a",
+  "localStatus": "PASS",
+  "environment": {
+    "node": "v24.22.1",
+    "ciNode": "22.23.4",
+    "ciPnpm": "10.34.8",
+    "dependencyNote": "Used installed per-app binaries. Root workspace pnpm auto-install cannot resolve existing sprite-tools; no dependency or lockfile changes. Current world-engine sources separately typechecked with explicit installed Phaser types."
+  },
+  "checks": [
+    {
+      "check": "server-tests",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "server-tests.txt",
+      "cwd": "apps/server"
+    },
+    {
+      "check": "portrait-http",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "portrait-http.txt"
+    },
+    {
+      "check": "avatar-lifecycle",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "avatar-lifecycle.txt"
+    },
+    {
+      "check": "avatar-contract",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "avatar-contract.txt"
+    },
+    {
+      "check": "world-boundary",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "world-boundary.txt"
+    },
+    {
+      "check": "npc-lifecycle",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "npc-lifecycle.txt"
+    },
+    {
+      "check": "blitz-ui-lifecycle",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "blitz-ui-lifecycle.txt"
+    },
+    {
+      "check": "world-avatar-units",
+      "exitCode": 0,
+      "status": "PASS",
+      "evidence": "world-avatar-units.txt"
+    },
+    {
+      "check": "web-current-source-typecheck",
+      "status": "PASS",
+      "evidence": "web-typecheck-config.json"
+    },
+    {
+      "check": "web-production-build",
+      "status": "PASS",
+      "command": "cd apps/web && ./node_modules/.bin/vite build",
+      "modules": 102,
+      "editorChunkKB": 42.06,
+      "mainChunkKB": 293.95,
+      "worldChunkKB": 1461.74,
+      "warning": "Existing world/Phaser chunk exceeds 500kB; no browser/GPU budget acceptance claimed."
+    },
+    {
+      "check": "existing-inventory-http",
+      "status": "PASS",
+      "slots": 11,
+      "values": 42,
+      "accountIsolation": true,
+      "restart": true
+    },
+    {
+      "check": "existing-equipment-http",
+      "status": "PASS",
+      "canonicalAttempts": 11,
+      "onceOnlyRewards": true,
+      "restart": true
+    },
+    {
+      "check": "real-90-second-blitz-http",
+      "status": "PASS",
+      "evidence": "blitz-http.json"
+    },
+    {
+      "check": "independent-server-security",
+      "status": "PASS",
+      "evidence": "server-independent-review.json"
+    },
+    {
+      "check": "independent-ui-code-lifecycle",
+      "status": "PASS",
+      "evidence": "ui-independent-review.json"
+    },
+    {
+      "check": "independent-pixels-and-art",
+      "status": "PASS",
+      "cases": 191,
+      "evidence": "../art/portrait-visual-review.json"
+    },
+    {
+      "check": "independent-review-source-fingerprints",
+      "status": "PASS",
+      "files": 29
+    },
+    {
+      "check": "repository-architecture-brand-fonts-asset-contracts-whitespace",
+      "status": "PASS",
+      "evidence": "repository-validation.json"
+    }
+  ],
+  "serverTests": 65,
+  "worldAvatarTests": 14,
+  "spritecook": {
+    "reuse": "30 owned registered families / 120 direction frames",
+    "paidOperationsThisChange": 0,
+    "generationDuringSave": false
+  },
+  "browserAcceptance": {
+    "status": "BLOCKED_BY_ENVIRONMENT",
+    "evidence": "../../modular-player-r03/integration/browser-blocked.json",
+    "attemptsRepeated": false,
+    "policyBypasses": false,
+    "actualNewBrowserScreenshots": false,
+    "gpuMeasurements": false
+  },
+  "remoteCI": "Run on the new PR126 head; see its Checks tab. Earlier candidate results are not reused as R04 evidence.",
+  "delivery": "Draft PR126; no merge or release until mandatory browser/runtime review."
+}

@@ -1,0 +1,22 @@
+✔ accepted local manifest retains authored pivot, duration and semantic IDs (2.102276ms)
+✔ frame boundaries and full-loop wrap follow source durations independently of frame rate (0.252611ms)
+✔ missing approval, unsafe external paths and malformed frame counts cannot enter loader (0.661396ms)
+✔ duplicate identities, incompatible idle/walk frame boxes and unbounded texture packs are rejected (0.535247ms)
+✔ ambient walking requires NPC role, matching authored direction and a bounded speed (0.363287ms)
+✔ all 42 server options and default saved profile match the reusable render contract (10.794909ms)
+✔ the actual compiled source pack matches the consumer schema, PNG and acceptance gate (5.73591ms)
+✔ only complete accepted catalogs load, with bounds, none semantics and every declared pose (59.453137ms)
+✔ optional accessories may be explicitly hidden by a direction; required body/clothes cannot (5.253502ms)
+✔ an accepted idle-only catalog does not claim walk or inspect readiness (4.590764ms)
+✔ back and front fragments use one global z order; companion is excluded from body (3.749467ms)
+✔ RGB remapping preserves alpha, transparent pixels and authored non-palette colors (0.260362ms)
+✔ cache bounds include active leases; scene disposal does not evict a second consumer (0.407103ms)
+✔ static fitting uses native frame rectangles and stable companion placement (4.060867ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 214.28341

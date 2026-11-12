@@ -1,0 +1,1 @@
+Modular player: 30 families, 42 values, idle4 × 4 directions; 167734 PNG bytes, 917504 decoded; art=PASS; verified

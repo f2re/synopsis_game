@@ -9,7 +9,8 @@ import {
   type TaskDefinition,
 } from '@synopsis/content-engine';
 import { decodeGroup, KN01_RULESET_ID, type SupportedKn01Group } from '@synopsis/kn01-codec';
-import { DEFAULT_AVATAR, type AvatarProfile } from '../identity/model.js';
+import { DEFAULT_AVATAR, validateAvatar, type AvatarPortrait, type AvatarProfile } from '../identity/model.js';
+import { composeAvatarPortrait, validateAvatarPortrait } from '../identity/avatarPortrait.js';
 import { EquipmentService, effectsAllowed } from '../equipment/equipmentService.js';
 import type { EquipmentSnapshot, ReferenceView, TrainingReward, TrainingShift, TrainingState } from '../equipment/model.js';
 import { BLITZ_DURATION_MS, BLITZ_MAX_START_KEYS, BLITZ_MODE, BLITZ_REQUEST_ID, BLITZ_RULES_VERSION, BLITZ_TASK_IDS, type BlitzSessionView } from './blitzRules.js';
@@ -75,6 +76,7 @@ export interface ShiftServiceOptions {
   contentRoot: string;
   attemptLogPath: string;
   equipment?: EquipmentService;
+  avatarAssetsRoot?: string;
   /** Server time only; injected clock is used by deterministic tests. */
   now?: () => Date;
 }
@@ -116,6 +118,7 @@ export class ShiftService {
     for (const source of sourceFile.sources) this.sources.set(source.id, source);
     this.pack = pack;
     this.validateContent();
+    await this.migrateActivityPortraits();
     try {
       const log = await readFile(this.options.attemptLogPath, 'utf8');
       for (const line of log.split('\n')) {
@@ -128,20 +131,21 @@ export class ShiftService {
     await this.flushAudit();
   }
 
-  async startShift(userId: string, avatar: AvatarProfile = DEFAULT_AVATAR) {
+  async startShift(userId: string, avatar: AvatarProfile = DEFAULT_AVATAR, avatarPortrait?: AvatarPortrait) {
     const pack = this.requirePack();
-    return this.equipment.store.transaction((draft) => {
+    return this.equipment.store.transaction(async (draft) => {
       const active = Object.values(draft.shifts).find((shift) => shift.userId === userId && effectsAllowed(shift.mode) && shift.currentIndex < shift.taskIds.length);
       if (active) {
         if (active.contentPack !== this.contentPackId(pack)) throw new ShiftError(409, 'Учебный пакет изменился. Незавершённая смена требует восстановления прежней версии пакета.', 'content_version_changed');
         return this.startResponse(active);
       }
+      const appearance = await this.activityAppearance(avatar, avatarPortrait);
       const mode = pack.status === 'published' ? 'practice' : 'practice-draft';
       const state: ShiftState = {
         id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...pack.tasks],
         currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: this.now(),
         mode, contentPack: this.contentPackId(pack), contentStatus: pack.status,
-        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), avatar, mode),
+        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), appearance.avatar, mode, appearance.portrait),
         assistedTaskIds: [], references: {}, responses: {},
       };
       draft.shifts[state.id] = state;
@@ -259,11 +263,11 @@ export class ShiftService {
     });
   }
 
-  async startBlitz(userId: string, avatar: AvatarProfile, requestId: unknown): Promise<BlitzSessionView> {
+  async startBlitz(userId: string, avatar: AvatarProfile, requestId: unknown, avatarPortrait?: AvatarPortrait): Promise<BlitzSessionView> {
     if (typeof requestId !== 'string' || !BLITZ_REQUEST_ID.test(requestId)) {
       throw new ShiftError(400, 'Для начала блица нужен идентификатор запроса', 'invalid_request_id');
     }
-    return this.equipment.store.transaction((draft) => {
+    return this.equipment.store.transaction(async (draft) => {
       const now = this.now();
       const sessions = Object.values(draft.shifts).filter((shift) => shift.userId === userId && shift.mode === BLITZ_MODE);
       for (const session of sessions) this.expireBlitz(session, now);
@@ -284,14 +288,15 @@ export class ShiftService {
       if (!BLITZ_TASK_IDS.every((id) => pack.tasks.includes(id))) {
         throw new ShiftError(503, 'Для этой версии блица недоступен полный набор заданий', 'blitz_content_unavailable');
       }
+      const appearance = await this.activityAppearance(avatar, avatarPortrait);
       const state: ShiftState = {
         id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...BLITZ_TASK_IDS],
         currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: now,
         mode: BLITZ_MODE, contentPack: this.contentPackId(pack), contentStatus: pack.status,
-        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), avatar, BLITZ_MODE),
+        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), appearance.avatar, BLITZ_MODE, appearance.portrait),
         assistedTaskIds: [], references: {}, responses: {},
         blitz: { rulesVersion: BLITZ_RULES_VERSION, requestIds: [requestId], deadlineAt: new Date(Date.parse(now) + BLITZ_DURATION_MS).toISOString(),
-          avatarSnapshot: structuredClone(avatar), review: [] },
+          avatarSnapshot: appearance.avatar, review: [] },
       };
       draft.shifts[state.id] = state;
       return this.blitzView(state, now);
@@ -344,6 +349,34 @@ export class ShiftService {
       state.completedAt = state.blitz.deadlineAt;
       state.blitz.finishReason = 'timeout';
     }
+  }
+
+  private async activityAppearance(avatar: AvatarProfile, portrait?: AvatarPortrait) {
+    const saved = validateAvatar(avatar);
+    return { avatar: saved, portrait: portrait ? validateAvatarPortrait(portrait, saved)
+      : await composeAvatarPortrait(saved, { assetsRoot: this.options.avatarAssetsRoot }) };
+  }
+
+  private async migrateActivityPortraits(): Promise<void> {
+    await this.equipment.store.transaction(async (draft) => {
+      for (const shift of Object.values(draft.shifts)) {
+        // Never substitute today's clothes for an unknown historical outfit.
+        const profile = shift.equipment.avatarSnapshot ?? shift.blitz?.avatarSnapshot;
+        if (!profile) continue;
+        const appearance = await this.activityAppearance(profile, shift.equipment.avatarPortrait);
+        shift.equipment.avatarSnapshot = appearance.avatar;
+        shift.equipment.avatarPortrait = appearance.portrait;
+        for (const entry of Object.values(shift.responses)) {
+          const response = entry.response as { equipment?: EquipmentSnapshot };
+          if (response.equipment) {
+            // Present cached copies were already validated by TrainingStore.
+            // Only missing legacy copies may be filled from this same historical pair.
+            response.equipment.avatarSnapshot ??= { ...appearance.avatar };
+            response.equipment.avatarPortrait ??= { ...appearance.portrait };
+          }
+        }
+      }
+    });
   }
 
   private blitzView(state: ShiftState, now: string): BlitzSessionView {

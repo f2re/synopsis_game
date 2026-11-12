@@ -1,0 +1,1 @@
+{"status":"PASS","test":"real static fitting components with deferred leases and hook doubles","checks":["StrictMode stale load released","draft switch hides obsolete composite","late response disposal","neutral load failure","first frame drawn once at integer scale","no animation or observer APIs"],"limits":"Not a browser layout or artwork acceptance result."}

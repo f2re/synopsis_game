@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { characterFrameAtTime, normalizeAvatarPresentation, parseCharacterManifest } from './characterAssets.ts';
+import { characterFrameAtTime, parseCharacterManifest } from './characterAssets.ts';
 
 function fixture() {
   return {
@@ -52,13 +52,6 @@ test('duplicate identities, incompatible idle/walk frame boxes and unbounded tex
   Object.assign(huge.actors[0].clips.idle, { frameWidth: 512, frameHeight: 512, frameCount: 64, durationsMs: Array(64).fill(100) });
   assert.throws(() => parseCharacterManifest(huge), /texture budget/);
 });
-
-test('presentation keeps only actual account equipment IDs and resets on sign-out', () => {
-  assert.deepEqual(normalizeAvatarPresentation({ heldItem: 'held.tablet', companion: 'companion.squirrel' }), { heldItem: 'held.tablet', companion: 'companion.squirrel' });
-  assert.deepEqual(normalizeAvatarPresentation({ heldItem: 'held.flashlight', companion: 'companion.pascal' }), { heldItem: 'held.none', companion: 'companion.none' });
-  assert.deepEqual(normalizeAvatarPresentation(null), { heldItem: 'held.none', companion: 'companion.none' });
-});
-
 
 test('ambient walking requires NPC role, matching authored direction and a bounded speed', () => {
   const pack = fixture();

@@ -1,4 +1,5 @@
 import type { BlitzState } from '../shift/blitzRules.js';
+import type { AvatarPortrait, AvatarProfile } from '../identity/model.js';
 
 export interface EffectCharges { reference: number; retry: number }
 
@@ -10,6 +11,9 @@ export interface EquipmentSnapshot {
   charges: EffectCharges;
   remaining: EffectCharges;
   assistedTasks: number;
+  /** Fixed at activity start; absent only for a legacy activity without a full outfit. */
+  avatarSnapshot?: AvatarProfile;
+  avatarPortrait?: AvatarPortrait;
 }
 
 export interface BadgeView {

@@ -1,4 +1,4 @@
-import { AVATAR_OPTIONS, type AvatarProfile } from '../identity/model.js';
+import { AVATAR_OPTIONS, validateAvatar, type AvatarPortrait, type AvatarProfile } from '../identity/model.js';
 import {
   EquipmentError,
   type BadgeView, type EffectCharges, type EquipmentSnapshot, type EquipmentUser,
@@ -48,7 +48,7 @@ export class EquipmentService {
     return state.users[userId] ?? (state.users[userId] = initialEquipmentUser());
   }
 
-  snapshot(user: EquipmentUser, avatar: AvatarProfile, mode: string): EquipmentSnapshot {
+  snapshot(user: EquipmentUser, avatar: AvatarProfile, mode: string, avatarPortrait?: AvatarPortrait): EquipmentSnapshot {
     const enabled = effectsAllowed(mode);
     const allowedHeld = AVATAR_OPTIONS.heldItem as readonly string[];
     const heldItem = allowedHeld.includes(avatar.heldItem) ? avatar.heldItem : 'held.none';
@@ -57,7 +57,8 @@ export class EquipmentService {
       reference: enabled ? Math.min(2, (badge?.effects.reference ?? 0) + (heldItem === 'held.tablet' || heldItem === 'held.map-folder' ? 1 : 0)) : 0,
       retry: enabled ? Math.min(2, (badge?.effects.retry ?? 0) + (heldItem === 'held.pencil' ? 1 : 0)) : 0,
     };
-    return { badgeId: badge?.id ?? null, badgeName: badge?.name ?? null, heldItem, enabled, charges, remaining: { ...charges }, assistedTasks: 0 };
+    return { badgeId: badge?.id ?? null, badgeName: badge?.name ?? null, heldItem, enabled, charges, remaining: { ...charges }, assistedTasks: 0,
+      ...(avatarPortrait ? { avatarSnapshot: validateAvatar(avatar), avatarPortrait: { ...avatarPortrait } } : {}) };
   }
 
   complete(state: TrainingState, shift: TrainingShift, completedAt: string): TrainingReward {

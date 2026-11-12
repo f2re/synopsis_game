@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { api, ApiError, type BlitzLobby, type BlitzSession, type SessionUser, type ShiftTask, type StationPlotPayload, type TaskStep } from '../../api';
 import { GAME_MARK } from '../../brand';
-import { AvatarPreview } from '../avatar/AvatarPreview';
+import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { PixelIcon, PixelProgressBar } from '../ui';
 import { StationPlotTask } from './StationPlotTask';
 import './ShiftWorkspace.css';
@@ -35,8 +35,11 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
   const mounted = useRef(true);
   const identityEpoch = useRef(0);
   const loadSequence = useRef(0);
+  const accountId = useRef(user.id);
+  const sessionOwner = useRef(user.id);
+  accountId.current = user.id;
 
-  function isCurrent(epoch: number): boolean { return mounted.current && identityEpoch.current === epoch; }
+  function isCurrent(epoch: number): boolean { return mounted.current && identityEpoch.current === epoch && accountId.current === user.id; }
 
   function acceptSession(next: BlitzSession, epoch: number) {
     if (!isCurrent(epoch)) return;
@@ -74,6 +77,7 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
 
   useEffect(() => {
     const epoch = ++identityEpoch.current;
+    sessionOwner.current = user.id;
     mounted.current = true;
     current.current = null; clock.current = null; startRequest.current = null;
     requestInFlight.current = false; refreshInFlight.current = false; lastRefresh.current = 0;
@@ -158,11 +162,13 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
     } finally { if (isCurrent(epoch)) { requestInFlight.current = false; setBusy(false); } }
   }
 
+  if (sessionOwner.current !== user.id) return <main className="shift-shell blitz-shell" role="status">Открываем блиц…</main>;
+
   const active = session?.status === 'active';
   const completed = session?.status === 'completed';
   const contentStatus = session?.contentStatus ?? lobby?.contentStatus;
   const draft = Boolean(contentStatus && contentStatus !== 'published');
-  const avatar = session?.avatarSnapshot ?? user.avatar;
+  const portrait = session ? session.equipment.avatarPortrait : user.avatarPortrait;
   const total = session?.progress.total ?? lobby?.total ?? 6;
 
   return <main className="shift-shell blitz-shell">
@@ -174,8 +180,8 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
 
     <div className="blitz-layout">
       <aside className="blitz-profile" aria-label="Персонаж в блице">
-        <div className="blitz-profile__portrait"><AvatarPreview avatar={avatar} context="blitz-practice" equipment={session?.equipment} size={96} showBackdrop={false} /></div>
-        <div className="blitz-profile__identity"><strong>{user.displayName}</strong><span>{session ? 'Комплект на начало раунда' : 'Ваш сохранённый комплект'}</span></div>
+        <div className="blitz-profile__portrait"><SavedAvatarPortrait portrait={portrait} size={80} label={session ? 'Портрет на начало раунда' : 'Сохранённый портрет'} missingLabel={session ? 'Портрет не сохранён для этого раунда' : 'Сохраните портрет в гардеробе'} /></div>
+        <div className="blitz-profile__identity"><strong>{user.displayName}</strong><span>{isSavedAvatarPortrait(portrait) ? session ? 'Портрет и комплект на начало раунда' : 'Ваш сохранённый портрет' : session ? 'Портрет не сохранён для этого раунда' : 'Сохраните портрет в гардеробе'}</span></div>
         <details className="blitz-profile__details"><summary>Комплект и время</summary><p>Одежда и инструменты сохраняют ваш образ. Справка и повтор в этом сценарии отключены.</p><p>Выход и перезагрузка не останавливают отсчёт. Здесь можно продолжить тот же раунд.</p></details>
       </aside>
 

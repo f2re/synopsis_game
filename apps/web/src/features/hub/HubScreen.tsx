@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { WorldBridge } from '@synopsis/world-engine';
 import type { SessionUser } from '../../api';
 import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from '../../brand';
-import { AvatarPreview } from '../avatar/AvatarPreview';
+import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { PixelIcon } from '../ui/PixelIcon';
 import { PixelSwitch } from '../ui/PixelSwitch';
 import { StationNavDock, type StationDockModalId } from '../ui/StationNavDock';
@@ -145,14 +145,14 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
 
   return (
     <main className="game-viewport hub-screen" aria-label={GAME_TITLE}>
-      <Suspense fallback={<div className="hub-world-loading" role="status">Открываем кампус…</div>}><WorldCanvas avatar={user?.avatar} /></Suspense>
+      <Suspense fallback={<div className="hub-world-loading" role="status">Открываем кампус…</div>}><WorldCanvas /></Suspense>
 
       <header className="hub-topbar" aria-label="Состояние станции">
         <button type="button" className="hub-profile-button" onClick={() => setActiveModal('profile')} aria-haspopup="dialog" aria-label={user ? `Профиль: ${user.displayName}` : 'Профиль наблюдателя и вход'}>
           <span className="hub-profile-button__portrait">
-            {user ? <AvatarPreview avatar={user.avatar} context="campus" size={40} /> : <HubIcon name="observer" size={40} />}
+            {user ? <SavedAvatarPortrait portrait={user.avatarPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /> : <HubIcon name="observer" size={40} />}
           </span>
-          <span className="hub-profile-button__copy"><strong>{user?.displayName ?? 'Наблюдатель'}</strong><small>{user ? user.groupId : 'Войти в учебную группу'}</small></span>
+          <span className="hub-profile-button__copy"><strong>{user?.displayName ?? 'Наблюдатель'}</strong><small>{user ? isSavedAvatarPortrait(user.avatarPortrait) ? user.groupId : 'Сохраните портрет в гардеробе' : 'Войти в учебную группу'}</small></span>
           <span className="hub-profile-button__chevron" aria-hidden="true">⌄</span>
         </button>
 
@@ -241,6 +241,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
       {activeModal === 'profile' && (
         <HubDialog title={user ? user.displayName : 'Режим наблюдателя'} subtitle={user ? `Учебная группа: ${user.groupId}` : 'Кампус открыт для знакомства'} icon={user ? 'student' : 'observer'} onClose={() => setActiveModal(null)}>
           {user ? <div className="hub-profile-actions">
+            <div className="hub-profile-identity"><SavedAvatarPortrait portrait={user.avatarPortrait} size={80} label={`Сохранённый портрет: ${user.displayName}`} /><p>{isSavedAvatarPortrait(user.avatarPortrait) ? 'Сохранённый портрет используется в кампусе и новых сменах и блицах.' : 'Портрет ещё не сохранён. Откройте гардероб и сохраните персонажа.'}</p></div>
             <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenAvatar)}>Персонаж и инвентарь</button>
             <button type="button" className="hub-action" onClick={() => closeThen(onOpenSetCode)}>{user.codeSet ? 'Сменить код входа' : 'Задать код входа'}</button>
             {user.roles.includes('admin') && <button type="button" className="hub-action" onClick={() => closeThen(onOpenAdmin)}>Управление группами</button>}

@@ -1,0 +1,8 @@
+{
+  "extends": "apps/web/tsconfig.json",
+  "resolvedSources": "packages/world-engine/src (current working tree)",
+  "phaserTypes": "apps/web/node_modules/.pnpm/phaser@4.2.1/node_modules/phaser/types/phaser.d.ts",
+  "temporaryConfig": "tsconfig-r04-web.json",
+  "exitCode": 0,
+  "executedAt": "2026-11-12T05:17:38.211384+00:00"
+}

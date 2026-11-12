@@ -1,6 +1,7 @@
 import { randomBytes, randomUUID, scrypt, timingSafeEqual } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
+import { avatarAppearanceKey, composeAvatarPortrait, validateAvatarPortrait } from './avatarPortrait.js';
 import {
   AVATAR_OPTIONS,
   DEFAULT_AVATAR,
@@ -40,6 +41,7 @@ interface IpAttempt {
 
 export interface IdentityServiceOptions {
   storePath: string;
+  avatarAssetsRoot?: string;
   securityProfile?: SecurityProfile;
   maxAttempts?: number;
   lockMs?: number;
@@ -133,22 +135,33 @@ export class IdentityService {
   }
 
   async init(): Promise<void> {
+    let raw: string;
     try {
-      const raw = await readFile(this.options.storePath, 'utf8');
-      const parsed = JSON.parse(raw) as IdentityState;
-      if (parsed.version !== 1 || !Array.isArray(parsed.users)) {
-        throw new Error('unsupported identity store');
-      }
-      this.state = parsed;
-      for (const user of this.state.users) {
-        if (user.roles.includes('admin') && user.codeSet === undefined) {
-          user.codeSet = true;
-        }
-      }
+      raw = await readFile(this.options.storePath, 'utf8');
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
       await this.persist();
+      return;
     }
+    const parsed = JSON.parse(raw) as IdentityState;
+    if (parsed.version !== 1 || !Array.isArray(parsed.users)) throw new Error('unsupported identity store');
+    let migrated = false;
+    for (const user of parsed.users) {
+      user.avatar = validateAvatar(user.avatar);
+      if (user.avatarPortrait === undefined) {
+        user.avatarPortrait = await composeAvatarPortrait(user.avatar, { assetsRoot: this.options.avatarAssetsRoot });
+        migrated = true;
+      } else {
+        // A damaged existing picture is not silently replaced with newer artwork.
+        user.avatarPortrait = validateAvatarPortrait(user.avatarPortrait, user.avatar);
+      }
+      if (user.roles.includes('admin') && user.codeSet === undefined) {
+        user.codeSet = true;
+        migrated = true;
+      }
+    }
+    if (migrated) await this.writeSnapshot(parsed);
+    this.state = parsed;
   }
 
   getSecurityProfile(): SecurityProfile {
@@ -357,12 +370,15 @@ export class IdentityService {
       // Recheck access after earlier queued writes, and keep the last committed
       // loadout visible to shift starts until this complete snapshot is saved.
       const user = this.requireSession(token);
+      if (user.avatarPortrait?.appearanceKey === avatarAppearanceKey(avatar)) return toSessionUser(user);
+      const avatarPortrait = await composeAvatarPortrait(avatar, { assetsRoot: this.options.avatarAssetsRoot });
       const draft: IdentityState = {
         ...this.state,
-        users: this.state.users.map((candidate) => candidate === user ? { ...candidate, avatar } : candidate),
+        users: this.state.users.map((candidate) => candidate === user ? { ...candidate, avatar, avatarPortrait } : candidate),
       };
       await this.writeSnapshot(draft);
       user.avatar = avatar;
+      user.avatarPortrait = avatarPortrait;
       return toSessionUser(user);
     });
   }
@@ -497,6 +513,7 @@ export class IdentityService {
       loginCodeSalt: verifier.salt,
       loginCodeHash: verifier.hash,
       avatar: { ...DEFAULT_AVATAR },
+      avatarPortrait: await composeAvatarPortrait(DEFAULT_AVATAR, { assetsRoot: this.options.avatarAssetsRoot }),
       createdAt: new Date().toISOString(),
       codeSet: Boolean(input.codeSet),
       failedAttempts: 0,

@@ -1,24 +1,28 @@
 /** Dev-only visual fixture. No login, tokens, real profile or HTTP API calls. */
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { DEFAULT_MODULAR_AVATAR, parseModularAvatarProfile } from '@synopsis/world-engine/avatar';
-import { api, type AvatarProfile, type EquipmentBadge, type EquipmentResponse, type SessionUser } from '../../src/api';
+import { DEFAULT_MODULAR_AVATAR, avatarProfileKey, parseModularAvatarProfile } from '@synopsis/world-engine/avatar';
+import { api, type AvatarPortrait, type AvatarProfile, type EquipmentBadge, type EquipmentResponse, type SessionUser } from '../../src/api';
 import { AvatarEditor } from '../../src/features/avatar/AvatarEditor';
 import { HubScreen } from '../../src/features/hub/HubScreen';
 import { clearAvatarDraft, avatarDraftStorage } from '../../src/features/avatar/avatarDraft';
+import portraitFixtures from './saved-portrait-fixtures.json';
 import '../../src/styles.css';
 import '../../src/hub-ui.css';
 
 if (!import.meta.env.DEV) throw new Error('The public visual fixture is only available in the Vite development server.');
 
-const FIXTURE_ID = 'fixture.modular-player-r02.public';
-const STORAGE_KEY = 'synopsis.visual-review.modular-player-r02';
+const FIXTURE_ID = 'fixture.saved-portrait.public';
+const STORAGE_KEY = 'synopsis.visual-review.saved-portrait';
 const EMPTY_USER: SessionUser = {
   id: FIXTURE_ID, displayName: 'Тестовый синоптик', groupId: 'Открытый стенд', roles: ['student'], status: 'active',
   createdAt: '2026-11-11T00:00:00.000Z', avatar: { ...DEFAULT_MODULAR_AVATAR },
 };
 let savedAvatar: AvatarProfile = { ...DEFAULT_MODULAR_AVATAR };
 let selectedBadge: string | null = 'badge.training_starter';
+let simulateFailure = false;
+let omitPortrait = false;
+const fixturePortrait = (avatar: AvatarProfile) => portraitFixtures.examples.find((example) => avatarProfileKey(example.avatar) === avatarProfileKey(avatar))?.avatarPortrait as AvatarPortrait | undefined;
 try {
   const stored = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null') as { avatar?: unknown; badgeId?: unknown } | null;
   const accepted = parseModularAvatarProfile(stored?.avatar);
@@ -26,7 +30,7 @@ try {
   if (stored?.badgeId === null) selectedBadge = null;
 } catch { /* The fixture starts clean when this tab has no usable saved fixture. */ }
 
-const user = (): SessionUser => ({ ...EMPTY_USER, avatar: { ...savedAvatar } });
+const user = (): SessionUser => ({ ...EMPTY_USER, avatar: { ...savedAvatar }, avatarPortrait: omitPortrait ? undefined : fixturePortrait(savedAvatar) });
 function persistFixture() { sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ avatar: savedAvatar, badgeId: selectedBadge })); }
 
 // Public baseline data copied from the checked-in starter catalog for visual review.
@@ -48,7 +52,7 @@ function fixtureEquipment(): EquipmentResponse {
   return {
     loadout: { badgeId: selectedBadge }, catalog: BADGES.map((entry) => ({ ...structuredClone(entry), equipped: entry.id === selectedBadge })),
     stats: { completedShifts: 0, unassistedCorrect: 0, practiceDays: 0 },
-    nextShift: { badgeId: selectedBadge, badgeName: badge?.name ?? null, heldItem, enabled: true, charges, remaining: { ...charges }, assistedTasks: 0 },
+    nextShift: { badgeId: selectedBadge, badgeName: badge?.name ?? null, heldItem, enabled: true, charges, remaining: { ...charges }, assistedTasks: 0, avatarSnapshot: { ...savedAvatar }, avatarPortrait: fixturePortrait(savedAvatar) },
     rules: { chargeCap: 2, description: 'Публичные тестовые данные для проверки интерфейса; задания на стенде не запускаются.' },
     tools: [
       { id: 'held.tablet', effects: { reference: 1, retry: 0 }, effectDescription: '+1 обращение к справке за учебную смену.' },
@@ -64,9 +68,11 @@ for (const method of Object.keys(api)) Object.assign(api, { [method]: async () =
 api.me = async () => user();
 api.equipment = async () => fixtureEquipment();
 api.updateAvatar = async (avatar: AvatarProfile) => {
+  if (simulateFailure) throw new Error('Тестовая ошибка сохранения. Подтверждённый портрет остаётся прежним.');
   const accepted = parseModularAvatarProfile(avatar);
   if (!accepted) throw new Error('Недопустимый профиль тестового стенда.');
-  savedAvatar = accepted; persistFixture(); return user();
+  if (!fixturePortrait(accepted)) throw new Error('Для этой примерки на стенде нет сохранённого PNG. Сбросьте тестовый образ и выберите один из готовых комплектов. Произвольные сочетания сохраняются сервером в основном приложении.');
+  savedAvatar = accepted; omitPortrait = false; persistFixture(); return user();
 };
 api.selectEquipmentBadge = async (badgeId: string | null) => {
   if (badgeId !== null && badgeId !== 'badge.training_starter') throw new Error('Этот знак не получен в стартовом тестовом наборе.');
@@ -79,15 +85,15 @@ function ReviewHarness() {
   const [revision, setRevision] = useState(0);
   const [notice, setNotice] = useState('');
   function resetFixture() {
-    savedAvatar = { ...DEFAULT_MODULAR_AVATAR }; selectedBadge = 'badge.training_starter';
+    savedAvatar = { ...DEFAULT_MODULAR_AVATAR }; selectedBadge = 'badge.training_starter'; omitPortrait = false; simulateFailure = false;
     sessionStorage.removeItem(STORAGE_KEY); clearAvatarDraft(avatarDraftStorage(), FIXTURE_ID);
     setCurrentUser(user()); setRevision((value) => value + 1); setView('editor'); setNotice('Только тестовый образ и его примерка сброшены.');
   }
   const noGame = () => setNotice('Это стенд внешности: учебные задания и действия аккаунта здесь не выполняются.');
   return <>
-    <header className="review-banner" data-review-fixture="public-modular-r02">
-      <div><strong>Тестовый стенд внешности</strong><span>Настоящие компоненты и принятые изображения · публичный тестовый профиль</span><small>Сохранение действует только в этой вкладке. Сервер, вход и реальные аккаунты не используются.</small></div>
-      <div className="review-banner__actions"><button type="button" onClick={() => setView('editor')}>В гардероб</button><button type="button" onClick={resetFixture}>Сбросить тестовый образ</button></div>
+    <header className="review-banner" data-review-fixture="public-saved-portrait">
+      <div><strong>Статическая примерка и сохранённый портрет</strong><span>Настоящие компоненты и принятые изображения · публичный тестовый профиль</span><small>Пять PNG заранее получены настоящим серверным композитором. На стенде сохраняются исходный образ и три готовых комплекта; другие сочетания дают явную ошибку. Сервер и аккаунты не используются.</small></div>
+      <div className="review-banner__actions"><button type="button" onClick={() => setView('editor')}>В гардероб</button><button type="button" onClick={() => setView('campus')}>Кампус</button><button type="button" onClick={resetFixture}>Сбросить тестовый образ</button><button type="button" onClick={() => { simulateFailure = !simulateFailure; setNotice(simulateFailure ? 'Включена ошибка сохранения: примерка должна остаться, подтверждённый портрет не меняется.' : 'Сохранение тестовых комплектов снова доступно.'); }}>Ошибка сохранения</button><button type="button" onClick={() => { omitPortrait = true; setCurrentUser(user()); setRevision((value) => value + 1); setNotice('Профиль без портрета: показана нейтральная заглушка. Сохраните известный тестовый комплект.'); }}>Нет портрета</button></div>
       {notice && <p className="review-banner__notice" role="status">{notice}</p>}
     </header>
     {view === 'editor'

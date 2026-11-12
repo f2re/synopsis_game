@@ -1,0 +1,48 @@
+{
+  "executedAt": "2026-11-12T05:21:25.892196+00:00",
+  "checks": [
+    {
+      "command": "python tools/validate_architecture.py",
+      "exitCode": 0,
+      "output": "Проверка архитектуры успешно завершена.\nApps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.\n"
+    },
+    {
+      "command": "python tools/validate_brand.py",
+      "exitCode": 0,
+      "output": "Проверка бренда успешно завершена: 26063: Позывной «Синоптик»\n"
+    },
+    {
+      "command": "python tools/validate_fonts.py",
+      "exitCode": 0,
+      "output": "Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.\n"
+    },
+    {
+      "command": "python tools/assets/check_asset_manifests.py",
+      "exitCode": 0,
+      "output": "✓ Проверено манифестов ассетов: 45. Все структуры корректны.\n"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": "python tools/validate_repo.py",
+      "exitCode": 0,
+      "output": "Проверка репозитория успешно завершена.\n"
+    },
+    {
+      "command": "python tools/assets/check_asset_contract.py",
+      "exitCode": 0,
+      "output": "WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png\nWARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nWARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nТехнический контракт assets: PASS (24 simple manifests, 20 иных manifests пропущено).\nХудожественное качество этим checker не оценивается.\n"
+    }
+  ],
+  "status": "PASS",
+  "unavailableLegacyCommands": [
+    {
+      "command": "python tools/validate_pixel_art.py",
+      "status": "MISSING_IN_BASELINE",
+      "note": "Referenced by AGENTS.md but absent from the repository. Existing CI asset contract/manifests checks ran; actual portrait grid, palette, alpha and composition were independently reviewed in saved-portrait-r04/art. The simple asset checker alone is not an art gate."
+    }
+  ]
+}

@@ -5,6 +5,9 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const ts = require('../apps/web/node_modules/typescript');
 const fixture = JSON.parse(fs.readFileSync('apps/web/tools/review/blitz-practice-fixture.json', 'utf8'));
+const portraits = JSON.parse(fs.readFileSync('apps/web/tools/review/saved-portrait-fixtures.json', 'utf8')).examples;
+const { load } = require('./ui_test_harness.cjs');
+const portraitModule = load('apps/web/src/features/avatar/SavedAvatarPortrait.tsx', { './saved-avatar-portrait.css': {} });
 
 class Events {
   listeners = new Map();
@@ -46,7 +49,7 @@ const react = {
 const deps = {
   react, 'react/jsx-runtime': { jsx: (type, props, key) => ({ type, props, key }), jsxs: (type, props, key) => ({ type, props, key }) },
   '../../api': { api, ApiError: class ApiError extends Error {} }, '../../brand': { GAME_MARK: '26063' },
-  '../avatar/AvatarPreview': { AvatarPreview: 'AvatarPreview' }, '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' },
+  '../avatar/SavedAvatarPortrait': portraitModule, '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' },
   './StationPlotTask': { StationPlotTask: 'StationPlotTask' }, './ShiftWorkspace.css': {}, './BlitzWorkspace.css': {},
 };
 const code = ts.transpileModule(fs.readFileSync('apps/web/src/features/shift/BlitzWorkspace.tsx', 'utf8'), {
@@ -87,9 +90,10 @@ function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   return value?.props ? text(value.props.children) : '';
 }
+const portrait = (runner) => nodes(runner.output).find((node) => node.type === portraitModule.SavedAvatarPortrait)?.props.portrait;
 const question = (runner) => nodes(runner.output).find((node) => node.type?.name === 'BlitzQuestion');
 const timer = (runner) => nodes(runner.output).find((node) => typeof node.props?.className === 'string' && /^blitz-timer(?: |$)/.test(node.props.className));
-const user = (id) => ({ id, displayName: `Fixture ${id}`, groupId: 'Review', roles: ['student'], status: 'active', createdAt: '2026-11-11T00:00:00.000Z', avatar: { ...fixture.avatar } });
+const user = (id) => ({ id, displayName: `Fixture ${id}`, groupId: 'Review', roles: ['student'], status: 'active', createdAt: '2026-11-11T00:00:00.000Z', avatar: { ...portraits[id === 'A' ? 0 : 4].avatar }, avatarPortrait: { ...portraits[id === 'A' ? 0 : 4].avatarPortrait } });
 const baseline = Date.parse(fixture.active[0].serverNow);
 function session(id, elapsed = 0, index = 0) {
   const value = structuredClone(fixture.active[index]);
@@ -105,6 +109,7 @@ function tick(runner, value) { now = value; for (const callback of [...timers.va
 (async () => {
   const runner = new Runner(user('A'));
   assert.equal(calls.blitzLobby.length, 1);
+  assert.equal(portrait(runner).sha256, portraits[0].avatarPortrait.sha256, 'The lobby uses the confirmed user portrait');
   runner.strictRemount();
   assert.equal(calls.blitzLobby.length, 2);
   await settle(runner, calls.blitzLobby[0], lobby(session('obsolete-strict')));
@@ -112,6 +117,9 @@ function tick(runner, value) { now = value; for (const callback of [...timers.va
   assert.equal(timers.size, 0);
   await settle(runner, calls.blitzLobby[1], lobby(session('round-A')));
   assert.equal(question(runner).props.task.instanceId, 'round-A:1');
+  assert.equal(portrait(runner).pngDataUrl, fixture.active[0].equipment.avatarPortrait.pngDataUrl, 'A started round uses its historical PNG bytes');
+  runner.render({ ...user('A'), avatar: portraits[4].avatar, avatarPortrait: portraits[4].avatarPortrait });
+  assert.equal(portrait(runner).sha256, fixture.active[0].equipment.avatarPortrait.sha256, 'Saving a new outfit elsewhere cannot rewrite the started round portrait');
   assert.equal(timers.size, 1);
   assert.equal(timer(runner).props['aria-label'], 'Осталось 90 секунд');
 
@@ -137,6 +145,7 @@ function tick(runner, value) { now = value; for (const callback of [...timers.va
   const pendingAnswer = calls.submitBlitzAnswer.at(-1);
   assert.equal(pendingAnswer.args[0], 'round-A');
   runner.render(user('B'));
+  assert.equal(portrait(runner).sha256, portraits[4].avatarPortrait.sha256, 'Changing identity removes the old portrait snapshot');
   assert.equal(question(runner), undefined, 'Changing identity clears the previous task immediately in the identity effect');
   assert.equal(timers.size, 0, 'The old round interval is removed');
   await settle(runner, pendingPoll, session('round-A', 16_000));
@@ -160,5 +169,12 @@ function tick(runner, value) { now = value; for (const callback of [...timers.va
   await settle(lateLoad, request, lobby(session('round-C')));
   assert.equal(lateLoad.lateWrites, 0);
   assert.equal(timers.size, 0);
-  console.log(JSON.stringify({ status: 'PASS', test: 'actual BlitzWorkspace hooks with deferred API and event doubles', cases: ['StrictMode stale initial response', 'old and equal serverNow do not extend display timer', 'identity clears session and clock', 'old account poll and answer ignored', 'late start/load after unmount ignored', 'interval and reconnect listener cleanup'], limits: 'No real browser layout, authentication or authoritative 90-second server verification.' }));
+  const legacy = new Runner(user('D'));
+  const historical = session('legacy-round'); delete historical.equipment.avatarPortrait;
+  await settle(legacy, calls.blitzLobby.at(-1), lobby(historical));
+  assert.equal(portrait(legacy), undefined, 'Missing historical PNG cannot silently become the current user portrait');
+  assert.match(text(legacy.output), /Портрет не сохранён для этого раунда/);
+  legacy.unmount();
+  assert.equal(timers.size, 0); assert.equal(window.count(), 0); assert.equal(document.count(), 0);
+  console.log(JSON.stringify({ status: 'PASS', test: 'actual BlitzWorkspace hooks with deferred API and event doubles', cases: ['lobby confirmed portrait', 'historical snapshot stable after new outfit save', 'honest missing historical portrait', 'StrictMode stale initial response', 'old and equal serverNow do not extend display timer', 'identity clears session and clock', 'old account poll and answer ignored', 'late start/load after unmount ignored', 'interval and reconnect listener cleanup'], limits: 'No real browser layout, authentication or authoritative 90-second server verification.' }));
 })().catch((error) => { console.error(error); process.exitCode = 1; });

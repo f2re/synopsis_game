@@ -15,6 +15,17 @@ export interface AvatarProfile {
   badge: string;
 }
 
+/** Immutable, dressed PNG produced with the saved appearance by the server. */
+export interface AvatarPortrait {
+  version: 1;
+  sourceRevision: string;
+  appearanceKey: string;
+  sha256: string;
+  width: 160;
+  height: 160;
+  pngDataUrl: string;
+}
+
 export interface SessionUser {
   id: string;
   displayName: string;
@@ -22,6 +33,7 @@ export interface SessionUser {
   roles: UserRole[];
   status: UserStatus;
   avatar: AvatarProfile;
+  avatarPortrait?: AvatarPortrait;
   createdAt: string;
   codeSet?: boolean;
   lastLoginAt?: string;
@@ -111,6 +123,9 @@ export interface ShiftProgress { answered: number; correct: number; current: num
 
 export interface EquipmentEffects { reference: number; retry: number; }
 export interface EquipmentSnapshot {
+  /** Absent only in a legacy shift which did not save a complete appearance. */
+  avatarSnapshot?: AvatarProfile;
+  avatarPortrait?: AvatarPortrait;
   badgeId: string | null;
   badgeName: string | null;
   heldItem: string;

@@ -1,0 +1,1 @@
+SpriteCook reusable library: 30 families, 120 exact directional cells; verified

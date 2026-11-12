@@ -17,10 +17,10 @@ class Events {
 }
 
 const effects = [], updates = [], commands = [];
-let reference = 0, state = 0, sleeps = 0, wakes = 0, destroyed = false, focused = 0;
+let sleeps = 0, wakes = 0, destroyed = false;
 const host = { dataset: {}, getBoundingClientRect: () => ({ left: 100, top: 50 }) };
 const bridge = new Events();
-bridge.setAvatarPresentation = () => undefined;
+bridge.notifyBuildingClicked = (id) => commands.push({ buildingId: id });
 const originalEmit = bridge.emit.bind(bridge);
 bridge.emit = (key, value) => { if (key === 'ui:avatar_command') commands.push(value); originalEmit(key, value); };
 const document = Object.assign(new Events(), { hidden: false, visibilityState: 'visible' });
@@ -38,18 +38,13 @@ const worldAudio = { setMuted(value) { muted = value; }, isMuted: () => muted, s
 class Canvas {}
 const dependencies = {
   react: {
-    useRef: () => ({ current: ++reference === 1 ? host : { focus() { focused++; } } }),
-    useState(initial) {
-      const index = state++;
-      return [index === 1 ? { ready: true, acceptedActions: ['idle', 'walk', 'inspect'], requestedAction: 'idle', paused: false, moving: false } : index === 2 ? true : initial,
-        (value) => updates.push({ index, value })];
-    },
+    useRef: () => ({ current: host }),
+    useState: () => [[{ id: 'codepost', label: 'Кодовый пост', state: 'available', x: 20, y: 30, width: 100, height: 80 }], (value) => updates.push(value)],
     useEffect(fn) { effects.push(fn); },
   },
   'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
   '@synopsis/world-engine': { createWorldGame: ({ parent }) => { assert.equal(parent, host); return game; }, normalizeWorldPreferences: (value) => ({ soundEnabled: value.soundEnabled === true, reducedMotion: value.reducedMotion === true, lowPower: value.lowPower === true }), worldAudio, worldBridge: bridge },
   '../features/hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false, reducedMotion: false, lowPower: false }), HUB_PREFERENCES_EVENT: 'preferences' },
-  './world-avatar.css': {},
 };
 const code = ts.transpileModule(fs.readFileSync('apps/web/src/game/WorldCanvas.tsx', 'utf8').replaceAll('import.meta.env.DEV', 'false'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
@@ -58,38 +53,21 @@ const exportsObject = {};
 vm.runInNewContext(code, { exports: exportsObject, require: (id) => { assert(id in dependencies, id); return dependencies[id]; }, document, window,
   performance: { now: () => 0 }, HTMLCanvasElement: Canvas, URLSearchParams, CustomEvent: class {} });
 
-const output = exportsObject.WorldCanvas({ avatar: undefined });
+const output = exportsObject.WorldCanvas();
 const cleanups = effects.map((effect) => effect()).filter(Boolean);
 const panel = output.props.children.find((child) => child && child.type === 'aside');
-assert(panel, 'Accepted fixtures expose the explicit control panel');
-const key = (value, extras = {}) => {
-  let prevented = 0;
-  panel.props.onKeyDown({ key: value, repeat: false, altKey: false, ctrlKey: false, metaKey: false, preventDefault() { prevented++; }, ...extras });
-  return prevented;
-};
-commands.length = 0;
-assert.equal(key('ArrowUp'), 1);
-assert.equal(commands.at(-1).direction, 'up');
-assert.equal(key('ц'), 1);
-assert.equal(commands.at(-1).direction, 'up');
-const beforeRepeat = commands.length;
-assert.equal(key('ArrowRight', { repeat: true }), 1);
-assert.equal(key('ArrowLeft', { ctrlKey: true }), 0);
-assert.equal(key('Tab'), 0);
-assert.equal(key('Enter'), 0);
-assert.equal(key(' '), 0);
-assert.equal(commands.length, beforeRepeat, 'Repeat and native button keys do not create movement');
-assert.equal(key('E'), 1); assert.equal(commands.at(-1).kind, 'inspect');
-assert.equal(key('Escape'), 1); assert.equal(focused, 1);
-
-commands.length = 0;
-output.props.onPointerDown({ target: {}, button: 0, clientX: 175, clientY: 225 });
-output.props.onPointerDown({ target: new Canvas(), button: 1, clientX: 175, clientY: 225 });
-assert.equal(commands.length, 0, 'Building buttons and non-primary clicks stay outside navigation');
-output.props.onPointerDown({ target: new Canvas(), button: 0, clientX: 175, clientY: 225 });
-assert.equal(commands.length, 1);
-assert.equal(commands[0].kind, 'point'); assert.equal(commands[0].x, 75); assert.equal(commands[0].y, 175);
+assert.equal(panel, undefined, 'The campus must not expose a personal-player control panel');
+assert.equal(output.props.onPointerDown, undefined, 'Canvas clicks do not move a personal avatar');
+assert.equal(output.props.onKeyDown, undefined, 'Native keyboard interaction stays with the building buttons');
 assert.equal(window.listeners.get('keydown')?.length ?? 0, 0, 'No global movement key handler');
+assert(![...bridge.listeners.keys()].some((key) => /avatar/.test(key)), 'The world never subscribes to a player profile or navigation');
+const building = output.props.children[1][0];
+assert.equal(building.props['data-building-id'], 'codepost');
+building.props.onClick();
+assert.equal(commands.length, 1); assert.equal(commands[0].buildingId, 'codepost');
+commands.length = 0;
+bridge.emit('ui:avatar_command', { kind: 'point', x: 50, y: 60 });
+assert.equal(updates.length, 0, 'Stale avatar commands do not update the world UI');
 
 game.renderer.emit('losewebgl');
 assert.equal(host.dataset.context, 'lost'); assert.equal(registry.get('ui.world_visible'), false);
@@ -110,4 +88,4 @@ for (const cleanup of cleanups) cleanup();
 assert.equal(destroyed, true);
 assert.equal(document.count(), 0); assert.equal(window.count(), 0); assert.equal(bridge.count(), 0);
 assert.equal(game.renderer.count(), 0); assert.equal(game.events.count(), 0);
-console.log(JSON.stringify({ status: 'PASS', reviewer: 'blitz_flow', boundary: 'real WorldCanvas code with deterministic event doubles', checks: ['focused keyboard and Cyrillic layout', 'no global key interception', 'native Tab/Enter/Space intact', 'Canvas-only coordinate mapping', 'context-loss and hidden restore', 'modal input pause', 'reduced-motion and 30fps preference', 'all listeners and game disposed'], limits: 'Not a browser layout, measured GPU or art acceptance result.' }));
+console.log(JSON.stringify({ status: 'PASS', boundary: 'real WorldCanvas code with deterministic event doubles', checks: ['no personal player controls or profile channel', 'native building actions retained', 'context-loss and hidden restore', 'modal input pause', 'reduced-motion and 30fps preference', 'all listeners and game disposed'], limits: 'Not a browser layout, measured GPU or art acceptance result.' }));
