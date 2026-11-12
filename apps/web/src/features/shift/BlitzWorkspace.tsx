@@ -217,7 +217,6 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
 
         {notice && <p className="blitz-notice" role="status">{notice}</p>}
         {error && <div className="shift-error" role="alert"><p>{error}</p>{active ? <button type="button" className="secondary-button" onClick={() => void refresh()}>Обновить состояние</button> : !lobby ? <button type="button" className="secondary-button" onClick={() => void load()}>Повторить загрузку</button> : null}</div>}
-        {lobby && <p className="blitz-version">Пакет: {session?.contentPack ?? lobby.contentPack} · Правила: {session?.rulesVersion ?? lobby.rulesVersion}</p>}
       </section>
     </div>
   </main>;

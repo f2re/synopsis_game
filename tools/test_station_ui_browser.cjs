@@ -31,7 +31,8 @@ async function checkDialog(page, viewport, report, capture, name) {
       gutter: node.offsetWidth - node.clientWidth - parseFloat(s.borderLeftWidth) - parseFloat(s.borderRightWidth),
       box: { x: b.x, y: b.y, width: b.width, height: b.height } };
   });
-  assert.ok(scroll.color !== 'auto' || (scroll.customThumb.color !== 'rgba(0, 0, 0, 0)' && scroll.customThumb.color !== 'transparent'), `${name}: scrollbar uses the interface palette`);
+  if (report.engine === 'firefox') assert.ok(scroll.color && scroll.color !== 'auto', `${name}: Firefox scrollbar uses the interface palette`);
+  else assert.ok((scroll.color && scroll.color !== 'auto') || (/^rgba?\(/.test(scroll.customThumb.color) && scroll.customThumb.color !== 'rgba(0, 0, 0, 0)'), `${name}: scrollbar uses the interface palette`);
   await capture(page, `${name}-${viewport.width}`);
   if (scroll.total > scroll.height + 2) {
     const closeBefore = await dialog.locator('.hub-dialog__close').boundingBox();
@@ -53,6 +54,9 @@ async function checkDialog(page, viewport, report, capture, name) {
   await dialog.locator('.hub-dialog__close').focus();
   await page.keyboard.press('Shift+Tab');
   assert.ok(await page.evaluate(() => document.querySelector('.hub-dialog[open]').contains(document.activeElement)), 'Modal keeps keyboard focus');
+  await page.keyboard.press('Tab');
+  assert.ok(await dialog.locator('.hub-dialog__close').evaluate(node => node === document.activeElement && node.matches(':focus-visible')), 'Tab completes the modal cycle with a visible focus');
+  await capture(page, `${name}-keyboard-focus-${viewport.width}`);
   report.cases.push({ name: `${name}-controls-${viewport.width}`, geometry, scroll, wheelAndThumb: scroll.total > scroll.height + 2 });
 }
 
@@ -68,8 +72,13 @@ async function checkStationUI({ page, base, viewport, report, capture, waitForCa
   const visibleText = await page.locator('body').innerText();
   assert.doesNotMatch(visibleText, /кампус|эмуляци|симуляци|художественный закат|не фактическ/iu);
   const profile = page.locator('.hub-profile-button');
+  const entrance = page.locator('[data-building-id="codepost"]');
+  await entrance.hover();
+  await page.waitForFunction(() => document.querySelector('.world-canvas-host > div').dataset.focusedBuilding === 'codepost');
+  await capture(page, `ui-building-hover-${viewport.width}`);
   const before = await profile.boundingBox();
   await profile.hover();
+  await page.waitForFunction(() => !document.querySelector('.world-canvas-host > div').dataset.focusedBuilding);
   await capture(page, `ui-topbar-hover-${viewport.width}`);
   const box = await profile.boundingBox();
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.mouse.down();
@@ -87,6 +96,8 @@ async function checkStationUI({ page, base, viewport, report, capture, waitForCa
   await capture(page, `ui-keyboard-focus-${viewport.width}`);
   await page.keyboard.press('Enter');
   await checkDialog(page, viewport, report, capture, 'ui-route');
+  const routeText = await page.locator('.hub-route-card > span').evaluateAll(nodes => nodes.map(node => ({ text: node.textContent, width: node.clientWidth, scrollWidth: node.scrollWidth })));
+  for (const text of routeText) assert.ok(text.scrollWidth <= text.width + 1, `Route text stays in its column: ${text.text}`);
   await page.keyboard.press('Escape');
   assert.ok(await route.evaluate(node => node === document.activeElement), 'Escape restores route opener');
   await route.click();

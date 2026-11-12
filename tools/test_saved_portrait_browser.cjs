@@ -290,6 +290,8 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await page.getByRole('button', { name: 'Журнал занятий', exact: true }).click();
     await page.getByRole('region', { name: 'Результаты занятий', exact: true }).waitFor();
     const counters = await page.locator('.hub-journal__summary dd').allTextContents();
+    const journalLabels = await page.locator('.hub-journal__summary dt').evaluateAll(nodes => nodes.map(node => ({ text: node.textContent, width: node.clientWidth, scrollWidth: node.scrollWidth })));
+    for (const label of journalLabels) assert.ok(label.scrollWidth <= label.width + 1, `Journal label fits its card: ${label.text}`);
     assert.deepEqual(counters.map(Number), [recorded.stats.completedShifts, recorded.stats.unassistedCorrect, recorded.stats.practiceDays]);
     assert.ok(recorded.stats.completedShifts > 0, 'Journal follows real completed practice');
     await capture(page, `journal-recorded-${viewport.width}`);

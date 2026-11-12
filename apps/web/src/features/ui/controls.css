@@ -85,10 +85,12 @@
   opacity: 1;
 }
 
-:is(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+:is(button, a, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 2px solid var(--color-window-light-3);
   outline-offset: 4px;
 }
+/* Route announcements receive programmatic focus without becoming a fake control. */
+main h1[tabindex="-1"]:focus { outline: none; }
 button { touch-action: manipulation; }
 button[aria-busy="true"] { cursor: progress; }
 button > :is(img, svg, .pixel-icon) { pointer-events: none; }
@@ -108,6 +110,10 @@ button > :is(img, svg, .pixel-icon) { pointer-events: none; }
   ::-webkit-scrollbar-thumb { min-height: 36px; min-width: 36px; border: 2px solid var(--ui-scroll-track); border-radius: 0; background: var(--ui-scroll-thumb); box-shadow: inset 2px 2px 0 #ffffff24, inset -2px -2px 0 #0004; }
   ::-webkit-scrollbar-thumb:hover { background: var(--ui-scroll-hover); }
   ::-webkit-scrollbar-corner { background: var(--ui-chrome); }
+}
+/* Firefox also parses WebKit scrollbar selectors, but draws its native scrollbar. */
+@supports (-moz-appearance: none) {
+  * { scrollbar-color: var(--ui-scroll-thumb) var(--ui-scroll-track); scrollbar-width: auto; }
 }
 
 input[type="checkbox"], input[type="radio"] {

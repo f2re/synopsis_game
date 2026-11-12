@@ -181,12 +181,9 @@ export class HubR01Layer {
         this.focus.lineBetween(x + 1, y - 3, x + 4, y).lineBetween(x + 1, y + 3, x + 4, y);
       }
       if (selected) {
-        const pad = 3;
-        this.focus.lineStyle(2, P.windowLight3, 1);
-        for (const [cx, cy, dx, dy] of [[box.x-pad,box.y-pad,1,1],[box.x+box.width+pad,box.y-pad,-1,1],[box.x-pad,box.y+box.height+pad,1,-1],[box.x+box.width+pad,box.y+box.height+pad,-1,-1]]) {
-          this.focus.lineBetween(cx,cy,cx + dx * 15,cy);
-          this.focus.lineBetween(cx,cy,cx,cy + dy * 15);
-        }
+        // Keep focus at the entrance. Texture bounds include transparent sky
+        // padding and must not become giant corner brackets across the scene.
+        this.focus.lineStyle(2, P.windowLight3, 1).strokeRect(x - 13, y - 11, 26, 24);
       }
     }
   }

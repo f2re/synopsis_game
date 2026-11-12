@@ -15,11 +15,26 @@ import { AUDIO_UNLOCK_EVENT, isAudioUnlocked } from '../features/atmosphere/audi
 /** The world contains campus NPCs only; the account portrait belongs to React. */
 export function WorldCanvas() {
   const hostRef = useRef<HTMLDivElement>(null);
+  const hoveredBuilding = useRef<string | null>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
   const weather = useAmbientWeather();
   const weatherRef = useRef(weather);
   const applyAudioRef = useRef<(() => void) | null>(null);
   weatherRef.current = weather;
+
+  function publishBuildingFocus() {
+    const active = document.activeElement;
+    const keyboardTarget = active instanceof HTMLElement && active.matches('[data-building-id]:focus-visible')
+      ? active.dataset.buildingId ?? null : null;
+    const buildingId = keyboardTarget ?? hoveredBuilding.current;
+    if (hostRef.current) hostRef.current.dataset.focusedBuilding = buildingId ?? '';
+    worldBridge.emit('ui:focus_building', { buildingId });
+  }
+
+  function clearBuildingHover() {
+    hoveredBuilding.current = null;
+    publishBuildingFocus();
+  }
 
   useEffect(() => { applyAudioRef.current?.(); }, [weather]);
 
@@ -196,7 +211,7 @@ export function WorldCanvas() {
   }, []);
 
   return (
-    <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание.">
+    <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание." onPointerLeave={clearBuildingHover}>
       <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
       {targets.map((target) => (
         <button
@@ -205,10 +220,10 @@ export function WorldCanvas() {
           aria-label={`${target.label}. ${target.state === 'locked' ? 'Модуль готовится' : 'Открыть'}`}
           title={target.label}
           data-building-id={target.id}
-          onFocus={() => worldBridge.emit('ui:focus_building', { buildingId: target.id })}
-          onBlur={() => worldBridge.emit('ui:focus_building', { buildingId: null })}
-          onPointerEnter={() => worldBridge.emit('ui:focus_building', { buildingId: target.id })}
-          onPointerLeave={() => worldBridge.emit('ui:focus_building', { buildingId: null })}
+          onFocus={publishBuildingFocus}
+          onBlur={publishBuildingFocus}
+          onPointerEnter={() => { hoveredBuilding.current = target.id; publishBuildingFocus(); }}
+          onPointerLeave={clearBuildingHover}
           onClick={() => worldBridge.notifyBuildingClicked(target.id)}
           style={{
             position: 'absolute', left: target.x, top: target.y,

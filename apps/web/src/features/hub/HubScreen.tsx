@@ -224,7 +224,6 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
 
       {activeModal === 'profile' && (
         <HubDialog title={user ? user.displayName : 'Наблюдатель'} subtitle={user ? `Учебная группа: ${user.groupId}` : 'Добро пожаловать на станцию'} icon={user ? 'student' : 'observer'} onClose={() => setActiveModal(null)}>
-          <div className="hub-profile-actions hub-profile-navigation"><button type="button" className="hub-action" onClick={() => setActiveModal(null)}>На площадь</button><button type="button" className="hub-action" onClick={() => closeThen(onOpenLibrary)}>Библиотека</button><button type="button" className="hub-action" onClick={() => closeThen(onOpenHelp)}>Помощь и управление</button></div>
           {user ? <div className="hub-profile-actions">
             <div className="hub-profile-identity"><SavedAvatarPortrait portrait={user.avatarPortrait} size={80} label={`Сохранённый портрет: ${user.displayName}`} /><p>{isSavedAvatarPortrait(user.avatarPortrait) ? 'Ваш портрет для станции, смен и блица.' : 'Выберите внешность и одежду в гардеробе, затем сохраните персонажа.'}</p></div>
             <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenAvatar)}>Персонаж и инвентарь</button>
@@ -233,8 +232,10 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
             <button type="button" className="hub-action" onClick={() => closeThen(onLogout)}>Выйти из игры</button>
           </div> : <>
             <p className="hub-dialog__lead">Для учебных заданий и сохранения персонажа войдите в профиль, который выдал преподаватель.</p>
-            <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onLoginClick)}>Войти в учебную группу</button>
-            <button type="button" className="hub-action" onClick={() => closeThen(onExit)}>Выйти из игры</button>
+            <div className="hub-guest-actions">
+              <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onLoginClick)}>Войти в учебную группу</button>
+              <button type="button" className="hub-action" onClick={() => closeThen(onExit)}>Выйти из игры</button>
+            </div>
           </>}
         </HubDialog>
       )}

@@ -47,7 +47,7 @@ export function StudyJournal({ user, onLogin, onOpenEquipment }: StudyJournalPro
   return <section className="hub-journal" aria-label="Результаты занятий">
     <dl className="hub-journal__summary">
       <div><dt>Завершено смен</dt><dd>{equipment.stats.completedShifts}</dd></div>
-      <div><dt>Верно самостоятельно</dt><dd>{equipment.stats.unassistedCorrect}</dd></div>
+      <div><dt>Верно без помощи</dt><dd>{equipment.stats.unassistedCorrect}</dd></div>
       <div><dt>Дней занятий</dt><dd>{equipment.stats.practiceDays}</dd></div>
     </dl>
     <p className="hub-note">Самостоятельные ответы — верные с первой попытки, без справки и показа решения.</p>

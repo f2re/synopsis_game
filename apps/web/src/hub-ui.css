@@ -130,6 +130,7 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
 .hub-settings-list p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--hub-muted); }
 .hub-settings-save { margin-right: auto; font-size: 13px; color: var(--hub-muted); }
 .hub-profile-actions { display: grid; gap: 12px; }
+.hub-guest-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .hub-profile-identity { display: flex; align-items: flex-start; gap: 16px; }
 .hub-profile-identity p { margin: 0; font-size: 16px; line-height: 1.5; }
 .hub-profile-navigation { padding-bottom: 16px; margin-bottom: 8px; }
@@ -193,9 +194,10 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
   .hub-dialog__body { padding: 0 12px 16px; }
   .hub-dialog__footer { padding: 8px 12px 12px; }
   .hub-keys > div { grid-template-columns: 1fr; gap: 8px; }
-  .hub-route-card { padding: 12px; gap: 12px; flex-wrap: wrap; }
-  .hub-route-card > span { flex: 1; }
-  .hub-route-card > b { margin-left: 52px; }
+  .hub-route-card { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: start; padding: 12px; gap: 8px 12px; }
+  .hub-route-card > .pixel-icon { grid-column: 1; grid-row: 1 / span 2; width: 32px !important; height: 32px !important; }
+  .hub-route-card > span:not(.pixel-icon) { grid-column: 2; grid-row: 1; }
+  .hub-route-card > b { grid-column: 2; grid-row: 2; justify-self: start; margin-left: 0; }
   .hub-journal__summary { gap: 8px; }
   .hub-journal__summary > div { padding: 12px 8px; }
 }

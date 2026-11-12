@@ -71,7 +71,6 @@ export function Codebook({ isOpen, onClose, shiftMode = 'mentor', onHandbookOpen
             <h4>Как читать</h4>
             <p>{current.rule}</p>
             <h4>Примеры чтения кода</h4>
-            <p className="codebook-example-note">Иллюстрации правил, не сводки реальных наблюдений.</p>
             <dl className="codebook-examples">{current.examples.map((example, index) => <div key={`${current.id}-${index}`}>
               <dt>{example.telegram}</dt><dd>{example.decoded}</dd>
             </div>)}</dl>

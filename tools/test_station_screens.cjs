@@ -151,6 +151,7 @@ async function waitForCampus(page) {
     const page = await context.newPage();
     page.on('pageerror', error => report.errors.push({ viewport: viewport.width, message: error.message }));
     await page.goto(base); await waitForCampus(page);
+    await page.mouse.move(1, 1);
     assert.equal(await page.locator('canvas').count(), 1, 'Station world is the main screen');
     assert.match(await page.title(), /^Станция/);
     await capture(page, `home-${viewport.width}`);
