@@ -9,10 +9,19 @@ import {
   type WorldUiPreferences,
 } from '@synopsis/world-engine';
 import { readHubPreferences, HUB_PREFERENCES_EVENT } from '../features/hub/hubPreferences';
+import { getSettings } from '../features/settings/settingsStore';
+import { useAmbientWeather } from '../features/atmosphere/AtmosphereProvider';
+import { AUDIO_UNLOCK_EVENT, isAudioUnlocked } from '../features/atmosphere/audioGate';
 
 export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
+  const weather = useAmbientWeather();
+  const weatherRef = useRef(weather);
+  const applyAudioRef = useRef<(() => void) | null>(null);
+  weatherRef.current = weather;
+
+  useEffect(() => { applyAudioRef.current?.(); }, [weather]);
 
   useEffect(() => {
     worldBridge.setAvatarPresentation(avatar);
@@ -26,7 +35,7 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
     let modalOpen = false;
     let activeScene = 'hub';
     let disposed = false;
-    worldAudio.setMuted(!preferences.soundEnabled);
+    worldAudio.setMuted(!preferences.soundEnabled || !isAudioUnlocked() || document.hidden);
     const game = createWorldGame({ parent: host });
 
     const applyInput = () => {
@@ -38,27 +47,29 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
     };
 
     const applyAudio = () => {
-      const audible = preferences.soundEnabled && !document.hidden;
+      const settings = getSettings();
+      const audible = preferences.soundEnabled && settings.masterVolume > 0 && isAudioUnlocked() && !document.hidden;
       worldAudio.setMuted(!audible);
       worldAudio.setReducedSensory(preferences.reducedMotion);
       worldAudio.setLowPower(preferences.lowPower);
       host.dataset.soundMuted = String(worldAudio.isMuted());
-      if (!audible) {
+      if (!audible || settings.ambientVolume === 0) {
         worldAudio.stopHubAtmosphereSchedule();
         worldAudio.stopAmbient(150);
         return;
       }
-      if (activeScene === 'archive') worldAudio.playArchiveAmbient(450);
-      else worldAudio.playHubOutdoorAmbient(false, 450);
+      if (activeScene === 'archive') {
+        worldAudio.playArchiveAmbient(450);
+        if (weatherRef.current === 'rain') worldAudio.addAmbientLayer('audio.ambient.rain-soft', .18, 0, 800);
+      } else worldAudio.playHubOutdoorAmbient(weatherRef.current === 'rain', 450);
       if (preferences.reducedMotion || preferences.lowPower || activeScene !== 'hub') {
         worldAudio.stopHubAtmosphereSchedule();
       } else worldAudio.startHubAtmosphereSchedule();
     };
+    applyAudioRef.current = applyAudio;
 
     const applyPreferences = (value: unknown) => {
       const next = normalizeWorldPreferences(value);
-      const audioChanged = next.soundEnabled !== preferences.soundEnabled ||
-        next.reducedMotion !== preferences.reducedMotion || next.lowPower !== preferences.lowPower;
       preferences = next;
       game.registry.set('ui.preferences', preferences);
       const fpsLimit = preferences.lowPower ? 30 : 60;
@@ -71,7 +82,7 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
       host.dataset.reducedMotion = String(preferences.reducedMotion);
       host.dataset.lowPower = String(preferences.lowPower);
       host.dataset.fpsLimit = String(fpsLimit);
-      if (audioChanged) applyAudio();
+      applyAudio();
       worldBridge.emit('world:preferences_applied', { ...preferences, fpsLimit });
     };
 
@@ -138,6 +149,7 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
     };
     applyPreferences(preferences);
     window.addEventListener(HUB_PREFERENCES_EVENT, handleStoredPreferences);
+    window.addEventListener(AUDIO_UNLOCK_EVENT, applyAudio);
     document.addEventListener('visibilitychange', handleVisibility);
     game.events.once('ready', bindRendererEvents);
     bindRendererEvents();
@@ -166,8 +178,10 @@ export function WorldCanvas({ avatar }: { avatar?: AvatarProfile }) {
 
     return () => {
       disposed = true;
+      applyAudioRef.current = null;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
       window.removeEventListener(HUB_PREFERENCES_EVENT, handleStoredPreferences);
+      window.removeEventListener(AUDIO_UNLOCK_EVENT, applyAudio);
       document.removeEventListener('visibilitychange', handleVisibility);
       game.events.off('ready', bindRendererEvents);
       game.renderer?.off('losewebgl', handleContextLost);

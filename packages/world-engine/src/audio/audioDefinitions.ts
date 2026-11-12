@@ -3,7 +3,7 @@
  * для звукового движка 26063: Позывной «Синоптик».
  */
 
-export type AudioChannel = 'master' | 'ambient' | 'effects' | 'ui';
+export type AudioChannel = 'master' | 'ambient' | 'effects' | 'ui' | 'music';
 
 export interface SoundDefinition {
   id: string;

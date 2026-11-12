@@ -188,14 +188,28 @@ export interface ShiftAnswerResponse {
 }
 
 const TOKEN_KEY = 'synopsis.session.token';
+let memoryToken: string | null = null;
+let storageUnavailable = false;
+let authenticationGeneration = 0;
+
+/** Closing a login form or leaving the app invalidates every pending login response. */
+export function cancelPendingLogin(): void { authenticationGeneration += 1; }
 
 export class ApiError extends Error {
   constructor(public readonly status: number, message: string, public readonly code?: string) { super(message); }
 }
-export function getSessionToken(): string | null { return sessionStorage.getItem(TOKEN_KEY); }
+export function getSessionToken(): string | null {
+  if (storageUnavailable) return memoryToken;
+  try { memoryToken = sessionStorage.getItem(TOKEN_KEY); } catch { storageUnavailable = true; }
+  return memoryToken;
+}
 export function setSessionToken(token: string | null): void {
-  if (token) sessionStorage.setItem(TOKEN_KEY, token);
-  else sessionStorage.removeItem(TOKEN_KEY);
+  memoryToken = token;
+  try {
+    if (token) sessionStorage.setItem(TOKEN_KEY, token);
+    else sessionStorage.removeItem(TOKEN_KEY);
+    storageUnavailable = false;
+  } catch { storageUnavailable = true; }
 }
 async function request<T>(path: string, init: RequestInit = {}, authenticated = false): Promise<T> {
   const headers = new Headers(init.headers);
@@ -216,16 +230,35 @@ export const api = {
   async groups(): Promise<string[]> { return (await request<{ groups: string[] }>('/api/identity/groups')).groups; },
   async roster(groupId: string): Promise<RosterUser[]> { return (await request<{ users: RosterUser[] }>(`/api/identity/roster?group=${encodeURIComponent(groupId)}`)).users; },
   async login(userId: string, code: string): Promise<SessionUser> {
+    const generation = ++authenticationGeneration;
     const result = await request<{ token: string; user: SessionUser }>('/api/identity/login', { method: 'POST', body: JSON.stringify({ userId, code }) });
+    if (generation !== authenticationGeneration) {
+      // The cancelled response must never restore the profile. Revoke its orphaned server session.
+      void request('/api/identity/logout', { method: 'POST', headers: { authorization: `Bearer ${result.token}` } }).catch(() => undefined);
+      throw new ApiError(409, 'Вход отменён. Откройте журнал допуска ещё раз.', 'login_cancelled');
+    }
     setSessionToken(result.token); return result.user;
   },
   async adminLogin(code: string): Promise<SessionUser> {
+    const generation = ++authenticationGeneration;
     const result = await request<{ token: string; user: SessionUser }>('/api/admin/login', { method: 'POST', body: JSON.stringify({ code }) });
+    if (generation !== authenticationGeneration) {
+      // The cancelled response must never restore the profile. Revoke its orphaned server session.
+      void request('/api/identity/logout', { method: 'POST', headers: { authorization: `Bearer ${result.token}` } }).catch(() => undefined);
+      throw new ApiError(409, 'Вход отменён. Откройте журнал допуска ещё раз.', 'login_cancelled');
+    }
     setSessionToken(result.token); return result.user;
   },
   async setCode(newCode: string, currentCode?: string): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/set-code', { method: 'POST', body: JSON.stringify({ newCode, currentCode }) }, true)).user; },
-  async logout(): Promise<void> { try { await request('/api/identity/logout', { method: 'POST' }, true); } finally { setSessionToken(null); } },
-  async me(): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', {}, true)).user; },
+  async logout(signal?: AbortSignal): Promise<void> {
+    cancelPendingLogin();
+    if (!getSessionToken()) return;
+    // request captures the departing token synchronously; clear locally before awaiting the network.
+    const revocation = request('/api/identity/logout', { method: 'POST', signal }, true);
+    setSessionToken(null);
+    await revocation;
+  },
+  async me(signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', { signal }, true)).user; },
   async updateAvatar(avatar: AvatarProfile): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }) }, true)).user; },
   async equipment(): Promise<EquipmentResponse> { return request('/api/equipment', {}, true); },
   async selectEquipmentBadge(badgeId: string | null): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }) }, true); },

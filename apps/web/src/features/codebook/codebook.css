@@ -1,0 +1,54 @@
+.codebook-dialog { width: min(1000px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); padding: 0; margin: auto; border: 3px solid #bfa275; border-radius: 2px; color: #f3ecd8; background: #0c2a33; box-shadow: 0 12px 0 rgba(0,0,0,.35); font: 16px/1.45 var(--font-pixel-ui); overflow: auto; }
+.codebook-dialog::backdrop { background: rgba(7,13,30,.82); }
+.codebook-dialog * { box-sizing: border-box; }
+.codebook-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; background: #143f4c; border-bottom: 2px solid #bfa275; }
+.codebook-header > div { display: flex; align-items: center; gap: 12px; }
+.codebook-header h2 { margin: 0; font: 24px/1.3 var(--font-pixel-display); color: #f3ecd8; }
+.codebook-button { min-height: 44px; font: inherit; padding: 8px 14px; border: 1px solid #6f9e95; border-radius: 2px; color: #f3ecd8; background: #143f4c; cursor: pointer; }
+.codebook-button:hover { background: #1b5660; border-color: #f2c75c; }
+.codebook-dialog button:focus-visible, .codebook-dialog input:focus-visible, .codebook-dialog a:focus-visible { outline: 3px solid #f2c75c; outline-offset: 2px; }
+.codebook-scope { color: #d4c39c; padding: 14px 18px; margin: 0; font-family: var(--font-pixel-dense); }
+.codebook-notice { margin: 0; padding: 12px 18px; color: #ffdd83; background: #483924; }
+.codebook-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: stretch; }
+.codebook-nav { padding: 16px 12px; min-width: 0; border-right: 2px solid #476561; }
+.codebook-nav label { display: block; margin-bottom: 8px; color: #e2d6b6; }
+.codebook-nav input { width: 100%; min-height: 44px; margin-bottom: 12px; padding: 10px; font: 16px var(--font-pixel-ui); border: 1px solid #367c8b; background: #071c24; color: #f4f7fa; }
+.codebook-nav input::placeholder { color: #a6b9bb; opacity: 1; }
+.codebook-page-links { display: grid; gap: 4px; }
+.codebook-page-links button { text-align: left; padding: 12px; border: 1px solid transparent; border-left: 4px solid transparent; background: transparent; color: #e9e4d6; font: 16px/1.375 var(--font-pixel-dense); cursor: pointer; }
+.codebook-page-links button strong, .codebook-page-links button span { display: block; font-weight: normal; }
+.codebook-page-links button span { color: #b9c8c6; margin-top: 6px; }
+.codebook-page-links button:hover { background: #143f4c; }
+.codebook-page-links button[aria-current="page"] { border-color: #476561; border-left-color: #f2c75c; background: #193f46; }
+.codebook-page { padding: 24px 28px; color: #1e2430; background: #f3ecd8; min-width: 0; overflow-wrap: anywhere; }
+.codebook-page-group { margin: 0 0 8px; font-family: var(--font-pixel-dense); color: #665038; }
+.codebook-page h3 { margin: 0 0 18px; color: #1e2430; font: 24px/1.3 var(--font-pixel-display); }
+.codebook-page h4 { color: #6b3a2c; font-size: 18px; margin: 24px 0 10px; }
+.codebook-page p { line-height: 1.5; }
+.codebook-scheme { padding: 12px 14px; background: #e2d6b6; border-left: 4px solid #367c8b; color: #143f4c; font-size: 18px; }
+.codebook-example-note { font: 16px/1.375 var(--font-pixel-dense); color: #4b5263; }
+.codebook-examples { display: grid; gap: 12px; margin: 0; }
+.codebook-examples > div { background: #ece1c8; border: 1px solid #bfaF8a; padding: 12px 14px; }
+.codebook-examples dt { color: #143f4c; font: 16px/1.5 var(--font-pixel-mono); }
+.codebook-examples dd { margin: 8px 0 0; }
+.codebook-method { padding: 16px; background: #e2d6b6; border-left: 4px solid #9a5838; margin-top: 24px; }
+.codebook-method h4 { margin-top: 0; }
+.codebook-method p { margin-bottom: 0; }
+.codebook-source { margin-top: 24px; border-top: 1px solid #bfaF8a; }
+.codebook-source a { color: #143f4c; text-decoration: underline; text-underline-offset: 3px; }
+.codebook-source p { color: #4b5263; font-family: var(--font-pixel-dense); }
+.codebook-source a:focus-visible { outline-color: #143f4c; }
+.codebook-locked { padding: 32px 24px; text-align: center; }
+.codebook-locked h3 { font-size: 24px; }
+.codebook-locked p { max-width: 520px; margin: 16px auto 24px; color: #b9c8c6; }
+@media (max-width: 700px) {
+  .codebook-header { gap: 10px; flex-wrap: wrap; padding: 12px; }
+  .codebook-header h2 { font-size: 20px; }
+  .codebook-layout { display: block; }
+  .codebook-nav { border: 0; border-bottom: 2px solid #476561; }
+  .codebook-page-links { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 6px; }
+  .codebook-page-links button { flex: 0 0 165px; border-left-width: 1px; border-bottom-width: 4px; }
+  .codebook-page-links button[aria-current="page"] { border-bottom-color: #f2c75c; }
+  .codebook-page { padding: 20px 16px; }
+  .codebook-page h3 { font-size: 24px; }
+}

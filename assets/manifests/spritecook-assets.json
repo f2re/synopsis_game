@@ -534,6 +534,12 @@
       "asset_id": "3f92695e-c920-4e8a-8a30-31de436b6116",
       "sha12": "f55b1b456f9e",
       "label": "26063 · companion.squirrel · four directions · R01"
+    },
+    {
+      "id": "assets/source/environment/station-room-r01/candidates/provider-room.png",
+      "asset_id": "1bc2db16-788b-4e09-8148-e7a1a634e8c5",
+      "sha12": "2f76f07965f9",
+      "label": "26063 — тихая читальня R01"
     }
   ]
 }

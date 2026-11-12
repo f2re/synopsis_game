@@ -375,3 +375,8 @@ html[data-low-power='true'] .hub-screen * { animation: none !important; transiti
   .hub-dialog__body { padding: 16px 20px; }
   .hub-dialog__footer { padding: 12px 26px 20px; }
 }
+
+/* Shared station screens are reachable from the campus without opening a task. */
+.hub-home-link{border:0;color:inherit;background:transparent;font:inherit;min-height:44px;cursor:pointer}
+.hub-home-link:hover{background:var(--hub-panel)}
+.hub-profile-navigation{padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--hub-border)}

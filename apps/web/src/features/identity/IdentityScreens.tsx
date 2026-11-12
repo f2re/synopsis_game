@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from 'react';
 import { api, ApiError, type AdminUser, type RosterUser, type SessionUser, type UserRole } from '../../api';
 import { PixelSwitch } from '../ui/PixelSwitch';
 
@@ -27,6 +27,7 @@ export function LoginScreen({
   onClose?: () => void;
   isModal?: boolean;
 }) {
+  const fieldId = useId();
   const [groups, setGroups] = useState<string[]>([]);
   const [groupId, setGroupId] = useState('');
   const [users, setUsers] = useState<RosterUser[]>([]);
@@ -41,7 +42,7 @@ export function LoginScreen({
         setGroups(items);
         if (items[0]) setGroupId(items[0]);
       })
-      .catch(() => setError('Сервер недоступен. Запустите apps/server.'))
+      .catch(() => setError('Не удалось связаться со станцией. Проверьте подключение или обратитесь к преподавателю.'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -91,18 +92,18 @@ export function LoginScreen({
       <p className="muted">Выберите свою учебную группу и свой профиль для входа в кампус.</p>
 
       <form className="form-stack" onSubmit={submit}>
-        <label>
-          Группа
-          <select value={groupId} onChange={(e) => setGroupId(e.target.value)} disabled={loading || groups.length === 0}>
+        <div className="login-field">
+          <label htmlFor={`${fieldId}-group`}>Группа</label>
+          <select id={`${fieldId}-group`} value={groupId} onChange={(e) => setGroupId(e.target.value)} disabled={loading || groups.length === 0}>
             {groups.map((group) => <option key={group} value={group}>{group}</option>)}
           </select>
-        </label>
-        <label>
-          Пользователь
-          <select value={userId} onChange={(e) => { setUserId(e.target.value); setCode(''); }} disabled={users.length === 0}>
+        </div>
+        <div className="login-field">
+          <label htmlFor={`${fieldId}-user`}>Пользователь</label>
+          <select id={`${fieldId}-user`} value={userId} onChange={(e) => { setUserId(e.target.value); setCode(''); }} disabled={users.length === 0}>
             {users.map((user) => <option key={user.id} value={user.id}>{user.displayName}</option>)}
           </select>
-        </label>
+        </div>
 
         {isFirstTime ? (
           <div className="login-first-time-box">

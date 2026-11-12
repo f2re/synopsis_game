@@ -1,0 +1,255 @@
+{
+  "status": "FAIL",
+  "browser": "151.0.7922.34",
+  "productionAssets": true,
+  "realServer": true,
+  "cases": [
+    {
+      "name": "home-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-performance-1440",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999818,
+        "p95": 16.700000000000728,
+        "samples": 119
+      },
+      "jsHeapBytes": 3456743,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": null,
+      "reducedMotion": "true",
+      "lowPower": "false",
+      "resourceBytes": 837246
+    },
+    {
+      "name": "home-resources-1440",
+      "javascriptRequests": [
+        "/assets/index-DLtQZtpO.js",
+        "/assets/jsx-runtime-Wy9s6hX0.js"
+      ],
+      "deferredWorldChunks": [
+        "/assets/src-DzwZIKbC.js"
+      ]
+    },
+    {
+      "name": "library-opening-1440",
+      "automationNavigationMs": 846
+    },
+    {
+      "name": "library-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "codebook-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "help-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Помощь и управление",
+      "canvasCount": 0
+    },
+    {
+      "name": "settings-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1425,
+      "brokenImages": [],
+      "heading": "Настройки",
+      "canvasCount": 0
+    },
+    {
+      "name": "campus-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "canvasCount": 1
+    },
+    {
+      "name": "campus-performance-1440",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 50,
+        "p95": 83.39999999999964,
+        "samples": 119
+      },
+      "jsHeapBytes": 29219828,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": "30",
+      "reducedMotion": "true",
+      "lowPower": "true",
+      "resourceBytes": 11654860
+    },
+    {
+      "name": "archive-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "Читальный зал архива",
+      "canvasCount": 0
+    },
+    {
+      "name": "login-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "exit-1440",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "heading": "До следующей смены",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "26063: Позывной «Синоптик»",
+      "canvasCount": 0
+    },
+    {
+      "name": "home-performance-390",
+      "measurement": "Browser RAF cadence and JS heap; not physical-GPU profiling",
+      "rafCadenceMs": {
+        "p50": 16.699999999999932,
+        "p95": 16.700000000000273,
+        "samples": 119
+      },
+      "jsHeapBytes": 3777611,
+      "decorativeDrops": 0,
+      "animatedDrops": 0,
+      "fpsLimit": null,
+      "reducedMotion": "true",
+      "lowPower": "false",
+      "resourceBytes": 838556
+    },
+    {
+      "name": "home-resources-390",
+      "javascriptRequests": [
+        "/assets/index-DLtQZtpO.js",
+        "/assets/jsx-runtime-Wy9s6hX0.js"
+      ],
+      "deferredWorldChunks": [
+        "/assets/src-DzwZIKbC.js"
+      ]
+    },
+    {
+      "name": "library-opening-390",
+      "automationNavigationMs": 840.2000000000116
+    },
+    {
+      "name": "library-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "codebook-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Библиотека синоптика",
+      "canvasCount": 0
+    },
+    {
+      "name": "help-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Помощь и управление",
+      "canvasCount": 0
+    },
+    {
+      "name": "settings-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 375,
+      "brokenImages": [],
+      "heading": "Настройки",
+      "canvasCount": 0
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "home-1440.png",
+    "library-1440.png",
+    "codebook-1440.png",
+    "help-1440.png",
+    "settings-1440.png",
+    "campus-1440.png",
+    "archive-1440.png",
+    "login-1440.png",
+    "exit-1440.png",
+    "home-390.png",
+    "library-390.png",
+    "codebook-390.png",
+    "help-390.png",
+    "settings-390.png"
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'70' !== '0'\n\n    at /home/runner/work/synopsis_game/synopsis_game/tools/test_station_screens.cjs:182:12"
+}

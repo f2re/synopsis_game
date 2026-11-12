@@ -24,6 +24,7 @@ export class WorldAudioManager {
   private ambientBus: GainNode | null = null;
   private effectsBus: GainNode | null = null;
   private uiBus: GainNode | null = null;
+  private musicBus: GainNode | null = null;
   private taskDuckingGain: GainNode | null = null;
   private sensoryFilterNode: BiquadFilterNode | null = null;
   private limiterNode: DynamicsCompressorNode | null = null;
@@ -35,6 +36,7 @@ export class WorldAudioManager {
   // Активные слои эмбиента
   private activeAmbientLayers: Map<string, ActiveAmbientLayer> = new Map();
   private fallbackEffects = new Set<HTMLAudioElement>();
+  private fallbackEffectMix = new WeakMap<HTMLAudioElement, { volume: number; channel: AudioChannel }>();
   private lfoAnimationId: number | null = null;
   private lfoStartTime = 0;
 
@@ -49,6 +51,7 @@ export class WorldAudioManager {
     ambient: 0.65,
     effects: 0.75,
     ui: 0.80,
+    music: 0.35,
   };
   private muted = false;
   private reducedSensory = false;
@@ -89,7 +92,8 @@ export class WorldAudioManager {
         return null;
       }
 
-      const ctx = new AudioContextClass();
+      let ctx: AudioContext;
+      try { ctx = new AudioContextClass(); } catch { return null; }
       this.audioCtx = ctx;
 
       // Мастер-лимитер безопасности (защита от скачков громкости)
@@ -133,6 +137,12 @@ export class WorldAudioManager {
       ui.connect(master);
       this.uiBus = ui;
 
+      // Procedural music shares the same context, limiter and master mute.
+      const music = ctx.createGain();
+      music.gain.setValueAtTime(this.volumes.music, ctx.currentTime);
+      music.connect(master);
+      this.musicBus = music;
+
       // Эмбиент-шина с узлом контекстного дакинга
       const taskDuck = ctx.createGain();
       taskDuck.gain.setValueAtTime(this.taskDucking ? 0.50 : 1.0, ctx.currentTime);
@@ -156,7 +166,10 @@ export class WorldAudioManager {
   private setupAutoplayUnlock(): void {
     if (typeof window === 'undefined') return;
 
-    const unlock = () => {
+    const unlock = (event: Event) => {
+      // Synthetic DOM events and a muted station must not construct a context.
+      // Do not use once:true: an ignored event must not consume the real unlock.
+      if (!event.isTrusted || this.muted) return;
       const ctx = this.getAudioContext();
       if (ctx && ctx.state === 'suspended') {
         ctx.resume().then(() => {
@@ -172,8 +185,8 @@ export class WorldAudioManager {
       window.removeEventListener('keydown', unlock);
     };
 
-    window.addEventListener('pointerdown', unlock, { once: true, passive: true });
-    window.addEventListener('keydown', unlock, { once: true, passive: true });
+    window.addEventListener('pointerdown', unlock, { passive: true });
+    window.addEventListener('keydown', unlock, { passive: true });
   }
 
   /**
@@ -238,8 +251,25 @@ export class WorldAudioManager {
         this.effectsBus.gain.setTargetAtTime(clamped, now, 0.05);
       } else if (channel === 'ui' && this.uiBus) {
         this.uiBus.gain.setTargetAtTime(clamped, now, 0.05);
+      } else if (channel === 'music' && this.musicBus) {
+        this.musicBus.gain.setTargetAtTime(clamped, now, 0.05);
       }
     }
+    // Volume sliders also apply to browsers using HTMLAudio fallbacks.
+    for (const layer of this.activeAmbientLayers.values()) {
+      if (layer.fallbackElement) layer.fallbackElement.volume = Math.max(0, Math.min(1, layer.baseVolume * this.volumes.ambient * this.volumes.master));
+    }
+    for (const element of this.fallbackEffects) {
+      const mix = this.fallbackEffectMix.get(element);
+      if (mix) element.volume = Math.max(0, Math.min(1, mix.volume * this.volumes[mix.channel] * this.volumes.master));
+    }
+  }
+
+  /** Called by the station music controller after a user gesture, never at boot. */
+  public getMusicOutput(): { context: AudioContext; output: AudioNode } | null {
+    if (this.muted) return null;
+    const context = this.getAudioContext();
+    return context && this.musicBus ? { context, output: this.musicBus } : null;
   }
 
   public getVolume(channel: AudioChannel): number {
@@ -390,7 +420,9 @@ export class WorldAudioManager {
 
         // Подключение к шине
         const targetBus =
-          soundDef.channel === 'ui'
+          soundDef.channel === 'music'
+            ? this.musicBus
+            : soundDef.channel === 'ui'
             ? this.uiBus
             : soundDef.channel === 'ambient'
             ? this.ambientBus
@@ -426,6 +458,7 @@ export class WorldAudioManager {
         )
       );
       audio.loop = options?.loop ?? def.loop;
+      this.fallbackEffectMix.set(audio, { volume: def.defaultVolume * (options?.volume ?? 1.0) * sensoryFactor, channel: def.channel });
       this.fallbackEffects.add(audio);
       const release = () => this.fallbackEffects.delete(audio);
       audio.addEventListener('ended', release, { once: true });

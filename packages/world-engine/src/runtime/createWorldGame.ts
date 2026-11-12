@@ -22,6 +22,8 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
     height: initialHeight,
     transparent: options.transparent ?? false,
     backgroundColor: '#08152f',
+    // worldAudio owns the shared context; these scenes do not use Phaser sound.
+    audio: { noAudio: true },
     fps: { target: 60, limit: 60 },
     render: {
       antialias: false,
