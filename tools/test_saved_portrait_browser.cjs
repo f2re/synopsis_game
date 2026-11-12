@@ -83,6 +83,20 @@ async function saveFromEditor(page) {
   await assertPortrait(page, '.inventory-saved-portrait .saved-avatar-portrait', user, 80);
   return user;
 }
+async function checkMentorDoesNotCoverAnswer(page) {
+  const geometry = await page.evaluate(() => {
+    const rectangle = node => {
+      const rect = node.getBoundingClientRect();
+      return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
+    };
+    const controls = [...document.querySelectorAll('.shift-numeric > div, .shift-card .shift-primary')].map(rectangle);
+    const helpers = [...document.querySelectorAll('.shift-mentor-trigger, .shift-mentor-reaction, .shift-mentor-panel')].map(rectangle);
+    return { controls, helpers, overlap: controls.some(a => helpers.some(b => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top)) };
+  });
+  assert.ok(geometry.controls.length > 0 && geometry.helpers.length > 0, 'Observe real answer controls and mentor controls');
+  assert.equal(geometry.overlap, false, 'Mentor controls must not cover an answer field or submit button');
+  return geometry;
+}
 
 async function runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture }) {
   // Keep the other public fixture user untouched for the station audio/logout suite.
@@ -135,6 +149,11 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
       directions[direction] = hash(await canvas.evaluate(node => node.toDataURL()));
     }
     assert.equal(new Set(Object.values(directions)).size, 4, 'Each manual direction has its own rendered view');
+    const directionLabels = await page.evaluate(async () => {
+      await document.fonts.ready;
+      return [...document.querySelectorAll('.inventory-directions button')].map(node => ({ label: node.textContent, clientWidth: node.clientWidth, scrollWidth: node.scrollWidth }));
+    });
+    for (const label of directionLabels) assert.ok(label.scrollWidth <= label.clientWidth, `Direction label must fit: ${JSON.stringify(label)}`);
     const stage = page.getByRole('group', { name: /Примерка одежды/ });
     await stage.focus(); await page.keyboard.press('ArrowLeft');
     await page.locator('canvas[data-avatar-direction="left"]').waitFor();
@@ -150,7 +169,7 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     assert.notEqual(saved.avatarPortrait.sha256, initial.avatarPortrait.sha256);
     await page.getByRole('button', { name: 'Обувь: Полевые ботинки. Выбрать предмет', exact: true }).waitFor();
     await capture(page, `portrait-editor-saved-${viewport.width}`);
-    report.cases.push({ name: `portrait-editor-static-${viewport.width}`, observedStaticMs: 400, directions, savedFields: saved.avatar,
+    report.cases.push({ name: `portrait-editor-static-${viewport.width}`, observedStaticMs: 400, directions, directionLabels, savedFields: saved.avatar,
       sha256: saved.avatarPortrait.sha256, fittingAtlasRequests: [...new Set(atlasRequests)] });
 
     await page.getByRole('button', { name: 'После смены', exact: true }).click();
@@ -189,9 +208,32 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await page.reload();
     await page.getByRole('button', { name: 'Принять смену', exact: true }).click();
     await assertPortrait(page, '.shift-equipment .saved-avatar-portrait', saved, 40);
+    const initialGeometry = await checkMentorDoesNotCoverAnswer(page);
+    const numeric = page.getByRole('textbox', { name: 'Числовой ответ', exact: true });
+    await numeric.scrollIntoViewIfNeeded();
+    const scrolledGeometry = await checkMentorDoesNotCoverAnswer(page);
+    await page.getByRole('button', { name: 'Спросить Ольхина', exact: true }).click();
+    await page.getByRole('complementary', { name: 'Клеёнчатая тетрадь Иннокентия Борисовича', exact: true }).waitFor();
+    if (viewport.width <= 760 || viewport.height <= 540) await checkMentorDoesNotCoverAnswer(page);
+    await page.getByRole('button', { name: 'Закрыть тетрадь', exact: true }).click();
+    await numeric.fill('0');
+    assert.equal(await numeric.inputValue(), '0');
+    await checkMentorDoesNotCoverAnswer(page);
     await capture(page, `portrait-shift-pinned-${viewport.width}`);
-    let task = practice.task;
-    const practiceTasks = new Set();
+    const submitted = page.waitForResponse(r => new URL(r.url()).pathname === `/api/tasks/${encodeURIComponent(practice.task.instanceId)}/answer` && r.request().method() === 'POST');
+    await page.getByRole('button', { name: 'Проверить', exact: true }).click();
+    const submitResponse = await submitted; assert.equal(submitResponse.status(), 200);
+    let firstAnswer = await submitResponse.json(); checkSnapshot(firstAnswer, saved);
+    await assertPortrait(page, '.shift-equipment .saved-avatar-portrait', saved, 40);
+    await capture(page, `portrait-shift-feedback-${viewport.width}`);
+    report.cases.push({ name: `portrait-shift-input-${viewport.width}`, initialGeometry, scrolledGeometry,
+      mentorOpenClose: true, numericInput: '0', realAnswerStatus: submitResponse.status() });
+    if (firstAnswer.status === 'retry-offered') {
+      firstAnswer = await request(`/api/shifts/${practice.shiftId}/reveal`, 'POST', { instanceId: practice.task.instanceId });
+      checkSnapshot(firstAnswer, saved);
+    }
+    let task = firstAnswer.nextTask;
+    const practiceTasks = new Set([practice.task.instanceId]);
     while (task) {
       assert.ok(!practiceTasks.has(task.instanceId), 'Ordinary practice must advance after answer/reveal');
       practiceTasks.add(task.instanceId);
