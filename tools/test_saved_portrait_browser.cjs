@@ -212,7 +212,8 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     const numeric = page.getByRole('textbox', { name: 'Числовой ответ', exact: true });
     await numeric.scrollIntoViewIfNeeded();
     const scrolledGeometry = await checkMentorDoesNotCoverAnswer(page);
-    await page.getByRole('button', { name: 'Спросить Ольхина', exact: true }).click();
+    // The guide icon contributes its existing accessible name before the button text.
+    await page.getByRole('button', { name: /Спросить Ольхина/ }).click();
     await page.getByRole('complementary', { name: 'Клеёнчатая тетрадь Иннокентия Борисовича', exact: true }).waitFor();
     if (viewport.width <= 760 || viewport.height <= 540) await checkMentorDoesNotCoverAnswer(page);
     await page.getByRole('button', { name: 'Закрыть тетрадь', exact: true }).click();
