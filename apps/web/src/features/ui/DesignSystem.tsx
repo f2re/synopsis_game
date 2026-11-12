@@ -1,4 +1,6 @@
 import React from 'react';
+import { keepTabInDialog } from './modalFocus';
+import { PixelScrollArea } from './PixelScrollArea';
 
 // 1. Panel (Dark Teal, Raised Slate, Brass Dialog)
 export interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,15 +37,19 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   className = '',
   children,
+  type = 'button',
   ...props
 }) => {
   return (
     <button
+      type={type}
       className={`pixel-btn pixel-btn--${variant} ${isLoading ? 'pixel-btn--loading' : ''} ${className}`}
       disabled={disabled || isLoading}
+      aria-busy={isLoading || undefined}
       {...props}
     >
-      {isLoading ? <span className="pixel-spinner">...</span> : children}
+      {children}
+      {isLoading && <span className="pixel-spinner" aria-hidden="true" />}
     </button>
   );
 };
@@ -105,7 +111,7 @@ export const Tape: React.FC<TapeProps> = ({
               type="button"
               className={`pixel-tape__group ${statusClass}`}
               onClick={() => onSelectGroup?.(idx)}
-              aria-selected={idx === selectedIndex}
+              aria-pressed={idx === selectedIndex}
             >
               {grp}
             </button>
@@ -186,6 +192,7 @@ export const ChoiceCard: React.FC<ChoiceCardProps> = ({
     <button
       type="button"
       className={`pixel-choice-card pixel-choice-card--${state} ${className}`}
+      aria-pressed={state === 'selected'}
       {...props}
     >
       <span className="pixel-choice-card__letter">[{letter}]</span>
@@ -245,12 +252,16 @@ export interface MentorPortraitProps {
 }
 
 export const MentorPortrait: React.FC<MentorPortraitProps> = ({ emotion = 'neutral', size = 64 }) => {
+  const emotions: Record<MentorEmotion, string> = {
+    neutral: 'спокойна', smile: 'улыбается', thoughtful: 'размышляет',
+    surprised: 'удивлена', approval: 'одобряет', glasses_up: 'поправляет очки',
+  };
   return (
     <div
       className={`pixel-mentor-portrait pixel-mentor-portrait--${emotion}`}
       style={{ width: size, height: size }}
       role="img"
-      aria-label={`Вера Павловна Ладожская: ${emotion}`}
+      aria-label={`Вера Павловна Ладожская: ${emotions[emotion]}`}
     />
   );
 };
@@ -285,20 +296,38 @@ export interface DialogProps {
 }
 
 export const Dialog: React.FC<DialogProps> = ({ isOpen, title, onClose, children }) => {
+  const ref = React.useRef<HTMLDialogElement>(null);
+  const titleId = React.useId();
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const dialog = ref.current;
+    if (!dialog) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    if (!dialog.open) dialog.showModal();
+    return () => {
+      dialog.close();
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
+    };
+  }, [isOpen]);
   if (!isOpen) return null;
 
   return (
-    <div className="pixel-dialog-backdrop" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
-      <div className="pixel-dialog-container pixel-panel pixel-panel--brass_dialog">
+    <dialog ref={ref} className="pixel-dialog-container pixel-panel pixel-panel--brass_dialog" tabIndex={-1}
+      aria-labelledby={titleId} onKeyDown={keepTabInDialog}
+      onCancel={event => { event.preventDefault(); onClose(); }}
+      onClick={event => {
+        if (event.target !== event.currentTarget) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose();
+      }}>
         <div className="pixel-dialog-header">
-          <h2 id="dialog-title" className="pixel-dialog-title">{title}</h2>
-          <button type="button" className="pixel-dialog-close" onClick={onClose} aria-label="Закрыть">
+          <h2 id={titleId} className="pixel-dialog-title">{title}</h2>
+          <button type="button" className="pixel-dialog-close" onClick={onClose} aria-label="Закрыть" autoFocus>
             ×
           </button>
         </div>
-        <div className="pixel-dialog-body">{children}</div>
-      </div>
-    </div>
+        <PixelScrollArea label={`Содержимое окна «${title}»`} viewportClassName="pixel-dialog-body">{children}</PixelScrollArea>
+    </dialog>
   );
 };
 

@@ -9,7 +9,7 @@
 [![Сборка](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml)
 [![Документация](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 [![Выпуск](https://github.com/f2re/synopsis_game/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/release.yml)
-[![Кандидат](https://img.shields.io/badge/кандидат-0.5.0-d9a441)](package.json)
+[![Кандидат](https://img.shields.io/badge/кандидат-0.5.1-d9a441)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520.19-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34.8-F69220?logo=pnpm&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](apps/web/package.json)
@@ -76,7 +76,9 @@
 
 ### Срез от 12 ноября 2026 года
 
-Срез **0.5.0 / R04** закрепляет статичный редактор и **сохранённый одетый портрет**. Те же 30 семейств тела и вещей используются только для примерки и серверной сборки при сохранении. Сервер атомарно сохраняет PNG 160×160 и все 11 параметров внешности, включая одежду, обувь и цвета. Главное меню, профиль и кампус показывают готовое изображение; учебная смена и блиц получают его неизменяемую копию при старте. Личная ходьба, осмотр и сборка персонажа в игровых экранах удалены. [Концепция R04](docs/design/MODULAR_CHARACTER_SAVED_PORTRAIT_R04.md) фиксирует новый контракт.
+Срез **0.5.1 / R05** открывает территорию станции прямо на главном экране. Кнопки, окна и прокрутка приведены к общей сетке, а журнал показывает сохранённые результаты занятий. Правила языка, состояний и визуальной проверки закреплены в [концепции интерфейса R05](docs/design/STATION_UI_R05.md).
+
+Срез **0.5.0 / R04** закрепил статичный редактор и **сохранённый одетый портрет**. Те же 30 семейств тела и вещей используются только для примерки и серверной сборки при сохранении. Сервер атомарно сохраняет PNG 160×160 и все 11 параметров внешности, включая одежду, обувь и цвета. Станция и профиль показывают готовое изображение; учебная смена и блиц получают его неизменяемую копию при старте. Личная ходьба, осмотр и сборка персонажа в игровых экранах удалены. [Концепция R04](docs/design/MODULAR_CHARACTER_SAVED_PORTRAIT_R04.md) фиксирует этот контракт.
 
 Маршрут `/blitz` открывает **блиц-практику на 90 секунд**. Сервер закрепляет срок и сохранённый образ; новая вкладка или перезапуск не продлевают раунд. Блиц использует шесть существующих черновых заданий и не даёт наград, рейтинга или квалификации. Правила описаны в [сценарии блица](docs/gameplay/BLITZ_PRACTICE.md).
 

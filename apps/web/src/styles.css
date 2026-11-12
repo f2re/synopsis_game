@@ -3,6 +3,7 @@
 /* 1. Модульный импорт дизайн-токенов и стилей фич */
 @import './theme/tokens.css';
 @import './features/ui/design-system.css';
+@import './features/ui/controls.css';
 @import './features/identity/identity.css';
 @import './features/avatar/avatar.css';
 
@@ -52,10 +53,10 @@
   -moz-osx-font-smoothing: grayscale;
 
   /* Токены палитры (привязаны к tokens.css) */
-  --ui-panel: var(--color-ui-teal-1);
-  --ui-panel-elevated: var(--color-ui-teal-2);
-  --ui-panel-border: var(--color-ui-teal-4);
-  --ui-panel-border-dark: var(--color-ui-teal-0);
+  --ui-panel: var(--color-sky-night-1);
+  --ui-panel-elevated: var(--color-sky-night-2);
+  --ui-panel-border: var(--color-sky-night-4);
+  --ui-panel-border-dark: var(--color-sky-night-0);
   --ui-text-primary: var(--color-birch-and-snow-3);
   --ui-text-secondary: var(--color-stone-concrete-4);
   --ui-primary-cta: var(--color-action-accent-1);
@@ -78,15 +79,15 @@
     inset -2px -2px 0 0 rgba(0, 0, 0, 0.55);
   --pixel-bevel-in:
     inset 2px 2px 0 0 rgba(0, 0, 0, 0.55),
-    inset -1px -1px 0 0 rgba(255, 255, 255, 0.12);
+    inset -2px -2px 0 0 rgba(255, 255, 255, 0.12);
   --pixel-bevel-btn-out:
     inset 2px 2px 0 0 rgba(255, 255, 255, 0.38),
     inset -2px -2px 0 0 rgba(0, 0, 0, 0.35);
   --pixel-bevel-btn-in:
     inset 2px 2px 0 0 rgba(0, 0, 0, 0.45),
-    inset -1px -1px 0 0 rgba(255, 255, 255, 0.18);
+    inset -2px -2px 0 0 rgba(255, 255, 255, 0.18);
   --pixel-shadow-panel:
-    0 0 0 1px var(--color-sky-night-0),
+    0 0 0 2px var(--color-sky-night-0),
     0 6px 0 0 rgba(4, 10, 22, 0.95),
     0 16px 36px rgba(0, 0, 0, 0.6);
 }
@@ -112,7 +113,7 @@ button {
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.65;
 }
 
 body {
@@ -135,7 +136,7 @@ body {
 .panel, .prototype-card {
   position: relative;
   border: 2px solid var(--ui-panel-border);
-  border-radius: 4px;
+  border-radius: 0;
   background: var(--ui-panel);
   color: var(--ui-text-primary);
   box-shadow:
@@ -144,48 +145,8 @@ body {
   image-rendering: pixelated;
 }
 
-.panel::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border: 1px solid rgba(111, 158, 149, 0.22);
-  border-radius: 2px;
-  pointer-events: none;
-  box-shadow: inset 1px 1px 0 0 rgba(0, 0, 0, 0.35);
-  z-index: 1;
-}
-
-.panel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  background-image:
-    radial-gradient(circle at 9px 9px, var(--color-birch-and-snow-3) 0px, var(--ui-primary-cta) 1.5px, var(--color-sky-night-0) 2.5px, transparent 3.5px),
-    radial-gradient(circle at calc(100% - 9px) 9px, var(--color-birch-and-snow-3) 0px, var(--ui-primary-cta) 1.5px, var(--color-sky-night-0) 2.5px, transparent 3.5px),
-    radial-gradient(circle at 9px calc(100% - 9px), var(--color-birch-and-snow-3) 0px, var(--ui-primary-cta) 1.5px, var(--color-sky-night-0) 2.5px, transparent 3.5px),
-    radial-gradient(circle at calc(100% - 9px) calc(100% - 9px), var(--color-birch-and-snow-3) 0px, var(--ui-primary-cta) 1.5px, var(--color-sky-night-0) 2.5px, transparent 3.5px);
-  background-repeat: no-repeat;
-  opacity: 0.82;
-}
-
-.panel > * {
-  position: relative;
-  z-index: 3;
-}
-
-.panel.no-rivets::after, .prototype-card::after {
-  display: none;
-}
-
-.pixel-divider-groove {
-  width: 100%;
-  height: 2px;
-  background: var(--color-ui-teal-0);
-  border-bottom: 1px solid rgba(111, 158, 149, 0.25);
-  margin: 12px 0;
-}
+/* The panel edge is the frame. No second border, rivets or decorative stripes. */
+.pixel-divider-groove { margin: 16px 0; height: 0; border: 0; }
 
 .prototype-card {
   width: min(1180px, 100%);
@@ -200,7 +161,7 @@ body {
 /* 6. Поля ввода */
 input, select, textarea {
   border: 2px solid var(--ui-panel-border-dark);
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--color-ui-teal-0);
   color: var(--ui-text-primary);
   padding: 10px 12px;
@@ -216,74 +177,7 @@ input:focus, select:focus, textarea:focus {
     0 0 0 1px var(--ui-focus);
 }
 
-/* 7. Кнопки общего назначения */
-.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: var(--font-pixel-ui);
-  font-weight: 700;
-  text-decoration: none;
-  border-radius: 3px;
-  padding: 10px 18px;
-  border: 2px solid transparent;
-  transition: transform 0.05s ease;
-  user-select: none;
-  image-rendering: pixelated;
-}
-
-.primary-button {
-  background: var(--ui-primary-cta);
-  color: var(--color-sky-night-0);
-  border-color: var(--ui-primary-cta-highlight);
-  box-shadow:
-    var(--pixel-bevel-btn-out),
-    0 3px 0 0 var(--ui-primary-cta-shadow);
-}
-
-.primary-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-}
-
-.primary-button:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow:
-    var(--pixel-bevel-btn-in),
-    0 1px 0 0 var(--ui-primary-cta-shadow);
-}
-
-.secondary-button {
-  background: var(--ui-secondary-btn);
-  color: var(--ui-text-primary);
-  border-color: var(--ui-secondary-highlight);
-  box-shadow:
-    var(--pixel-bevel-btn-out),
-    0 3px 0 0 var(--ui-secondary-shadow);
-}
-
-.secondary-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-.secondary-button:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow:
-    var(--pixel-bevel-btn-in),
-    0 1px 0 0 var(--ui-secondary-shadow);
-}
-
-.ghost-button {
-  background: transparent;
-  color: var(--ui-text-secondary);
-  border-color: var(--ui-panel-border-dark);
-}
-
-.ghost-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--ui-text-primary);
-}
+/* 7. Shared button states live in features/ui/controls.css. */
 
 /* 8. Статусные сообщения */
 .form-error {
@@ -291,7 +185,7 @@ input:focus, select:focus, textarea:focus {
   border: 1px solid var(--ui-error);
   color: var(--ui-text-primary);
   padding: 10px 12px;
-  border-radius: 3px;
+  border-radius: 0;
   font-size: 0.88rem;
 }
 
@@ -300,7 +194,7 @@ input:focus, select:focus, textarea:focus {
   border: 1px solid var(--ui-success);
   color: var(--ui-text-primary);
   padding: 10px 12px;
-  border-radius: 3px;
+  border-radius: 0;
   font-size: 0.88rem;
 }
 
@@ -313,3 +207,20 @@ input:focus, select:focus, textarea:focus {
     scroll-behavior: auto !important;
   }
 }
+
+/* Page scrolling belongs to the application's frame, including Firefox.
+   In-window areas retain their own bounded viewport without a second browser rail. */
+.app-page-scroll {
+  height: 100dvh;
+  min-width: 0;
+  gap: 0;
+  background: var(--ui-chrome);
+}
+.app-page-scroll[data-overflow-y="true"] { column-gap: 4px; padding-right: 4px; }
+.app-page-viewport > .pixel-scroll-area__content { min-height: 100%; }
+.app-page-scroll > .pixel-scroll-area__track { margin-block: 4px; }
+.app-page-scroll .station-page,
+.app-page-scroll .station-settings,
+.app-page-scroll .library-screen,
+.app-page-scroll .inventory-screen,
+.app-page-scroll .shift-shell { min-width: 0; }

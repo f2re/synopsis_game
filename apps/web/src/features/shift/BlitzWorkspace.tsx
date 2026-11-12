@@ -3,6 +3,7 @@ import { api, ApiError, type BlitzLobby, type BlitzSession, type SessionUser, ty
 import { GAME_MARK } from '../../brand';
 import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { PixelIcon, PixelProgressBar } from '../ui';
+import { handleRadioGroupKeyDown } from '../ui/radioGroupKeys';
 import { StationPlotTask } from './StationPlotTask';
 import './ShiftWorkspace.css';
 import './BlitzWorkspace.css';
@@ -173,29 +174,29 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
 
   return <main className="shift-shell blitz-shell">
     <header className={`shift-topbar blitz-topbar${active ? ' is-active' : ''}`}>
-      <div className="shift-heading"><PixelIcon name="kn01" size="md" /><div className="shift-heading__text"><span className="shift-kicker">{GAME_MARK} · тренировка</span><strong>Блиц-практика · 90 с</strong></div></div>
+      <div className="shift-heading"><PixelIcon name="kn01" size="md" /><div className="shift-heading__text"><span className="shift-kicker">{GAME_MARK} · тренировка</span><strong>Блиц-практика · 90 с</strong></div></div>
       {active && <div className={`blitz-timer ${remaining <= 15 ? 'blitz-timer--ending' : ''}`} aria-label={`Осталось ${remaining} секунд`}><span aria-hidden="true">{Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, '0')}</span><small>на весь раунд</small></div>}
-      <button type="button" className="shift-exit" onClick={onExit}><PixelIcon name="logout" size="sm" /><span>В кампус</span></button>
+      <button type="button" className="shift-exit" onClick={onExit}><PixelIcon name="logout" size="sm" alt="" /><span>На станцию</span></button>
     </header>
 
     <div className="blitz-layout">
       <aside className="blitz-profile" aria-label="Персонаж в блице">
         <div className="blitz-profile__portrait"><SavedAvatarPortrait portrait={portrait} size={80} label={session ? 'Портрет на начало раунда' : 'Сохранённый портрет'} missingLabel={session ? 'Портрет не сохранён для этого раунда' : 'Сохраните портрет в гардеробе'} /></div>
         <div className="blitz-profile__identity"><strong>{user.displayName}</strong><span>{isSavedAvatarPortrait(portrait) ? session ? 'Портрет и комплект на начало раунда' : 'Ваш сохранённый портрет' : session ? 'Портрет не сохранён для этого раунда' : 'Сохраните портрет в гардеробе'}</span></div>
-        <details className="blitz-profile__details"><summary>Комплект и время</summary><p>Одежда и инструменты сохраняют ваш образ. Справка и повтор в этом сценарии отключены.</p><p>Выход и перезагрузка не останавливают отсчёт. Здесь можно продолжить тот же раунд.</p></details>
+        <details className="blitz-profile__details"><summary>Комплект и время</summary><p>Одежда и инструменты сохраняют ваш образ. В блице одна самостоятельная попытка на задание.</p><p>Выход и перезагрузка не останавливают отсчёт. Здесь можно продолжить тот же раунд.</p></details>
       </aside>
 
       <section className="blitz-content">
-        {draft && <p className="shift-draft">Черновой учебный пакет. Это тренировка без рейтинга и наград.</p>}
+        {draft && <p className="shift-draft">Задания проходят методическую проверку.</p>}
         {loading ? <section className="blitz-card" role="status"><h1>Открываем блиц…</h1><p>Проверяем доступ и сохранённый раунд.</p></section> : <>
           {!session && <section className="blitz-card">
             <span className="blitz-kicker">Короткая самостоятельная тренировка</span>
             <h1>Шесть заданий. Один отсчёт.</h1>
             <p>Дешифрируйте кодовые группы, восстановите порядок и нанесите данные станции. Все задания взяты из текущей учебной смены.</p>
-            <dl className="blitz-rules"><div><dt>90 секунд</dt><dd>На весь раунд, включая переходы.</dd></div><div><dt>Одна попытка</dt><dd>Ответ проверяет сервер. Разбор сохранится после ответа.</dd></div><div><dt>Только практика</dt><dd>Результат не начисляет знаки, рейтинг или допуск.</dd></div></dl>
+            <dl className="blitz-rules"><div><dt>90 секунд</dt><dd>На весь раунд, включая переходы.</dd></div><div><dt>Одна попытка</dt><dd>После ответа открывается разбор.</dd></div><div><dt>Только практика</dt><dd>Личный результат: число верных ответов.</dd></div></dl>
             {lobby?.eligible
               ? <button type="button" className="shift-primary" disabled={busy} onClick={() => void start()}>{busy ? 'Начинаем…' : 'Начать блиц · 90 с'}</button>
-              : lobby && <div className="blitz-locked"><strong>Сначала завершите одну учебную смену КН-01.</strong><p>Блиц откроется после её последнего ответа. Он не заменяет квалификационный допуск.</p><button type="button" className="shift-primary" onClick={onStartPractice}>К учебной смене</button></div>}
+              : lobby && <div className="blitz-locked"><strong>Сначала завершите одну учебную смену КН-01.</strong><p>Блиц откроется после её последнего ответа.</p><button type="button" className="shift-primary" onClick={onStartPractice}>К учебной смене</button></div>}
           </section>}
 
           {active && session.task && <>
@@ -205,7 +206,7 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
           </>}
 
           {completed && <section className="blitz-card blitz-result" aria-labelledby="blitz-result-title">
-            <span className="blitz-kicker">Серверный результат</span>
+            <span className="blitz-kicker">Итог раунда</span>
             <h1 id="blitz-result-title">{session.finishReason === 'timeout' ? 'Время вышло' : 'Раунд завершён'}</h1>
             <div className="blitz-result__score"><strong>{session.progress.correct}<span> / {total}</span></strong><p>верных ответов</p></div>
             <p>Отправлено: {session.progress.answered} из {total}. Без ответа: {total - session.progress.answered}.</p>
@@ -217,7 +218,6 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
 
         {notice && <p className="blitz-notice" role="status">{notice}</p>}
         {error && <div className="shift-error" role="alert"><p>{error}</p>{active ? <button type="button" className="secondary-button" onClick={() => void refresh()}>Обновить состояние</button> : !lobby ? <button type="button" className="secondary-button" onClick={() => void load()}>Повторить загрузку</button> : null}</div>}
-        {lobby && <p className="blitz-version">Пакет: {session?.contentPack ?? lobby.contentPack} · Правила: {session?.rulesVersion ?? lobby.rulesVersion}</p>}
       </section>
     </div>
   </main>;
@@ -253,7 +253,7 @@ function BlitzQuestion({ task, disabled, onSubmit }: { task: ShiftTask; disabled
     {task.payload?.encoded && <div className="kn01-code" aria-label={`Кодовая группа ${task.payload.encoded}`}>{task.payload.encoded}</div>}
     {task.payload?.group && <div className="kn01-group">Структура: <code>{task.payload.group}</code></div>}
     {kind === 'numeric' && <label className="shift-numeric"><span>Ответ</span><div><input autoFocus disabled={disabled} inputMode="decimal" value={numeric} onChange={(event) => setNumeric(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') submit(); }} aria-label="Числовой ответ" />{task.response.unit && <b>{task.response.unit === 'degC' ? '°C' : task.response.unit}</b>}</div></label>}
-    {kind === 'choice' && <div className="shift-options" role="radiogroup" aria-label="Варианты ответа">{(task.payload?.options ?? []).map((option) => <button key={option.id} disabled={disabled} type="button" role="radio" aria-checked={choiceIndex === option.id} className={choiceIndex === option.id ? 'is-selected' : ''} onClick={() => setChoiceIndex(option.id)}><span>{String.fromCharCode(65 + option.id)}</span>{option.label}</button>)}</div>}
+    {kind === 'choice' && <div className="shift-options" role="radiogroup" aria-label="Варианты ответа" onKeyDown={handleRadioGroupKeyDown}>{(task.payload?.options ?? []).map((option) => <button key={option.id} disabled={disabled} type="button" role="radio" tabIndex={!disabled && (choiceIndex ?? task.payload?.options?.[0]?.id) === option.id ? 0 : -1} aria-checked={choiceIndex === option.id} className={choiceIndex === option.id ? 'is-selected' : ''} onClick={() => setChoiceIndex(option.id)}><span>{String.fromCharCode(65 + option.id)}</span>{option.label}</button>)}</div>}
     {kind === 'sequence' && <div className="shift-sequence" aria-label="Порядок групп">{steps.map((step, index) => <div className="shift-sequence-row" key={step.id}><b>{index + 1}</b><code>{step.label}</code><div><button type="button" aria-label={`Поднять ${step.label}`} disabled={disabled || index === 0} onClick={() => move(index, -1)}>↑</button><button type="button" aria-label={`Опустить ${step.label}`} disabled={disabled || index === steps.length - 1} onClick={() => move(index, 1)}>↓</button></div></div>)}</div>}
     {kind === 'stationPlot' && task.payload?.observations && task.payload?.slots && <StationPlotTask payload={task.payload as StationPlotPayload} placements={placements} onChange={setPlacements} disabled={disabled} />}
     <button type="button" className="shift-primary" disabled={disabled || !valid} onClick={submit}>{disabled ? 'Ожидаем сервер…' : 'Отправить ответ'}</button>

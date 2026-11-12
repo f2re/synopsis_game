@@ -15,7 +15,7 @@ export function Certificate({
   user,
   score,
   maxScore = 100,
-  dateStr = '27 октября 2026 г.',
+  dateStr,
   onClose,
   onPrint,
 }: CertificateProps) {
@@ -40,13 +40,13 @@ export function Certificate({
             }}>
               {/* Шапка ведомства */}
               <div style={{ fontSize: 10, letterSpacing: 2, color: 'var(--ui-text-muted)', marginBottom: 6 }}>
-                СЕВЕРО-ЗАПАДНОЕ УГМС РОССИИ · ОПОРНАЯ СТАНЦИЯ {GAME_MARK}
+                {GAME_MARK} · {GAME_CALLSIGN}
               </div>
 
               <div style={{ width: 64, height: 64, margin: '0 auto 12px' }}>
                 <img
                   src="/ui/ui_station_crest_badge_v2.png"
-                  alt="Герб 26063"
+                  alt="Эмблема станции"
                   style={{ width: '100%', height: '100%', imageRendering: 'pixelated' }}
                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 />
@@ -58,15 +58,15 @@ export function Certificate({
                 fontFamily: 'var(--font-pixel-display)',
                 color: 'var(--color-primary-cyan)'
               }}>
-                СВИДЕТЕЛЬСТВО НАБЛЮДАТЕЛЯ
+                ИТОГ ЗАНЯТИЯ
               </h1>
 
               <div style={{ fontSize: 11, color: 'var(--color-accent-amber)', marginBottom: 20 }}>
-                КВАЛИФИКАЦИОННЫЙ УРОВЕНЬ 1 · КОД КН-01 (SYNOP)
+                ПРАКТИКА КН-01
               </div>
 
               <p style={{ fontSize: 12, color: 'var(--ui-text-secondary)', margin: '0 auto 16px', maxWidth: 460 }}>
-                Настоящим подтверждается, что наблюдатель гидрометеорологической службы
+                Участник занятия
               </p>
 
               <div style={{
@@ -83,7 +83,7 @@ export function Certificate({
               </div>
 
               <p style={{ fontSize: 12, color: 'var(--ui-text-secondary)', margin: '0 auto 20px', maxWidth: 480, lineHeight: 1.5 }}>
-                успешно сдал теоретический и практический зачёт по раскодированию приземных синоптических телеграмм Раздела 0 и Раздела 1 с итоговым результатом:
+                Завершил занятие с результатом:
               </p>
 
               {/* Баллы и печать */}
@@ -95,7 +95,7 @@ export function Certificate({
                   padding: '8px 16px',
                   fontFamily: 'monospace'
                 }}>
-                  <div style={{ fontSize: 10, color: 'var(--ui-text-muted)' }}>РЕЗУЛЬТАТ АТТЕСТАЦИИ</div>
+                  <div style={{ fontSize: 10, color: 'var(--ui-text-muted)' }}>РЕЗУЛЬТАТ</div>
                   <div style={{ fontSize: 20, fontWeight: 'bold', color: 'var(--color-primary-cyan)' }}>
                     {score} / {maxScore} БАЛЛОВ
                   </div>
@@ -131,8 +131,8 @@ export function Certificate({
                 borderTop: '1px solid rgba(255, 255, 255, 0.08)',
                 paddingTop: 12
               }}>
-                <span>Дата выдачи: {dateStr}</span>
-                <span>Методический профиль: RUS_SURFACE_STATION_V1</span>
+                {dateStr && <span>Дата занятия: {dateStr}</span>}
+                <span>Группа: {user.groupId}</span>
               </div>
             </div>
 
@@ -143,7 +143,7 @@ export function Certificate({
                 className="pixel-btn-secondary"
                 onClick={onClose}
               >
-                ← В хаб станции
+                ← На станцию
               </button>
 
               <div style={{ display: 'flex', gap: 10 }}>
@@ -153,7 +153,7 @@ export function Certificate({
                     className="pixel-btn-secondary"
                     onClick={onPrint}
                   >
-                    Печать / Экспорт 🖨
+                    Печать
                   </button>
                 )}
                 <button
@@ -162,7 +162,7 @@ export function Certificate({
                   onClick={onClose}
                   style={{ padding: '8px 20px' }}
                 >
-                  Продолжить службу →
+                  На станцию →
                 </button>
               </div>
             </div>

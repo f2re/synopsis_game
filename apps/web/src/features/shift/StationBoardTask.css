@@ -31,7 +31,7 @@
   min-height: 58px;
   padding: 9px 11px;
   border: 1px solid rgba(180, 204, 209, .2);
-  border-radius: 10px;
+  border-radius: 0;
   color: #dce7e7;
   background: rgba(255,255,255,.04);
   text-align: left;
@@ -48,9 +48,12 @@
 
 .station-board-svg {
   width: 100%;
-  max-height: 620px;
+  min-width: 720px;
+  height: auto;
+  max-height: none;
+  display: block;
   aspect-ratio: 1 / 1;
-  border-radius: 14px;
+  border-radius: 0;
   background: #e9ece7;
 }
 .station-board-paper { fill: #f7f5ea; stroke: #c9c6b7; stroke-width: 3; }
@@ -64,7 +67,7 @@
 .station-board-slot rect { fill: rgba(255,255,255,.62); stroke: #819096; stroke-width: 3; stroke-dasharray: 9 7; }
 .station-board-slot text { fill: #24353d; font: 700 27px/1 system-ui, sans-serif; pointer-events: none; }
 .station-board-workspace.is-dense .station-board-slot text { font-size: 23px; }
-.station-board-slot:hover rect, .station-board-slot:focus rect { fill: #edf5f7; stroke: #2e7396; }
+.station-board-slot:not([aria-disabled="true"]):hover rect, .station-board-slot:not([aria-disabled="true"]):focus-visible rect { fill: #edf5f7; stroke: #2e7396; }
 .station-board-slot.is-filled rect { fill: #fffdf6; stroke-dasharray: none; }
 .station-board-slot.is-correct rect { fill: #e4f2e6; stroke: #4d995f; }
 .station-board-slot.is-wrong rect { fill: #f7e2df; stroke: #ba4943; }
@@ -85,3 +88,12 @@
   .station-board-observations,
   .station-board-workspace.is-dense .station-board-observations { grid-template-columns: 1fr; }
 }
+
+.station-board-slot[aria-disabled="true"] { cursor: default; }
+.station-board-observations button { border-width: 2px; }
+.station-board-observations button:hover:not(:disabled) { border-color: var(--color-action-accent-1); }
+.station-board-observations button:active:not(:disabled) { box-shadow: var(--ui-control-pressed); }
+
+/* Keep station positions large enough to read and select on narrow screens. */
+.station-board-map { max-height: min(640px, 70dvh); border: 2px solid var(--ui-chrome-edge); padding: 4px; background: var(--ui-chrome); }
+.station-board-workspace.is-dense .station-board-svg { min-width: 820px; }

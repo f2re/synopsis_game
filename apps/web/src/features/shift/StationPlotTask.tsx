@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { stationPositionLabel } from './stationPositionLabel';
 import type {
   StationPlotComponentResult,
   StationPlotObservation,
@@ -51,6 +52,27 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
   const observations = payload.observations ?? [];
   const slots = payload.slots ?? [];
   const [selectedObservationId, setSelectedObservationId] = useState<string | null>(observations[0]?.id ?? null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [minimumHitSize, setMinimumHitSize] = useState(0);
+
+  useLayoutEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const measure = () => {
+      const bounds = svg.getBoundingClientRect();
+      // The square viewBox uses xMidYMid meet, so its scale follows the shorter side.
+      const renderedSize = Math.min(bounds.width, bounds.height);
+      if (renderedSize > 0) setMinimumHitSize(Math.ceil(44 * 1000 / renderedSize));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(svg);
+    return () => observer.disconnect();
+  }, []);
+
+  // Include the visible four-unit outline while keeping it out of hit testing.
+  const targetWidth = Math.max(234, minimumHitSize);
+  const targetHeight = Math.max(114, minimumHitSize);
 
   const selected = useMemo(
     () => observations.find((observation) => observation.id === selectedObservationId) ?? null,
@@ -80,38 +102,41 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
         {observations.map((observation) => {
           const placed = placements[observation.id];
           return (
+            <div className="station-observation-row" key={observation.id}>
             <button
               key={observation.id}
               type="button"
               className={`station-observation ${selectedObservationId === observation.id ? 'is-selected' : ''} ${placed ? 'is-placed' : ''}`}
               onClick={() => setSelectedObservationId(observation.id)}
               disabled={disabled}
+              aria-pressed={selectedObservationId === observation.id}
             >
               <span>{observation.label}</span>
               <strong>{observation.value}</strong>
-              {placed && !disabled && (
-                <i
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Снять ${observation.label}`}
-                  onClick={(event) => { event.stopPropagation(); clearObservation(observation.id); }}
-                  onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') clearObservation(observation.id); }}
-                >×</i>
-              )}
             </button>
+              {placed && !disabled && (
+                <button
+                  type="button"
+                  className="station-observation-clear"
+                  aria-label={`Снять ${observation.label}`}
+                  onClick={(event) => { (event.currentTarget.previousElementSibling as HTMLButtonElement | null)?.focus(); clearObservation(observation.id); }}
+                >×</button>
+              )}
+            </div>
           );
         })}
       </div>
 
       <div className="station-plot-panel">
         <div className="station-plot-caption">
-          <span>{payload.profile ?? 'RUS_SURFACE_STATION_V1'}</span>
+          <span>Станционная модель</span>
           <strong>{payload.station?.name ?? 'Учебная станция'}</strong>
         </div>
         <svg
+          ref={svgRef}
           className="station-plot-svg"
           viewBox="0 0 1000 1000"
-          role="img"
+          role="group"
           aria-label="Интерактивная станционная модель"
           preserveAspectRatio="xMidYMid meet"
         >
@@ -120,6 +145,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
 
           {slots.map((slot) => {
             const observation = assignedObservation(observations, placements, slot.id);
+            const position = stationPositionLabel(slot.x, slot.y);
             const status = statusForSlot(slot, placements, results);
             const className = ['station-slot', observation ? 'is-filled' : '', status ? `is-${status}` : ''].filter(Boolean).join(' ');
 
@@ -131,12 +157,14 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                   key={slot.id}
                   className={className}
                   role="button"
+                  aria-disabled={disabled}
                   tabIndex={disabled ? -1 : 0}
-                  aria-label={observation ? `Размещено: ${observation.label}` : 'Позиция станционной модели'}
+                  aria-label={`Позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
                   onClick={() => assign(slot.id)}
-                  onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') assign(slot.id); }}
+                  onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
                 >
-                  <circle className="station-slot-hit wind-hit" cx="500" cy="500" r="125" />
+                  <circle className="station-slot-target" cx="500" cy="500" r={Math.max(127, minimumHitSize / 2)} fill="transparent" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
+                  <circle className="station-slot-hit wind-hit" cx="500" cy="500" r="125" pointerEvents="none" />
                   <line className="station-wind-line" x1="500" y1="500" x2={end.x} y2={end.y} />
                   {wind && (
                     <>
@@ -153,12 +181,14 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                 key={slot.id}
                 className={className}
                 role="button"
+                aria-disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
-                aria-label={observation ? `Размещено: ${observation.label}` : 'Позиция станционной модели'}
+                aria-label={`Позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
                 onClick={() => assign(slot.id)}
-                onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') assign(slot.id); }}
+                onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
               >
-                <rect className="station-slot-hit" x={slot.x - 115} y={slot.y - 55} width="230" height="110" rx="22" />
+                <rect className="station-slot-target" x={slot.x - targetWidth / 2} y={slot.y - targetHeight / 2} width={targetWidth} height={targetHeight} rx="24" fill="transparent" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
+                <rect className="station-slot-hit" x={slot.x - 115} y={slot.y - 55} width="230" height="110" rx="22" pointerEvents="none" />
                 <text className="station-slot-text" x={slot.x} y={slot.y + 12} textAnchor="middle">
                   {observation ? observationText(observation) : '· · ·'}
                 </text>
@@ -168,7 +198,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
         </svg>
         {!disabled && (
           <p className="station-plot-hint">
-            Выберите наблюдение слева, затем укажите его место на станционной модели. Координаты модели не зависят от размера экрана.
+            Выберите наблюдение, затем укажите его место на станционной модели.
           </p>
         )}
       </div>

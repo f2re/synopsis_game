@@ -1,0 +1,87 @@
+{
+  "task": "station-ui-r05",
+  "reviewer": "/root/station_ui_review",
+  "roles": ["pixel-art-quality-reviewer", "art-director", "ux-accessibility-reviewer"],
+  "source_commit": "bc6c189fe6524f8889dece45695cb6048fefd418",
+  "synthetic_merge": "5259aa35",
+  "verdict": "REQUEST_CHANGES",
+  "scope": "Independent inspection of production browser PNGs and reports; no production files authored by this reviewer",
+  "firefox": {
+    "browser": "153.0",
+    "artifact_id": 13946246583,
+    "artifact_sha256": "f2c4c0282ed8a67ec6646d056f7a04aeee92d48f97c0884fefd8bc7867a22f67",
+    "reported_cases": 165,
+    "reported_screenshots": 114,
+    "reported_page_errors": 0,
+    "reported_status": "PASS",
+    "qualification": "The scrollbar assertion accepted an empty unsupported pseudo-element value; this report does not prove correct Firefox scrollbar styling.",
+    "visually_inspected": [
+      "home-390.png", "home-844.png", "ui-home-390-dpr2.png",
+      "ui-route-scrolled-390.png", "ui-route-scrolled-844.png",
+      "library-1440.png", "library-390.png", "codebook-390.png", "codebook-1440.png",
+      "settings-1440.png", "settings-390.png",
+      "portrait-editor-saved-1440.png", "portrait-editor-restored-390.png", "portrait-editor-restored-844.png",
+      "portrait-shift-pinned-390.png", "portrait-blitz-pinned-844.png",
+      "journal-recorded-390.png", "journal-offline-390.png",
+      "ui-world-loading.png", "ui-world-load-failed.png",
+      "login-390.png", "help-844.png", "archive-390.png", "ui-building-390.png", "exit-390.png"
+    ]
+  },
+  "chromium": {
+    "browser": "151.0.7922.34",
+    "reported_status": "FAIL",
+    "failure": "Shift+Tab from the close control leaves the modal focus loop",
+    "visually_inspected": ["home-1366.png", "ui-topbar-hover-1366.png", "ui-topbar-pressed-1366.png", "ui-profile-1366.png"]
+  },
+  "accepted_direction": [
+    "A restrained common navy/brass control system improves hierarchy while retaining the SpriteCook world and icon family.",
+    "Rendered dialog frames no longer contain stretched corner bolts or horizontal separators crossing their outer frame.",
+    "Home has one obvious primary action and consistent secondary dock heights.",
+    "Reviewed library, settings, login, help, archive, inventory and learning screenshots retain readable Russian typography and coherent controls.",
+    "Loading and failure states keep the station navigation present and explain a concrete next action."
+  ],
+  "required_changes": [
+    {
+      "id": "R05-F01",
+      "issue": "Programmatic focus draws a gold rectangle around the noninteractive home heading, competing with the primary action.",
+      "evidence": "home-1366.png; home-844.png",
+      "acceptance": "Heading still receives route focus for accessibility, without a button-like outline; keyboard control focus remains visible."
+    },
+    {
+      "id": "R05-F02",
+      "issue": "Guest sign-in and exit controls touch with no gap, and duplicated navigation dominates the profile dialog.",
+      "evidence": "ui-profile-1366.png",
+      "acceptance": "A spaced, wrapping action group gives sign-in clear priority; redundant home navigation is reduced."
+    },
+    {
+      "id": "R05-F03",
+      "issue": "Modal keyboard focus escapes in Chromium.",
+      "evidence": "Chromium browser-report.json failure",
+      "acceptance": "Tab and Shift+Tab wrap inside the open modal; close, Escape and backdrop restore its real opener."
+    },
+    {
+      "id": "R05-F04",
+      "issue": "The route card squeezes the narrow-screen title and description into approximately 90 px because icon and right action occupy the same row.",
+      "evidence": "ui-route-scrolled-390.png",
+      "acceptance": "The action moves below the text on narrow screens; the title and body use the remaining width without one-word columns."
+    },
+    {
+      "id": "R05-F05",
+      "issue": "Firefox scrollbars remain gray and unthemed. The WebKit feature query resets scrollbar-color to auto; unsupported pseudo-element computed values are empty and falsely pass the test.",
+      "evidence": "ui-route-scrolled-390.png; ui-route-scrolled-844.png; ui-route-controls-* cases",
+      "acceptance": "Firefox receives the station track/thumb colors and the test rejects auto plus empty pseudo-element values. New screenshots must demonstrate the resulting native shape and integrated position."
+    },
+    {
+      "id": "R05-F06",
+      "issue": "The word «самостоятельно» escapes the second summary card into its neighbor on the 390 px journal.",
+      "evidence": "journal-recorded-390.png",
+      "acceptance": "A concise label or wider layout fits inside the card; inner element overflow is checked."
+    }
+  ],
+  "followup_notes": [
+    "World corner brackets are intentional selected-building graphics in HubR01Layer.drawMarkers. Verify clearing on pointer leave before deciding whether there is a stale hover state.",
+    "Remove remaining redundant negative boilerplate in the codebook examples and implementation-only font/package wording from ordinary user flows without changing scientific meaning.",
+    "The 844×390 blitz is vertically long; a compact landscape layout would keep timed work closer to its timer. This predates R05 and is recorded separately from the six required corrections."
+  ],
+  "final_acceptance": "BLOCKED pending new browser evidence for the corrected candidate"
+}

@@ -181,7 +181,7 @@ export function ModeSelect({ currentMode = 'study', onSelectMode, onClose }: Mod
                 onClick={onClose}
                 style={{ padding: '10px 16px' }}
               >
-                Назад в хаб
+                На станцию
               </button>
               <button
                 type="button"

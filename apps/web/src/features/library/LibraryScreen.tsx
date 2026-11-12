@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import libraryData from '../../../../../content/library/synoptic_library.json';
 import sourceRegistry from '../../../../../content/sources/sources.json';
 import { PixelIcon } from '../ui';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
 import { Codebook } from '../codebook/Codebook';
 import { parseLibraryFavorites, searchLibrary } from './librarySearch';
 import './library.css';
@@ -61,6 +62,7 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
   const [status, setStatus] = useState('');
   const articleHeading = useRef<HTMLHeadingElement>(null);
   const searchInput = useRef<HTMLInputElement>(null);
+  const catalogViewport = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setQuery(initialQuery);
@@ -68,6 +70,10 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
     setFavoritesOnly(false);
     setReaderOpen(false);
   }, [initialQuery]);
+
+  useEffect(() => {
+    if (catalogViewport.current) catalogViewport.current.scrollTop = 0;
+  }, [query, category, favoritesOnly]);
 
   const results = useMemo(() => searchLibrary(articles, query).filter(article =>
     (category === 'all' || article.category === category) && (!favoritesOnly || favoriteIds.includes(article.id)),
@@ -93,6 +99,10 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
     const removing = favoriteIds.includes(id);
     const next = removing ? favoriteIds.filter(value => value !== id) : [...favoriteIds, id];
     setFavoriteIds(next);
+    if (removing && favoritesOnly && results.length === 1) {
+      setReaderOpen(false);
+      window.requestAnimationFrame(() => searchInput.current?.focus());
+    }
     try {
       localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
       setStatus(removing ? 'Закладка удалена.' : 'Закладка сохранена в этом браузере.');
@@ -107,7 +117,7 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
   }
 
   return (
-    <main className="library-screen" aria-labelledby="library-title" data-reading={readerOpen}>
+    <main className="library-screen" aria-labelledby="library-title" data-reading={readerOpen && Boolean(selected)}>
       <div className="library-shell">
         <header className="library-header">
           <div className="library-heading-group">
@@ -148,7 +158,7 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
               <span role="status" aria-live="polite">{results.length} из {articles.length}</span>
             </div>
             <div className="library-catalog-scene"><StationRoomArt rain={weather === 'rain'} reducedMotion={preferences.reducedMotion || preferences.lowPower} /></div>
-            {results.length ? <ul className="library-results">
+            {results.length ? <PixelScrollArea className="library-catalog-scroll" label="Каталог библиотеки" viewportRef={catalogViewport}><ul className="library-results">
               {results.map(article => <li key={article.id}>
                 <button type="button" className="library-result" aria-current={selected?.id === article.id ? 'true' : undefined}
                   onClick={() => readArticle(article.id)}>
@@ -156,7 +166,7 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
                   <span className="library-result-description">{article.summary}</span>
                 </button>
               </li>)}
-            </ul> : <div className="library-empty">
+            </ul></PixelScrollArea> : <div className="library-empty">
               <PixelIcon name="archive" size={48} alt="" />
               <h3>{favoritesOnly && !query ? 'Здесь будут ваши закладки' : 'Ничего не найдено'}</h3>
               <p>{favoritesOnly && !query ? 'Откройте статью и нажмите «В избранное». Она останется под рукой в этом браузере.' : 'Попробуйте короткое название, обозначение или другой раздел.'}</p>

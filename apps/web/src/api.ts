@@ -280,8 +280,8 @@ async function request<T>(path: string, init: RequestInit = {}, authenticated = 
 }
 
 export const api = {
-  async groups(): Promise<string[]> { return (await request<{ groups: string[] }>('/api/identity/groups')).groups; },
-  async roster(groupId: string): Promise<RosterUser[]> { return (await request<{ users: RosterUser[] }>(`/api/identity/roster?group=${encodeURIComponent(groupId)}`)).users; },
+  async groups(signal?: AbortSignal): Promise<string[]> { return (await request<{ groups: string[] }>('/api/identity/groups', { signal })).groups; },
+  async roster(groupId: string, signal?: AbortSignal): Promise<RosterUser[]> { return (await request<{ users: RosterUser[] }>(`/api/identity/roster?group=${encodeURIComponent(groupId)}`, { signal })).users; },
   async login(userId: string, code: string): Promise<SessionUser> {
     const generation = ++authenticationGeneration;
     const result = await request<{ token: string; user: SessionUser }>('/api/identity/login', { method: 'POST', body: JSON.stringify({ userId, code }) });
@@ -312,10 +312,10 @@ export const api = {
     await revocation;
   },
   async me(signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', { signal }, true)).user; },
-  async updateAvatar(avatar: AvatarProfile): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }) }, true)).user; },
-  async equipment(): Promise<EquipmentResponse> { return request('/api/equipment', {}, true); },
-  async selectEquipmentBadge(badgeId: string | null): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }) }, true); },
-  async startShift(): Promise<ShiftStartResponse> { return request<ShiftStartResponse>('/api/shifts', { method: 'POST' }, true); },
+  async updateAvatar(avatar: AvatarProfile, signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }), signal }, true)).user; },
+  async equipment(signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment', { signal }, true); },
+  async selectEquipmentBadge(badgeId: string | null, signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }), signal }, true); },
+  async startShift(signal?: AbortSignal): Promise<ShiftStartResponse> { return request<ShiftStartResponse>('/api/shifts', { method: 'POST', signal }, true); },
   async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress; equipment: EquipmentSnapshot; retryAvailable: boolean; reference?: ShiftReference }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true); },
   async shiftReference(shiftId: string, instanceId: string): Promise<ShiftReference & { equipment: EquipmentSnapshot }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/reference`, { method: 'POST', body: JSON.stringify({ instanceId }) }, true); },
   async revealShiftAnswer(shiftId: string, instanceId: string): Promise<ShiftAnswerResponse> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/reveal`, { method: 'POST', body: JSON.stringify({ instanceId }) }, true); },

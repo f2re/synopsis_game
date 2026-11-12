@@ -1,0 +1,180 @@
+/* Station chrome uses one 2 CSS px edge at every viewport size.
+ * The hit rectangle never moves on hover or press. Only the inset bevel changes.
+ * SpriteCook artwork stays in fixed-size icons, never stretched around controls. */
+:root {
+  --ui-pixel: 2px;
+  --ui-chrome: var(--color-sky-night-1);
+  --ui-chrome-raised: var(--color-sky-night-2);
+  --ui-chrome-hover: var(--color-sky-night-3);
+  --ui-chrome-edge: var(--color-sky-night-4);
+  --ui-chrome-light: var(--color-sky-day-0);
+  --ui-scroll-track: var(--color-sky-night-0);
+  --ui-scroll-thumb: var(--color-sky-day-0);
+  --ui-scroll-hover: var(--color-action-accent-1);
+  --ui-control-shadow: inset 0 2px 0 #ffffff12, inset 0 -2px 0 #0004, 0 2px 0 var(--color-sky-night-0);
+  --ui-control-pressed: inset 0 2px 0 #0005, inset 0 -2px 0 #ffffff0d;
+}
+
+:is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
+    .hub-action, .inventory-button, .library-button, .station-settings__button,
+    .station-menu-button, .station-back, .station-sound-button, .codebook-button,
+    .shift-exit, .shift-primary, .pixel-dialog-close) {
+  --control-fill: var(--ui-chrome-raised);
+  --control-hover: var(--ui-chrome-hover);
+  --control-border: var(--ui-chrome-edge);
+  --control-ink: var(--color-birch-and-snow-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 2px solid var(--control-border);
+  border-radius: 0;
+  background: var(--control-fill);
+  color: var(--control-ink);
+  box-shadow: var(--ui-control-shadow);
+  font: 16px/1.4 var(--font-pixel-ui);
+  text-decoration: none;
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  transform: none;
+  transition: none;
+}
+
+:is(.primary-button, .pixel-btn--primary, .hub-action--primary, .inventory-button--primary,
+    .station-settings__button--primary, .station-menu-button--primary, .shift-primary) {
+  --control-fill: var(--color-action-accent-1);
+  --control-hover: var(--color-action-accent-2);
+  --control-border: var(--color-action-accent-2);
+  --control-ink: var(--color-ink-telecode-0);
+}
+
+:is(.ghost-button, .pixel-btn--ghost) { --control-fill: transparent; }
+.danger-button { --control-fill: #482c34; --control-hover: #59333b; --control-border: #b2607f; }
+
+:is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
+    .hub-action, .inventory-button, .library-button, .station-settings__button,
+    .station-menu-button, .station-back, .station-sound-button, .codebook-button,
+    .shift-exit, .shift-primary, .pixel-dialog-close):hover:not(:disabled) {
+  border-color: var(--color-action-accent-2);
+  background: var(--control-hover);
+  filter: none;
+  transform: none;
+}
+
+:is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
+    .hub-action, .inventory-button, .library-button, .station-settings__button,
+    .station-menu-button, .station-back, .station-sound-button, .codebook-button,
+    .shift-exit, .shift-primary, .pixel-dialog-close):active:not(:disabled) {
+  box-shadow: var(--ui-control-pressed);
+  transform: none;
+}
+
+:is(.primary-button, .secondary-button, .ghost-button, .danger-button, .pixel-button, .pixel-btn,
+    .hub-action, .inventory-button, .library-button, .station-settings__button,
+    .station-menu-button, .station-back, .station-sound-button, .codebook-button,
+    .shift-exit, .shift-primary, .pixel-dialog-close):disabled {
+  color: var(--color-stone-concrete-4);
+  background: var(--color-sky-night-1);
+  border-color: var(--color-sky-night-4);
+  box-shadow: none;
+  cursor: default;
+  opacity: 1;
+}
+
+:is(button, a, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--color-window-light-3);
+  outline-offset: 4px;
+}
+/* Route announcements receive programmatic focus without becoming a fake control. */
+main h1[tabindex="-1"]:focus { outline: none; }
+button { touch-action: manipulation; }
+button[aria-busy="true"] { cursor: progress; }
+button > :is(img, svg, .pixel-icon) { pointer-events: none; }
+
+/* Native scrolling retains wheel, touch, keyboard and assistive-technology behavior. */
+* { scrollbar-width: auto; scrollbar-color: var(--ui-scroll-thumb) var(--ui-scroll-track); }
+:is(.hub-dialog__body, .library-results, .inventory-item-grid, .codebook-layout,
+    .shift-mentor-panel, .pixel-dialog-body) {
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+  scroll-padding: 8px;
+}
+@supports selector(::-webkit-scrollbar) {
+  * { scrollbar-color: auto; }
+  ::-webkit-scrollbar { width: 14px; height: 14px; background: var(--ui-scroll-track); }
+  ::-webkit-scrollbar-track { border: 2px solid var(--ui-chrome); background: var(--ui-scroll-track); }
+  ::-webkit-scrollbar-thumb { min-height: 36px; min-width: 36px; border: 2px solid var(--ui-scroll-track); border-radius: 0; background: var(--ui-scroll-thumb); box-shadow: inset 2px 2px 0 #ffffff24, inset -2px -2px 0 #0004; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ui-scroll-hover); }
+  ::-webkit-scrollbar-corner { background: var(--ui-chrome); }
+}
+/* Firefox also parses WebKit scrollbar selectors, but draws its native scrollbar. */
+@supports (-moz-appearance: none) {
+  * { scrollbar-color: var(--ui-scroll-thumb) var(--ui-scroll-track); scrollbar-width: auto; }
+}
+
+input[type="checkbox"], input[type="radio"] {
+  appearance: none;
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-content: center;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 2px solid var(--ui-chrome-light);
+  border-radius: 0;
+  background: var(--ui-chrome);
+  color: var(--color-action-accent-1);
+  box-shadow: inset 2px 2px 0 #0004;
+  cursor: pointer;
+}
+input[type="checkbox"]::before, input[type="radio"]::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  visibility: hidden;
+}
+input[type="checkbox"]::before { clip-path: polygon(0 4px, 2px 4px, 2px 6px, 4px 6px, 4px 8px, 6px 8px, 6px 4px, 8px 4px, 8px 2px, 10px 2px, 10px 0, 12px 0, 12px 4px, 10px 4px, 10px 6px, 8px 6px, 8px 10px, 6px 10px, 6px 12px, 4px 12px, 4px 10px, 2px 10px, 2px 8px, 0 8px); }
+input[type="checkbox"]:checked::before, input[type="radio"]:checked::before { visibility: visible; }
+input[type="checkbox"]:checked, input[type="radio"]:checked { border-color: var(--color-action-accent-1); }
+input[type="checkbox"]:disabled, input[type="radio"]:disabled { cursor: default; opacity: .6; }
+
+input[type="range"] { appearance: none; height: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+input[type="range"]::-webkit-slider-runnable-track { height: 8px; border: 2px solid var(--ui-chrome-edge); background: var(--ui-chrome); }
+input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 24px; margin-top: -10px; border: 2px solid var(--color-action-accent-2); border-radius: 0; background: var(--color-action-accent-1); box-shadow: inset 2px 2px 0 #fff4, inset -2px -2px 0 #0004; }
+input[type="range"]::-moz-range-track { height: 4px; border: 2px solid var(--ui-chrome-edge); background: var(--ui-chrome); }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 20px; border: 2px solid var(--color-action-accent-2); border-radius: 0; background: var(--color-action-accent-1); box-shadow: inset 2px 2px 0 #fff4, inset -2px -2px 0 #0004; }
+
+.pixel-switch { position: relative; display: inline-flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.pixel-switch input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.pixel-switch-track { display: block; width: 52px; height: 28px; flex: 0 0 52px; padding: 2px; border: 2px solid var(--ui-chrome-light); background: var(--ui-chrome); }
+.pixel-switch-thumb { display: block; width: 20px; height: 20px; background: var(--color-stone-concrete-4); box-shadow: inset 2px 2px 0 #fff4, inset -2px -2px 0 #0004; }
+.pixel-switch input:checked + .pixel-switch-track { border-color: var(--color-action-accent-1); }
+.pixel-switch input:checked + .pixel-switch-track .pixel-switch-thumb { transform: translateX(24px); background: var(--color-action-accent-1); }
+.pixel-switch input:focus-visible + .pixel-switch-track { outline: 2px solid var(--color-window-light-3); outline-offset: 4px; }
+.pixel-switch:has(input:disabled) { opacity: .6; cursor: default; }
+
+/* Loading is a bounded status, not a fabricated percentage or a blocking overlay. */
+.app-loading { min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px; background: var(--ui-chrome); color: var(--ui-text-primary); text-align: center; font: 18px/1.5 var(--font-pixel-ui); }
+.app-loading__signal { display: flex; gap: 8px; height: 12px; }
+.app-loading__signal i { display: block; width: 12px; height: 12px; background: var(--color-action-accent-1); animation: station-loading-pulse 1200ms steps(2, end) infinite; }
+.app-loading__signal i:nth-child(2) { animation-delay: 200ms; }
+.app-loading__signal i:nth-child(3) { animation-delay: 400ms; }
+@keyframes station-loading-pulse { 0%, 66%, 100% { opacity: .4; } 33% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .app-loading__signal i { animation: none; opacity: 1; } }
+:root[data-reduced-motion="true"] .app-loading__signal i, :root[data-low-power="true"] .app-loading__signal i { animation: none; opacity: 1; }
+
+/* Loading keeps both the label and the control rectangle stable. */
+.pixel-btn { position: relative; }
+.pixel-spinner { position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; background: currentColor; }
+.pixel-btn--loading { cursor: progress; }
+.pixel-dialog-close { padding: 6px; font-size: 24px; }
+
+/* A short back action stays whole while the neighbouring title may wrap. */
+.station-back { white-space: nowrap; flex: 0 0 auto; }

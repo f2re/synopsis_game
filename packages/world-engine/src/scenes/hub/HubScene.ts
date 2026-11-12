@@ -77,6 +77,16 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
+    // The home screen must not silently replace a failed station download with
+    // the legacy scene. React keeps navigation available and offers a retry.
+    if (this.useR01) {
+      const missing = r01Assets.assets.filter((asset) => !this.textures.exists(asset.key)).map((asset) => asset.key);
+      if (missing.length > 0) {
+        this.registry.set('world.load_error', { scene: 'hub', assets: missing });
+        worldBridge.emit('world:load_error', { scene: 'hub', assets: missing });
+        return;
+      }
+    }
     // Candidate preview is explicit; the default switches only after independent art acceptance.
     if (this.useR01 && r01Assets.assets.every((asset) => this.textures.exists(asset.key))) {
       this.timeOfDay = new HubTimeOfDay(r01Assets.scene.world_location);

@@ -114,7 +114,7 @@ export function LevelMap({ onClose, onSelectMilestone }: LevelMapProps) {
                 onClick={onClose}
                 style={{ padding: '6px 12px', fontSize: 12 }}
               >
-                ✕ В хаб
+                На станцию
               </button>
             </div>
 

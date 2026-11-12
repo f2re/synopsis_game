@@ -55,17 +55,17 @@ export function Settings({ onClose, isPaused = false, onResume, connectionLost =
             <section className="station-settings__section" aria-labelledby="settings-weather-title">
               <div className="station-settings__section-mark" aria-hidden="true">02</div>
               <h2 id="settings-weather-title">За окном</h2>
-              <fieldset className="station-settings__weather"><legend className="sr-only">Декоративная погода</legend>{([['auto', 'Иногда дождь'], ['clear', 'Без дождя'], ['rain', 'Дождь']] as const).map(([value, label]) => <label key={value} className={settings.weather === value ? 'is-selected' : ''}><input type="radio" name="station-weather" value={value} checked={settings.weather === value} onChange={() => update('weather', value)} /><span>{label}</span></label>)}</fieldset>
-              <p className="station-settings__hint">Это атмосфера станции. Погода в учебных наблюдениях и правильные ответы от неё не меняются.</p>
+              <fieldset className="station-settings__weather"><legend className="sr-only">Погода за окном</legend>{([['auto', 'Иногда дождь'], ['clear', 'Без дождя'], ['rain', 'Дождь']] as const).map(([value, label]) => <label key={value} className={settings.weather === value ? 'is-selected' : ''}><input type="radio" name="station-weather" value={value} checked={settings.weather === value} onChange={() => update('weather', value)} /><span>{label}</span></label>)}</fieldset>
+              <p className="station-settings__hint">Меняет погоду за окном станции.</p>
             </section>
 
             <section className="station-settings__section" aria-labelledby="settings-display-title">
               <div className="station-settings__section-mark" aria-hidden="true">03</div>
               <h2 id="settings-display-title">Чтение и движение</h2>
               <label className="station-settings__toggle"><span><strong>Уменьшить движение</strong><small>{systemReducedMotion ? 'Включено в настройках вашей системы.' : 'Спокойные сцены без постоянной анимации.'}</small></span><input type="checkbox" checked={settings.reducedMotion || systemReducedMotion} disabled={systemReducedMotion} onChange={(e) => update('reducedMotion', e.target.checked)} /></label>
-              <label className="station-settings__toggle"><span><strong>Экономия ресурсов</strong><small>Упрощённые эффекты; в кампусе до 30 кадров/с.</small></span><input type="checkbox" checked={settings.lowPower} onChange={(e) => update('lowPower', e.target.checked)} /></label>
+              <label className="station-settings__toggle"><span><strong>Экономия ресурсов</strong><small>Упрощённые эффекты; на станции до 30 кадров/с.</small></span><input type="checkbox" checked={settings.lowPower} onChange={(e) => update('lowPower', e.target.checked)} /></label>
               <label className="station-settings__toggle"><span><strong>Повышенный контраст</strong><small>Более заметные границы и подписи.</small></span><input type="checkbox" checked={settings.highContrast} onChange={(e) => update('highContrast', e.target.checked)} /></label>
-              <label className="station-settings__toggle"><span><strong>Плотный шрифт для чтения</strong><small>Тонкие пиксельные штрихи; обе гарнитуры поддерживают кириллицу.</small></span><input type="checkbox" checked={!settings.pixelFont} onChange={(e) => update('pixelFont', !e.target.checked)} /></label>
+              <label className="station-settings__toggle"><span><strong>Плотный шрифт для чтения</strong><small>Компактные буквы для длинных текстов.</small></span><input type="checkbox" checked={!settings.pixelFont} onChange={(e) => update('pixelFont', !e.target.checked)} /></label>
             </section>
           </div>
         </div>

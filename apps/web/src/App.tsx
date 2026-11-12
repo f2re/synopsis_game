@@ -2,10 +2,11 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type Reac
 import { api, ApiError, cancelPendingLogin, getSessionToken, setSessionToken, type SessionUser } from './api';
 import { GAME_MARK, GAME_TITLE } from './brand';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
-import { PixelIcon, PixelCard, PixelProgressBar } from './features/ui';
+import { PixelIcon, PixelCard } from './features/ui';
+import { PixelScrollArea } from './features/ui/PixelScrollArea';
 import { HubModalLayer } from './features/hub/HubModalLayer';
 import { HubDialog } from './features/hub/HubDialog';
-import { TitleScreen } from './features/title/TitleScreen';
+import { WorldLoadBoundary } from './features/hub/WorldLoadBoundary';
 import { ExitScreen } from './features/title/ExitScreen';
 import { HelpScreen } from './features/help/HelpScreen';
 import { ReadingRoomScreen } from './features/library/ReadingRoomScreen';
@@ -33,7 +34,7 @@ function returnFromPage(): void {
 }
 
 function LoadingScreen({ text = 'Загрузка…' }: { text?: string }) {
-  return <main className="app-shell" aria-live="polite"><section className="panel compact-panel" style={{ textAlign: 'center' }}><PixelIcon name="kn01" size="lg" alt="" /><p>{text}</p><PixelProgressBar value={65} max={100} size="sm" variant="teal" /></section></main>;
+  return <main className="app-shell app-loading" aria-live="polite" aria-busy="true"><section className="panel compact-panel"><PixelIcon name="kn01" size="lg" alt="" /><h1>{text}</h1><span className="app-loading__signal" aria-hidden="true"><i /><i /><i /></span></section></main>;
 }
 
 /** Commit alongside a resolved route, so a lazy screen receives focus after loading. */
@@ -47,7 +48,7 @@ function RouteHeadingFocus() {
 }
 
 function ArenaTvPlaceholder() {
-  return <main className="station-page" aria-labelledby="arena-title"><PixelCard variant="dialog" style={{ maxWidth: 540, margin: '40px auto', textAlign: 'center' }}><span>{GAME_MARK} · режим большого экрана</span><h1 id="arena-title">Большой экран</h1><p>Автоматическая трансляция матчей появится в следующем этапе. Этот экран не получает список наблюдателей и данные профилей.</p><button type="button" className="station-back" onClick={() => navigate('/')}>← Главное меню</button></PixelCard></main>;
+  return <main className="station-page" aria-labelledby="arena-title"><PixelCard variant="dialog" style={{ maxWidth: 540, margin: '40px auto', textAlign: 'center' }}><span>{GAME_MARK} · режим большого экрана</span><h1 id="arena-title">Большой экран</h1><p>Трансляция матчей готовится к запуску. Открытые занятия доступны на станции.</p><button type="button" className="station-back" onClick={() => navigate('/')}>← На станцию</button></PixelCard></main>;
 }
 
 export function App() {
@@ -80,7 +81,6 @@ export function App() {
 
   useEffect(() => {
     document.title = `${SCREEN_TITLES[path] ?? 'Страница не найдена'} · ${GAME_TITLE}`;
-    window.scrollTo(0, 0);
   }, [path]);
 
   useEffect(() => {
@@ -103,10 +103,12 @@ export function App() {
   }, []);
 
   function startShift() {
+    if (booting) return;
     if (user) navigate('/shift');
     else { setPendingDestination('/shift'); setLoginModalOpen(true); }
   }
   function startBlitz() {
+    if (booting) return;
     if (user) navigate('/blitz');
     else { setPendingDestination('/blitz'); setLoginModalOpen(true); }
   }
@@ -146,45 +148,49 @@ export function App() {
 
   let screen: ReactNode;
   if (path === '/arena-tv') screen = <ArenaTvPlaceholder />;
-  else if (path === '/') screen = <TitleScreen user={user} onOpenCampus={() => navigate('/campus')} onStartShift={startShift} onOpenLogin={() => setLoginModalOpen(true)} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit} sessionPending={booting} sessionNotice={sessionNotice} />;
   else if (path === '/library') screen = <LibraryScreen onBack={returnFromPage} initialQuery={new URLSearchParams(location.split('?')[1] ?? '').get('q') ?? ''} />;
-  else if (path === '/archive') screen = <ReadingRoomScreen onBack={() => navigate('/campus')} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} />;
+  else if (path === '/archive') screen = <ReadingRoomScreen onBack={() => navigate('/')} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} />;
   else if (path === '/codebook') screen = <Codebook isOpen onClose={returnFromPage} />;
-  else if (path === '/help') screen = <HelpScreen onBack={returnFromPage} onOpenLibrary={() => navigate('/library')} onOpenSettings={() => navigate('/settings')} onOpenCampus={() => navigate('/campus')} onStartShift={startShift} />;
+  else if (path === '/help') screen = <HelpScreen onBack={returnFromPage} onOpenLibrary={() => navigate('/library')} onOpenSettings={() => navigate('/settings')} onOpenCampus={() => navigate('/')} onStartShift={startShift} />;
   else if (path === '/settings') screen = <Settings onClose={returnFromPage} />;
   else if (path === '/exit') {
     screen = getSessionToken()
-      ? <main className="station-page station-exit"><section className="station-exit__card"><h1>Завершить сеанс?</h1><p>После выхода профиль будет закрыт на этом устройстве.</p><button type="button" className="station-menu-button station-menu-button--primary" onClick={requestExit}>Выйти из игры</button><button type="button" className="station-text-button" onClick={() => navigate('/')}>Главное меню</button></section></main>
+      ? <main className="station-page station-exit"><section className="station-exit__card"><h1>Завершить сеанс?</h1><p>После выхода профиль будет закрыт на этом устройстве.</p><button type="button" className="station-menu-button station-menu-button--primary" onClick={requestExit}>Выйти из игры</button><button type="button" className="station-text-button" onClick={() => navigate('/')}>На станцию</button></section></main>
       : <ExitScreen onReturn={() => navigate('/')} notice={exitNotice} />;
   } else if (path === '/admin') {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : user?.roles.includes('admin')
-      ? <AdminScreen currentUser={user} onBack={() => navigate('/campus')} />
+      ? <AdminScreen currentUser={user} onBack={() => navigate('/')} />
       : <AdminLoginScreen currentUser={user} onLogin={(adminUser) => { setUser(adminUser); navigate('/admin', true); }} onBack={() => navigate('/')} />;
   } else if (path === '/profile/avatar' || path === '/shift' || path === '/blitz') {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : !user
       ? <LoginScreen onLogin={(profile) => { setUser(profile); setSessionNotice(''); }} onClose={() => navigate('/')} />
       : path === '/profile/avatar'
-        ? <AvatarEditor key={user.id} user={user} onSaved={acceptUpdatedProfile} onBack={() => navigate('/campus')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />
+        ? <AvatarEditor key={user.id} user={user} onSaved={acceptUpdatedProfile} onBack={() => navigate('/')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />
         : path === '/blitz'
-          ? <BlitzWorkspace key={user.id} user={user} onExit={() => navigate('/campus')} onStartPractice={() => navigate('/shift')} />
-          : <SeamlessShiftFlow key={user.id} onExit={() => navigate('/campus')} onEquipment={() => navigate('/profile/avatar?section=badges')} />;
-  } else if (path === '/campus') screen = <HubScreen
+          ? <BlitzWorkspace key={user.id} user={user} onExit={() => navigate('/')} onStartPractice={() => navigate('/shift')} />
+          : <SeamlessShiftFlow key={user.id} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} />;
+  } else if (path === '/' || path === '/campus') screen = <HubScreen
     user={user} onLoginClick={() => setLoginModalOpen(true)} onLogout={requestExit}
     onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift} onStartBlitz={startBlitz}
     onOpenAvatar={() => navigate('/profile/avatar')} onOpenAdmin={() => navigate('/admin')}
-    onOpenHome={() => navigate('/')} onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
+    onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
     externalModalOpen={loginModalOpen || setCodeModalOpen || exitDialogOpen}
+    sessionPending={booting} sessionNotice={sessionNotice}
   />;
-  else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь в главное меню: оттуда доступны кампус, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>Главное меню</button></section></main>;
+  else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь на станцию: там доступны занятия, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>На станцию</button></section></main>;
 
   const focusKey = ['/shift', '/blitz', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
+  const stationWorld = path === '/' || path === '/campus';
+  const routeContent = <><RouteHeadingFocus key={focusKey} />{screen}</>;
   return <AtmosphereProvider surface={exiting ? 'silent' : screenSurface(path)}>
-    <Suspense fallback={<LoadingScreen text="Открываем комнату…" />}><RouteHeadingFocus key={focusKey} />{screen}</Suspense>
+    <WorldLoadBoundary key={path} fallback={<main className="app-shell app-loading"><section className="panel compact-panel" role="alert"><h1>Не удалось открыть экран</h1><p>Проверьте соединение и перезагрузите страницу.</p><div className="hub-profile-actions"><button type="button" className="hub-action hub-action--primary" onClick={() => window.location.reload()}>Перезагрузить страницу</button><button type="button" className="hub-action" onClick={() => navigate('/help')}>Открыть помощь</button></div></section></main>}>
+      <Suspense fallback={<LoadingScreen text="Открываем станцию…" />}>{stationWorld || path === '/codebook' ? routeContent : <PixelScrollArea key={focusKey} label={SCREEN_TITLES[path] ?? 'Страница'} className="app-page-scroll" viewportClassName="app-page-viewport">{routeContent}</PixelScrollArea>}</Suspense>
+    </WorldLoadBoundary>
     {loginModalOpen && <HubModalLayer label="Вход в учебную группу" onClose={closeLogin}><LoginScreen onLogin={finishLogin} onClose={closeLogin} isModal /></HubModalLayer>}
     {setCodeModalOpen && user && <HubModalLayer label="Персональный код входа" onClose={() => setSetCodeModalOpen(false)}><SetCodeModal user={user} onSuccess={acceptUpdatedProfile} onClose={() => setSetCodeModalOpen(false)} /></HubModalLayer>}
     {exitDialogOpen && <HubDialog title="Завершить сеанс?" subtitle={user ? `Наблюдатель: ${user.displayName}` : 'Выход со станции'} icon="exit" onClose={() => { if (!exiting) setExitDialogOpen(false); }} footer={<div className="station-confirm-actions"><button type="button" className="hub-action" onClick={() => setExitDialogOpen(false)} disabled={exiting}>Остаться</button><button type="button" className="hub-action hub-action--primary" onClick={() => void finishExit()} disabled={exiting}>{exiting ? 'Завершаем сеанс…' : 'Выйти из игры'}</button></div>}>
-      <p className="station-confirm-copy">{user ? 'Вы выйдете из профиля. Принятые сервером результаты и сохранённый внешний вид останутся в вашей учётной записи.' : 'Музыка, фоновые звуки и игровая сцена остановятся.'}</p><p className="station-confirm-copy">Вернуться можно в любое время. Настройки этого браузера и закладки библиотеки сохранятся.</p>
+      <p className="station-confirm-copy">{user ? 'Вы выйдете из профиля. Результаты и сохранённый персонаж останутся в вашей учётной записи.' : 'Музыка, фоновые звуки и игровая сцена остановятся.'}</p><p className="station-confirm-copy">Вернуться можно в любое время. Настройки этого браузера и закладки библиотеки сохранятся.</p>
     </HubDialog>}
   </AtmosphereProvider>;
 }

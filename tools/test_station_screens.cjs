@@ -1,4 +1,4 @@
-/** Real Chromium + production assets + real isolated server. No API/artwork mocks.
+/** Real Chromium/Firefox + production assets + real isolated server. No API/artwork mocks.
  * Requires built apps/web/dist and apps/server/dist. Run on a host that permits sockets.
  * STATION_PLAYWRIGHT_MODULES=/path/to/node_modules node tools/test_station_screens.cjs
  */
@@ -10,7 +10,10 @@ const os = require('node:os');
 const http = require('node:http');
 const { spawn } = require('node:child_process');
 const { once } = require('node:events');
-const { chromium } = require(require.resolve('playwright', { paths: [process.env.STATION_PLAYWRIGHT_MODULES || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES || process.cwd()] }));
+const { chromium, firefox } = require(require.resolve('playwright', { paths: [process.env.STATION_PLAYWRIGHT_MODULES || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES || process.cwd()] }));
+const browserName = process.env.STATION_BROWSER || 'chromium';
+assert.ok(['chromium', 'firefox'].includes(browserName));
+const engine = browserName === 'firefox' ? firefox : chromium;
 const repo = process.cwd(), dist = path.join(repo, 'apps/web/dist');
 const worldChunks = fs.readdirSync(path.join(dist, 'assets')).filter(name => {
   if (!name.endsWith('.js')) return false;
@@ -21,7 +24,9 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const report = { status: 'RUNNING', browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
+const phases = new Set((process.env.STATION_SCREEN_PHASES || 'station,public,portraits,game,admin,audio').split(','));
+for (const phase of phases) assert.ok(['station','public','portraits','game','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
+const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
 let apiProcess, webServer, browser, nativeChrome;
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -31,7 +36,7 @@ async function startServers() {
   const baseApi = `http://127.0.0.1:${port}`;
   apiProcess = spawn(process.execPath, ['apps/server/dist/index.js'], { cwd: repo, env: {
     ...process.env, API_BIND: '127.0.0.1', API_PORT: String(port), SYNOPSIS_SECURITY_PROFILE: 'trusted',
-    SYNOPSIS_BOOTSTRAP_ADMIN_CODE: '', SYNOPSIS_ENABLE_TEST_ROSTER: 'true', SYNOPSIS_TEST_ROSTER_FILE: path.join(repo, 'config/test-roster.example.json'),
+    SYNOPSIS_BOOTSTRAP_ADMIN_CODE: '26063review', SYNOPSIS_ENABLE_TEST_ROSTER: 'true', SYNOPSIS_TEST_ROSTER_FILE: path.join(repo, 'config/test-roster.example.json'),
     SYNOPSIS_IDENTITY_STORE: path.join(temp, 'identity.json'), SYNOPSIS_EQUIPMENT_STORE: path.join(temp, 'equipment.json'),
     SYNOPSIS_PROGRESSION_STORE: path.join(temp, 'progression.json'), SYNOPSIS_ATTEMPT_LOG: path.join(temp, 'attempts.jsonl'), SYNOPSIS_CONTENT_ROOT: path.join(repo, 'content'),
   }, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -84,23 +89,75 @@ async function openNativeLifecycleBrowser() {
 async function capture(page, name) {
   await page.evaluate(async () => {
     await document.fonts.ready;
-    // Offscreen lazy inventory thumbnails need not load until the user scrolls.
-    // Waiting for their decode here would deadlock the screenshot itself.
-    await Promise.all([...document.images].filter(img => {
+    // Lazy thumbnails outside a nested viewport must not hold up a screenshot.
+    // Intersect every clipping ancestor, not just the browser window.
+    const visible = img => {
       const rect = img.getBoundingClientRect();
-      return rect.width > 0 && (img.complete || rect.bottom > 0 && rect.top < innerHeight && rect.right > 0 && rect.left < innerWidth);
-    }).map(img => img.decode().catch(() => undefined)));
+      let left = Math.max(0, rect.left), right = Math.min(innerWidth, rect.right);
+      let top = Math.max(0, rect.top), bottom = Math.min(innerHeight, rect.bottom);
+      if (!rect.width || !rect.height || getComputedStyle(img).visibility === 'hidden') return false;
+      for (let parent = img.parentElement; parent; parent = parent.parentElement) {
+        const style = getComputedStyle(parent), bounds = parent.getBoundingClientRect();
+        if (style.overflowX !== 'visible') { const edge = bounds.left + parent.clientLeft; left = Math.max(left, edge); right = Math.min(right, edge + parent.clientWidth); }
+        if (style.overflowY !== 'visible') { const edge = bounds.top + parent.clientTop; top = Math.max(top, edge); bottom = Math.min(bottom, edge + parent.clientHeight); }
+      }
+      return right > left && bottom > top;
+    };
+    await Promise.all([...document.images].filter(visible).map(img => new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`Visible image did not finish loading: ${new URL(img.src).pathname}`)), 8_000);
+      img.decode().catch(() => undefined).finally(() => { clearTimeout(timer); resolve(); });
+    })));
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   });
+  // A newly mounted nested rail needs its own layout measurement after it
+  // becomes visible. Capture the settled UI, and fail if it never agrees with
+  // native scrolling; do not hide an empty thumb in a supposedly final image.
+  await page.waitForFunction(() => {
+    if (matchMedia('(forced-colors: active)').matches) return true;
+    return [...document.querySelectorAll('.pixel-scroll-area')].every(area => {
+      const box = area.getBoundingClientRect();
+      if (!box.width || !box.height || box.bottom <= 0 || box.top >= innerHeight || box.right <= 0 || box.left >= innerWidth) return true;
+      const viewport = area.querySelector(':scope > .pixel-scroll-area__viewport');
+      if (!viewport) return false;
+      return [...area.querySelectorAll(':scope > [role="scrollbar"]')].every(track => {
+        const vertical = track.getAttribute('aria-orientation') === 'vertical';
+        const extent = Math.max(0, vertical ? viewport.scrollHeight - viewport.clientHeight : viewport.scrollWidth - viewport.clientWidth);
+        if (extent <= 1) return track.getAttribute('data-overflow') === 'false';
+        const offset = vertical ? viewport.scrollTop : viewport.scrollLeft;
+        const thumb = track.querySelector('.pixel-scroll-area__thumb')?.getBoundingClientRect();
+        return track.getAttribute('data-overflow') === 'true'
+          && Math.abs(Number(track.getAttribute('aria-valuemax')) - extent) <= 2
+          && Math.abs(Number(track.getAttribute('aria-valuenow')) - offset) <= 2
+          && Boolean(thumb?.width && thumb?.height);
+      });
+    });
+  }, undefined, { timeout: 5_000 });
   const metric = await page.evaluate(() => ({
-    viewport: [innerWidth, innerHeight], scrollWidth: document.documentElement.scrollWidth,
+    viewport: [innerWidth, innerHeight], scrollWidth: document.documentElement.scrollWidth, documentHeight: document.documentElement.scrollHeight,
     brokenImages: [...document.images].filter(img => img.getBoundingClientRect().width > 0 && img.complete && img.naturalWidth === 0).map(img => new URL(img.src).pathname),
     heading: document.querySelector('main h1,dialog h2')?.textContent,
     canvasCount: document.querySelectorAll('canvas').length,
+    pageOverflow: [...document.querySelectorAll('.app-page-viewport')].filter(node => node.clientWidth > 0 && node.scrollWidth > node.clientWidth + 2).map(node => ({ width: node.clientWidth, total: node.scrollWidth })),
+    unframedOverflow: [...document.querySelectorAll('body *')].filter(node => {
+      if (!(node instanceof HTMLElement) || node.matches('input,select,.pixel-scroll-area__viewport')) return false;
+      const box = node.getBoundingClientRect();
+      if (!box.width || !box.height || box.bottom <= 0 || box.top >= innerHeight || box.right <= 0 || box.left >= innerWidth) return false;
+      const style = getComputedStyle(node);
+      return (node.clientHeight > 0 && node.scrollHeight > node.clientHeight + 2 && /^(auto|scroll)$/.test(style.overflowY))
+        || (node.clientWidth > 0 && node.scrollWidth > node.clientWidth + 2 && /^(auto|scroll)$/.test(style.overflowX));
+    }).map(node => ({ tag: node.tagName, className: node.className, width: node.clientWidth, totalWidth: node.scrollWidth, height: node.clientHeight, totalHeight: node.scrollHeight })),
+    visibleText: document.body.innerText,
   }));
   assert.ok(metric.scrollWidth <= metric.viewport[0] + 2, `${name}: horizontal overflow ${JSON.stringify(metric)}`);
+  assert.ok(metric.documentHeight <= metric.viewport[1] + 2, `${name}: document must not create a second scrollbar or empty tail: ${JSON.stringify(metric)}`);
   assert.deepEqual(metric.brokenImages, [], `${name}: broken artwork`);
+  assert.deepEqual(metric.pageOverflow, [], `${name}: content overflows its page frame`);
+  assert.deepEqual(metric.unframedOverflow, [], `${name}: a scrolling region is missing its shared pixel rail`);
+  assert.doesNotMatch(metric.visibleText, /кампус|эмуляци|симуляци|художественный закат|не фактическ/iu, `${name}: visible interface language`);
+  delete metric.visibleText;
   await page.screenshot({ path: path.join(output, `${name}.png`), fullPage: true });
   report.screenshots.push(`${name}.png`); report.cases.push({ name, ...metric });
+  console.log(`SCREEN ${name}`);
 }
 async function measurePresentation(page, name) {
   const metrics = await page.evaluate(async () => {
@@ -125,7 +182,7 @@ async function measurePresentation(page, name) {
   });
   assert.ok(metrics.decorativeDrops <= 12, 'Rain has a bounded number of visual elements');
   if (metrics.reducedMotion === 'true' || metrics.lowPower === 'true') assert.equal(metrics.animatedDrops, 0);
-  if (name === 'home-full-motion-performance') {
+  if (name === 'library-full-motion-performance') {
     assert.equal(metrics.decorativeDrops, 12, 'Rain renders all twelve authored drops');
     assert.equal(metrics.animatedDrops, 12, 'Full-motion rain animates behind the window');
   }
@@ -133,29 +190,35 @@ async function measurePresentation(page, name) {
 }
 async function waitForCampus(page) {
   await page.locator('.hub-screen').waitFor();
-  await page.waitForFunction(() => document.querySelector('.hub-scene-caption') && !document.querySelector('.hub-scene-caption').textContent.includes('Подготовка'), undefined, { timeout: 30_000 });
+  await page.locator('.hub-screen[data-world-state="ready"]').waitFor({ timeout: 30_000 });
   await page.locator('canvas').first().waitFor();
 }
 (async () => {
   const base = await startServers();
-  browser = await chromium.launch({ headless: process.env.STATION_BROWSER_HEADED !== 'true', ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
+  browser = await engine.launch({ headless: process.env.STATION_BROWSER_HEADED !== 'true', ...(browserName === 'chromium' ? { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] } : { firefoxUserPrefs: { 'webgl.force-enabled': true, 'gfx.webrender.all': true } }) });
   report.browser = browser.version();
-  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
+  const createContext = browser.newContext.bind(browser);
+  browser.newContext = async options => { const context = await createContext(options); context.setDefaultTimeout(20_000); return context; };
+  for (const viewport of (phases.has('station') ? [{ width: 1366, height: 768 }, { width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }] : [])) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
     await context.addInitScript(() => {
       if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'rain', soundEnabled: false }));
     });
     const page = await context.newPage();
     page.on('pageerror', error => report.errors.push({ viewport: viewport.width, message: error.message }));
-    await page.goto(base); await page.getByRole('heading', { name: /Позывной/ }).waitFor();
-    assert.equal(await page.locator('canvas').count(), 0, 'Home must not mount Phaser');
+    await page.goto(base); await waitForCampus(page);
+    await page.mouse.move(1, 1);
+    assert.equal(await page.locator('canvas').count(), 1, 'Station world is the main screen');
+    assert.match(await page.title(), /^Станция/);
     await capture(page, `home-${viewport.width}`);
     await measurePresentation(page, `home-performance-${viewport.width}`);
     const initialScripts = await page.evaluate(() => performance.getEntriesByType('resource').map(entry => new URL(entry.name).pathname).filter(name => name.endsWith('.js')));
-    assert.ok(!initialScripts.some(name => worldChunks.includes(name)), 'Home must not fetch the separate Phaser world chunk');
-    report.cases.push({ name: `home-resources-${viewport.width}`, javascriptRequests: initialScripts, deferredWorldChunks: worldChunks });
+    assert.ok(initialScripts.some(name => worldChunks.includes(name)), 'The home world loads its renderer');
+    assert.ok(!initialScripts.some(name => /AvatarEditor/.test(name)), 'The fitting editor remains deferred');
+    report.cases.push({ name: `home-resources-${viewport.width}`, javascriptRequests: initialScripts, worldChunks });
+    await require('./test_station_ui_browser.cjs').checkStationUI({ page, base, viewport, report, capture, waitForCampus });
     const openedAt = await page.evaluate(() => performance.now());
-    await page.getByRole('button', { name: /Библиотека Понятия/ }).click();
+    await page.locator('.hub-dock__archive').click();
     await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
     await page.waitForFunction(() => document.activeElement === document.querySelector('main h1'));
     report.cases.push({ name: `library-opening-${viewport.width}`, automationNavigationMs: await page.evaluate(() => performance.now()) - openedAt });
@@ -202,7 +265,7 @@ async function waitForCampus(page) {
     await page.getByRole('heading', { name: 'Читальный зал архива' }).waitFor();
     assert.equal(await page.locator('canvas').count(), 0, 'Reading room replaces the fixed-size canvas placeholder');
     await capture(page, `archive-${viewport.width}`);
-    await page.getByRole('button', { name: 'На площадь', exact: false }).click();
+    await page.getByRole('button', { name: /На (станцию|площадь)/ }).first().click();
     await waitForCampus(page);
     assert.equal(await page.locator('canvas').count(), 1, 'Returning mounts exactly one campus');
     await page.goBack();
@@ -210,25 +273,40 @@ async function waitForCampus(page) {
     assert.equal(await page.locator('canvas').count(), 0);
     await page.getByRole('button', { name: /Открыть библиотеку/ }).click();
     await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
-    await page.goto(base);
-    await page.getByRole('button', { name: 'Войти', exact: true }).click();
+    await page.goto(base); await waitForCampus(page);
+    await page.locator('.hub-profile-button').click();
+    await page.getByRole('button', { name: 'Войти в учебную группу', exact: true }).click();
     await page.getByRole('dialog', { name: 'Вход в учебную группу' }).waitFor();
     await page.getByLabel('Группа', { exact: true }).waitFor();
     await capture(page, `login-${viewport.width}`);
     await page.keyboard.press('Escape');
+    await page.locator('.hub-profile-button').click();
     const exit = page.getByRole('button', { name: 'Выйти из игры', exact: true }); await exit.click();
     await page.getByRole('dialog', { name: 'Завершить сеанс?' }).waitFor();
     await page.keyboard.press('Tab');
     assert.ok(await page.evaluate(() => document.querySelector('dialog[open]').contains(document.activeElement)), 'Exit traps keyboard focus');
     await page.keyboard.press('Escape');
-    assert.ok(await exit.evaluate(node => node === document.activeElement), 'Escape restores opener focus');
+    assert.ok(await page.locator('.hub-profile-button').evaluate(node => node === document.activeElement), 'Escape returns focus to the surviving profile control');
+    await page.locator('.hub-profile-button').click();
     await exit.click(); await page.getByRole('dialog').getByRole('button', { name: 'Выйти из игры', exact: true }).click();
     await page.getByRole('heading', { name: 'До следующей смены' }).waitFor();
     await capture(page, `exit-${viewport.width}`);
     assert.equal(await page.locator('canvas').count(), 0);
     await context.close();
   }
-  await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
+  if (phases.has('station')) await require('./test_station_ui_browser.cjs').checkWorldLoading({ base, browser, report, capture, waitForCampus });
+  if (phases.has('public')) await require('./test_all_screens_browser.cjs').runAdditionalScreenChecks({ base, browser, report, capture, waitForCampus });
+  if (phases.has('portraits')) await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
+  if (phases.has('game')) await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
+  if (phases.has('admin')) await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
+  // Firefox exercises the same production screens, input and portrait flows above.
+  // Native CDP visibility/audio observation is available only in Chromium.
+  if (browserName === 'firefox' || !phases.has('audio')) {
+    assert.deepEqual(report.errors, [], 'Uncaught browser errors');
+    report.status = 'PASS';
+    console.log(JSON.stringify({ status: report.status, engine: browserName, screenshots: report.screenshots.length, cases: report.cases.length }));
+    return;
+  }
   // Native audio nodes are observed, not replaced, to prove real gesture/start/stop behavior.
   await browser.close();
   const context = await openNativeLifecycleBrowser();
@@ -249,12 +327,16 @@ async function waitForCampus(page) {
   const page = context.pages()[0] || await context.newPage();
   await page.setViewportSize({ width: 1280, height: 900 });
   page.on('pageerror', error => report.errors.push({ scenario: 'session/audio', message: error.message }));
-  await page.goto(base); await page.getByRole('heading', { name: /Позывной/ }).waitFor();
+  await page.goto(base); await waitForCampus(page);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 0, 'No AudioContext before a gesture');
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
   await page.getByRole('radio', { name: 'Дождь', exact: true }).check();
   await page.getByRole('button', { name: /Назад/ }).first().click();
-  await measurePresentation(page, 'home-full-motion-performance');
+  await page.locator('.hub-dock__archive').click();
+  await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
+  await measurePresentation(page, 'library-full-motion-performance');
+  await page.getByRole('button', { name: /Назад/ }).first().click();
+  await waitForCampus(page);
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
   await page.getByRole('checkbox', { name: /Экономия ресурсов/ }).check();
   await page.getByRole('button', { name: /Назад/ }).first().click();
@@ -263,7 +345,10 @@ async function waitForCampus(page) {
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
   await page.getByRole('checkbox', { name: /Экономия ресурсов/ }).uncheck();
   await page.getByRole('button', { name: /Назад/ }).first().click();
-  await page.getByRole('button', { name: 'Включить звук', exact: true }).click();
+  await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+  await page.getByRole('checkbox', { name: /Звуковое сопровождение/ }).check();
+  await page.getByRole('button', { name: /Назад/ }).first().click();
+  await waitForCampus(page);
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Music and ambience share a context');
   // A real background tab in headed Chromium, not a mocked visibility event.
@@ -280,7 +365,7 @@ async function waitForCampus(page) {
   await page.waitForFunction(() => document.visibilityState === 'visible' && window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Returning resumes the shared context');
   await backgroundTab.close();
-  await page.getByRole('button', { name: /Учебная смена/ }).click();
+  await page.locator('.hub-dock__primary').click();
   await page.getByRole('dialog', { name: 'Вход в учебную группу' }).waitFor();
   await page.getByLabel('Группа', { exact: true }).selectOption({ label: fixture.groupId });
   await page.getByLabel('Пользователь', { exact: true }).selectOption({ label: fixture.users[0].displayName });
@@ -301,7 +386,7 @@ async function waitForCampus(page) {
   assert.equal(await exitPage.evaluate(() => sessionStorage.getItem('synopsis.session.token')), sessionToken);
   await exitPage.close();
   await page.bringToFront();
-  await page.getByRole('button', { name: 'Вернуться в центр', exact: true }).click(); await waitForCampus(page);
+  await page.getByRole('button', { name: 'На станцию', exact: true }).click(); await waitForCampus(page);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Campus must reuse the station audio context');
   assert.equal(await page.locator('.world-canvas-host > div').first().getAttribute('data-fps-limit'), '60');
   await measurePresentation(page, 'campus-full-motion-performance');

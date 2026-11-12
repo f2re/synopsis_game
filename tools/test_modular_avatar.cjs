@@ -34,7 +34,7 @@ assert.equal(attrs.get('aria-label'), 'Сохранённый портрет н�
 assert(!attrs.get('aria-label').includes('гардероб'), 'A historical failure must not promise to rewrite the old round');
 
 const values = new Map();
-const window = Object.assign(new Events(), { sessionStorage: { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value), removeItem: (key) => values.delete(key) } });
+const window = Object.assign(new Events(), { setTimeout, clearTimeout, sessionStorage: { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value), removeItem: (key) => values.delete(key) } });
 const drafts = load('apps/web/src/features/avatar/avatarDraft.ts', { './avatarOptions': options }, { window });
 const equipment = { loadout: { badgeId: null }, catalog: [], stats: { completedShifts: 0, unassistedCorrect: 0, practiceDays: 0 }, nextShift: { badgeId: null, badgeName: null, heldItem: first.avatar.heldItem, enabled: true, charges: { reference: 0, retry: 0 }, remaining: { reference: 0, retry: 0 }, assistedTasks: 0, avatarSnapshot: first.avatar, avatarPortrait: first.avatarPortrait }, rules: { chargeCap: 2, description: '' }, tools: [] };
 const saves = [], savedUsers = [];
@@ -46,7 +46,8 @@ const editor = load('apps/web/src/features/avatar/AvatarEditor.tsx', {
   '../hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false }) },
   './EquipmentBadges': { EquipmentBadges: 'EquipmentBadges', EquipmentSummary: 'EquipmentSummary' },
   './avatarDraft': drafts, './inventory.css': {},
-}, { window });
+  '../ui/modalFocus': { keepTabInDialog() {} }, '../ui/PixelScrollArea': { PixelScrollArea: 'PixelScrollArea' },
+}, { window, AbortController });
 const button = (runner, label) => nodes(runner.output).find((node) => node.type === 'button' && text(node) === label);
 const draft = (runner) => nodes(runner.output).find((node) => node.type === 'StaticFitting').props.avatar;
 function equip(runner, slot, value) { nodes(runner.output).find((node) => node.type === 'AvatarOptionGrid').props.onEquip(slot, value); runner.render(); }
@@ -101,7 +102,8 @@ async function screenChecks() {
   // The hub's real markup consumes the same confirmed PNG without loading its effects or Phaser.
   const hub = load('apps/web/src/features/hub/HubScreen.tsx', {
     '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик', GAME_TITLE: '26063' }, '../avatar/SavedAvatarPortrait': portraitModule,
-    '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' }, '../ui/SynopticDutyTicker': { SynopticDutyTicker: 'SynopticDutyTicker' },
+    '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' },
+    './StudyJournal': { StudyJournal: 'StudyJournal' }, './WorldLoadBoundary': { WorldLoadBoundary: 'WorldLoadBoundary' },
     './HubDialog': { HubDialog: 'HubDialog' }, './HubIcon': { HubIcon: 'HubIcon' },
     '../settings/settingsStore': { usePresentationPreferences: () => ({}) },
   }, { window: { matchMedia: () => ({ matches: false }) } });
@@ -115,9 +117,10 @@ async function screenChecks() {
   const shift = load('apps/web/src/features/shift/ShiftWorkspace.tsx', {
     '../../api': { api: { startShift() { const request = deferred(); starts.push(request); return request.promise; } } }, '../../brand': { GAME_MARK: '26063' },
     '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' }, './FindErrorTask': { FindErrorTask: 'FindErrorTask' }, './StationBoardTask': { StationBoardTask: 'StationBoardTask' }, './StationPlotTask': { StationPlotTask: 'StationPlotTask' },
+    '../ui/radioGroupKeys': load('apps/web/src/features/ui/radioGroupKeys.ts'),
     './feedback/DigitAnatomy': { DigitAnatomy: 'DigitAnatomy' }, '../../game/worldBridge': { createCodePostBridge: () => ({}) }, '@synopsis/world-engine': { worldAudio: {} },
     '../avatar/avatarOptions': options, '../avatar/SavedAvatarPortrait': portraitModule, './ShiftWorkspace.css': {},
-  });
+  }, { window: { setTimeout, clearTimeout }, AbortController });
   const task = JSON.parse(fs.readFileSync('apps/web/tools/review/blitz-practice-fixture.json', 'utf8')).active[0].task;
   for (const legacy of [false, true]) {
     const shiftRunner = new Runner(shift.ShiftWorkspace, { onExit() {} });

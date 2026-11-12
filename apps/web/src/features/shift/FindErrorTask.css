@@ -8,7 +8,7 @@
   gap: 3px;
   padding: 12px 14px;
   border: 1px solid rgba(216,181,91,.28);
-  border-radius: 12px;
+  border-radius: 0;
   background: rgba(216,181,91,.08);
   color: #b7c6cb;
   font-size: 12px;
@@ -18,7 +18,7 @@
   width: 100%;
   max-height: 620px;
   aspect-ratio: 1 / 1;
-  border-radius: 14px;
+  border-radius: 0;
   background: #e9ece7;
 }
 .find-error-paper { fill: #f7f5ea; stroke: #c9c6b7; stroke-width: 3; }
@@ -30,8 +30,8 @@
 .find-error-dot { fill: #273941; }
 .find-error-value { fill: #24353d; font: 700 25px/1 system-ui, sans-serif; }
 .find-error-name { fill: #45545b; font: 700 19px/1 system-ui, sans-serif; }
-.find-error-station:hover .find-error-hit,
-.find-error-station:focus .find-error-hit,
+.find-error-station:not([aria-disabled="true"]):hover .find-error-hit,
+.find-error-station:not([aria-disabled="true"]):focus-visible .find-error-hit,
 .find-error-station.is-selected .find-error-hit {
   fill: rgba(46,115,150,.08);
   stroke: #2e7396;
@@ -55,3 +55,5 @@
   .find-error-legend { display: grid; gap: 5px; }
   .find-error-legend strong { margin-left: 0; }
 }
+
+.find-error-station[aria-disabled="true"] { cursor: default; }

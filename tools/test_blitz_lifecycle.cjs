@@ -50,6 +50,7 @@ const deps = {
   react, 'react/jsx-runtime': { jsx: (type, props, key) => ({ type, props, key }), jsxs: (type, props, key) => ({ type, props, key }) },
   '../../api': { api, ApiError: class ApiError extends Error {} }, '../../brand': { GAME_MARK: '26063' },
   '../avatar/SavedAvatarPortrait': portraitModule, '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' },
+  '../ui/radioGroupKeys': load('apps/web/src/features/ui/radioGroupKeys.ts'),
   './StationPlotTask': { StationPlotTask: 'StationPlotTask' }, './ShiftWorkspace.css': {}, './BlitzWorkspace.css': {},
 };
 const code = ts.transpileModule(fs.readFileSync('apps/web/src/features/shift/BlitzWorkspace.tsx', 'utf8'), {

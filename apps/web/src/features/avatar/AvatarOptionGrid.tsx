@@ -1,4 +1,5 @@
 import type { AvatarProfile, EquipmentResponse } from '../../api';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
 import {
   EQUIPMENT_SLOTS, INVENTORY_CATEGORIES, INVENTORY_ITEMS, OPTIONS,
   type EquipmentSlot, type InventoryCategory, type InventoryItem,
@@ -29,7 +30,7 @@ export function AvatarOptionGrid({ avatar, selectedId, category, query, equipped
   const slot = EQUIPMENT_SLOTS.find((entry) => entry.id === selected.slot)!;
   const equipped = avatar[selected.slot] === selected.id;
   const equipLabel = selected.slot === 'companion' ? 'Позвать спутника' : selected.slot === 'heldItem' ? 'Взять в руки' : selected.slot === 'badge' ? 'Прикрепить' : 'Надеть';
-  const removeLabel = selected.slot === 'companion' ? 'Оставить в кампусе' : selected.slot === 'heldItem' ? 'Убрать из рук' : 'Снять';
+  const removeLabel = selected.slot === 'companion' ? 'Оставить на станции' : selected.slot === 'heldItem' ? 'Убрать из рук' : 'Снять';
   const selectedTool = tools?.find((tool) => tool.id === selected.id);
 
   return (
@@ -50,7 +51,7 @@ export function AvatarOptionGrid({ avatar, selectedId, category, query, equipped
           <label className="inventory-equipped-filter"><input type="checkbox" checked={equippedOnly} onChange={(event) => onEquippedOnlyChange(event.target.checked)} />На персонаже</label>
         </div>
         <p className="inventory-result-count" aria-live="polite">{items.length} из {INVENTORY_ITEMS.length} предметов · стартовый набор</p>
-        <div className="inventory-item-grid">
+        <PixelScrollArea label="Каталог вещей" className="inventory-item-scroll" viewportClassName="inventory-item-viewport" contentClassName="inventory-item-grid" key={`${category}:${query}:${equippedOnly}`}>
           {items.map((item) => {
             const isEquipped = avatar[item.slot] === item.id;
             const isSelected = selected.id === item.id;
@@ -64,7 +65,7 @@ export function AvatarOptionGrid({ avatar, selectedId, category, query, equipped
               </button>
             );
           })}
-        </div>
+        </PixelScrollArea>
         {items.length === 0 && <div className="inventory-empty" role="status"><p>Таких предметов в наборе нет.</p><button type="button" className="inventory-button" onClick={() => { onQueryChange(''); onCategoryChange('all'); onEquippedOnlyChange(false); }}>Сбросить фильтры</button></div>}
       </section>
       {items.length > 0 && <aside className="inventory-detail" aria-labelledby="inventory-item-title">
