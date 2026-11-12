@@ -48,13 +48,19 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const equipmentRequest = useRef(0);
   const avatarRequest = useRef(0);
   const avatarSave = useRef<{ abort: AbortController; timer: number } | null>(null);
+  const equipmentPending = useRef<{ abort: AbortController; timer: number } | null>(null);
   const accountId = useRef(user.id);
   accountId.current = user.id;
   const exitDialog = useRef<HTMLDialogElement>(null);
+  const saveFooter = useRef<HTMLElement>(null);
   const dirty = !sameAvatar(avatar, savedAvatar);
   const portraitSaved = isSavedAvatarPortrait(savedPortrait);
   const visibleEquipment = equipmentOwner === user.id ? equipment : null;
   const busy = saving || selectingBadge;
+
+  useEffect(() => {
+    if (notice?.kind === 'error') saveFooter.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }, [notice]);
 
   useEffect(() => {
     setAvatar({ ...user.avatar });
@@ -79,7 +85,10 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   useEffect(() => {
     setEquipment(null); setEquipmentOwner(''); setSelectingBadge(false);
     void loadEquipment();
-    return () => { equipmentRequest.current += 1; };
+    return () => {
+      equipmentRequest.current += 1;
+      if (equipmentPending.current) { window.clearTimeout(equipmentPending.current.timer); equipmentPending.current.abort.abort(); equipmentPending.current = null; }
+    };
   }, [user.id]);
 
   useEffect(() => {
@@ -116,34 +125,51 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   async function loadEquipment() {
     const requestId = ++equipmentRequest.current;
     const owner = user.id;
+    const pending = beginEquipmentRequest();
     setEquipmentLoading(true); setEquipmentError('');
     try {
-      const result = await api.equipment();
+      const result = await api.equipment(pending.abort.signal);
       if (requestId !== equipmentRequest.current || accountId.current !== owner) return;
       setEquipment(result); setEquipmentOwner(owner);
     } catch (reason) {
       if (requestId !== equipmentRequest.current || accountId.current !== owner) return;
-      setEquipmentError(reason instanceof Error ? reason.message : 'Не удалось загрузить знаки отличия.');
+      setEquipmentError(pending.abort.signal.aborted ? 'Сервер не ответил вовремя. Повторите загрузку знаков.' : reason instanceof Error ? reason.message : 'Не удалось загрузить знаки отличия.');
     } finally {
+      finishEquipmentRequest(pending);
       if (requestId === equipmentRequest.current && accountId.current === owner) setEquipmentLoading(false);
     }
   }
 
+  function beginEquipmentRequest() {
+    if (equipmentPending.current) { window.clearTimeout(equipmentPending.current.timer); equipmentPending.current.abort.abort(); }
+    const pending = { abort: new AbortController(), timer: 0 };
+    pending.timer = window.setTimeout(() => pending.abort.abort(), 8_000);
+    equipmentPending.current = pending;
+    return pending;
+  }
+
+  function finishEquipmentRequest(pending: { abort: AbortController; timer: number }) {
+    window.clearTimeout(pending.timer);
+    if (equipmentPending.current === pending) equipmentPending.current = null;
+  }
+
   async function selectBadge(badgeId: string | null) {
-    if (busy || equipmentLoading) return;
+    if (busy || equipmentLoading || equipmentPending.current) return;
     const owner = user.id;
     const requestId = ++equipmentRequest.current;
+    const pending = beginEquipmentRequest();
     setSelectingBadge(true); setEquipmentError(''); setNotice(null);
     try {
-      const result = await api.selectEquipmentBadge(badgeId);
+      const result = await api.selectEquipmentBadge(badgeId, pending.abort.signal);
       if (requestId !== equipmentRequest.current || accountId.current !== owner) return;
       setEquipment(result); setEquipmentOwner(owner);
       setNotice({ kind: 'success', text: badgeId ? 'Учебный знак выбран. Его эффект будет доступен в новой смене.' : 'Учебный знак снят. Текущая смена сохраняет прежние заряды.' });
       playClick();
     } catch (reason) {
       if (requestId !== equipmentRequest.current || accountId.current !== owner) return;
-      setEquipmentError(reason instanceof Error ? reason.message : 'Не удалось выбрать знак. Повторите действие.');
+      setEquipmentError(pending.abort.signal.aborted ? 'Сервер не подтвердил выбор знака вовремя. Обновите список, чтобы проверить сохранённый выбор.' : reason instanceof Error ? reason.message : 'Не удалось выбрать знак. Повторите действие.');
     } finally {
+      finishEquipmentRequest(pending);
       if (requestId === equipmentRequest.current && accountId.current === owner) setSelectingBadge(false);
     }
   }
@@ -301,11 +327,10 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
           </section>
         </fieldset>
 
-        <footer className="inventory-footer">
-          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : dirty ? 'Есть несохранённые изменения' : portraitSaved ? 'Персонаж сохранён' : 'Портрет ещё не сохранён'}</strong><span>{dirty ? draftStored ? 'Примерка сохранена в этой вкладке. Одежда, цвета и портрет обновятся после сохранения персонажа.' : 'Сохраните персонажа перед уходом: браузер не сохранил черновик.' : 'Начатые смены и блицы сохраняют портрет и комплект на момент старта.'}</span></div>
+        <footer ref={saveFooter} className="inventory-footer">
+          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : notice?.kind === 'error' ? 'Сохранение не подтверждено' : dirty ? 'Есть несохранённые изменения' : portraitSaved ? 'Персонаж сохранён' : 'Портрет ещё не сохранён'}</strong>{notice ? <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p> : <span>{dirty ? draftStored ? 'Примерка сохранена в этой вкладке. Одежда, цвета и портрет обновятся после сохранения персонажа.' : 'Сохраните персонажа перед уходом: браузер не сохранил черновик.' : 'Начатые смены и блицы сохраняют портрет и комплект на момент старта.'}</span>}</div>
           <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={(!dirty && portraitSaved) || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : 'Сохранить персонажа'}</button></div>
         </footer>
-        {notice && <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
       </div>
       <dialog ref={exitDialog} className="inventory-exit-dialog" tabIndex={-1} onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (!saving) setConfirmExit(false); }} aria-labelledby="inventory-exit-title">
         <PixelScrollArea label="Несохранённая примерка" className="inventory-exit-scroll">

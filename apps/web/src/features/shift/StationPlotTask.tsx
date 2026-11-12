@@ -174,7 +174,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
         </svg>
         {!disabled && (
           <p className="station-plot-hint">
-            Выберите наблюдение слева, затем укажите его место на станционной модели. Координаты модели не зависят от размера экрана.
+            Выберите наблюдение, затем укажите его место на станционной модели.
           </p>
         )}
       </div>

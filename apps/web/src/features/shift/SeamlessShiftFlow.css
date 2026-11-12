@@ -168,7 +168,7 @@
 .shift-mentor-page p { margin: 0 0 14px; line-height: 1.58; color: #d1dfda; }
 .shift-mentor-page > div { padding-top: 12px; border-top: 0; color: #b9cec8; line-height: 1.5; }
 
-.shift-mentor-scroll footer { display: flex; justify-content: space-between; gap: 14px; padding: 0 18px 16px; color: #819f9a; font-size: 11px; line-height: 1.35; }
+.shift-mentor-scroll footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; padding: 0 18px 16px; color: #b4c7c8; font-size: 13px; line-height: 1.4; }
 
 @media (max-width: 640px) {
   .shift-lore-shell { padding: 12px; }
@@ -199,8 +199,7 @@ dialog.shift-debrief-overlay::backdrop { background: rgba(3, 14, 18, .6); }
   .shift-lore-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
 }
 
-/* Keep mentor controls after the task when the viewport cannot spare an overlay. */
-@media (max-width: 760px), (max-height: 540px) {
+/* Mentor controls stay in document flow so they cannot cover map positions. */
   .seamless-shift-host { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 
   .seamless-shift-host > .shift-mentor-trigger,
@@ -225,12 +224,8 @@ dialog.shift-debrief-overlay::backdrop { background: rgba(3, 14, 18, .6); }
   .seamless-shift-host > .shift-mentor-panel > header { position: static; align-items: center; }
   .seamless-shift-host > .shift-mentor-panel > header > button { flex-shrink: 0; min-width: 44px; min-height: 44px; }
   .seamless-shift-host > .shift-mentor-panel .shift-mentor-tabs button { min-height: 44px; }
-}
-
 .shift-mentor-scroll { min-height: 0; padding: 0 6px 6px; }
 .shift-mentor-panel > header { flex-shrink: 0; }
 .shift-mentor-tabs button:active:not(:disabled), .shift-mentor-trigger:active, .shift-mentor-panel > header button:active { box-shadow: var(--ui-control-pressed); }
 .shift-mentor-tabs button:hover:not(:disabled), .shift-mentor-panel > header button:hover { border-color: var(--color-action-accent-1); }
-@media (max-width: 760px), (max-height: 540px) {
-  .seamless-shift-host > .shift-mentor-panel { max-height: min(720px, 90dvh); overflow: hidden; }
-}
+.seamless-shift-host > .shift-mentor-panel { max-height: min(720px, 90dvh); overflow: hidden; }

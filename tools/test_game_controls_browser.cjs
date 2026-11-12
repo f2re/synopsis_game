@@ -13,11 +13,78 @@ async function afterClick(page, control, path, method = 'POST') {
 }
 async function pressWithoutPageScroll(page, control) {
   await control.scrollIntoViewIfNeeded(); await control.focus();
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const parent = page.locator('.app-page-viewport');
   const before = await parent.evaluate(node => node.scrollTop);
   await control.press('Space');
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   assert.equal(await parent.evaluate(node => node.scrollTop), before, 'Space selects the diagram position without scrolling the page');
+}
+
+async function clickSvgPosition(page, control) {
+  // Firefox's automatic SVG-group scrolling can miss an inner HTML viewport.
+  // Use the same wheel interaction as a player, then verify the actual hit target.
+  const viewportId = await control.evaluate(node => node.closest('.pixel-scroll-area__viewport')?.id);
+  assert.ok(viewportId, 'The diagram belongs to a known scroll viewport');
+  const viewport = page.locator(`[id=${JSON.stringify(viewportId)}]`);
+  await viewport.scrollIntoViewIfNeeded();
+  const movement = await control.evaluate(node => {
+    const viewport = node.closest('.pixel-scroll-area__viewport');
+    const hitArea = node.querySelector('.station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+    const target = hitArea.getBoundingClientRect(), frame = viewport.getBoundingClientRect();
+    const left = frame.left + viewport.clientLeft, top = frame.top + viewport.clientTop;
+    const right = left + viewport.clientWidth, bottom = top + viewport.clientHeight;
+    const clamp = (value, maximum) => Math.max(0, Math.min(maximum, value));
+    return {
+      left: viewport.scrollLeft, top: viewport.scrollTop,
+      x: clamp(viewport.scrollLeft + (target.left < left + 8 || target.right > right - 8 ? target.left + target.width / 2 - (left + right) / 2 : 0), viewport.scrollWidth - viewport.clientWidth),
+      y: clamp(viewport.scrollTop + (target.top < top + 8 || target.bottom > bottom - 8 ? target.top + target.height / 2 - (top + bottom) / 2 : 0), viewport.scrollHeight - viewport.clientHeight),
+    };
+  });
+  for (const [axis, orientation, offset] of [['x', 'horizontal', 'left'], ['y', 'vertical', 'top']]) {
+    const delta = movement[axis] - movement[offset];
+    if (Math.abs(delta) <= 1) continue;
+    const rail = viewport.locator('..').locator(`:scope > [role="scrollbar"][aria-orientation="${orientation}"]`);
+    await rail.hover();
+    await page.mouse.wheel(axis === 'x' ? delta : 0, axis === 'y' ? delta : 0);
+    await page.waitForFunction(({ id, axis, target }) => {
+      const viewport = document.getElementById(id);
+      return Math.abs((axis === 'x' ? viewport.scrollLeft : viewport.scrollTop) - target) <= 2;
+    }, { id: viewportId, axis, target: movement[axis] }, { timeout: 3_000 });
+  }
+  await viewport.scrollIntoViewIfNeeded();
+  const handle = await control.elementHandle();
+  await page.waitForFunction(node => {
+    const hitArea = node.querySelector('.station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+    const rect = hitArea.getBoundingClientRect();
+    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    return node.contains(hit);
+  }, handle, { timeout: 3_000 });
+  const point = await control.evaluate(node => {
+    const hitArea = node.querySelector('.station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+    const rect = hitArea.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  });
+  await page.mouse.click(point.x, point.y);
+}
+
+async function checkMapTabVisibility(page, positions) {
+  await positions.first().focus();
+  for (let index = 0; index < await positions.count(); index++) {
+    if (index) await page.keyboard.press('Tab');
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    assert.ok(await positions.nth(index).evaluate(node => {
+      if (document.activeElement !== node) return false;
+      const rect = node.getBoundingClientRect();
+      for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+        if (!parent.classList.contains('pixel-scroll-area__viewport')) continue;
+        const frame = parent.getBoundingClientRect();
+        const left = frame.left + parent.clientLeft, top = frame.top + parent.clientTop;
+        if (rect.left < left - 2 || rect.right > left + parent.clientWidth + 2 || rect.top < top - 2 || rect.bottom > top + parent.clientHeight + 2) return false;
+      }
+      return node.contains(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2));
+    }), `Map position ${index + 1}: keyboard focus remains visible inside every scrolling frame`);
+  }
 }
 async function fillTask(page, task) {
   const kind = task.response.kind;
@@ -49,15 +116,17 @@ async function fillTask(page, task) {
     for (let index = 0; index < task.payload.observations.length; index++) {
       await observations.nth(index).click();
       const position = positions.nth(index % task.payload.slots.length);
-      if (index === 0) await pressWithoutPageScroll(page, position); else await position.click();
+      if (index === 0) await pressWithoutPageScroll(page, position); else await clickSvgPosition(page, position);
+      assert.ok((await position.getAttribute('aria-label')).endsWith(`: ${task.payload.observations[index].label}`), 'The intended position receives the selected observation');
       if (!board && index === 0) {
         const clear = page.locator('.station-observation-clear').first();
         await clear.press('Space');
         assert.ok(await observations.first().evaluate(node => node === document.activeElement), 'Removing a placement returns focus to its observation');
-        await position.click();
+        await clickSvgPosition(page, position);
       }
     }
     assert.equal(await page.locator(board ? '.station-board-observations .is-placed' : '.station-observation.is-placed').count(), task.payload.observations.length);
+    if (board) await checkMapTabVisibility(page, positions);
   } else if (kind === 'findError') {
     const stations = page.locator('.find-error-station');
     await pressWithoutPageScroll(page, stations.first());
@@ -65,7 +134,7 @@ async function fillTask(page, task) {
     await stations.last().click(); assert.equal(await stations.last().getAttribute('aria-pressed'), 'true');
   } else throw new Error(`Uncovered task kind: ${kind}`);
 }
-async function checkInventory({page, base, viewport, report, capture}) {
+async function checkInventory({page, base, viewport, report, capture, token}) {
   await page.goto(base + '/profile/avatar');
   await page.getByRole('heading', { name: 'Персонаж и инвентарь', exact: true }).waitFor();
   await page.locator('canvas[data-avatar-renderer="editor-static"]').waitFor();
@@ -89,13 +158,24 @@ async function checkInventory({page, base, viewport, report, capture}) {
   await page.getByRole('checkbox', { name: 'На персонаже', exact: true }).uncheck();
   await page.getByRole('tab', { name: 'Знаки отличия', exact: true }).click();
   await page.locator('.equipment-badge-grid').waitFor();
-  const eligible = page.locator('.equipment-badge.is-unlocked button:not(:disabled)').first();
-  if (await eligible.count()) {
-    const selected = page.waitForResponse(r => pathOf(r) === '/api/equipment/loadout' && r.request().method() === 'PATCH');
-    await eligible.click(); const response = await selected; assert.ok(response.ok());
-    await page.getByRole('button', { name: 'Снять учебный знак', exact: true }).click();
+  const starter = page.locator('.equipment-badge').filter({ has: page.getByRole('heading', { name: 'На связи', exact: true }) }).getByRole('button');
+  if (await starter.isEnabled()) await afterClick(page, starter, '/api/equipment/loadout', 'PATCH');
+  await afterClick(page, page.getByRole('button', { name: 'Снять учебный знак', exact: true }), '/api/equipment/loadout', 'PATCH');
+  await page.locator('.equipment-active-badge').getByText('Без значка', { exact: true }).waitFor();
+  if (viewport.width === 1366) {
+    let stalled;
+    const stall = route => { stalled = route; };
+    await page.route('**/api/equipment/loadout', stall);
+    await starter.click();
+    await page.getByRole('alert').filter({ hasText: 'Сервер не подтвердил выбор знака вовремя' }).waitFor({ timeout: 12_000 });
+    assert.ok(await page.getByRole('button', { name: '← На станцию', exact: true }).isEnabled(), 'A timed-out badge request releases navigation');
+    assert.ok(stalled, 'The actual badge write was held before transmission');
+    await stalled.abort('timedout').catch(() => {}); await page.unroute('**/api/equipment/loadout', stall);
+    await afterClick(page, page.getByRole('button', { name: 'Обновить', exact: true }), '/api/equipment', 'GET');
     await page.locator('.equipment-active-badge').getByText('Без значка', { exact: true }).waitFor();
+    report.cases.push({ name: 'inventory-badge-timeout', deadlineMs: 8000, navigationReleased: true, actualReload: true, fabricatedResponse: false });
   }
+  await afterClick(page, starter, '/api/equipment/loadout', 'PATCH');
   await capture(page, `all-inventory-badges-${viewport.width}`);
   await page.getByRole('tab', { name: /^Инвентарь/ }).click();
   const back = page.getByRole('button', { name: '← На станцию', exact: true });
@@ -107,16 +187,71 @@ async function checkInventory({page, base, viewport, report, capture}) {
   assert.ok(await back.evaluate(node => node === document.activeElement));
   await back.click(); await dialog.getByRole('button', { name: 'Продолжить примерку', exact: true }).click();
   await page.getByRole('button', { name: 'Отменить изменения', exact: true }).click();
-  await page.getByRole('button', { name: 'В центре', exact: true }).click();
+  // The real pencil and starter badge guarantee one retry and one reference.
+  await page.getByRole('button', { name: 'На площадке', exact: true }).click();
   await page.getByRole('tab', { name: 'Внешность', exact: true }).click();
   await page.locator('.inventory-appearance-option[aria-pressed="false"]').first().click();
   await back.click();
+  if (viewport.width === 1366) {
+    let stalled;
+    const stall = route => { if (route.request().method() === 'PATCH') stalled = route; else return route.continue(); };
+    await page.route('**/api/identity/avatar', stall);
+    await dialog.getByRole('button', { name: 'Сохранить и выйти', exact: true }).click();
+    await page.getByRole('alert').filter({ hasText: 'Сервер не подтвердил сохранение вовремя' }).waitFor({ timeout: 12_000 });
+    await dialog.waitFor({ state: 'hidden' });
+    assert.ok(await back.isEnabled(), 'The timed-out save releases navigation');
+    assert.equal(await page.locator('.inventory-fitting__stage').getAttribute('data-outfit-state'), 'draft');
+    assert.ok(stalled, 'The real request was held before transmission');
+    await stalled.abort('timedout').catch(() => {});
+    await page.unroute('**/api/identity/avatar', stall);
+    await capture(page, 'all-inventory-save-timeout');
+    report.cases.push({ name: 'inventory-save-timeout', deadlineMs: 8000, preservedDraft: true, navigationReleased: true, fabricatedResponse: false });
+    await back.click();
+  }
   await afterClick(page, dialog.getByRole('button', { name: 'Сохранить и выйти', exact: true }), '/api/identity/avatar', 'PATCH');
   await page.locator('.hub-screen').waitFor();
-  report.cases.push({ name: `all-inventory-controls-${viewport.width}`, everyCategory: true, everyAppearanceOption: true, everyItemDescription: viewport.width === 1366, emptyReset: true, equippedFilter: true, tabArrows: true, unsavedExit: true });
+  const readProfile = async () => {
+    const response = await page.request.get(base + '/api/identity/me', { headers: { authorization: `Bearer ${token}` } });
+    assert.ok(response.ok()); return (await response.json()).user;
+  };
+  const saved = await readProfile();
+  let discardedWrites = 0;
+  const countWrites = req => { if (req.method() === 'PATCH' && new URL(req.url()).pathname === '/api/identity/avatar') discardedWrites++; };
+  page.on('request', countWrites);
+  await page.goto(base + '/profile/avatar');
+  await page.getByRole('heading', { name: 'Персонаж и инвентарь', exact: true }).waitFor();
+  await page.getByRole('button', { name: 'После смены', exact: true }).click();
+  await back.click(); await dialog.waitFor();
+  await dialog.getByRole('button', { name: 'Выйти без сохранения', exact: true }).click();
+  await page.locator('.hub-screen').waitFor();
+  const discarded = await readProfile();
+  assert.deepEqual(discarded.avatar, saved.avatar); assert.deepEqual(discarded.avatarPortrait, saved.avatarPortrait);
+  await page.goto(base + '/profile/avatar');
+  await page.locator('.inventory-fitting__stage[data-outfit-state="saved"]').waitFor();
+  assert.equal(await page.getByRole('button', { name: 'Восстановить примерку', exact: true }).count(), 0, 'Discarded draft is not offered on reopening');
+  assert.equal(discardedWrites, 0, 'Discarding makes no avatar write'); page.off('request', countWrites);
+  await back.click(); await page.locator('.hub-screen').waitFor();
+  report.cases.push({ name: `all-inventory-controls-${viewport.width}`, everyCategory: true, everyAppearanceOption: true, everyItemDescription: viewport.width === 1366, emptyReset: true, equippedFilter: true, tabArrows: true, unsavedExit: true, discardExit: true, discardedServerPortraitUnchanged: true });
 }
 async function checkShift({page, base, viewport, report, capture}) {
+  if (viewport.width === 1366) {
+    await page.goto(base + '/shift');
+    let stalled;
+    const stall = route => { if (route.request().method() === 'POST') stalled = route; else return route.continue(); };
+    await page.route('**/api/shifts', stall);
+    await page.getByRole('button', { name: 'Принять смену', exact: true }).click();
+    await page.getByText('Готовим учебную смену…', { exact: true }).waitFor();
+    assert.ok(await page.getByRole('button', { name: 'На станцию', exact: true }).isEnabled(), 'Leaving is available while the shift starts');
+    await page.getByText('Сервер не ответил вовремя. Вернитесь на станцию и откройте смену ещё раз.', { exact: true }).waitFor({ timeout: 12_000 });
+    await capture(page, 'all-shift-start-timeout');
+    await page.getByRole('button', { name: 'На станцию', exact: true }).click();
+    await page.locator('.hub-screen').waitFor();
+    assert.ok(stalled, 'The actual start request was held before transmission');
+    await stalled.abort('timedout').catch(() => {}); await page.unroute('**/api/shifts', stall);
+    report.cases.push({ name: 'shift-start-timeout', deadlineMs: 8000, exitAvailableWhileLoading: true, exitAfterTimeout: true, fabricatedResponse: false });
+  }
   await page.goto(base + '/shift');
+  await page.getByRole('heading', { name: 'Записка на краю стола', exact: true }).waitFor();
   await capture(page, `all-shift-handover-${viewport.width}`);
   let state = await afterClick(page, page.getByRole('button', { name: 'Принять смену', exact: true }), '/api/shifts');
   const id = state.shiftId, kinds = new Set();
@@ -137,7 +272,8 @@ async function checkShift({page, base, viewport, report, capture}) {
   await early.waitFor(); await exerciseScrollbar(page, early.locator('.shift-debrief-scroll'), report, `all-shift-early-scroll-${viewport.width}`);
   await capture(page, `all-shift-early-exit-${viewport.width}`);
   await early.getByRole('button', { name: 'Продолжить эту смену', exact: true }).click();
-  let answered = 0, reference = false;
+  assert.ok(state.equipment.charges.reference > 0 && state.equipment.charges.retry > 0, 'The actual saved equipment enables both assistance controls');
+  let answered = 0, reference = false, retried = false, revealed = false, skippedRetry = false;
   while (state.task && answered++ < 15) {
     const task = state.task; kinds.add(task.response.kind);
     await page.getByRole('heading', { name: task.question, exact: true }).waitFor();
@@ -153,7 +289,23 @@ async function checkShift({page, base, viewport, report, capture}) {
     }
     await capture(page, `all-task-${task.response.kind}-${answered}-${viewport.width}`);
     let result = await afterClick(page, page.getByRole('button', { name: 'Проверить', exact: true }), `/api/tasks/${encodeURIComponent(task.instanceId)}/answer`);
-    if (result.status === 'retry-offered') result = await afterClick(page, page.getByRole('button', { name: 'Показать разбор', exact: true }), `/api/shifts/${id}/reveal`);
+    if (result.status === 'retry-offered') {
+      if (!revealed) {
+        result = await afterClick(page, page.getByRole('button', { name: 'Показать разбор', exact: true }), `/api/shifts/${id}/reveal`);
+        revealed = true;
+      } else {
+        await page.getByRole('button', { name: 'Повторить ответ · 1 заряд', exact: true }).click();
+        if (!skippedRetry) {
+          result = await afterClick(page, page.getByRole('button', { name: 'Перейти к разбору', exact: true }), `/api/shifts/${id}/reveal`);
+          assert.equal(result.equipment.remaining.retry, 1, 'Leaving the second attempt does not spend its charge');
+          skippedRetry = true;
+        } else {
+          result = await afterClick(page, page.getByRole('button', { name: 'Проверить повторную попытку', exact: true }), `/api/tasks/${encodeURIComponent(task.instanceId)}/answer`);
+          assert.equal(result.feedback.retried, true); assert.equal(result.equipment.remaining.retry, 0);
+          retried = true;
+        }
+      }
+    }
     await page.locator('.shift-feedback').waitFor();
     if (result.completed) { await page.getByRole('button', { name: /^Завершить смену ·/ }).click(); break; }
     assert.ok(result.nextTask, 'The authoritative answer contains the next task');
@@ -161,11 +313,12 @@ async function checkShift({page, base, viewport, report, capture}) {
     state = { ...state, task: result.nextTask };
   }
   assert.deepEqual([...kinds].sort(), ['choice','dependencySequence','findError','numeric','sequence','stationBoard','stationPlot']);
+  assert.ok(reference && retried && revealed && skippedRetry, 'Reference, reveal, leaving a retry and a second answer are all exercised against the actual server');
   const final = page.locator('.shift-debrief-overlay[open]'); await final.waitFor();
   await exerciseScrollbar(page, final.locator('.shift-debrief-scroll'), report, `all-shift-result-scroll-${viewport.width}`);
   await capture(page, `all-shift-result-${viewport.width}`);
   await final.getByRole('button', { name: 'На станцию', exact: true }).click();
-  report.cases.push({ name: `all-shift-controls-${viewport.width}`, actualAnswered: answered, kinds: [...kinds], reference, mentorTabs: true, earlyExitContinue: true, completed: true });
+  report.cases.push({ name: `all-shift-controls-${viewport.width}`, actualAnswered: answered, kinds: [...kinds], reference, retried, revealed, skippedRetry, mentorTabs: true, earlyExitContinue: true, completed: true });
 }
 async function checkBlitz({page, base, viewport, report, capture}) {
   await page.goto(base + '/blitz');
@@ -178,7 +331,16 @@ async function checkBlitz({page, base, viewport, report, capture}) {
   while (state.status === 'active' && state.task && count++ < 8) {
     await page.getByRole('heading', { name: state.task.question, exact: true }).waitFor();
     await fillTask(page, state.task);
-    const result = await afterClick(page, page.getByRole('button', { name: 'Отправить ответ', exact: true }), `/api/blitz-practice/${state.id}/answer`);
+    const submit = page.getByRole('button', { name: 'Отправить ответ', exact: true });
+    await submit.scrollIntoViewIfNeeded();
+    const timedControls = await submit.evaluate(button => {
+      const timer = document.querySelector('.blitz-timer'), clock = timer?.getBoundingClientRect(), action = button.getBoundingClientRect();
+      return { clockVisible: Boolean(clock && clock.top >= 0 && clock.bottom <= innerHeight && timer.contains(document.elementFromPoint(clock.x + clock.width / 2, clock.y + clock.height / 2))),
+        actionReachable: button.contains(document.elementFromPoint(action.x + action.width / 2, action.y + action.height / 2)) };
+    });
+    assert.deepEqual(timedControls, { clockVisible: true, actionReachable: true }, 'The running clock stays visible and does not cover the answer action');
+    if (count === 1) await capture(page, `all-blitz-active-${viewport.width}`);
+    const result = await afterClick(page, submit, `/api/blitz-practice/${state.id}/answer`);
     state = result.session;
   }
   assert.equal(state.status, 'completed'); assert.equal(state.progress.answered, 6, 'Six actual UI answers finish before the actual deadline');
@@ -194,8 +356,8 @@ async function runGameControlChecks({base,browser,report,capture,fixture}) {
   for (const viewport of [{width:1366,height:768},{width:390,height:844},{width:844,height:390}]) {
     const context = await browser.newContext({ viewport, reducedMotion:'reduce', deviceScaleFactor:1 });
     const page = await context.newPage(); page.on('pageerror', error => report.errors.push({ scenario:`game-${viewport.width}`,message:error.message }));
-    await login(page,base,fixture,fixture.users[1]);
-    const args = {page,base,viewport,report,capture};
+    const session = await login(page,base,fixture,fixture.users[1]);
+    const args = {page,base,viewport,report,capture,token:session.token};
     await checkInventory(args); await checkShift(args); await checkBlitz(args);
     await context.close();
   }

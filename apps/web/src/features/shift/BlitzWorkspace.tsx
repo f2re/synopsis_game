@@ -174,9 +174,9 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
 
   return <main className="shift-shell blitz-shell">
     <header className={`shift-topbar blitz-topbar${active ? ' is-active' : ''}`}>
-      <div className="shift-heading"><PixelIcon name="kn01" size="md" /><div className="shift-heading__text"><span className="shift-kicker">{GAME_MARK} · тренировка</span><strong>Блиц-практика · 90 с</strong></div></div>
+      <div className="shift-heading"><PixelIcon name="kn01" size="md" /><div className="shift-heading__text"><span className="shift-kicker">{GAME_MARK} · тренировка</span><strong>Блиц-практика · 90 с</strong></div></div>
       {active && <div className={`blitz-timer ${remaining <= 15 ? 'blitz-timer--ending' : ''}`} aria-label={`Осталось ${remaining} секунд`}><span aria-hidden="true">{Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, '0')}</span><small>на весь раунд</small></div>}
-      <button type="button" className="shift-exit" onClick={onExit}><PixelIcon name="logout" size="sm" /><span>На станцию</span></button>
+      <button type="button" className="shift-exit" onClick={onExit}><PixelIcon name="logout" size="sm" alt="" /><span>На станцию</span></button>
     </header>
 
     <div className="blitz-layout">
@@ -206,7 +206,7 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
           </>}
 
           {completed && <section className="blitz-card blitz-result" aria-labelledby="blitz-result-title">
-            <span className="blitz-kicker">Серверный результат</span>
+            <span className="blitz-kicker">Итог раунда</span>
             <h1 id="blitz-result-title">{session.finishReason === 'timeout' ? 'Время вышло' : 'Раунд завершён'}</h1>
             <div className="blitz-result__score"><strong>{session.progress.correct}<span> / {total}</span></strong><p>верных ответов</p></div>
             <p>Отправлено: {session.progress.answered} из {total}. Без ответа: {total - session.progress.answered}.</p>

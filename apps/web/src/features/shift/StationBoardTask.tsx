@@ -32,6 +32,28 @@ function slotStatus(slot: StationPlotSlot, results?: StationPlotComponentResult[
   return results.some((item) => !item.correct && item.expectedSlotId === slot.id) ? 'is-expected' : '';
 }
 
+function revealFocusedPosition(target: SVGGElement) {
+  // Firefox does not reliably scroll SVG groups inside nested HTML viewports.
+  // Apply the smallest movement after native focus scrolling has finished.
+  requestAnimationFrame(() => {
+    if (!target.isConnected || document.activeElement !== target) return;
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+      if (!parent.classList.contains('pixel-scroll-area__viewport')) continue;
+      const rect = target.getBoundingClientRect();
+      const frame = parent.getBoundingClientRect();
+      const left = frame.left + parent.clientLeft + 8;
+      const top = frame.top + parent.clientTop + 8;
+      const right = frame.left + parent.clientLeft + parent.clientWidth - 8;
+      const bottom = frame.top + parent.clientTop + parent.clientHeight - 8;
+      parent.scrollBy({
+        left: rect.left < left ? rect.left - left : rect.right > right ? rect.right - right : 0,
+        top: rect.top < top ? rect.top - top : rect.bottom > bottom ? rect.bottom - bottom : 0,
+        behavior: 'instant',
+      });
+    }
+  });
+}
+
 export function StationBoardTask({ payload, placements, onChange, disabled = false, results }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(payload.observations[0]?.id ?? null);
   const selected = useMemo(
@@ -56,7 +78,7 @@ export function StationBoardTask({ payload, placements, onChange, disabled = fal
     <div className={`station-board-workspace ${dense ? 'is-dense' : ''}`}>
       <div className="station-board-toolbar">
         <div>
-          <span>Планшет 1000×1000 · {payload.stations.length} станций</span>
+          <span>Наблюдения · {payload.stations.length} станций</span>
           <strong>Размещено {placed}/{payload.observations.length}</strong>
         </div>
         <p>Выберите значение и укажите его позицию около нужной станции.</p>
@@ -110,6 +132,7 @@ export function StationBoardTask({ payload, placements, onChange, disabled = fal
               aria-disabled={disabled}
               tabIndex={disabled ? -1 : 0}
               aria-label={`${station?.name ?? 'Станция'}, позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
+              onFocus={(event) => revealFocusedPosition(event.currentTarget)}
               onClick={() => assign(slot.id)}
               onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
             >

@@ -24,7 +24,9 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const report = { status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
+const phases = new Set((process.env.STATION_SCREEN_PHASES || 'station,public,portraits,game,admin,audio').split(','));
+for (const phase of phases) assert.ok(['station','public','portraits','game','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
+const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
 let apiProcess, webServer, browser, nativeChrome;
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -87,28 +89,75 @@ async function openNativeLifecycleBrowser() {
 async function capture(page, name) {
   await page.evaluate(async () => {
     await document.fonts.ready;
-    // Offscreen lazy inventory thumbnails need not load until the user scrolls.
-    // Waiting for their decode here would deadlock the screenshot itself.
-    await Promise.all([...document.images].filter(img => {
+    // Lazy thumbnails outside a nested viewport must not hold up a screenshot.
+    // Intersect every clipping ancestor, not just the browser window.
+    const visible = img => {
       const rect = img.getBoundingClientRect();
-      return rect.width > 0 && (img.complete || rect.bottom > 0 && rect.top < innerHeight && rect.right > 0 && rect.left < innerWidth);
-    }).map(img => img.decode().catch(() => undefined)));
+      let left = Math.max(0, rect.left), right = Math.min(innerWidth, rect.right);
+      let top = Math.max(0, rect.top), bottom = Math.min(innerHeight, rect.bottom);
+      if (!rect.width || !rect.height || getComputedStyle(img).visibility === 'hidden') return false;
+      for (let parent = img.parentElement; parent; parent = parent.parentElement) {
+        const style = getComputedStyle(parent), bounds = parent.getBoundingClientRect();
+        if (style.overflowX !== 'visible') { const edge = bounds.left + parent.clientLeft; left = Math.max(left, edge); right = Math.min(right, edge + parent.clientWidth); }
+        if (style.overflowY !== 'visible') { const edge = bounds.top + parent.clientTop; top = Math.max(top, edge); bottom = Math.min(bottom, edge + parent.clientHeight); }
+      }
+      return right > left && bottom > top;
+    };
+    await Promise.all([...document.images].filter(visible).map(img => new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`Visible image did not finish loading: ${new URL(img.src).pathname}`)), 8_000);
+      img.decode().catch(() => undefined).finally(() => { clearTimeout(timer); resolve(); });
+    })));
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   });
+  // A newly mounted nested rail needs its own layout measurement after it
+  // becomes visible. Capture the settled UI, and fail if it never agrees with
+  // native scrolling; do not hide an empty thumb in a supposedly final image.
+  await page.waitForFunction(() => {
+    if (matchMedia('(forced-colors: active)').matches) return true;
+    return [...document.querySelectorAll('.pixel-scroll-area')].every(area => {
+      const box = area.getBoundingClientRect();
+      if (!box.width || !box.height || box.bottom <= 0 || box.top >= innerHeight || box.right <= 0 || box.left >= innerWidth) return true;
+      const viewport = area.querySelector(':scope > .pixel-scroll-area__viewport');
+      if (!viewport) return false;
+      return [...area.querySelectorAll(':scope > [role="scrollbar"]')].every(track => {
+        const vertical = track.getAttribute('aria-orientation') === 'vertical';
+        const extent = Math.max(0, vertical ? viewport.scrollHeight - viewport.clientHeight : viewport.scrollWidth - viewport.clientWidth);
+        if (extent <= 1) return track.getAttribute('data-overflow') === 'false';
+        const offset = vertical ? viewport.scrollTop : viewport.scrollLeft;
+        const thumb = track.querySelector('.pixel-scroll-area__thumb')?.getBoundingClientRect();
+        return track.getAttribute('data-overflow') === 'true'
+          && Math.abs(Number(track.getAttribute('aria-valuemax')) - extent) <= 2
+          && Math.abs(Number(track.getAttribute('aria-valuenow')) - offset) <= 2
+          && Boolean(thumb?.width && thumb?.height);
+      });
+    });
+  }, undefined, { timeout: 5_000 });
   const metric = await page.evaluate(() => ({
-    viewport: [innerWidth, innerHeight], scrollWidth: document.documentElement.scrollWidth,
+    viewport: [innerWidth, innerHeight], scrollWidth: document.documentElement.scrollWidth, documentHeight: document.documentElement.scrollHeight,
     brokenImages: [...document.images].filter(img => img.getBoundingClientRect().width > 0 && img.complete && img.naturalWidth === 0).map(img => new URL(img.src).pathname),
     heading: document.querySelector('main h1,dialog h2')?.textContent,
     canvasCount: document.querySelectorAll('canvas').length,
     pageOverflow: [...document.querySelectorAll('.app-page-viewport')].filter(node => node.clientWidth > 0 && node.scrollWidth > node.clientWidth + 2).map(node => ({ width: node.clientWidth, total: node.scrollWidth })),
+    unframedOverflow: [...document.querySelectorAll('body *')].filter(node => {
+      if (!(node instanceof HTMLElement) || node.matches('input,select,.pixel-scroll-area__viewport')) return false;
+      const box = node.getBoundingClientRect();
+      if (!box.width || !box.height || box.bottom <= 0 || box.top >= innerHeight || box.right <= 0 || box.left >= innerWidth) return false;
+      const style = getComputedStyle(node);
+      return (node.clientHeight > 0 && node.scrollHeight > node.clientHeight + 2 && /^(auto|scroll)$/.test(style.overflowY))
+        || (node.clientWidth > 0 && node.scrollWidth > node.clientWidth + 2 && /^(auto|scroll)$/.test(style.overflowX));
+    }).map(node => ({ tag: node.tagName, className: node.className, width: node.clientWidth, totalWidth: node.scrollWidth, height: node.clientHeight, totalHeight: node.scrollHeight })),
     visibleText: document.body.innerText,
   }));
   assert.ok(metric.scrollWidth <= metric.viewport[0] + 2, `${name}: horizontal overflow ${JSON.stringify(metric)}`);
+  assert.ok(metric.documentHeight <= metric.viewport[1] + 2, `${name}: document must not create a second scrollbar or empty tail: ${JSON.stringify(metric)}`);
   assert.deepEqual(metric.brokenImages, [], `${name}: broken artwork`);
   assert.deepEqual(metric.pageOverflow, [], `${name}: content overflows its page frame`);
+  assert.deepEqual(metric.unframedOverflow, [], `${name}: a scrolling region is missing its shared pixel rail`);
   assert.doesNotMatch(metric.visibleText, /кампус|эмуляци|симуляци|художественный закат|не фактическ/iu, `${name}: visible interface language`);
   delete metric.visibleText;
   await page.screenshot({ path: path.join(output, `${name}.png`), fullPage: true });
   report.screenshots.push(`${name}.png`); report.cases.push({ name, ...metric });
+  console.log(`SCREEN ${name}`);
 }
 async function measurePresentation(page, name) {
   const metrics = await page.evaluate(async () => {
@@ -148,7 +197,9 @@ async function waitForCampus(page) {
   const base = await startServers();
   browser = await engine.launch({ headless: process.env.STATION_BROWSER_HEADED !== 'true', ...(browserName === 'chromium' ? { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] } : { firefoxUserPrefs: { 'webgl.force-enabled': true, 'gfx.webrender.all': true } }) });
   report.browser = browser.version();
-  for (const viewport of [{ width: 1366, height: 768 }, { width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
+  const createContext = browser.newContext.bind(browser);
+  browser.newContext = async options => { const context = await createContext(options); context.setDefaultTimeout(20_000); return context; };
+  for (const viewport of (phases.has('station') ? [{ width: 1366, height: 768 }, { width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }] : [])) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
     await context.addInitScript(() => {
       if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'rain', soundEnabled: false }));
@@ -243,15 +294,15 @@ async function waitForCampus(page) {
     assert.equal(await page.locator('canvas').count(), 0);
     await context.close();
   }
-  await require('./test_station_ui_browser.cjs').checkWorldLoading({ base, browser, report, capture, waitForCampus });
-  await require('./test_all_screens_browser.cjs').runAdditionalScreenChecks({ base, browser, report, capture, waitForCampus });
-  await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
-  await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
-  await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
+  if (phases.has('station')) await require('./test_station_ui_browser.cjs').checkWorldLoading({ base, browser, report, capture, waitForCampus });
+  if (phases.has('public')) await require('./test_all_screens_browser.cjs').runAdditionalScreenChecks({ base, browser, report, capture, waitForCampus });
+  if (phases.has('portraits')) await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
+  if (phases.has('game')) await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
+  if (phases.has('admin')) await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
   // Firefox exercises the same production screens, input and portrait flows above.
   // Native CDP visibility/audio observation is available only in Chromium.
-  if (browserName === 'firefox') {
-    assert.deepEqual(report.errors, [], 'Uncaught Firefox errors');
+  if (browserName === 'firefox' || !phases.has('audio')) {
+    assert.deepEqual(report.errors, [], 'Uncaught browser errors');
     report.status = 'PASS';
     console.log(JSON.stringify({ status: report.status, engine: browserName, screenshots: report.screenshots.length, cases: report.cases.length }));
     return;

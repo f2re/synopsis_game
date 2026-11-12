@@ -42,6 +42,11 @@ const profile = { id: 'observer-b', displayName: 'Наблюдатель Б', gr
   oldRoster.resolve([{ id: 'observer-a', displayName: 'Наблюдатель А', groupId: 'А', hasCode: false }]); await flush(runner);
   assert.equal(list(runner, 'select')[1].props.value, 'observer-b', 'Late group response cannot replace the selected roster');
   assert.doesNotMatch(text(runner.output), /Наблюдатель А/);
+  const rosterCallsBeforeReselect = requests.filter(item => item.method === 'roster').length;
+  list(runner, 'select')[0].props.onChange({ target: { value: 'Б' } }); runner.render();
+  assert.equal(list(runner, 'select')[1].props.disabled, false, 'Selecting the current group keeps its loaded users available');
+  assert.equal(list(runner, 'select')[1].props.value, 'observer-b');
+  assert.equal(requests.filter(item => item.method === 'roster').length, rosterCallsBeforeReselect, 'An unchanged group starts no redundant request');
   const loginStart = requests.filter(item => item.method === 'login').length;
   const submit = form(runner).props.onSubmit;
   const firstLogin = submit(event); const duplicateLogin = submit(event); runner.render();

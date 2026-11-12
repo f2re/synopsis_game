@@ -122,13 +122,13 @@ export function LoginScreen({
 
   const content = (
     <section className="panel login-panel" aria-labelledby="login-title">
-      <div className="login-header-row">
+      <div className="login-header-row auth-panel-header">
         <div className="brand-mark" aria-hidden="true">
           <img src="/ui/ui_station_crest_badge_v2.png" alt="" width={56} height={64} className="brand-mark-img" onError={(e) => { e.currentTarget.style.display = 'none'; if (e.currentTarget.parentElement) e.currentTarget.parentElement.dataset.imageFailed = 'true'; }} />
           <span className="brand-mark-fallback">☁</span>
         </div>
         {onClose && (
-          <button type="button" className="ghost-button login-close-button" onClick={onClose} aria-label="Закрыть">
+          <button type="button" className="ghost-button login-close-button auth-panel-close" onClick={onClose} aria-label="Закрыть">
             ✕
           </button>
         )}
@@ -140,7 +140,7 @@ export function LoginScreen({
       <form className="form-stack" onSubmit={submit} aria-busy={loading || rosterLoading || submitting}>
         <div className="login-field">
           <label htmlFor={`${fieldId}-group`}>Группа</label>
-          <select id={`${fieldId}-group`} value={groupId} onChange={(e) => { setUsers([]); setUserId(''); setCode(''); setRosterLoading(true); setGroupId(e.target.value); }} disabled={loading || submitting || groups.length === 0}>
+          <select id={`${fieldId}-group`} value={groupId} onChange={(e) => { if (e.target.value === groupId) return; setUsers([]); setUserId(''); setCode(''); setRosterLoading(true); setGroupId(e.target.value); }} disabled={loading || submitting || groups.length === 0}>
             {groups.map((group) => <option key={group} value={group}>{group}</option>)}
           </select>
         </div>
@@ -377,7 +377,7 @@ export function SetCodeModal({
   return (
     <div className="modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <section className="panel compact-panel" aria-labelledby="set-code-title">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+        <header className="auth-panel-header">
           <img
             src="/ui/ui_station_crest_badge_v2.png"
             alt="26063"
@@ -385,7 +385,8 @@ export function SetCodeModal({
             style={{ width: 32, height: 32, flexShrink: 0 }}
           />
           <h2 id="set-code-title" style={{ margin: 0 }}>{hasCode ? 'Смена персонального кода' : 'Установка персонального кода'}</h2>
-        </div>
+          <button type="button" className="ghost-button login-close-button auth-panel-close" onClick={onClose} aria-label="Закрыть">×</button>
+        </header>
         <p className="muted tiny">
           {hasCode
             ? 'Введите текущий код и задайте новый код для входа в систему.'
@@ -866,14 +867,13 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
                         </button>
                         <input ref={importFileInput} type="file" accept=".txt,.csv" onChange={handleFileUpload} hidden tabIndex={-1} aria-label="Файл со списком учащихся" />
                       </div>
-                      <textarea
-                        className="import-textarea"
-                        aria-label="Список учащихся для добавления"
-                        disabled={batchLoading}
-                        value={batchText}
-                        onChange={(e) => setBatchText(e.target.value)}
-                        placeholder={`Иванов Иван Иванович\nПетрова Анна Сергеевна\nСидоров Алексей Дмитриевич`}
-                        rows={5}
+                      <PixelScrollArea
+                        className="import-textarea-scroll"
+                        viewportClassName="import-textarea"
+                        label="Список учащихся для добавления"
+                        textareaProps={{ disabled: batchLoading, value: batchText,
+                          onChange: (event) => setBatchText(event.target.value),
+                          placeholder: `Иванов Иван Иванович\nПетрова Анна Сергеевна\nСидоров Алексей Дмитриевич`, rows: 5 }}
                       />
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
                         <span className="tiny" style={{ color: 'var(--ui-text-secondary)' }}>
@@ -1024,7 +1024,10 @@ export function AdminScreen({ currentUser, onBack }: { currentUser: SessionUser;
         <HubModalLayer label="Сброс кода доступа" onClose={() => setResetTarget(null)}>
         <div className="modal-backdrop" role="presentation" onClick={(e) => { if (e.target === e.currentTarget) setResetTarget(null); }}>
           <section className="panel reset-modal form-stack" aria-labelledby="reset-modal-title">
-            <h2 id="reset-modal-title">Сброс кода доступа</h2>
+            <header className="auth-panel-header">
+              <h2 id="reset-modal-title">Сброс кода доступа</h2>
+              <button type="button" className="ghost-button login-close-button auth-panel-close" onClick={() => setResetTarget(null)} aria-label="Закрыть">×</button>
+            </header>
             <p className="tiny muted">
               Пользователь: <strong>{resetTarget.displayName}</strong> (группа {resetTarget.groupId})
             </p>

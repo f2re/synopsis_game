@@ -4,7 +4,8 @@
 .blitz-shell :is(button, summary) { min-height: 44px; }
 .blitz-shell :is(p, dd, span, strong, b, code) { overflow-wrap: anywhere; }
 .blitz-shell .blitz-topbar { grid-template-columns: minmax(0, 1fr) auto; gap: 16px; }
-.blitz-shell .blitz-topbar.is-active { grid-template-columns: minmax(0, 1fr) auto auto; }
+.blitz-shell .blitz-topbar.is-active { grid-template-columns: minmax(0, 1fr) auto auto; position: sticky; top: 0; z-index: 12; background: var(--ui-chrome); border-bottom: 2px solid var(--ui-chrome-edge); }
+.app-page-viewport:has(.blitz-topbar.is-active) { scroll-padding-top: 96px; }
 .blitz-shell .shift-heading { min-width: 0; }
 .blitz-shell .shift-heading > :first-child { flex-shrink: 0; }
 .blitz-shell .shift-heading__text strong, .blitz-shell .shift-kicker { font: 16px/1.5 var(--font-pixel-ui); letter-spacing: 0; }
@@ -48,7 +49,7 @@
 .blitz-shell .shift-sequence-row > div { display: flex; flex-wrap: wrap; gap: 8px; }
 .blitz-shell .shift-sequence-row button { width: 44px; height: 44px; min-width: 44px; padding: 0; }
 .blitz-shell .shift-options button { min-width: 0; grid-template-columns: 32px minmax(0, 1fr); font: 16px/1.5 var(--font-pixel-ui); }
-.blitz-shell .station-plot-workspace { grid-template-columns: minmax(160px, .8fr) minmax(0, 1.7fr); }
+.blitz-shell .station-observations { flex-basis: 160px; }
 .blitz-shell .station-observation { min-height: 64px; padding-right: 60px; }
 .blitz-shell .station-observation :is(span, strong), .blitz-shell .station-plot-caption, .blitz-shell .station-plot-caption strong, .blitz-shell .station-plot-hint { font: 16px/1.375 var(--font-pixel-dense); }
 .blitz-shell .station-observation i { width: 44px; height: 44px; right: 8px; }
@@ -69,7 +70,7 @@
 @media (max-width: 760px) {
   .blitz-layout { grid-template-columns: minmax(0, 1fr); width: calc(100% - 24px); margin: 16px auto; gap: 16px; }
   .blitz-shell .blitz-topbar, .blitz-shell .blitz-topbar.is-active { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 12px; }
-  .blitz-topbar.is-active .shift-heading { grid-column: 1 / -1; }
+  .blitz-topbar.is-active .shift-heading { display: none; }
   .blitz-topbar.is-active .blitz-timer { grid-column: 1; text-align: left; }
   .blitz-topbar.is-active .shift-exit { grid-column: 2; }
   .blitz-profile { grid-template-columns: 80px minmax(0, 1fr); gap: 4px 16px; padding: 8px 12px; text-align: left; align-items: center; }
@@ -79,7 +80,8 @@
   .blitz-card, .blitz-question { padding: 20px 12px; }
   .blitz-rules { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .blitz-rules > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 12px; }
-  .blitz-shell .station-plot-workspace { grid-template-columns: minmax(0, 1fr); }
+  .blitz-shell .station-plot-workspace > .station-observations,
+  .blitz-shell .station-plot-workspace > .station-plot-panel { flex-basis: 100%; }
 }
 @media (max-width: 420px) {
   .blitz-shell .shift-sequence-row { grid-template-columns: 24px minmax(0, 1fr); }

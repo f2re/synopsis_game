@@ -175,3 +175,6 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 20px; border: 2px s
 .pixel-spinner { position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; background: currentColor; }
 .pixel-btn--loading { cursor: progress; }
 .pixel-dialog-close { padding: 6px; font-size: 24px; }
+
+/* A short back action stays whole while the neighbouring title may wrap. */
+.station-back { white-space: nowrap; flex: 0 0 auto; }

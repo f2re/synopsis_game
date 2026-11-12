@@ -1,4 +1,4 @@
-import { useCallback, useId, useLayoutEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type KeyboardEvent, type PointerEvent, type ReactNode, type Ref } from 'react';
+import { useCallback, useId, useLayoutEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type KeyboardEvent, type PointerEvent, type ReactNode, type Ref, type TextareaHTMLAttributes } from 'react';
 import './PixelScrollArea.css';
 
 type Axis = 'vertical' | 'horizontal';
@@ -12,12 +12,14 @@ export interface PixelScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
   viewportClassName?: string;
   contentClassName?: string;
   viewportRef?: Ref<HTMLDivElement>;
-  children: ReactNode;
+  /** Native editing and caret scrolling with the same rail as document areas. */
+  textareaProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'children' | 'className' | 'id' | 'role'>;
+  children?: ReactNode;
 }
 
 /** Native content scrolling, with a stable pixel track shared by all browsers. */
-export function PixelScrollArea({ label, orientation = 'vertical', className = '', viewportClassName = '', contentClassName = '', viewportRef, children, ...props }: PixelScrollAreaProps) {
-  const viewport = useRef<HTMLDivElement>(null);
+export function PixelScrollArea({ label, orientation = 'vertical', className = '', viewportClassName = '', contentClassName = '', viewportRef, textareaProps, children, ...props }: PixelScrollAreaProps) {
+  const viewport = useRef<HTMLDivElement | HTMLTextAreaElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const verticalTrack = useRef<HTMLDivElement>(null);
   const horizontalTrack = useRef<HTMLDivElement>(null);
@@ -28,17 +30,23 @@ export function PixelScrollArea({ label, orientation = 'vertical', className = '
   const viewportId = useId();
   const hasVertical = orientation !== 'horizontal';
   const hasHorizontal = orientation !== 'vertical';
+  const isTextarea = Boolean(textareaProps);
+  const refresh = useRef<() => void>(() => {});
 
   const assignViewport = useCallback((element: HTMLDivElement | null) => {
     viewport.current = element;
     if (typeof viewportRef === 'function') viewportRef(element);
     else if (viewportRef) viewportRef.current = element;
   }, [viewportRef]);
+  const assignTextarea = useCallback((element: HTMLTextAreaElement | null) => {
+    viewport.current = element;
+  }, []);
 
   useLayoutEffect(() => {
     const node = viewport.current;
     if (!node) return;
     let frame = 0;
+    let disposed = false;
     const measure = () => {
       frame = 0;
       const readAxis = (axis: Axis): ScrollMetrics => {
@@ -58,6 +66,7 @@ export function PixelScrollArea({ label, orientation = 'vertical', className = '
         (Object.keys(next[axis]) as (keyof ScrollMetrics)[]).every(key => previous[axis][key] === next[axis][key])) ? previous : next);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    refresh.current = schedule;
     measure();
     const observer = typeof ResizeObserver === 'function' ? new ResizeObserver(schedule) : null;
     for (const target of [node, content.current, verticalTrack.current, horizontalTrack.current]) if (target) observer?.observe(target);
@@ -65,8 +74,14 @@ export function PixelScrollArea({ label, orientation = 'vertical', className = '
     const mutation = new MutationObserver(schedule);
     if (content.current) mutation.observe(content.current, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['open', 'hidden'] });
     node.addEventListener('scroll', schedule, { passive: true });
+    node.addEventListener('input', schedule);
     node.addEventListener('load', schedule, true);
     window.addEventListener('resize', schedule);
+    // A textarea has a fixed border box. A newly loaded font can change its
+    // scrollHeight without producing a ResizeObserver notification.
+    const fonts = isTextarea ? document.fonts : undefined;
+    fonts?.addEventListener('loadingdone', schedule);
+    void fonts?.ready.then(() => { if (!disposed) schedule(); });
     // A rail is next to the native viewport. Wheel input on it must operate
     // this area rather than scroll a surrounding page or another panel.
     const railListeners: Array<[HTMLDivElement, (event: WheelEvent) => void]> = [];
@@ -87,16 +102,23 @@ export function PixelScrollArea({ label, orientation = 'vertical', className = '
       railListeners.push([rail, onWheel]);
     }
     return () => {
+      disposed = true;
       if (frame) cancelAnimationFrame(frame);
       observer?.disconnect();
       mutation.disconnect();
       node.removeEventListener('scroll', schedule);
+      node.removeEventListener('input', schedule);
       node.removeEventListener('load', schedule, true);
       window.removeEventListener('resize', schedule);
+      fonts?.removeEventListener('loadingdone', schedule);
       for (const [rail, onWheel] of railListeners) rail.removeEventListener('wheel', onWheel);
       drag.current = null;
+      if (refresh.current === schedule) refresh.current = () => {};
     };
-  }, [hasVertical, hasHorizontal]);
+  }, [hasVertical, hasHorizontal, isTextarea]);
+
+  // React writes controlled values as properties, outside MutationObserver.
+  useLayoutEffect(() => { refresh.current(); }, [textareaProps?.value, textareaProps?.defaultValue, textareaProps?.rows, textareaProps?.cols, textareaProps?.wrap]);
 
   const scrollTo = (axis: Axis, offset: number) => {
     const node = viewport.current;
@@ -174,10 +196,13 @@ export function PixelScrollArea({ label, orientation = 'vertical', className = '
 
   return <div className={`pixel-scroll-area pixel-scroll-area--${orientation} ${className}`.trim()}
     data-overflow-y={hasVertical && metrics.vertical.extent > 1} data-overflow-x={hasHorizontal && metrics.horizontal.extent > 1} {...props}>
-    <div ref={assignViewport} id={viewportId} className={`pixel-scroll-area__viewport ${viewportClassName}`.trim()}
-      role="region" aria-label={label} tabIndex={metrics.vertical.extent > 1 || metrics.horizontal.extent > 1 ? 0 : undefined}>
-      <div ref={content} className={`pixel-scroll-area__content ${contentClassName}`.trim()}>{children}</div>
-    </div>
+    {textareaProps
+      ? <textarea {...textareaProps} ref={assignTextarea} id={viewportId}
+          className={`pixel-scroll-area__viewport ${viewportClassName}`.trim()} aria-label={textareaProps['aria-label'] ?? label} />
+      : <div ref={assignViewport} id={viewportId} className={`pixel-scroll-area__viewport ${viewportClassName}`.trim()}
+          role="region" aria-label={label} tabIndex={metrics.vertical.extent > 1 || metrics.horizontal.extent > 1 ? 0 : undefined}>
+          <div ref={content} className={`pixel-scroll-area__content ${contentClassName}`.trim()}>{children}</div>
+        </div>}
     {hasVertical && renderTrack('vertical')}
     {hasHorizontal && renderTrack('horizontal')}
   </div>;

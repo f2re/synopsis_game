@@ -120,7 +120,7 @@ async function screenChecks() {
     '../ui/radioGroupKeys': load('apps/web/src/features/ui/radioGroupKeys.ts'),
     './feedback/DigitAnatomy': { DigitAnatomy: 'DigitAnatomy' }, '../../game/worldBridge': { createCodePostBridge: () => ({}) }, '@synopsis/world-engine': { worldAudio: {} },
     '../avatar/avatarOptions': options, '../avatar/SavedAvatarPortrait': portraitModule, './ShiftWorkspace.css': {},
-  });
+  }, { window: { setTimeout, clearTimeout }, AbortController });
   const task = JSON.parse(fs.readFileSync('apps/web/tools/review/blitz-practice-fixture.json', 'utf8')).active[0].task;
   for (const legacy of [false, true]) {
     const shiftRunner = new Runner(shift.ShiftWorkspace, { onExit() {} });

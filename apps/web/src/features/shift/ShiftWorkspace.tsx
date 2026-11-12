@@ -83,7 +83,9 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
 
   useEffect(() => {
     let active = true;
-    api.startShift()
+    const abort = new AbortController();
+    const timeout = window.setTimeout(() => abort.abort(), 8_000);
+    api.startShift(abort.signal)
       .then((started) => {
         if (!active) return;
         setShiftId(started.shiftId);
@@ -96,9 +98,9 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
         setResumed(started.progress.answered > 0 || started.retryAvailable || Boolean(started.reference));
         onProgressChanged?.(started.progress, started.equipment.assistedTasks);
       })
-      .catch((reason) => active && setError(reason instanceof Error ? reason.message : 'Не удалось начать смену'))
-      .finally(() => active && setLoading(false));
-    return () => { active = false; };
+      .catch((reason) => active && setError(abort.signal.aborted ? 'Сервер не ответил вовремя. Вернитесь на станцию и откройте смену ещё раз.' : reason instanceof Error ? reason.message : 'Не удалось начать смену'))
+      .finally(() => { window.clearTimeout(timeout); if (active) setLoading(false); });
+    return () => { active = false; window.clearTimeout(timeout); abort.abort(); };
   }, []);
 
   useEffect(() => {
@@ -248,6 +250,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
         <section className="shift-loading" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
           <p>Готовим учебную смену…</p>
+          <button type="button" className="secondary-button" onClick={() => onExit('startup-error')}>На станцию</button>
         </section>
       </main>
     );
@@ -304,7 +307,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
           />
         </div>
         <button type="button" className="shift-exit" onClick={() => onExit('manual')}>
-          <PixelIcon name="logout" size="sm" />
+          <PixelIcon name="logout" size="sm" alt="" />
           <span>Сдать смену</span>
         </button>
       </header>
@@ -328,9 +331,9 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
             : findError
               ? 'Проверьте согласованность уже нанесённых наблюдений. Выберите станцию, в которой нарушено заданное физическое условие.'
               : stationBoard
-                ? 'Работайте сразу с несколькими станциями на едином листе. Координаты станций и моделей нормированы и не зависят от размера экрана.'
+                ? 'Нанесите наблюдения возле соответствующих станций.'
                 : stationPlot
-                  ? 'Размещайте метеоэлементы по их нормативным позициям на станционной модели. Координатная сетка не зависит от разрешения экрана.'
+                  ? 'Разместите метеоэлементы по их нормативным позициям вокруг знака станции.'
                   : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
           {contentStatus !== 'published' && <div className="shift-draft">Задания проходят методическую проверку.</div>}
         </aside>

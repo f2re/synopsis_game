@@ -63,9 +63,12 @@ Run repository validators before handoff:
 python tools/validate_repo.py
 python tools/validate_architecture.py
 python tools/validate_brand.py
-python tools/validate_pixel_art.py
+python tools/assets/check_asset_contract.py
+python tools/assets/check_asset_manifests.py
 python tools/validate_fonts.py
 ```
+
+Asset validators check contracts and manifest structure. They do not replace the independent pixel-art and Art Director screenshot acceptance required below.
 
 ## Agent routing
 

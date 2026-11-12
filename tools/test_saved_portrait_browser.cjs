@@ -180,6 +180,12 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await assertPortrait(page, '.inventory-saved-portrait .saved-avatar-portrait', saved, 80);
     assert.equal(await stage.getAttribute('data-outfit-state'), 'draft');
     assert.deepEqual((await request('/api/identity/me')).user.avatarPortrait, saved.avatarPortrait);
+    const failureVisibility = await page.locator('.inventory-footer').evaluate(footer => {
+      const alert = footer.querySelector('[role="alert"]')?.getBoundingClientRect();
+      const retry = footer.querySelector('.inventory-button--primary')?.getBoundingClientRect();
+      return { errorVisible: Boolean(alert && alert.top >= 0 && alert.bottom <= innerHeight), retryVisible: Boolean(retry && retry.top >= 0 && retry.bottom <= innerHeight) };
+    });
+    assert.deepEqual(failureVisibility, { errorVisible: true, retryVisible: true }, 'The actual save failure and retry action are visible together without extra scrolling');
     await capture(page, `portrait-save-network-failure-${viewport.width}`);
     await page.unroute('**/api/identity/avatar', abortSave);
     await page.getByRole('button', { name: 'Отменить изменения', exact: true }).click();

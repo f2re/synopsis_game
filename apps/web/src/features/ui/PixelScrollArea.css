@@ -12,6 +12,8 @@
 .pixel-scroll-area[data-overflow-y="true"] { grid-template-columns: minmax(0, 1fr) 18px; column-gap: 6px; }
 .pixel-scroll-area[data-overflow-x="true"] { grid-template-rows: minmax(0, 1fr) 18px; row-gap: 6px; }
 .pixel-scroll-area__viewport {
+  /* Keep absolute helpers inside their scrolling viewport, including clipped labels. */
+  position: relative;
   grid-area: 1 / 1;
   min-width: 0;
   min-height: 0;
@@ -24,7 +26,7 @@
 .pixel-scroll-area--vertical > .pixel-scroll-area__viewport { overflow-x: hidden; }
 .pixel-scroll-area--horizontal > .pixel-scroll-area__viewport { overflow-y: hidden; }
 .pixel-scroll-area__viewport::-webkit-scrollbar { display: none; width: 0; height: 0; }
-.pixel-scroll-area__viewport:focus-visible { outline-offset: -2px; }
+.pixel-scroll-area > .pixel-scroll-area__viewport[role="region"]:focus-visible { outline-offset: -2px; }
 .pixel-scroll-area__content { display: flow-root; min-width: 0; }
 .pixel-scroll-area__track {
   position: relative;
@@ -40,7 +42,7 @@
 .pixel-scroll-area__track--vertical { grid-area: 1 / 2; }
 .pixel-scroll-area__track--horizontal { grid-area: 2 / 1; }
 .pixel-scroll-area__track[data-overflow="false"] { display: none; }
-.pixel-scroll-area__track:focus-visible { outline-offset: -2px; }
+.pixel-scroll-area > .pixel-scroll-area__track[role="scrollbar"]:focus-visible { outline-offset: -2px; }
 .pixel-scroll-area__thumb {
   position: absolute;
   display: block;

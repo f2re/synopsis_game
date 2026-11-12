@@ -54,9 +54,11 @@ async function exerciseScrollbar(page, area, report, label, axis = 'vertical') {
   const thumb = track.locator('.pixel-scroll-area__thumb');
   assert.equal(await thumb.evaluate(node => getComputedStyle(node).borderRadius), '0px', `${label}: square thumb`);
   const controlId = await track.getAttribute('aria-controls');
-  const atTop = () => page.waitForFunction(({ id, vertical }) => {
-    const node = document.getElementById(id); return (vertical ? node.scrollTop : node.scrollLeft) <= 1;
-  }, { id: controlId, vertical });
+  const atTop = () => page.waitForFunction(({ id, vertical, axis }) => {
+    const node = document.getElementById(id);
+    const control = [...document.querySelectorAll('[role="scrollbar"]')].find(element => element.getAttribute('aria-controls') === id && element.getAttribute('aria-orientation') === axis);
+    return (vertical ? node.scrollTop : node.scrollLeft) <= 1 && control && Number(control.getAttribute('aria-valuenow')) <= 1;
+  }, { id: controlId, vertical, axis });
   const moved = () => page.waitForFunction(({ id, vertical }) => {
     const node = document.getElementById(id); return (vertical ? node.scrollTop : node.scrollLeft) > 1;
   }, { id: controlId, vertical });
@@ -92,6 +94,12 @@ async function exerciseScrollbar(page, area, report, label, axis = 'vertical') {
     const node = document.getElementById(id); return vertical ? node.scrollHeight - node.clientHeight - node.scrollTop <= 2 : node.scrollWidth - node.clientWidth - node.scrollLeft <= 2;
   }, { id: controlId, vertical });
   const bottom = await measure();
+  await page.waitForFunction(({ id, axis }) => {
+    const node = document.getElementById(id);
+    const control = [...document.querySelectorAll('[role="scrollbar"]')].find(element => element.getAttribute('aria-controls') === id && element.getAttribute('aria-orientation') === axis);
+    const actual = axis === 'vertical' ? node.scrollTop : node.scrollLeft;
+    return control && Math.abs(Number(control.getAttribute('aria-valuenow')) - actual) <= 2;
+  }, { id: controlId, axis });
   assert.ok(Number(await track.getAttribute('aria-valuenow')) > 0, `${label}: accessible value follows scrolling`);
   await track.press(vertical ? 'ArrowUp' : 'ArrowLeft');
   await page.waitForFunction(({ id, vertical, offset }) => {
@@ -187,6 +195,15 @@ async function checkLibrary({ page, base, viewport, report, capture }) {
   await page.getByLabel('Что хотите найти?', { exact: true }).fill(first.title);
   await page.locator('.library-result').filter({ has: page.getByText(first.title, { exact: true }) }).click();
   await page.getByRole('heading', { name: first.title, exact: true }).waitFor();
+  if (viewport.width > 760) {
+    const columns = await page.locator('.library-body').evaluate(node => {
+      const frame = node.getBoundingClientRect(), article = node.querySelector('.library-reader').getBoundingClientRect();
+      return { width: frame.width, articleWidth: article.width,
+        unusedRight: frame.right - parseFloat(getComputedStyle(node).borderRightWidth) - article.right };
+    });
+    assert.ok(Math.abs(columns.unusedRight) <= 2, `Library article fills the available grid width: ${JSON.stringify(columns)}`);
+    report.cases.push({ name: `all-library-column-fill-${viewport.width}`, ...columns });
+  }
   const favorite = page.locator('.library-favorite');
   await checkHitTarget(favorite, 'Library bookmark'); await favorite.click();
   assert.equal(await favorite.getAttribute('aria-pressed'), 'true');
@@ -349,12 +366,71 @@ async function runAdditionalScreenChecks({ base, browser, report, capture, waitF
   page.on('pageerror', error => report.errors.push({ scenario: 'narrow-overview', viewport: 320, message: error.message }));
   try {
     await page.goto(base); await waitForCampus(page); await capture(page, 'all-home-320');
-    for (const path of ['help', 'settings', 'library']) {
-      await page.goto(base + '/' + path); await page.locator('main h1').waitFor();
+    for (const [path, heading] of [['help', 'Помощь и управление'], ['settings', 'Настройки'], ['library', 'Библиотека синоптика']]) {
+      await page.goto(base + '/' + path);
+      await page.getByRole('heading', { name: heading, exact: true }).waitFor();
+      await page.locator('.app-page-scroll').waitFor();
       await checkPageScroll({ page, viewport, report, capture }, 'all-narrow-' + path);
     }
     report.cases.push({ name: 'all-narrow-overview-320', screens: ['station', 'help', 'settings', 'library'], innerHorizontalOverflow: false });
   } finally { await context.close(); }
+
+  if (report.engine === 'chromium') {
+    const colors = await browser.newContext({ viewport: { width: 390, height: 844 }, forcedColors: 'active', reducedMotion: 'reduce' });
+    const native = await colors.newPage();
+    native.on('pageerror', error => report.errors.push({ scenario: 'forced-colors', message: error.message }));
+    try {
+      await native.goto(base + '/help'); await native.getByRole('heading', { name: 'Помощь и управление' }).waitFor();
+      assert.ok(await native.evaluate(() => matchMedia('(forced-colors: active)').matches));
+      const viewportNode = native.locator('.app-page-scroll > .pixel-scroll-area__viewport');
+      const bounds = await viewportNode.evaluate(node => ({ height: node.clientHeight, total: node.scrollHeight, width: node.clientWidth, totalWidth: node.scrollWidth, nativeWidth: getComputedStyle(node).scrollbarWidth }));
+      assert.ok(bounds.height > 0 && bounds.total > bounds.height, 'Forced colors preserve the bounded native scrolling viewport');
+      assert.ok(bounds.totalWidth <= bounds.width + 2, 'Forced colors do not conceal horizontal overflow');
+      assert.notEqual(bounds.nativeWidth, 'none', 'Native scrollbar is enabled in forced colors');
+      assert.equal(await native.locator('.app-page-scroll > .pixel-scroll-area__track').isVisible(), false, 'Custom scrollbar yields to the system high-contrast scrollbar');
+      await viewportNode.focus(); await viewportNode.press('End');
+      await native.waitForFunction(() => {
+        const node = document.querySelector('.app-page-viewport'); return node.scrollTop > 0 && node.scrollHeight - node.clientHeight - node.scrollTop <= 2;
+      });
+      const last = native.locator('.station-help-faq summary').last();
+      await checkHitTarget(last, 'Last FAQ in forced colors'); await last.click();
+      assert.ok(await last.evaluate(node => node.parentElement.open));
+      await viewportNode.focus(); await viewportNode.press('End'); await nextPaint(native);
+      await capture(native, 'all-forced-colors-help-bottom-390');
+      report.cases.push({ name: 'all-forced-colors-native-scroll-390', media: 'active', customTrackHidden: true, nativeEndKey: true, lastFaqReachable: true, ...bounds });
+    } finally { await colors.close(); }
+  }
+
+  const touch = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'reduce' });
+  await touch.addInitScript(() => {
+    if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true }));
+  });
+  const tapped = await touch.newPage();
+  tapped.on('pageerror', error => report.errors.push({ scenario: 'touch-controls', message: error.message }));
+  try {
+    await tapped.goto(base); await waitForCampus(tapped);
+    await tapped.locator('.hub-profile-button').tap(); await tapped.getByRole('dialog', { name: 'Наблюдатель' }).waitFor();
+    await tapped.getByRole('button', { name: 'Закрыть окно', exact: true }).tap();
+    await tapped.locator('.hub-dock__route').tap(); await tapped.getByRole('dialog', { name: 'На станции', exact: true }).waitFor();
+    await tapped.getByRole('button', { name: 'Закрыть окно', exact: true }).tap();
+    await tapped.locator('.hub-dock__archive').tap(); await tapped.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
+    await tapped.getByRole('button', { name: 'Открыть таблицы КН-01 →', exact: true }).tap();
+    const dialog = tapped.getByRole('dialog', { name: 'Наставление КН-01', exact: true }); await dialog.waitFor();
+    const track = dialog.locator('.codebook-scroll > [role="scrollbar"][aria-orientation="vertical"]');
+    await track.waitFor({ state: 'visible' });
+    const bounds = await track.boundingBox();
+    await tapped.touchscreen.tap(bounds.x + bounds.width / 2, bounds.y + bounds.height - 3);
+    await tapped.waitForFunction(() => document.querySelector('.codebook-scroll > .pixel-scroll-area__viewport').scrollTop > 0);
+    await capture(tapped, 'all-touch-codebook-scrolled-390');
+    await dialog.getByRole('button', { name: 'Закрыть справочник', exact: true }).tap();
+    await tapped.getByRole('button', { name: /Назад/ }).first().tap(); await waitForCampus(tapped);
+    await tapped.getByRole('button', { name: 'Настройки', exact: true }).tap();
+    await tapped.getByRole('heading', { name: 'Настройки', exact: true }).waitFor();
+    await tapped.getByRole('button', { name: 'Готово', exact: true }).tap(); await waitForCampus(tapped);
+    await tapped.locator('.hub-dock__guide').tap(); await tapped.getByRole('heading', { name: 'Помощь и управление' }).waitFor();
+    await tapped.getByRole('button', { name: /Назад/ }).first().tap(); await waitForCampus(tapped);
+    report.cases.push({ name: 'all-touch-station-controls-390', hasTouch: true, profile: true, route: true, library: true, settings: true, help: true, codebookTrackTapScroll: true, nativeSwipeClaimed: false });
+  } finally { await touch.close(); }
 }
 
 module.exports = { runAdditionalScreenChecks, exerciseScrollbar, checkHitTarget };

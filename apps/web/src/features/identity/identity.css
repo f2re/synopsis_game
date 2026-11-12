@@ -547,7 +547,32 @@
 .admin-import-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 .admin-shell .quick-add-row { min-width: 0; }
 .admin-shell .quick-add-row input { min-width: 0; min-height: 44px; }
-.admin-shell .import-textarea { width: 100%; min-width: 0; resize: vertical; }
+.admin-shell .import-textarea-scroll {
+  height: 144px;
+  padding: 4px;
+  border: 2px solid var(--ui-panel-border-dark);
+  background: var(--color-ui-teal-0);
+  box-shadow: var(--pixel-bevel-in);
+}
+.admin-shell .import-textarea-scroll:has(textarea:focus-visible) {
+  outline: 2px solid var(--color-window-light-3);
+  outline-offset: 4px;
+}
+.admin-shell .import-textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  resize: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.admin-shell .import-textarea:focus { border: 0; box-shadow: none; }
+.admin-shell .import-textarea:focus-visible { outline: none; }
 .admin-shell .roster-search-box input { width: 100%; }
 .admin-shell .roster-table { min-width: 720px; }
 .admin-shell .roster-table thead th, .admin-shell .roster-badge { font-size: 14px; }
@@ -562,19 +587,54 @@
 .compact-panel .form-stack > label { display: grid; gap: 8px; min-width: 0; }
 .compact-panel input { width: 100%; min-width: 0; min-height: 44px; }
 
-/* The modal has one scrollable surface; its forms never create a second rail. */
-.hub-auth-scroll { height: 100dvh; padding: 8px; }
-.hub-auth-content { min-height: 100%; display: grid; }
+/* The dialog centers one framed viewport. Its rail belongs to the form, and
+   the full-screen outer surface remains available for backdrop dismissal. */
+.hub-auth-dialog[open] { display: grid; place-items: center; padding: 12px; }
+.hub-auth-scroll {
+  width: min(520px, 100%);
+  max-height: calc(100dvh - 24px);
+  padding: 4px;
+  border: 2px solid var(--ui-chrome-edge);
+  background: var(--ui-chrome);
+  box-shadow: inset 0 2px 0 var(--ui-chrome-light), 0 4px 0 #070d1e;
+}
+.hub-auth-dialog:has(.login-panel) .hub-auth-scroll { width: min(460px, 100%); }
+.hub-auth-content { min-height: 0; display: block; }
 .hub-auth-dialog :is(.modal-backdrop, .login-modal-backdrop) {
   position: relative;
   inset: auto;
+  display: block;
   width: 100%;
-  min-height: 100%;
+  min-height: 0;
+  padding: 0;
   background: transparent;
   backdrop-filter: none;
   animation: none;
 }
-.hub-auth-dialog :is(.login-panel, .compact-panel, .reset-modal, .batch-result-modal, .modal-window) { max-height: none; overflow: visible; }
+.hub-auth-dialog :is(.login-panel, .compact-panel, .reset-modal, .batch-result-modal, .modal-window) {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+  animation: none;
+}
+.hub-auth-dialog .auth-panel-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding-block: 6px;
+  background: var(--ui-chrome);
+}
+.hub-auth-dialog .auth-panel-header h2 { min-width: 0; flex: 1; margin: 0; font-size: 22px; line-height: 1.3; overflow-wrap: anywhere; }
+.hub-auth-dialog .auth-panel-close { flex: 0 0 44px; margin-left: auto; }
+.hub-auth-viewport { scroll-padding-top: 112px; }
 
 @media (max-width: 900px) {
   .admin-shell .admin-groups-layout { grid-template-columns: minmax(0, 1fr); }

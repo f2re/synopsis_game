@@ -39,12 +39,14 @@ async function focusInside(page, dialog) {
   }
 }
 async function backdropClick(page, dialog) {
-  const point = await dialog.locator('.modal-backdrop').evaluate(node => {
-    const r = node.getBoundingClientRect();
-    const left = Math.max(0, r.left), top = Math.max(0, r.top);
-    const right = Math.min(innerWidth, r.right), bottom = Math.min(innerHeight, r.bottom);
-    for (const [x, y] of [[left + 2, top + 2], [left + 2, (top + bottom) / 2], [right - 2, top + 2], [right - 2, bottom - 2]]) {
-      if (document.elementFromPoint(x, y) === node) return { x, y };
+  const point = await dialog.evaluate(dialog => {
+    for (const node of [dialog, ...dialog.querySelectorAll('.modal-backdrop')]) {
+      const r = node.getBoundingClientRect();
+      const left = Math.max(0, r.left), top = Math.max(0, r.top);
+      const right = Math.min(innerWidth, r.right), bottom = Math.min(innerHeight, r.bottom);
+      for (const [x, y] of [[left + 2, top + 2], [left + 2, (top + bottom) / 2], [right - 2, top + 2], [right - 2, bottom - 2]]) {
+        if (document.elementFromPoint(x, y) === node) return { x, y };
+      }
     }
     return null;
   });
@@ -56,7 +58,177 @@ async function modalScroll(page, dialog, report, capture, name) {
   await capture(page, name);
   const track = dialog.locator('[role="scrollbar"][aria-orientation="vertical"]');
   if (await track.isVisible()) {
-    await track.focus(); await track.press('End'); await capture(page, name + '-bottom'); await track.press('Home');
+    await track.focus(); await track.press('End'); await capture(page, name + '-bottom');
+  }
+  const geometry = await dialog.evaluate(dialog => {
+    const frame = dialog.querySelector('.hub-auth-scroll').getBoundingClientRect();
+    const panel = dialog.querySelector('.modal-backdrop > .panel').getBoundingClientRect();
+    const rail = dialog.querySelector('.hub-auth-scroll > [aria-orientation="vertical"]').getBoundingClientRect();
+    const close = dialog.querySelector('.auth-panel-close'), box = close.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    return { closeWidth: box.width, closeHeight: box.height,
+      closeVisible: box.top >= 0 && box.bottom <= innerHeight && box.left >= 0 && box.right <= innerWidth,
+      closeHit: hit === close || close.contains(hit), railVisible: rail.height > 0,
+      railInset: frame.right - rail.right, railPanelGap: rail.left - panel.right };
+  });
+  assert.ok(geometry.closeWidth >= 44 && geometry.closeHeight >= 44 && geometry.closeVisible && geometry.closeHit, `${name}: close remains reachable after scrolling to the end`);
+  if (geometry.railVisible) assert.ok(geometry.railInset >= 0 && geometry.railInset <= 8 && geometry.railPanelGap >= 0 && geometry.railPanelGap <= 8,
+    `${name}: scrollbar is inside the form frame beside its panel, not on the screen edge`);
+  report.cases.push({ name: name + '-frame', ...geometry });
+  if (await track.isVisible()) await track.press('Home');
+}
+
+async function exerciseImportTextarea(page, textarea, report, capture, tag) {
+  const value = await textarea.inputValue();
+  const area = page.locator('.import-textarea-scroll');
+  assert.equal(await area.getByRole('textbox', { name: 'Список учащихся для добавления', exact: true }).count(), 1,
+    'The editable viewport keeps its native textbox role');
+  await exerciseScrollbar(page, area, report, `admin-import-pixel-scroll-${tag}`);
+  await textarea.scrollIntoViewIfNeeded(); await textarea.focus();
+  const metrics = await textarea.evaluate(node => {
+    const style = getComputedStyle(node), box = node.getBoundingClientRect();
+    return { clientHeight: node.clientHeight, scrollHeight: node.scrollHeight, width: box.width,
+      scrollbarColor: style.scrollbarColor, scrollbarWidth: style.scrollbarWidth };
+  });
+  assert.ok(metrics.scrollHeight > metrics.clientHeight, 'The filled import textarea has real scrollable content');
+  await textarea.press('Control+Home');
+  await page.waitForFunction(() => document.querySelector('.import-textarea').scrollTop <= 1);
+  assert.equal(await textarea.evaluate(node => node.selectionStart), 0, 'Ctrl+Home moves the actual text caret');
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await capture(page, `admin-import-filled-${tag}`);
+  await textarea.press('Control+End');
+  await page.waitForFunction(() => {
+    const node = document.querySelector('.import-textarea');
+    return node.scrollTop >= node.scrollHeight - node.clientHeight - 1;
+  });
+  assert.equal(await textarea.evaluate(node => node.selectionEnd), value.length, 'Ctrl+End moves the actual text caret');
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await capture(page, `admin-import-filled-bottom-${tag}`);
+  await textarea.press('Control+Home');
+  await page.waitForFunction(() => document.querySelector('.import-textarea').scrollTop <= 1);
+  await textarea.hover(); await page.mouse.wheel(0, 100);
+  await page.waitForFunction(() => document.querySelector('.import-textarea').scrollTop > 0);
+  assert.equal(await textarea.inputValue(), value, 'Keyboard and wheel scrolling preserve every imported name');
+
+  // Paste through the browser clipboard and normal keyboard action. The long
+  // draft is never submitted; the original 18 records are restored below.
+  const pasted = Array.from({ length: 120 }, (_, index) => `Участник длинного списка ${tag} ${index + 1}`).join('\n');
+  await textarea.click();
+  await page.evaluate(text => navigator.clipboard.writeText(text), pasted);
+  await textarea.press('Control+A'); await textarea.press('Control+V');
+  await page.waitForFunction(value => document.querySelector('.import-textarea').value === value, pasted);
+  await textarea.press('Control+End'); await textarea.press('Enter'); await textarea.press('X');
+  await page.waitForFunction(() => {
+    const node = document.querySelector('.import-textarea');
+    // Native caret scrolling may leave only the trailing padding below view.
+    // The last line itself must fit; scrollbar End is checked separately above.
+    const padding = parseFloat(getComputedStyle(node).paddingBottom) || 0;
+    return node.scrollHeight - padding - node.scrollTop <= node.clientHeight + 1;
+  });
+  assert.equal(await textarea.inputValue(), pasted + '\nX', 'Typing after a long paste preserves native insertion');
+  assert.equal(await textarea.evaluate(node => node.selectionEnd), pasted.length + 2, 'The caret follows insertion at the bottom');
+  await capture(page, `admin-import-long-bottom-${tag}`);
+  await textarea.press('Control+Home'); await textarea.press('Shift+End');
+  assert.ok(await textarea.evaluate(node => node.selectionStart === 0 && node.selectionEnd > 0), 'Native range selection remains available');
+  await textarea.fill('');
+  await area.getByRole('scrollbar').waitFor({ state: 'hidden' });
+  await textarea.fill(value);
+  await area.getByRole('scrollbar').waitFor({ state: 'visible' });
+  report.cases.push({ name: `admin-import-textarea-scroll-${tag}`, ...metrics,
+    keyboardHomeEnd: true, wheel: true, textPreserved: true, clipboardPaste: 120,
+    nativeSelection: true, caretAtBottom: true, clearsRail: true, controlledValueRestoresRail: true });
+}
+
+async function checkPersonalCode({ base, browser, report, capture, viewport, student }) {
+  const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  await context.addInitScript(() => localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true })));
+  const page = await context.newPage(), tag = String(viewport.width);
+  page.on('pageerror', error => report.errors.push({ scenario: 'personal-code', viewport: viewport.width, message: error.message }));
+  let token, releaseSave = () => {};
+  try {
+    await page.goto(base + '/');
+    const profile = page.locator('.hub-profile-button');
+    await profile.click();
+    await page.getByRole('button', { name: 'Войти в учебную группу', exact: true }).click();
+    const loginDialog = page.getByRole('dialog', { name: 'Вход в учебную группу', exact: true });
+    await loginDialog.waitFor();
+    await loginDialog.getByLabel('Группа', { exact: true }).selectOption({ label: student.groupId });
+    await loginDialog.getByLabel('Пользователь', { exact: true }).selectOption({ label: student.displayName });
+    await loginDialog.getByLabel('Задать персональный код (необязательно)', { exact: true }).fill('');
+    const login = await actionResponse(page, 'POST', '/api/identity/login', () => loginDialog.getByRole('button', { name: 'Войти', exact: true }).click());
+    token = login.token;
+    assert.equal(login.user.id, student.id); assert.equal(login.user.codeSet, false);
+    await loginDialog.waitFor({ state: 'hidden' });
+    await profile.click();
+    await page.getByRole('button', { name: 'Задать код входа', exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: 'Персональный код входа', exact: true });
+    await dialog.waitFor(); await focusInside(page, dialog);
+    assert.equal(await dialog.getByLabel('Текущий код', { exact: true }).count(), 0, 'First code requires no previous code');
+    const next = dialog.getByLabel('Новый персональный код', { exact: true });
+    const confirm = dialog.getByLabel('Повторите новый код', { exact: true });
+    const save = dialog.getByRole('button', { name: 'Сохранить код', exact: true });
+    let writes = 0;
+    const countWrites = req => { if (req.method() === 'POST' && new URL(req.url()).pathname === '/api/identity/set-code') writes++; };
+    page.on('request', countWrites);
+    await next.fill('studentone'); await confirm.fill('different'); await save.click();
+    await dialog.getByRole('alert').filter({ hasText: 'Новые коды не совпадают' }).waitFor();
+    assert.equal(writes, 0, 'Personal-code mismatch does not send a write');
+    await modalScroll(page, dialog, report, capture, `admin-personal-code-validation-${tag}`);
+    await confirm.fill('studentone');
+
+    // Delay dispatch, then continue the original request to the actual server.
+    // Neither the successful response nor the saved profile is fabricated.
+    let notifyHeld;
+    const held = new Promise(resolve => { notifyHeld = resolve; });
+    const release = new Promise(resolve => { releaseSave = resolve; });
+    await page.route('**/api/identity/set-code', async route => { notifyHeld(); await release; await route.continue(); }, { times: 1 });
+    const finished = page.waitForResponse(response => routeIs(response, 'POST', '/api/identity/set-code'));
+    void finished.catch(() => {});
+    await save.click(); await held;
+    await dialog.getByRole('button', { name: 'Закрыть окно', exact: true }).click();
+    await dialog.waitFor({ state: 'hidden' });
+    assert.ok(await profile.evaluate(node => node === document.activeElement), 'Closing a pending code save returns to the profile control');
+    await profile.click(); await page.getByRole('button', { name: 'Задать код входа', exact: true }).click(); await dialog.waitFor();
+    const replacement = await dialog.elementHandle();
+    assert.equal(await dialog.getByLabel('Текущий код', { exact: true }).count(), 0);
+    releaseSave();
+    const response = await finished; assert.equal(response.status(), 200);
+    const updated = (await response.json()).user;
+    assert.equal(updated.id, student.id); assert.equal(updated.codeSet, true);
+    await dialog.getByLabel('Текущий код', { exact: true }).waitFor();
+    assert.ok(await replacement.evaluate(node => node.isConnected && node.open), 'Late success updates the owner without closing the replacement form');
+    assert.equal((await request(context, base, '/api/identity/me', { token })).user.codeSet, true);
+    await capture(page, `admin-personal-code-race-${tag}`);
+    await page.keyboard.press('Escape'); await dialog.waitFor({ state: 'hidden' });
+    assert.ok(await profile.evaluate(node => node === document.activeElement));
+
+    await profile.click(); await page.getByRole('button', { name: 'Сменить код входа', exact: true }).click(); await dialog.waitFor();
+    await dialog.getByLabel('Текущий код', { exact: true }).fill('studentone');
+    await next.fill('studenttwo'); await confirm.fill('studenttwo');
+    const changed = await actionResponse(page, 'POST', '/api/identity/set-code', () => save.click());
+    assert.equal(changed.user.id, student.id); assert.equal(changed.user.codeSet, true);
+    await dialog.waitFor({ state: 'hidden' });
+    assert.ok(await profile.evaluate(node => node === document.activeElement), 'Completed save returns focus');
+    await profile.click(); await page.getByRole('button', { name: 'Сменить код входа', exact: true }).click(); await dialog.waitFor();
+    assert.equal(await dialog.getByLabel('Текущий код', { exact: true }).inputValue(), '');
+    assert.equal(await next.inputValue(), '', 'Saved code fields are cleared on reopening');
+    await capture(page, `admin-personal-code-saved-${tag}`);
+    await page.keyboard.press('Escape'); await dialog.waitFor({ state: 'hidden' });
+    assert.ok(await profile.evaluate(node => node === document.activeElement));
+    const verified = await request(context, base, '/api/identity/login', { method: 'POST', data: { userId: student.id, code: 'studenttwo' } });
+    assert.equal(verified.user.id, student.id);
+    await request(context, base, '/api/identity/logout', { method: 'POST', token: verified.token });
+    assert.equal(writes, 2); page.off('request', countWrites);
+    report.cases.push({ name: `admin-personal-code-controls-${tag}`, viewport, disposableStudent: true, stationLogin: true,
+      mismatch: true, firstCodeSavedByRealServer: true, delayedRealRequest: true, closeDuringSave: true,
+      replacementDialogSurvives: true, owningProfileUpdated: true, currentCodeFieldAppears: true,
+      changeCode: true, reopenedFieldsCleared: true, escape: true, focusReturn: true, actualLoginWithSavedCode: true });
+  } catch (error) {
+    await capture(page, `admin-personal-code-failure-${tag}`).catch(() => {}); throw error;
+  } finally {
+    releaseSave();
+    if (token) await context.request.post(base + '/api/identity/logout', { headers: { authorization: `Bearer ${token}` } }).catch(() => {});
+    await context.close();
   }
 }
 
@@ -127,6 +299,7 @@ async function checkAdminViewport({ base, browser, report, capture, adminCode, v
     const importSubmit = page.locator('.group-add-box button[type="submit"]');
     assert.equal(await importSubmit.isDisabled(), true);
     await textarea.fill('\n' + names.join('\n') + '\n');
+    await exerciseImportTextarea(page, textarea, report, capture, tag);
     await checkHitTarget(importSubmit, 'Submit text import');
     const imported = await actionResponse(page, 'POST', '/api/admin/users/batch', () => importSubmit.click(), 201);
     assert.equal(imported.count, names.length); await rows(page, 20);
@@ -235,6 +408,7 @@ async function checkAdminViewport({ base, browser, report, capture, adminCode, v
       resetCancel: true, resetConfirmed: true, resetAllowsActualLoginWithoutCode: true,
       modalFocus: true, escape: true, backdrop: true, focusReturn: true,
       adminLoginError: true, codeMismatch: true, wrongCurrentCode: true, bootstrapCodeUnchanged: true, reloadPersistence: true, returnToStation: true });
+    await checkPersonalCode({ base, browser, report, capture, viewport, student: first });
   } catch (error) {
     await capture(page, `admin-failure-${tag}`).catch(() => {}); throw error;
   } finally {

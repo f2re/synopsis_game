@@ -15,7 +15,9 @@ export function HubModalLayer({ label, onClose, children }: { label: string; onC
       if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, []);
-  return <dialog ref={ref} className="hub-auth-dialog" tabIndex={-1} aria-label={label} onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); onClose(); }}>
+  return <dialog ref={ref} className="hub-auth-dialog" tabIndex={-1} aria-label={label} onKeyDown={keepTabInDialog}
+    onCancel={(event) => { event.preventDefault(); onClose(); }}
+    onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <PixelScrollArea label={label} className="hub-auth-scroll" viewportClassName="hub-auth-viewport" contentClassName="hub-auth-content">{children}</PixelScrollArea>
   </dialog>;
 }

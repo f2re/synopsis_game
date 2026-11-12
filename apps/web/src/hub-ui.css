@@ -135,8 +135,9 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
 .hub-profile-identity p { margin: 0; font-size: 16px; line-height: 1.5; }
 .hub-profile-navigation { padding-bottom: 16px; margin-bottom: 8px; }
 .hub-auth-dialog { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: hidden; color: var(--ui-text-primary); }
-.hub-auth-dialog::backdrop { background: transparent; }
+.hub-auth-dialog::backdrop { background: #040a16b8; }
 .hub-journal { display: grid; gap: 20px; }
+.hub-journal > p { margin: 0; }
 .hub-journal h2 { margin: 4px 0 0; font-size: 20px; font-weight: normal; }
 .hub-journal__summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
 .hub-journal__summary > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; padding: 16px; background: var(--hub-panel); border: 2px solid var(--hub-border); }
