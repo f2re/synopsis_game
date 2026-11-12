@@ -1,0 +1,165 @@
+{
+  "task": "UI-R06",
+  "date": "2026-11-12",
+  "source_commit": "a782756ee5247c831f430c2356d5d2b22224b1e4",
+  "ci_merge_commit": "aafa420267f705528e9721fcbb9c47f8d096a7a7",
+  "run_id": 43272512433,
+  "run_url": "https://github.com/f2re/synopsis_game/actions/runs/43272512433",
+  "runtime_trees": {
+    "apps": "3898c8274430f56a4dfc7279acb42fae42585790",
+    "assets": "28a9880e9a36f9bb42236b3c219af3d5eb529804",
+    "config": "61adb9ab81e9f26bcd8abb22966e6a693cf2cfaa",
+    "content": "1b9ceff658b0b27edf41fce99504e38ff5f8debf",
+    "packages": "371f9caa9f6e3a9e5dca907e5bfb9ffed0b920f3",
+    "tools": "4719142b38ef7974ff79b897b7b10e6955d10ec9"
+  },
+  "reports": [
+    {
+      "file": "firefox-report.json",
+      "browser": "153.0",
+      "job_id": 131372381456,
+      "artifact_id": 13969846251,
+      "status": "PASS",
+      "cases": 481,
+      "screenshots": 285,
+      "sha256": "771a2b274dc1265ca7a3e4b32675f461365593638cf8a11cebc49aea9bdb5b6e",
+      "git_blob_sha": "bd7c9f5be5bbb2166736813b7ccc5157e0d7f9bc",
+      "archive_sha256": "0e5013c2582a2f38c2df7409843aa49035b6ab87fd3263481022329bb1a959c2"
+    },
+    {
+      "file": "chromium-report.json",
+      "browser": "151.0.7922.34",
+      "job_id": 131372381404,
+      "artifact_id": 13969452992,
+      "status": "PASS",
+      "cases": 490,
+      "screenshots": 287,
+      "sha256": "33e51454c15a519a2103e915824625caed9cc2e29afb60d3aac8dbcd6d8f5a04",
+      "git_blob_sha": "1b2e0ba9a70d5e334f61791745f1faa84b35a317",
+      "archive_sha256": "1f241bb964abdfdd52d17ba73a49151d0bb1953da42701da026d72cb7432dc74"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "chromium-topbar-pressed-1440-crop.png",
+      "source": "ui-topbar-pressed-1440.png",
+      "engine": "chromium",
+      "bytes": 63444,
+      "sha256": "04f72bb3a62defa2b6aafaef495d698b7c3561feb2a2ba30b64bc1ccd8fb5d58",
+      "git_blob_sha": "6e38f61fe6ed2260bed9db6bc101c9c3b8e6490f",
+      "crop": [
+        0,
+        0,
+        1440,
+        100
+      ]
+    },
+    {
+      "file": "chromium-dock-1440-crop.png",
+      "source": "home-1440.png",
+      "engine": "chromium",
+      "bytes": 106481,
+      "sha256": "e4148451df28e3cb50fabb6a551830ddf2bb763a6ea40514b23a9ae67dc4af54",
+      "git_blob_sha": "e58fdc6fd672bd72098e3cd182586c3bdd1f2423",
+      "crop": [
+        0,
+        896,
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "chromium-home-390.png",
+      "source": "home-390.png",
+      "engine": "chromium",
+      "bytes": 581809,
+      "sha256": "d2a4af5aa955e8a689462f5a4c87123685be13bb552706f4c59e8fb10154ad3d",
+      "git_blob_sha": "f3a717e9648efa108748514231a3e68dea994554"
+    },
+    {
+      "file": "chromium-ui-route-scrolled-390.png",
+      "source": "ui-route-scrolled-390.png",
+      "engine": "chromium",
+      "bytes": 69078,
+      "sha256": "44b8b28cf322cd3956edfbe931d249931e78a1fb5acf036ae5d383c520c4a214",
+      "git_blob_sha": "a972bf92651c898e0d429b82e4f9d4e949ea40b0"
+    },
+    {
+      "file": "chromium-all-library-reader-844.png",
+      "source": "all-library-reader-844.png",
+      "engine": "chromium",
+      "bytes": 71496,
+      "sha256": "0fd4c6196afdfd33d94008230dddcbda35a9b3dc5a8ba9f6ed7f77079f4fdb9a",
+      "git_blob_sha": "c1e29876c5842a1952e077a94c6a49dd2d9342de"
+    },
+    {
+      "file": "chromium-all-settings-bottom-390.png",
+      "source": "all-settings-bottom-390.png",
+      "engine": "chromium",
+      "bytes": 26934,
+      "sha256": "d26bc48d3deb1d20cd6359d29b014f616514e890507464cfa3c4e016cb082634",
+      "git_blob_sha": "1eccd1a2a53e2cc4b87a01763e23bd343da3f188"
+    },
+    {
+      "file": "chromium-admin-import-long-bottom-390.png",
+      "source": "admin-import-long-bottom-390.png",
+      "engine": "chromium",
+      "bytes": 19066,
+      "sha256": "b83025224e28057664d123d5d472b423a7ebf2d190b5529d5f1a7e4addf50389",
+      "git_blob_sha": "67c70e6036f7d34f156480f23d2c80d2fca9e0f6"
+    },
+    {
+      "file": "chromium-admin-code-error-844-bottom.png",
+      "source": "admin-code-error-844-bottom.png",
+      "engine": "chromium",
+      "bytes": 20223,
+      "sha256": "b6d01d03d22a2cc45def11c0a9c2632ad2631a5f1db054fa4afcd46454cc6401",
+      "git_blob_sha": "c1fa1f52c8115643772e87fd089949285c0fb61c"
+    },
+    {
+      "file": "chromium-portrait-save-network-failure-390.png",
+      "source": "portrait-save-network-failure-390.png",
+      "engine": "chromium",
+      "bytes": 51465,
+      "sha256": "1a5b868c2e272c46a43734e58772e59cd74d0761634c5de2a2627ab507fdc6c9",
+      "git_blob_sha": "18137efb9dbbc363bdb5a8fa590136b42fbb063c"
+    },
+    {
+      "file": "chromium-all-task-stationBoard-8-390.png",
+      "source": "all-task-stationBoard-8-390.png",
+      "engine": "chromium",
+      "bytes": 30252,
+      "sha256": "d3b1ab4afc2555d365fd9332b027376f42865f6745326e4077b5fc06d7a82095",
+      "git_blob_sha": "d724011a249d4fda0a89d1e363838e37067f8a78"
+    },
+    {
+      "file": "chromium-all-station-plot-resize-320.png",
+      "source": "all-station-plot-resize-320.png",
+      "engine": "chromium",
+      "bytes": 41940,
+      "sha256": "50b786e0387b877233f3c07e396123531ea1b730439ab881e3bbc05922bd69fa",
+      "git_blob_sha": "8a7536bfa5167742700ade14184b790074cb456c"
+    },
+    {
+      "file": "chromium-all-blitz-active-844.png",
+      "source": "all-blitz-active-844.png",
+      "engine": "chromium",
+      "bytes": 17359,
+      "sha256": "46e4f54a9495f0bb57aa33698e213b2e3a8d531728a309a8c33816494bc800a3",
+      "git_blob_sha": "922595a74a0303ac14d078ebbad7d4721e6dac9f"
+    }
+  ],
+  "manual_review": {
+    "reviewer": "/root/visual_acceptance",
+    "latest_original_pngs": 18,
+    "firefox": 8,
+    "chromium": 10,
+    "scope": "Screen families, reported defects and selected final original PNGs; not individual manual review of all 572 PNGs"
+  },
+  "limits": [
+    "Software rendering under Xvfb; browser RAF is not physical GPU frame time.",
+    "Native audio and visibility lifecycle is Chromium-only.",
+    "Touch input and responsive layouts were exercised in browsers; physical device gestures were not certified.",
+    "Scientific content and server scoring were not changed by the final transparent-target fix."
+  ]
+}
