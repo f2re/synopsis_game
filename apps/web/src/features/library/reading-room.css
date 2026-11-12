@@ -1,0 +1,11 @@
+.station-reading-room__layout { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr); align-items:center; gap:32px; margin:32px 0 40px; }
+.station-reading-room__layout .station-home__room { width:100%; margin:0; }
+.station-reading-room__desk { min-width:0; padding:26px; background:#17343a; border:1px solid #536963; }
+.station-reading-room__desk p { color:#cad1c3; line-height:1.65; }
+.station-reading-room__desk ul { margin:22px 0; padding-left:22px; color:#e2d6b6; }
+.station-reading-room__desk li { margin:8px 0; padding-left:5px; }
+.station-reading-room__desk .station-menu-button { margin-top:16px; }
+.station-reading-room__layout .station-home__room-footer { flex-wrap:wrap; padding:18px; }
+.station-reading-room .station-home__footer>span { max-width:none; text-align:left; }
+@media (max-width:1000px) { .station-reading-room__layout { gap:20px; grid-template-columns:minmax(0,1.15fr) minmax(280px,1fr); } .station-reading-room__desk { padding:20px; } }
+@media (max-width:700px) { .station-reading-room__layout { grid-template-columns:1fr; gap:22px; margin:24px 0; } .station-reading-room .station-page__header { align-items:flex-start; } .station-reading-room .station-back { white-space:nowrap; } .station-reading-room__desk { padding:20px; } }

@@ -33,18 +33,22 @@ const game = {
   loop: { fpsLimit: 60, setFPSLimit(value) { this.fpsLimit = value; }, sleep() { sleeps++; }, wake() { wakes++; } },
   renderer: new Events(), events: new Events(), destroy(value) { destroyed = value; },
 };
-let muted = true;
-const worldAudio = { setMuted(value) { muted = value; }, isMuted: () => muted, setReducedSensory() {}, setLowPower() {}, stopHubAtmosphereSchedule() {}, stopAmbient() {}, playArchiveAmbient() {}, playHubOutdoorAmbient() {}, startHubAtmosphereSchedule() {} };
+let muted = true, unlocked = false, refIndex = 0;
+const settings = { masterVolume: 1, ambientVolume: 1 };
+const worldAudio = { setMuted(value) { muted = value; }, isMuted: () => muted, setReducedSensory() {}, setLowPower() {}, stopHubAtmosphereSchedule() {}, stopAmbient() {}, playArchiveAmbient() {}, playHubOutdoorAmbient() {}, startHubAtmosphereSchedule() {}, addAmbientLayer() {} };
 class Canvas {}
 const dependencies = {
   react: {
-    useRef: () => ({ current: host }),
+    useRef: (value) => ({ current: refIndex++ === 0 ? host : value }),
     useState: () => [[{ id: 'codepost', label: 'Кодовый пост', state: 'available', x: 20, y: 30, width: 100, height: 80 }], (value) => updates.push(value)],
     useEffect(fn) { effects.push(fn); },
   },
   'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
   '@synopsis/world-engine': { createWorldGame: ({ parent }) => { assert.equal(parent, host); return game; }, normalizeWorldPreferences: (value) => ({ soundEnabled: value.soundEnabled === true, reducedMotion: value.reducedMotion === true, lowPower: value.lowPower === true }), worldAudio, worldBridge: bridge },
   '../features/hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false, reducedMotion: false, lowPower: false }), HUB_PREFERENCES_EVENT: 'preferences' },
+  '../features/settings/settingsStore': { getSettings: () => settings },
+  '../features/atmosphere/AtmosphereProvider': { useAmbientWeather: () => 'rain' },
+  '../features/atmosphere/audioGate': { AUDIO_UNLOCK_EVENT: 'audio-unlock', isAudioUnlocked: () => unlocked },
 };
 const code = ts.transpileModule(fs.readFileSync('apps/web/src/game/WorldCanvas.tsx', 'utf8').replaceAll('import.meta.env.DEV', 'false'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
@@ -69,14 +73,25 @@ commands.length = 0;
 bridge.emit('ui:avatar_command', { kind: 'point', x: 50, y: 60 });
 assert.equal(updates.length, 0, 'Stale avatar commands do not update the world UI');
 
+bridge.emit('ui:preferences', { soundEnabled: true });
+assert.equal(muted, true, 'Enabling sound cannot bypass the shared gesture gate');
+unlocked = true; window.emit('audio-unlock');
+assert.equal(muted, false, 'The campus uses the station audio unlock');
+settings.masterVolume = 0; window.emit('preferences', { detail: { soundEnabled: true } });
+assert.equal(muted, true, 'Zero master volume keeps the campus muted');
+settings.masterVolume = 1; window.emit('preferences', { detail: { soundEnabled: true } });
+assert.equal(muted, false);
 game.renderer.emit('losewebgl');
 assert.equal(host.dataset.context, 'lost'); assert.equal(registry.get('ui.world_visible'), false);
+assert.equal(muted, true, 'A lost renderer silences campus audio');
 assert.equal(game.input.enabled, false); assert.equal(scene.input.keyboard.enabled, false); assert.equal(sleeps, 1);
 document.hidden = true; game.renderer.emit('restorewebgl');
 assert.equal(wakes, 0, 'Restoring a hidden renderer must not wake it');
 assert.equal(registry.get('ui.world_visible'), false);
+assert.equal(muted, true, 'A hidden restored renderer remains silent');
 document.hidden = false; document.emit('visibilitychange');
 assert.equal(wakes, 1); assert.equal(game.input.enabled, true); assert.equal(scene.input.keyboard.enabled, true);
+assert.equal(muted, false, 'Visible restored campus can resume unlocked audio');
 bridge.emit('ui:modal_open', true);
 assert.equal(game.input.enabled, false); assert.equal(scene.input.keyboard.enabled, false);
 bridge.emit('ui:modal_open', false);
@@ -88,4 +103,4 @@ for (const cleanup of cleanups) cleanup();
 assert.equal(destroyed, true);
 assert.equal(document.count(), 0); assert.equal(window.count(), 0); assert.equal(bridge.count(), 0);
 assert.equal(game.renderer.count(), 0); assert.equal(game.events.count(), 0);
-console.log(JSON.stringify({ status: 'PASS', boundary: 'real WorldCanvas code with deterministic event doubles', checks: ['no personal player controls or profile channel', 'native building actions retained', 'context-loss and hidden restore', 'modal input pause', 'reduced-motion and 30fps preference', 'all listeners and game disposed'], limits: 'Not a browser layout, measured GPU or art acceptance result.' }));
+console.log(JSON.stringify({ status: 'PASS', boundary: 'real WorldCanvas code with deterministic event doubles', checks: ['no personal player controls or profile channel', 'native building actions retained', 'shared audio gesture and master volume gates', 'context-loss and hidden restore silence', 'modal input pause', 'reduced-motion and 30fps preference', 'all listeners and game disposed'], limits: 'Not a browser layout, measured GPU or art acceptance result.' }));

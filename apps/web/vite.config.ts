@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@synopsis/world-engine/avatar': path.resolve(__dirname, '../../packages/world-engine/src/avatar.ts'),
+      '@synopsis/world-engine/audio': path.resolve(__dirname, '../../packages/world-engine/src/audio/WorldAudioManager.ts'),
       '@synopsis/world-engine': path.resolve(__dirname, '../../packages/world-engine/src/index.ts'),
       'phaser': path.resolve(__dirname, 'node_modules/.pnpm/phaser@4.2.1/node_modules/phaser'),
     },

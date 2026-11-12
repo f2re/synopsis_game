@@ -576,6 +576,12 @@
       "asset_id": "eb922b54-dccb-4a03-895f-4293b96fa155",
       "sha12": "d8ccb7f5c85c",
       "label": "26063 R03 motion reference only: walk-down-guide.png"
+    },
+    {
+      "id": "assets/source/environment/station-room-r01/candidates/provider-room.png",
+      "asset_id": "1bc2db16-788b-4e09-8148-e7a1a634e8c5",
+      "sha12": "2f76f07965f9",
+      "label": "26063 — тихая читальня R01"
     }
   ]
 }

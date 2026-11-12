@@ -79,11 +79,31 @@ async function staticCompositorCheck() {
 }
 
 async function screenChecks() {
+  const title = load('apps/web/src/features/title/TitleScreen.tsx', {
+    '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик' }, '../avatar/SavedAvatarPortrait': portraitModule,
+    '../hub/HubIcon': { HubIcon: 'HubIcon' }, '../ui/PixelIcon': { PixelIcon: 'PixelIcon' },
+    '../atmosphere/StationRoomArt': { StationRoomArt: 'StationRoomArt' }, '../atmosphere/AtmosphereProvider': { useAmbientWeather: () => 'calm' },
+    '../settings/settingsStore': { useSettings: () => ({ soundEnabled: false }), usePresentationPreferences: () => ({}), updateSettings() {} },
+    './station-screens.css': {},
+  });
+  const titleRunner = new Runner(title.TitleScreen, { user: user('title') }, { effects: false });
+  assert.equal(portraitNode(titleRunner).props.size, 40);
+  assert.equal(image(portraitNode(titleRunner).props.portrait).props.src, first.avatarPortrait.pngDataUrl, 'The main menu uses the saved personal portrait');
+  titleRunner.render({ user: user('title', second) });
+  assert.equal(portraitNode(titleRunner).props.portrait.sha256, second.avatarPortrait.sha256);
+  titleRunner.render({ user: { ...user('title'), avatarPortrait: undefined } });
+  assert.equal(portraitNode(titleRunner).props.portrait, undefined, 'An older authenticated profile gets the neutral portrait placeholder');
+  titleRunner.render({ user: null });
+  assert.equal(portraitNode(titleRunner), undefined);
+  assert(nodes(titleRunner.output).some((node) => node.type === 'HubIcon' && node.props.name === 'observer'), 'Guests keep the generic station icon');
+  titleRunner.unmount();
+
   // The hub's real markup consumes the same confirmed PNG without loading its effects or Phaser.
   const hub = load('apps/web/src/features/hub/HubScreen.tsx', {
     '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик', GAME_TITLE: '26063' }, '../avatar/SavedAvatarPortrait': portraitModule,
     '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' }, '../ui/SynopticDutyTicker': { SynopticDutyTicker: 'SynopticDutyTicker' },
-    './HubDialog': { HubDialog: 'HubDialog' }, './HubIcon': { HubIcon: 'HubIcon' }, './hubPreferences': { readHubPreferences: () => ({}) },
+    './HubDialog': { HubDialog: 'HubDialog' }, './HubIcon': { HubIcon: 'HubIcon' },
+    '../settings/settingsStore': { usePresentationPreferences: () => ({}) },
   }, { window: { matchMedia: () => ({ matches: false }) } });
   const hubRunner = new Runner(hub.HubScreen, { user: user('hub') }, { effects: false });
   assert.equal(image(portraitNode(hubRunner).props.portrait).props.src, first.avatarPortrait.pngDataUrl);
@@ -162,7 +182,7 @@ async function screenChecks() {
   assert.equal(window.count(), 0);
 
   await staticCompositorCheck(); await screenChecks();
-  for (const file of ['apps/web/src/features/hub/HubScreen.tsx', 'apps/web/src/features/shift/ShiftWorkspace.tsx', 'apps/web/src/features/shift/BlitzWorkspace.tsx', 'apps/web/src/game/WorldCanvas.tsx']) {
+  for (const file of ['apps/web/src/features/title/TitleScreen.tsx', 'apps/web/src/features/hub/HubScreen.tsx', 'apps/web/src/features/shift/ShiftWorkspace.tsx', 'apps/web/src/features/shift/BlitzWorkspace.tsx', 'apps/web/src/game/WorldCanvas.tsx']) {
     const source = fs.readFileSync(file, 'utf8');
     assert(!/\bAvatarPreview\b|modularAvatarCompositor|LegacyAvatarPreview|world-engine\/avatar/.test(source), `Fitting compositor leaked into ${file}`);
   }
@@ -171,6 +191,8 @@ async function screenChecks() {
   }
   const app = fs.readFileSync('apps/web/src/App.tsx', 'utf8');
   assert.match(app, /const AvatarEditor = lazy/); assert.match(app, /<AvatarEditor key=\{user.id\}/);
-  assert.match(app, /current\?\.id === updated.id \? updated : current/);
-  console.log(JSON.stringify({ status: 'PASS', test: 'saved PNG contract and actual editor/hub/shift handlers', checks: ['same PNG at 40/80/160', 'bounded PNG-only neutral fallback', 'failed save keeps draft and confirmed portrait', 'authoritative returned portrait', 'account change before effects', 'late save after unmount', 'missing portrait can save without appearance edits', 'historical shift snapshot and honest legacy placeholder', 'one static cached fitting frame', 'no personal Phaser player including legacy fallback'], limits: 'No real browser, GPU, server-authentication or artwork acceptance claims.' }));
+  assert.match(app, /activeSessionToken && getSessionToken\(\) === activeSessionToken/);
+  assert.match(app, /current\?\.id === profile.id \? profile : current/);
+  assert.match(app, /<BlitzWorkspace key=\{user.id\}/); assert.match(app, /<SeamlessShiftFlow key=\{user.id\}/);
+  console.log(JSON.stringify({ status: 'PASS', test: 'saved PNG contract and actual editor/title/hub/shift handlers', checks: ['same PNG at 40/80/160', 'bounded PNG-only neutral fallback', 'failed save keeps draft and confirmed portrait', 'authoritative returned portrait', 'account change before effects', 'late save after unmount', 'missing portrait can save without appearance edits', 'same confirmed portrait in title and hub', 'historical shift snapshot and honest legacy placeholder', 'one static cached fitting frame', 'no personal Phaser player including legacy fallback'], limits: 'No real browser, GPU, server-authentication or artwork acceptance claims.' }));
 })().catch((error) => { console.error(error); process.exitCode = 1; });

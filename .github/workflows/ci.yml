@@ -32,6 +32,7 @@ jobs:
           python tools/assets/check_asset_contract.py
           python tools/assets/check_asset_manifests.py
           python tools/assets/build_hub_r01.py --check
+          python tools/assets/build_station_room_r01.py --check --require-approved
           python tools/assets/build_characters_r01.py --check
           python tools/assets/build_inventory_icons_r01.py --check
           python tools/assets/build_equipment_r01.py --check

@@ -1,161 +1,78 @@
-import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from '../../brand';
+import { GAME_CALLSIGN, GAME_MARK } from '../../brand';
 import type { SessionUser } from '../../api';
-import { PixelCard, PixelIcon } from '../ui';
+import { SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
+import { HubIcon } from '../hub/HubIcon';
+import { PixelIcon } from '../ui/PixelIcon';
+import { StationRoomArt } from '../atmosphere/StationRoomArt';
+import { useAmbientWeather } from '../atmosphere/AtmosphereProvider';
+import { useSettings, usePresentationPreferences, updateSettings } from '../settings/settingsStore';
+import './station-screens.css';
 
 interface TitleScreenProps {
   user: SessionUser | null;
+  onOpenCampus: () => void;
   onStartShift: () => void;
   onOpenLogin: () => void;
-  onOpenSettings?: () => void;
-  onOpenAdmin?: () => void;
-  onOpenArenaTv?: () => void;
-  onLogout?: () => void;
+  onOpenLibrary: () => void;
+  onOpenHelp: () => void;
+  onOpenSettings: () => void;
+  onExit: () => void;
+  sessionPending?: boolean;
+  sessionNotice?: string;
 }
 
-export function TitleScreen({
-  user,
-  onStartShift,
-  onOpenLogin,
-  onOpenSettings,
-  onOpenAdmin,
-  onOpenArenaTv,
-  onLogout,
-}: TitleScreenProps) {
+export function TitleScreen({ user, onOpenCampus, onStartShift, onOpenLogin, onOpenLibrary, onOpenHelp, onOpenSettings, onExit, sessionPending, sessionNotice }: TitleScreenProps) {
+  const settings = useSettings();
+  const preferences = usePresentationPreferences();
+  const weather = useAmbientWeather();
   return (
-    <main className="app-shell title-screen" aria-labelledby="title-main-heading">
-      <div style={{ maxWidth: 520, margin: '48px auto', textAlign: 'center' }}>
-        <PixelCard variant="dialog" cornerBrackets>
-          <div style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-            {/* Герб / Эмблема станции */}
-            <div style={{ width: 88, height: 88, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img
-                src="/ui/ui_station_crest_badge_v2.png"
-                alt="Эмблема 26063"
-                style={{ width: 72, height: 72, imageRendering: 'pixelated' }}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </div>
-
-            {/* Иерархия бренда */}
-            <div>
-              <div style={{ fontSize: 13, color: 'var(--color-primary-cyan)', fontFamily: 'var(--font-pixel-ui)', letterSpacing: 2 }}>
-                {GAME_MARK}
-              </div>
-              <h1 id="title-main-heading" style={{ margin: '6px 0 2px', fontSize: 22, fontFamily: 'var(--font-pixel-display)' }}>
-                {GAME_CALLSIGN}
-              </h1>
-              <p style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--ui-text-secondary)', lineHeight: 1.4 }}>
-                Учебный тренажёр наблюдателей гидрометеорологических станций
-              </p>
-            </div>
-
-            {/* Статус пользователя */}
-            {user ? (
-              <div style={{
-                width: '100%',
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid var(--ui-border-subtle)',
-                borderRadius: 4,
-                padding: '10px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                margin: '8px 0'
-              }}>
-                <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: 11, color: 'var(--ui-text-muted)' }}>Текущий наблюдатель:</div>
-                  <div style={{ fontSize: 13, fontWeight: 'bold', fontFamily: 'var(--font-pixel-ui)' }}>
-                    {user.displayName} ({user.roles.includes('admin') || user.roles.includes('instructor') ? 'Инструктор' : 'Наблюдатель'})
-                  </div>
-                </div>
-                {onLogout && (
-                  <button type="button" className="pixel-btn-secondary" style={{ fontSize: 11, padding: '4px 8px' }} onClick={onLogout}>
-                    Сменить
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div style={{ fontSize: 12, color: 'var(--ui-text-muted)', margin: '4px 0' }}>
-                Допуск осуществляется по журналу наблюдателей станции
-              </div>
-            )}
-
-            {/* Главные кнопки действий */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 300, marginTop: 8 }}>
-              {user ? (
-                <button
-                  type="button"
-                  className="pixel-btn-primary"
-                  style={{ width: '100%', fontSize: 14, padding: '12px 16px' }}
-                  onClick={onStartShift}
-                >
-                  ▶ Заступить на смену
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="pixel-btn-primary"
-                  style={{ width: '100%', fontSize: 14, padding: '12px 16px' }}
-                  onClick={onOpenLogin}
-                >
-                  ▶ Журнал допуска (Вход)
-                </button>
-              )}
-
-              {user && (
-                <button
-                  type="button"
-                  className="pixel-btn-secondary"
-                  style={{ width: '100%' }}
-                  onClick={onOpenLogin}
-                >
-                  Выбрать другого наблюдателя
-                </button>
-              )}
-
-              {onOpenArenaTv && (
-                <button
-                  type="button"
-                  className="pixel-btn-secondary"
-                  style={{ width: '100%' }}
-                  onClick={onOpenArenaTv}
-                >
-                  📺 Трансляция Arena TV
-                </button>
-              )}
-
-              {onOpenSettings && (
-                <button
-                  type="button"
-                  className="pixel-btn-secondary"
-                  style={{ width: '100%' }}
-                  onClick={onOpenSettings}
-                >
-                  ⚙ Настройки
-                </button>
-              )}
-
-              {onOpenAdmin && (
-                <button
-                  type="button"
-                  className="pixel-btn-secondary"
-                  style={{ width: '100%', opacity: 0.75, fontSize: 11 }}
-                  onClick={onOpenAdmin}
-                >
-                  Управление ростером (Инструктор)
-                </button>
-              )}
-            </div>
-
-            {/* Подвал с версией и правовой информацией */}
-            <div style={{ marginTop: 12, fontSize: 10, color: 'var(--ui-text-muted)' }}>
-              Северо-Западное УГМС · Станция 26063 · Код КН-01 (SYNOP)
-            </div>
+    <main className="station-home" aria-labelledby="title-main-heading">
+      <header className="station-home__masthead">
+        <span className="station-wordmark"><span aria-hidden="true" className="station-signal" />УЧЕБНАЯ СТАНЦИЯ</span>
+        <span>Северо-Запад · вымышленный кампус</span>
+      </header>
+      <div className="station-home__layout">
+        <section className="station-home__menu">
+          <p className="station-home__number" aria-hidden="true">{GAME_MARK}</p>
+          <h1 id="title-main-heading" tabIndex={-1}><span className="visually-hidden">{GAME_MARK}: </span>{GAME_CALLSIGN}</h1>
+          <p className="station-home__intro">Наблюдать. Разбираться. Возвращаться к главному.</p>
+          <div className="station-home__identity" role="status">
+            {user ? <SavedAvatarPortrait portrait={user.avatarPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /> : <HubIcon name="observer" size={32} />}
+            <span>{sessionPending ? 'Проверяем профиль…' : user ? <><strong>{user.displayName}</strong><small>Группа {user.groupId}</small></> : <>Кампус и библиотека открыты<small>Для смены нужен профиль учебной группы</small></>}</span>
+            {!user && !sessionPending && <button type="button" className="station-text-button" onClick={onOpenLogin}>Войти</button>}
           </div>
-        </PixelCard>
+          {sessionNotice && <p className="station-notice" role="status">{sessionNotice}</p>}
+          <nav className="station-main-menu" aria-label="Главное меню">
+            <button className="station-menu-button station-menu-button--primary" type="button" onClick={onOpenCampus}>
+              <HubIcon name="map" size={40} /><span><strong>{user ? 'Продолжить в кампусе' : 'Войти в кампус'}</strong><small>Площадь, архив и кодовый пост</small></span><b aria-hidden="true">→</b>
+            </button>
+            <button className="station-menu-button" type="button" onClick={onStartShift} disabled={sessionPending}>
+              <PixelIcon name="kn01" size={32} alt="" /><span><strong>Учебная смена</strong><small>Перейти к рабочему месту</small></span><b aria-hidden="true">›</b>
+            </button>
+            <button className="station-menu-button" type="button" onClick={onOpenLibrary}>
+              <HubIcon name="guide" size={36} /><span><strong>Библиотека</strong><small>Понятия, определения и памятки</small></span><b aria-hidden="true">›</b>
+            </button>
+            <div className="station-main-menu__pair">
+              <button className="station-menu-button station-menu-button--compact" type="button" onClick={onOpenHelp}><PixelIcon name="help" size={28} alt="" /><span>Помощь</span></button>
+              <button className="station-menu-button station-menu-button--compact" type="button" onClick={onOpenSettings}><HubIcon name="settings" size={28} /><span>Настройки</span></button>
+            </div>
+            <button className="station-text-button station-menu-exit" type="button" onClick={onExit}><PixelIcon name="exit" size={24} alt="" />Выйти из игры</button>
+          </nav>
+        </section>
+        <section className="station-home__room" aria-label="Читальный уголок станции">
+          <div className="station-home__room-label"><span className="station-signal" aria-hidden="true" />Читальный зал<span>{weather === 'rain' ? 'Дождь за окном' : 'Тихий вечер'}</span></div>
+          <StationRoomArt rain={weather === 'rain'} reducedMotion={preferences.reducedMotion || preferences.lowPower} />
+          <div className="station-home__room-footer"><div><span>КНИГА ОТКРЫТА</span><p>Можно никуда не спешить.<br />Начните с того, что хочется понять.</p></div><button type="button" className="station-room-link" onClick={onOpenLibrary}>К полкам <span aria-hidden="true">↗</span></button></div>
+        </section>
       </div>
+      <footer className="station-home__footer">
+        <span>Учебная игра о работе синоптика</span>
+        <button type="button" className="station-sound-button" aria-pressed={settings.soundEnabled} onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}>
+          <span aria-hidden="true" className={settings.soundEnabled ? 'station-sound-bars is-on' : 'station-sound-bars'}><i /><i /><i /></span>
+          {settings.soundEnabled ? 'Звук включён' : 'Включить звук'}
+        </button>
+        <span>Музыка и атмосфера — в настройках</span>
+      </footer>
     </main>
   );
 }
