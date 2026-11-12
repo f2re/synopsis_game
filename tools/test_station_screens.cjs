@@ -175,8 +175,10 @@ async function waitForCampus(page) {
     await page.getByRole('button', { name: /Настроить атмосферу/ }).click();
     await page.getByRole('heading', { name: 'Настройки', exact: true }).waitFor();
     const master = page.locator('#settings-masterVolume'); await master.focus(); await master.press('Home');
+    assert.equal(await master.inputValue(), '0', 'Keyboard changes the range before any other setting');
     await page.getByRole('radio', { name: 'Дождь', exact: true }).check();
     await page.getByRole('checkbox', { name: /Экономия ресурсов/ }).check();
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('synopsis_26063_settings')).masterVolume), 0, 'Adjacent controls preserve the saved keyboard volume');
     await capture(page, `settings-${viewport.width}`);
     await page.reload();
     assert.equal(await master.inputValue(), '0');

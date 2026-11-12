@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { api, ApiError, cancelPendingLogin, getSessionToken, setSessionToken, type SessionUser } from './api';
 import { GAME_MARK, GAME_TITLE } from './brand';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
@@ -37,12 +37,10 @@ function LoadingScreen({ text = 'Загрузка…' }: { text?: string }) {
 
 /** Commit alongside a resolved route, so a lazy screen receives focus after loading. */
 function RouteHeadingFocus() {
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const heading = document.querySelector<HTMLElement>('main h1') ?? document.querySelector<HTMLElement>('main');
-      if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
-    });
-    return () => window.cancelAnimationFrame(frame);
+  useLayoutEffect(() => {
+    // Set route focus before the first paint; no delayed callback may steal a user's input.
+    const heading = document.querySelector<HTMLElement>('main h1') ?? document.querySelector<HTMLElement>('main');
+    if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
   }, []);
   return null;
 }
