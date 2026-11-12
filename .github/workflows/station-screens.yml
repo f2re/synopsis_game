@@ -35,7 +35,8 @@ jobs:
       - name: Проверить экраны и сеанс в браузере
         env:
           STATION_PLAYWRIGHT_MODULES: /tmp/station-browser/node_modules
-        run: node tools/test_station_screens.cjs
+          STATION_BROWSER_HEADED: 'true'
+        run: xvfb-run -a node tools/test_station_screens.cjs
       - name: Сохранить снимки, размеры и результаты
         if: always()
         uses: actions/upload-artifact@v4

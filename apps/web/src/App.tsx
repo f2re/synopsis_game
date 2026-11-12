@@ -38,7 +38,7 @@ function LoadingScreen({ text = 'Загрузка…' }: { text?: string }) {
 function RouteHeadingFocus() {
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      const heading = document.querySelector<HTMLElement>('main h1');
+      const heading = document.querySelector<HTMLElement>('main h1') ?? document.querySelector<HTMLElement>('main');
       if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
     });
     return () => window.cancelAnimationFrame(frame);
@@ -143,7 +143,7 @@ export function App() {
   let screen: ReactNode;
   if (path === '/arena-tv') screen = <ArenaTvPlaceholder />;
   else if (path === '/') screen = <TitleScreen user={user} onOpenCampus={() => navigate('/campus')} onStartShift={startShift} onOpenLogin={() => setLoginModalOpen(true)} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit} sessionPending={booting} sessionNotice={sessionNotice} />;
-  else if (path === '/library') screen = <LibraryScreen onBack={returnFromPage} initialQuery={new URLSearchParams(location.split('?')[1] ?? '').get('q') ?? ''} onOpenCodebook={() => navigate('/codebook')} />;
+  else if (path === '/library') screen = <LibraryScreen onBack={returnFromPage} initialQuery={new URLSearchParams(location.split('?')[1] ?? '').get('q') ?? ''} />;
   else if (path === '/codebook') screen = <Codebook isOpen onClose={returnFromPage} />;
   else if (path === '/help') screen = <HelpScreen onBack={returnFromPage} onOpenLibrary={() => navigate('/library')} onOpenSettings={() => navigate('/settings')} onOpenCampus={() => navigate('/campus')} onStartShift={startShift} />;
   else if (path === '/settings') screen = <Settings onClose={returnFromPage} />;

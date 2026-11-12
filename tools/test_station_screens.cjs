@@ -12,6 +12,12 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { chromium } = require(require.resolve('playwright', { paths: [process.env.STATION_PLAYWRIGHT_MODULES || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES || process.cwd()] }));
 const repo = process.cwd(), dist = path.join(repo, 'apps/web/dist');
+const worldChunks = fs.readdirSync(path.join(dist, 'assets')).filter(name => {
+  if (!name.endsWith('.js')) return false;
+  const source = fs.readFileSync(path.join(dist, 'assets', name), 'utf8');
+  return source.includes('Phaser') && source.includes('WebGLRenderer');
+}).map(name => '/assets/' + name);
+assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built renderer code');
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
@@ -102,7 +108,7 @@ async function waitForCampus(page) {
 }
 (async () => {
   const base = await startServers();
-  browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
+  browser = await chromium.launch({ headless: process.env.STATION_BROWSER_HEADED !== 'true', ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
   report.browser = browser.version();
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
@@ -115,11 +121,14 @@ async function waitForCampus(page) {
     assert.equal(await page.locator('canvas').count(), 0, 'Home must not mount Phaser');
     await capture(page, `home-${viewport.width}`);
     await measurePresentation(page, `home-performance-${viewport.width}`);
+    const initialScripts = await page.evaluate(() => performance.getEntriesByType('resource').map(entry => new URL(entry.name).pathname).filter(name => name.endsWith('.js')));
+    assert.ok(!initialScripts.some(name => worldChunks.includes(name)), 'Home must not fetch the separate Phaser world chunk');
+    report.cases.push({ name: `home-resources-${viewport.width}`, javascriptRequests: initialScripts, deferredWorldChunks: worldChunks });
     const openedAt = await page.evaluate(() => performance.now());
     await page.getByRole('button', { name: /Библиотека Понятия/ }).click();
     await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
     await page.waitForFunction(() => document.activeElement === document.querySelector('main h1'));
-    report.cases.push({ name: `library-opening-${viewport.width}`, inputToHeadingMs: await page.evaluate(() => performance.now()) - openedAt });
+    report.cases.push({ name: `library-opening-${viewport.width}`, automationNavigationMs: await page.evaluate(() => performance.now()) - openedAt });
     await page.getByLabel('Что хотите найти?').fill('точка росы');
     await page.locator('.library-result').first().click();
     await page.getByRole('heading', { name: 'Точка росы', exact: true }).waitFor();
@@ -198,9 +207,30 @@ async function waitForCampus(page) {
   await page.getByRole('radio', { name: 'Дождь', exact: true }).check();
   await page.getByRole('button', { name: /Назад/ }).first().click();
   await measurePresentation(page, 'home-full-motion-performance');
+  await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+  await page.getByRole('checkbox', { name: /Экономия ресурсов/ }).check();
+  await page.getByRole('button', { name: /Назад/ }).first().click();
+  assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), false);
+  await measurePresentation(page, 'home-low-power-only-performance');
+  await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+  await page.getByRole('checkbox', { name: /Экономия ресурсов/ }).uncheck();
+  await page.getByRole('button', { name: /Назад/ }).first().click();
   await page.getByRole('button', { name: 'Включить звук', exact: true }).click();
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Music and ambience share a context');
+  // A real background tab in headed Chromium, not a mocked visibility event.
+  const backgroundTab = await context.newPage();
+  await backgroundTab.goto('about:blank'); await backgroundTab.bringToFront();
+  await page.waitForFunction(() => document.visibilityState === 'hidden', undefined, { polling: 100 });
+  await page.waitForFunction(() => window.__stationAudioProbe.oscillators === 0 && window.__stationAudioProbe.buffers === 0, undefined, { polling: 100 });
+  const hiddenState = await page.evaluate(() => ({ visibility: document.visibilityState, ...window.__stationAudioProbe,
+    animatedDrops: [...document.querySelectorAll('.station-room-art__drop')].filter(node => getComputedStyle(node).animationName !== 'none' && getComputedStyle(node).display !== 'none').length }));
+  assert.equal(hiddenState.animatedDrops, 0);
+  report.cases.push({ name: 'hidden-tab-pause', ...hiddenState });
+  await page.bringToFront();
+  await page.waitForFunction(() => document.visibilityState === 'visible' && window.__stationAudioProbe.oscillators > 0);
+  assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Returning resumes the shared context');
+  await backgroundTab.close();
   await page.getByRole('button', { name: /Учебная смена/ }).click();
   await page.getByRole('dialog', { name: 'Вход в учебную группу' }).waitFor();
   await page.getByLabel('Группа', { exact: true }).selectOption({ label: fixture.groupId });
@@ -208,7 +238,8 @@ async function waitForCampus(page) {
   await page.getByLabel('Персональный код', { exact: true }).fill(fixture.users[0].code);
   await page.getByRole('dialog').getByRole('button', { name: 'Войти', exact: true }).click();
   await page.getByRole('heading', { name: 'Записка на краю стола' }).waitFor();
-  await page.waitForFunction(() => window.__stationAudioProbe.oscillators === 0);
+  await page.waitForFunction(() => window.__stationAudioProbe.oscillators === 0 && window.__stationAudioProbe.buffers === 0);
+  report.cases.push({ name: 'study-background-silent', ...await page.evaluate(() => window.__stationAudioProbe) });
   await capture(page, 'shift-handover-authenticated');
   const sessionToken = await page.evaluate(() => sessionStorage.getItem('synopsis.session.token'));
   assert.ok(sessionToken);
@@ -220,6 +251,7 @@ async function waitForCampus(page) {
   await exitPage.getByRole('heading', { name: 'Завершить сеанс?' }).waitFor();
   assert.equal(await exitPage.evaluate(() => sessionStorage.getItem('synopsis.session.token')), sessionToken);
   await exitPage.close();
+  await page.bringToFront();
   await page.getByRole('button', { name: 'Вернуться в центр', exact: true }).click(); await waitForCampus(page);
   assert.equal(await page.locator('.world-canvas-host > div').first().getAttribute('data-fps-limit'), '60');
   await measurePresentation(page, 'campus-full-motion-performance');
