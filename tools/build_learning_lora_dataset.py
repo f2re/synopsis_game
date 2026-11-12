@@ -22,7 +22,7 @@ MANIFESTS_DIR = REPO_ROOT / "assets" / "manifests"
 ASSETS_DATA = [
     {
         "id": "synopsis_ref_campus_master_sheet",
-        "filename": "Meteorological Campus Pixel Art Reference Sheet(1).png",
+        "filename": "Meteorological Campus Pixel Art Reference Sheet.png",
         "caption": "master reference sheet for synoptic meteorological campus, featuring station buildings, radar dome, weather garden, instruments, character portraits, and color palette tokens in detailed 16-bit pixel art style",
     },
     {
