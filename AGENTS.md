@@ -21,7 +21,7 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 14. The station world at `/` is the main screen. Use «Станция», «территория станции» or «площадь» in Russian UI. `/campus` is a compatibility route, not a user-facing name.
 15. Product text follows `docs/LANGUAGE_POLICY.md`, including its rules for concise, truthful interface copy. Never fill a missing feature with invented activity, progress, weather or results.
 16. Shared UI chrome follows one pixel grid and one control-state contract. A visual change needs pointer/keyboard and screenshot acceptance; passing a build alone is insufficient.
-17. Use `PixelScrollArea` for bounded UI overflow and page scrolling. A fitting region must not retain an empty track or gap. Check wheel input over both content and track, thumb dragging, keyboard focus, and nested regions in Chromium and Firefox. Keep dense scientific diagrams readable instead of shrinking their controls below usable size.
+17. Use `PixelScrollArea` for bounded UI overflow and page scrolling. A fitting region must not retain an empty track or gap. Check wheel input over both content and track, thumb dragging, keyboard focus, and nested regions in Chromium and Firefox. Keep dense scientific diagrams readable instead of shrinking their controls below usable size. Interactive diagram targets must measure at least 44 CSS pixels on supported narrow screens; enlarge transparent hit areas without changing scientific geometry, and check their separation and edge clicks.
 
 ## Mandatory source documents
 

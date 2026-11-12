@@ -30,7 +30,7 @@ async function clickSvgPosition(page, control) {
   await viewport.scrollIntoViewIfNeeded();
   const movement = await control.evaluate(node => {
     const viewport = node.closest('.pixel-scroll-area__viewport');
-    const hitArea = node.querySelector('.station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+    const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
     const target = hitArea.getBoundingClientRect(), frame = viewport.getBoundingClientRect();
     const left = frame.left + viewport.clientLeft, top = frame.top + viewport.clientTop;
     const right = left + viewport.clientWidth, bottom = top + viewport.clientHeight;
@@ -55,17 +55,98 @@ async function clickSvgPosition(page, control) {
   await viewport.scrollIntoViewIfNeeded();
   const handle = await control.elementHandle();
   await page.waitForFunction(node => {
-    const hitArea = node.querySelector('.station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+    const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
     const rect = hitArea.getBoundingClientRect();
     const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
     return node.contains(hit);
   }, handle, { timeout: 3_000 });
-  const point = await control.evaluate(node => {
-    const hitArea = node.querySelector('.station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
-    const rect = hitArea.getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-  });
-  await page.mouse.click(point.x, point.y);
+  const pointCount = await control.evaluate(node => node.querySelector('.station-slot-target') ? 9 : 1);
+  for (let index = 0; index < pointCount; index++) {
+    // Placing an observation can add a clear button and reflow its card.
+    // Read current coordinates for every click instead of reusing the first box.
+    const probe = await control.evaluate((node, index) => {
+      const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+      const rect = hitArea.getBoundingClientRect();
+      const center = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      const points = [center];
+      if (hitArea.classList.contains('station-slot-target')) {
+        points.push(
+          { x: center.x, y: rect.top + 0.5 },
+          { x: rect.right - 0.5, y: center.y },
+          { x: center.x, y: rect.bottom - 0.5 },
+          { x: rect.left + 0.5, y: center.y },
+        );
+        const matrix = hitArea.getScreenCTM();
+        const scale = Math.hypot(matrix.a, matrix.b);
+        const radius = hitArea.tagName === 'circle' ? rect.width / 2 : Number(hitArea.getAttribute('rx') || 0) * scale;
+        const cornerInset = radius * (1 - Math.SQRT1_2) + 0.5;
+        for (const x of [rect.left + cornerInset, rect.right - cornerInset]) {
+          for (const y of [rect.top + cornerInset, rect.bottom - cornerInset]) points.push({ x, y });
+        }
+      }
+      const point = points[index];
+      const hit = document.elementFromPoint(point.x, point.y);
+      return {
+        point, receivesPointer: node.contains(hit), label: node.getAttribute('aria-label'),
+        hitTag: hit?.tagName, hitClass: hit?.getAttribute('class'),
+        bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+      };
+    }, index);
+    assert.ok(probe.receivesPointer, `The SVG target receives click ${index + 1}: ${JSON.stringify(probe)}`);
+    await page.mouse.click(probe.point.x, probe.point.y);
+    if (pointCount > 1) await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  }
+}
+
+async function checkStationPlotTargets(positions) {
+  const targets = await positions.evaluateAll(nodes => nodes.map(node => {
+    const target = node.querySelector('.station-slot-target');
+    if (!target) return null;
+    const rect = target.getBoundingClientRect();
+    const matrix = target.getScreenCTM();
+    const scale = Math.hypot(matrix.a, matrix.b);
+    const svg = target.ownerSVGElement.getBoundingClientRect();
+    const style = getComputedStyle(target);
+    return {
+      label: node.getAttribute('aria-label'), kind: target.tagName,
+      left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
+      width: rect.width, height: rect.height,
+      radius: target.tagName === 'circle' ? rect.width / 2 : Number(target.getAttribute('rx') || 0) * scale,
+      insideSvg: rect.left >= svg.left && rect.right <= svg.right && rect.top >= svg.top && rect.bottom <= svg.bottom,
+      soleHitArea: style.pointerEvents === 'all' && style.stroke === 'none' && Number.parseFloat(style.strokeWidth) === 0
+        && [...node.querySelectorAll(':scope > :not(.station-slot-target)')].every(shape => getComputedStyle(shape).pointerEvents === 'none'),
+    };
+  }));
+  for (const target of targets) {
+    assert.ok(target, 'Every station plot position has an explicit hit area');
+    assert.ok(target.width >= 44 - 0.01 && target.height >= 44 - 0.01, `Station plot target is at least 44 CSS px: ${JSON.stringify(target)}`);
+    assert.ok(target.insideSvg, 'The entire hit area remains inside its SVG');
+    assert.ok(target.soleHitArea, 'Visible outlines and wind marks cannot extend the interactive target');
+  }
+  const center = shape => ({ x: (shape.left + shape.right) / 2, y: (shape.top + shape.bottom) / 2 });
+  const circleRectGap = (circle, rect) => {
+    const point = center(circle);
+    const x = Math.max(rect.left + rect.radius - point.x, 0, point.x - rect.right + rect.radius);
+    const y = Math.max(rect.top + rect.radius - point.y, 0, point.y - rect.bottom + rect.radius);
+    return Math.hypot(x, y) - rect.radius - circle.radius;
+  };
+  const clearances = [];
+  for (let first = 0; first < targets.length; first++) for (let second = first + 1; second < targets.length; second++) {
+    const a = targets[first], b = targets[second];
+    const gap = a.kind === 'circle' && b.kind === 'circle'
+      ? Math.hypot(center(a).x - center(b).x, center(a).y - center(b).y) - a.radius - b.radius
+      : a.kind === 'circle' ? circleRectGap(a, b)
+        : b.kind === 'circle' ? circleRectGap(b, a)
+          : Math.max(a.left - b.right, b.left - a.right, a.top - b.bottom, b.top - a.bottom);
+    assert.ok(gap > 0, `Station plot positions ${first + 1} and ${second + 1} have separate hit areas: ${gap} CSS px`);
+    clearances.push({ first: first + 1, second: second + 1, gap });
+  }
+  return {
+    targets, clearances,
+    minimumWidthCss: Math.min(...targets.map(target => target.width)),
+    minimumHeightCss: Math.min(...targets.map(target => target.height)),
+    minimumClearanceCss: Math.min(...clearances.map(pair => pair.gap)),
+  };
 }
 
 async function checkMapTabVisibility(page, positions) {
@@ -86,7 +167,7 @@ async function checkMapTabVisibility(page, positions) {
     }), `Map position ${index + 1}: keyboard focus remains visible inside every scrolling frame`);
   }
 }
-async function fillTask(page, task) {
+async function fillTask(page, task, evidence) {
   const kind = task.response.kind;
   if (kind === 'numeric') {
     await page.getByLabel('Числовой ответ', { exact: true }).fill('0');
@@ -127,6 +208,14 @@ async function fillTask(page, task) {
     }
     assert.equal(await page.locator(board ? '.station-board-observations .is-placed' : '.station-observation.is-placed').count(), task.payload.observations.length);
     if (board) await checkMapTabVisibility(page, positions);
+    else {
+      const geometry = await checkStationPlotTargets(positions);
+      if (evidence) evidence.report.cases.push({
+        name: `all-${evidence.phase}-station-plot-targets-${page.viewportSize().width}`,
+        viewport: page.viewportSize(), task: task.definitionId,
+        pointerSamplesPerTarget: 9, ...geometry,
+      });
+    }
   } else if (kind === 'findError') {
     const stations = page.locator('.find-error-station');
     await pressWithoutPageScroll(page, stations.first());
@@ -282,7 +371,18 @@ async function checkShift({page, base, viewport, report, capture}) {
       await afterClick(page, referenceButton, `/api/shifts/${id}/reference`); reference = true;
       await page.getByRole('heading', { name: 'Справка к заданию', exact: true }).waitFor();
     }
-    await fillTask(page, task);
+    await fillTask(page, task, { report, phase: 'shift' });
+    if (task.response.kind === 'stationPlot' && viewport.width === 390) {
+      // Repeat the populated diagram across orientation and narrow-width changes.
+      // Clear/reassign must still use the current layout, without extra server answers.
+      for (const size of [{ width: 844, height: 390 }, { width: 320, height: 844 }, viewport]) {
+        await page.setViewportSize(size);
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await fillTask(page, task, { report, phase: 'shift-resize' });
+        await checkMapTabVisibility(page, page.locator('.station-slot'));
+        await capture(page, `all-station-plot-resize-${size.width}`);
+      }
+    }
     if (task.response.kind === 'stationBoard') {
       const map = page.locator('.station-board-map');
       if (await map.count()) { await exerciseScrollbar(page, map, report, `all-board-x-${viewport.width}-${answered}`, 'horizontal'); await exerciseScrollbar(page, map, report, `all-board-y-${viewport.width}-${answered}`); }
@@ -330,7 +430,7 @@ async function checkBlitz({page, base, viewport, report, capture}) {
   let count = 0;
   while (state.status === 'active' && state.task && count++ < 8) {
     await page.getByRole('heading', { name: state.task.question, exact: true }).waitFor();
-    await fillTask(page, state.task);
+    await fillTask(page, state.task, { report, phase: 'blitz' });
     const submit = page.getByRole('button', { name: 'Отправить ответ', exact: true });
     await submit.scrollIntoViewIfNeeded();
     const timedControls = await submit.evaluate(button => {

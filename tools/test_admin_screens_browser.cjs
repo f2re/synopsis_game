@@ -91,21 +91,39 @@ async function exerciseImportTextarea(page, textarea, report, capture, tag) {
       scrollbarColor: style.scrollbarColor, scrollbarWidth: style.scrollbarWidth };
   });
   assert.ok(metrics.scrollHeight > metrics.clientHeight, 'The filled import textarea has real scrollable content');
+  const caretState = () => textarea.evaluate(node => {
+    const style = getComputedStyle(node);
+    return { scrollTop: node.scrollTop, scrollHeight: node.scrollHeight, clientHeight: node.clientHeight,
+      paddingTop: parseFloat(style.paddingTop) || 0, paddingBottom: parseFloat(style.paddingBottom) || 0,
+      selectionStart: node.selectionStart, selectionEnd: node.selectionEnd };
+  });
+  const waitForCaret = async (edge, position) => {
+    // A native editing command reveals the caret. It need not expose the
+    // padding beyond the first/last text line. Exact scroll limits are tested
+    // separately above through the actual scrollbar's Home/End keys.
+    try {
+      await page.waitForFunction(({ edge, position }) => {
+        const node = document.querySelector('.import-textarea'), style = getComputedStyle(node);
+        const padding = parseFloat(edge === 'start' ? style.paddingTop : style.paddingBottom) || 0;
+        const visible = edge === 'start' ? node.scrollTop <= padding + 1
+          : node.scrollHeight - padding - node.scrollTop <= node.clientHeight + 1;
+        return node === document.activeElement && node.selectionStart === position && node.selectionEnd === position && visible;
+      }, { edge, position });
+    } catch (error) {
+      throw new Error(`Native textarea caret at ${edge}: ${JSON.stringify(await caretState())}`, { cause: error });
+    }
+    return caretState();
+  };
   await textarea.press('Control+Home');
-  await page.waitForFunction(() => document.querySelector('.import-textarea').scrollTop <= 1);
-  assert.equal(await textarea.evaluate(node => node.selectionStart), 0, 'Ctrl+Home moves the actual text caret');
+  const homeCaret = await waitForCaret('start', 0);
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await capture(page, `admin-import-filled-${tag}`);
   await textarea.press('Control+End');
-  await page.waitForFunction(() => {
-    const node = document.querySelector('.import-textarea');
-    return node.scrollTop >= node.scrollHeight - node.clientHeight - 1;
-  });
-  assert.equal(await textarea.evaluate(node => node.selectionEnd), value.length, 'Ctrl+End moves the actual text caret');
+  const endCaret = await waitForCaret('end', value.length);
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await capture(page, `admin-import-filled-bottom-${tag}`);
   await textarea.press('Control+Home');
-  await page.waitForFunction(() => document.querySelector('.import-textarea').scrollTop <= 1);
+  await waitForCaret('start', 0);
   await textarea.hover(); await page.mouse.wheel(0, 100);
   await page.waitForFunction(() => document.querySelector('.import-textarea').scrollTop > 0);
   assert.equal(await textarea.inputValue(), value, 'Keyboard and wheel scrolling preserve every imported name');
@@ -134,7 +152,7 @@ async function exerciseImportTextarea(page, textarea, report, capture, tag) {
   await area.getByRole('scrollbar').waitFor({ state: 'hidden' });
   await textarea.fill(value);
   await area.getByRole('scrollbar').waitFor({ state: 'visible' });
-  report.cases.push({ name: `admin-import-textarea-scroll-${tag}`, ...metrics,
+  report.cases.push({ name: `admin-import-textarea-scroll-${tag}`, ...metrics, homeCaret, endCaret,
     keyboardHomeEnd: true, wheel: true, textPreserved: true, clipboardPaste: 120,
     nativeSelection: true, caretAtBottom: true, clearsRail: true, controlledValueRestoresRail: true });
 }
