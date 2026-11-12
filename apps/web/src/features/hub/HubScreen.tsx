@@ -4,12 +4,11 @@ import type { SessionUser } from '../../api';
 import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from '../../brand';
 import { AvatarPreview } from '../avatar/AvatarPreview';
 import { PixelIcon } from '../ui/PixelIcon';
-import { PixelSwitch } from '../ui/PixelSwitch';
 import { StationNavDock, type StationDockModalId } from '../ui/StationNavDock';
 import { SynopticDutyTicker } from '../ui/SynopticDutyTicker';
 import { HubDialog } from './HubDialog';
 import { HubIcon } from './HubIcon';
-import { readHubPreferences, saveHubPreferences, type HubPreferences } from './hubPreferences';
+import { usePresentationPreferences } from '../settings/settingsStore';
 
 const WorldCanvas = lazy(() => import('../../game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
 
@@ -21,6 +20,11 @@ interface HubScreenProps {
   onStartShift: () => void;
   onOpenAvatar: () => void;
   onOpenAdmin: () => void;
+  onOpenHome: () => void;
+  onOpenLibrary: () => void;
+  onOpenHelp: () => void;
+  onOpenSettings: () => void;
+  onExit: () => void;
   externalModalOpen?: boolean;
 }
 
@@ -32,18 +36,16 @@ const plannedLocations = [
 
 const facilities: Record<string, { title: string; icon: string; description: string; action?: 'shift' | 'archive' }> = {
   codepost: { title: 'Кодовый пост', icon: 'kn01', description: 'Рабочее место дежурного. Примите смену, выполните задания КН-01 и разберите ответы с наставником.', action: 'shift' },
-  archive: { title: 'Архив наблюдений', icon: 'archive', description: 'Читальный зал открыт для посещения. Войдите, чтобы познакомиться с помещением архива.', action: 'archive' },
+  archive: { title: 'Архив наблюдений', icon: 'archive', description: 'Читальный зал, понятия и определения, проверенные источники и памятки. Посетите комнату или откройте библиотеку.', action: 'archive' },
   cartography: { title: 'Картографический класс', icon: 'cartography', description: 'Самостоятельный модуль анализа карт находится в разработке. Доступные учебные задания входят в смену КН-01.' },
   radar: { title: 'Радарный комплекс', icon: 'radar', description: 'Учебный модуль радиолокации находится в разработке.' },
   lab: { title: 'Аэрологический павильон', icon: 'weather', description: 'Учебный модуль аэрологии находится в разработке.' },
   hall: { title: 'Турнирный зал', icon: 'trophy', description: 'Дуэли, турниры и рейтинговые матчи пока не доступны в этой версии.' },
 };
 
-export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onOpenAvatar, onOpenAdmin, externalModalOpen = false }: HubScreenProps) {
+export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onOpenAvatar, onOpenAdmin, onOpenHome, onOpenLibrary, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false }: HubScreenProps) {
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
-  const [preferences, setPreferences] = useState<HubPreferences>(readHubPreferences);
-  const [systemReducedMotion, setSystemReducedMotion] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true);
-  const [preferencesSaved, setPreferencesSaved] = useState<boolean | null>(null);
+  const preferences = usePresentationPreferences();
   const [currentScene, setCurrentScene] = useState('hub');
   const [environmentLabel, setEnvironmentLabel] = useState('');
   const [sceneReady, setSceneReady] = useState(false);
@@ -92,16 +94,6 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
   }, []);
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => {
-      setSystemReducedMotion(media.matches);
-      setPreferences(readHubPreferences());
-    };
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
-  }, []);
-
-  useEffect(() => {
     const showProfile = () => setActiveModal('profile');
     window.addEventListener('hub:session-menu', showProfile);
     window.addEventListener('hub:start-shift', onStartShift);
@@ -115,7 +107,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
     bridge.current?.emit('ui:preferences', preferences);
     document.documentElement.dataset.reducedMotion = String(preferences.reducedMotion);
     document.documentElement.dataset.lowPower = String(preferences.lowPower);
-  }, [preferences]);
+  }, [preferences.soundEnabled, preferences.reducedMotion, preferences.lowPower]);
 
   useEffect(() => {
     bridge.current?.emit('ui:modal_open', Boolean(activeModal || selectedFacility || externalModalOpen));
@@ -125,12 +117,6 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
     setActiveModal(null);
     setSelectedFacility(null);
     action();
-  }
-
-  function changePreference(key: keyof HubPreferences, value: boolean) {
-    const next = { ...preferences, [key]: value };
-    setPreferences(next);
-    setPreferencesSaved(saveHubPreferences(next));
   }
 
   function openScene(scene: 'hub' | 'archive') {
@@ -155,12 +141,12 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           <span className="hub-profile-button__chevron" aria-hidden="true">⌄</span>
         </button>
 
-        <div className="hub-station-title"><strong>{GAME_MARK}</strong><span>{GAME_CALLSIGN}</span></div>
+        <button type="button" className="hub-station-title hub-home-link" onClick={onOpenHome} aria-label="Главное меню"><strong>{GAME_MARK}</strong><span>{GAME_CALLSIGN}</span></button>
         <div className="hub-learning-status"><PixelIcon name="kn01" size={32} alt="" /><span><strong>Учебная смена</strong><small>Практика КН-01</small></span></div>
         <button type="button" className="hub-clock" onClick={() => setActiveModal('journal')} aria-label={`Учебный журнал, ${utcTime} UTC`} aria-haspopup="dialog"><strong>{utcTime} <span>UTC</span></strong><small>{utcDate}</small></button>
         <div className="hub-topbar__actions">
           <button type="button" className="hub-icon-button" aria-label="Учебный журнал" aria-haspopup="dialog" title="Учебный журнал" onClick={() => setActiveModal('journal')}><PixelIcon name="telegram" size={32} alt="" /></button>
-          <button type="button" className="hub-icon-button" aria-label="Настройки" aria-haspopup="dialog" title="Настройки" onClick={() => setActiveModal('settings')}><HubIcon name="settings" size={36} /></button>
+          <button type="button" className="hub-icon-button" aria-label="Настройки" title="Настройки" onClick={onOpenSettings}><HubIcon name="settings" size={36} /></button>
         </div>
       </header>
 
@@ -171,12 +157,15 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
 
       <StationNavDock
         onStartShift={onStartShift}
-        onOpenModal={setActiveModal}
+        onOpenModal={(modal) => { if (modal === 'guide') onOpenHelp(); else if (modal === 'settings') onOpenSettings(); else setActiveModal(modal); }}
+        onOpenLibrary={onOpenLibrary}
         onOpenArchive={() => openScene(currentScene === 'archive' ? 'hub' : 'archive')}
         onOpenProfile={() => user ? onOpenAvatar() : setActiveModal('profile')}
         currentScene={currentScene}
         sceneReady={sceneReady}
       />
+
+      {currentScene === 'archive' && <button type="button" className="hub-reading-room-link" onClick={onOpenLibrary}><HubIcon name="guide" size={36} /><span><strong>Открыть библиотеку</strong><small>Понятия, источники и ваши закладки</small></span><b aria-hidden="true">›</b></button>}
 
       {selectedFacility && facilities[selectedFacility] && (
         <HubDialog
@@ -187,28 +176,17 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           footer={facilities[selectedFacility].action === 'shift'
             ? <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onStartShift)}>Начать смену</button>
             : facilities[selectedFacility].action === 'archive'
-              ? <button type="button" className="hub-action hub-action--primary" onClick={() => openScene('archive')}>Войти в архив</button>
+              ? <><button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenLibrary)}>Открыть библиотеку</button><button type="button" className="hub-action" onClick={() => openScene('archive')}>Посетить читальный зал</button></>
               : <button type="button" className="hub-action" onClick={() => setSelectedFacility(null)}>Вернуться на площадь</button>}
         >
           <p className="hub-dialog__lead">{facilities[selectedFacility].description}</p>
         </HubDialog>
       )}
 
-      {activeModal === 'guide' && (
-        <HubDialog title="Управление кампусом" subtitle="Всё необходимое для первого дежурства" icon="guide" onClose={() => setActiveModal(null)} footer={<button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onStartShift)}>Начать смену</button>}>
-          <p className="hub-dialog__lead">Выберите «Начать смену», войдите в учебную группу и примите дежурство. В заданиях ответ проверяет сервер, после ответа появляется разбор.</p>
-          <dl className="hub-keys">
-            <div><dt><kbd>Tab</kbd><span> / </span><kbd>Shift</kbd> + <kbd>Tab</kbd></dt><dd>Перейти к следующему или предыдущему элементу управления.</dd></div>
-            <div><dt><kbd>Enter</kbd><span> / </span><kbd>Пробел</kbd></dt><dd>Нажать выбранную кнопку или открыть выбранную локацию.</dd></div>
-            <div><dt><kbd>Esc</kbd></dt><dd>Закрыть окно и вернуться к элементу, который его открыл.</dd></div>
-          </dl>
-          <p>Архив можно посетить из нижней панели. Кнопка «На площадь» вернёт вас в кампус. В настройках доступны звук, уменьшенное движение и экономия ресурсов.</p>
-        </HubDialog>
-      )}
-
       {activeModal === 'route' && (
         <HubDialog title="Маршрут по кампусу" subtitle="Доступные занятия и следующие этапы" icon="cartography" onClose={() => setActiveModal(null)}>
           <div className="hub-route-list">
+            <button type="button" className="hub-route-card" onClick={() => closeThen(onOpenLibrary)}><PixelIcon name="library" size={40} alt="" /><span><strong>Библиотека понятий</strong><small>Поиск, определения, памятки и закладки</small></span><b>Читать ›</b></button>
             <button type="button" className="hub-route-card" onClick={() => closeThen(onStartShift)}><PixelIcon name="kn01" size={40} alt="" /><span><strong>Дежурная смена КН-01</strong><small>Учебные задания с проверкой и разбором</small></span><b>Начать ›</b></button>
             <button type="button" className="hub-route-card" disabled={!sceneReady} onClick={() => openScene('archive')}><PixelIcon name="archive" size={40} alt="" /><span><strong>Архив наблюдений</strong><small>Посетить открытый читальный зал</small></span><b>Войти ›</b></button>
             {plannedLocations.map((location) => <div className="hub-route-card hub-route-card--planned" key={location.title}><PixelIcon name={location.icon} size={40} alt="" /><span><strong>{location.title}</strong><small>{location.description}</small></span><b>В разработке</b></div>)}
@@ -225,27 +203,19 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         </HubDialog>
       )}
 
-      {activeModal === 'settings' && (
-        <HubDialog title="Настройки рабочего места" subtitle="Изменения применяются сразу" icon="settings" onClose={() => setActiveModal(null)} footer={<><span className="hub-settings-save" role="status">{preferencesSaved === null ? 'Параметры сохраняются автоматически' : preferencesSaved ? 'Сохранено на этом устройстве' : 'Применено. Браузер не разрешил сохранение.'}</span><button type="button" className="hub-action hub-action--primary" onClick={() => setActiveModal(null)}>Готово</button></>}>
-          <div className="hub-settings-list">
-            <div><PixelSwitch checked={preferences.soundEnabled} onChange={(value) => changePreference('soundEnabled', value)} label="Звук" /><p>Звуковое сопровождение и сигналы интерфейса. По умолчанию выключены.</p></div>
-            <div><PixelSwitch checked={preferences.reducedMotion} disabled={systemReducedMotion} onChange={(value) => changePreference('reducedMotion', value)} label="Уменьшенное движение" /><p>{systemReducedMotion ? 'Включено в настройках системы. Кампус учитывает этот режим автоматически.' : 'Спокойная сцена без необязательной анимации. Системная настройка также учитывается.'}</p></div>
-            <div><PixelSwitch checked={preferences.lowPower} onChange={(value) => changePreference('lowPower', value)} label="Экономия ресурсов" /><p>Упрощённые фоновые эффекты для слабого ноутбука. Задания и кнопки остаются доступными.</p></div>
-          </div>
-        </HubDialog>
-      )}
-
       {activeModal === 'profile' && (
         <HubDialog title={user ? user.displayName : 'Режим наблюдателя'} subtitle={user ? `Учебная группа: ${user.groupId}` : 'Кампус открыт для знакомства'} icon={user ? 'student' : 'observer'} onClose={() => setActiveModal(null)}>
+          <div className="hub-profile-actions hub-profile-navigation"><button type="button" className="hub-action" onClick={() => closeThen(onOpenHome)}>Главное меню</button><button type="button" className="hub-action" onClick={() => closeThen(onOpenLibrary)}>Библиотека</button><button type="button" className="hub-action" onClick={() => closeThen(onOpenHelp)}>Помощь и управление</button></div>
           {user ? <div className="hub-profile-actions">
             <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenAvatar)}>Персонаж и инвентарь</button>
             <button type="button" className="hub-action" onClick={() => closeThen(onOpenSetCode)}>{user.codeSet ? 'Сменить код входа' : 'Задать код входа'}</button>
             {user.roles.includes('admin') && <button type="button" className="hub-action" onClick={() => closeThen(onOpenAdmin)}>Управление группами</button>}
-            <button type="button" className="hub-action" onClick={() => closeThen(onLogout)}>Выйти из профиля</button>
+            <button type="button" className="hub-action" onClick={() => closeThen(onLogout)}>Выйти из игры</button>
           </div> : <>
             <p className="hub-dialog__lead">Для учебных заданий и сохранения персонажа войдите в профиль, который выдал преподаватель.</p>
             <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onLoginClick)}>Войти в учебную группу</button>
             <p className="hub-note">Доступ выдаётся через список учебной группы. Самостоятельная регистрация не требуется.</p>
+            <button type="button" className="hub-action" onClick={() => closeThen(onExit)}>Выйти из игры</button>
           </>}
         </HubDialog>
       )}

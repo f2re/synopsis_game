@@ -375,3 +375,12 @@ html[data-low-power='true'] .hub-screen * { animation: none !important; transiti
   .hub-dialog__body { padding: 16px 20px; }
   .hub-dialog__footer { padding: 12px 26px 20px; }
 }
+
+/* Shared station screens are reachable from the campus without opening a task. */
+.hub-home-link{border:0;color:inherit;background:transparent;font:inherit;min-height:44px;cursor:pointer}
+.hub-home-link:hover{background:var(--hub-panel)}
+.hub-profile-navigation{padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--hub-border)}
+.hub-reading-room-link{position:absolute;z-index:20;left:50%;bottom:132px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;max-width:calc(100% - 32px);padding:12px 20px;background:#e2d6b6;color:#1e3436;border:2px solid #f2c75c;box-shadow:0 4px #091921;text-align:left;min-height:58px}
+.hub-reading-room-link strong,.hub-reading-room-link small{display:block}.hub-reading-room-link strong{font-size:18px;font-weight:400}.hub-reading-room-link small{font-size:13px}.hub-reading-room-link b{font-size:28px;margin-left:12px}
+@media(max-width:760px){.hub-reading-room-link{bottom:160px;width:max-content;padding:10px 12px}.hub-reading-room-link strong{font-size:16px}}
+@media(max-height:480px) and (orientation:landscape){.hub-reading-room-link{bottom:82px}}

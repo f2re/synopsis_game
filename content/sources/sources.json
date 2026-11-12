@@ -46,6 +46,104 @@
       "url": "https://www.ogimet.com/synops.phtml.en",
       "license": "Public Open Data for Educational and Research Purposes",
       "notes": "Деперсонализированные открытые данные приземных метеорологических станций; используются для формирования учебного банка телеграмм уровня 1."
+    },
+    {
+      "id": "RHM_GLOSSARY_WIND",
+      "type": "official_glossary",
+      "title": "Метеословарь: Направление ветра",
+      "issuer": "Гидрометцентр России",
+      "authority": "official_reference",
+      "url": "https://meteoinfo.ru/glossary/6918-2013-05-07-10-45-06",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая статья; проверена 12.11.2026",
+      "notes": "Справочное определение, не нормативный критерий опасного явления."
+    },
+    {
+      "id": "RHM_GLOSSARY_CLOUDS",
+      "type": "official_glossary",
+      "title": "Метеословарь: Облачность",
+      "issuer": "Гидрометцентр России",
+      "authority": "official_reference",
+      "url": "https://meteoinfo.ru/glossary/6225-2012-11-21-14-28-22",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая статья; проверена 12.11.2026",
+      "notes": "Справочное определение, не нормативный критерий опасного явления."
+    },
+    {
+      "id": "RHM_GLOSSARY_ANTICYCLONE",
+      "type": "official_glossary",
+      "title": "Метеословарь: Антициклон",
+      "issuer": "Гидрометцентр России",
+      "authority": "official_reference",
+      "url": "https://meteoinfo.ru/glossary/4929-2012-04-04-15-03-42",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая статья; проверена 12.11.2026",
+      "notes": "Справочное определение, не нормативный критерий опасного явления."
+    },
+    {
+      "id": "RHM_GLOSSARY_TOPOGRAPHY",
+      "type": "official_glossary",
+      "title": "Метеословарь: Карта барической топографии",
+      "issuer": "Гидрометцентр России",
+      "authority": "official_reference",
+      "url": "https://meteoinfo.ru/glossary/4795-2012-03-10-08-24-27",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая статья; проверена 12.11.2026",
+      "notes": "Справочное определение, не нормативный критерий опасного явления."
+    },
+    {
+      "id": "RHM_GLOSSARY_ADVECTION",
+      "type": "official_glossary",
+      "title": "Метеословарь: Адвекция тепла",
+      "issuer": "Гидрометцентр России",
+      "authority": "official_reference",
+      "url": "https://meteoinfo.ru/glossary/4928-2012-04-04-15-00-39",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая статья; проверена 12.11.2026",
+      "notes": "Справочное определение, не нормативный критерий опасного явления."
+    },
+    {
+      "id": "RHM_GLOSSARY_SOUNDING",
+      "type": "official_glossary",
+      "title": "Метеословарь: Аэрологическое зондирование",
+      "issuer": "Гидрометцентр России",
+      "authority": "official_reference",
+      "url": "https://meteoinfo.ru/glossary/8391-2014-01-07-07-24-29",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая статья; проверена 12.11.2026",
+      "notes": "Справочное определение, не нормативный критерий опасного явления."
+    },
+    {
+      "id": "NWS_GLOSSARY_DEWPOINT",
+      "type": "official_reference",
+      "title": "Dew Point / Dew Point Depression",
+      "issuer": "NOAA / National Weather Service",
+      "authority": "official_reference",
+      "url": "https://forecast.weather.gov/glossary.php?word=dew+point",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая учебная публикация; проверена 12.11.2026",
+      "notes": "Источник физических определений; не источник российских кодовых правил или цветов карты."
+    },
+    {
+      "id": "NWS_PRESSURE_FRONTS",
+      "type": "official_reference",
+      "title": "A Basic Discussion on Pressure Systems, Fronts, Jet Streams, and Precipitation",
+      "issuer": "NOAA / National Weather Service",
+      "authority": "official_reference",
+      "url": "https://www.weather.gov/lmk/basic-fronts",
+      "checked_at": "2026-11-12",
+      "edition": "Сетевая учебная публикация; проверена 12.11.2026",
+      "notes": "Источник физических определений; не источник российских кодовых правил или цветов карты."
+    },
+    {
+      "id": "PROJECT_STATION_PROFILE_V1",
+      "type": "project_specification",
+      "title": "Учебная схема игры RUS_SURFACE_STATION_V1, версия 1.0.0",
+      "authority": "project_assumption",
+      "issuer": "Проект 26063: Позывной «Синоптик»",
+      "url": "https://github.com/f2re/synopsis_game/blob/main/content/method-profiles/RUS_SURFACE_STATION_V1.json",
+      "checked_at": "2026-11-12",
+      "notes": "Описывает расположение полей в существующем интерфейсе игры; не самостоятельный нормативный источник метеорологического знания."
     }
   ]
 }

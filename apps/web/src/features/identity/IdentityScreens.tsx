@@ -41,7 +41,7 @@ export function LoginScreen({
         setGroups(items);
         if (items[0]) setGroupId(items[0]);
       })
-      .catch(() => setError('Сервер недоступен. Запустите apps/server.'))
+      .catch(() => setError('Не удалось связаться со станцией. Проверьте подключение или обратитесь к преподавателю.'))
       .finally(() => setLoading(false));
   }, []);
 

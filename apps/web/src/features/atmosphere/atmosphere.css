@@ -1,0 +1,28 @@
+:root[data-pixel-font="false"] {
+  --font-pixel-ui: 'PixCyrillic-Dense', 'PixCyrillic', monospace;
+  --font-pixel-display: 'PixCyrillic-Dense', 'PixCyrillic', monospace;
+}
+
+:root[data-high-contrast="true"] {
+  --ui-text-muted: #dce8e4;
+  --ui-text-secondary: #eff3ec;
+  --ui-text-primary: #fffaf0;
+  --ui-border-subtle: #8eada7;
+  --color-ui-text-secondary: #e8efed;
+  --color-ui-panel-bg: #061a1f;
+  --color-ui-panel-base: #0a242b;
+}
+
+:root[data-high-contrast="true"] :is(button, input, select, summary):focus-visible {
+  outline: 3px solid #ffe7a0;
+  outline-offset: 3px;
+}
+
+:root[data-reduced-motion="true"] :is(.station-room-art, .station-room-art *) {
+  animation: none !important;
+  transition: none !important;
+}
+
+:root[data-low-power="true"] :is(.station-room-art, .station-room-art *) {
+  animation: none !important;
+}

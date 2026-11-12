@@ -6,6 +6,7 @@ export interface StationNavDockProps {
   onStartShift: () => void;
   onOpenModal: (modal: Exclude<StationDockModalId, null>) => void;
   onOpenArchive: () => void;
+  onOpenLibrary?: () => void;
   onOpenProfile: () => void;
   className?: string;
   currentScene?: string;
@@ -17,6 +18,7 @@ export function StationNavDock({
   onStartShift,
   onOpenModal,
   onOpenArchive,
+  onOpenLibrary,
   onOpenProfile,
   className = '',
   currentScene = 'hub',
@@ -40,9 +42,9 @@ export function StationNavDock({
         <span><strong>Начать смену</strong><small>КН-01 · приём дежурства</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
-      <button type="button" className="hub-dock__button hub-dock__archive" onClick={onOpenArchive} disabled={!sceneReady}>
+      <button type="button" className="hub-dock__button hub-dock__archive" onClick={inArchive ? onOpenArchive : onOpenLibrary ?? onOpenArchive} disabled={inArchive && !sceneReady}>
         <HubIcon name={inArchive ? 'map' : 'archive'} size={40} />
-        <span><strong>{inArchive ? 'На площадь' : 'Архив'}</strong><small>{inArchive ? 'Вернуться в кампус' : 'Открыть читальный зал'}</small></span>
+        <span><strong>{inArchive ? 'На площадь' : 'Библиотека'}</strong><small>{inArchive ? 'Вернуться в кампус' : 'Понятия и справочник'}</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
       <button type="button" className="hub-dock__button hub-dock__profile" onClick={onOpenProfile}>

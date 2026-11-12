@@ -1,0 +1,170 @@
+{
+  "reviewer": "sprite_art / independent meteo-verifier",
+  "date": "2026-11-12",
+  "verdict": "VERIFIED for reference reading only; not publication approval for new Ranked/Exam material",
+  "files": {
+    "content/library/synoptic_library.json": "f9a982f27de03d4e89b6f64461aa3fe198400f171abca7a6c1bd5b36508c8dbf",
+    "content/codebook/kn01_level1.json": "033b0f87a567218d9de9c1cd9c87fb683f3ac1d90145b6ef018ea623e7b21875",
+    "content/sources/sources.json": "e7a4bd631b60f6f5abadf366f6807703d6bae59f371638e85c1f6f4447159cbc",
+    "content/method-profiles/RUS_SURFACE_STATION_V1.json": "12d46f7ea1fe185da7e43eebe35eb3334b9361c6e7e0fe88ffafb9cae9802203",
+    "apps/web/src/features/library/LibraryScreen.tsx": "b19c1b50a30892c5fe0be8341140c35ccfd7ca5269a404dbc0b7389cf0af923e",
+    "apps/web/src/features/codebook/Codebook.tsx": "3d178d5273abcd867189ab4cf7fbb2e55833488a74c82ef65d548a5cb35c1a69"
+  },
+  "structure": {
+    "articles": 30,
+    "categories": 4,
+    "sourceRegistryEntries": 13,
+    "codebookPages": 7,
+    "articleSourceLinks": 34,
+    "relatedLinks": 77
+  },
+  "examples": [
+    {
+      "telegram": "AAXX 14121 26063",
+      "expected": {
+        "day": 14,
+        "hourUTC": 12,
+        "iw": 1,
+        "station": "26063"
+      },
+      "independentComputation": {
+        "day": 14,
+        "hourUTC": 12,
+        "iw": 1,
+        "station": "26063"
+      },
+      "result": "PASS"
+    },
+    {
+      "telegram": "AAXX 05031 27612",
+      "expected": {
+        "day": 5,
+        "hourUTC": 3,
+        "iw": 1,
+        "station": "27612"
+      },
+      "independentComputation": {
+        "day": 5,
+        "hourUTC": 3,
+        "iw": 1,
+        "station": "27612"
+      },
+      "result": "PASS"
+    },
+    {
+      "telegram": "82714",
+      "expected": {
+        "N": 8,
+        "dd": 27,
+        "ff": 14
+      },
+      "independentComputation": {
+        "N": 8,
+        "dd": 27,
+        "ff": 14
+      },
+      "result": "PASS"
+    },
+    {
+      "telegram": "00000",
+      "expected": {
+        "N": 0,
+        "dd": 0,
+        "ff": 0
+      },
+      "independentComputation": {
+        "N": 0,
+        "dd": 0,
+        "ff": 0
+      },
+      "result": "PASS"
+    },
+    {
+      "telegram": "69902",
+      "expected": {
+        "N": 6,
+        "dd": 99,
+        "ff": 2
+      },
+      "independentComputation": {
+        "N": 6,
+        "dd": 99,
+        "ff": 2
+      },
+      "result": "PASS"
+    },
+    {
+      "telegram": "10152",
+      "expected": 15.2,
+      "independentComputation": 15.2,
+      "result": "PASS"
+    },
+    {
+      "telegram": "11038",
+      "expected": -3.8,
+      "independentComputation": -3.8,
+      "result": "PASS"
+    },
+    {
+      "telegram": "10000",
+      "expected": 0.0,
+      "independentComputation": 0.0,
+      "result": "PASS"
+    },
+    {
+      "telegram": "20084",
+      "expected": 8.4,
+      "independentComputation": 8.4,
+      "result": "PASS"
+    },
+    {
+      "telegram": "21045",
+      "expected": -4.5,
+      "independentComputation": -4.5,
+      "result": "PASS"
+    },
+    {
+      "telegram": "30124",
+      "expected": 1012.4,
+      "independentComputation": "0124",
+      "result": "PASS"
+    },
+    {
+      "telegram": "39856",
+      "expected": 985.6,
+      "independentComputation": "9856",
+      "result": "PASS"
+    },
+    {
+      "telegram": "40156",
+      "expected": 1015.6,
+      "independentComputation": "0156",
+      "result": "PASS"
+    },
+    {
+      "telegram": "49942",
+      "expected": 994.2,
+      "independentComputation": "9942",
+      "result": "PASS"
+    },
+    {
+      "telegram": "52018",
+      "expected": 1.8,
+      "independentComputation": 1.8,
+      "result": "PASS"
+    },
+    {
+      "telegram": "57024",
+      "expected": -2.4,
+      "independentComputation": -2.4,
+      "result": "PASS"
+    },
+    {
+      "telegram": "54000",
+      "expected": 0.0,
+      "independentComputation": 0.0,
+      "result": "PASS"
+    }
+  ],
+  "method": "Independent source reading plus standalone arithmetic and forward encoding; no calls to project codec or author test expectations."
+}

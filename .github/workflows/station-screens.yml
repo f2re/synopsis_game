@@ -1,0 +1,46 @@
+name: Экраны станции — браузерная проверка
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  station-screens:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+      - name: Установить зависимости приложения
+        run: pnpm bootstrap
+      - name: Проверить контракты библиотеки, настроек и выхода
+        run: |
+          pnpm typecheck
+          node tools/test_library.cjs
+          node tools/test_station_atmosphere.cjs
+          node tools/test_world_audio_controls.cjs
+          node tools/test_session_navigation.cjs
+      - name: Собрать настоящую рабочую версию
+        run: pnpm build
+      - name: Подготовить Chromium
+        run: |
+          npm install --prefix /tmp/station-browser --no-package-lock --ignore-scripts playwright@1.62.1
+          node /tmp/station-browser/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Проверить экраны и сеанс в браузере
+        env:
+          STATION_PLAYWRIGHT_MODULES: /tmp/station-browser/node_modules
+        run: node tools/test_station_screens.cjs
+      - name: Сохранить снимки, размеры и результаты
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: station-screens-${{ github.sha }}
+          path: artifacts/cozy-screens-r01/
+          if-no-files-found: warn
+          retention-days: 14

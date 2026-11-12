@@ -1,42 +1,9 @@
-import { useState, useEffect } from 'react';
-import { PixelCard } from '../ui';
-import { worldAudio } from '@synopsis/world-engine';
+import { useState } from 'react';
+import { worldAudio } from '@synopsis/world-engine/audio';
+import { DEFAULT_SETTINGS, saveSettings, updateSettings, useSettings, useSystemReducedMotion, type UserSettings } from './settingsStore';
+import './settings.css';
 
-export interface UserSettings {
-  masterVolume: number;
-  sfxVolume: number;
-  ambientVolume: number;
-  reducedMotion: boolean;
-  highContrast: boolean;
-  integerScale: boolean;
-  pixelFont: boolean;
-}
-
-const DEFAULT_SETTINGS: UserSettings = {
-  masterVolume: 80,
-  sfxVolume: 85,
-  ambientVolume: 70,
-  reducedMotion: false,
-  highContrast: false,
-  integerScale: true,
-  pixelFont: true,
-};
-
-const STORAGE_KEY = 'synopsis_26063_settings';
-
-export function loadSettings(): UserSettings {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
-  } catch {}
-  return DEFAULT_SETTINGS;
-}
-
-export function saveSettings(settings: UserSettings): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch {}
-}
+export { loadSettings, saveSettings, type UserSettings } from './settingsStore';
 
 interface SettingsProps {
   onClose: () => void;
@@ -46,214 +13,64 @@ interface SettingsProps {
   onRetryConnection?: () => void;
 }
 
-export function Settings({
-  onClose,
-  isPaused = false,
-  onResume,
-  connectionLost = false,
-  onRetryConnection,
-}: SettingsProps) {
-  const [settings, setSettings] = useState<UserSettings>(loadSettings);
-  const [savedStatus, setSavedStatus] = useState('');
+const volumes = [
+  ['masterVolume', 'Общая громкость'],
+  ['musicVolume', 'Музыка'],
+  ['ambientVolume', 'Дождь и звуки окружения'],
+  ['sfxVolume', 'Кнопки и игровые сигналы'],
+] as const;
 
-  useEffect(() => {
-    saveSettings(settings);
-    try {
-      worldAudio.setVolume('master', settings.masterVolume / 100);
-      worldAudio.setVolume('effects', settings.sfxVolume / 100);
-      worldAudio.setVolume('ambient', settings.ambientVolume / 100);
-    } catch {}
-  }, [settings]);
-
-  function updateSetting<K extends keyof UserSettings>(key: K, value: UserSettings[K]) {
-    setSettings((prev) => ({ ...prev, [key]: value }));
-    setSavedStatus('Настройки сохранены в профиле');
-    setTimeout(() => setSavedStatus(''), 2000);
-  }
+export function Settings({ onClose, isPaused = false, onResume, connectionLost = false, onRetryConnection }: SettingsProps) {
+  const settings = useSettings();
+  const systemReducedMotion = useSystemReducedMotion();
+  const [saved, setSaved] = useState<boolean | null>(null);
+  const update = <K extends keyof UserSettings>(key: K, value: UserSettings[K]) => setSaved(updateSettings({ [key]: value }));
+  const leave = isPaused && onResume ? onResume : onClose;
 
   return (
-    <main className="app-shell settings-screen" aria-labelledby="settings-title">
-      <div style={{ maxWidth: 620, margin: '36px auto' }}>
-        <PixelCard variant="dialog" cornerBrackets>
-          <div style={{ padding: '24px 28px' }}>
-            {/* Ошибка связи S20 */}
-            {connectionLost && (
-              <div style={{
-                background: 'rgba(231, 76, 60, 0.15)',
-                border: '2px solid var(--color-danger, #e74c3c)',
-                borderRadius: 4,
-                padding: '12px 16px',
-                marginBottom: 20,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 'bold', color: '#ff9999' }}>
-                    ⚠ Потеря связи с сервером станции
-                  </div>
-                  <div style={{ fontSize: 11, color: 'var(--ui-text-muted)' }}>
-                    Ваш введённый ответ сохранён локально и не потерян.
-                  </div>
-                </div>
-                {onRetryConnection && (
-                  <button
-                    type="button"
-                    className="pixel-btn-primary"
-                    onClick={onRetryConnection}
-                    style={{ fontSize: 11, padding: '6px 12px' }}
-                  >
-                    Повторить запрос ⟳
-                  </button>
-                )}
-              </div>
-            )}
+    <main className="station-settings" aria-labelledby="settings-title">
+      <div className="station-settings__sheet">
+        <header className="station-settings__header">
+          <div><p className="station-settings__eyebrow">26063 · РАБОЧЕЕ МЕСТО</p><h1 id="settings-title">Настройки</h1><p>Устройтесь поудобнее. Всё сохраняется на этом устройстве.</p></div>
+          <button type="button" className="pixel-btn-secondary" onClick={leave}>← {isPaused ? 'Продолжить' : 'Назад'}</button>
+        </header>
 
-            {/* Шапка настроек */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: '1px solid var(--ui-border-subtle)',
-              paddingBottom: 14,
-              marginBottom: 20
-            }}>
-              <div>
-                <span style={{ fontSize: 11, color: 'var(--color-primary-cyan)', fontFamily: 'var(--font-pixel-ui)' }}>
-                  СТАНЦИЯ 26063 · ПАРАМЕТРЫ ТЕРМИНАЛА
-                </span>
-                <h1 id="settings-title" style={{ margin: '4px 0 0', fontSize: 18, fontFamily: 'var(--font-pixel-display)' }}>
-                  {isPaused ? 'Дежурство на паузе' : 'Настройки рабочего места'}
-                </h1>
-              </div>
-              <button
-                type="button"
-                className="pixel-btn-secondary"
-                onClick={isPaused && onResume ? onResume : onClose}
-                style={{ padding: '6px 12px', fontSize: 12 }}
-              >
-                ✕ {isPaused ? 'Продолжить' : 'Закрыть'}
-              </button>
+        {connectionLost && <section className="station-settings__notice" role="status"><strong>Нет связи с сервером станции</strong><p>Настройки доступны без подключения. Результат отправки учебного ответа проверяйте после восстановления связи.</p>{onRetryConnection && <button type="button" className="pixel-btn-secondary" onClick={onRetryConnection}>Проверить соединение</button>}</section>}
+
+        <div className="station-settings__columns">
+          <section className="station-settings__section" aria-labelledby="settings-audio-title">
+            <div className="station-settings__section-mark" aria-hidden="true">01</div>
+            <h2 id="settings-audio-title">Звук станции</h2>
+            <p className="station-settings__hint">Тихая мелодия, шелест бумаги и погода за окном.</p>
+            <label className="station-settings__toggle station-settings__toggle--main"><span><strong>Звуковое сопровождение</strong><small>{settings.soundEnabled ? 'Включено. Можно настроить каждый слой.' : 'Сейчас тихо. Включите, когда будете готовы.'}</small></span><input type="checkbox" checked={settings.soundEnabled} onChange={(e) => update('soundEnabled', e.target.checked)} /></label>
+            <label className="station-settings__toggle"><span><strong>Спокойная музыка</strong><small>Авторская мелодия без слов; на смене она затихает.</small></span><input type="checkbox" checked={settings.musicEnabled} onChange={(e) => update('musicEnabled', e.target.checked)} /></label>
+            <div className="station-settings__sliders">
+              {volumes.map(([key, label]) => <label className="station-settings__range" key={key} htmlFor={`settings-${key}`}><span>{label}<output htmlFor={`settings-${key}`}>{settings[key]}%</output></span><input id={`settings-${key}`} type="range" min="0" max="100" step="1" value={settings[key]} onChange={(e) => update(key, Number(e.target.value))} /></label>)}
             </div>
+            <button type="button" className="pixel-btn-secondary" disabled={!settings.soundEnabled || settings.masterVolume === 0 || settings.sfxVolume === 0} onClick={() => worldAudio.play('audio.ui.click-soft', { allowVariance: false })}>Послушать сигнал</button>
+            <p className="station-settings__footnote">При скрытии вкладки и выходе из игры звук останавливается. Учебные задания полностью доступны без звука.</p>
+          </section>
 
-            {/* Звуковые параметры */}
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 12, fontWeight: 'bold', color: 'var(--ui-text-primary)', marginBottom: 10, fontFamily: 'var(--font-pixel-ui)' }}>
-                ГРОМКОСТЬ ЗВУКОВОГО КОМПЛЕКСА:
-              </div>
+          <div className="station-settings__stack">
+            <section className="station-settings__section" aria-labelledby="settings-weather-title">
+              <div className="station-settings__section-mark" aria-hidden="true">02</div>
+              <h2 id="settings-weather-title">За окном</h2>
+              <fieldset className="station-settings__weather"><legend className="sr-only">Декоративная погода</legend>{([['auto', 'Иногда дождь'], ['clear', 'Без дождя'], ['rain', 'Дождь']] as const).map(([value, label]) => <label key={value} className={settings.weather === value ? 'is-selected' : ''}><input type="radio" name="station-weather" value={value} checked={settings.weather === value} onChange={() => update('weather', value)} /><span>{label}</span></label>)}</fieldset>
+              <p className="station-settings__hint">Это атмосфера станции. Погода в учебных наблюдениях и правильные ответы от неё не меняются.</p>
+            </section>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
-                    <span>Общая громкость:</span>
-                    <span style={{ fontFamily: 'monospace' }}>{settings.masterVolume}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={settings.masterVolume}
-                    onChange={(e) => updateSetting('masterVolume', Number(e.target.value))}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
-                    <span>Звуковые сигналы и штамп (SFX):</span>
-                    <span style={{ fontFamily: 'monospace' }}>{settings.sfxVolume}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={settings.sfxVolume}
-                    onChange={(e) => updateSetting('sfxVolume', Number(e.target.value))}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
-                    <span>Шум ветра и фауна хаба (Ambience):</span>
-                    <span style={{ fontFamily: 'monospace' }}>{settings.ambientVolume}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={settings.ambientVolume}
-                    onChange={(e) => updateSetting('ambientVolume', Number(e.target.value))}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Доступность и отображение */}
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 12, fontWeight: 'bold', color: 'var(--ui-text-primary)', marginBottom: 10, fontFamily: 'var(--font-pixel-ui)' }}>
-                ДОСТУПНОСТЬ И РЕЖИМЫ ЭКРАНА:
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, cursor: 'pointer' }}>
-                  <span>Уменьшенное движение (Reduced Motion)</span>
-                  <input
-                    type="checkbox"
-                    checked={settings.reducedMotion}
-                    onChange={(e) => updateSetting('reducedMotion', e.target.checked)}
-                  />
-                </label>
-
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, cursor: 'pointer' }}>
-                  <span>Целочисленное масштабирование пикселей (Integer Scale)</span>
-                  <input
-                    type="checkbox"
-                    checked={settings.integerScale}
-                    onChange={(e) => updateSetting('integerScale', e.target.checked)}
-                  />
-                </label>
-
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, cursor: 'pointer' }}>
-                  <span>Пиксельный ведомственный шрифт (PixCyrillic)</span>
-                  <input
-                    type="checkbox"
-                    checked={settings.pixelFont}
-                    onChange={(e) => updateSetting('pixelFont', e.target.checked)}
-                  />
-                </label>
-              </div>
-            </div>
-
-            {savedStatus && (
-              <div style={{ fontSize: 11, color: 'var(--color-primary-cyan)', textAlign: 'right', marginBottom: 10 }}>
-                ✔ {savedStatus}
-              </div>
-            )}
-
-            {/* Кнопки выхода */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, paddingTop: 14, borderTop: '1px solid var(--ui-border-subtle)' }}>
-              {isPaused && onResume && (
-                <button
-                  type="button"
-                  className="pixel-btn-primary"
-                  onClick={onResume}
-                  style={{ padding: '8px 20px' }}
-                >
-                  ▶ Продолжить дежурство
-                </button>
-              )}
-              <button
-                type="button"
-                className="pixel-btn-secondary"
-                onClick={onClose}
-              >
-                Вернуться
-              </button>
-            </div>
+            <section className="station-settings__section" aria-labelledby="settings-display-title">
+              <div className="station-settings__section-mark" aria-hidden="true">03</div>
+              <h2 id="settings-display-title">Чтение и движение</h2>
+              <label className="station-settings__toggle"><span><strong>Уменьшить движение</strong><small>{systemReducedMotion ? 'Включено в настройках вашей системы.' : 'Спокойные сцены без постоянной анимации.'}</small></span><input type="checkbox" checked={settings.reducedMotion || systemReducedMotion} disabled={systemReducedMotion} onChange={(e) => update('reducedMotion', e.target.checked)} /></label>
+              <label className="station-settings__toggle"><span><strong>Экономия ресурсов</strong><small>Упрощённые эффекты; в кампусе до 30 кадров/с.</small></span><input type="checkbox" checked={settings.lowPower} onChange={(e) => update('lowPower', e.target.checked)} /></label>
+              <label className="station-settings__toggle"><span><strong>Повышенный контраст</strong><small>Более заметные границы и подписи.</small></span><input type="checkbox" checked={settings.highContrast} onChange={(e) => update('highContrast', e.target.checked)} /></label>
+              <label className="station-settings__toggle"><span><strong>Плотный шрифт для чтения</strong><small>Тонкие пиксельные штрихи; обе гарнитуры поддерживают кириллицу.</small></span><input type="checkbox" checked={!settings.pixelFont} onChange={(e) => update('pixelFont', !e.target.checked)} /></label>
+            </section>
           </div>
-        </PixelCard>
+        </div>
+
+        <footer className="station-settings__footer"><div role="status" aria-live="polite">{saved === null ? 'Настройки применяются сразу.' : saved ? 'Сохранено на этом устройстве.' : 'Применено на время сеанса. Браузер не разрешил сохранить настройки.'}</div><button type="button" className="pixel-btn-secondary" onClick={() => setSaved(saveSettings({ ...DEFAULT_SETTINGS }))}>По умолчанию</button><button type="button" className="pixel-btn-primary" onClick={leave}>Готово</button></footer>
       </div>
     </main>
   );
