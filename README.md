@@ -9,7 +9,7 @@
 [![Сборка](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml)
 [![Документация](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 [![Выпуск](https://github.com/f2re/synopsis_game/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/release.yml)
-[![Кандидат](https://img.shields.io/badge/кандидат-0.5.2-d9a441)](package.json)
+[![Версия](https://img.shields.io/badge/версия-0.5.2-365f4a)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520.19-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34.8-F69220?logo=pnpm&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](apps/web/package.json)
@@ -78,7 +78,7 @@
 
 Выбор «Дождь» в настройках управляет и звуком, и дождём на территории станции. В сцене не более 72 штрихов с частотой обновления 12 Гц; уменьшенное движение, экономия ресурсов и скрытие вкладки убирают движущиеся капли. При возвращении во вкладку фаза суток пересчитывается сразу. На низком горизонтальном экране камера оставляет входы в здания выше нижней панели.
 
-Chromium и Firefox проверены на собранной версии 0.5.2: шесть фаз, дождь и ясная погода, входы после изменения размера, возврат из читальни и остановка фоновых эффектов. Полная матрица экранов содержит 490 проверок Chromium и 481 проверку Firefox. Независимые художественная и техническая проверки приняты; [итоговый протокол R07](docs/testing/2026-11-13-station-r07-release-review.md) фиксирует точные версии, дополнительную проверку пробела и границы измерений. В сопоставимой ясной сцене регрессии относительно 0.5.1 не обнаружено; измерения программного рендеринга не заменяют проверку физических учебных компьютеров.
+Chromium и Firefox проверены на собранной версии 0.5.2: шесть фаз, дождь и ясная погода, входы после изменения размера, возврат из читальни и остановка фоновых эффектов. Сохранённая полная матрица экранов содержит 490 записей Chromium и 481 запись Firefox; это состояния и снимки, а не число независимых сценариев. Независимые художественная и техническая проверки приняты; [итоговый протокол R07](docs/testing/2026-11-13-station-r07-release-review.md) фиксирует точные версии, дополнительную проверку пробела и границы измерений. В сопоставимой ясной сцене регрессии относительно 0.5.1 не обнаружено; измерения программного рендеринга не заменяют проверку физических учебных компьютеров.
 
 При переходе в настройки и обратно сцена корректно освобождает прежние обработчики событий и восстанавливает изображение. Входы проверяются мышью в центре и у краёв, клавишами Tab, Shift+Tab, Enter, пробел и Esc на размерах 1366×768, 390×844 и 844×390 с DPR 2. [Контрольные снимки и отчёты](docs/testing/evidence/station-r07/README.md) сохранены вместе с контрольными суммами. Исходники, устройство освещения и команды проверки: [окружение станции R07](docs/design/STATION_ENVIRONMENT_R07.md).
 
