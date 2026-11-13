@@ -9,7 +9,7 @@
 [![Сборка](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/ci.yml)
 [![Документация](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/docs-quality.yml)
 [![Выпуск](https://github.com/f2re/synopsis_game/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/f2re/synopsis_game/actions/workflows/release.yml)
-[![Версия](https://img.shields.io/badge/версия-0.5.2-365f4a)](package.json)
+[![Версия](https://img.shields.io/badge/версия-0.5.3-365f4a)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520.19-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34.8-F69220?logo=pnpm&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](apps/web/package.json)
@@ -71,6 +71,12 @@
 | Сетевые режимы и автономный экран арены | 🟡 поэтапная реализация |
 
 Проект находится в активной разработке и пока не считается завершённым учебным продуктом.
+
+### Срез 0.5.3 / R08 — полноэкранная библиотека
+
+Библиотека и читальня открывают изображение помещения на всю область игры. Окно на залив, лампа, стол и книги остаются видимыми; поиск, каталог и статья последовательно занимают компактную рабочую область. На широком экране она расположена слева, на телефоне — снизу. Чтение можно явно развернуть и свернуть с сохранением места в статье. Возврат к каталогу сохраняет запрос, выбранный раздел и фокус.
+
+Научные статьи, источники, поиск и закладки сохранены. Кнопка «Источники» открывает нужное место в статье; фоновые звуки и музыка управляются общим провайдером. Все слои помещения и маска дождя кадрируются вместе. [Контракт и реализация библиотеки](docs/design/STATION_SCREENS_AND_LIBRARY.md) описывают композицию и критерии приёмки. Браузерная и независимая художественная приёмка R08 завершены: [итоговый протокол](docs/testing/2026-11-13-library-r08-release-review.md), [исходные отчёты и контрольные кадры](docs/testing/evidence/library-r08/README.md). В обычных режимах открыто 68,55% / 59,18% / 56,53% сцены для трёх размеров; крупный текст, восстановление чтения и управление звуком проверены в собранном приложении.
 
 ### Срез 0.5.2 / R07 — 13 ноября 2026 года
 

@@ -1,9 +1,7 @@
-import { GAME_MARK } from '../../brand';
 import { StationRoomArt } from '../atmosphere/StationRoomArt';
 import { useAmbientWeather } from '../atmosphere/AtmosphereProvider';
 import { usePresentationPreferences, useSettings, updateSettings } from '../settings/settingsStore';
-import { HubIcon } from '../hub/HubIcon';
-import '../title/station-screens.css';
+import { PixelScrollArea } from '../ui/PixelScrollArea';
 import './reading-room.css';
 
 interface ReadingRoomScreenProps {
@@ -13,36 +11,34 @@ interface ReadingRoomScreenProps {
   onOpenSettings: () => void;
 }
 
-/** An accessible reading room replaces the old fixed-size canvas placeholder. */
 export function ReadingRoomScreen({ onBack, onOpenLibrary, onOpenHelp, onOpenSettings }: ReadingRoomScreenProps) {
   const weather = useAmbientWeather();
   const preferences = usePresentationPreferences();
   const settings = useSettings();
-  return <main className="station-page station-reading-room" aria-labelledby="reading-room-title">
-    <header className="station-page__header">
-      <span className="station-page__brand">{GAME_MARK} · Архив наблюдений</span>
-      <button type="button" className="station-back" onClick={onBack}>← На площадь</button>
-    </header>
-    <h1 id="reading-room-title">Читальный зал архива</h1>
-    <p className="station-page__lead">Тихое место, чтобы разобраться в понятиях и подготовиться к следующей смене.</p>
-    <div className="station-reading-room__layout">
-      <section className="station-home__room" aria-label="У окна читального зала">
-        <div className="station-home__room-label"><i className="station-signal" aria-hidden="true" />Свет у окна<span>{weather === 'rain' ? 'Дождь за окном' : 'Вид на залив'}</span></div>
-        <StationRoomArt rain={weather === 'rain'} reducedMotion={preferences.reducedMotion || preferences.lowPower} />
-        <div className="station-home__room-footer"><div><span>МОЖНО НЕ СПЕШИТЬ</span><p>Лампа горит. Книга открыта.</p></div><button type="button" className="station-room-link" onClick={onOpenSettings}>Атмосфера <span aria-hidden="true">↗</span></button></div>
-      </section>
-      <section className="station-reading-room__desk" aria-labelledby="reading-room-shelf">
-        <span className="station-eyebrow">ПОЛКА СИНОПТИКА</span>
-        <h2 id="reading-room-shelf">Нужная книга — рядом</h2>
-        <p>Найдите знакомое обозначение, прочитайте определение или сохраните полезную статью в закладки.</p>
-        <ul><li>Наблюдения и код КН-01</li><li>Карты и атмосфера</li><li>Памятки и приёмы работы</li></ul>
-        <button type="button" className="station-menu-button station-menu-button--primary" onClick={onOpenLibrary}><HubIcon name="guide" size={40} /><span><strong>Открыть библиотеку</strong><small>Поиск, определения и ваши закладки</small></span><b aria-hidden="true">›</b></button>
-        <button type="button" className="station-menu-button" onClick={onOpenHelp}><HubIcon name="guide" size={32} /><span><strong>Помощь на станции</strong><small>Первое дежурство и ответы на вопросы</small></span></button>
-      </section>
-    </div>
-    <footer className="station-home__footer">
-      <span>Читальный зал открыт без входа в профиль</span>
-      <button type="button" className="station-sound-button" aria-pressed={settings.soundEnabled} onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}>{settings.soundEnabled ? 'Выключить звук' : 'Включить звук'}</button>
-    </footer>
+  return <main className="station-interior-screen station-reading-room" aria-labelledby="reading-room-title">
+    <StationRoomArt presentation="scene" rain={weather === 'rain'} reducedMotion={preferences.reducedMotion || preferences.lowPower} />
+    <nav className="station-interior-nav" aria-label="Читальный зал" data-scene-occluder>
+      <button type="button" className="station-interior-button station-back" onClick={onBack}>← На площадь</button>
+      <button type="button" className="station-interior-button station-sound-button" aria-pressed={settings.soundEnabled}
+        onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}>
+        {settings.soundEnabled ? 'Выключить звук' : 'Включить звук'}
+      </button>
+    </nav>
+    <section className="station-interior-desk station-reading-room__desk" aria-label="Книга на столе" data-scene-occluder>
+      <PixelScrollArea className="station-reading-room__desk-scroll" label="Читальный зал архива">
+        <div className="station-reading-room__desk-content">
+          <p className="station-reading-room__eyebrow">КНИГА НА СТОЛЕ</p>
+          <h1 id="reading-room-title">Читальный зал архива</h1>
+          <p>Найдите понятие, разберите обозначение или вернитесь к своей закладке.</p>
+          <button type="button" className="station-reading-room__open" onClick={onOpenLibrary}>
+            <strong>Открыть библиотеку</strong><span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </PixelScrollArea>
+      <footer className="station-reading-room__actions">
+        <button type="button" className="station-reading-room__link" onClick={onOpenHelp}>Помощь на станции</button>
+        <button type="button" className="station-reading-room__link" onClick={onOpenSettings}>Атмосфера</button>
+      </footer>
+    </section>
   </main>;
 }

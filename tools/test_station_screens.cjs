@@ -24,8 +24,8 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const phases = new Set((process.env.STATION_SCREEN_PHASES || 'station,public,portraits,game,admin,audio').split(','));
-for (const phase of phases) assert.ok(['station','public','portraits','game','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
+const phases = new Set((process.env.STATION_SCREEN_PHASES || 'library,station,public,portraits,game,admin,audio').split(','));
+for (const phase of phases) assert.ok(['library','station','public','portraits','game','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
 const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
 let apiProcess, webServer, browser, nativeChrome;
@@ -199,6 +199,7 @@ async function waitForCampus(page) {
   report.browser = browser.version();
   const createContext = browser.newContext.bind(browser);
   browser.newContext = async options => { const context = await createContext(options); context.setDefaultTimeout(20_000); return context; };
+  if (phases.has('library')) await require('./test_library_scene.cjs').runLibrarySceneChecks({ base, browser, report, capture, output });
   for (const viewport of (phases.has('station') ? [{ width: 1366, height: 768 }, { width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }] : [])) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
     await context.addInitScript(() => {
@@ -234,7 +235,7 @@ async function waitForCampus(page) {
     await page.getByLabel('Что хотите найти?').fill('несуществующеепонятие');
     await page.getByRole('heading', { name: 'Ничего не найдено' }).waitFor();
     await page.getByRole('button', { name: 'Показать все темы' }).click();
-    await page.getByRole('button', { name: /Открыть таблицы КН-01/ }).click();
+    await page.getByRole('button', { name: /Таблицы КН-01/i }).click();
     await page.locator('dialog[open]').waitFor();
     await capture(page, `codebook-${viewport.width}`);
     await page.keyboard.press('Escape');
@@ -351,6 +352,7 @@ async function waitForCampus(page) {
   await waitForCampus(page);
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Music and ambience share a context');
+  await require('./test_library_scene.cjs').checkLibraryNativeAudio({ page, context, report, capture, waitForCampus });
   // A real background tab in headed Chromium, not a mocked visibility event.
   // This context has no driver focus emulation or visibility mocks.
   const backgroundTab = await context.newPage();

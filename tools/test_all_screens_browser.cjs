@@ -175,35 +175,33 @@ async function checkCodebook({ page, viewport, report, capture, opener }) {
 async function checkLibrary({ page, base, viewport, report, capture }) {
   await page.goto(base + '/library');
   await page.getByRole('heading', { name: 'Библиотека синоптика', exact: true }).waitFor();
-  const categoryBar = page.getByRole('navigation', { name: 'Разделы библиотеки' });
+  const categorySelect = page.getByLabel('Раздел библиотеки', { exact: true });
   const categories = [];
   for (const category of library.categories) {
-    const button = categoryBar.getByRole('button', { name: category.title, exact: true });
-    await checkHitTarget(button, `Library category ${category.title}`); await button.click();
-    assert.equal(await button.getAttribute('aria-pressed'), 'true');
+    await checkHitTarget(categorySelect, `Library category ${category.title}`);
+    await categorySelect.selectOption(category.id);
+    assert.equal(await categorySelect.inputValue(), category.id);
     assert.equal(await page.locator('.library-result').count(), library.articles.filter(article => article.category === category.id).length);
     categories.push(category.id);
   }
-  await categoryBar.getByRole('button', { name: 'Все темы', exact: true }).click();
+  await categorySelect.selectOption('all');
   const first = library.articles[0];
   if (viewport.width === 1366) {
     for (const entry of library.articles) {
       await page.locator('.library-result').filter({ has: page.getByText(entry.title, { exact: true }) }).click();
       await page.waitForFunction(title => document.querySelector('#library-article-heading')?.textContent === title, entry.title);
+      await page.getByRole('button', { name: /К каталогу/ }).click();
     }
   }
   await page.getByLabel('Что хотите найти?', { exact: true }).fill(first.title);
   await page.locator('.library-result').filter({ has: page.getByText(first.title, { exact: true }) }).click();
   await page.getByRole('heading', { name: first.title, exact: true }).waitFor();
-  if (viewport.width > 760) {
-    const columns = await page.locator('.library-body').evaluate(node => {
-      const frame = node.getBoundingClientRect(), article = node.querySelector('.library-reader').getBoundingClientRect();
-      return { width: frame.width, articleWidth: article.width,
-        unusedRight: frame.right - parseFloat(getComputedStyle(node).borderRightWidth) - article.right };
-    });
-    assert.ok(Math.abs(columns.unusedRight) <= 2, `Library article fills the available grid width: ${JSON.stringify(columns)}`);
-    report.cases.push({ name: `all-library-column-fill-${viewport.width}`, ...columns });
-  }
+  const composition = await require('./test_library_scene.cjs').measureLibraryScene(page, report, `all-library-reader-composition-${viewport.width}`);
+  assert.equal(composition.lowPower, 'true');
+  assert.equal(composition.reducedMotion, 'false', 'Low-power library is tested independently of reduced motion');
+  assert.equal(composition.raining, 'true', 'Low-power check retains the actual rainy room');
+  assert.equal(composition.paused, 'true');
+  assert.equal(composition.animatedDrops, 0, 'Low-power stops moving room drops without removing the scene');
   const favorite = page.locator('.library-favorite');
   await checkHitTarget(favorite, 'Library bookmark'); await favorite.click();
   assert.equal(await favorite.getAttribute('aria-pressed'), 'true');
@@ -213,10 +211,8 @@ async function checkLibrary({ page, base, viewport, report, capture }) {
   const relatedTitle = (await related.innerText()).replace(/\s*→\s*$/, '').trim();
   await related.click();
   await page.getByRole('heading', { name: relatedTitle, exact: true }).waitFor();
-  if (viewport.width <= 760) {
-    await page.getByRole('button', { name: '← К каталогу', exact: true }).click();
-    assert.ok(await page.getByLabel('Что хотите найти?', { exact: true }).evaluate(node => node === document.activeElement));
-  }
+  await page.getByRole('button', { name: /К каталогу/ }).click();
+  await page.waitForFunction(() => document.activeElement?.classList.contains('library-result'));
   await page.reload(); await page.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
   await page.getByRole('button', { name: /Избранное/ }).click();
   assert.equal(await page.locator('.library-result').count(), 1, 'Library bookmark survives reload');
@@ -227,11 +223,12 @@ async function checkLibrary({ page, base, viewport, report, capture }) {
   await page.getByRole('heading', { name: 'Ничего не найдено' }).waitFor();
   await page.getByRole('button', { name: 'Показать все темы', exact: true }).click();
   assert.equal(await page.locator('.library-result').count(), library.articles.length);
-  const catalogue = page.locator('.library-catalog .pixel-scroll-area');
-  if (await catalogue.count()) await exerciseScrollbar(page, catalogue, report, `all-library-scroll-${viewport.width}`);
+  const catalogue = page.locator('.library-catalog-scroll');
+  assert.equal(await catalogue.count(), 1, 'Library catalogue retains the shared scrolling control');
+  await exerciseScrollbar(page, catalogue, report, `all-library-scroll-${viewport.width}`);
   await capture(page, `all-library-catalog-${viewport.width}`);
   await checkPageScroll({ page, viewport, report, capture }, 'all-library');
-  const opener = page.getByRole('button', { name: 'Открыть таблицы КН-01 →', exact: true });
+  const opener = page.getByRole('button', { name: /Таблицы КН-01/i });
   await opener.click();
   await checkCodebook({ page, viewport, report, capture, opener });
   report.cases.push({ name: `all-library-controls-${viewport.width}`, categories, articlesOpened: viewport.width === 1366 ? library.articles.length : 2, bookmarksAddedRemoved: true, emptyAndReset: true, reload: true });
@@ -344,7 +341,7 @@ async function runAdditionalScreenChecks({ base, browser, report, capture, waitF
   for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'no-preference' });
     await context.addInitScript(() => {
-      if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true }));
+      if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true, weather: 'rain' }));
     });
     const page = await context.newPage();
     page.on('pageerror', error => report.errors.push({ scenario: 'all-public-screens', viewport: viewport.width, message: error.message }));
@@ -414,7 +411,7 @@ async function runAdditionalScreenChecks({ base, browser, report, capture, waitF
     await tapped.locator('.hub-dock__route').tap(); await tapped.getByRole('dialog', { name: 'На станции', exact: true }).waitFor();
     await tapped.getByRole('button', { name: 'Закрыть окно', exact: true }).tap();
     await tapped.locator('.hub-dock__archive').tap(); await tapped.getByRole('heading', { name: 'Библиотека синоптика' }).waitFor();
-    await tapped.getByRole('button', { name: 'Открыть таблицы КН-01 →', exact: true }).tap();
+    await tapped.getByRole('button', { name: /Таблицы КН-01/i }).tap();
     const dialog = tapped.getByRole('dialog', { name: 'Наставление КН-01', exact: true }); await dialog.waitFor();
     const track = dialog.locator('.codebook-scroll > [role="scrollbar"][aria-orientation="vertical"]');
     await track.waitFor({ state: 'visible' });

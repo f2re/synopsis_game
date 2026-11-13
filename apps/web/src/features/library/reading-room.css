@@ -1,11 +1,43 @@
-.station-reading-room__layout { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr); align-items:center; gap:32px; margin:32px 0 40px; }
-.station-reading-room__layout .station-home__room { width:100%; margin:0; }
-.station-reading-room__desk { min-width:0; padding:26px; background:#17343a; border:1px solid #536963; }
-.station-reading-room__desk p { color:#cad1c3; line-height:1.65; }
-.station-reading-room__desk ul { margin:22px 0; padding-left:22px; color:#e2d6b6; }
-.station-reading-room__desk li { margin:8px 0; padding-left:5px; }
-.station-reading-room__desk .station-menu-button { margin-top:16px; }
-.station-reading-room__layout .station-home__room-footer { flex-wrap:wrap; padding:18px; }
-.station-reading-room .station-home__footer>span { max-width:none; text-align:left; }
-@media (max-width:1000px) { .station-reading-room__layout { gap:20px; grid-template-columns:minmax(0,1.15fr) minmax(280px,1fr); } .station-reading-room__desk { padding:20px; } }
-@media (max-width:700px) { .station-reading-room__layout { grid-template-columns:1fr; gap:22px; margin:24px 0; } .station-reading-room .station-page__header { align-items:flex-start; } .station-reading-room .station-back { white-space:nowrap; } .station-reading-room__desk { padding:20px; } }
+.station-reading-room__desk { display: grid; grid-template-rows: minmax(0, 1fr) auto; height: 340px; overflow: hidden; }
+.station-reading-room__desk-scroll { min-height: 0; padding: 12px 10px 0 0; }
+.station-reading-room__desk-content { padding: 12px 22px 16px; }
+.station-reading-room__eyebrow { margin: 0 0 12px; color: #665038; font: 13px/1.4 var(--font-pixel-dense); letter-spacing: .06em; }
+.station-reading-room h1 { margin: 0 0 14px; color: #1e2430; font: 26px/1.3 var(--font-pixel-display); }
+.station-reading-room__desk-content > p:not(.station-reading-room__eyebrow) { margin: 0 0 20px; color: #4b5263; font-size: 16px; line-height: 1.5; }
+.station-reading-room__open {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; min-height: 48px; padding: 10px 14px; border: 2px solid #6b5731; border-radius: 0;
+  color: #1e2430; background: #f2c75c; font: 16px/1.4 var(--font-pixel-ui); text-align: left; cursor: pointer;
+}
+.station-reading-room__open strong { font-weight: normal; }
+.station-reading-room__open:hover { background: #ffdd83; }
+.station-reading-room__open:active { background: #e6c07a; box-shadow: inset 0 2px #6b573155; }
+.station-reading-room__actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px 12px; }
+.station-reading-room__link {
+  min-width: 44px; min-height: 44px; padding: 8px 10px; border: 2px solid #8b7857; border-radius: 0;
+  background: #e2d6b6; color: #143f4c; font: 14px/1.4 var(--font-pixel-ui); text-align: left; cursor: pointer;
+}
+.station-reading-room__link:hover { background: #f2c75c; border-color: #665038; }
+.station-reading-room__link:active { background: #d5b574; box-shadow: inset 0 2px #6b573155; }
+.station-reading-room .pixel-scroll-area :is(button, a):focus-visible { outline-offset: -2px; }
+@media (max-width: 600px) and (orientation: portrait) {
+  .station-reading-room__desk { height: 38dvh; }
+  .station-reading-room__desk-scroll { padding-top: 0; }
+  .station-reading-room__desk-content { padding: 14px 14px 10px; }
+  .station-reading-room__eyebrow { margin-bottom: 8px; }
+  .station-reading-room h1 { font-size: 22px; margin-bottom: 10px; }
+  .station-reading-room__desk-content > p:not(.station-reading-room__eyebrow) { margin-bottom: 14px; }
+  .station-reading-room__actions { padding: 8px 10px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .station-reading-room__desk { height: calc(100dvh - 80px); }
+  .station-reading-room__desk-scroll { padding-top: 0; }
+  .station-reading-room__desk-content { padding: 12px 14px; }
+  .station-reading-room__eyebrow { margin-bottom: 6px; }
+  .station-reading-room h1 { font-size: 22px; margin-bottom: 10px; }
+  .station-reading-room__desk-content > p:not(.station-reading-room__eyebrow) { margin-bottom: 12px; }
+  .station-reading-room__actions { padding: 6px 8px; }
+}
+@media (forced-colors: active) {
+  .station-reading-room__open, .station-reading-room__link { border-color: CanvasText; background: Canvas; color: CanvasText; }
+}

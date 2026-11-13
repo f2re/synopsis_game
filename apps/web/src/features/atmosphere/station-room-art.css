@@ -11,6 +11,122 @@
   image-rendering: pixelated;
 }
 
+.station-room-art__plane {
+  position: absolute;
+  inset: 0;
+}
+
+/* The view, glass mask and foreground share one 16:9 plane, including its crop. */
+.station-room-art--scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border: 0;
+  pointer-events: none;
+}
+
+.station-room-art--scene .station-room-art__plane {
+  inset: auto;
+  width: max(100vw, calc(100dvh * 16 / 9));
+  height: max(100dvh, calc(100vw * 9 / 16));
+  left: var(--room-focus-x, 50%);
+  top: 50%;
+  transform: translate(calc(-1 * var(--room-focus-x, 50%)), -50%);
+}
+
+.station-interior-screen {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100dvh;
+  min-height: 280px;
+  overflow: hidden;
+  color: #f3ecd8;
+  background: #193b3e;
+  font: 16px/1.45 var(--font-pixel-ui, PixCyrillic, monospace);
+}
+
+.station-interior-screen *, .station-interior-screen *::before, .station-interior-screen *::after {
+  box-sizing: border-box;
+}
+
+.station-interior-nav {
+  position: absolute;
+  z-index: 2;
+  top: max(20px, env(safe-area-inset-top));
+  left: max(24px, env(safe-area-inset-left));
+  right: max(24px, env(safe-area-inset-right));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.station-interior-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 2px solid #6f9e95;
+  border-radius: 0;
+  background: #0c2a33;
+  box-shadow: inset 0 2px #ffffff14, 0 3px #071c24;
+  color: #f3ecd8;
+  font: inherit;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.station-interior-button:hover { background: #143f4c; border-color: #e6c07a; }
+.station-interior-button:active:not(:disabled) { background: #1b5660; box-shadow: inset 0 2px #0004; }
+.station-interior-button:disabled { opacity: .6; cursor: default; }
+.station-interior-screen :is(button, a, input, select):focus-visible {
+  outline: 2px solid #ffe7a0;
+  outline-offset: 3px;
+}
+
+.station-interior-desk {
+  position: absolute;
+  z-index: 1;
+  left: max(24px, env(safe-area-inset-left));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: min(420px, calc(100vw - 48px));
+  max-height: calc(100dvh - 112px);
+  min-width: 0;
+  color: #1e2430;
+  background: #f3ecd8;
+  border: 4px solid #6b4935;
+  box-shadow: 0 4px 0 #28322a, inset 0 0 0 2px #e2d6b6;
+  --ui-chrome-edge: #756143;
+  --ui-scroll-track: #e2d6b6;
+  --ui-scroll-thumb: #9a7851;
+  --ui-scroll-hover: #6b5731;
+}
+
+.station-interior-desk :is(button, a, input, select):focus-visible {
+  outline-color: #143f4c;
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  .station-interior-screen { --room-focus-x: 63%; }
+  .station-interior-nav { top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; }
+  .station-interior-desk { left: 12px; bottom: max(12px, env(safe-area-inset-bottom)); width: calc(100vw - 24px); max-height: 38dvh; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .station-interior-nav { top: 12px; left: 16px; right: 16px; }
+  .station-interior-desk { left: 16px; bottom: 12px; width: min(340px, 44vw); max-height: calc(100dvh - 80px); }
+}
+
+@media (forced-colors: active) {
+  .station-interior-button, .station-interior-desk { border-color: CanvasText; background: Canvas; color: CanvasText; }
+}
+
 .station-room-art__window,
 .station-room-art__interior,
 .station-room-art__rain {
