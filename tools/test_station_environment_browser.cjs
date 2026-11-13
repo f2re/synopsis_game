@@ -315,12 +315,14 @@ async function interactionCases(base) {
         await pressEntranceKey(page, 'Tab', `${viewport.width}/${box.id}/return`);
       }
       assert.equal(await target.evaluate(node => document.activeElement === node && node.matches(':focus-visible')), true, `${box.id}: real Tab navigation returns to visible focus`);
-      await pressEntranceKey(page, 'Enter', `${viewport.width}/${box.id}/open`);
-      await page.getByRole('dialog', { name: facilityNames[box.id], exact: true }).waitFor();
-      await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/keyboard`);
-      assert.equal(await target.evaluate(node => document.activeElement === node), true, `${box.id}: Escape restores the entrance`);
+      for (const activationKey of ['Enter', 'Space']) {
+        await pressEntranceKey(page, activationKey, `${viewport.width}/${box.id}/open`);
+        await page.getByRole('dialog', { name: facilityNames[box.id], exact: true }).waitFor();
+        await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/keyboard-${activationKey}`);
+        assert.equal(await target.evaluate(node => document.activeElement === node), true, `${box.id}: Escape restores the entrance after ${activationKey}`);
+      }
     }
-    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Escape'] });
+    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
     await capture(page, `entrances-${viewport.width}-dpr2`);
   }
   await context.close();
