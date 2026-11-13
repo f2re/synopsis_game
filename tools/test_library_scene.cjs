@@ -90,7 +90,11 @@ async function measureLibraryScene(page, report, name, { expanded = false } = {}
       images, declaredPanels: rectangles.filter(r => r.reason === 'declared-panel'), occupiedArea: occupied,
       openSceneFraction: 1 - occupied / (innerWidth * innerHeight), measuredRectangles: rectangles,
       canvasCount: document.querySelectorAll('canvas').length,
-      mainViewport: viewport, reducedMotion: document.documentElement.dataset.reducedMotion, lowPower: document.documentElement.dataset.lowPower };
+      mainViewport: viewport, reducedMotion: document.documentElement.dataset.reducedMotion, lowPower: document.documentElement.dataset.lowPower,
+      raining: scene.dataset.raining, paused: scene.dataset.paused,
+      animatedDrops: [...scene.querySelectorAll('.station-room-art__drop')].filter(node => {
+        const style = getComputedStyle(node); return style.display !== 'none' && style.animationName !== 'none';
+      }).length };
   });
   report.cases.push({ name, ...metric, expanded, measurement: 'Union of visible panels, painted surfaces, controls and text; translucent panels count as occupied' });
   const [width, height] = metric.viewport;
@@ -134,7 +138,10 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
       await capture(page, `library-scene-search-${viewport.width}`);
       const result = page.locator('.library-result').first();
       await checkHitTarget(result, 'Library search result');
-      await result.focus(); await result.press('Enter');
+      await result.focus();
+      const catalogueViewport = page.locator('.library-catalog-scroll > .pixel-scroll-area__viewport');
+      const cataloguePosition = await catalogueViewport.evaluate(node => node.scrollTop);
+      await result.press('Enter');
       const heading = page.getByRole('heading', { name: 'Точка росы', exact: true });
       await heading.waitFor();
       await page.waitForFunction(() => document.activeElement === document.querySelector('#library-article-heading'));
@@ -195,12 +202,38 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
       await checkHitTarget(page.locator('.library-favorite'), 'Bookmark action');
       await page.locator('.library-favorite').click();
       assert.ok((await page.evaluate(() => JSON.parse(localStorage.getItem('synopsis_26063_library_favorites_v1')))).includes(dewPoint.id));
+      const savedReading = await readerViewport.evaluate(node => {
+        const top = node.getBoundingClientRect().top;
+        const block = [...node.querySelectorAll('[data-reading-block]')].find(element => element.getBoundingClientRect().bottom > top + 1);
+        return { scrollTop: node.scrollTop, block: block?.dataset.readingBlock, text: block?.textContent,
+          offset: block ? block.getBoundingClientRect().top - top : null };
+      });
+      assert.ok(savedReading.scrollTop > 1 && savedReading.block, 'Sources establish a meaningful saved reading position');
       await page.getByRole('button', { name: /К каталогу/, exact: false }).click();
       await search.waitFor();
       assert.equal(await search.inputValue(), 'точка росы', 'Returning preserves the search');
-      await page.waitForFunction(() => document.activeElement?.classList.contains('library-result'));
+      await page.waitForFunction(() => document.activeElement?.matches('.library-result[data-article-id="dew-point"]'));
+      assert.ok(Math.abs(await catalogueViewport.evaluate(node => node.scrollTop) - cataloguePosition) <= 2,
+        'Returning restores the catalogue scroll position');
       await measureLibraryScene(page, report, `library-scene-return-geometry-${viewport.width}`);
       await capture(page, `library-scene-return-${viewport.width}`);
+      await result.click(); await nextPaint(page);
+      const reopened = await readerViewport.evaluate((node, saved) => {
+        const block = node.querySelector(`[data-reading-block="${saved.block}"]`);
+        const box = node.getBoundingClientRect();
+        return { scrollTop: node.scrollTop, text: block?.textContent,
+          offset: block ? block.getBoundingClientRect().top - box.top : null,
+          viewportFocused: document.activeElement === node,
+          viewportVisible: box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight };
+      }, savedReading);
+      assert.equal(reopened.text, savedReading.text, 'Reopening retains the same scientific reading block');
+      assert.ok(Math.abs(reopened.scrollTop - savedReading.scrollTop) <= 2 && Math.abs(reopened.offset - savedReading.offset) <= 3,
+        `Reopening restores reading position: ${JSON.stringify({ savedReading, reopened })}`);
+      assert.ok(reopened.viewportFocused && reopened.viewportVisible, 'Reopening focuses the visible reading viewport, not an off-screen heading');
+      report.cases.push({ name: `library-scene-reopened-position-${viewport.width}`, savedReading, reopened, cataloguePosition, catalogueFocus: dewPoint.id });
+      await capture(page, `library-scene-reopened-${viewport.width}`);
+      await page.getByRole('button', { name: /К каталогу/ }).click();
+      await search.waitFor();
       if (viewport.width === 390) {
         await result.click(); await expand.click();
         const before = await page.locator('.library-definition').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
@@ -214,10 +247,36 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
         await nextPaint(page);
         const after = await page.locator('.library-definition').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
         assert.ok(after >= before * 2 - .1, 'Article text is enlarged to 200%');
+        const measureTextLayout = () => page.evaluate(() => {
+          const box = node => {
+            const r = node.getBoundingClientRect();
+            return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height };
+          };
+          const selectors = ['.station-interior-nav', '.library-desk', '.library-header', '.library-reader-toolbar', '.library-reader-scroll', '.library-reader', '.library-footer'];
+          const panels = Object.fromEntries(selectors.map(selector => [selector, box(document.querySelector(selector))]));
+          const scrolling = [...document.querySelectorAll('.pixel-scroll-area__viewport,.library-desk')]
+            .filter(node => { const r = node.getBoundingClientRect(); return r.width > 0 && r.height > 0; })
+            .map(node => ({ className: node.className, scrollLeft: node.scrollLeft, scrollTop: node.scrollTop,
+              width: node.clientWidth, totalWidth: node.scrollWidth, height: node.clientHeight, totalHeight: node.scrollHeight, box: box(node) }));
+          const nav = panels['.station-interior-nav'], desk = panels['.library-desk'];
+          const navDeskOverlapArea = Math.max(0, Math.min(nav.right, desk.right) - Math.max(nav.left, desk.left))
+            * Math.max(0, Math.min(nav.bottom, desk.bottom) - Math.max(nav.top, desk.top));
+          return { viewport: [innerWidth, innerHeight], panels, scrolling, navDeskOverlapArea };
+        });
+        const beforeInput = await measureTextLayout();
         await checkHitTarget(collapse, 'Collapse at 200% text size');
         await exerciseScrollbar(page, reader, report, 'library-scene-reader-scroll-text-200-390');
+        const afterInput = await measureTextLayout();
         await capture(page, 'library-scene-text-200-390');
-        report.cases.push({ name: 'library-scene-text-200-390', beforePx: before, afterPx: after, method: 'CSS text-only enlargement of actual text elements; not native browser zoom' });
+        report.cases.push({ name: 'library-scene-text-200-390', beforePx: before, afterPx: after, beforeInput, afterInput,
+          method: 'CSS text-only enlargement of actual text elements; not native browser zoom' });
+        for (const layout of [beforeInput, afterInput]) {
+          assert.ok(layout.navDeskOverlapArea <= 1, `At 200% text navigation must not cover the book: ${JSON.stringify(layout)}`);
+          for (const scroll of layout.scrolling) {
+            assert.ok(Math.abs(scroll.scrollLeft) <= 1 && scroll.totalWidth <= scroll.width + 2,
+              `At 200% text no nested viewport hides or shifts text horizontally: ${JSON.stringify(scroll)}`);
+          }
+        }
       }
       await page.goto(base + '/archive');
       await page.getByRole('heading', { name: 'Читальный зал архива', exact: true }).waitFor();

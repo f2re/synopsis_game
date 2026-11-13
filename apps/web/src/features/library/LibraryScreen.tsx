@@ -236,8 +236,8 @@ export function LibraryScreen({ onBack, initialQuery = '', onOpenCodebook }: Lib
         <PixelScrollArea className="library-catalog-scroll" label="Каталог библиотеки" viewportRef={catalogViewport}>
           <div className="library-catalog-heading">
             <label className="library-category-label">
-              <span className="library-visually-hidden">Раздел библиотеки</span>
-              <select value={category} onChange={event => setCategory(event.target.value)}>
+              <span id="library-category-label" className="library-visually-hidden">Раздел библиотеки</span>
+              <select aria-labelledby="library-category-label" value={category} onChange={event => setCategory(event.target.value)}>
                 <option value="all">Все темы</option>
                 {libraryData.categories.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
               </select>

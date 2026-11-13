@@ -196,7 +196,12 @@ async function checkLibrary({ page, base, viewport, report, capture }) {
   await page.getByLabel('Что хотите найти?', { exact: true }).fill(first.title);
   await page.locator('.library-result').filter({ has: page.getByText(first.title, { exact: true }) }).click();
   await page.getByRole('heading', { name: first.title, exact: true }).waitFor();
-  await require('./test_library_scene.cjs').measureLibraryScene(page, report, `all-library-reader-composition-${viewport.width}`);
+  const composition = await require('./test_library_scene.cjs').measureLibraryScene(page, report, `all-library-reader-composition-${viewport.width}`);
+  assert.equal(composition.lowPower, 'true');
+  assert.equal(composition.reducedMotion, 'false', 'Low-power library is tested independently of reduced motion');
+  assert.equal(composition.raining, 'true', 'Low-power check retains the actual rainy room');
+  assert.equal(composition.paused, 'true');
+  assert.equal(composition.animatedDrops, 0, 'Low-power stops moving room drops without removing the scene');
   const favorite = page.locator('.library-favorite');
   await checkHitTarget(favorite, 'Library bookmark'); await favorite.click();
   assert.equal(await favorite.getAttribute('aria-pressed'), 'true');
@@ -336,7 +341,7 @@ async function runAdditionalScreenChecks({ base, browser, report, capture, waitF
   for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'no-preference' });
     await context.addInitScript(() => {
-      if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true }));
+      if (!localStorage.getItem('synopsis_26063_settings')) localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true, weather: 'rain' }));
     });
     const page = await context.newPage();
     page.on('pageerror', error => report.errors.push({ scenario: 'all-public-screens', viewport: viewport.width, message: error.message }));
