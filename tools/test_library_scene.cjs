@@ -202,11 +202,15 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
       await checkHitTarget(page.locator('.library-favorite'), 'Bookmark action');
       await page.locator('.library-favorite').click();
       assert.ok((await page.evaluate(() => JSON.parse(localStorage.getItem('synopsis_26063_library_favorites_v1')))).includes(dewPoint.id));
+      // Capture waits for the actual rail/viewport geometry to agree. A hidden
+      // pane may briefly have a different width while ResizeObserver settles.
+      await capture(page, `library-scene-sources-${viewport.width}`);
       const savedReading = await readerViewport.evaluate(node => {
         const top = node.getBoundingClientRect().top;
         const block = [...node.querySelectorAll('[data-reading-block]')].find(element => element.getBoundingClientRect().bottom > top + 1);
         return { scrollTop: node.scrollTop, block: block?.dataset.readingBlock, text: block?.textContent,
-          offset: block ? block.getBoundingClientRect().top - top : null };
+          offset: block ? block.getBoundingClientRect().top - top : null,
+          viewportWidth: node.clientWidth, viewportHeight: node.clientHeight, contentHeight: node.scrollHeight };
       });
       assert.ok(savedReading.scrollTop > 1 && savedReading.block, 'Sources establish a meaningful saved reading position');
       await page.getByRole('button', { name: /К каталогу/, exact: false }).click();
@@ -217,21 +221,31 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
         'Returning restores the catalogue scroll position');
       await measureLibraryScene(page, report, `library-scene-return-geometry-${viewport.width}`);
       await capture(page, `library-scene-return-${viewport.width}`);
-      await result.click(); await nextPaint(page);
-      const reopened = await readerViewport.evaluate((node, saved) => {
-        const block = node.querySelector(`[data-reading-block="${saved.block}"]`);
-        const box = node.getBoundingClientRect();
-        return { scrollTop: node.scrollTop, text: block?.textContent,
-          offset: block ? block.getBoundingClientRect().top - box.top : null,
-          viewportFocused: document.activeElement === node,
-          viewportVisible: box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight };
-      }, savedReading);
-      assert.equal(reopened.text, savedReading.text, 'Reopening retains the same scientific reading block');
-      assert.ok(Math.abs(reopened.scrollTop - savedReading.scrollTop) <= 2 && Math.abs(reopened.offset - savedReading.offset) <= 3,
-        `Reopening restores reading position: ${JSON.stringify({ savedReading, reopened })}`);
-      assert.ok(reopened.viewportFocused && reopened.viewportVisible, 'Reopening focuses the visible reading viewport, not an off-screen heading');
-      report.cases.push({ name: `library-scene-reopened-position-${viewport.width}`, savedReading, reopened, cataloguePosition, catalogueFocus: dewPoint.id });
+      await result.click();
       await capture(page, `library-scene-reopened-${viewport.width}`);
+      const reopenedSamples = await readerViewport.evaluate(async (node, saved) => {
+        const samples = [];
+        for (let frame = 0; frame < 4; frame++) {
+          await new Promise(resolve => requestAnimationFrame(resolve));
+          const block = node.querySelector(`[data-reading-block="${saved.block}"]`);
+          const box = node.getBoundingClientRect();
+          samples.push({ scrollTop: node.scrollTop, block: block?.dataset.readingBlock, text: block?.textContent,
+            offset: block ? block.getBoundingClientRect().top - box.top : null,
+            viewportWidth: node.clientWidth, viewportHeight: node.clientHeight, contentHeight: node.scrollHeight,
+            viewportFocused: document.activeElement === node,
+            viewportVisible: box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight });
+        }
+        return samples;
+      }, savedReading);
+      report.cases.push({ name: `library-scene-reopened-position-${viewport.width}`, savedReading, reopenedSamples, cataloguePosition, catalogueFocus: dewPoint.id,
+        criterion: 'Same scientific block, visible offset and focus after settled layout across four frames; raw scrollTop records wrapping changes' });
+      for (const reopened of reopenedSamples) {
+        assert.equal(reopened.block, savedReading.block);
+        assert.equal(reopened.text, savedReading.text, 'Reopening retains the same scientific reading block');
+        assert.ok(Math.abs(reopened.offset - savedReading.offset) <= 3,
+          `Reopening restores the visible reading anchor: ${JSON.stringify({ savedReading, reopened })}`);
+        assert.ok(reopened.viewportFocused && reopened.viewportVisible, 'Reopening focuses the visible reading viewport, not an off-screen heading');
+      }
       await page.getByRole('button', { name: /К каталогу/ }).click();
       await search.waitFor();
       if (viewport.width === 390) {
