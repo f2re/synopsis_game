@@ -116,6 +116,16 @@ export class HubTimeOfDay {
     return this.isAcceleratedDemo;
   }
 
+  /** Reconcile the wall clock immediately after a suspended browser tab. */
+  refresh(date: Date = new Date(), onPhaseChange?: (phase: DayPhase) => void): void {
+    if (this.isAcceleratedDemo) return;
+    this.realTimeCheckTimer = 0;
+    const phase = this.calculateSolarPhase(date);
+    if (phase === this.currentPhase) return;
+    this.currentPhase = phase;
+    onPhaseChange?.(phase);
+  }
+
   update(deltaMs: number, onPhaseChange?: (newPhase: DayPhase) => void): void {
     if (this.isAcceleratedDemo) {
       this.demoTimer += deltaMs;
@@ -132,12 +142,7 @@ export class HubTimeOfDay {
     // В обычном режиме проверяем переход астрономической фазы каждые 30 секунд
     this.realTimeCheckTimer += deltaMs;
     if (this.realTimeCheckTimer >= 30000) {
-      this.realTimeCheckTimer = 0;
-      const expectedPhase = this.calculateSolarPhase(new Date());
-      if (expectedPhase !== this.currentPhase) {
-        this.currentPhase = expectedPhase;
-        onPhaseChange?.(this.currentPhase);
-      }
+      this.refresh(new Date(), onPhaseChange);
     }
   }
 

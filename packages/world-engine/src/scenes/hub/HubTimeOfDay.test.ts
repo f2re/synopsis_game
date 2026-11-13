@@ -74,3 +74,16 @@ test('4. Цвета фаз соответствуют токенам палит�
     assert.ok(typeof colors.starsVisible === 'boolean', `starsVisible для ${phase} должен быть boolean`);
   });
 });
+
+test('Возврат после паузы сразу обновляет солнечную фазу и не повторяет одинаковые события', () => {
+  const clock = new HubTimeOfDay(STATION_26063_LOCATION);
+  clock.setPhase('day');
+  const events: string[] = [];
+  clock.refresh(new Date('2026-10-27T22:00:00+03:00'), (phase) => events.push(phase));
+  assert.equal(clock.getCurrentPhase(), 'night');
+  clock.refresh(new Date('2026-10-27T22:00:01+03:00'), (phase) => events.push(phase));
+  assert.deepEqual(events, ['night']);
+  clock.setAcceleratedDemo(true);
+  clock.refresh(new Date('2026-10-27T14:00:00+03:00'), (phase) => events.push(phase));
+  assert.equal(clock.getCurrentPhase(), 'night');
+});

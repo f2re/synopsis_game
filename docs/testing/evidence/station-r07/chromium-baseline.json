@@ -1,0 +1,990 @@
+{
+  "status": "PASS",
+  "mode": "baseline",
+  "engine": "chromium",
+  "browser": "151.0.7922.34",
+  "revision": "395d4cff1d2506b810e41e3595e6553720ebfc16",
+  "appVersion": "0.5.1",
+  "runnerSha256": "6f24aca2efa6d8b4ad0466822bd5a2fe28ebdf08ca88b2c0f02a08faa9bdff43",
+  "ci": {
+    "runId": "43360427117",
+    "attempt": "1",
+    "job": "station-environment",
+    "runner": "GitHub Actions 1000027797"
+  },
+  "graphicsSetup": {
+    "configuredChromiumFlags": [
+      "--no-sandbox",
+      "--enable-unsafe-swiftshader"
+    ],
+    "firefoxUserPrefs": null,
+    "softwareEnvironment": "1",
+    "rendererSource": "Read from the existing production canvas after scene readiness."
+  },
+  "productionAssets": true,
+  "realServer": true,
+  "fixedDateOnly": true,
+  "cases": [
+    {
+      "name": "raf-clear-1366-normal",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5049.8,
+          "frames": 68,
+          "p50Ms": 66.80000000000018,
+          "p95Ms": 100,
+          "maxMs": 100,
+          "jsHeapBytes": 16863800
+        },
+        {
+          "elapsedMs": 5066.4,
+          "frames": 58,
+          "p50Ms": 83.39999999999964,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 17033876
+        },
+        {
+          "elapsedMs": 5066.5,
+          "frames": 59,
+          "p50Ms": 83.30000000000291,
+          "p95Ms": 100.09999999999854,
+          "maxMs": 100.10000000000218,
+          "jsHeapBytes": 16834572
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1366-normal",
+      "reducedMotion": "false",
+      "lowPower": "false",
+      "fpsLimit": "60",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+      "lightingMode": "authored-demo",
+      "phase": "golden_hour",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1366,
+        768
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1366,
+        768
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1366,
+        768
+      ],
+      "canvasSha256": "2ab31966c32a6bc14680371c340cd1df7c08dfe1cce0d5a1e91e021bfc322244"
+    },
+    {
+      "name": "raf-clear-1366-low-power",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5033.1,
+          "frames": 86,
+          "p50Ms": 66.60000000000036,
+          "p95Ms": 66.70000000000073,
+          "maxMs": 83.30000000000018,
+          "jsHeapBytes": 19853711
+        },
+        {
+          "elapsedMs": 5049.799999999999,
+          "frames": 75,
+          "p50Ms": 66.69999999999891,
+          "p95Ms": 83.30000000000109,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 17686027
+        },
+        {
+          "elapsedMs": 5049.800000000001,
+          "frames": 80,
+          "p50Ms": 66.60000000000218,
+          "p95Ms": 66.70000000000073,
+          "maxMs": 66.80000000000109,
+          "jsHeapBytes": 20277471
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1366-low-power",
+      "reducedMotion": "false",
+      "lowPower": "true",
+      "fpsLimit": "30",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+      "lightingMode": "authored-demo",
+      "phase": "golden_hour",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1366,
+        768
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1366,
+        768
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1366,
+        768
+      ],
+      "canvasSha256": "43dbc9ebd6feec57f31a2da429d8a6fc70653ed17027b4b9ccde5221340a742e"
+    },
+    {
+      "name": "raf-clear-1440-normal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5083.200000000001,
+          "frames": 65,
+          "p50Ms": 83.30000000000018,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.40000000000055,
+          "jsHeapBytes": 18376831
+        },
+        {
+          "elapsedMs": 5016.5,
+          "frames": 64,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 18496611
+        },
+        {
+          "elapsedMs": 5083.0999999999985,
+          "frames": 65,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.40000000000146,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 18622739
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1440-normal",
+      "reducedMotion": "false",
+      "lowPower": "false",
+      "fpsLimit": "60",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+      "lightingMode": "authored-demo",
+      "phase": "golden_hour",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1440,
+        1000
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1440,
+        1000
+      ],
+      "canvasSha256": "7272d857f2cc17cf893fcab8f34be72108e353b7932bf7de58087cd883070398"
+    },
+    {
+      "name": "raf-clear-1440-low-power",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5033.099999999999,
+          "frames": 81,
+          "p50Ms": 66.69999999999982,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.39999999999964,
+          "jsHeapBytes": 19057603
+        },
+        {
+          "elapsedMs": 5016.5,
+          "frames": 64,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 19659771
+        },
+        {
+          "elapsedMs": 5083.1,
+          "frames": 65,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.40000000000146,
+          "maxMs": 83.5,
+          "jsHeapBytes": 19342275
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1440-low-power",
+      "reducedMotion": "false",
+      "lowPower": "true",
+      "fpsLimit": "30",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+      "lightingMode": "authored-demo",
+      "phase": "golden_hour",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1440,
+        1000
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1440,
+        1000
+      ],
+      "canvasSha256": "978579930d52e871e4840a3bd03c39cb4bc18bc9f5648607ddcea7d7d5d2e751"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "measured-clear-1366-normal.png",
+      "sha256": "d684bb665221e620a1b0200140ebbe686184013a2cb12865379b1c04a5e8633d"
+    },
+    {
+      "name": "measured-clear-1366-normal-canvas.png",
+      "sha256": "2ab31966c32a6bc14680371c340cd1df7c08dfe1cce0d5a1e91e021bfc322244"
+    },
+    {
+      "name": "measured-clear-1366-low-power.png",
+      "sha256": "d252f20238a3c0c6e27bbc67be7b5a4fab9419b646b6ab40d23366ae82aec328"
+    },
+    {
+      "name": "measured-clear-1366-low-power-canvas.png",
+      "sha256": "43dbc9ebd6feec57f31a2da429d8a6fc70653ed17027b4b9ccde5221340a742e"
+    },
+    {
+      "name": "measured-clear-1440-normal.png",
+      "sha256": "4891bd552c2145642a2916d4a7fa93643ac8bb7d6ac3fd96978493a9ed912443"
+    },
+    {
+      "name": "measured-clear-1440-normal-canvas.png",
+      "sha256": "7272d857f2cc17cf893fcab8f34be72108e353b7932bf7de58087cd883070398"
+    },
+    {
+      "name": "measured-clear-1440-low-power.png",
+      "sha256": "29affeb167d6c6e283bff3bcf254c39df5616caab0da5ea19eae335a0dc31b1e"
+    },
+    {
+      "name": "measured-clear-1440-low-power-canvas.png",
+      "sha256": "978579930d52e871e4840a3bd03c39cb4bc18bc9f5648607ddcea7d7d5d2e751"
+    }
+  ],
+  "measurements": [
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5049.8,
+          "frames": 68,
+          "p50Ms": 66.80000000000018,
+          "p95Ms": 100,
+          "maxMs": 100,
+          "jsHeapBytes": 16863800
+        },
+        {
+          "elapsedMs": 5066.4,
+          "frames": 58,
+          "p50Ms": 83.39999999999964,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 17033876
+        },
+        {
+          "elapsedMs": 5066.5,
+          "frames": 59,
+          "p50Ms": 83.30000000000291,
+          "p95Ms": 100.09999999999854,
+          "maxMs": 100.10000000000218,
+          "jsHeapBytes": 16834572
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5033.1,
+          "frames": 86,
+          "p50Ms": 66.60000000000036,
+          "p95Ms": 66.70000000000073,
+          "maxMs": 83.30000000000018,
+          "jsHeapBytes": 19853711
+        },
+        {
+          "elapsedMs": 5049.799999999999,
+          "frames": 75,
+          "p50Ms": 66.69999999999891,
+          "p95Ms": 83.30000000000109,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 17686027
+        },
+        {
+          "elapsedMs": 5049.800000000001,
+          "frames": 80,
+          "p50Ms": 66.60000000000218,
+          "p95Ms": 66.70000000000073,
+          "maxMs": 66.80000000000109,
+          "jsHeapBytes": 20277471
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5083.200000000001,
+          "frames": 65,
+          "p50Ms": 83.30000000000018,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.40000000000055,
+          "jsHeapBytes": 18376831
+        },
+        {
+          "elapsedMs": 5016.5,
+          "frames": 64,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 18496611
+        },
+        {
+          "elapsedMs": 5083.0999999999985,
+          "frames": 65,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.40000000000146,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 18622739
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5033.099999999999,
+          "frames": 81,
+          "p50Ms": 66.69999999999982,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.39999999999964,
+          "jsHeapBytes": 19057603
+        },
+        {
+          "elapsedMs": 5016.5,
+          "frames": 64,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.39999999999964,
+          "maxMs": 83.40000000000146,
+          "jsHeapBytes": 19659771
+        },
+        {
+          "elapsedMs": 5083.1,
+          "frames": 65,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 83.40000000000146,
+          "maxMs": 83.5,
+          "jsHeapBytes": 19342275
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":3,\"animatedActors\":3,\"animationBudget\":3,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"character.r01.observer\",\"state\":\"walk\",\"frames\":8,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9555555555555556]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9444444444444444]}],\"errors\":[]}",
+        "lightingMode": "authored-demo",
+        "phase": "golden_hour",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    }
+  ],
+  "focusTrace": [],
+  "interactionGeometry": [],
+  "errors": [],
+  "skipped": [],
+  "limits": "RAF intervals and JS heap on this browser host; no physical GPU, sound-listening or pixel-art acceptance claim."
+}

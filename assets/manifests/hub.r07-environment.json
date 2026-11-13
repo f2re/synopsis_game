@@ -1,0 +1,47 @@
+{
+  "id": "hub.r07-environment",
+  "schema": "spritecook-landscape/v1",
+  "title": "Нейтральное небо и залив для освещения станции",
+  "source": "assets/source/environment/hub/r07/environment.aseprite",
+  "reference": "assets/source/environment/hub/r01/coastal-sky-source.png",
+  "model": "gemini-nano-banana-2.1",
+  "sourceTreatment": "Native detailed R01 raster; no resizing, palette conversion or alpha replacement. Lighting is a runtime vertex tint.",
+  "art_status": "pass",
+  "provenance": {
+    "origin": "SpriteCook edit of asset 1247bf53-6b2b-412f-9981-eb3fed885555",
+    "license": "project-generated; retain provider and reference provenance"
+  },
+  "assets": [
+    {
+      "id": "hub.r07.coastal-neutral",
+      "asset_id": "aec6e652-df8e-46e2-a040-df7d04b66acd",
+      "layer": "coastal-neutral",
+      "label": "Нейтральное небо и залив",
+      "source_png": "assets/source/environment/hub/r07/coastal-neutral-source.png",
+      "source_rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1376,
+        "height": 768
+      },
+      "logicalSize": {
+        "width": 1376,
+        "height": 768
+      },
+      "pivot": {
+        "x": 688,
+        "y": 384
+      },
+      "kind": "environment",
+      "state": "neutral",
+      "generated": "assets/generated/hub/r07/coastal-neutral.png",
+      "publicPath": "/hub/r07/coastal-neutral.png",
+      "sha256": "13df6482e28f43025fee32b5c60c86c0b3522061adcbe0aa6275b302c5afebc1",
+      "sha12": "13df6482e28f",
+      "bytes": 1278541,
+      "sourceSha256": "eea6823e6af01b1eddc06296c23879f2d47bde7e4f49d4067a5a6e62e872e89c"
+    }
+  ],
+  "art_review": "docs/art/reviews/2026-11-13-station-r07-review.md",
+  "sourceSha256": "d31d6fc64d5319c44347c4dae1629fedd38ef1f6f3469a8daeb5a3e6076af75d"
+}

@@ -10,11 +10,12 @@
       "timezone": "Europe/Moscow"
     },
     "demo_override": {
-      "enabled": true,
+      "enabled": false,
       "phase": "golden_hour",
-      "label": "Художественный закат",
-      "reason": "The authored R01 scenery has fixed sunset lighting. Solar-time variants remain pending; this decorative override does not represent live weather or the station clock."
-    }
+      "label": "",
+      "reason": "Освещение R07 следует солнечному времени профиля станции; нейтральный слой используется для дня, сумерек, ночи и дождя."
+    },
+    "environment_review": "docs/art/reviews/2026-11-13-station-r07-review.md"
   },
   "assets": [
     {
@@ -124,7 +125,40 @@
       "enabled": true,
       "status": "approved",
       "sha256": "d8b723f82fa52d8365c32f54efca3902a011b56aa4c3c02122db03750c24c6a2"
+    },
+    {
+      "id": "coastal-neutral",
+      "key": "hub-r07-coastal-neutral",
+      "url": "/hub/r07/coastal-neutral.png",
+      "enabled": true,
+      "required": true,
+      "status": "approved",
+      "sha256": "13df6482e28f43025fee32b5c60c86c0b3522061adcbe0aa6275b302c5afebc1"
+    },
+    {
+      "id": "light-codepost",
+      "key": "hub-r07-light-codepost",
+      "url": "/hub/r07/light-codepost.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "d91d758758e511ddb22dd9cd3ea3bb23ae469874119e2c030c546d7e80e06229"
+    },
+    {
+      "id": "light-archive",
+      "key": "hub-r07-light-archive",
+      "url": "/hub/r07/light-archive.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "5c7dbbd70918348c3464b5c1edc5e08a2bdc1909d4553bfbcd617013f059f2f0"
+    },
+    {
+      "id": "light-lamp",
+      "key": "hub-r07-light-lamp",
+      "url": "/hub/r07/light-lamp.png",
+      "enabled": true,
+      "status": "approved",
+      "sha256": "ad12a37df5ef1300f31dadef85b6710bd7aee6f718f5eef4f4c49b27afb270ff"
     }
   ],
-  "acceptanceScope": "First interactive R01-derived campus slice: native detailed pixel-style components, authored golden-hour lighting, desktop and portrait composition. Not a declaration of complete MVP, all weather/time variants or target-device performance."
+  "acceptanceScope": "R01 separate buildings and scenery; R07 neutral source independently accepted. R07 lighting and interaction candidate requires its separate scene and release review before merge."
 }

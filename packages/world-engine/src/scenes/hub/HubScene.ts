@@ -25,6 +25,7 @@ import { STATION_26063_LOCATION } from './HubTimeOfDay';
 import { HubWeatherOverlay, type WeatherMode } from './HubWeatherOverlay';
 import { HubScheduleManager } from '../../world/hubSchedule';
 import { worldBridge } from '../../bridge/WorldBridge';
+import { getR01PhaseStyle, normalizeR01Weather } from './r01Environment';
 
 export class HubScene extends Phaser.Scene {
   private timeOfDay: HubTimeOfDay;
@@ -77,10 +78,15 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
+    // A route unmount destroys the whole Phaser Game. Systems.destroy emits
+    // DESTROY directly, without SHUTDOWN; both paths must release bridge listeners.
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
+    this.events.once(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     // The home screen must not silently replace a failed station download with
     // the legacy scene. React keeps navigation available and offers a retry.
     if (this.useR01) {
-      const missing = r01Assets.assets.filter((asset) => !this.textures.exists(asset.key)).map((asset) => asset.key);
+      const required = [...r01Assets.assets, ...r01Assets.optionalAssets.filter((asset) => 'required' in asset && asset.required)];
+      const missing = required.filter((asset) => !this.textures.exists(asset.key)).map((asset) => asset.key);
       if (missing.length > 0) {
         this.registry.set('world.load_error', { scene: 'hub', assets: missing });
         worldBridge.emit('world:load_error', { scene: 'hub', assets: missing });
@@ -94,19 +100,11 @@ export class HubScene extends Phaser.Scene {
       if (authoredPhase) this.timeOfDay.setPhase(authoredPhase);
       this.r01Layer = new HubR01Layer(this);
       this.characterLayer = new HubCharacterLayer(this);
+      this.r01Layer.setWeather(this.registry.get('ui.weather'));
       this.setupBridge();
       this.applyDayPhase(this.timeOfDay.getCurrentPhase());
-      const environment = {
-        lightingMode: authoredPhase ? 'authored-demo' : 'solar',
-        label: authoredPhase ? r01Assets.scene.demo_override.label : '',
-        phase: this.timeOfDay.getCurrentPhase(),
-        worldLocation: r01Assets.scene.world_location,
-      };
-      this.registry.set('world.environment', environment);
-      worldBridge.emit('world:environment_mode', environment);
       worldBridge.notifySeasonChanged(this.season);
       worldBridge.notifySceneReady('hub');
-      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.cleanup());
       return;
     }
     // 1. Экспериментальная полноэкранная камера Hub; до UX-приёмки только ?hubCover=1
@@ -157,15 +155,14 @@ export class HubScene extends Phaser.Scene {
     // Уведомление о готовности сцены
     worldBridge.notifySceneReady('hub');
 
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.cleanup();
-    });
   }
 
   private applyDayPhase(phase: DayPhase): void {
     const effectivePhase = this.r01Layer ? this.getAuthoredPhase() ?? phase : phase;
     const colors = PHASE_COLOR_MAP[effectivePhase];
     this.r01Layer?.applyDayPhase(effectivePhase, colors);
+    const weather = normalizeR01Weather(this.registry.get('ui.weather'));
+    this.characterLayer?.applyLighting(getR01PhaseStyle(effectivePhase, weather.mode).sceneryTint);
 
     this.environmentLayer?.applyDayPhase(phase, colors);
     this.groundDecorLayer?.applyDayPhase(phase, colors);
@@ -173,6 +170,19 @@ export class HubScene extends Phaser.Scene {
     this.weatherOverlay?.applyDayPhase(phase);
 
     worldBridge.notifyPhaseChanged(effectivePhase);
+    this.publishEnvironment(effectivePhase);
+  }
+
+  private publishEnvironment(phase = this.timeOfDay.getCurrentPhase()): void {
+    if (!this.r01Layer) return;
+    const environment = {
+      lightingMode: this.getAuthoredPhase() ? 'authored-demo' : 'solar',
+      phase,
+      worldLocation: r01Assets.scene.world_location,
+      ...this.r01Layer.getEnvironment(),
+    };
+    this.registry.set('world.environment', environment);
+    worldBridge.emit('world:environment_mode', environment);
   }
 
   private getAuthoredPhase(): DayPhase | null {
@@ -228,6 +238,21 @@ export class HubScene extends Phaser.Scene {
       },
     );
 
+    // Presentation weather uses the same choice as the archive and soundscape.
+    // It is independent from observations and does not change task data.
+    const unsubPresentationWeather = worldBridge.on('ui:weather', (value: unknown) => {
+      const weather = normalizeR01Weather(value);
+      this.r01Layer?.setWeather(weather);
+      const phase = this.getAuthoredPhase() ?? this.timeOfDay.getCurrentPhase();
+      this.characterLayer?.applyLighting(getR01PhaseStyle(phase, weather.mode).sceneryTint);
+      this.publishEnvironment(phase);
+    });
+    const unsubVisibility = worldBridge.on<boolean>('ui:world_visible', (visible) => {
+      if (visible && !this.getAuthoredPhase()) {
+        this.timeOfDay.refresh(new Date(), (phase) => this.applyDayPhase(phase));
+      }
+    });
+
     // 5. Режим study-calm (блокировка спорадических всплесков)
     const unsubCalm = worldBridge.on(
       'server:study_calm',
@@ -259,6 +284,8 @@ export class HubScene extends Phaser.Scene {
       unsubPhase,
       unsubDemo,
       unsubWeather,
+      unsubPresentationWeather,
+      unsubVisibility,
       unsubCalm,
       unsubFocusBuilding,
       unsubSeason,
@@ -300,6 +327,8 @@ export class HubScene extends Phaser.Scene {
   }
 
   private cleanup(): void {
+    this.events.off(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
+    this.events.off(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
     this.scale.off(Phaser.Scale.Events.RESIZE, this.publishLegacyTargets, this);

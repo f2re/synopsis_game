@@ -32,6 +32,7 @@ jobs:
           python tools/assets/check_asset_contract.py
           python tools/assets/check_asset_manifests.py
           python tools/assets/build_hub_r01.py --check
+          python tools/assets/build_hub_lighting_r07.py --check
           python tools/assets/build_station_room_r01.py --check --require-approved
           python tools/assets/build_characters_r01.py --check
           python tools/assets/build_inventory_icons_r01.py --check
@@ -68,10 +69,12 @@ jobs:
           node tools/test_modular_avatar.cjs
           node tools/test_avatar_preview_lifecycle.cjs
           node tools/test_avatar_world_boundary.cjs
+          node tools/test_hub_scene_lifecycle.cjs
           node tools/test_blitz_lifecycle.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
+          node --experimental-strip-types --test packages/world-engine/src/scenes/hub/r01Environment.test.ts
           node --experimental-strip-types --test packages/world-engine/src/runtime/hubCoverGeometry.test.ts
           pnpm build
           node tools/test_avatar_inventory.cjs --api

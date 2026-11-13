@@ -160,6 +160,10 @@ export class HubCharacterLayer {
     return true;
   }
 
+  applyLighting(tint: number): void {
+    for (const actor of this.actors) actor.image.setTint(tint);
+  }
+
   update(deltaMs: number): void {
     if (this.destroyed || this.preferences.reducedMotion) return;
     const delta = Math.max(0, Math.min(Number.isFinite(deltaMs) ? deltaMs : 0, 100));

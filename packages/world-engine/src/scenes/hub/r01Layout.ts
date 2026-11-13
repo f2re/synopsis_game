@@ -47,7 +47,12 @@ export function getR01Layout(viewportWidth: number, viewportHeight: number) {
   // Short phone viewports still expose the last entrance above the 144px dock.
   // Tall phones keep the full-width composition; only vertical pressure reduces it.
   const portraitEntranceLimit = Math.max(.1, (viewportHeight / 2 - 144 - 8) / 305);
-  const zoom = portrait ? Math.min(fitZoom, portraitEntranceLimit) : fitZoom;
+  // The short landscape dock occupies the bottom 68 CSS pixels. Keep the
+  // frontmost entrance (world y=462) and its whole hit area above that dock.
+  const landscapeEntranceLimit = viewportHeight <= 540 && viewportWidth > viewportHeight
+    ? Math.max(.1, (viewportHeight / 2 - 68 - 8) / (462 - height / 2))
+    : fitZoom;
+  const zoom = portrait ? Math.min(fitZoom, portraitEntranceLimit) : Math.min(fitZoom, landscapeEntranceLimit);
   const buildings: R01BuildingPlacement[] = BUILDINGS.map((building, index) => {
     const [x, y, boxWidth, boxHeight] = boxes[index];
     return { ...building, x, y, width: boxWidth, height: boxHeight };

@@ -1,0 +1,279 @@
+{
+  "schema_version": 2,
+  "purpose": "Независимые свидетельства приёмки станции R07: исходные браузерные отчёты и снимки; графические ресурсы игры здесь не хранятся.",
+  "review_date": "2026-11-13",
+  "pull_request": "https://github.com/f2re/synopsis_game/pull/129",
+  "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+  "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+  "source_tree": "1ed3758b878a6fe7b364aec0fcb5ba0603b1c70d",
+  "baseline": "395d4cff1d2506b810e41e3595e6553720ebfc16",
+  "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117",
+  "primary_scope": "Актуальное окружение, клавиатура, выбранные PNG и сравнение производительности. Общая матрица экранов сохранена из предыдущего запуска с отдельным происхождением у каждого файла.",
+  "verification": {
+    "agent": "screens_controls_review",
+    "current_environment_original_png_hashes_verified": 150,
+    "current_environment_hash_breakdown": {
+      "chromium_candidate": 72,
+      "firefox_candidate": 70,
+      "chromium_baseline": 8
+    },
+    "inherited_screen_archives_sha256_verified": 2,
+    "inherited_screen_png_presence_verified": 572,
+    "inherited_screen_png_original_hashes_available": false,
+    "keyboard_space_cycles_per_browser": 18,
+    "keyboard_enter_cycles_per_browser": 18,
+    "focus_trace_records_per_browser": 528,
+    "unfocused_records": 0
+  },
+  "screen_revalidation": {
+    "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117",
+    "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+    "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+    "status": "success",
+    "jobs": [
+      {
+        "id": 131672354188,
+        "name": "station-screens (chromium)",
+        "conclusion": "success"
+      },
+      {
+        "id": 131672354070,
+        "name": "station-screens (firefox)",
+        "conclusion": "success"
+      }
+    ],
+    "note": "Текущие статусы проверены через GitHub. Сохранённые JSON общей матрицы взяты из предыдущих артефактов, а не переименованы в результат текущего запуска."
+  },
+  "artifacts": [
+    {
+      "artifact_id": 14007583794,
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43360427117/artifacts/14007583794",
+      "sha256": "5fa70fd5f608e6f6074764e0129cebfb79065ae8ad2658b8f9c2f9b47b37a8cc",
+      "archive_bytes": 107474017,
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "artifact_id": 14008186560,
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43360427117/artifacts/14008186560",
+      "sha256": "8e1632c4f7e0d27d9ebeeafa79c227aa465ced38a3a14eb7682d705ba7a4a70e",
+      "archive_bytes": 107313491,
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "artifact_id": 14006163215,
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43356695357/artifacts/14006163215",
+      "sha256": "ac3a3047485298a2d0908ea4cfa5a91ed2e85c770d4f9af9d0a9383df6a787d1",
+      "archive_bytes": 72763634,
+      "source_head": "f89d4936abd29d85e21ac789aaf16005cf3949e4",
+      "tested_merge": "4e0300b27d9c4b17acecc3dbea84e57a8d8c247b",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43356695357"
+    },
+    {
+      "artifact_id": 14006821492,
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43356695357/artifacts/14006821492",
+      "sha256": "877d09f5f6ac00573366d11254e91ba6282bd58c0ec967c5acb62374f8b28b2c",
+      "archive_bytes": 82895273,
+      "source_head": "f89d4936abd29d85e21ac789aaf16005cf3949e4",
+      "tested_merge": "4e0300b27d9c4b17acecc3dbea84e57a8d8c247b",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43356695357"
+    }
+  ],
+  "reports": [
+    {
+      "path": "chromium-environment.json",
+      "artifact_id": 14007583794,
+      "sha256": "83f98cd5356d19364d050dc9494362fd0b6664e269d9798201f96f5b4f667d44",
+      "status": "PASS",
+      "cases": 53,
+      "listed_screenshots": 72,
+      "verified_original_screenshot_hashes": 72,
+      "missing_screenshots": 0,
+      "errors": [],
+      "skipped": [],
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117",
+      "original_path": "candidate/artifacts/station-environment-r07/browser-report.json",
+      "tested_revision": "51b4da24733e7494c14a86aaca7a691d660a6991"
+    },
+    {
+      "path": "chromium-baseline.json",
+      "artifact_id": 14007583794,
+      "sha256": "ae554c213c6f94faf1ec8a7cbb6bae07782923c51016f3b6a7751afbcc4d1f83",
+      "status": "PASS",
+      "cases": 8,
+      "listed_screenshots": 8,
+      "verified_original_screenshot_hashes": 8,
+      "missing_screenshots": 0,
+      "errors": [],
+      "skipped": [],
+      "source_head": "395d4cff1d2506b810e41e3595e6553720ebfc16",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117",
+      "original_path": "baseline/artifacts/station-environment-r07/browser-report.json",
+      "pull_request_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_revision": "395d4cff1d2506b810e41e3595e6553720ebfc16"
+    },
+    {
+      "path": "firefox-environment.json",
+      "artifact_id": 14008186560,
+      "sha256": "05ba69297ac40760b9e1cb1b981c016971566cae15bce9c0283073a0a495b2f5",
+      "status": "PASS",
+      "cases": 50,
+      "listed_screenshots": 70,
+      "verified_original_screenshot_hashes": 70,
+      "missing_screenshots": 0,
+      "errors": [],
+      "skipped": [
+        {
+          "name": "native-hidden-resume",
+          "reason": "Native visibility is accepted in Chromium without CDP focus emulation; Firefox is not represented as passing this check."
+        }
+      ],
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117",
+      "original_path": "candidate/artifacts/station-environment-r07/browser-report.json",
+      "tested_revision": "51b4da24733e7494c14a86aaca7a691d660a6991"
+    },
+    {
+      "path": "chromium-screens.json",
+      "artifact_id": 14006163215,
+      "sha256": "6da50ff7796a1c4cf4599eec4645f2d7ab914a2b7e4c243290e4c583f100f76b",
+      "status": "PASS",
+      "cases": 490,
+      "listed_screenshots": 287,
+      "verified_original_screenshot_hashes": 0,
+      "missing_screenshots": 0,
+      "errors": [],
+      "skipped": [],
+      "source_head": "f89d4936abd29d85e21ac789aaf16005cf3949e4",
+      "tested_merge": "4e0300b27d9c4b17acecc3dbea84e57a8d8c247b",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43356695357",
+      "original_path": "browser-report.json",
+      "inherited_for_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "inheritance_reason": "Между f89d493 и 8de3337 изменён только сценарий окружения: добавлена клавиша Space. Код приложения, ресурсы и сценарии общей матрицы экранов не менялись. Общая матрица повторно прошла в новом CI; сохранённые JSON относятся к указанному прежнему запуску.",
+      "tested_revision": "4e0300b27d9c4b17acecc3dbea84e57a8d8c247b"
+    },
+    {
+      "path": "firefox-screens.json",
+      "artifact_id": 14006821492,
+      "sha256": "47447833a305c866b7243194a635a225c1e0d5ba2727ac09795394d591fe47b4",
+      "status": "PASS",
+      "cases": 481,
+      "listed_screenshots": 285,
+      "verified_original_screenshot_hashes": 0,
+      "missing_screenshots": 0,
+      "errors": [],
+      "skipped": [],
+      "source_head": "f89d4936abd29d85e21ac789aaf16005cf3949e4",
+      "tested_merge": "4e0300b27d9c4b17acecc3dbea84e57a8d8c247b",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43356695357",
+      "original_path": "browser-report.json",
+      "inherited_for_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "inheritance_reason": "Между f89d493 и 8de3337 изменён только сценарий окружения: добавлена клавиша Space. Код приложения, ресурсы и сценарии общей матрицы экранов не менялись. Общая матрица повторно прошла в новом CI; сохранённые JSON относятся к указанному прежнему запуску.",
+      "tested_revision": "4e0300b27d9c4b17acecc3dbea84e57a8d8c247b"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "chromium-day-1366.png",
+      "artifact_id": 14007583794,
+      "original_path": "candidate/artifacts/station-environment-r07/solar-day-1366.png",
+      "browser": "chromium",
+      "pixel_dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "9d5001221c797a5cd80e5c379e0e0126bf0e57ade79cfe429911943ed490d64a",
+      "bytes": 1657612,
+      "transformation": "none; copied byte-for-byte",
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "path": "chromium-night-1366.png",
+      "artifact_id": 14007583794,
+      "original_path": "candidate/artifacts/station-environment-r07/solar-night-1366.png",
+      "browser": "chromium",
+      "pixel_dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "d1add6dd4da5f6cf654ee5e19568774e207316813a73e1a20789eb3970184bb8",
+      "bytes": 1383801,
+      "transformation": "none; copied byte-for-byte",
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "path": "chromium-rain-golden-hour-1366.png",
+      "artifact_id": 14007583794,
+      "original_path": "candidate/artifacts/station-environment-r07/weather-rain-golden_hour-1366.png",
+      "browser": "chromium",
+      "pixel_dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "34f7c2dc0eb386c85244b6bae17c86f147d42722890faeb12b8a2057dafdb3ad",
+      "bytes": 1592837,
+      "transformation": "none; copied byte-for-byte",
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "path": "firefox-rain-night-390.png",
+      "artifact_id": 14008186560,
+      "original_path": "candidate/artifacts/station-environment-r07/weather-rain-night-390.png",
+      "browser": "firefox",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "6af749b5a162dee7357a3ff92d1dff83d0aa417ce697e3d44e9950b1e7bd526d",
+      "bytes": 548351,
+      "transformation": "none; copied byte-for-byte",
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "path": "firefox-entrances-844-dpr2.png",
+      "artifact_id": 14008186560,
+      "original_path": "candidate/artifacts/station-environment-r07/entrances-844-dpr2.png",
+      "browser": "firefox",
+      "pixel_dimensions": [
+        1688,
+        780
+      ],
+      "sha256": "ad02265e7209fb1928ad5cd241f5b4739b70a2cf1f0ca1303e2ee86a35f72942",
+      "bytes": 733323,
+      "transformation": "none; copied byte-for-byte",
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    },
+    {
+      "path": "chromium-reduced-motion-390.png",
+      "artifact_id": 14007583794,
+      "original_path": "candidate/artifacts/station-environment-r07/rain-reduced-motion-390.png",
+      "browser": "chromium",
+      "pixel_dimensions": [
+        390,
+        844
+      ],
+      "sha256": "baf9d3ed87f796582ee0ef2413e1e7b497d7a3b83b3198ac016ac98767b82f6c",
+      "bytes": 545261,
+      "transformation": "none; copied byte-for-byte",
+      "source_head": "8de3337ce352a9f47fed4334999b095b7c671553",
+      "tested_merge": "51b4da24733e7494c14a86aaca7a691d660a6991",
+      "workflow_run": "https://github.com/f2re/synopsis_game/actions/runs/43360427117"
+    }
+  ]
+}
