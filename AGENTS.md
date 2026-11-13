@@ -8,7 +8,7 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 2. Educational truth, game balance, UI, realtime protocol and visual style are separate layers.
 3. The server is authoritative for answers, match state, rating and rewards.
 4. Ranked must not become pay/grind-to-win.
-5. The hub is a living layered world; the active task remains visually dominant during learning.
+5. Атмосфера игры и научная точность — два обязательных приоритета продукта. Атмосфера определяет композицию, свет, материалы и звук; научная точность определяет содержание, данные, обозначения и ответы. Интерфейс служит обоим приоритетам. Во время выполнения учебного задания карта или задача остаётся главным рабочим объектом; это правило не превращает вход в библиотеку и другие помещения в экран сплошных панелей. См. `docs/00A_FOUNDATIONAL_RUNTIME_PRINCIPLES.md`.
 6. Live KN-01 data are untrusted input and must pass versioned parsing, QC and snapshotting before gameplay.
 7. No public self-registration. Roster and access rules follow `docs/accounts/ROSTER_LOGIN_AND_ACCESS.md`.
 8. Pixel-art direction follows `docs/BRAND_AND_LORE_26063.md`, `docs/design/PIXEL_ART_STYLE_GUIDE.md` and `docs/design/LIVING_WORLD_SYSTEM.md`.
@@ -22,6 +22,7 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 15. Product text follows `docs/LANGUAGE_POLICY.md`, including its rules for concise, truthful interface copy. Never fill a missing feature with invented activity, progress, weather or results.
 16. Shared UI chrome follows one pixel grid and one control-state contract. A visual change needs pointer/keyboard and screenshot acceptance; passing a build alone is insufficient.
 17. Use `PixelScrollArea` for bounded UI overflow and page scrolling. A fitting region must not retain an empty track or gap. Check wheel input over both content and track, thumb dragging, keyboard focus, and nested regions in Chromium and Firefox. Keep dense scientific diagrams readable instead of shrinking their controls below usable size. Interactive diagram targets must measure at least 44 CSS pixels on supported narrow screens; enlarge transparent hit areas without changing scientific geometry, and check their separation and edge clicks.
+18. Библиотека и читальня открываются как полноэкранная сцена: в исходном виде более половины видимой игровой области остаётся открыто для помещения, а поиск, каталог и чтение занимают ограниченную, предметно встроенную область. На телефоне сцена сохраняется. Пользователь может явно развернуть чтение; шрифт, доступность и научные источники не сокращаются ради доли изображения. Нормативная композиция, звук и приёмка определены в `docs/design/STATION_SCREENS_AND_LIBRARY.md`; прежняя компактная сцена, скрытая на телефоне, новой норме не соответствует.
 
 ## Mandatory source documents
 
@@ -34,6 +35,7 @@ This repository is developed as a coordinated multi-agent project. Read this fil
 - `docs/architecture/GAME_RUNTIME_AND_ASSETS.md`
 - `docs/decisions/ADR-0005-mvp-modular-monolith-boundaries.md`
 - `docs/design/PIXEL_ASSET_PIPELINE.md`
+- `docs/design/STATION_SCREENS_AND_LIBRARY.md`
 - `docs/testing/QUALITY_GATES.md`
 - `config/brand.yaml`
 - `config/art-toolchain.yaml` for accepted runtime/art tooling
