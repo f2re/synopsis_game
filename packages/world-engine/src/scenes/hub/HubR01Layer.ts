@@ -5,21 +5,24 @@ import { WORLD_PALETTE as P } from '../../theme/tokens';
 import type { WorldInteractionTarget } from '../../runtime/uiPreferences';
 import { getR01Layout, getR01Decor, type HubR01BuildingId } from './r01Layout';
 import type { PhaseColors } from './HubTimeOfDay';
+import { getR01PhaseStyle, normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT, R01_RAIN_FRAME_MS, type R01WeatherPresentation } from './r01Environment';
 
 type Bounds = { x: number; y: number; width: number; height: number };
 
 /** Independently exported scenery, facades and props; graphics only add light and focus. */
 export class HubR01Layer {
-  private readonly sky: Phaser.GameObjects.Graphics;
   private readonly terrain: Phaser.GameObjects.Graphics;
   private readonly lights: Phaser.GameObjects.Graphics;
   private readonly accents: Phaser.GameObjects.Graphics;
   private readonly focus: Phaser.GameObjects.Graphics;
+  private readonly rain: Phaser.GameObjects.Graphics;
   private readonly coastalBackground?: Phaser.GameObjects.Image;
   private readonly campusGround?: Phaser.GameObjects.Image;
   private readonly sprites = new Map<HubR01BuildingId, Phaser.GameObjects.Image>();
+  private readonly windowLights = new Map<HubR01BuildingId, Phaser.GameObjects.Image>();
   private readonly bounds = new Map<string, Bounds>();
   private decor: Phaser.GameObjects.Image[] = [];
+  private lampLights: Phaser.GameObjects.Image[] = [];
   private fountain?: Phaser.GameObjects.Image;
   private layout: ReturnType<typeof getR01Layout>;
   private phase: DayPhase = 'golden_hour';
@@ -27,20 +30,24 @@ export class HubR01Layer {
   private focused: string | null = null;
   private ambientTime = 0;
   private paintTime = 0;
+  private rainPaintTime = 0;
+  private weather: R01WeatherPresentation = { mode: 'clear', animate: false };
   private readonly unsubs: (() => void)[] = [];
 
   constructor(private readonly scene: Phaser.Scene) {
     this.layout = getR01Layout(scene.scale.width, scene.scale.height);
-    this.sky = scene.add.graphics().setDepth(0);
     this.terrain = scene.add.graphics().setDepth(2);
     this.lights = scene.add.graphics().setDepth(9);
     this.accents = scene.add.graphics().setDepth(32);
     this.focus = scene.add.graphics().setDepth(35);
-    this.coastalBackground = this.optionalImage('coastal-sky')?.setOrigin(.5, 0).setDepth(1);
+    this.rain = scene.add.graphics().setDepth(34);
+    this.coastalBackground = (this.optionalImage('coastal-neutral') ?? this.optionalImage('coastal-sky'))?.setOrigin(.5, 0).setDepth(1);
     this.campusGround = this.optionalImage('campus-ground')?.setOrigin(.5, 0).setDepth(2.5);
     for (const building of this.layout.buildings) {
       const asset = r01Assets.assets.find((candidate) => candidate.id === building.id)!;
       this.sprites.set(building.id, scene.add.image(0, 0, asset.key).setOrigin(.5, 1));
+      const light = this.optionalImage(`light-${building.id}`)?.setOrigin(.5, 1);
+      if (light) this.windowLights.set(building.id, light);
     }
     this.unsubs.push(worldBridge.on<{buildingId: string | null}>('ui:focus_building', ({buildingId}) => {
       this.focused = buildingId;
@@ -61,18 +68,9 @@ export class HubR01Layer {
     const {width, height, zoom, portrait, horizon, shore} = this.layout;
     scene.cameras.main.setViewport(0, 0, scene.scale.width, scene.scale.height);
     scene.cameras.main.setZoom(zoom).centerOn(width / 2, height / 2);
-    scene.cameras.main.setBackgroundColor(P.skyNight0);
-
     const visibleWidth = scene.scale.width / zoom;
     const visibleHeight = scene.scale.height / zoom;
     const top = (height - visibleHeight) / 2;
-    if (this.coastalBackground) {
-      // The authored coast is at 62.5% of the source plate. Keep that low horizon
-      // aligned while covering the full visible sky, including portrait letterboxing.
-      const plate = this.coastalBackground;
-      const scale = Math.max(visibleWidth / plate.width, (horizon - top + 8) / (plate.height * .625));
-      plate.setScale(scale).setPosition(width / 2, horizon - plate.height * scale * .625);
-    }
     if (this.campusGround) {
       const bottom = height / 2 + visibleHeight / 2;
       // Cover preserves native paving and rail proportions; portrait crops the
@@ -88,6 +86,7 @@ export class HubR01Layer {
       const scale = Math.min(building.width / sprite.width, building.height / sprite.height);
       sprite.setScale(scale).setPosition(building.x + building.width / 2, building.y + building.height);
       sprite.setDepth(10 + index);
+      this.windowLights.get(building.id)?.setScale(scale).setPosition(sprite.x, sprite.y).setDepth(sprite.depth + .1);
       this.bounds.set(building.id, {
         x: sprite.x - sprite.displayWidth / 2,
         y: sprite.y - sprite.displayHeight,
@@ -96,7 +95,9 @@ export class HubR01Layer {
       });
     }
     this.decor.forEach((sprite) => sprite.destroy());
+    this.lampLights.forEach((sprite) => sprite.destroy());
     this.decor = [];
+    this.lampLights = [];
     this.fountain = undefined;
     for (const placement of getR01Decor(portrait)) {
       const sprite = this.optionalImage(placement.id);
@@ -105,6 +106,13 @@ export class HubR01Layer {
       sprite.setScale(Math.min(placement.width / sprite.width, placement.height / sprite.height));
       this.decor.push(sprite);
       if (placement.id === 'prop-fountain') this.fountain = sprite;
+      if (placement.id === 'prop-lamp') {
+        const light = this.optionalImage('light-lamp');
+        if (light) {
+          light.setOrigin(.5, 1).setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setDepth(sprite.depth + .1);
+          this.lampLights.push(light);
+        }
+      }
     }
     this.drawStatic();
     this.drawMarkers();
@@ -115,6 +123,31 @@ export class HubR01Layer {
     this.phase = phase;
     this.colors = colors;
     this.drawStatic();
+  }
+
+  setWeather(value: unknown): void {
+    const next = normalizeR01Weather(value);
+    if (next.mode === this.weather.mode && next.animate === this.weather.animate) return;
+    this.weather = next;
+    this.rainPaintTime = 0;
+    this.drawStatic();
+  }
+
+  getEnvironment() {
+    return { weather: this.weather.mode, rainDrops: this.weather.animate ? R01_RAIN_DROP_LIMIT : 0, rainAnimated: this.weather.animate };
+  }
+
+  private positionBackground(): void {
+    const plate = this.coastalBackground;
+    if (!plate) return;
+    const { width, height, zoom, horizon, shore } = this.layout;
+    const top = (height - this.scene.scale.height / zoom) / 2;
+    // Both independently authored plates share the flat shore at 62.5% height.
+    // Cover keeps their own pixel proportions; changing phase never stretches a plate.
+    const scale = Math.max(this.scene.scale.width / zoom / plate.width, (horizon - top + 8) / (plate.height * .625));
+    plate.setScale(scale).setPosition(width / 2, horizon - plate.height * scale * .625);
+    // Opaque paving covers the lower sky/water pixels. Avoid filling them twice.
+    plate.setCrop(0, 0, plate.width, this.campusGround ? Math.min(plate.height, Math.ceil((shore - plate.y) / scale) + 1) : plate.height);
   }
 
   private publishTargets(): void {
@@ -140,13 +173,24 @@ export class HubR01Layer {
     const visibleHeight = this.scene.scale.height / zoom;
     const top = (h - visibleHeight) / 2;
     const bottom = h / 2 + visibleHeight / 2;
-    this.sky.clear();
     this.terrain.clear();
     this.lights.clear();
-    // Neutral backing is only visible when an optional plate cannot be loaded.
-    this.sky.fillStyle(this.colors.skyTop).fillRect(-w, top - 8, w * 3, bottom - top + 16);
-    this.terrain.fillStyle(P.stoneConcrete0).fillRect(-w, shore, w * 3, bottom - shore + 8);
-    const warmLight = this.phase !== 'day';
+    const style = getR01PhaseStyle(this.phase, this.weather.mode);
+    // The camera already clears the screen. Do not replay an opaque fullscreen
+    // Graphics rectangle behind another opaque image on every render.
+    this.scene.cameras.main.setBackgroundColor(this.colors.skyTop);
+    if (!this.campusGround) this.terrain.fillStyle(P.stoneConcrete0).fillRect(-w, shore, w * 3, bottom - shore + 8);
+    const skyId = style.sunset ? 'coastal-sky' : 'coastal-neutral';
+    const skyAsset = r01Assets.optionalAssets.find((asset) => asset.id === skyId);
+    if (skyAsset && this.scene.textures.exists(skyAsset.key)) this.coastalBackground?.setTexture(skyAsset.key);
+    this.coastalBackground?.setTint(style.skyTint);
+    this.positionBackground();
+    this.campusGround?.setTint(style.sceneryTint);
+    this.sprites.forEach((sprite) => sprite.setTint(style.sceneryTint));
+    this.decor.forEach((sprite) => sprite.setTint(style.sceneryTint));
+    this.windowLights.forEach((sprite) => sprite.setAlpha(style.lightAlpha));
+    this.lampLights.forEach((sprite) => sprite.setAlpha(style.lightAlpha));
+    const warmLight = style.lightAlpha > 0;
     for (const building of this.layout.buildings) {
       const box = this.bounds.get(building.id)!;
       pixelEllipse(this.lights, box.x + box.width / 2, box.y + box.height - 1, box.width * .44, 9, P.skyNight0, .36);
@@ -160,6 +204,7 @@ export class HubR01Layer {
       }
     }
     this.drawAmbient();
+    this.drawRain();
   }
 
   private drawMarkers(): void {
@@ -202,8 +247,29 @@ export class HubR01Layer {
     }
   }
 
+  private drawRain(): void {
+    this.rain.clear();
+    if (!this.weather.animate) return;
+    const { width, height, zoom } = this.layout;
+    const visibleWidth = this.scene.scale.width / zoom;
+    const visibleHeight = this.scene.scale.height / zoom;
+    const left = (width - visibleWidth) / 2;
+    const top = (height - visibleHeight) / 2;
+    this.rain.lineStyle(1, P.waterGulf4, .45);
+    for (let i = 0; i < R01_RAIN_DROP_LIMIT; i++) {
+      const drop = r01RainDrop(i, this.ambientTime, visibleWidth, visibleHeight);
+      const x = Math.round(left + drop.x), y = Math.round(top + drop.y);
+      this.rain.lineBetween(x, y, x - 1, y + drop.length);
+    }
+  }
+
   update(deltaMs: number): void {
     this.ambientTime += Math.min(deltaMs, 100);
+    this.rainPaintTime += deltaMs;
+    if (this.weather.animate && this.rainPaintTime >= R01_RAIN_FRAME_MS) {
+      this.rainPaintTime %= R01_RAIN_FRAME_MS;
+      this.drawRain();
+    }
     this.paintTime += deltaMs;
     if (this.paintTime < 125) return;
     this.paintTime = 0;
@@ -214,10 +280,12 @@ export class HubR01Layer {
     this.scene.scale.off(Phaser.Scale.Events.RESIZE, this.resize, this);
     this.unsubs.forEach((unsubscribe) => unsubscribe());
     this.sprites.forEach((sprite) => sprite.destroy());
+    this.windowLights.forEach((sprite) => sprite.destroy());
     this.decor.forEach((sprite) => sprite.destroy());
+    this.lampLights.forEach((sprite) => sprite.destroy());
     this.coastalBackground?.destroy();
     this.campusGround?.destroy();
-    [this.sky,this.terrain,this.lights,this.accents,this.focus].forEach((graphic) => graphic.destroy());
+    [this.terrain,this.lights,this.accents,this.focus,this.rain].forEach((graphic) => graphic.destroy());
   }
 }
 

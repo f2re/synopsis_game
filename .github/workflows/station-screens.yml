@@ -55,3 +55,72 @@ jobs:
           path: artifacts/cozy-screens-r01/
           if-no-files-found: warn
           retention-days: 14
+  station-environment:
+    name: Свет и погода — ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+    defaults:
+      run:
+        working-directory: candidate
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: candidate
+      - uses: actions/checkout@v4
+        if: matrix.browser == 'chromium'
+        with:
+          path: baseline
+          ref: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+      - name: Собрать проверяемую версию
+        run: |
+          pnpm bootstrap
+          pnpm build
+      - name: Собрать исходную версию для сравнения
+        if: matrix.browser == 'chromium'
+        working-directory: baseline
+        run: |
+          pnpm bootstrap
+          pnpm build
+      - name: Подготовить браузер окружения
+        run: |
+          npm install --prefix /tmp/station-environment-browser --no-package-lock --ignore-scripts playwright@1.62.1
+          node /tmp/station-environment-browser/node_modules/playwright/cli.js install --with-deps ${{ matrix.browser }}
+      - name: Измерить исходную версию тем же сценарием
+        if: matrix.browser == 'chromium'
+        working-directory: baseline
+        env:
+          STATION_PLAYWRIGHT_MODULES: /tmp/station-environment-browser/node_modules
+          STATION_BROWSER_HEADED: 'true'
+          STATION_BROWSER: chromium
+          STATION_ENV_BASELINE: '1'
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a node ../candidate/tools/test_station_environment_browser.cjs
+      - name: Проверить фазы, дождь и входы после изменения размера
+        env:
+          STATION_PLAYWRIGHT_MODULES: /tmp/station-environment-browser/node_modules
+          STATION_BROWSER_HEADED: 'true'
+          STATION_BROWSER: ${{ matrix.browser }}
+          STATION_ENV_BASELINE_REPORT: ${{ matrix.browser == 'chromium' && '../baseline/artifacts/station-environment-r07/browser-report.json' || '' }}
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          MOZ_WEBRENDER: '1'
+        run: xvfb-run -a node tools/test_station_environment_browser.cjs
+      - name: Сохранить приёмку окружения и сравнение
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: station-environment-${{ matrix.browser }}-${{ github.sha }}
+          path: |
+            candidate/artifacts/station-environment-r07/
+            baseline/artifacts/station-environment-r07/
+          if-no-files-found: warn
+          retention-days: 14

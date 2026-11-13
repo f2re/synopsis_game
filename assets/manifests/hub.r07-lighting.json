@@ -1,0 +1,120 @@
+{
+  "id": "hub.r07-lighting",
+  "schema": "derived-window-light/v1",
+  "title": "Свет окон и фонарей из принятых исходников станции",
+  "art_status": "pass",
+  "art_review": "docs/art/reviews/2026-11-13-station-r07-review.md",
+  "selection": {
+    "redMin": 155,
+    "greenMin": 95,
+    "blueMax": 155,
+    "redGreenRatio": 1.06,
+    "greenBlueRatio": 1.25,
+    "alphaMin": 130
+  },
+  "assets": [
+    {
+      "id": "hub.r07.light-codepost",
+      "sourceManifest": "assets/manifests/hub.r01-buildings.json",
+      "sourceAsset": "hub.r01.building.codepost",
+      "regions": [
+        [
+          0.14,
+          0.58,
+          0.25,
+          0.82
+        ],
+        [
+          0.41,
+          0.58,
+          0.58,
+          0.88
+        ],
+        [
+          0.76,
+          0.58,
+          0.86,
+          0.82
+        ],
+        [
+          0.265,
+          0.66,
+          0.33,
+          0.8
+        ],
+        [
+          0.6,
+          0.66,
+          0.65,
+          0.8
+        ],
+        [
+          0.68,
+          0.66,
+          0.73,
+          0.8
+        ]
+      ],
+      "generated": "assets/generated/hub/r07/light-codepost.png",
+      "publicPath": "/hub/r07/light-codepost.png",
+      "sha256": "d91d758758e511ddb22dd9cd3ea3bb23ae469874119e2c030c546d7e80e06229",
+      "sourceSha256": "eb9340de12665cb7a48eeb4e40aef7e5fc314e3ce4711a553399cf9c56ca01f4",
+      "logicalSize": {
+        "width": 340,
+        "height": 343
+      },
+      "litPixels": 6176,
+      "bytes": 21442
+    },
+    {
+      "id": "hub.r07.light-archive",
+      "sourceManifest": "assets/manifests/hub.r01-buildings.json",
+      "sourceAsset": "hub.r01.building.archive",
+      "regions": [
+        [
+          0.16,
+          0.4,
+          0.81,
+          0.89
+        ]
+      ],
+      "generated": "assets/generated/hub/r07/light-archive.png",
+      "publicPath": "/hub/r07/light-archive.png",
+      "sha256": "5c7dbbd70918348c3464b5c1edc5e08a2bdc1909d4553bfbcd617013f059f2f0",
+      "sourceSha256": "eb9340de12665cb7a48eeb4e40aef7e5fc314e3ce4711a553399cf9c56ca01f4",
+      "logicalSize": {
+        "width": 267,
+        "height": 274
+      },
+      "litPixels": 6399,
+      "bytes": 25889
+    },
+    {
+      "id": "hub.r07.light-lamp",
+      "sourceManifest": "assets/manifests/hub.r01-props.json",
+      "sourceAsset": "hub.r01.prop.lamp",
+      "regions": [
+        [
+          0.15,
+          0.18,
+          0.85,
+          0.345
+        ]
+      ],
+      "generated": "assets/generated/hub/r07/light-lamp.png",
+      "publicPath": "/hub/r07/light-lamp.png",
+      "sha256": "ad12a37df5ef1300f31dadef85b6710bd7aee6f718f5eef4f4c49b27afb270ff",
+      "sourceSha256": "08b3b8eef5d825d9ba3b7e14c0ec2392485231d883ccdef08bfc403451efb484",
+      "logicalSize": {
+        "width": 87,
+        "height": 352
+      },
+      "litPixels": 1844,
+      "bytes": 5889,
+      "selection": {
+        "brightCoreMin": 160,
+        "brightCoreMaxSpread": 100
+      }
+    }
+  ]
+}

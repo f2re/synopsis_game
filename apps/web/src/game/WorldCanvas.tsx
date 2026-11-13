@@ -20,6 +20,7 @@ export function WorldCanvas() {
   const weather = useAmbientWeather();
   const weatherRef = useRef(weather);
   const applyAudioRef = useRef<(() => void) | null>(null);
+  const applyWeatherRef = useRef<(() => void) | null>(null);
   weatherRef.current = weather;
 
   function publishBuildingFocus() {
@@ -36,7 +37,10 @@ export function WorldCanvas() {
     publishBuildingFocus();
   }
 
-  useEffect(() => { applyAudioRef.current?.(); }, [weather]);
+  useEffect(() => {
+    applyWeatherRef.current?.();
+    applyAudioRef.current?.();
+  }, [weather]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -58,6 +62,21 @@ export function WorldCanvas() {
         if (scene.input.keyboard) scene.input.keyboard.enabled = !modalOpen && !document.hidden && rendererReady;
       }
     };
+
+    // One absolute presentation snapshot survives delayed scene creation. Weather
+    // stays selected when motion stops; the scene owns the static rendering.
+    const applyWeather = () => {
+      const presentation = {
+        mode: weatherRef.current,
+        animate: weatherRef.current === 'rain' && !preferences.reducedMotion &&
+          !preferences.lowPower && !document.hidden && rendererReady,
+      };
+      game.registry.set('ui.weather', presentation);
+      host.dataset.weather = presentation.mode;
+      host.dataset.weatherAnimated = String(presentation.animate);
+      worldBridge.emit('ui:weather', presentation);
+    };
+    applyWeatherRef.current = applyWeather;
 
     const applyAudio = () => {
       const settings = getSettings();
@@ -95,6 +114,7 @@ export function WorldCanvas() {
       host.dataset.reducedMotion = String(preferences.reducedMotion);
       host.dataset.lowPower = String(preferences.lowPower);
       host.dataset.fpsLimit = String(fpsLimit);
+      applyWeather();
       applyAudio();
       worldBridge.emit('world:preferences_applied', { ...preferences, fpsLimit });
     };
@@ -128,9 +148,12 @@ export function WorldCanvas() {
       worldBridge.on<WorldInteractionTarget[]>('world:interaction_layout', (layout) => {
         if (!disposed) setTargets(layout);
       }),
-      worldBridge.on<{lightingMode: string; phase: string}>('world:environment_mode', (environment) => {
+      worldBridge.on<{lightingMode: string; phase: string; weather?: string; rainDrops?: number; rainAnimated?: boolean}>('world:environment_mode', (environment) => {
         host.dataset.lightingMode = environment.lightingMode;
         host.dataset.phase = environment.phase;
+        if (environment.weather !== undefined) host.dataset.renderedWeather = environment.weather;
+        if (environment.rainDrops !== undefined) host.dataset.rainDrops = String(environment.rainDrops);
+        if (environment.rainAnimated !== undefined) host.dataset.rainAnimated = String(environment.rainAnimated);
       }),
     ];
 
@@ -144,6 +167,7 @@ export function WorldCanvas() {
       if (!visible) game.loop.sleep();
       else game.loop.wake();
       applyInput();
+      applyWeather();
       applyAudio();
     };
     const handleContextLost = () => { rendererReady = false; host.dataset.context = 'lost'; handleVisibility(); };
@@ -195,6 +219,7 @@ export function WorldCanvas() {
     return () => {
       disposed = true;
       applyAudioRef.current = null;
+      applyWeatherRef.current = null;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
       window.removeEventListener(HUB_PREFERENCES_EVENT, handleStoredPreferences);
       window.removeEventListener(AUDIO_UNLOCK_EVENT, applyAudio);

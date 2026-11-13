@@ -582,6 +582,12 @@
       "asset_id": "1bc2db16-788b-4e09-8148-e7a1a634e8c5",
       "sha12": "2f76f07965f9",
       "label": "26063 — тихая читальня R01"
+    },
+    {
+      "id": "assets/source/environment/hub/r07/coastal-neutral-source.png",
+      "asset_id": "aec6e652-df8e-46e2-a040-df7d04b66acd",
+      "sha12": "eea6823e6af0",
+      "label": "assets/source/environment/hub/r07/coastal-neutral-source.png"
     }
   ]
 }

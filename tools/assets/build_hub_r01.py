@@ -22,7 +22,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFESTS = ("ui.hub-r01.json", "hub.r01-buildings.json", "hub.r01-landscape.json", "hub.r01-ground.json", "hub.r01-props.json")
+MANIFESTS = ("ui.hub-r01.json", "hub.r01-buildings.json", "hub.r01-landscape.json", "hub.r01-ground.json", "hub.r01-props.json", "hub.r07-environment.json")
 
 
 def digest(data: bytes) -> str:
@@ -195,7 +195,9 @@ def main() -> None:
         path = ROOT / "assets/manifests/spritecook-assets.json"
         current = json.loads(path.read_text()) if path.exists() else {"id": "spritecook.assets", "assets": []}
         # Stable asset ID + local hash, no expiring URLs, auth or account details.
-        indexed = {(a["asset_id"], a.get("label", "")): a for a in current["assets"]}
+        # One provider operation can have both PNG and WebP exports with the
+        # same label. Preserve their separate file identities when merging.
+        indexed = {(a["asset_id"], a.get("id", a.get("label", ""))): a for a in current["assets"]}
         for entry in entries:
             indexed[(entry["asset_id"], entry["label"])] = {"id": entry["label"], **entry}
         current["assets"] = list(indexed.values())
