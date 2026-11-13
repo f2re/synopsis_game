@@ -128,7 +128,8 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
       const search = page.getByLabel('Что хотите найти?', { exact: true });
       await checkHitTarget(search, 'Library search');
       await search.fill('точка росы');
-      assert.equal(await page.locator('.library-result').count(), 1, 'Search uses the real library');
+      assert.deepEqual(await page.locator('.library-result').evaluateAll(results => results.map(result => result.dataset.articleId)),
+        ['dew-point', 'dewpoint-depression'], 'Search returns and ranks the two real dew-point articles');
       await measureLibraryScene(page, report, `library-scene-search-geometry-${viewport.width}`);
       await capture(page, `library-scene-search-${viewport.width}`);
       const result = page.locator('.library-result').first();

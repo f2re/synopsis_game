@@ -240,7 +240,33 @@ async function weatherCases(base) {
     await page.getByRole('button', { name: 'Посетить читальный зал', exact: true }).click();
     await page.getByRole('heading', { name: 'Читальный зал архива', exact: true }).waitFor();
     assert.equal(await page.locator('canvas').count(), 0, 'Reading room retires the world canvas');
-    await page.getByText('Дождь за окном', { exact: true }).waitFor();
+    const room = page.locator('.station-room-art[data-raining="true"]');
+    await room.waitFor({ state: 'visible' });
+    await page.waitForFunction(() => {
+      const scene = document.querySelector('.station-room-art[data-raining="true"]');
+      return scene?.dataset.paused === 'false' && [...scene.querySelectorAll('.station-room-art__drop')].some(drop => {
+        const style = getComputedStyle(drop);
+        return style.display !== 'none' && style.visibility === 'visible' && style.animationName !== 'none';
+      });
+    });
+    const roomRain = await room.evaluate(scene => {
+      const layer = scene.querySelector('.station-room-art__rain');
+      const style = getComputedStyle(layer);
+      const animatedDrops = [...layer.querySelectorAll('.station-room-art__drop')].filter(drop => {
+        const value = getComputedStyle(drop);
+        return value.display !== 'none' && value.visibility === 'visible' && value.animationName !== 'none';
+      }).length;
+      return { raining: scene.dataset.raining, paused: scene.dataset.paused, animatedDrops,
+        maskImage: style.maskImage || style.webkitMaskImage, maskRepeat: style.maskRepeat || style.webkitMaskRepeat,
+        canvasCount: document.querySelectorAll('canvas').length };
+    });
+    assert.ok(roomRain.animatedDrops > 0 && roomRain.animatedDrops <= 12, 'Reading room paints bounded animated rain drops');
+    assert.match(roomRain.maskImage, /\/window-mask\.png/, 'Reading-room rain uses the actual window mask');
+    assert.equal(roomRain.maskRepeat, 'no-repeat');
+    const roomImage = `reading-room-rain-${viewport.width}.png`;
+    const roomBytes = await page.screenshot({ path: path.join(output, roomImage) });
+    report.screenshots.push({ name: roomImage, sha256: sha256(roomBytes) });
+    record(`reading-room-rain-${viewport.width}`, roomRain);
     await page.getByRole('button', { name: /На площадь/ }).click(); await ready(page);
     record(`rain-survives-reading-room-${viewport.width}`, await weatherIs(page, 'rain', true));
     assert.equal(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).weather, settingsKey), 'rain');
