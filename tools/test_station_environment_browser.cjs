@@ -42,7 +42,7 @@ const report = {
   graphicsSetup: { configuredChromiumFlags: browserName === 'chromium' ? ['--no-sandbox', '--enable-unsafe-swiftshader'] : [],
     firefoxUserPrefs: browserName === 'firefox' ? { 'webgl.force-enabled': true, 'gfx.webrender.all': true } : null,
     softwareEnvironment: process.env.LIBGL_ALWAYS_SOFTWARE || null, rendererSource: 'Read from the existing production canvas after scene readiness.' },
-  productionAssets: true, realServer: true, fixedDateOnly: true, cases: [], screenshots: [], measurements: [], errors: [], skipped: [],
+  productionAssets: true, realServer: true, fixedDateOnly: true, cases: [], screenshots: [], measurements: [], focusTrace: [], interactionGeometry: [], errors: [], skipped: [],
   limits: 'RAF intervals and JS heap on this browser host; no physical GPU, sound-listening or pixel-art acceptance claim.',
 };
 fs.mkdirSync(output, { recursive: true });
@@ -259,38 +259,119 @@ async function weatherCases(base) {
     await context.close();
   }
 }
+async function rainPhaseCases(base) {
+  for (const { phase, viewport } of [
+    { phase: 'night', viewport: viewports[1] },
+    { phase: 'golden_hour', viewport: viewports[0] },
+  ]) {
+    const { context, page } = await createPage(viewport, { weather: 'rain' });
+    await setDate(page, dates.find(value => value.phase === phase).iso);
+    await page.goto(base); await ready(page); await phaseIs(page, phase);
+    await weatherIs(page, 'rain', true);
+    await capture(page, `weather-rain-${phase}-${viewport.width}`);
+    await context.close();
+  }
+}
 async function interactionCases(base) {
   const { context, page } = await createPage(viewports[0], { dpr: 2, reducedMotion: 'reduce' });
   await setDate(page, dates[2].iso); await page.goto(base); await ready(page);
+  let previousGeometry;
   for (const viewport of [...viewports, { width: 844, height: 390 }]) {
     await page.setViewportSize(viewport); await ready(page);
-    const boxes = await page.locator('[data-building-id]').evaluateAll(nodes => nodes.map(node => {
-      const box = node.getBoundingClientRect();
-      return { id: node.dataset.buildingId, x: box.x, y: box.y, width: box.width, height: box.height };
-    }));
+    const boxes = await settledEntranceGeometry(page, viewport, previousGeometry);
+    previousGeometry = JSON.stringify(boxes);
+    report.interactionGeometry.push({ viewport, boxes });
     for (const box of boxes) {
       assert.ok(box.width >= 44 && box.height >= 44, `${box.id}: readable touch target after resize`);
       assert.ok(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width + 1 && box.y + box.height <= viewport.height + 1, `${box.id}: target inside viewport`);
       const points = [[box.width / 2, box.height / 2], [2, box.height / 2], [box.width - 3, box.height / 2], [box.width / 2, 2], [box.width / 2, box.height - 3]];
       for (const [dx, dy] of points) {
         const x = box.x + dx, y = box.y + dy;
-        assert.equal(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('[data-building-id]')?.getAttribute('data-building-id'), { x, y }), box.id, `${box.id}: center/edge is not covered by another surface`);
+        const hit = await page.evaluate(({ x, y }) => {
+          const element = document.elementFromPoint(x, y);
+          return { buildingId: element?.closest('[data-building-id]')?.getAttribute('data-building-id') ?? null,
+            tag: element?.tagName ?? null, id: element?.id ?? null, className: element?.getAttribute('class') ?? null };
+        }, { x, y });
+        report.lastInteraction = { viewport, buildingId: box.id, box, point: { x, y, dx, dy }, hit };
+        assert.equal(hit.buildingId, box.id, `${box.id}: center/edge is not covered by another surface; ${JSON.stringify(report.lastInteraction)}`);
         await page.mouse.click(x, y);
         await page.getByRole('dialog', { name: facilityNames[box.id], exact: true }).waitFor();
-        await page.keyboard.press('Escape');
-        await page.locator('dialog[open]').waitFor({ state: 'hidden' });
+        await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/pointer-${dx}-${dy}`);
       }
       const target = page.locator(`[data-building-id="${box.id}"]`);
-      await target.focus(); await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Tab');
+      if (box === boxes[0]) {
+        // The first entrance has no preceding document tab stop. Start at its
+        // next sibling so real keyboard traversal never visits browser chrome.
+        const next = page.locator(`[data-building-id="${boxes[1].id}"]`);
+        await next.focus();
+        await pressEntranceKey(page, 'Shift+Tab', `${viewport.width}/${box.id}/from-next`);
+        assert.equal(await target.evaluate(node => document.activeElement === node && node.matches(':focus-visible')), true, `${box.id}: reverse Tab selects the first entrance visibly`);
+        await pressEntranceKey(page, 'Tab', `${viewport.width}/${box.id}/to-next`);
+        assert.equal(await next.evaluate(node => document.activeElement === node && node.matches(':focus-visible')), true, `${box.id}: Tab reaches the next entrance visibly`);
+        await pressEntranceKey(page, 'Shift+Tab', `${viewport.width}/${box.id}/return`);
+      } else {
+        await target.focus();
+        await pressEntranceKey(page, 'Shift+Tab', `${viewport.width}/${box.id}/previous`);
+        await pressEntranceKey(page, 'Tab', `${viewport.width}/${box.id}/return`);
+      }
       assert.equal(await target.evaluate(node => document.activeElement === node && node.matches(':focus-visible')), true, `${box.id}: real Tab navigation returns to visible focus`);
-      await page.keyboard.press('Enter'); await page.getByRole('dialog', { name: facilityNames[box.id], exact: true }).waitFor();
-      await page.keyboard.press('Escape');
+      await pressEntranceKey(page, 'Enter', `${viewport.width}/${box.id}/open`);
+      await page.getByRole('dialog', { name: facilityNames[box.id], exact: true }).waitFor();
+      await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/keyboard`);
       assert.equal(await target.evaluate(node => document.activeElement === node), true, `${box.id}: Escape restores the entrance`);
     }
     record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Escape'] });
     await capture(page, `entrances-${viewport.width}-dpr2`);
   }
   await context.close();
+}
+async function settledEntranceGeometry(page, viewport, previousGeometry) {
+  await page.waitForFunction(({ width, height }) => {
+    const canvas = document.querySelector('canvas');
+    const host = document.querySelector('.world-canvas-host > div')?.getBoundingClientRect();
+    return canvas?.width === width && canvas?.height === height && host &&
+      Math.abs(host.width - width) < .5 && Math.abs(host.height - height) < .5;
+  }, viewport);
+  return page.evaluate(async previous => {
+    const deadline = performance.now() + 15_000;
+    let last, stable = 0;
+    while (performance.now() < deadline) {
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const boxes = [...document.querySelectorAll('[data-building-id]')].map(node => {
+        const box = node.getBoundingClientRect();
+        return { id: node.dataset.buildingId, x: box.x, y: box.y, width: box.width, height: box.height };
+      });
+      const signature = JSON.stringify(boxes);
+      stable = boxes.length === 6 && signature !== previous ? (signature === last ? stable + 1 : 1) : 0;
+      if (stable >= 3) return boxes;
+      last = signature;
+    }
+    throw new Error('Entrance rectangles did not change and settle after the requested viewport resize');
+  }, previousGeometry);
+}
+async function traceEntranceFocus(page, checkpoint) {
+  const value = await page.evaluate(() => {
+    const active = document.activeElement;
+    return { active: active ? { tag: active.tagName, id: active.id || null,
+      buildingId: active.getAttribute('data-building-id'), focusVisible: active.matches(':focus-visible') } : null,
+      openDialogs: [...document.querySelectorAll('dialog[open]')].map(dialog => ({ id: dialog.id || null, title: dialog.querySelector('h2')?.textContent ?? null })),
+      documentFocused: document.hasFocus(), focusedBuilding: document.querySelector('.world-canvas-host > div')?.dataset.focusedBuilding,
+    };
+  });
+  report.focusTrace.push({ checkpoint, ...value });
+}
+async function pressEntranceKey(page, key, checkpoint) {
+  await traceEntranceFocus(page, `${checkpoint}/before-${key}`);
+  await page.keyboard.press(key);
+  await traceEntranceFocus(page, `${checkpoint}/after-${key}`);
+}
+async function closeEntranceDialog(page, buildingId, checkpoint) {
+  await pressEntranceKey(page, 'Escape', checkpoint);
+  // React removes the dialog before its passive cleanup restores the opener.
+  // Wait for both required postconditions before starting the next key sequence.
+  await page.waitForFunction(id => !document.querySelector('dialog[open]') &&
+    document.activeElement?.getAttribute('data-building-id') === id, buildingId);
+  await traceEntranceFocus(page, `${checkpoint}/restored`);
 }
 async function measureCases(base) {
   // Clear golden-hour scenery is the common workload with the authored R01
@@ -394,7 +475,7 @@ function compareBaseline() {
       : { firefoxUserPrefs: { 'webgl.force-enabled': true, 'gfx.webrender.all': true } }),
   });
   report.browser = browser.version();
-  if (!baseline) { await solarCases(base); await weatherCases(base); await interactionCases(base); }
+  if (!baseline) { await solarCases(base); await weatherCases(base); await rainPhaseCases(base); await interactionCases(base); }
   await measureCases(base);
   if (!baseline && browserName === 'chromium') await nativeVisibility(base);
   else if (!baseline) report.skipped.push({ name: 'native-hidden-resume', reason: 'Native visibility is accepted in Chromium without CDP focus emulation; Firefox is not represented as passing this check.' });
@@ -410,11 +491,13 @@ function compareBaseline() {
       return { url: location.href, canvasCount: document.querySelectorAll('canvas').length,
         targetsCount: document.querySelectorAll('[data-building-id]').length, hostDataset: { ...host?.dataset },
         hostRect: rect(host), canvasRects: [...document.querySelectorAll('canvas')].map(rect),
+        canvasIntrinsic: [...document.querySelectorAll('canvas')].map(canvas => ({ width: canvas.width, height: canvas.height })),
+        targetBoxes: [...document.querySelectorAll('[data-building-id]')].map(node => ({ buildingId: node.dataset.buildingId, ...rect(node) })),
         worldState: document.querySelector('.hub-screen')?.dataset.worldState ?? null,
         clock: globalThis.__stationFixedDate?.snapshot(),
       };
     }).catch(error => ({ url: page.url(), snapshotError: String(error) }));
-    report.failureSnapshots.push({ ...snapshot, errors: [...report.errors] });
+    report.failureSnapshots.push({ ...snapshot, lastInteraction: report.lastInteraction ?? null, errors: [...report.errors] });
     await page.screenshot({ path: path.join(output, `failure-${Date.now()}.png`) }).catch(() => {});
   }
 }).finally(async () => {
