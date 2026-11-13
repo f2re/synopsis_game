@@ -11,6 +11,12 @@
 .library-header { display: flex; flex-direction: column; min-width: 0; gap: 4px; padding: 16px 18px 12px; overflow-wrap: anywhere; }
 .library-header h1 { margin: 0; font: 22px/1.3 var(--font-pixel-display); color: #1e2430; }
 .library-desk-label { font: 13px/1.35 var(--font-pixel-dense); letter-spacing: .06em; color: #665038; }
+.library-screen .library-button {
+  --control-fill: #e2d6b6;
+  --control-hover: #f2c75c;
+  --control-border: #8b7857;
+  --control-ink: #1e2430;
+}
 .library-button {
   display: inline-flex;
   align-items: center;
@@ -30,7 +36,7 @@
   overflow-wrap: anywhere;
   cursor: pointer;
 }
-.library-button:hover { border-color: #665038; background: #f2c75c; }
+.library-button:hover:not(:disabled) { border-color: #665038; background: #f2c75c; }
 .library-button:active:not(:disabled) { background: #d5b574; box-shadow: inset 0 2px #6b573155; }
 .library-button:disabled { opacity: .6; cursor: default; }
 .library-button[aria-pressed="true"] { border-color: #6b5731; background: #d5b574; }

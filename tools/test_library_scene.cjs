@@ -202,6 +202,28 @@ async function runLibrarySceneChecks({ base, browser, report, capture, output })
       await checkHitTarget(page.locator('.library-favorite'), 'Bookmark action');
       await page.locator('.library-favorite').click();
       assert.ok((await page.evaluate(() => JSON.parse(localStorage.getItem('synopsis_26063_library_favorites_v1')))).includes(dewPoint.id));
+      await page.locator('.library-favorite').hover();
+      const bookmarkHover = await page.locator('.library-favorite').evaluate(node => {
+        const style = getComputedStyle(node);
+        const rgb = value => {
+          if (!/^rgba?\(/.test(value)) throw new Error(`Unsupported computed color: ${value}`);
+          return value.match(/[\d.]+/g).map(Number);
+        };
+        const foreground = rgb(style.color), background = rgb(style.backgroundColor);
+        const luminance = channels => channels.slice(0, 3).map(value => {
+          const srgb = value / 255; return srgb <= .04045 ? srgb / 12.92 : ((srgb + .055) / 1.055) ** 2.4;
+        }).reduce((total, value, index) => total + value * [.2126, .7152, .0722][index], 0);
+        const a = luminance(foreground), b = luminance(background);
+        return { foreground: style.color, background: style.backgroundColor,
+          foregroundAlpha: foreground[3] ?? 1, backgroundAlpha: background[3] ?? 1, opacity: Number(style.opacity),
+          contrast: (Math.max(a, b) + .05) / (Math.min(a, b) + .05), hovered: node.matches(':hover'),
+          selected: node.getAttribute('aria-pressed'), fontPx: parseFloat(style.fontSize) };
+      });
+      report.cases.push({ name: `library-scene-bookmark-hover-colors-${viewport.width}`, ...bookmarkHover });
+      await capture(page, `library-scene-bookmark-hover-${viewport.width}`);
+      assert.ok(bookmarkHover.hovered && bookmarkHover.selected === 'true', 'Bookmark contrast is measured in the actual selected hover state');
+      assert.equal(bookmarkHover.foregroundAlpha, 1); assert.equal(bookmarkHover.backgroundAlpha, 1); assert.equal(bookmarkHover.opacity, 1);
+      assert.ok(bookmarkHover.contrast >= 4.5, `Bookmark hover text remains readable: ${JSON.stringify(bookmarkHover)}`);
       // Capture waits for the actual rail/viewport geometry to agree. A hidden
       // pane may briefly have a different width while ResizeObserver settles.
       await capture(page, `library-scene-sources-${viewport.width}`);
