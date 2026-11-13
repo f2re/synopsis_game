@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "task_id": "LIBRARY-R08",
+  "date": "2026-11-13",
+  "repository": "f2re/synopsis_game",
+  "version": "0.5.3",
+  "accepted_head_sha": "2e5b0e56ffe5eec6591ed195940d0d912f392b31",
+  "accepted_app_tree": "3fc31182420b767efe342251d4ec6289eac1abc1",
+  "base_sha": "532a2282a19e87495283473663071d5f7cc2e6c9",
+  "unchanged_content_tree": "1b9ceff658b0b27edf41fce99504e38ff5f8debf",
+  "unchanged_assets_tree": "ce059dbfbfcf19f2ccc37e1cbfd93e14ad8595da",
+  "sources": [
+    {
+      "key": "screens-chromium-run5",
+      "run_id": 43488115593,
+      "head_sha": "2e5b0e56ffe5eec6591ed195940d0d912f392b31",
+      "tested_merge_sha": "6c7643fed51b736e937ef67e174ce1789463205f",
+      "artifact_id": 14069066335,
+      "zip_sha256": "fd78d87dfea8d7be7f1087133528e946eaec1856ac9eb262076cc4989d86b664",
+      "run_url": "https://github.com/f2re/synopsis_game/actions/runs/43488115593",
+      "artifact_url": "https://github.com/f2re/synopsis_game/actions/runs/43488115593/artifacts/14069066335",
+      "zip_digest_verified": true
+    },
+    {
+      "key": "screens-firefox-run5",
+      "run_id": 43488115593,
+      "head_sha": "2e5b0e56ffe5eec6591ed195940d0d912f392b31",
+      "tested_merge_sha": "6c7643fed51b736e937ef67e174ce1789463205f",
+      "artifact_id": 14068498012,
+      "zip_sha256": "a7dbfc46da62b637d289ca6813789bded1dbccba0fa2028550f839c41265b994",
+      "run_url": "https://github.com/f2re/synopsis_game/actions/runs/43488115593",
+      "artifact_url": "https://github.com/f2re/synopsis_game/actions/runs/43488115593/artifacts/14068498012",
+      "zip_digest_verified": true
+    },
+    {
+      "key": "environment-chromium-run4",
+      "run_id": 43485629426,
+      "head_sha": "d05a373a9f67e73aec70ed1a3c88a80a6294d658",
+      "tested_merge_sha": "a922376b11c5cc13a96154aeccff6303bc2a5296",
+      "artifact_id": 14066534150,
+      "zip_sha256": "a56bb84197f93def776485232367f1ab09c5cec2a8f7f3f323912e69338fd755",
+      "run_url": "https://github.com/f2re/synopsis_game/actions/runs/43485629426",
+      "artifact_url": "https://github.com/f2re/synopsis_game/actions/runs/43485629426/artifacts/14066534150",
+      "zip_digest_verified": true
+    },
+    {
+      "key": "environment-firefox-run4",
+      "run_id": 43485629426,
+      "head_sha": "d05a373a9f67e73aec70ed1a3c88a80a6294d658",
+      "tested_merge_sha": "a922376b11c5cc13a96154aeccff6303bc2a5296",
+      "artifact_id": 14066903799,
+      "zip_sha256": "009f0df5e07c21e5cca00161ab81bc65c1aace9c69c93de3fa55d34739dd4e10",
+      "run_url": "https://github.com/f2re/synopsis_game/actions/runs/43485629426",
+      "artifact_url": "https://github.com/f2re/synopsis_game/actions/runs/43485629426/artifacts/14066903799",
+      "zip_digest_verified": true
+    }
+  ],
+  "files": [
+    {
+      "file": "chromium-library-entry-1366.png",
+      "kind": "original_png",
+      "source_artifact_id": 14069066335,
+      "source_member": "library-scene-entry-1366.png",
+      "bytes": 241764,
+      "sha256": "a509c44dc8f13917c30acba780423255e25c97531a47cc75d2f1777d75418b71",
+      "git_blob_sha1": "e02262f395ec686041a701e9e13698f85ad64c26"
+    },
+    {
+      "file": "chromium-library-entry-844.png",
+      "kind": "original_png",
+      "source_artifact_id": 14069066335,
+      "source_member": "library-scene-entry-844.png",
+      "bytes": 146909,
+      "sha256": "d3beea363efa1da580994c60a29b19dd918461856e893650f10ebae87c3339f6",
+      "git_blob_sha1": "f3926bc42e03c4676c78b24fb64f7f32ab224509"
+    },
+    {
+      "file": "chromium-library-bookmark-hover-390.png",
+      "kind": "original_png",
+      "source_artifact_id": 14069066335,
+      "source_member": "library-scene-bookmark-hover-390.png",
+      "bytes": 56997,
+      "sha256": "b9d035a6899731907292e1c4bd7264bdd4e076fca8907cd7a1bbb89fc994bb35",
+      "git_blob_sha1": "31dc3400457a6e5df9e1a249609e00b94d1b9b6e"
+    },
+    {
+      "file": "firefox-library-entry-390.png",
+      "kind": "original_png",
+      "source_artifact_id": 14068498012,
+      "source_member": "library-scene-entry-390.png",
+      "bytes": 68829,
+      "sha256": "088ae907e3ba57e3264504343e9cb96558d0fca6231fd52f8524cb4ff74fdf3b",
+      "git_blob_sha1": "b8139b2c3a5f4fdb8ef1cfde8d39e5625dd1a2e7"
+    },
+    {
+      "file": "firefox-library-reader-390.png",
+      "kind": "original_png",
+      "source_artifact_id": 14068498012,
+      "source_member": "library-scene-reader-390.png",
+      "bytes": 70409,
+      "sha256": "0ac389f6e0dde3c4d1d3edcae922f6e9188926397df2b22efc8a286557d44d93",
+      "git_blob_sha1": "8927a23ca5b1e95d08121126ac067c24f7ea3eec"
+    },
+    {
+      "file": "firefox-library-expanded-390.png",
+      "kind": "original_png",
+      "source_artifact_id": 14068498012,
+      "source_member": "library-scene-expanded-390.png",
+      "bytes": 35598,
+      "sha256": "b4e07b63d862447f62a8053f76c9c33f7a531ddc10ce0475d8b2ebb183f47a26",
+      "git_blob_sha1": "d6e7c817a4603908291d07b4f0e4528625438473"
+    },
+    {
+      "file": "firefox-library-reopened-390.png",
+      "kind": "original_png",
+      "source_artifact_id": 14068498012,
+      "source_member": "library-scene-reopened-390.png",
+      "bytes": 69341,
+      "sha256": "8c6fd77e8ecca7a8f0ad2639b54b651ef7d21d55fd0da04834ff2aaa571d378d",
+      "git_blob_sha1": "5d42869c1cc23766fbb9535a50401647c54815a6"
+    },
+    {
+      "file": "firefox-library-text-200-390.png",
+      "kind": "original_png",
+      "source_artifact_id": 14068498012,
+      "source_member": "library-scene-text-200-390.png",
+      "bytes": 30131,
+      "sha256": "b920be48e0037122582161c2e0bfe60a00037cb048e6be96cc7c996b04ad2a02",
+      "git_blob_sha1": "cf09e148f41035e965854e1cb314c21aa0195764"
+    },
+    {
+      "file": "chromium-archive-entry-1366.png",
+      "kind": "original_png",
+      "source_artifact_id": 14069066335,
+      "source_member": "archive-scene-entry-1366.png",
+      "bytes": 254158,
+      "sha256": "c3d4c3721c84f9c62a23ba5593f24c12a9f65f695c4b62b395dda580c8a792d6",
+      "git_blob_sha1": "ee76f861a9b727ae1c413c006ca5d611b4b7ad63"
+    },
+    {
+      "file": "screens-chromium-run5.json.gz",
+      "kind": "gzip_of_unchanged_raw_json",
+      "source_artifact_id": 14069066335,
+      "source_run_id": 43488115593,
+      "source_member": "browser-report.json",
+      "raw_bytes": 496398,
+      "raw_sha256": "1a4644fad9b6f36143510c1e4ccca9ba3169c2e1e8372e3c917039a56939aa79",
+      "bytes": 29739,
+      "sha256": "893fc4b158e5c8b65ebe94c8bc93ed7ebb67ab10ce2cb1d1284eeecd817c139d",
+      "git_blob_sha1": "c9b23f72611d5d68eb662c6b5dc37f939fa953a1",
+      "gzip_mtime": 0,
+      "decompressed_bytes_match_source": true,
+      "status": "PASS"
+    },
+    {
+      "file": "screens-firefox-run5.json.gz",
+      "kind": "gzip_of_unchanged_raw_json",
+      "source_artifact_id": 14068498012,
+      "source_run_id": 43488115593,
+      "source_member": "browser-report.json",
+      "raw_bytes": 507602,
+      "raw_sha256": "3f70811de3ec05df3d92f82e75009c0b18618194e859bb0d99149d7811c780ae",
+      "bytes": 30202,
+      "sha256": "53b7b0ae4adeb4c243948c99255727ce06dc6e26c06c9c43a7f507e4895f42c0",
+      "git_blob_sha1": "521c16a42ba4c5e3eb950b47c1f32abd5029e08d",
+      "gzip_mtime": 0,
+      "decompressed_bytes_match_source": true,
+      "status": "PASS"
+    },
+    {
+      "file": "environment-chromium-candidate-run4.json.gz",
+      "kind": "gzip_of_unchanged_raw_json",
+      "source_artifact_id": 14066534150,
+      "source_run_id": 43485629426,
+      "source_member": "candidate/artifacts/station-environment-r07/browser-report.json",
+      "raw_bytes": 334564,
+      "raw_sha256": "df44fd76d0592ff77347b0ac0ee7ba56e318bc9981253aac2ae2fc2a040ff884",
+      "bytes": 15259,
+      "sha256": "ac1626fc771a35132e1985de4009df5a021766db482933ddf2c9aed881dc190c",
+      "git_blob_sha1": "f47add1f4135c81db1a93473ec1c753a2321e0ae",
+      "gzip_mtime": 0,
+      "decompressed_bytes_match_source": true,
+      "status": "PASS"
+    },
+    {
+      "file": "environment-chromium-baseline-run4.json.gz",
+      "kind": "gzip_of_unchanged_raw_json",
+      "source_artifact_id": 14066534150,
+      "source_run_id": 43485629426,
+      "source_member": "baseline/artifacts/station-environment-r07/browser-report.json",
+      "raw_bytes": 36519,
+      "raw_sha256": "47726f35932fda39c17f1e0f02e6351197a1fb8a533193da4957c97e2e17783e",
+      "bytes": 2827,
+      "sha256": "79131403e35fc586aba1e3f04237f63c13bd5d64fa753b87685b2a4771689ffc",
+      "git_blob_sha1": "e881a699a8b0551ff90292a830f8005630db86e8",
+      "gzip_mtime": 0,
+      "decompressed_bytes_match_source": true,
+      "status": "PASS"
+    },
+    {
+      "file": "environment-firefox-candidate-run4.json.gz",
+      "kind": "gzip_of_unchanged_raw_json",
+      "source_artifact_id": 14066903799,
+      "source_run_id": 43485629426,
+      "source_member": "candidate/artifacts/station-environment-r07/browser-report.json",
+      "raw_bytes": 324569,
+      "raw_sha256": "f6b38cda4fb05f8db819f1d85b649a844de7c3a2c4b7eb564aff1f650a757123",
+      "bytes": 15047,
+      "sha256": "9e8726aaa6728ba5d7e91f8acd16fa9bf8618c5d65c551fa5807717db67e4ce5",
+      "git_blob_sha1": "910b6198f1f195e444500a6fd384453f39d82a91",
+      "gzip_mtime": 0,
+      "decompressed_bytes_match_source": true,
+      "status": "PASS"
+    }
+  ],
+  "evidence_scope": {
+    "screens": "Final head, both browsers; all listed screenshots exist. PNG bytes are unchanged.",
+    "environment": "Original run4 evidence retained only for unchanged environment runtime and runner; final run5 environment jobs also succeeded.",
+    "compression": "Original JSON bytes are stored in deterministic gzip containers; raw and container checksums are both recorded.",
+    "inherited_report_note": "The run4 rainScope text that baseline lacks rain is stale. Baseline 532a228 already includes R07 rain. Rain measurements are candidate-only, not paired A/B.",
+    "observations_not_claimed": [
+      "physical GPU performance",
+      "physical phone testing",
+      "subjective audio listening",
+      "all native browser zoom modes"
+    ]
+  },
+  "reviews": [
+    {
+      "agent": "/root/library_scene_qa",
+      "role": "independent QA, controls, audio lifecycle",
+      "decision": "PASS",
+      "head_sha": "2e5b0e56ffe5eec6591ed195940d0d912f392b31"
+    },
+    {
+      "agent": "/root/library_scene_art_review",
+      "role": "independent SpriteCook integration and Art/UX",
+      "decision": "PASS",
+      "head_sha": "2e5b0e56ffe5eec6591ed195940d0d912f392b31",
+      "final_original_pngs_viewed": 10,
+      "previous_full_matrix_pngs_viewed": 50
+    },
+    {
+      "agent": "/root/contract_integration_review",
+      "role": "independent integration and performance",
+      "decision": "PASS",
+      "head_sha": "2e5b0e56ffe5eec6591ed195940d0d912f392b31"
+    }
+  ]
+}
