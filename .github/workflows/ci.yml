@@ -69,6 +69,7 @@ jobs:
           node tools/test_modular_avatar.cjs
           node tools/test_avatar_preview_lifecycle.cjs
           node tools/test_avatar_world_boundary.cjs
+          node tools/test_hub_scene_lifecycle.cjs
           node tools/test_blitz_lifecycle.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.

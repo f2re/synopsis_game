@@ -22,6 +22,7 @@ const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-environment-'));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const settingsKey = 'synopsis_26063_settings';
+const fixedDatePages = new WeakSet();
 const dates = [
   { phase: 'day', iso: '2026-10-27T14:00:00+03:00' },
   { phase: 'twilight', iso: '2026-10-27T18:00:00+03:00' },
@@ -94,8 +95,45 @@ async function ready(page) {
   await page.evaluate(async () => { await document.fonts.ready; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
 }
 async function setDate(page, iso) {
-  assert.ok(page.clock?.setFixedTime, 'The pinned Playwright clock must support fixing Date without pausing timers');
-  await page.clock.setFixedTime(new Date(iso));
+  const epoch = Date.parse(iso);
+  assert.ok(Number.isFinite(epoch), 'A valid fixed station date is required');
+  if (!fixedDatePages.has(page)) {
+    // One init script per page; later changes update the current document only.
+    // Each solar case gets a new page, so navigation never replays stale dates.
+    await page.addInitScript(installFixedDate, epoch);
+    fixedDatePages.add(page);
+  }
+  await page.evaluate(installFixedDate, epoch);
+}
+function installFixedDate(epoch) {
+  if (globalThis.__stationFixedDate) { globalThis.__stationFixedDate.set(epoch); return; }
+  const NativeDate = globalThis.Date;
+  const originals = {
+    requestAnimationFrame: globalThis.requestAnimationFrame, cancelAnimationFrame: globalThis.cancelAnimationFrame,
+    setTimeout: globalThis.setTimeout, clearTimeout: globalThis.clearTimeout,
+    setInterval: globalThis.setInterval, clearInterval: globalThis.clearInterval,
+    performance: globalThis.performance, performanceNow: globalThis.performance.now,
+  };
+  let fixed = epoch;
+  function FixedDate(...args) {
+    if (!new.target) return new NativeDate(fixed).toString();
+    return Reflect.construct(NativeDate, args.length ? args : [fixed], new.target);
+  }
+  Object.setPrototypeOf(FixedDate, NativeDate);
+  FixedDate.prototype = NativeDate.prototype;
+  Object.defineProperty(FixedDate, 'now', { value: () => fixed });
+  globalThis.Date = FixedDate;
+  Object.defineProperty(globalThis, '__stationFixedDate', { value: {
+    set(value) { if (!Number.isFinite(value)) throw new Error('Invalid fixed date'); fixed = value; },
+    snapshot() { return { fixedEpoch: fixed, dateOnly: globalThis.Date === FixedDate,
+      nativeTiming: Object.fromEntries(Object.entries(originals).map(([key, value]) =>
+        [key, (key === 'performanceNow' ? globalThis.performance.now : globalThis[key]) === value])),
+    }; },
+  } });
+}
+function assertNativeTiming(value) {
+  assert.equal(value.clock?.dateOnly, true, 'Only Date is replaced for the solar scenario');
+  assert.equal(Object.values(value.clock.nativeTiming).every(Boolean), true, 'RAF, performance and timers retain their original identities');
 }
 async function state(page) {
   return page.evaluate(() => {
@@ -116,7 +154,7 @@ async function state(page) {
       }
       if (renderer.type === 'unknown' && canvas.getContext('2d')) renderer = { type: 'canvas2d' };
     }
-    return { ...host?.dataset, ambientWeather: document.documentElement.dataset.ambientWeather,
+    return { ...host?.dataset, clock: globalThis.__stationFixedDate?.snapshot(), ambientWeather: document.documentElement.dataset.ambientWeather,
       storedWeather: JSON.parse(localStorage.getItem('synopsis_26063_settings') || '{}').weather,
       visibility: document.visibilityState, date: new Date().toISOString(), viewport: [innerWidth, innerHeight], dpr: devicePixelRatio,
       canvasCount: document.querySelectorAll('canvas').length, canvasSize: canvas ? [canvas.width, canvas.height] : null, renderer,
@@ -126,6 +164,7 @@ async function state(page) {
 async function phaseIs(page, expected) {
   if (!baseline) await page.waitForFunction(phase => document.querySelector('.world-canvas-host > div')?.dataset.phase === phase && document.querySelector('.world-canvas-host > div')?.dataset.lightingMode === 'solar', expected, { timeout: 8_000 });
   const value = await state(page);
+  assertNativeTiming(value);
   if (!baseline) { assert.equal(value.phase, expected); assert.equal(value.lightingMode, 'solar'); }
   assert.equal(value.canvasCount, 1, 'Exactly one world canvas');
   return value;
@@ -170,17 +209,17 @@ async function visitSettings(page, changes) {
 }
 async function solarCases(base) {
   for (const viewport of viewports) {
-    const { context, page } = await createPage(viewport, { reducedMotion: 'reduce' });
     const hashes = {};
     for (const { phase, iso } of dates) {
+      const { context, page } = await createPage(viewport, { reducedMotion: 'reduce' });
       await setDate(page, iso); await page.goto(base); await ready(page); await phaseIs(page, phase);
       await weatherIs(page, 'clear', false);
       hashes[phase] = await capture(page, `solar-${phase}-${viewport.width}`);
+      await context.close();
     }
     assert.notEqual(hashes.day, hashes.night, 'Day and night must change the actual canvas, not only diagnostics');
     assert.notEqual(hashes.twilight, hashes.day, 'Twilight must change the actual canvas from day');
     assert.notEqual(hashes.twilight, hashes.night, 'Twilight must remain visually distinct from night');
-    await context.close();
   }
 }
 async function weatherCases(base) {
@@ -279,7 +318,8 @@ async function measureCases(base) {
       const percentile = p => intervals[Math.min(intervals.length - 1, Math.floor(intervals.length * p))];
       return { elapsedMs: previous - start, frames: intervals.length, p50Ms: percentile(.5), p95Ms: percentile(.95), maxMs: intervals.at(-1), jsHeapBytes: performance.memory?.usedJSHeapSize ?? null };
     }));
-    const result = { viewport, weatherMode, lowPower, fixedDate: measurementDate.iso, warmupMs: 3_000, runs: samples, state: await state(page), metric: 'Browser RAF callback intervals, not guaranteed rendered FPS' };
+    const measuredState = await state(page); assertNativeTiming(measuredState);
+    const result = { viewport, weatherMode, lowPower, fixedDate: measurementDate.iso, warmupMs: 3_000, runs: samples, state: measuredState, metric: 'Native browser RAF callback intervals, not guaranteed rendered FPS' };
     report.measurements.push(result); record(`raf-${weatherMode}-${viewport.width}-${lowPower ? 'low-power' : 'normal'}`, result);
     await capture(page, `measured-${weatherMode}-${viewport.width}-${lowPower ? 'low-power' : 'normal'}`);
     await context.close();
@@ -362,7 +402,21 @@ function compareBaseline() {
   console.log(JSON.stringify({ status: report.status, mode: report.mode, cases: report.cases.length, screenshots: report.screenshots.length, measurements: report.measurements.length }));
 })().catch(async error => {
   report.status = 'FAIL'; report.failure = error.stack || String(error); console.error(report.failure); process.exitCode = 1;
-  if (browser) for (const context of browser.contexts()) for (const page of context.pages()) await page.screenshot({ path: path.join(output, `failure-${Date.now()}.png`) }).catch(() => {});
+  report.failureSnapshots = [];
+  if (browser) for (const context of browser.contexts()) for (const page of context.pages()) {
+    const snapshot = await page.evaluate(() => {
+      const rect = node => { const box = node?.getBoundingClientRect(); return box ? { x: box.x, y: box.y, width: box.width, height: box.height } : null; };
+      const host = document.querySelector('.world-canvas-host > div');
+      return { url: location.href, canvasCount: document.querySelectorAll('canvas').length,
+        targetsCount: document.querySelectorAll('[data-building-id]').length, hostDataset: { ...host?.dataset },
+        hostRect: rect(host), canvasRects: [...document.querySelectorAll('canvas')].map(rect),
+        worldState: document.querySelector('.hub-screen')?.dataset.worldState ?? null,
+        clock: globalThis.__stationFixedDate?.snapshot(),
+      };
+    }).catch(error => ({ url: page.url(), snapshotError: String(error) }));
+    report.failureSnapshots.push({ ...snapshot, errors: [...report.errors] });
+    await page.screenshot({ path: path.join(output, `failure-${Date.now()}.png`) }).catch(() => {});
+  }
 }).finally(async () => {
   fs.writeFileSync(path.join(output, 'browser-report.json'), JSON.stringify(report, null, 2) + '\n');
   if (browser) await browser.close().catch(() => {});

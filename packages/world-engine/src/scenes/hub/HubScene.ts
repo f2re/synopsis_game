@@ -78,6 +78,10 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
+    // A route unmount destroys the whole Phaser Game. Systems.destroy emits
+    // DESTROY directly, without SHUTDOWN; both paths must release bridge listeners.
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
+    this.events.once(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     // The home screen must not silently replace a failed station download with
     // the legacy scene. React keeps navigation available and offers a retry.
     if (this.useR01) {
@@ -101,7 +105,6 @@ export class HubScene extends Phaser.Scene {
       this.applyDayPhase(this.timeOfDay.getCurrentPhase());
       worldBridge.notifySeasonChanged(this.season);
       worldBridge.notifySceneReady('hub');
-      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.cleanup());
       return;
     }
     // 1. Экспериментальная полноэкранная камера Hub; до UX-приёмки только ?hubCover=1
@@ -152,9 +155,6 @@ export class HubScene extends Phaser.Scene {
     // Уведомление о готовности сцены
     worldBridge.notifySceneReady('hub');
 
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.cleanup();
-    });
   }
 
   private applyDayPhase(phase: DayPhase): void {
@@ -327,6 +327,8 @@ export class HubScene extends Phaser.Scene {
   }
 
   private cleanup(): void {
+    this.events.off(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
+    this.events.off(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     this.bridgeUnsubscribers.forEach((unsub) => unsub());
     this.bridgeUnsubscribers = [];
     this.scale.off(Phaser.Scale.Events.RESIZE, this.publishLegacyTargets, this);
