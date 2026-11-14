@@ -1,0 +1,156 @@
+{
+  "id": "ui.wardrobe.icons",
+  "provider": "SpriteCook",
+  "model": "pixel-engine-image-v1",
+  "class": "ui_icon",
+  "sourceSize": [
+    48,
+    48
+  ],
+  "runtimeSize": [
+    64,
+    64
+  ],
+  "icons": [
+    {
+      "id": "backpack.city",
+      "asset_id": "8f46574d-6e70-4d05-9357-0b5dc82bad1d",
+      "sha256": "6eb12658e2d56da3de06cdff494e00e368707bd121415ff291d08cc51c496295"
+    },
+    {
+      "id": "backpack.field",
+      "asset_id": "6a4b8dbd-4406-450a-95eb-27f2ec82b2a1",
+      "sha256": "384e3b38e692243241373c32150b3180e4e37773926aefa55800fa58f916ba25"
+    },
+    {
+      "id": "badge.accuracy",
+      "asset_id": "124d0d97-9628-479d-8053-fb7cfa75f214",
+      "sha256": "4c78f0d0160b81e742021afa3310272f93f0d6749f4812413b8345323393d1b1"
+    },
+    {
+      "id": "badge.aerology",
+      "asset_id": "3a054548-b33f-44de-94eb-95599bd53a6f",
+      "sha256": "49c8554cdc6957b7f45f83a993e54e29bd2ed40c7afa82fb78d00bff9bc6b3b0"
+    },
+    {
+      "id": "badge.first_shift",
+      "asset_id": "1ba9c2e1-29e3-4226-9022-a1b17419e245",
+      "sha256": "f7fd04e5f54bce69e3375e10467d6b8fd4e8f9ee4e3abaa57439e3b0f6d188b4"
+    },
+    {
+      "id": "badge.meteo",
+      "asset_id": "b302ee24-ec09-4d7b-a82b-6e80a417d202",
+      "sha256": "ac12555ebd2c841699be0a108378d07e3a8d599038ff0d4810ed5b42390a485b"
+    },
+    {
+      "id": "badge.regular",
+      "asset_id": "82408c20-951e-4815-ac74-024429e28975",
+      "sha256": "cd08129032ed390ad1bab3be1b75d4812874eeef9f59ad79dde2061bea913103"
+    },
+    {
+      "id": "badge.training_starter",
+      "asset_id": "17b12f29-ee9e-4aa1-83e3-594609ee8f43",
+      "sha256": "c52d2226ab01145b7a7bf416797488b78d199ac61651ee23f21ec55ca4aeb410"
+    },
+    {
+      "id": "bottom.dark-trousers",
+      "asset_id": "33e9cc71-505f-4234-8665-c6a5c9ba1850",
+      "sha256": "71284ac18f78ec1863d1d0f7c233d68ab34bc433290922262cfe19ea9b0ff75d"
+    },
+    {
+      "id": "bottom.field-trousers",
+      "asset_id": "8029e2e5-43d6-4d83-a3b1-17a1e2b276bf",
+      "sha256": "c8234ff64b1b99e4c823c41047945f5450ad238104e2b62c5df34b0fc93dd183"
+    },
+    {
+      "id": "bottom.jeans",
+      "asset_id": "5392440e-5b5a-496c-8360-14def6b9d04b",
+      "sha256": "3fb60c6c55a49d51618589df30f4c1b46f7690a1767710807a6320c363e98c3b"
+    },
+    {
+      "id": "companion.squirrel",
+      "asset_id": "ae3366f6-78a3-4ca7-8c08-dbd413ae8277",
+      "sha256": "613200682bd02b58fd3f0a0d06852278a2b21b12bc3969d9066875be4b794635"
+    },
+    {
+      "id": "companion.tit",
+      "asset_id": "5c2cf33a-fd68-439d-b3a6-15f0970bba0d",
+      "sha256": "ed149f9c6b00b94a71439d85bdfea97fa47fc740324b0108fdfec64eaafcdd11"
+    },
+    {
+      "id": "footwear.boots",
+      "asset_id": "59a047d0-9e00-4649-872d-427a72d79616",
+      "sha256": "f707bfbecc9b683b6f65e4b3798ae4f9907939793c6515653f1e3fb2afabf973"
+    },
+    {
+      "id": "footwear.shoes",
+      "asset_id": "3013941a-af8c-43bb-9329-ec08a01b3660",
+      "sha256": "79c848b8b852044861e53d6e5c3267b5c14046dc3c0ee8698d4dd8377df5de4d"
+    },
+    {
+      "id": "footwear.sneakers",
+      "asset_id": "61fa42bb-0856-49db-bbce-9cb4011e0fc2",
+      "sha256": "fa461d3c3b72c2e9ef2455f0a7ecfd451edd16aced936b5574d86ed2a1f22cef"
+    },
+    {
+      "id": "headwear.beanie",
+      "asset_id": "66753038-aa90-4564-be86-7ccf4b0b5742",
+      "sha256": "b2216e9214fc28e5c334baa8b5b5d2844eae2e634216ec66d5a8e14bd663fbe3"
+    },
+    {
+      "id": "headwear.cap",
+      "asset_id": "17314163-3cfb-4060-b71b-f3006c0cfab3",
+      "sha256": "f148beec9f31693637a9d43b09e8b148958e9fef19574e3e83998e8a35409c04"
+    },
+    {
+      "id": "headwear.goggles",
+      "asset_id": "14b7688a-6cd6-430d-b4a5-b67f7f9a47ec",
+      "sha256": "6374eedcf726adc7e3d2dc81b2d38a611888c3bdc9a3d6daaaf5c2f0967e88c3"
+    },
+    {
+      "id": "headwear.scarf",
+      "asset_id": "1e7382a9-feaa-4989-ac0f-79e064da8b95",
+      "sha256": "55ccd8a5c1459ede7876f36753219ca7b3bb8d0b0ce0841fd62f9167cb5babf9"
+    },
+    {
+      "id": "held.map-folder",
+      "asset_id": "cfe2d5cf-e46d-4e7c-9b74-bdbd9cd6dabd",
+      "sha256": "8a34de7db7bf2db254f91bab65eef5734d76112f10c76fe7366ad293e4a4a697"
+    },
+    {
+      "id": "held.pencil",
+      "asset_id": "5088758d-7ce3-45b2-9892-bc7ba5d201c3",
+      "sha256": "02e96d65447496c0d57d54f072c698db3f6316d1c3761060756261cd7af2e365"
+    },
+    {
+      "id": "held.tablet",
+      "asset_id": "eab7c21e-6347-4e90-ad5e-5f8670ad253a",
+      "sha256": "04b407599064b734fd238f9a1dcd1b0865688d69e1218bcf93eb268687a1133a"
+    },
+    {
+      "id": "top.center-jacket",
+      "asset_id": "bfc122f3-2c77-4741-91e7-e36acf6b21e1",
+      "sha256": "0154d05455fba933607e353b3deb486fdc00f8f846da9b580dc218465cca0d59"
+    },
+    {
+      "id": "top.field-jacket",
+      "asset_id": "2fd9435d-54d1-4f20-afef-ee7ee88ad4bb",
+      "sha256": "2784e6ec26a2699f1609c96fdbde908ae34f3cd4ec059d0fc3b4471068d0487b"
+    },
+    {
+      "id": "top.hoodie",
+      "asset_id": "61adabe7-68ec-44cf-ac99-6f8d8602f230",
+      "sha256": "e2491778c45818017e965d02bfe66abf24a7f294c1b6045ddc0c55fa0e3f01ab"
+    },
+    {
+      "id": "top.shirt",
+      "asset_id": "a5b1f5de-3f75-4261-9073-22eaeab4e7ed",
+      "sha256": "6921b2db8a32a3128f0f3f55e4b430e312409728ceb3397101735a4073f40456"
+    },
+    {
+      "id": "top.sweater",
+      "asset_id": "85d90c62-bef8-42c6-bcca-0429125e3918",
+      "sha256": "f1ae9ecfbbefabcad3e9f2701120345f62c238497a5b9e46e9afd6573510d25a"
+    }
+  ]
+}

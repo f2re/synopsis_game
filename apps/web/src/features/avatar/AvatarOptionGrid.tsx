@@ -1,5 +1,6 @@
 import type { AvatarProfile, EquipmentResponse } from '../../api';
 import { PixelScrollArea } from '../ui/PixelScrollArea';
+import { AvatarPreview } from './AvatarPreview';
 import {
   EQUIPMENT_SLOTS, INVENTORY_CATEGORIES, INVENTORY_ITEMS, OPTIONS,
   type EquipmentSlot, type InventoryCategory, type InventoryItem,
@@ -85,16 +86,23 @@ export function AvatarOptionGrid({ avatar, selectedId, category, query, equipped
   );
 }
 
-export function AvatarAppearance({ avatar, onSelect }: { avatar: AvatarProfile; onSelect: (slot: keyof AvatarProfile, id: string) => void }) {
+export function AvatarAppearance({ avatar, onSelect, showFace, onShowFace }: { avatar: AvatarProfile; onSelect: (slot: keyof AvatarProfile, id: string) => void; showFace: boolean; onShowFace: () => void }) {
   return (
     <div className="inventory-appearance">
+      <div className="inventory-appearance__intro">
+        <p>Цвета и причёска сразу меняются в примерочной.</p>
+        {avatar.headwear !== 'headwear.none' && <button type="button" className="inventory-button" aria-pressed={showFace} onClick={onShowFace}>Скрыть головной убор в примерочной</button>}
+      </div>
       {([['skinTone', 'Тон кожи'], ['hairColor', 'Цвет волос'], ['hair', 'Причёска']] as const).map(([slot, label]) => (
         <section className="inventory-appearance-section" key={slot} aria-labelledby={`appearance-${slot}`}>
-          <h2 id={`appearance-${slot}`}>{label}</h2>
+          <div className="inventory-appearance-section__heading">
+            <h2 id={`appearance-${slot}`}>{label}</h2>
+            {slot !== 'hair' && <AvatarPreview avatar={{ ...avatar, headwear: 'headwear.none', companion: 'companion.none' }} hairstyleThumbnail />}
+          </div>
           <div className="inventory-appearance-options">
             {OPTIONS[slot].map((item) => (
               <button type="button" key={item.id} className={`inventory-appearance-option ${avatar[slot] === item.id ? 'is-selected' : ''}`} aria-pressed={avatar[slot] === item.id} onClick={() => onSelect(slot, item.id)}>
-                {item.color ? <span className="inventory-swatch" style={{ backgroundColor: item.color }} /> : <img src={item.image} alt="" width={72} height={72} />}
+                {item.color ? <span className="inventory-swatch" style={{ backgroundColor: item.color }} /> : <AvatarPreview avatar={{ ...avatar, hair: item.id, headwear: 'headwear.none', companion: 'companion.none' }} hairstyleThumbnail />}
                 <span>{item.name}</span>
                 {avatar[slot] === item.id && <span aria-hidden="true">✓</span>}
               </button>

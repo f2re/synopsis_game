@@ -1,5 +1,11 @@
 import type { EquipmentResponse, EquipmentSnapshot } from '../../api';
-import { OPTIONS } from './avatarOptions';
+import { OPTIONS, wardrobeIcon } from './avatarOptions';
+
+const TRAINING_BADGE_ICONS = new Set(['badge.training_starter', 'badge.first_shift', 'badge.accuracy', 'badge.regular']);
+
+function badgeIcon(badge: { id: string; image: string }): string {
+  return TRAINING_BADGE_ICONS.has(badge.id) ? wardrobeIcon(badge.id) : badge.image;
+}
 
 interface EquipmentBadgesProps {
   equipment: EquipmentResponse | null;
@@ -24,14 +30,14 @@ export function EquipmentBadges({ equipment, loading, error, selecting, onReload
     <header className="equipment-badges__header">
       <div><span className="inventory-eyebrow">Коллекция станции · {count} из {equipment.catalog.length}</span><h2 id="equipment-badges-title">Знаки отличия</h2><p>Выберите один знак для следующей учебной смены. Он добавит заряды к вашему инструменту.</p></div>
       <div className="equipment-active-badge">
-        {active && <img src={active.image} alt="" width={64} height={64} />}
+        {active && <img src={badgeIcon(active)} alt="" width={64} height={64} />}
         <div><span>Выбран для смены</span><strong>{active?.name ?? 'Без значка'}</strong>{active && <button type="button" disabled={selecting || loading} onClick={() => onSelect(null)}>Снять учебный знак</button>}</div>
       </div>
     </header>
     {error && <div className="equipment-inline-error" role="alert"><span>{error}</span><button type="button" className="inventory-button" disabled={loading || selecting} onClick={onReload}>Обновить</button></div>}
     <div className="equipment-badge-grid">
       {equipment.catalog.map((badge) => <article key={badge.id} className={`equipment-badge ${badge.equipped ? 'is-equipped' : ''} ${badge.unlocked ? 'is-unlocked' : 'is-locked'}`} aria-labelledby={`title-${badge.id}`}>
-        <div className="equipment-badge__top"><div className="equipment-badge__art"><img src={badge.image} alt="" width={96} height={96} loading="lazy" decoding="async" /></div><span className="equipment-badge__status">{badge.equipped ? '✓ Активен' : badge.unlocked ? 'Получен' : 'Ещё не получен'}</span></div>
+        <div className="equipment-badge__top"><div className="equipment-badge__art"><img src={badgeIcon(badge)} alt="" width={64} height={64} loading="lazy" decoding="async" /></div><span className="equipment-badge__status">{badge.equipped ? '✓ Активен' : badge.unlocked ? 'Получен' : 'Ещё не получен'}</span></div>
         <h3 id={`title-${badge.id}`}>{badge.name}</h3>
         <p className="equipment-badge__description">{badge.description}</p>
         <p className="equipment-badge__effect">{badge.effectDescription}</p>

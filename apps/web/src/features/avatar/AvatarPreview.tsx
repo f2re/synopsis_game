@@ -10,10 +10,11 @@ export type { AvatarDirection } from '@synopsis/world-engine/avatar';
 export interface AvatarPreviewProps {
   avatar: AvatarProfile;
   direction?: AvatarDirection;
+  hairstyleThumbnail?: boolean;
 }
 
 /** Static fitting only. Gameplay must import SavedAvatarPortrait instead. */
-export function AvatarPreview({ avatar, direction = 'down' }: AvatarPreviewProps) {
+export function AvatarPreview({ avatar, direction = 'down', hairstyleThumbnail = false }: AvatarPreviewProps) {
   const key = `${avatarProfileKey(avatar)}:${direction}`;
   const [loaded, setLoaded] = useState<{ key: string; value: AvatarComposite } | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
@@ -32,21 +33,33 @@ export function AvatarPreview({ avatar, direction = 'down' }: AvatarPreviewProps
     return () => { active = false; lease?.release(); };
   }, [key]);
 
+  if ((!loaded || loaded.key !== key) && hairstyleThumbnail) return <span className="inventory-hairstyle-thumbnail" aria-hidden="true" />;
   if (!loaded || loaded.key !== key) return <div className="inventory-preview-placeholder" role="status">
     {failure === key ? 'Примерка недоступна. Выбранные вещи можно сохранить; портрет появится после ответа сервера.' : 'Открываем примерку…'}
   </div>;
-  return <StaticAvatarCanvas composite={loaded.value} />;
+  return <StaticAvatarCanvas composite={loaded.value} hairstyleThumbnail={hairstyleThumbnail} />;
 }
 
-function StaticAvatarCanvas({ composite }: { composite: AvatarComposite }) {
+function StaticAvatarCanvas({ composite, hairstyleThumbnail }: { composite: AvatarComposite; hairstyleThumbnail: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const bounds = avatarPreviewBounds(composite);
   useEffect(() => {
     const context = ref.current?.getContext('2d');
-    if (context) drawAvatarComposite(context, composite, 0);
-  }, [composite]);
+    if (!context) return;
+    if (hairstyleThumbnail) {
+      const { width, height } = context.canvas;
+      context.clearRect(0, 0, width, height);
+      context.drawImage(composite.body.canvas, composite.body.frame.pivot[0] - width / 2, 0, width, height, 0, 0, width, height);
+    } else {
+      drawAvatarComposite(context, composite, 0);
+    }
+  }, [composite, hairstyleThumbnail]);
+  if (hairstyleThumbnail) return <canvas ref={ref} className="inventory-hairstyle-thumbnail" width={44} height={44} aria-hidden="true" />;
+  const footX = bounds.bodyAt[0] + composite.body.frame.pivot[0];
+  const footY = bounds.bodyAt[1] + composite.body.frame.pivot[1];
   return <canvas ref={ref} className="avatar-preview" width={bounds.width} height={bounds.height}
     role="img" aria-label="Неподвижная примерка одежды" data-avatar-renderer="editor-static"
     data-avatar-direction={composite.direction} data-avatar-frame="0" data-avatar-key={composite.key}
-    style={{ display: 'block', width: bounds.width * 2, height: bounds.height * 2, imageRendering: 'pixelated' }} />;
+    style={{ width: bounds.width * 2, height: bounds.height * 2,
+      left: `calc(50% - ${footX * 2}px)`, top: `calc(var(--fitting-rug-y) - ${footY * 2}px)` }} />;
 }

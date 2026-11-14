@@ -56,15 +56,31 @@ const makeEditor = (id, example = first) => new Runner(editor.AvatarEditor, { us
 
 async function staticCompositorCheck() {
   const manifest = JSON.parse(fs.readFileSync('apps/web/public/assets/avatar/modular-r01/manifest.json', 'utf8'));
+  const palettes = JSON.parse(fs.readFileSync('apps/web/public/assets/avatar/modular-r01/fitting-palettes.json', 'utf8'));
   const canvases = [], timers = new Set(); let timerId = 0;
   const document = { createElement(tag) {
     assert.equal(tag, 'canvas');
-    const c = { width: 0, height: 0, draws: [], getContext() { return { imageSmoothingEnabled: false, drawImage: (...args) => c.draws.push(args), getImageData: (_x, _y, w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} }; } };
+    const c = { width: 0, height: 0, draws: [], getContext() { return { imageSmoothingEnabled: false, drawImage: (...args) => c.draws.push(args), getImageData: () => { throw new Error('Fitting must not read canvas pixels'); } }; } };
     canvases.push(c); return c;
   } };
-  class Image { naturalWidth = manifest.atlas.width; naturalHeight = manifest.atlas.height; set src(value) { assert.equal(value, manifest.atlas.url); this.onload(); } }
-  const compositor = load('packages/world-engine/src/runtime/modularAvatarCompositor.ts', { './modularAvatarManifest.ts': contract }, {
-    document, Image, AbortController, fetch: async (url) => { assert.equal(url, contract.MODULAR_AVATAR_URL); return { ok: true, json: async () => manifest }; },
+  const fauna = require('../packages/world-engine/src/assets/hub/station-fauna.json');
+  class Image {
+    set src(value) {
+      const isOriginal = value === manifest.atlas.url;
+      const isCompanion = Object.values(fauna.fitting).includes(value);
+      if (!isOriginal && !isCompanion) assert(value.endsWith('/' + palettes.image));
+      [this.naturalWidth, this.naturalHeight] = isOriginal ? [manifest.atlas.width, manifest.atlas.height] : isCompanion ? [256, 64] : palettes.size;
+      this.srcUrl = value;
+      this.onload();
+    }
+  }
+  const compositor = load('packages/world-engine/src/runtime/modularAvatarCompositor.ts', {
+    './modularAvatarManifest.ts': contract, '../assets/hub/station-fauna.json': { default: fauna },
+  }, {
+    document, Image, AbortController, fetch: async (url) => {
+      if (url !== contract.MODULAR_AVATAR_URL) assert(url.endsWith('/fitting-palettes.json'));
+      return { ok: true, json: async () => url === contract.MODULAR_AVATAR_URL ? manifest : palettes };
+    },
     window: { setTimeout: () => { timers.add(++timerId); return timerId; }, clearTimeout: (id) => timers.delete(id) },
   }).modularAvatarCompositor;
   for (const direction of contract.AVATAR_DIRECTIONS) {
@@ -74,6 +90,11 @@ async function staticCompositorCheck() {
     const duplicate = await compositor.acquireStatic(second.avatar, direction);
     assert.equal(lease.value, duplicate.value, 'An unchanged appearance reuses its bounded static frame');
     lease.release(); duplicate.release();
+    const companion = await compositor.acquireStatic({ ...second.avatar, companion: 'companion.tit' }, direction);
+    const [[texture, x]] = companion.value.companion.canvas.draws;
+    assert.equal(texture.srcUrl, fauna.fitting['companion.tit']);
+    assert.equal(x, contract.AVATAR_DIRECTIONS.indexOf(direction) * 64);
+    companion.release();
   }
   assert.equal(timers.size, 0, 'Only finite loading timeouts exist; none remain once the atlas is loaded');
   assert.equal(compositor.diagnostics().composites.leased, 0);

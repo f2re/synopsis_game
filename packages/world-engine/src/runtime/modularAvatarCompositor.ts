@@ -1,11 +1,12 @@
 import {
-  MODULAR_AVATAR_URL, avatarPoseCels, avatarProfileKey, parseModularAvatarManifest, parseModularAvatarProfile,
+  AVATAR_DIRECTIONS, MODULAR_AVATAR_URL, avatarPoseCels, avatarProfileKey, parseModularAvatarManifest, parseModularAvatarProfile,
   type AvatarAction, type AvatarCel, type AvatarClip, type AvatarDirection, type AvatarFrameBox,
-  type AvatarPaletteRamp, type ModularAvatarManifest, type ModularAvatarProfile,
+  type ModularAvatarManifest, type ModularAvatarProfile,
 } from './modularAvatarManifest.ts';
+import stationFauna from '../assets/hub/station-fauna.json';
 
 /** Bounded CPU resources for the static fitting room only. */
-export const AVATAR_CACHE_BUDGET = { composites: 12 * 1024 * 1024, paletteCels: 4 * 1024 * 1024 } as const;
+export const AVATAR_CACHE_BUDGET = { composites: 12 * 1024 * 1024 } as const;
 
 interface CacheEntry<T> { value: T; bytes: number; references: number; }
 export interface AvatarLease<T> { value: T; release: () => void; }
@@ -50,16 +51,6 @@ export class AvatarResourceCache<T> {
   }
 }
 
-/** Change only four exact RGB keys; authored alpha and every other pixel survive. */
-export function remapAvatarPalette(pixels: Uint8ClampedArray, source: AvatarPaletteRamp, target: AvatarPaletteRamp): void {
-  const colors = new Map(source.map((rgb, index) => [rgb[0] * 65536 + rgb[1] * 256 + rgb[2], target[index]]));
-  for (let offset = 0; offset < pixels.length; offset += 4) {
-    if (pixels[offset + 3] === 0) continue;
-    const color = colors.get(pixels[offset] * 65536 + pixels[offset + 1] * 256 + pixels[offset + 2]);
-    if (color) { pixels[offset] = color[0]; pixels[offset + 1] = color[1]; pixels[offset + 2] = color[2]; }
-  }
-}
-
 export interface AvatarSheet { canvas: HTMLCanvasElement; frame: AvatarFrameBox; }
 export interface AvatarComposite {
   key: string;
@@ -74,43 +65,86 @@ export interface AvatarComposite {
 function canvas(width: number, height: number): { canvas: HTMLCanvasElement; context: CanvasRenderingContext2D } {
   const result = document.createElement('canvas');
   result.width = width; result.height = height;
-  const context = result.getContext('2d', { willReadFrequently: true });
+  const context = result.getContext('2d');
   if (!context) throw new Error('Modular avatar: Canvas 2D unavailable');
   context.imageSmoothingEnabled = false;
   return { canvas: result, context };
 }
 function releaseCanvas(value: HTMLCanvasElement): void { value.width = 0; value.height = 0; }
 
+type PaletteRect = AvatarCel['rect'];
+interface FittingPalettes {
+  revision: string;
+  image: string;
+  size: [number, number];
+  variants: Record<string, Record<string, PaletteRect>>;
+}
+const FITTING_DIRECTORY = MODULAR_AVATAR_URL.slice(0, MODULAR_AVATAR_URL.lastIndexOf('/') + 1);
+
+async function fetchJson(url: string): Promise<unknown> {
+  const abort = new AbortController();
+  const timeout = window.setTimeout(() => abort.abort(), 20_000);
+  try {
+    const response = await fetch(url, { credentials: 'same-origin', signal: abort.signal });
+    if (!response.ok) throw new Error(`Modular avatar: HTTP ${response.status}`);
+    return await response.json();
+  } finally { window.clearTimeout(timeout); }
+}
+
+async function loadAtlas(url: string, width: number, height: number): Promise<HTMLImageElement> {
+  const atlas = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    const timeout = window.setTimeout(() => {
+      image.onload = image.onerror = null;
+      image.src = '';
+      reject(new Error('Modular avatar: atlas timed out'));
+    }, 20_000);
+    image.onload = () => { window.clearTimeout(timeout); image.onload = image.onerror = null; resolve(image); };
+    image.onerror = () => { window.clearTimeout(timeout); image.onload = image.onerror = null; reject(new Error('Modular avatar: atlas unavailable')); };
+    image.src = url;
+  });
+  if (atlas.naturalWidth !== width || atlas.naturalHeight !== height) throw new Error('Modular avatar: atlas dimensions differ from manifest');
+  return atlas;
+}
+
+interface FittingPack {
+  manifest: ModularAvatarManifest;
+  atlas: HTMLImageElement;
+  paletteAtlas: HTMLImageElement;
+  variants: FittingPalettes['variants'];
+}
+
 class ModularAvatarCompositor {
-  private packPromise?: Promise<{ manifest: ModularAvatarManifest; atlas: HTMLImageElement }>;
+  private packPromise?: Promise<FittingPack>;
+  private companionImages = new Map<string, Promise<HTMLImageElement>>();
   private failureAt = 0;
-  private cels = new AvatarResourceCache<HTMLCanvasElement>(AVATAR_CACHE_BUDGET.paletteCels, releaseCanvas);
   private composites = new AvatarResourceCache<AvatarComposite>(AVATAR_CACHE_BUDGET.composites, (value) => {
     releaseCanvas(value.body.canvas); if (value.companion) releaseCanvas(value.companion.canvas);
   });
 
-  private load(): Promise<{ manifest: ModularAvatarManifest; atlas: HTMLImageElement }> {
+  private load(): Promise<FittingPack> {
     if (this.failureAt && Date.now() - this.failureAt > 30_000) this.packPromise = undefined;
     if (!this.packPromise) {
       this.failureAt = 0;
       this.packPromise = (async () => {
-        const abort = new AbortController();
-        const manifestTimeout = window.setTimeout(() => abort.abort(), 20_000);
-        let manifest: ModularAvatarManifest;
-        try {
-          const response = await fetch(MODULAR_AVATAR_URL, { credentials: 'same-origin', signal: abort.signal });
-          if (!response.ok) throw new Error(`Modular avatar: manifest HTTP ${response.status}`);
-          manifest = parseModularAvatarManifest(await response.json());
-        } finally { window.clearTimeout(manifestTimeout); }
-        const atlas = await new Promise<HTMLImageElement>((resolve, reject) => {
-          const image = new Image();
-          const timeout = window.setTimeout(() => { image.onload = image.onerror = null; image.src = ''; reject(new Error('Modular avatar: atlas timed out')); }, 20_000);
-          image.onload = () => { window.clearTimeout(timeout); image.onload = image.onerror = null; resolve(image); };
-          image.onerror = () => { window.clearTimeout(timeout); image.onload = image.onerror = null; reject(new Error('Modular avatar: atlas unavailable')); };
-          image.src = manifest.atlas.url;
-        });
-        if (atlas.naturalWidth !== manifest.atlas.width || atlas.naturalHeight !== manifest.atlas.height) throw new Error('Modular avatar: atlas dimensions differ from manifest');
-        return { manifest, atlas };
+        const [rig, paletteData] = await Promise.all([
+          fetchJson(MODULAR_AVATAR_URL), fetchJson(FITTING_DIRECTORY + 'fitting-palettes.json'),
+        ]);
+        const manifest = parseModularAvatarManifest(rig);
+        const palettes = paletteData as FittingPalettes;
+        if (!palettes || palettes.revision !== manifest.revision || typeof palettes.image !== 'string'
+          || !/^fitting-palettes-[a-f0-9]{16}\.png$/.test(palettes.image)
+          || !Array.isArray(palettes.size) || palettes.size.length !== 2
+          || !palettes.size.every((size) => Number.isInteger(size) && size > 0 && size <= 1024)
+          || palettes.size[0] * palettes.size[1] * 4 > 2 * 1024 * 1024
+          || !palettes.variants || typeof palettes.variants !== 'object') {
+          throw new Error('Modular avatar: invalid fitting palettes');
+        }
+        const [atlas, paletteAtlas] = await Promise.all([
+          loadAtlas(manifest.atlas.url, manifest.atlas.width, manifest.atlas.height),
+          loadAtlas(FITTING_DIRECTORY + palettes.image, ...palettes.size),
+        ]);
+        return { manifest, atlas, paletteAtlas, variants: palettes.variants };
       })().catch((error: unknown) => { this.failureAt = Date.now(); throw error; });
     }
     return this.packPromise;
@@ -120,37 +154,62 @@ class ModularAvatarCompositor {
   async acquireStatic(profileValue: ModularAvatarProfile, direction: AvatarDirection): Promise<AvatarLease<AvatarComposite>> {
     const profile = parseModularAvatarProfile(profileValue);
     if (!profile) throw new Error('Modular avatar: invalid saved profile');
-    const { manifest, atlas } = await this.load();
+    const { manifest, atlas, paletteAtlas, variants } = await this.load();
+    const companionId = profile.companion;
+    const companion = manifest.companions[companionId];
+    const url = stationFauna.fitting[companionId as keyof typeof stationFauna.fitting];
+    let companionImage: HTMLImageElement | undefined;
+    if (companion && url) {
+      let pending = this.companionImages.get(url);
+      if (!pending) {
+        pending = loadAtlas(url, companion.frame.width * AVATAR_DIRECTIONS.length, companion.frame.height);
+        this.companionImages.set(url, pending);
+        pending.catch(() => this.companionImages.delete(url));
+      }
+      companionImage = await pending.catch(() => undefined);
+    }
     const action = 'idle';
-    const key = `${manifest.rigId}:${manifest.revision}:${avatarProfileKey(profile)}:${direction}:static0`;
+    const key = `${manifest.rigId}:${manifest.revision}:${avatarProfileKey(profile)}:${direction}:static0:${companionImage ? 'station-fauna' : 'base'}`;
     return this.composites.acquire(key, () => {
       const clip = { durationsMs: [manifest.clips.idle.durationsMs[0]], loop: false };
       const count = 1;
       const body = canvas(manifest.frame.width * count, manifest.frame.height);
-      const selectedCompanion = manifest.companions[profile.companion];
+      const selectedCompanion = companion;
       const child = selectedCompanion ? canvas(selectedCompanion.frame.width * count, selectedCompanion.frame.height) : null;
       try {
         const draw = (context: CanvasRenderingContext2D, cel: AvatarCel, frameOffset: number) => {
-          const [sx, sy, w, h] = cel.rect;
-          if (!cel.paletteRole) { context.drawImage(atlas, sx, sy, w, h, frameOffset + cel.at[0], cel.at[1], w, h); return; }
-          const palette = manifest.palettes[cel.paletteRole];
-          const selected = profile[cel.paletteRole === 'skin' ? 'skinTone' : 'hairColor'];
-          const paletteKey = `${manifest.revision}:${cel.rect.join(',')}:${cel.paletteRole}:${selected}`;
-          const lease = this.cels.acquire(paletteKey, () => {
-            const tint = canvas(w, h);
-            tint.context.drawImage(atlas, sx, sy, w, h, 0, 0, w, h);
-            const pixels = tint.context.getImageData(0, 0, w, h);
-            remapAvatarPalette(pixels.data, palette.source, palette.variants[selected]);
-            tint.context.putImageData(pixels, 0, 0);
-            return { value: tint.canvas, bytes: w * h * 4 };
-          });
-          try { context.drawImage(lease.value, frameOffset + cel.at[0], cel.at[1]); } finally { lease.release(); }
+          let rect = cel.rect;
+          let image = atlas;
+          if (cel.paletteRole) {
+            const selected = profile[cel.paletteRole === 'skin' ? 'skinTone' : 'hairColor'];
+            const palette = manifest.palettes[cel.paletteRole];
+            const variant = variants[`${cel.rect.join(',')}:${cel.paletteRole}`]?.[selected];
+            if (variant) {
+              if (!Array.isArray(variant) || variant.length !== 4 || !variant.every(Number.isInteger)
+                || variant[0] < 0 || variant[1] < 0 || variant[2] !== cel.rect[2] || variant[3] !== cel.rect[3]
+                || variant[0] + variant[2] > paletteAtlas.naturalWidth
+                || variant[1] + variant[3] > paletteAtlas.naturalHeight) {
+                throw new Error('Modular avatar: invalid fitting palette rectangle');
+              }
+              rect = variant;
+              image = paletteAtlas;
+            } else if (palette.variants[selected].some((rgb, index) => rgb.some((channel, axis) => channel !== palette.source[index][axis]))) {
+              throw new Error('Modular avatar: missing fitting palette');
+            }
+          }
+          const [sx, sy, w, h] = rect;
+          context.drawImage(image, sx, sy, w, h, frameOffset + cel.at[0], cel.at[1], w, h);
         };
         for (let index = 0; index < count; index++) {
           for (const cel of avatarPoseCels(manifest, profile, direction, action, index)) draw(body.context, cel, index * manifest.frame.width);
           if (selectedCompanion && child) {
-            const cels = [...selectedCompanion.frames[direction][action]![index].cels].sort((a, b) => a.z - b.z);
-            for (const cel of cels) draw(child.context, cel, index * selectedCompanion.frame.width);
+            if (companionImage) {
+              const { width, height } = selectedCompanion.frame;
+              child.context.drawImage(companionImage, AVATAR_DIRECTIONS.indexOf(direction) * width, 0, width, height, 0, 0, width, height);
+            } else {
+              const cels = [...selectedCompanion.frames[direction][action]![index].cels].sort((a, b) => a.z - b.z);
+              for (const cel of cels) draw(child.context, cel, index * selectedCompanion.frame.width);
+            }
           }
         }
         const value: AvatarComposite = { key, manifest, action, direction, clip,
@@ -161,7 +220,7 @@ class ModularAvatarCompositor {
     });
   }
 
-  diagnostics() { return { composites: this.composites.stats(), paletteCels: this.cels.stats() }; }
+  diagnostics() { return { composites: this.composites.stats() }; }
 }
 
 /** Loaded only by the wardrobe. Saved portraits never call this compositor. */

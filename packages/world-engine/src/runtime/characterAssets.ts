@@ -20,10 +20,13 @@ export interface WorldCharacterDefinition {
   displayHeight: number;
   pivot: [number, number];
   positions: { landscape: [number, number]; portrait: [number, number] };
-  clips: { idle: WorldCharacterClip; walk?: WorldCharacterClip };
+  clips: { idle: WorldCharacterClip } & Partial<Record<WorldCharacterAction, WorldCharacterClip>>;
   /** A fixed-facing employee crosses the viewport and wraps only out of sight. */
   motion?: { type: 'walk-across'; direction: 'left' | 'right'; speed: number };
 }
+
+const ACTIONS = ['walk', 'run', 'hop', 'flutter'] as const;
+export type WorldCharacterAction = 'idle' | typeof ACTIONS[number];
 
 export interface WorldEquipmentDefinition {
   id: string;
@@ -97,10 +100,16 @@ export function parseCharacterManifest(value: unknown): WorldCharacterManifest {
       throw new Error('Invalid character definition');
     }
     const idle = parseClip(clips.idle);
-    const walk = clips.walk ? parseClip(clips.walk) : undefined;
-    if (walk && (walk.frameWidth !== idle.frameWidth || walk.frameHeight !== idle.frameHeight)) {
-      throw new Error('All actor clips must share one frame box and foot pivot');
+    const actions: WorldCharacterDefinition['clips'] = { idle };
+    for (const action of ACTIONS) {
+      if (clips[action] === undefined) continue;
+      const clip = parseClip(clips[action]);
+      if (clip.frameWidth !== idle.frameWidth || clip.frameHeight !== idle.frameHeight) {
+        throw new Error('All actor clips must share one frame box and foot pivot');
+      }
+      actions[action] = clip;
     }
+    const walk = actions.walk;
     const motion = record(actor.motion);
     if (actor.motion !== undefined && (!motion || actor.role !== 'npc' || motion.type !== 'walk-across' ||
         !['left', 'right'].includes(String(motion.direction)) || !finite(motion.speed, 4, 60) || !walk ||
@@ -111,7 +120,7 @@ export function parseCharacterManifest(value: unknown): WorldCharacterManifest {
       id: actor.id, label: actor.label, role: actor.role as WorldCharacterDefinition['role'],
       displayHeight: actor.displayHeight, pivot: [...actor.pivot],
       positions: { landscape: [...positions!.landscape as [number, number]], portrait: [...positions!.portrait as [number, number]] },
-      clips: { idle, ...(walk ? { walk } : {}) },
+      clips: actions,
       ...(motion ? { motion: { type: 'walk-across' as const, direction: motion.direction as 'left' | 'right', speed: motion.speed as number } } : {}),
     };
   });

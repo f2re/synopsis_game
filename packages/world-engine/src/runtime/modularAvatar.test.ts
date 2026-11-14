@@ -8,7 +8,7 @@ import {
   avatarPoseCels, parseModularAvatarManifest, parseModularAvatarProfile,
   type AvatarCel, type AvatarPartFrames, type AvatarPaletteRamp, type ModularAvatarManifest,
 } from './modularAvatarManifest.ts';
-import { AvatarResourceCache, avatarPreviewBounds, drawAvatarComposite, remapAvatarPalette, type AvatarComposite } from './modularAvatarCompositor.ts';
+import { AvatarResourceCache, avatarPreviewBounds, drawAvatarComposite, type AvatarComposite } from './modularAvatarCompositor.ts';
 
 const ramp: AvatarPaletteRamp = [[240, 200, 180], [200, 150, 110], [150, 90, 60], [70, 40, 20]];
 const cel = (z: number, paletteRole?: AvatarCel['paletteRole']): AvatarCel => ({ rect: [0, 0, 1, 1], at: [48, 100], z, ...(paletteRole ? { paletteRole } : {}) });
@@ -116,13 +116,6 @@ test('back and front fragments use one global z order; companion is excluded fro
   const ordered = avatarPoseCels(pack, profile, 'up', 'idle', 0);
   assert.deepEqual(ordered.map((c) => c.z), [5, 10, 20, 22, 23, 24, 40, 60]);
   assert.equal(ordered.length, avatarPoseCels(pack, { ...profile, companion: 'companion.none' }, 'up', 'idle', 0).length);
-});
-
-test('RGB remapping preserves alpha, transparent pixels and authored non-palette colors', () => {
-  const target: AvatarPaletteRamp = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]];
-  const pixels = new Uint8ClampedArray([240, 200, 180, 255, 200, 150, 110, 128, 240, 200, 180, 0, 240, 200, 179, 255]);
-  remapAvatarPalette(pixels, ramp, target);
-  assert.deepEqual([...pixels], [1, 2, 3, 255, 4, 5, 6, 128, 240, 200, 180, 0, 240, 200, 179, 255]);
 });
 
 test('cache bounds include active leases; scene disposal does not evict a second consumer', () => {

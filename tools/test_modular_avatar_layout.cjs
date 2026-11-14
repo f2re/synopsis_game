@@ -40,6 +40,9 @@ fs.mkdirSync(output, { recursive: true });
     await page.route('**/api/**', (route) => route.fulfill({ status: 401, contentType: 'application/json', body: '{"error":"Unauthenticated test"}' }));
     await page.route('**/assets/avatar/modular-r01/manifest.json', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(manifest) }));
     await page.route('**/assets/avatar/modular-r01/layout-test.png', (route) => route.fulfill({ contentType: 'image/png', body: existingPng }));
+    const paletteImage = 'fitting-palettes-0123456789abcdef.png';
+    await page.route('**/assets/avatar/modular-r01/fitting-palettes.json', (route) => route.fulfill({ json: { revision: manifest.revision, image: paletteImage, size: [manifest.atlas.width, manifest.atlas.height], variants: {} } }));
+    await page.route(`**/assets/avatar/modular-r01/${paletteImage}`, (route) => route.fulfill({ contentType: 'image/png', body: existingPng }));
     await page.goto(process.env.MODULAR_AVATAR_TEST_URL || 'http://127.0.0.1:5192', { waitUntil: 'networkidle' });
     await page.addStyleTag({ content: '#root { display:none !important } body { margin:0; background:#080808 }' });
     await page.evaluate(async (avatar) => {
@@ -66,13 +69,16 @@ fs.mkdirSync(output, { recursive: true });
           context.fillStyle = '#1155dd'; context.fillRect(18, 0, 96, 144);
           const hasChild = canvas.dataset.avatarKey.includes('companion.tit');
           if (hasChild) { context.fillStyle = '#22cc55'; context.fillRect(0, 104, 16, 32); }
-          return { intrinsic: [canvas.width, canvas.height], box: [rect.width, rect.height], objectFit: style.objectFit,
+          const stage = canvas.parentElement.getBoundingClientRect();
+          const pivotOffset = rect.left + (18 + 48) * 2 - (stage.left + stage.width / 2);
+          return { intrinsic: [canvas.width, canvas.height], box: [rect.width, rect.height], pivotOffset, objectFit: style.objectFit,
             position: [rect.x, rect.y], composite: canvas.dataset.avatarKey, frame: canvas.dataset.avatarFrame, imageRendering: style.imageRendering };
         });
         assert.deepEqual(metric.intrinsic, [114, 144]);
         assert.equal(metric.frame, '0');
         assert.equal(metric.imageRendering, 'pixelated');
         assert.deepEqual(metric.box, [228, 288], 'Static fitting stays at an exact integer scale');
+        assert(Math.abs(metric.pivotOffset) < 1, 'Player feet remain centered on the rug');
         const filename = `layout-${width}-${companion.split('.')[1]}.png`;
         await page.locator('#layout-target').screenshot({ path: path.join(output, filename) });
         results.push({ width, companion, ...metric, screenshot: filename });

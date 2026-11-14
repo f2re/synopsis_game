@@ -37,6 +37,8 @@ jobs:
           python tools/assets/build_characters_r01.py --check
           python tools/assets/build_inventory_icons_r01.py --check
           python tools/assets/build_equipment_r01.py --check
+          python tools/assets/build_wardrobe_icons.py --check
+          python tools/assets/build_station_fauna.py --check
           python tools/assets/build_modular_player_r01.py --check
           python tools/assets/test_modular_player_contract.py
           python tools/assets/export_modular_player_library.py --check --require-registry

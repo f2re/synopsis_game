@@ -31,6 +31,10 @@ DEFAULT = {key: f'{key}.{values[0]}' for key, values in OPTIONS.items()}
 def sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
 def json_bytes(value: object) -> bytes: return (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode()
 
+def rgba_pixels(image: Image.Image):
+    pixels = image.tobytes()
+    return zip(pixels[0::4], pixels[1::4], pixels[2::4], pixels[3::4])
+
 
 def frame_source(name: str, rig: dict = RIG) -> tuple[dict[str, Image.Image], dict]:
     path = SOURCE / 'editable' / f'{name}.aseprite'
@@ -89,16 +93,19 @@ class Atlas:
     def cel(self, layer: Image.Image, z: int, offset: tuple[int, int] = (0, 0), role: str | None = None) -> dict:
         bounds = layer.getbbox()
         if not bounds: raise ValueError('Empty cel')
-        image = clean(layer.crop(bounds))
+        result = {'_image': self.add(layer.crop(bounds)), 'at': [bounds[0] + offset[0], bounds[1] + offset[1]], 'z': z}
+        if result['at'][0] < 0 or result['at'][0] + bounds[2] - bounds[0] > layer.width or result['at'][1] < 1 or result['at'][1] + bounds[3] - bounds[1] > layer.height:
+            raise ValueError('Authored motion clips a part')
+        if role: result['paletteRole'] = role
+        return result
+
+    def add(self, image: Image.Image) -> int:
+        image = clean(image)
         key = f'{image.width}:{image.height}:{sha(image.tobytes())}'
         if key not in self.ids:
             self.ids[key] = len(self.images)
             self.images.append(image)
-        result = {'_image': self.ids[key], 'at': [bounds[0] + offset[0], bounds[1] + offset[1]], 'z': z}
-        if result['at'][0] < 0 or result['at'][0] + image.width > layer.width or result['at'][1] < 1 or result['at'][1] + image.height > layer.height:
-            raise ValueError('Authored motion clips a part')
-        if role: result['paletteRole'] = role
-        return result
+        return self.ids[key]
 
     def pack(self) -> tuple[Image.Image, dict[int, list[int]]]:
         # Stable shelf packing with one empty pixel on every edge. No filtering
@@ -173,6 +180,56 @@ def resolve_rects(value: object, rects: dict) -> None:
         for item in value: resolve_rects(item, rects)
 
 
+def fitting_palettes(runtime: dict, packed: Image.Image) -> tuple[dict, bytes]:
+    """Bake exact ramp substitutions for browsers that alter canvas readback."""
+    atlas = Atlas()
+    variants = {}
+    for family in (runtime['body'], *runtime['parts'].values()):
+        for direction in family.values():
+            for pose in direction['idle']:
+                for cel in pose['cels']:
+                    role = cel.get('paletteRole')
+                    if role is None:
+                        continue
+                    key = ','.join(map(str, cel['rect'])) + ':' + role
+                    if key in variants:
+                        continue
+                    sx, sy, w, h = cel['rect']
+                    original = packed.crop((sx, sy, sx + w, sy + h))
+                    palette = runtime['palettes'][role]
+                    variants[key] = {}
+                    for name, target in palette['variants'].items():
+                        if target == palette['source']:
+                            continue
+                        colors = {tuple(src): tuple(dst) for src, dst in zip(palette['source'], target)}
+                        pixels = [(*colors.get(pixel[:3], pixel[:3]), pixel[3]) if pixel[3] else pixel
+                                  for pixel in rgba_pixels(original)]
+                        image = Image.new('RGBA', original.size)
+                        image.putdata(pixels)
+                        variants[key][name] = atlas.add(image)
+    image, rectangles = atlas.pack()
+    data = png(image)
+    filename = f'fitting-palettes-{sha(image.tobytes())[:16]}.png'
+    return {
+        'revision': runtime['revision'], 'image': filename, 'size': list(image.size),
+        'variants': {key: {name: rectangles[index] for name, index in entries.items()}
+                     for key, entries in variants.items()},
+    }, data
+
+
+def save_fitting_palettes(runtime: dict, packed: Image.Image, check: bool) -> None:
+    fitting, data = fitting_palettes(runtime, packed)
+    for directory in [GENERATED, PUBLIC]:
+        save(directory / 'fitting-palettes.json', json_bytes(fitting), check)
+        target = directory / fitting['image']
+        if check:
+            with Image.open(target) as current:
+                if current.mode != 'RGBA' or list(current.size) != fitting['size'] or sha(current.tobytes())[:16] not in target.name:
+                    raise ValueError(f'Invalid fitting palette atlas: {target}')
+        else:
+            save(target, data, False)
+
+
 def render(runtime: dict, atlas: Image.Image, profile: dict, direction: str = 'down', phase: int = 0) -> Image.Image:
     result = Image.new('RGBA', (96, 144))
     cels = runtime['body'][direction]['idle'][phase]['cels'][:]
@@ -183,7 +240,7 @@ def render(runtime: dict, atlas: Image.Image, profile: dict, direction: str = 'd
             role = cel['paletteRole']; palette = runtime['palettes'][role]
             variant = profile.get('skinTone' if role == 'skin' else 'hairColor', 'skin.warm' if role == 'skin' else 'haircolor.brown')
             mapping = {tuple(a): tuple(b) for a, b in zip(palette['source'], palette['variants'][variant])}
-            part.putdata([(*mapping.get(p[:3], p[:3]), p[3]) for p in part.get_flattened_data()])
+            part.putdata([(*mapping.get(p[:3], p[:3]), p[3]) for p in rgba_pixels(part)])
         result.alpha_composite(part, tuple(cel['at']))
     return result
 
@@ -246,7 +303,7 @@ def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
             else:
                 frames, sources[name] = frame_source(name, rig)
                 if group == 'hair':
-                    colors = {pixel[:3] for frame in frames.values() for pixel in frame.get_flattened_data() if pixel[3]}
+                    colors = {pixel[:3] for frame in frames.values() for pixel in rgba_pixels(frame) if pixel[3]}
                     if not colors.issubset({tuple(p) for p in rig['palettes']['hair']['source']}): raise ValueError('Hair escapes exact ramp')
                 runtime['parts'][name] = part_frames(frames, name, atlas, rig, body)
     for name in rig['companionIds']:
@@ -280,6 +337,7 @@ def build(check: bool) -> None:
     if check and json_bytes(source_manifest) != prior: raise ValueError('Source manifest hashes or budgets are stale')
     for directory in [GENERATED, PUBLIC]:
         save(directory / 'atlas.png', data, check); save(directory / 'manifest.json', json_bytes(runtime), check)
+    save_fitting_palettes(runtime, packed, check)
     contacts(runtime, packed, check)
     if not check: MANIFEST.write_bytes(json_bytes(source_manifest))
     print(f"Modular player: {len(sources)} families, 42 values, idle4 × 4 directions; {len(data)} PNG bytes, {packed.width * packed.height * 4} decoded; art={runtime['artAcceptance']}; {'verified' if check else 'built'}")
@@ -292,4 +350,14 @@ def build(check: bool) -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
-    build(parser.parse_args().check)
+    parser.add_argument('--fitting-only', action='store_true', help='Use the checked-in accepted pack as input')
+    args = parser.parse_args()
+    if args.fitting_only:
+        runtime = json.loads((PUBLIC / 'manifest.json').read_text())
+        atlas_data = (PUBLIC / 'atlas.png').read_bytes()
+        if runtime['artAcceptance'] != 'PASS' or acceptance_result(json.loads(MANIFEST.read_text()), RIG, runtime, atlas_data, ROOT)['status'] != 'PASS':
+            raise ValueError('Fitting palettes require the independently accepted rig')
+        with Image.open(PUBLIC / 'atlas.png') as packed:
+            save_fitting_palettes(runtime, packed, args.check)
+    else:
+        build(args.check)

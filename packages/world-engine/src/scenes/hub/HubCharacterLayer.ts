@@ -1,15 +1,18 @@
 import Phaser from 'phaser';
 import { worldBridge } from '../../bridge/WorldBridge';
+import stationFauna from '../../assets/hub/station-fauna.json';
 import {
   characterFrameAtTime,
   characterTextureKey,
   parseCharacterManifest,
   type WorldCharacterClip,
+  type WorldCharacterAction,
   type WorldCharacterDefinition,
   type WorldCharacterManifest,
 } from '../../runtime/characterAssets';
 import { normalizeWorldPreferences, type WorldUiPreferences } from '../../runtime/uiPreferences';
 import { getR01Layout } from './r01Layout';
+import { isMovingFauna, stationFaunaPose, STATION_FAUNA_CYCLE_MS } from './stationFaunaMotion';
 
 const MANIFEST_KEY = 'hub.characters.manifest.v1';
 const MANIFEST_URL = '/hub/characters/manifest.json';
@@ -24,7 +27,8 @@ export function preloadHubCharacters(scene: Phaser.Scene): void {
   scene.registry.remove(PACK_REGISTRY);
   const queue = (raw: unknown) => {
     try {
-      const pack = parseCharacterManifest(raw);
+      const original = parseCharacterManifest(raw);
+      const pack = parseCharacterManifest({ ...original, actors: [...original.actors, ...stationFauna.station] });
       scene.registry.set(PACK_REGISTRY, pack);
       for (const actor of pack.actors.filter((entry) => entry.role === 'npc')) {
         for (const clip of Object.values(actor.clips)) {
@@ -48,10 +52,12 @@ export function preloadHubCharacters(scene: Phaser.Scene): void {
     scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, failed);
     scene.load.off(Phaser.Loader.Events.COMPLETE, clean);
     scene.events.off(Phaser.Scenes.Events.SHUTDOWN, clean);
+    scene.events.off(Phaser.Scenes.Events.DESTROY, clean);
   };
   scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, failed);
   scene.load.once(Phaser.Loader.Events.COMPLETE, clean);
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, clean);
+  scene.events.once(Phaser.Scenes.Events.DESTROY, clean);
   if (scene.cache.json.exists(MANIFEST_KEY)) queue(scene.cache.json.get(MANIFEST_KEY));
   else {
     scene.load.once(completeKey, fileComplete);
@@ -65,7 +71,8 @@ interface Actor {
   clip: WorldCharacterClip;
   elapsedMs: number;
   frame: number;
-  state: 'idle' | 'walk';
+  state: WorldCharacterAction;
+  faunaReady: boolean;
 }
 
 /** Authored frames only. No breathing scale/tween, texture redraw or React frame events. */
@@ -76,6 +83,7 @@ export class HubCharacterLayer {
   private preferences: WorldUiPreferences;
   private layout: ReturnType<typeof getR01Layout>;
   private sampleTimeMs = 0;
+  private faunaTimeMs = 0;
   private destroyed = false;
 
   constructor(private readonly scene: Phaser.Scene) {
@@ -91,7 +99,12 @@ export class HubCharacterLayer {
       const image = scene.add.image(0, 0, characterTextureKey(clip.assetId), 0)
         .setOrigin(definition.pivot[0], definition.pivot[1])
         .setScale(definition.displayHeight / clip.frameHeight);
-      this.actors.push({ definition, image, clip, elapsedMs: 0, frame: 0, state: 'idle' });
+      const actions = definition.id === 'animal_squirrel' ? ['run'] as const : ['hop', 'flutter'] as const;
+      const faunaReady = isMovingFauna(definition.id) && actions.every((action) => {
+        const motion = definition.clips[action];
+        return motion && this.validTexture(motion);
+      });
+      this.actors.push({ definition, image, clip, elapsedMs: 0, frame: 0, state: 'idle', faunaReady });
     }
     scene.events.on('ui:preferences', this.applyPreferences, this);
     scene.scale.on(Phaser.Scale.Events.RESIZE, this.resize, this);
@@ -124,12 +137,17 @@ export class HubCharacterLayer {
       actor.image.setFrame(0);
       actor.image.setDepth(24 + point[1] / this.layout.height * 4);
     }
+    this.updateFauna();
     this.publishDiagnostics();
   }
 
   private applyPreferences(value: unknown): void {
     this.preferences = normalizeWorldPreferences(value);
     this.sampleTimeMs = 0;
+    if (this.preferences.reducedMotion || this.preferences.lowPower) {
+      this.faunaTimeMs = 0;
+      this.updateFauna();
+    }
     if (this.preferences.reducedMotion) {
       for (const actor of this.actors) {
         if (actor.definition.motion) {
@@ -147,10 +165,11 @@ export class HubCharacterLayer {
     this.publishDiagnostics();
   }
 
-  private setClip(actor: Actor, state: 'idle' | 'walk'): boolean {
+  private setClip(actor: Actor, state: WorldCharacterAction): boolean {
     const clip = actor.definition.clips[state];
-    if (!clip || !this.validTexture(clip)) return false;
+    if (!clip) return false;
     if (actor.clip !== clip) {
+      if (!this.validTexture(clip)) return false;
       actor.clip = clip;
       actor.state = state;
       actor.elapsedMs = 0;
@@ -158,6 +177,23 @@ export class HubCharacterLayer {
       actor.image.setTexture(characterTextureKey(clip.assetId), 0);
     }
     return true;
+  }
+
+  private updateFauna(): void {
+    for (const actor of this.actors) {
+      if (!actor.faunaReady) continue;
+      const pose = stationFaunaPose(actor.definition.id, this.faunaTimeMs, this.layout.portrait);
+      const point = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
+      this.setClip(actor, pose.action);
+      const x = point[0] + pose.x, y = point[1] + pose.y;
+      if (actor.image.x !== x || actor.image.y !== y) actor.image.setPosition(x, y);
+      if (actor.image.flipX !== pose.facingRight) actor.image.setFlipX(pose.facingRight);
+      if (pose.action === 'idle') continue;
+      const total = actor.clip.durationsMs.reduce((sum, duration) => sum + duration, 0);
+      const elapsed = pose.action === 'run' ? pose.elapsed : total * pose.elapsed / pose.duration;
+      const frame = characterFrameAtTime(actor.clip, elapsed);
+      if (frame !== actor.frame) { actor.image.setFrame(frame); actor.frame = frame; }
+    }
   }
 
   applyLighting(tint: number): void {
@@ -168,12 +204,18 @@ export class HubCharacterLayer {
     if (this.destroyed || this.preferences.reducedMotion) return;
     const delta = Math.max(0, Math.min(Number.isFinite(deltaMs) ? deltaMs : 0, 100));
     this.sampleTimeMs += delta;
+    if (!this.preferences.lowPower) {
+      this.faunaTimeMs = (this.faunaTimeMs + delta) % STATION_FAUNA_CYCLE_MS;
+      this.updateFauna();
+    }
     const sample = !this.preferences.lowPower || this.sampleTimeMs >= 250;
     let activeLoops = 0;
     for (const actor of this.actors) {
       if (!actor.image.visible) continue;
+      if (isMovingFauna(actor.definition.id)) continue;
       // Extra background actors stay in their authored first frame if a future
       // content pack contains more than this scene's three-actor budget (plus the existing fountain loop).
+      if (actor.clip.frameCount === 1 && actor.state === 'idle') continue;
       if (actor.clip.frameCount > 1 && activeLoops++ >= MAX_ANIMATED_ACTORS) {
         if (actor.frame !== 0) { actor.image.setFrame(0); actor.frame = 0; }
         continue;
@@ -199,7 +241,7 @@ export class HubCharacterLayer {
 
   private publishDiagnostics(): void {
     const visible = this.actors.filter((actor) => actor.image.visible);
-    const animated = visible.filter((actor) => actor.clip.frameCount > 1).length;
+    const animated = visible.filter((actor) => !isMovingFauna(actor.definition.id) && actor.clip.frameCount > 1).length;
     const diagnostics = {
       artAccepted: this.pack?.artAcceptance === 'PASS',
       characterClass: 'r01-detailed-actor',
@@ -208,6 +250,7 @@ export class HubCharacterLayer {
       visibleActors: visible.length,
       animatedActors: this.preferences.reducedMotion ? 0 : Math.min(animated, MAX_ANIMATED_ACTORS),
       animationBudget: MAX_ANIMATED_ACTORS,
+      faunaAnimationBudget: this.preferences.lowPower || this.preferences.reducedMotion ? 0 : 1,
       reducedMotion: this.preferences.reducedMotion,
       lowPower: this.preferences.lowPower,
       actors: visible.map((actor) => ({ id: actor.definition.id, state: actor.state, frames: actor.clip.frameCount, pivot: actor.definition.pivot })),

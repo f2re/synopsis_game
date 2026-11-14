@@ -25,12 +25,15 @@ const assets = moduleFrom('runtime/characterAssets.ts');
 const preferences = moduleFrom('runtime/uiPreferences.ts');
 const bridgeModule = moduleFrom('bridge/WorldBridge.ts');
 const { worldBridge } = bridgeModule;
+const faunaMotion = moduleFrom('scenes/hub/stationFaunaMotion.ts');
 const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCharacterLayer.ts', {
-  phaser: { Textures: { FilterMode: { NEAREST: 0 } }, Scale: { Events: { RESIZE: 'resize' } }, Scenes: { Events: { SHUTDOWN: 'shutdown' } }, Loader: { Events: { FILE_LOAD_ERROR: 'loaderror', COMPLETE: 'complete' } } },
+  phaser: { Textures: { FilterMode: { NEAREST: 0 } }, Scale: { Events: { RESIZE: 'resize' } }, Scenes: { Events: { SHUTDOWN: 'shutdown', DESTROY: 'destroy' } }, Loader: { Events: { FILE_LOAD_ERROR: 'loaderror', COMPLETE: 'complete' } } },
+  '../../assets/hub/station-fauna.json': require('../packages/world-engine/src/assets/hub/station-fauna.json'),
   '../../bridge/WorldBridge': bridgeModule,
   '../../runtime/characterAssets': assets,
   '../../runtime/uiPreferences': preferences,
   './r01Layout': { getR01Layout(w, h) { return { width: w, height: h, portrait: w < h, shore: 150, zoom: 1 }; } },
+  './stationFaunaMotion': faunaMotion,
 });
 const pack = assets.parseCharacterManifest({ version: 1, artAcceptance: 'PASS', actors: [
   ['character.observer', 'npc'], ['character.vera', 'npc'], ['companion.pascal', 'npc'], ['npc.extra', 'npc'], ['legacy.player', 'player'], ['companion.tit', 'companion'],
@@ -125,4 +128,20 @@ loaderScene.events.emit('shutdown');
 assert.equal(loaderScene.load.listenerCount(), 0);
 loaderScene.load.emit('filecomplete-json-hub.characters.manifest.v1', '', '', pack);
 assert.equal(enqueued, 0, 'Late JSON completion after shutdown must not enqueue assets');
+for (const portrait of [false, true]) {
+  const moves = new Map([['animal_squirrel', new Set()], ['bird_tit', new Set()]]);
+  for (let clock = 0; clock <= faunaMotion.STATION_FAUNA_CYCLE_MS; clock += 10) {
+    let active = 0;
+    for (const [id, actions] of moves) {
+      const pose = faunaMotion.stationFaunaPose(id, clock, portrait);
+      actions.add(pose.action);
+      if (pose.action !== 'idle') active++;
+      else assert.equal(pose.y, 0);
+      assert.ok(Math.abs(pose.x) <= 33 && pose.y >= -17 && pose.y <= 0);
+    }
+    assert.ok(active <= 1, 'At most one authored fauna clip may animate');
+  }
+  assert.deepEqual([...moves.get('animal_squirrel')], ['idle', 'run']);
+  assert.deepEqual([...moves.get('bird_tit')], ['idle', 'hop', 'flutter']);
+}
 console.log('PASS: no personal player or account items; NPC cadence/pivot, reduced motion, three-actor budget, low-power sampling, portrait placement, offscreen-only employee wrap, missing-art diagnostic and loader/layer cleanup.');

@@ -1,0 +1,346 @@
+{
+  "id": "station.fauna",
+  "provider": "SpriteCook",
+  "model": "pixel-engine-image-v1",
+  "class": "companion_sprite",
+  "actors": [
+    {
+      "name": "squirrel",
+      "label": "Обыкновенная белка",
+      "worldId": "animal_squirrel",
+      "companionId": "companion.squirrel",
+      "guides": {
+        "rgba": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "columns": [
+          47
+        ],
+        "rows": [
+          48
+        ]
+      },
+      "poses": [
+        {
+          "crop": [
+            0,
+            0,
+            48,
+            48
+          ],
+          "supportX": 24
+        },
+        {
+          "crop": [
+            48,
+            0,
+            96,
+            48
+          ],
+          "supportX": 22
+        },
+        {
+          "crop": [
+            0,
+            48,
+            48,
+            96
+          ],
+          "supportX": 23
+        },
+        {
+          "crop": [
+            48,
+            48,
+            96,
+            96
+          ],
+          "supportX": 25
+        }
+      ],
+      "campusPivot": [
+        20,
+        36
+      ],
+      "campusSupportX": 15,
+      "displayHeight": 26,
+      "positions": {
+        "landscape": [
+          337,
+          410
+        ],
+        "portrait": [
+          65,
+          575
+        ]
+      },
+      "provider": {
+        "fitting": {
+          "file": "provider/squirrel-sheet.png",
+          "assetId": "05cb4c3e-9c6e-446d-8efe-c8f46e18e399",
+          "sha256": "c7f2ea60747293d5d774476315c6aa5f2e9c043b3be6b7cb089a0bd676fe1108"
+        },
+        "campus": {
+          "file": "provider/squirrel-campus.png",
+          "assetId": "5de15324-59df-4642-8b55-678991a7451c",
+          "sha256": "ec65e4f8e2b408b44e93b650b3bfc3e969ab5dcd60a3ce099ef02452717c9839"
+        },
+        "runPose": {
+          "file": "provider/run-source.png",
+          "assetId": "7c5ddd94-877f-4598-a638-9d6faa1d8267",
+          "sha256": "89ebb6429b4ac2e187a9e504f6a7f019c0860100d3a061045fcd2522eb4354a0"
+        }
+      },
+      "fittingScale": 0.82,
+      "motions": [
+        {
+          "action": "run",
+          "sourceFrameWidth": 48,
+          "frameMs": 64,
+          "frames": [
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1
+            ],
+            [
+              2,
+              0,
+              1
+            ],
+            [
+              3,
+              0,
+              1
+            ],
+            [
+              4,
+              0,
+              1
+            ],
+            [
+              5,
+              0,
+              1
+            ],
+            [
+              6,
+              0,
+              1
+            ],
+            [
+              7,
+              0,
+              1
+            ]
+          ],
+          "sourceAssetId": "7c5ddd94-877f-4598-a638-9d6faa1d8267",
+          "file": "provider/run.png",
+          "assetId": "6f1cc603-0319-4811-a587-df8064ee4023",
+          "sha256": "4aabcd45a0e2f269828bdfcd160e297f0b8309946aac5cceb5054a0f2b11d611"
+        }
+      ]
+    },
+    {
+      "name": "tit",
+      "label": "Большая синица",
+      "worldId": "bird_tit",
+      "companionId": "companion.tit",
+      "guides": {
+        "rgba": [
+          184,
+          184,
+          184,
+          255
+        ],
+        "columns": [
+          46,
+          47,
+          95
+        ],
+        "rows": [
+          47,
+          48,
+          95
+        ]
+      },
+      "poses": [
+        {
+          "crop": [
+            0,
+            0,
+            48,
+            48
+          ],
+          "supportX": 23
+        },
+        {
+          "crop": [
+            48,
+            0,
+            96,
+            48
+          ],
+          "supportX": 17
+        },
+        {
+          "crop": [
+            0,
+            48,
+            40,
+            96
+          ],
+          "supportX": 23
+        },
+        {
+          "crop": [
+            48,
+            0,
+            96,
+            48
+          ],
+          "supportX": 30,
+          "mirror": true
+        }
+      ],
+      "campusPivot": [
+        13,
+        28
+      ],
+      "campusSupportX": 9,
+      "displayHeight": 19,
+      "positions": {
+        "landscape": [
+          427,
+          409
+        ],
+        "portrait": [
+          225,
+          492
+        ]
+      },
+      "provider": {
+        "fitting": {
+          "file": "provider/tit-sheet.png",
+          "assetId": "62447046-aa19-40f5-a3b4-e23bf851b50b",
+          "sha256": "54e534f86cbe94ab4ef9482aac5c1c78dc5a3a0f78ba1a964c47abce26c7f9f9"
+        },
+        "campus": {
+          "file": "provider/tit-campus.png",
+          "assetId": "9f5f7cb1-62de-42f8-b168-dd30a5333ecb",
+          "sha256": "c6e67b3a9acd43e81ee3cb9b214008e519db4c9eb46e59d656a7985b0e79dc26"
+        }
+      },
+      "fittingScale": 0.65,
+      "motions": [
+        {
+          "action": "hop",
+          "sourceFrameWidth": 36,
+          "frameMs": 92,
+          "frames": [
+            [
+              0,
+              9,
+              8
+            ],
+            [
+              1,
+              9,
+              8
+            ],
+            [
+              2,
+              9,
+              8
+            ],
+            [
+              3,
+              9,
+              8
+            ],
+            [
+              4,
+              9,
+              8
+            ]
+          ],
+          "sourceAssetId": "9f5f7cb1-62de-42f8-b168-dd30a5333ecb",
+          "file": "provider/hop.png",
+          "assetId": "0564a215-3740-4596-9de0-372f00ec4ba8",
+          "sha256": "dc9d912b1290d497859d0e8c876165c97c8d9d4fe85dcec142b3234e7f060c15"
+        },
+        {
+          "action": "flutter",
+          "sourceFrameWidth": 36,
+          "frameMs": 130,
+          "frames": [
+            [
+              0,
+              9,
+              8
+            ],
+            [
+              1,
+              9,
+              8
+            ],
+            [
+              2,
+              9,
+              7
+            ],
+            [
+              3,
+              9,
+              6
+            ],
+            [
+              4,
+              9,
+              6
+            ],
+            [
+              5,
+              9,
+              5
+            ],
+            [
+              6,
+              9,
+              5
+            ],
+            [
+              7,
+              9,
+              4
+            ]
+          ],
+          "sourceAssetId": "9f5f7cb1-62de-42f8-b168-dd30a5333ecb",
+          "file": "provider/flutter.png",
+          "assetId": "c80f3ac1-29af-41d2-bd60-328b504988ce",
+          "sha256": "f4dcdcdaea2ca55a2393110a11730da15377500f34d8cb41cd78a35a55949dad",
+          "removePixels": {
+            "3": [
+              [
+                24,
+                35
+              ],
+              [
+                24,
+                36
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
