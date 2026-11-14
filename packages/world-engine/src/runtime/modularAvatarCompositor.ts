@@ -85,7 +85,7 @@ async function fetchJson(url: string): Promise<unknown> {
   const abort = new AbortController();
   const timeout = window.setTimeout(() => abort.abort(), 20_000);
   try {
-    const response = await fetch(url, { credentials: 'same-origin', signal: abort.signal });
+    const response = await fetch(url, { cache: 'no-store', credentials: 'same-origin', signal: abort.signal });
     if (!response.ok) throw new Error(`Modular avatar: HTTP ${response.status}`);
     return await response.json();
   } finally { window.clearTimeout(timeout); }
@@ -141,7 +141,9 @@ class ModularAvatarCompositor {
           throw new Error('Modular avatar: invalid fitting palettes');
         }
         const [atlas, paletteAtlas] = await Promise.all([
-          loadAtlas(manifest.atlas.url, manifest.atlas.width, manifest.atlas.height),
+          // The deployment serves PNGs as immutable. A new rig must use its
+          // own cache entry even though the server reads from a fixed path.
+          loadAtlas(`${manifest.atlas.url}?v=${manifest.revision}`, manifest.atlas.width, manifest.atlas.height),
           loadAtlas(FITTING_DIRECTORY + palettes.image, ...palettes.size),
         ]);
         return { manifest, atlas, paletteAtlas, variants: palettes.variants };

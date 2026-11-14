@@ -1,7 +1,7 @@
 import { randomBytes, randomUUID, scrypt, timingSafeEqual } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { avatarAppearanceKey, composeAvatarPortrait, validateAvatarPortrait } from './avatarPortrait.js';
+import { avatarAppearanceKey, composeAvatarPortrait, currentAvatarPortraitRevision, validateAvatarPortrait } from './avatarPortrait.js';
 import {
   AVATAR_OPTIONS,
   DEFAULT_AVATAR,
@@ -370,8 +370,12 @@ export class IdentityService {
       // Recheck access after earlier queued writes, and keep the last committed
       // loadout visible to shift starts until this complete snapshot is saved.
       const user = this.requireSession(token);
-      if (user.avatarPortrait?.appearanceKey === avatarAppearanceKey(avatar)) return toSessionUser(user);
-      const avatarPortrait = await composeAvatarPortrait(avatar, { assetsRoot: this.options.avatarAssetsRoot });
+      const portraitOptions = { assetsRoot: this.options.avatarAssetsRoot };
+      if (user.avatarPortrait?.appearanceKey === avatarAppearanceKey(avatar)) {
+        const revision = await currentAvatarPortraitRevision(portraitOptions);
+        if (!revision || user.avatarPortrait.sourceRevision === revision) return toSessionUser(user);
+      }
+      const avatarPortrait = await composeAvatarPortrait(avatar, portraitOptions);
       const draft: IdentityState = {
         ...this.state,
         users: this.state.users.map((candidate) => candidate === user ? { ...candidate, avatar, avatarPortrait } : candidate),

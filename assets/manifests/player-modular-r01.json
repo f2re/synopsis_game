@@ -8,10 +8,11 @@
   "provenance": "assets/source/characters/player-r01/provenance.json",
   "source_authoring": "tools/assets/prepare_modular_player_r01.py",
   "build": "tools/assets/build_modular_player_r01.py",
-  "release_scope": "Accepted R02 editable parts for the static character editor and server-side saved portrait only. Use idle phase 0; personal-character animation and per-screen dynamic clothing composition are disabled by the 2026-11-12 portrait decision.",
+  "release_scope": "Accepted four-direction R01 fitting for the static character editor and server-side saved portrait. Gameplay displays the saved portrait.",
   "reviews": [
-    "docs/testing/2026-11-10-modular-player-independent-review.md",
-    "docs/art/reviews/2026-11-10-modular-player-r01-art-review.md"
+    "docs/testing/2026-11-14-wardrobe-fitting-pixel-review.md",
+    "docs/art/reviews/2026-11-14-wardrobe-fitting-art-review.md",
+    "docs/testing/2026-11-14-wardrobe-fitting-source-review.md"
   ],
   "sources": {
     "body": {
@@ -795,15 +796,15 @@
       }
     }
   },
-  "rigSha256": "7b1f9dc79db85779e88e01a8d6374e7b8866e6a199cc74171cfa8ef233ba279d",
+  "rigSha256": "55f507de805547add63f30dd2412e6f0f0b1a7b5949eeee358b4cd615b3d3a28",
   "budget": {
-    "compressedAtlasBytes": 167734,
-    "decodedAtlasBytes": 917504,
+    "compressedAtlasBytes": 164940,
+    "decodedAtlasBytes": 983040,
     "atlasSize": [
       512,
-      448
+      480
     ],
-    "uniqueCels": 125,
+    "uniqueCels": 135,
     "sourceFamilies": 30,
     "catalogValues": 42,
     "appearanceCombinations": 1944000,
@@ -821,29 +822,28 @@
     "maximumDecodedAtlasBytes": 2097152
   },
   "outputs": {
-    "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
-    "manifestSha256": "f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf"
+    "atlasSha256": "ec9a0bfea2724344b2554c83fefe6654ac6b730ef6dc99aa472441c14c27ca7f",
+    "manifestSha256": "4723057ebb5f8b962f2e942dd16ac931d44b50ce2ee6c605dbe116958039024a"
   },
   "acceptedFingerprint": {
     "version": 1,
-    "scope": "Existing R01 idle pixels and composition, plus the R02 explicit source-contract migration. Pins are written only after independent review; the build never updates this record.",
     "fingerprints": {
-      "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
-      "compositionSha256": "f9dc46abc5b9d12ca630b0d31395042f5e76e12e48cf46b2b6eb8fe66df8b707",
-      "sourceContractSha256": "02666d4e7806158e35a6abe9dd0b7eb8bb5dfa0c24221c9e396bed1e2ea7e56f"
+      "atlasSha256": "ec9a0bfea2724344b2554c83fefe6654ac6b730ef6dc99aa472441c14c27ca7f",
+      "compositionSha256": "15be38a3944828b300a2c6d4a82bbd5ea499f00efed3c7813c04bc2ea4336c4f",
+      "sourceContractSha256": "ef221a1fc7831d16d9317c26a518babbde9920caeb74933601d847f3693ee559"
     },
     "reviews": {
-      "pixelArt": "docs/testing/2026-11-10-modular-player-independent-review.md",
-      "artDirection": "docs/art/reviews/2026-11-10-modular-player-r01-art-review.md",
-      "sourceContract": "docs/testing/2026-11-11-modular-source-contract-review.md"
+      "pixelArt": "docs/testing/2026-11-14-wardrobe-fitting-pixel-review.md",
+      "artDirection": "docs/art/reviews/2026-11-14-wardrobe-fitting-art-review.md",
+      "sourceContract": "docs/testing/2026-11-14-wardrobe-fitting-source-review.md"
     }
   },
   "currentAcceptance": {
     "status": "PASS",
     "fingerprints": {
-      "atlasSha256": "a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73",
-      "compositionSha256": "f9dc46abc5b9d12ca630b0d31395042f5e76e12e48cf46b2b6eb8fe66df8b707",
-      "sourceContractSha256": "02666d4e7806158e35a6abe9dd0b7eb8bb5dfa0c24221c9e396bed1e2ea7e56f"
+      "atlasSha256": "ec9a0bfea2724344b2554c83fefe6654ac6b730ef6dc99aa472441c14c27ca7f",
+      "compositionSha256": "15be38a3944828b300a2c6d4a82bbd5ea499f00efed3c7813c04bc2ea4336c4f",
+      "sourceContractSha256": "ef221a1fc7831d16d9317c26a518babbde9920caeb74933601d847f3693ee559"
     },
     "reasons": []
   }

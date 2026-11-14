@@ -66,7 +66,8 @@ async function staticCompositorCheck() {
   const fauna = require('../packages/world-engine/src/assets/hub/station-fauna.json');
   class Image {
     set src(value) {
-      const isOriginal = value === manifest.atlas.url;
+      const isOriginal = value === `${manifest.atlas.url}?v=${manifest.revision}`;
+      assert.notEqual(value, manifest.atlas.url, 'An immutable atlas must use a revision-specific cache entry');
       const isCompanion = Object.values(fauna.fitting).includes(value);
       if (!isOriginal && !isCompanion) assert(value.endsWith('/' + palettes.image));
       [this.naturalWidth, this.naturalHeight] = isOriginal ? [manifest.atlas.width, manifest.atlas.height] : isCompanion ? [256, 64] : palettes.size;
@@ -77,7 +78,8 @@ async function staticCompositorCheck() {
   const compositor = load('packages/world-engine/src/runtime/modularAvatarCompositor.ts', {
     './modularAvatarManifest.ts': contract, '../assets/hub/station-fauna.json': { default: fauna },
   }, {
-    document, Image, AbortController, fetch: async (url) => {
+    document, Image, AbortController, fetch: async (url, options) => {
+      assert.equal(options.cache, 'no-store', 'Metadata must revalidate together after an art update');
       if (url !== contract.MODULAR_AVATAR_URL) assert(url.endsWith('/fitting-palettes.json'));
       return { ok: true, json: async () => url === contract.MODULAR_AVATAR_URL ? manifest : palettes };
     },

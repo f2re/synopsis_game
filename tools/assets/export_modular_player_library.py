@@ -15,7 +15,8 @@ from pathlib import Path
 
 from PIL import Image
 
-from build_characters_r01 import png, read_aseprite, save
+from build_characters_r01 import read_aseprite, save
+from build_modular_player_r01 import pack_png
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / 'assets/manifests/player-modular-r01.json'
@@ -53,7 +54,7 @@ def export(check: bool, require_registry: bool = False) -> None:
             x, y = (i % 2) * width, (i // 2) * height
             sheet.paste(frame, (x, y))
             cells.append({'direction': direction, 'rect': [x, y, width, height]})
-        data = png(sheet)
+        data = pack_png(sheet)
         target = OUTPUT / f'{family}.png'
         save(target, data, check)
         index['families'].append({'id': family, 'source': source['source'],

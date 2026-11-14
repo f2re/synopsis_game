@@ -13,7 +13,8 @@ test('saved portrait is deterministic dressed RGBA8, 160 square, with exact near
   const saved = await composeAvatarPortrait(DEFAULT_AVATAR);
   assert.deepEqual(await composeAvatarPortrait({ ...DEFAULT_AVATAR }), saved);
   assert.equal(saved.appearanceKey, avatarAppearanceKey(DEFAULT_AVATAR));
-  assert.match(saved.sourceRevision, /^portrait-v1:r01-idle4-/);
+  const manifest = JSON.parse(await readFile(join(assetsRoot, 'manifest.json'), 'utf8')) as { revision: string };
+  assert.equal(saved.sourceRevision.split(':')[1], manifest.revision);
   const image = decodeRgbaPng(portraitToPngBytes(saved));
   assert.equal(image.width, 160);
   assert.equal(image.height, 160);

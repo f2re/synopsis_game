@@ -24,13 +24,12 @@ class ModularPlayerContractTests(unittest.TestCase):
         return acceptance_result(source or self.source, rig or self.rig, runtime or self.runtime,
                                  data or self.png, root or builder.ROOT)
 
-    def test_migration_preserves_the_reviewed_r01_atlas_and_all_composition_bytes(self):
-        self.assertEqual(digest(self.png), 'a79c02dab83bbd99555aa3d8cecd706359c135483fbc31a1149aafbae4206e73')
+    def test_build_reproduces_the_reviewed_atlas_and_composition(self):
+        self.assertEqual(digest(self.png), self.source['outputs']['atlasSha256'])
         runtime = copy.deepcopy(self.runtime)
         runtime['artAcceptance'] = 'PASS'
-        # This is the actual R01 public JSON accepted before the source migration.
-        self.assertEqual(digest(builder.json_bytes(runtime)), 'f408f8eb3b8781ee6a20b62d2dfcb78a023f3e2d7b767d5ef17e7c5f44eadedf')
-        self.assertEqual(self.cel_count, 125)
+        self.assertEqual(builder.json_bytes(runtime), (builder.PUBLIC / 'manifest.json').read_bytes())
+        self.assertEqual(self.cel_count, self.source['budget']['uniqueCels'])
         self.assertEqual(len(self.sources), 30)
         self.assertEqual(fingerprints(self.rig, self.runtime, self.png), self.source['acceptedFingerprint']['fingerprints'])
 
@@ -45,7 +44,7 @@ class ModularPlayerContractTests(unittest.TestCase):
             frames, metadata = load(name, rig)
             if name == 'top.center-jacket':
                 image = frames['down']
-                for y in range(image.height):
+                for y in range(48, image.height):
                     for x in range(image.width):
                         r, g, b, a = image.getpixel((x, y))
                         if a:
@@ -55,7 +54,7 @@ class ModularPlayerContractTests(unittest.TestCase):
 
         with patch.object(builder, 'frame_source', altered):
             runtime, _, data, _, _ = builder.compile_pack(copy.deepcopy(self.rig))
-        self.assertNotEqual(data, self.png)
+        self.assertNotEqual(digest(data), digest(self.png))
         result = self.admit(runtime=runtime, data=data)
         self.assertEqual(result['status'], 'PENDING')
         self.assertIn('changed or unreviewed atlasSha256', result['reasons'])
@@ -147,6 +146,12 @@ class ModularPlayerContractTests(unittest.TestCase):
         cases.append(rig)
         rig = copy.deepcopy(self.rig)
         rig['slots']['held']['values'] = ['none', '../outside']
+        cases.append(rig)
+        rig = copy.deepcopy(self.rig)
+        rig['assembly']['poses']['down']['fitting']['neckOpening'] = [[36, 60, 42]]
+        cases.append(rig)
+        rig = copy.deepcopy(self.rig)
+        rig['assembly']['poses']['up']['layerOrder']['hairBack'] = 60
         cases.append(rig)
         for rig in cases:
             with self.subTest(rig=rig):

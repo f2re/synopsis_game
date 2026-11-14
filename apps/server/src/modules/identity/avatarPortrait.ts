@@ -88,6 +88,15 @@ async function source(options: AvatarPortraitOptions): Promise<PortraitSource> {
   return pending;
 }
 
+export async function currentAvatarPortraitRevision(options: AvatarPortraitOptions): Promise<string | undefined> {
+  try {
+    return (await source(options)).revision;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined;
+    throw error;
+  }
+}
+
 /** Compose once on save/migration, using only accepted down.idle[0] dressed layers. */
 export async function composeAvatarPortrait(input: AvatarProfile, options: AvatarPortraitOptions = {}): Promise<AvatarPortrait> {
   const profile = validateAvatar(input);

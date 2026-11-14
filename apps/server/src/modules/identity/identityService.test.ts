@@ -243,6 +243,29 @@ test('a saved portrait is copied on reads, survives restart without art assets, 
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
+test('same outfit can refresh a portrait from an older art revision', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'synopsis-portrait-refresh-'));
+  const storePath = join(directory, 'identity.json');
+  try {
+    const first = new IdentityService({ storePath, securityProfile: 'trusted' });
+    await first.init();
+    await first.bootstrapAdmin('Администратор', '1234');
+    const record = JSON.parse(await readFile(storePath, 'utf8'));
+    record.users[0].avatarPortrait.sourceRevision = 'portrait-v1:older-art:0123456789abcdef';
+    await writeFile(storePath, JSON.stringify(record));
+
+    const service = new IdentityService({ storePath, securityProfile: 'trusted' });
+    await service.init();
+    const login = await service.adminLogin('1234', '127.0.0.1');
+    assert.equal(login.user.avatarPortrait?.sourceRevision, record.users[0].avatarPortrait.sourceRevision);
+    const updated = await service.updateAvatar(login.token, login.user.avatar);
+    assert.deepEqual(updated.avatar, login.user.avatar);
+    assert.equal(updated.avatarPortrait?.appearanceKey, login.user.avatarPortrait?.appearanceKey);
+    assert.notEqual(updated.avatarPortrait?.sourceRevision, login.user.avatarPortrait?.sourceRevision);
+    assert.deepEqual(JSON.parse(await readFile(storePath, 'utf8')).users[0].avatarPortrait, updated.avatarPortrait);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
 test('legacy profiles migrate once; missing assets or corrupted stored PNG never replace the identity file', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'synopsis-portrait-migrate-'));
   const storePath = join(directory, 'identity.json');

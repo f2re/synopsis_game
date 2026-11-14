@@ -10,9 +10,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import struct
+import zlib
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw
 
 from build_characters_r01 import clean, png, read_aseprite, save
 from modular_player_contract import acceptance_result, layer_offset, validate_rig
@@ -30,6 +32,29 @@ DEFAULT = {key: f'{key}.{values[0]}' for key, values in OPTIONS.items()}
 
 def sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
 def json_bytes(value: object) -> bytes: return (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode()
+
+
+def pack_png(image: Image.Image) -> bytes:
+    """Use the same PNG filters with canonical zlib across Pillow wheel builds."""
+    encoded = png(image)
+    offset = 8
+    headers = []
+    pixels = []
+    while offset < len(encoded):
+        length, kind = struct.unpack_from('>I4s', encoded, offset)
+        end = offset + length + 12
+        if kind == b'IDAT':
+            pixels.append(encoded[offset + 8:end - 4])
+        elif kind != b'IEND':
+            headers.append(encoded[offset:end])
+        offset = end
+    compressor = zlib.compressobj(9, zlib.DEFLATED, 15, 9, zlib.Z_FILTERED)
+    data = compressor.compress(zlib.decompress(b''.join(pixels))) + compressor.flush()
+    blocks = []
+    for start in range(0, len(data), 65536):
+        block = b'IDAT' + data[start:start + 65536]
+        blocks.append(struct.pack('>I', len(block) - 4) + block + struct.pack('>I', zlib.crc32(block)))
+    return b''.join([encoded[:8], *headers, *blocks, encoded[-12:]])
 
 def rgba_pixels(image: Image.Image):
     pixels = image.tobytes()
@@ -132,19 +157,61 @@ def attached_cel(atlas: Atlas, image: Image.Image, rig: dict, direction: str,
     return atlas.cel(image, order, layer_offset(rig, direction, layer_name, phase, attachment), layer.get('paletteRole'))
 
 
-def part_frames(source: dict[str, Image.Image], part_id: str, atlas: Atlas, rig: dict, body_source: dict | None = None) -> dict:
+def fitting_layers(frame: Image.Image, part_id: str, layer: str, pose: dict,
+                   trousers: list[Image.Image]) -> list[tuple[str, Image.Image]]:
+    """Apply the authored pixel cuts before packing, on the shared pose grid."""
+    if layer == 'top':
+        frame = frame.copy()
+        for y, left, right in pose['fitting']['neckOpening']:
+            frame.paste((0, 0, 0, 0), (left, y, right, y + 1))
+        lining = pose['fitting']['jacketLining'].get(part_id)
+        if lining:
+            for y, left, right, rgb in lining:
+                frame.paste((*rgb, 255), (left, y, right, y + 1))
+    if part_id in pose['fitting']['hairBack']:
+        front = frame.copy()
+        back = Image.new('RGBA', frame.size)
+        for left, top, right, bottom in pose['fitting']['hairBack'][part_id]:
+            box = (left, top, right, bottom)
+            back.paste(frame.crop(box), (left, top))
+            front.paste((0, 0, 0, 0), box)
+        return [(name, image) for name, image in [('hairBack', back), (layer, front)] if image.getbbox()]
+    if part_id == 'footwear.boots':
+        fitted = Image.new('RGBA', frame.size)
+        for left, right, inset_left, inset_right in pose['fitting']['bootWidth']:
+            boot = frame.crop((left, 0, right, frame.height))
+            boot = boot.resize((right - left - inset_left - inset_right, frame.height), Image.Resampling.NEAREST)
+            fitted.paste(boot, (left + inset_left, 0))
+        seam = pose['fitting']['bootSeam']
+        shaft, toe = fitted.copy(), fitted
+        shaft.paste((0, 0, 0, 0), (0, seam, frame.width, frame.height))
+        coverage = trousers[0].getchannel('A')
+        for bottom in trousers[1:]:
+            coverage = ImageChops.darker(coverage, bottom.getchannel('A'))
+        # A shaft can show around the cuff, but isolated upper rim pixels
+        # must stay under every trouser silhouette.
+        coverage.paste(255, (0, seam - 1, frame.width, frame.height))
+        shaft.putalpha(ImageChops.darker(coverage, shaft.getchannel('A')))
+        toe.paste((0, 0, 0, 0), (0, 0, frame.width, seam))
+        return [('bootShaft', shaft), (layer, toe)]
+    return [(layer, frame)]
+
+
+def part_frames(source: dict[str, Image.Image], part_id: str, atlas: Atlas, rig: dict,
+                body_source: dict | None = None, trousers: tuple[dict, ...] = ()) -> dict:
     result = {}
     group = part_id.split('.')[0]
     layer_name = rig['slots'][group]['layer'] if group in rig['slots'] else 'companion'
     attachment = rig['assembly']['partAttachments'].get(part_id)
     for direction in rig['directions']:
         pose = rig['assembly']['poses'][direction]
+        layers = fitting_layers(source[direction], part_id, layer_name, pose, [bottom[direction] for bottom in trousers])
         poses = []
         for phase in range(len(rig['clips']['idle']['durationsMs'])):
             hidden = pose['hiddenLayers'].get(layer_name)
             if hidden:
                 poses.append({'cels': [], 'hidden': hidden}); continue
-            cels = [attached_cel(atlas, source[direction], rig, direction, layer_name, phase, attachment)]
+            cels = [attached_cel(atlas, image, rig, direction, name, phase, attachment) for name, image in layers]
             for supplement in pose['extraBodyMasks'].get(part_id, []):
                 assert body_source is not None
                 _, arms = hands(body_source[direction], direction, rig, [supplement['mask']])
@@ -165,6 +232,11 @@ def body_frames(source: dict[str, Image.Image], atlas: Atlas, rig: dict) -> dict
         upper, lower = base.copy(), base.copy()
         upper.paste((0, 0, 0, 0), (0, split_y, frame.width, frame.height))
         lower.paste((0, 0, 0, 0), (0, 0, frame.width, split_y))
+        # The outfit requires trousers and footwear. Keep the waist underlay
+        # where a moving top can reveal it, and let the garments own the legs.
+        lower.paste((0, 0, 0, 0), (0, pose['fitting']['underlayEnd'], frame.width, frame.height))
+        for box in pose['fitting']['shoulderUnderlay']:
+            upper.paste((0, 0, 0, 0), tuple(box))
         result[direction] = {'idle': [{'cels': [attached_cel(atlas, upper, rig, direction, 'bodyUpper', phase),
             attached_cel(atlas, lower, rig, direction, 'bodyLower', phase)]
             + [attached_cel(atlas, hand, rig, direction, 'hands', phase, pose['masks'][name]['attachment'])
@@ -208,7 +280,7 @@ def fitting_palettes(runtime: dict, packed: Image.Image) -> tuple[dict, bytes]:
                         image.putdata(pixels)
                         variants[key][name] = atlas.add(image)
     image, rectangles = atlas.pack()
-    data = png(image)
+    data = pack_png(image)
     filename = f'fitting-palettes-{sha(image.tobytes())[:16]}.png'
     return {
         'revision': runtime['revision'], 'image': filename, 'size': list(image.size),
@@ -258,7 +330,7 @@ def contacts(runtime: dict, atlas: Image.Image, check: bool) -> None:
     for row, (label, profile) in enumerate(rows):
         draw.text((4, row * 148 + 12), label, fill=(35, 45, 53))
         for i, direction in enumerate(DIRS): sheet.alpha_composite(render(runtime, atlas, profile, direction), (160 + i * 96, row * 148))
-    save(GENERATED / 'catalog-contact.png', png(sheet), check)
+    save(GENERATED / 'catalog-contact.png', pack_png(sheet), check)
     for direction in DIRS:
         hair_hat = Image.new('RGBA', (5 * 192, 5 * 288), (30, 43, 53, 255))
         for row, hair in enumerate(OPTIONS['hair']):
@@ -266,15 +338,15 @@ def contacts(runtime: dict, atlas: Image.Image, check: bool) -> None:
                 im = render(runtime, atlas, {**DEFAULT, 'hair': f'hair.{hair}', 'headwear': f'headwear.{hat}'}, direction)
                 hair_hat.alpha_composite(im.resize((192, 288), Image.Resampling.NEAREST), (col * 192, row * 288))
         filename = 'hair-headwear-contact.png' if direction == 'down' else f'hair-headwear-{direction}.png'
-        save(GENERATED / filename, png(hair_hat), check)
+        save(GENERATED / filename, pack_png(hair_hat), check)
     default = Image.new('RGBA', (4 * 192, 2 * 288), (225, 230, 221, 255))
     for i, d in enumerate(DIRS):
         im = render(runtime, atlas, DEFAULT, d)
-        save(SOURCE / 'prepared' / f'preview-default-{d}.png', png(im), check)
+        save(SOURCE / 'prepared' / f'preview-default-{d}.png', pack_png(im), check)
         default.alpha_composite(im.resize((192, 288), Image.Resampling.NEAREST), (i * 192, 0))
         dark = Image.new('RGBA', (96, 144), (30, 43, 53, 255)); dark.alpha_composite(im)
         default.alpha_composite(dark.resize((192, 288), Image.Resampling.NEAREST), (i * 192, 288))
-    save(GENERATED / 'default-contact.png', png(default), check)
+    save(GENERATED / 'default-contact.png', pack_png(default), check)
     outfits = [DEFAULT, {**DEFAULT, 'top':'top.field-jacket', 'bottom':'bottom.field-trousers',
         'footwear':'footwear.boots', 'headwear':'headwear.beanie', 'hair':'hair.long', 'backpack':'backpack.field',
         'held':'held.map-folder', 'badge':'badge.aerology'}, {**DEFAULT, 'top':'top.sweater', 'bottom':'bottom.jeans',
@@ -284,7 +356,7 @@ def contacts(runtime: dict, atlas: Image.Image, check: bool) -> None:
     for row, profile in enumerate(outfits):
         for col, direction in enumerate(DIRS):
             outfit_sheet.alpha_composite(render(runtime,atlas,profile,direction).resize((192,288),Image.Resampling.NEAREST),(col*192,row*288))
-    save(GENERATED/'outfit-contact.png',png(outfit_sheet),check)
+    save(GENERATED / 'outfit-contact.png', pack_png(outfit_sheet), check)
 
 
 def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
@@ -295,17 +367,19 @@ def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
     runtime = {'version': 1, 'rigId': rig['rigId'], 'revision': rig['runtimeRevision'], 'complete': True,
         'artAcceptance': 'PENDING', 'frame': rig['frame'], 'clips': rig['clips'], 'palettes': rig['palettes'],
         'body': body_frames(body, atlas, rig), 'parts': {}, 'companions': {'companion.none': None}}
+    bottoms = {f'bottom.{value}': frame_source(f'bottom.{value}', rig) for value in rig['slots']['bottom']['values']}
+    trousers = tuple(frames for frames, _ in bottoms.values())
     for group, slot in rig['slots'].items():
         for value in slot['values']:
             name = f'{group}.{value}'
             if value == 'none':
                 runtime['parts'][name] = {d: {'idle': [{'cels': []} for _ in rig['clips']['idle']['durationsMs']]} for d in rig['directions']}
             else:
-                frames, sources[name] = frame_source(name, rig)
+                frames, sources[name] = bottoms[name] if group == 'bottom' else frame_source(name, rig)
                 if group == 'hair':
                     colors = {pixel[:3] for frame in frames.values() for pixel in rgba_pixels(frame) if pixel[3]}
                     if not colors.issubset({tuple(p) for p in rig['palettes']['hair']['source']}): raise ValueError('Hair escapes exact ramp')
-                runtime['parts'][name] = part_frames(frames, name, atlas, rig, body)
+                runtime['parts'][name] = part_frames(frames, name, atlas, rig, body, trousers)
     for name in rig['companionIds']:
         frames, sources[name] = frame_source(name, rig)
         runtime['companions'][name] = {'frame': rig['companionFrame'],
@@ -313,7 +387,7 @@ def compile_pack(rig: dict) -> tuple[dict, Image.Image, bytes, dict, int]:
     packed, rects = atlas.pack(); resolve_rects(runtime, rects)
     runtime['atlas'] = {'assetId': 'player.modular.r01.atlas', 'url': '/assets/avatar/modular-r01/atlas.png',
         'width': packed.width, 'height': packed.height}
-    data = png(packed)
+    data = pack_png(packed)
     return runtime, packed, data, sources, len(atlas.images)
 
 

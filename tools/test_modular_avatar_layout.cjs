@@ -39,7 +39,7 @@ fs.mkdirSync(output, { recursive: true });
     page.on('pageerror', (error) => errors.push(error.message));
     await page.route('**/api/**', (route) => route.fulfill({ status: 401, contentType: 'application/json', body: '{"error":"Unauthenticated test"}' }));
     await page.route('**/assets/avatar/modular-r01/manifest.json', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(manifest) }));
-    await page.route('**/assets/avatar/modular-r01/layout-test.png', (route) => route.fulfill({ contentType: 'image/png', body: existingPng }));
+    await page.route(`**/assets/avatar/modular-r01/layout-test.png?v=${manifest.revision}`, (route) => route.fulfill({ contentType: 'image/png', body: existingPng }));
     const paletteImage = 'fitting-palettes-0123456789abcdef.png';
     await page.route('**/assets/avatar/modular-r01/fitting-palettes.json', (route) => route.fulfill({ json: { revision: manifest.revision, image: paletteImage, size: [manifest.atlas.width, manifest.atlas.height], variants: {} } }));
     await page.route(`**/assets/avatar/modular-r01/${paletteImage}`, (route) => route.fulfill({ contentType: 'image/png', body: existingPng }));

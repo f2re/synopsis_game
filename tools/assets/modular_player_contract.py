@@ -56,7 +56,7 @@ def validate_rig(rig: dict) -> dict:
 
     assembly = rig.get('assembly', {})
     layers = assembly.get('layers', {})
-    require(set(layers) == set(slots) | {'bodyUpper', 'bodyLower', 'hands', 'forearm', 'companion'}, 'layer coverage differs')
+    require(set(layers) == set(slots) | {'bodyUpper', 'bodyLower', 'hands', 'forearm', 'companion', 'hairBack', 'bootShaft'}, 'layer coverage differs')
     for name, layer in layers.items():
         require(isinstance(layer.get('attachment'), str) and layer.get('paletteRole') in (None, 'skin', 'hair'), f'invalid {name} layer')
     selection = assembly.get('skinMaskSelection', {})
@@ -93,7 +93,41 @@ def validate_rig(rig: dict) -> dict:
         require(isinstance(extras, dict) and set(extras) <= part_ids, f'unknown {direction} body supplement')
         for part_id, records in extras.items():
             require(isinstance(records, list) and len(records) <= 8 and all(isinstance(r, dict) and r.get('mask') in masks and r.get('layer') in layers for r in records), f'invalid {direction}/{part_id} body supplement')
+        validate_fitting(pose, direction, part_ids, anchors[split_anchor]['sourceAt'][1])
     return rig
+
+
+def validate_fitting(pose: dict, direction: str, part_ids: set[str], split_y: int) -> None:
+    fitting = pose.get('fitting', {})
+    fields = {'underlayEnd': int, 'bootSeam': int, 'neckOpening': list, 'jacketLining': dict,
+              'hairBack': dict, 'shoulderUnderlay': list, 'bootWidth': list}
+    require(isinstance(fitting, dict) and set(fitting) == set(fields) and all(
+        type(fitting[key]) is kind for key, kind in fields.items()), f'invalid {direction} fitting fields')
+    require(split_y < fitting['underlayEnd'] <= 100 and 120 <= fitting['bootSeam'] <= 132, f'invalid {direction} fitting seam')
+
+    def span(row: object) -> bool:
+        return ints(row, 3, 0, 96) and 34 <= row[0] <= 47 and row[1] < row[2]
+
+    def boxes(values: object) -> bool:
+        return isinstance(values, list) and all(
+            ints(box, 4, 0, 96) and box[0] < box[2] and 34 <= box[1] < box[3] <= 52 for box in values)
+
+    require(all(span(row) for row in fitting['neckOpening']), f'invalid {direction} neckline cut')
+    require(boxes(fitting['shoulderUnderlay']), f'invalid {direction} shoulder cut')
+    for part_id, rows in fitting['jacketLining'].items():
+        require(part_id in part_ids and part_id.startswith('top.') and isinstance(rows, list) and all(
+            isinstance(row, list) and len(row) == 4 and span(row[:3]) and ints(row[3], 3, 0, 255)
+            for row in rows), f'invalid {direction}/{part_id} lining')
+    for part_id, regions in fitting['hairBack'].items():
+        require(part_id in part_ids and part_id.startswith('hair.') and boxes(regions), f'invalid {direction}/{part_id} rear hair cut')
+    widths = fitting['bootWidth']
+    require(1 <= len(widths) <= 2 and all(ints(box, 4, 0, 96) and
+        max(box[2:]) <= 4 and box[1] - box[0] > sum(box[2:]) for box in widths)
+        and all(left[1] <= right[0] for left, right in zip(widths, widths[1:])), f'invalid {direction} boot outline')
+    order = pose['layerOrder']
+    hair_ceiling = min(order['backpack'], order['hair']) if direction == 'up' else order['top']
+    require(order['bootShaft'] < order['bottom'] < order['footwear'] and order['hairBack'] < hair_ceiling,
+        f'invalid {direction} fitting layer order')
 
 
 def layer_offset(rig: dict, direction: str, layer: str, phase: int,

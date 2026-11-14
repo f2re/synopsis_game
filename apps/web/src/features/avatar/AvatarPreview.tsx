@@ -11,10 +11,11 @@ export interface AvatarPreviewProps {
   avatar: AvatarProfile;
   direction?: AvatarDirection;
   hairstyleThumbnail?: boolean;
+  onRigLoaded?: (revision: string) => void;
 }
 
 /** Static fitting only. Gameplay must import SavedAvatarPortrait instead. */
-export function AvatarPreview({ avatar, direction = 'down', hairstyleThumbnail = false }: AvatarPreviewProps) {
+export function AvatarPreview({ avatar, direction = 'down', hairstyleThumbnail = false, onRigLoaded }: AvatarPreviewProps) {
   const key = `${avatarProfileKey(avatar)}:${direction}`;
   const [loaded, setLoaded] = useState<{ key: string; value: AvatarComposite } | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
@@ -27,11 +28,12 @@ export function AvatarPreview({ avatar, direction = 'down', hairstyleThumbnail =
       if (!active) { acquired.release(); return; }
       lease = acquired;
       setLoaded({ key, value: acquired.value });
+      onRigLoaded?.(acquired.value.manifest.revision);
     }).catch(() => {
       if (active) setFailure(key);
     });
     return () => { active = false; lease?.release(); };
-  }, [key]);
+  }, [key, onRigLoaded]);
 
   if ((!loaded || loaded.key !== key) && hairstyleThumbnail) return <span className="inventory-hairstyle-thumbnail" aria-hidden="true" />;
   if (!loaded || loaded.key !== key) return <div className="inventory-preview-placeholder" role="status">

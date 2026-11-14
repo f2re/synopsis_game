@@ -1,7 +1,7 @@
 {
   "version": 2,
   "rigId": "player.modular.r01.v1",
-  "runtimeRevision": "r01-idle4-20261110",
+  "runtimeRevision": "r01-fitting-20261114",
   "description": "Source assembly contract for the accepted four-view idle family. Attachment points describe this standing artwork only; they are not a skeleton or evidence of walk/inspect readiness.",
   "directions": ["down", "right", "up", "left"],
   "frame": {"width": 96, "height": 144, "pivot": [48, 136]},
@@ -40,7 +40,9 @@
       "bodyLower": {"attachment": "pelvis", "paletteRole": "skin"},
       "hands": {"attachment": "mask", "paletteRole": "skin"},
       "forearm": {"attachment": "mask", "paletteRole": "skin"},
-      "companion": {"attachment": "companionGround"}
+      "companion": {"attachment": "companionGround"},
+      "hairBack": {"attachment": "head", "paletteRole": "hair"},
+      "bootShaft": {"attachment": "ground"}
     },
     "partAttachments": {"headwear.scarf": "neck", "headwear.goggles": "head"},
     "skinMaskSelection": {"contourMaxChannelExclusive": 110, "contourRedToBlueMinimum": 0.95, "neighbours": [[0, -1], [0, 1], [-1, 0], [1, 0]]},
@@ -77,9 +79,20 @@
           "headwear": 60,
           "held": 65,
           "hands": 70,
-          "companion": 0
+          "companion": 0,
+          "hairBack": -1,
+          "bootShaft": 8
         },
         "hiddenLayers": {},
+        "fitting": {
+          "neckOpening": [[36, 43, 52], [37, 44, 51]],
+          "jacketLining": {"top.center-jacket": [[37, 51, 53, [48, 44, 48]], [38, 42, 54, [37, 36, 44]], [39, 44, 53, [31, 30, 37]]], "top.field-jacket": [[37, 51, 54, [68, 61, 50]], [38, 44, 52, [52, 47, 39]], [39, 45, 52, [39, 30, 28]]], "top.shirt": [[37, 51, 53, [56, 55, 66]]]},
+          "hairBack": {"hair.long": [[29, 36, 36, 49], [36, 40, 38, 49], [59, 38, 68, 49], [47, 45, 68, 49]], "hair.bob": [[29, 35, 35, 41], [60, 35, 68, 41], [43, 39, 58, 41]]},
+          "shoulderUnderlay": [[21, 36, 42, 47], [53, 36, 75, 47]],
+          "underlayEnd": 88,
+          "bootSeam": 127,
+          "bootWidth": [[24, 48, 2, 0], [48, 72, 0, 2]]
+        },
         "extraBodyMasks": {}
       },
       "right": {
@@ -113,9 +126,20 @@
           "headwear": 60,
           "held": 65,
           "hands": 70,
-          "companion": 0
+          "companion": 0,
+          "hairBack": 25,
+          "bootShaft": 8
         },
         "hiddenLayers": {"badge": "direction"},
+        "fitting": {
+          "neckOpening": [[37, 50, 51]],
+          "jacketLining": {},
+          "hairBack": {"hair.long": [[31, 40, 38, 49], [38, 43, 45, 49]], "hair.bob": [[31, 39, 38, 41]]},
+          "shoulderUnderlay": [],
+          "underlayEnd": 88,
+          "bootSeam": 128,
+          "bootWidth": [[32, 67, 2, 2]]
+        },
         "extraBodyMasks": {"top.shirt": [{"mask": "shirtForearm", "layer": "forearm"}]}
       },
       "up": {
@@ -149,9 +173,20 @@
           "headwear": 60,
           "held": 65,
           "hands": 70,
-          "companion": 0
+          "companion": 0,
+          "hairBack": 32,
+          "bootShaft": 8
         },
         "hiddenLayers": {"badge": "direction"},
+        "fitting": {
+          "neckOpening": [],
+          "jacketLining": {},
+          "hairBack": {"hair.long": [[29, 37, 68, 49]], "hair.bob": [[29, 37, 68, 41]]},
+          "shoulderUnderlay": [[21, 36, 42, 47], [54, 36, 76, 47]],
+          "underlayEnd": 88,
+          "bootSeam": 127,
+          "bootWidth": [[24, 48, 2, 0], [48, 72, 0, 2]]
+        },
         "extraBodyMasks": {}
       },
       "left": {
@@ -185,9 +220,20 @@
           "headwear": 60,
           "held": 65,
           "hands": 70,
-          "companion": 0
+          "companion": 0,
+          "hairBack": 25,
+          "bootShaft": 8
         },
         "hiddenLayers": {"held": "occlusion"},
+        "fitting": {
+          "neckOpening": [[37, 44, 45]],
+          "jacketLining": {},
+          "hairBack": {"hair.long": [[58, 40, 65, 49], [51, 43, 58, 49]], "hair.bob": [[58, 39, 65, 41]]},
+          "shoulderUnderlay": [],
+          "underlayEnd": 88,
+          "bootSeam": 128,
+          "bootWidth": [[29, 64, 2, 2]]
+        },
         "extraBodyMasks": {"top.shirt": [{"mask": "shirtForearm", "layer": "forearm"}]}
       }
     }

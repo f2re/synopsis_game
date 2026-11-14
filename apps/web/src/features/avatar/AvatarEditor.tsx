@@ -35,6 +35,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const [selectedId, setSelectedId] = useState(user.avatar.heldItem !== 'held.none' ? user.avatar.heldItem : user.avatar.top);
   const [direction, setDirection] = useState<AvatarDirection>('down');
   const [showFace, setShowFace] = useState(false);
+  const [rigRevision, setRigRevision] = useState<string>();
   const [notice, setNotice] = useState<Notice>(null);
   const [saving, setSaving] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
@@ -56,6 +57,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const saveFooter = useRef<HTMLElement>(null);
   const dirty = !sameAvatar(avatar, savedAvatar);
   const portraitSaved = isSavedAvatarPortrait(savedPortrait);
+  const portraitOutdated = portraitSaved && Boolean(rigRevision && !savedPortrait.sourceRevision.startsWith(`portrait-v1:${rigRevision}:`));
   const visibleEquipment = equipmentOwner === user.id ? equipment : null;
   const busy = saving || selectingBadge;
 
@@ -182,13 +184,11 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
 
   function openSection(next: typeof SECTIONS[number]) {
     setSection(next);
-    if (next === 'appearance') setDirection('down');
   }
 
   function updateOption(slot: keyof AvatarProfile, value: string) {
     setAvatar((current) => ({ ...current, [slot]: value }));
     if (slot === 'skinTone' || slot === 'hairColor' || slot === 'hair') {
-      setDirection('down');
       setShowFace(true);
     } else if (slot === 'backpack' && value !== 'backpack.none') {
       setDirection('up');
@@ -205,6 +205,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     const slot = EQUIPMENT_SLOTS.find((entry) => entry.id === slotId)!;
     const selected = INVENTORY_ITEMS.find((item) => item.id === avatar[slotId]) ?? INVENTORY_ITEMS.find((item) => item.slot === slotId)!;
     setSection('inventory'); setCategory(slot.category); setQuery(''); setEquippedOnly(false); setSelectedId(selected.id);
+    window.requestAnimationFrame(() => document.getElementById('inventory-tab')?.focus());
   }
 
   function handlePreviewKeys(event: KeyboardEvent<HTMLDivElement>) {
@@ -226,12 +227,13 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
 
   async function save(exitAfter = false) {
     if (busy || pendingDraft || avatarSave.current) return;
-    if (!dirty && portraitSaved) { if (exitAfter) onBack(); return; }
+    if (!dirty && portraitSaved && !portraitOutdated) { if (exitAfter) onBack(); return; }
     const requestId = ++avatarRequest.current;
     const owner = user.id;
     const pending = { abort: new AbortController(), timer: 0 };
     pending.timer = window.setTimeout(() => pending.abort.abort(), 8_000);
     avatarSave.current = pending;
+    if (!exitAfter) saveFooter.current?.focus();
     setSaving(true); setNotice(null);
     try {
       const updated = await api.updateAvatar({ ...avatar }, pending.abort.signal);
@@ -270,16 +272,9 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     <main className="inventory-screen" aria-labelledby="inventory-title">
       <div className="inventory-shell">
         <header className="inventory-header">
-          <div className="inventory-heading"><img src="/assets/ui/hub-r01/icon-observer.png" alt="" width={44} height={44} /><div><span className="inventory-eyebrow">26063 · {user.displayName}</span><h1 id="inventory-title">Персонаж и инвентарь</h1></div></div>
+          <div className="inventory-heading"><SavedAvatarPortrait portrait={savedPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /><div><span className="inventory-eyebrow">26063 · {user.displayName}</span><h1 id="inventory-title">Персонаж и инвентарь</h1></div></div>
           <button type="button" className="inventory-button" disabled={busy} onClick={() => dirty ? setConfirmExit(true) : onBack()}>← На станцию</button>
         </header>
-
-        <section className="equipment-ledger" aria-label="Ваш учебный журнал">
-          <div><img src={wardrobeIcon('held.tablet')} alt="" width={44} height={44} /><span>Завершено смен<strong>{visibleEquipment ? visibleEquipment.stats.completedShifts : '—'}</strong></span></div>
-          <div><img src={wardrobeIcon('held.pencil')} alt="" width={44} height={44} /><span>Верно самостоятельно<strong>{visibleEquipment ? visibleEquipment.stats.unassistedCorrect : '—'}</strong></span></div>
-          <div><img src={wardrobeIcon('badge.meteo')} alt="" width={44} height={44} /><span>Знаки отличия<strong>{visibleEquipment ? `${visibleEquipment.catalog.filter((badge) => badge.unlocked).length} / ${visibleEquipment.catalog.length}` : '—'}</strong></span></div>
-          <p>{equipmentLoading ? 'Обновляем журнал…' : equipmentError ? 'Журнал требует обновления' : 'Личный учебный прогресс'}<span>Рейтинговый режим — без усилений</span></p>
-        </section>
 
         {pendingDraft && <section className="inventory-draft-recovery" aria-labelledby="inventory-draft-title">
           <div><h2 id="inventory-draft-title">Осталась незавершённая примерка</h2><p>Она сохранена в этой вкладке. Восстановите её или оставьте образ из профиля.</p>
@@ -292,33 +287,20 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
         </section>}
 
         <fieldset className="inventory-workspace" disabled={busy || Boolean(pendingDraft)} aria-label="Настройка персонажа">
-          <aside className="inventory-observer" aria-label="Ваш персонаж и надетые вещи">
+          <aside className="inventory-observer" aria-label="Ваш персонаж">
             <div className="inventory-observer__heading"><span className="inventory-eyebrow">Дежурный синоптик</span><strong>{user.displayName}</strong></div>
             <section className="inventory-fitting" aria-labelledby="inventory-fitting-title">
               <h2 id="inventory-fitting-title" className="inventory-fitting__label">Примерочная</h2>
               <div className="inventory-fitting__stage" tabIndex={0} role="group" aria-label="Примерка одежды. Стрелки влево и вправо — поворот."
                 onKeyDown={handlePreviewKeys} data-outfit-state={dirty ? 'draft' : 'saved'}>
-                <AvatarPreview avatar={section === 'appearance' && showFace ? { ...avatar, headwear: 'headwear.none' } : avatar} direction={direction} />
-                <span className="inventory-fitting__state">{section === 'appearance' && showFace && avatar.headwear !== 'headwear.none' ? 'Головной убор скрыт в примерочной' : dirty ? 'Несохранённая примерка' : 'Сохранённый образ'}</span>
+                <AvatarPreview avatar={section === 'appearance' && showFace ? { ...avatar, headwear: 'headwear.none' } : avatar} direction={direction} onRigLoaded={setRigRevision} />
+                <span className="inventory-fitting__state" role="status">{dirty ? 'Несохранённая примерка' : 'Сохранённый образ'}</span>
               </div>
             </section>
-            <div className="inventory-preview-controls">
+            <div className="inventory-preview-controls" onKeyDown={handlePreviewKeys}>
               <div className="inventory-directions" aria-label="Ракурс персонажа">{DIRECTIONS.map((value) => <button type="button" key={value} className="inventory-segment" aria-pressed={direction === value} onClick={() => setDirection(value)}>{DIRECTION_LABELS[value]}</button>)}</div>
             </div>
             <p className="inventory-preview-hint">В фокусе примерочной: ← → поворот</p>
-            <section className="inventory-saved-portrait" aria-labelledby="inventory-saved-portrait-title" data-confirmed-portrait={savedPortrait?.sha256}>
-              <SavedAvatarPortrait portrait={savedPortrait} size={80} />
-              <div><h2 id="inventory-saved-portrait-title">Портрет в профиле</h2>
-                <p>{portraitSaved ? dirty ? 'На игровых экранах пока показан этот сохранённый портрет. Примерка применится после сохранения.' : 'Этот портрет используется на станции и новых раундах.' : 'Портрет ещё не сохранён. Нажмите «Сохранить персонажа».'}</p>
-              </div>
-            </section>
-            <h2 className="inventory-subtitle">{dirty ? 'В примерке' : 'Сохранённые вещи'}</h2>
-            <div className="inventory-slots">{EQUIPMENT_SLOTS.map((slot) => {
-              const item = OPTIONS[slot.id].find((entry) => entry.id === avatar[slot.id]);
-              return <button key={slot.id} type="button" className={`inventory-slot ${item && item.id !== slot.empty ? 'has-item' : ''}`} aria-label={`${slot.label}: ${item?.name ?? 'Пусто'}. Выбрать предмет`} onClick={() => focusSlot(slot.id)}><span className="inventory-slot__art">{item?.image ? <img src={item.image} alt="" width={48} height={48} /> : item?.iconLabel ? <span className="inventory-art-token" aria-hidden="true">{item.iconLabel}</span> : <span aria-hidden="true">—</span>}</span><span>{slot.label}</span></button>;
-            })}</div>
-            {visibleEquipment && <EquipmentSummary snapshot={visibleEquipment.nextShift} dirty={dirty} stale={equipmentLoading || Boolean(equipmentError)} onOpenBadges={openBadges} />}
-            {!visibleEquipment && <div className="equipment-summary equipment-summary--loading"><p>{equipmentLoading ? 'Проверяем снаряжение…' : 'Не удалось загрузить эффекты снаряжения.'}</p>{!equipmentLoading && <button type="button" className="inventory-button" onClick={() => void loadEquipment()}>Повторить загрузку</button>}</div>}
           </aside>
 
           <section className="inventory-main">
@@ -327,23 +309,47 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
               <button id="badges-tab" type="button" role="tab" tabIndex={section === 'badges' ? 0 : -1} aria-selected={section === 'badges'} aria-controls="badges-panel" className={`inventory-tab ${section === 'badges' ? 'is-active' : ''}`} onClick={() => setSection('badges')}>Знаки отличия</button>
               <button id="appearance-tab" type="button" role="tab" tabIndex={section === 'appearance' ? 0 : -1} aria-selected={section === 'appearance'} aria-controls="appearance-panel" className={`inventory-tab ${section === 'appearance' ? 'is-active' : ''}`} onClick={() => openSection('appearance')}>Внешность</button>
             </div>
-            <div role="tabpanel" id="badges-panel" aria-labelledby="badges-tab" hidden={section !== 'badges'}>
+            <div role="tabpanel" id="badges-panel" tabIndex={-1} aria-labelledby="badges-tab" hidden={section !== 'badges'}>
               {section === 'badges' && <EquipmentBadges equipment={visibleEquipment} loading={equipmentLoading} error={equipmentError} selecting={selectingBadge} onReload={() => void loadEquipment()} onSelect={(id) => void selectBadge(id)} />}
             </div>
             <div role="tabpanel" id="inventory-panel" aria-labelledby="inventory-tab" hidden={section !== 'inventory'}>
-              {section === 'inventory' && <AvatarOptionGrid avatar={avatar} selectedId={selectedId} category={category} query={query} equippedOnly={equippedOnly} tools={visibleEquipment?.tools} onSelect={selectItem} onCategoryChange={setCategory} onQueryChange={setQuery} onEquippedOnlyChange={setEquippedOnly} onEquip={updateOption} />}
+              {section === 'inventory' && <>
+                <h2 className="inventory-subtitle">{dirty ? 'В примерке' : 'Сохранённые вещи'}</h2>
+                <div className="inventory-slots">{EQUIPMENT_SLOTS.map((slot) => {
+                  const item = OPTIONS[slot.id].find((entry) => entry.id === avatar[slot.id]);
+                  return <button key={slot.id} type="button" className={`inventory-slot ${item && item.id !== slot.empty ? 'has-item' : ''}`} aria-label={`${slot.label}: ${item?.name ?? 'Пусто'}. Выбрать предмет`} onClick={() => focusSlot(slot.id)}><span className="inventory-slot__art">{item?.image ? <img src={item.image} alt="" width={48} height={48} /> : item?.iconLabel ? <span className="inventory-art-token" aria-hidden="true">{item.iconLabel}</span> : <span aria-hidden="true">—</span>}</span><span>{slot.label}</span></button>;
+                })}</div>
+                <AvatarOptionGrid avatar={avatar} selectedId={selectedId} category={category} query={query} equippedOnly={equippedOnly} tools={visibleEquipment?.tools} onSelect={selectItem} onCategoryChange={setCategory} onQueryChange={setQuery} onEquippedOnlyChange={setEquippedOnly} onEquip={updateOption} />
+              </>}
             </div>
             <div role="tabpanel" id="appearance-panel" aria-labelledby="appearance-tab" hidden={section !== 'appearance'}>
-              {section === 'appearance' && <AvatarAppearance avatar={avatar} onSelect={updateOption} showFace={showFace} onShowFace={() => { setShowFace((current) => !current); setDirection('down'); }} />}
+              {section === 'appearance' && <AvatarAppearance avatar={avatar} onSelect={updateOption} showFace={showFace} onShowFace={() => setShowFace((current) => !current)} />}
             </div>
             {section !== 'badges' && <section className="inventory-presets" aria-labelledby="inventory-presets-title"><h2 id="inventory-presets-title">Готовые комплекты</h2><div>{STYLE_PRESETS.map((preset) => <button key={preset.id} type="button" className="inventory-preset" onClick={() => { setAvatar((current) => ({ ...current, ...preset.avatar })); setNotice({ kind: 'info', text: `Примеряем комплект «${preset.name}». Сохраните его, чтобы оставить в профиле.` }); playClick(); }}><img src={preset.image} alt="" width={40} height={40} /><span>{preset.name}</span></button>)}</div></section>}
           </section>
         </fieldset>
 
-        <footer ref={saveFooter} className="inventory-footer">
-          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : notice?.kind === 'error' ? 'Сохранение не подтверждено' : dirty ? 'Есть несохранённые изменения' : portraitSaved ? 'Персонаж сохранён' : 'Портрет ещё не сохранён'}</strong>{notice ? <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p> : dirty && <span>{draftStored ? 'Сохраните образ, чтобы обновить портрет в профиле.' : 'Сохраните персонажа перед уходом: браузер не сохранил черновик.'}</span>}</div>
-          <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={(!dirty && portraitSaved) || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : 'Сохранить персонажа'}</button></div>
+        <footer ref={saveFooter} className="inventory-footer" tabIndex={-1} aria-label="Сохранение персонажа">
+          <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : notice?.kind === 'error' ? 'Сохранение не подтверждено' : dirty ? 'Есть несохранённые изменения' : portraitOutdated ? 'Доступен обновлённый портрет' : portraitSaved ? 'Персонаж сохранён' : 'Портрет ещё не сохранён'}</strong>{notice ? <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p> : dirty && <span>{draftStored ? 'Сохраните образ, чтобы обновить портрет в профиле.' : 'Сохраните персонажа перед уходом: браузер не сохранил черновик.'}</span>}</div>
+          <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={(!dirty && portraitSaved && !portraitOutdated) || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : !dirty && portraitOutdated ? 'Обновить портрет' : 'Сохранить персонажа'}</button></div>
         </footer>
+        <section className="inventory-profile-summary" aria-labelledby="inventory-saved-portrait-title">
+          <div className="inventory-saved-portrait" data-confirmed-portrait={savedPortrait?.sha256}>
+            <SavedAvatarPortrait portrait={savedPortrait} size={80} />
+            <div><h2 id="inventory-saved-portrait-title">Портрет в профиле</h2>
+              <p>{portraitSaved ? 'Используется на станции и в новых раундах.' : 'Появится после сохранения персонажа.'}</p>
+            </div>
+          </div>
+          {visibleEquipment && <EquipmentSummary snapshot={visibleEquipment.nextShift} dirty={dirty} stale={equipmentLoading || Boolean(equipmentError)} onOpenBadges={openBadges} />}
+          {!visibleEquipment && <div className="equipment-summary equipment-summary--loading"><p>{equipmentLoading ? 'Проверяем снаряжение…' : 'Не удалось загрузить эффекты снаряжения.'}</p>{!equipmentLoading && <button type="button" className="inventory-button" disabled={busy || Boolean(pendingDraft)} onClick={() => void loadEquipment()}>Повторить загрузку</button>}</div>}
+        </section>
+        <section className="equipment-ledger" aria-label="Ваш учебный журнал">
+          <div><img src={wardrobeIcon('held.tablet')} alt="" width={44} height={44} /><span>Завершено смен<strong>{visibleEquipment ? visibleEquipment.stats.completedShifts : '—'}</strong></span></div>
+          <div><img src={wardrobeIcon('held.pencil')} alt="" width={44} height={44} /><span>Верно самостоятельно<strong>{visibleEquipment ? visibleEquipment.stats.unassistedCorrect : '—'}</strong></span></div>
+          <div><img src={wardrobeIcon('badge.meteo')} alt="" width={44} height={44} /><span>Знаки отличия<strong>{visibleEquipment ? `${visibleEquipment.catalog.filter((badge) => badge.unlocked).length} / ${visibleEquipment.catalog.length}` : '—'}</strong></span></div>
+          <p>{equipmentLoading ? 'Обновляем журнал…' : equipmentError ? 'Журнал требует обновления' : 'Личный учебный прогресс'}<span>Рейтинговый режим — без усилений</span></p>
+        </section>
+
       </div>
       <dialog ref={exitDialog} className="inventory-exit-dialog" tabIndex={-1} onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (!saving) setConfirmExit(false); }} aria-labelledby="inventory-exit-title">
         <PixelScrollArea label="Несохранённая примерка" className="inventory-exit-scroll">
