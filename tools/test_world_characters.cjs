@@ -26,7 +26,9 @@ const preferences = moduleFrom('runtime/uiPreferences.ts');
 const bridgeModule = moduleFrom('bridge/WorldBridge.ts');
 const { worldBridge } = bridgeModule;
 const faunaMotion = moduleFrom('scenes/hub/stationFaunaMotion.ts');
-const crowd = moduleFrom('scenes/hub/stationCrowd.ts', { './r01Layout.ts': moduleFrom('scenes/hub/r01Layout.ts') });
+const crowd = moduleFrom('scenes/hub/stationCrowd.ts', { './r01Layout.ts': moduleFrom('scenes/hub/r01Layout.ts', {
+  '../../runtime/worldPixelSurface.ts': moduleFrom('runtime/worldPixelSurface.ts'),
+}) });
 const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCharacterLayer.ts', {
   phaser: { Textures: { FilterMode: { NEAREST: 0 } }, Scale: { Events: { RESIZE: 'resize' } }, Scenes: { Events: { SHUTDOWN: 'shutdown', DESTROY: 'destroy' } }, Loader: { Events: { FILE_LOAD_ERROR: 'loaderror', COMPLETE: 'complete' } } },
   '../../assets/hub/station-fauna.json': require('../packages/world-engine/src/assets/hub/station-fauna.json'),
@@ -154,6 +156,12 @@ assert.ok(visitorsScene.images.every(({destroyed}) => destroyed));
 
 for (const portrait of [false, true]) {
   const plan = crowd.stationCrowdPlan(portrait);
+  const seated = plan.filter(({action}) => action === 'sit');
+  assert.equal(seated.length, 4);
+  for (const entry of seated) {
+    assert.equal(crowd.stationCrowdPose(entry, 0, false, 6).facesLeft, true, 'Seated feet face the front edge of the bench');
+    assert.equal(crowd.stationCrowdPose(entry, 0, true, 6).facesLeft, true);
+  }
   const walker = plan.find(({id}) => id === 'rounds');
   const exactStart = crowd.stationCrowdPose(walker, 0, false, 0);
   const nextCycleStart = crowd.stationCrowdPose(walker, (walker.travelMs + 1100) * 2, false, 0);

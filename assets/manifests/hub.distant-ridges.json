@@ -1,0 +1,46 @@
+{
+  "id": "hub.distant-ridges",
+  "schema": "spritecook-landscape/v1",
+  "title": "Дальние горные силуэты за рекой",
+  "source": "assets/source/environment/hub/distant-ridges/horizon.aseprite",
+  "reference": "design/pixel-art/v2/01_hub.png",
+  "model": "gemini-nano-banana-2.1",
+  "art_status": "pass",
+  "art_review": "docs/art/reviews/2026-11-14-station-living-plaza.md",
+  "provenance": {
+    "origin": "SpriteCook edit of neutral shore asset aec6e652-df8e-46e2-a040-df7d04b66acd",
+    "license": "project-generated; retain provider and reference provenance"
+  },
+  "assets": [
+    {
+      "id": "hub.distant-ridges.plate",
+      "asset_id": "68d5cde2-1898-44b1-b5d6-963c3c9d31b8",
+      "layer": "horizon",
+      "label": "Горы за дальним берегом",
+      "source_png": "assets/source/environment/hub/distant-ridges/spritecook.png",
+      "source_rect": {
+        "x": 0,
+        "y": 0,
+        "width": 512,
+        "height": 288
+      },
+      "logicalSize": {
+        "width": 512,
+        "height": 288
+      },
+      "pivot": {
+        "x": 256,
+        "y": 180
+      },
+      "kind": "environment",
+      "state": "neutral",
+      "generated": "assets/generated/hub/distant-ridges/horizon.png",
+      "publicPath": "/hub/distant-ridges/horizon.png",
+      "sha256": "b2e35e0ebf89bf0eb09c3d658beb36745be1eecf058001dc063217df8210b92d",
+      "sha12": "b2e35e0ebf89",
+      "bytes": 246986,
+      "sourceSha256": "154796740c75dd876e893d2790b6df1bc048ee34b2b933ff9a16d7b19d7e59e7"
+    }
+  ],
+  "sourceSha256": "d3771895cf5deebdf98e3ba61ce35823f3cfe6efd35b2f712cf9c79431dc5876"
+}

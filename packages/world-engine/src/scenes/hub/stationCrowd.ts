@@ -7,7 +7,7 @@ type CrowdPlan = {
   costume: number;
   visitors: number;
 } & (
-  | { action: 'sit'; point: Point; facesLeft: boolean }
+  | { action: 'sit'; point: Point }
   | { action: 'talk'; point: Point; facesLeft: boolean; second: boolean; offset: number }
   | { action: 'walk'; from: Point; to: Point; travelMs: number; offset: number }
 );
@@ -22,16 +22,20 @@ export function stationVisitorCount(value: unknown): number {
 
 export function stationCrowdPlan(portrait: boolean): CrowdPlan[] {
   const benches = getR01Decor(portrait).filter(({ id }) => id === 'prop-bench');
-  // The seat runs downhill to the right; the pot takes up the right third.
-  // The seated cel's hips sit above its bottom (shoe) pivot.
-  const seats: Point[] = benches.map(({ x, y, width, height }) => [x - width * .12, y - height * .49]);
+  // Locate the two hips on the bench's sloping seat plane, before the planter.
+  // The mirrored cel puts the hips 3 px right and 17 px above its ground pivot.
+  const seats = benches.map(({ x, y, width, height }) => {
+    const seat = (fractionX: number, fractionY: number): Point =>
+      [x + width * fractionX - 3, y - height * fractionY + 17];
+    return [seat(-.23, .56), seat(.05, .47)] as const;
+  });
   const conversation: readonly Point[] = portrait
     ? [[69, 591], [100, 594], [180, 578], [208, 581]]
     : [[549, 420], [578, 423], [294, 438], [323, 441]];
 
   return [
-    { id: 'bench-west', costume: 0, visitors: 0, action: 'sit', point: seats[0], facesLeft: false },
-    { id: 'bench-east', costume: 2, visitors: 0, action: 'sit', point: seats[1], facesLeft: false },
+    { id: 'bench-west', costume: 0, visitors: 0, action: 'sit', point: seats[0][0] },
+    { id: 'bench-east', costume: 2, visitors: 0, action: 'sit', point: seats[1][0] },
     { id: 'colleague-west', costume: 1, visitors: 0, action: 'talk', point: conversation[0], facesLeft: false, second: false, offset: 0 },
     { id: 'colleague-east', costume: 0, visitors: 0, action: 'talk', point: conversation[1], facesLeft: true, second: true, offset: 0 },
     { id: 'rounds', costume: 2, visitors: 0, action: 'walk', from: portrait ? [214, 531] : [371, 420], to: portrait ? [265, 546] : [431, 427], travelMs: 3200, offset: 1600 },
@@ -39,8 +43,8 @@ export function stationCrowdPlan(portrait: boolean): CrowdPlan[] {
     { id: 'visitor-2', costume: 2, visitors: 2, action: 'talk', point: conversation[2], facesLeft: false, second: false, offset: 1200 },
     { id: 'visitor-3', costume: 1, visitors: 3, action: 'talk', point: conversation[3], facesLeft: true, second: true, offset: 1200 },
     { id: 'visitor-4', costume: 0, visitors: 4, action: 'walk', from: portrait ? [25, 585] : [115, 472], to: portrait ? [19, 642] : [247, 472], travelMs: portrait ? 3300 : 6100, offset: 500 },
-    { id: 'visitor-5', costume: 1, visitors: 5, action: 'sit', point: [seats[0][0] + 15, seats[0][1] + 5], facesLeft: false },
-    { id: 'visitor-6', costume: 0, visitors: 6, action: 'sit', point: [seats[1][0] + 15, seats[1][1] + 5], facesLeft: false },
+    { id: 'visitor-5', costume: 1, visitors: 5, action: 'sit', point: seats[0][1] },
+    { id: 'visitor-6', costume: 0, visitors: 6, action: 'sit', point: seats[1][1] },
   ];
 }
 
@@ -71,5 +75,6 @@ export function stationCrowdPose(plan: CrowdPlan, timeMs: number, reducedMotion:
       action: (talking && !reducedMotion ? 'talk' : 'idle') as WorldCharacterAction,
     };
   }
-  return { x: plan.point[0], y: plan.point[1], action: 'sit' as const, facesLeft: plan.facesLeft, elapsed: 0 };
+  // From the backrest to the front edge, both benches open down and left.
+  return { x: plan.point[0], y: plan.point[1], action: 'sit' as const, facesLeft: true, elapsed: 0 };
 }

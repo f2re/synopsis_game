@@ -133,7 +133,7 @@
     },
     {
       "id": "npc.r01.field-worker",
-      "label": "Сотрудник метеоплощадки",
+      "label": "Инженер метеоплощадки",
       "role": "crowd",
       "displayHeight": 48,
       "pivot": [
@@ -153,7 +153,7 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.field-worker.idle",
-          "url": "/hub/characters/field-worker-idle.png?v=9f148686cfd8",
+          "url": "/hub/characters/field-worker-idle.png?v=484e8166545e",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
@@ -163,7 +163,7 @@
         },
         "walk": {
           "assetId": "npc.r01.field-worker.walk",
-          "url": "/hub/characters/field-worker-walk.png?v=3ef091d7e6c1",
+          "url": "/hub/characters/field-worker-walk.png?v=231036ae7f46",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 4,
@@ -177,7 +177,7 @@
         },
         "sit": {
           "assetId": "npc.r01.field-worker.sit",
-          "url": "/hub/characters/field-worker-sit.png?v=1e39efe97e93",
+          "url": "/hub/characters/field-worker-sit.png?v=f7bbf4004851",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
@@ -187,7 +187,7 @@
         },
         "talk": {
           "assetId": "npc.r01.field-worker.talk",
-          "url": "/hub/characters/field-worker-talk.png?v=5001e9c69ac6",
+          "url": "/hub/characters/field-worker-talk.png?v=f769bed47974",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 2,
@@ -200,7 +200,7 @@
     },
     {
       "id": "npc.r01.map-worker",
-      "label": "Сотрудница картографического зала",
+      "label": "Метеоролог",
       "role": "crowd",
       "displayHeight": 48,
       "pivot": [
@@ -220,7 +220,7 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.map-worker.idle",
-          "url": "/hub/characters/map-worker-idle.png?v=154d7fc2b162",
+          "url": "/hub/characters/map-worker-idle.png?v=792d85a5773a",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
@@ -230,7 +230,7 @@
         },
         "walk": {
           "assetId": "npc.r01.map-worker.walk",
-          "url": "/hub/characters/map-worker-walk.png?v=dc4a396fae69",
+          "url": "/hub/characters/map-worker-walk.png?v=546d2db72ddd",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 4,
@@ -244,7 +244,7 @@
         },
         "sit": {
           "assetId": "npc.r01.map-worker.sit",
-          "url": "/hub/characters/map-worker-sit.png?v=0c187f7056ed",
+          "url": "/hub/characters/map-worker-sit.png?v=20fe8ecf8313",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
@@ -254,7 +254,7 @@
         },
         "talk": {
           "assetId": "npc.r01.map-worker.talk",
-          "url": "/hub/characters/map-worker-talk.png?v=055b3c0ff3b3",
+          "url": "/hub/characters/map-worker-talk.png?v=62fed011be96",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 2,
@@ -267,7 +267,7 @@
     },
     {
       "id": "npc.r01.shift-worker",
-      "label": "Сотрудник дежурной смены",
+      "label": "Синоптик дежурной смены",
       "role": "crowd",
       "displayHeight": 48,
       "pivot": [
@@ -287,7 +287,7 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.shift-worker.idle",
-          "url": "/hub/characters/shift-worker-idle.png?v=31161f7953b6",
+          "url": "/hub/characters/shift-worker-idle.png?v=2598d01e536c",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
@@ -297,7 +297,7 @@
         },
         "walk": {
           "assetId": "npc.r01.shift-worker.walk",
-          "url": "/hub/characters/shift-worker-walk.png?v=1d2bc5749605",
+          "url": "/hub/characters/shift-worker-walk.png?v=139f3cbc31fb",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 4,
@@ -311,7 +311,7 @@
         },
         "sit": {
           "assetId": "npc.r01.shift-worker.sit",
-          "url": "/hub/characters/shift-worker-sit.png?v=5578e5762b0a",
+          "url": "/hub/characters/shift-worker-sit.png?v=436168d0227b",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
@@ -321,7 +321,7 @@
         },
         "talk": {
           "assetId": "npc.r01.shift-worker.talk",
-          "url": "/hub/characters/shift-worker-talk.png?v=6a59866ca03a",
+          "url": "/hub/characters/shift-worker-talk.png?v=fb601660029b",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 2,

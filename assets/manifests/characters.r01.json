@@ -369,7 +369,7 @@
     {
       "id": "npc.r01.field-worker",
       "name": "field-worker",
-      "label": "Сотрудник метеоплощадки",
+      "label": "Инженер метеоплощадки",
       "role": "crowd",
       "displayHeight": 48,
       "pivot": [
@@ -387,11 +387,11 @@
         ]
       },
       "source": "assets/source/characters/r01/field-worker.aseprite",
-      "source_credit": "Original pixel cels authored for 26063",
+      "source_credit": "SpriteCook base sprite with hand-authored production cels",
       "outputs": {
         "idle": {
-          "sha256": "044b27c7b5012213fe28c442098c89d9581dba53707923bbc5664720969a454b",
-          "bytes": 810,
+          "sha256": "a49b56c18b9d7cb599cafb364f1b99139b381dc24078088e3e852096bdc6d65d",
+          "bytes": 945,
           "frameSize": [
             32,
             48
@@ -402,16 +402,16 @@
           ],
           "frameBounds": [
             [
-              6,
-              9,
-              25,
+              7,
+              2,
+              30,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "eeda77908badcf88516ec745ab9b6ba299e4dd694c4554a94c47271479d82455",
-          "bytes": 1465,
+          "sha256": "0de82ee6d2881f47a954d7f68025f5d2f7c0ce4a4476c8d13557b896813ca5ee",
+          "bytes": 1556,
           "frameSize": [
             32,
             48
@@ -425,34 +425,34 @@
           ],
           "frameBounds": [
             [
-              5,
-              9,
-              25,
+              4,
+              2,
+              30,
               46
             ],
             [
-              6,
-              8,
-              23,
+              7,
+              3,
+              30,
               46
             ],
             [
-              6,
-              9,
-              23,
+              7,
+              2,
+              30,
               46
             ],
             [
-              6,
-              8,
-              23,
+              7,
+              3,
+              30,
               46
             ]
           ]
         },
         "sit": {
-          "sha256": "55f34408f7b5c051047fc107526291bfb44695053f62d2e3a380db8aa28584ed",
-          "bytes": 765,
+          "sha256": "838c3d991e710961f53bf8a604454a5eaa35a3661343e468a31b7f4172460c9a",
+          "bytes": 1001,
           "frameSize": [
             32,
             48
@@ -463,16 +463,16 @@
           ],
           "frameBounds": [
             [
-              6,
-              16,
+              7,
+              3,
               28,
               46
             ]
           ]
         },
         "talk": {
-          "sha256": "dd200dbbeb335f7e454a01f4fc05c17d5cc0782e869f9454237c74ce436b366e",
-          "bytes": 983,
+          "sha256": "f0f1c5dec508a6b1864504dad75512bb1d3b3d32943c18232c0c553298862d09",
+          "bytes": 1124,
           "frameSize": [
             32,
             48
@@ -484,26 +484,32 @@
           ],
           "frameBounds": [
             [
-              6,
-              9,
-              25,
+              7,
+              2,
+              30,
               46
             ],
             [
-              6,
-              9,
-              29,
+              7,
+              2,
+              30,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "de64e4ff4f1720f4760709c70d1ee7550ce8efa1d0c381f9a22986c626b383a7"
+      "sourceSha256": "ca10a79a7abf672f19ad57f2598671639b60eb0027d1275002e0206ee070f8a5",
+      "provider": {
+        "assetId": "28399742-b406-45be-a0e9-b1ea41241000",
+        "model": "pixel-engine-image-v1",
+        "source": "assets/source/characters/r01/provider/station-crew/field-worker.png",
+        "sha256": "3e207fa1800cdcaf8ad919359fb2cd83b4a04131f9ee3b42b49dee7dddd1d1e8"
+      }
     },
     {
       "id": "npc.r01.map-worker",
       "name": "map-worker",
-      "label": "Сотрудница картографического зала",
+      "label": "Метеоролог",
       "role": "crowd",
       "displayHeight": 48,
       "pivot": [
@@ -521,11 +527,11 @@
         ]
       },
       "source": "assets/source/characters/r01/map-worker.aseprite",
-      "source_credit": "Original pixel cels authored for 26063",
+      "source_credit": "SpriteCook base sprite with hand-authored production cels",
       "outputs": {
         "idle": {
-          "sha256": "7f7c2d9de6e24b6f340168fa08be3f876e1e2672c315eb1496af049b24823581",
-          "bytes": 767,
+          "sha256": "e447fa6c2649fe354f0999daaa31eef7d729610df8cfd8594e7d2666189cd11d",
+          "bytes": 990,
           "frameSize": [
             32,
             48
@@ -536,16 +542,16 @@
           ],
           "frameBounds": [
             [
-              8,
-              9,
-              26,
+              5,
+              1,
+              30,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "f552f82711cd96e303ba1c3fd0f91951ad1ee293ce72c0ecb3e18dd442dab42e",
-          "bytes": 1355,
+          "sha256": "47e7187ee1fef5816fab8a05dd24679a754e0aa64e6dc25bf990a260a6615e52",
+          "bytes": 1631,
           "frameSize": [
             32,
             48
@@ -559,34 +565,34 @@
           ],
           "frameBounds": [
             [
-              4,
-              9,
-              24,
+              3,
+              1,
+              30,
               46
             ],
             [
-              8,
-              8,
-              22,
+              5,
+              2,
+              30,
               46
             ],
             [
-              9,
-              9,
-              23,
+              5,
+              1,
+              30,
               46
             ],
             [
-              9,
-              8,
-              22,
+              5,
+              2,
+              30,
               46
             ]
           ]
         },
         "sit": {
-          "sha256": "318f26d1b62ce9e450571d1c2459ee1d1c7de405c98fe020d022e4032abc70a3",
-          "bytes": 755,
+          "sha256": "310e815df1dfe78e406f6ce9f233755a12c778edc07f0f8a3959275e297bf40f",
+          "bytes": 1095,
           "frameSize": [
             32,
             48
@@ -597,16 +603,16 @@
           ],
           "frameBounds": [
             [
-              9,
-              16,
-              28,
+              5,
+              2,
+              30,
               46
             ]
           ]
         },
         "talk": {
-          "sha256": "acea40c090ffb39d2a64597ac0cd8deb71194916b93be6cba1871ea691ba1888",
-          "bytes": 961,
+          "sha256": "e7332db6168087fa7bdba87b193d193c0ad594afad45ddaaffccf28a27da44a3",
+          "bytes": 1143,
           "frameSize": [
             32,
             48
@@ -618,26 +624,32 @@
           ],
           "frameBounds": [
             [
-              8,
-              9,
-              26,
+              5,
+              1,
+              30,
               46
             ],
             [
-              8,
-              9,
+              5,
+              1,
               30,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "a257ef8da7dcb858922c330c763d7ce8382309a23e3cf6ab7e57e3f6de1e4f54"
+      "sourceSha256": "8d99641e5293f2e961c5de408359988885a21992193142c772982bddcb7891ce",
+      "provider": {
+        "assetId": "2e012b9b-ae72-4f12-ad71-a23aa798457b",
+        "model": "pixel-engine-image-v1",
+        "source": "assets/source/characters/r01/provider/station-crew/map-worker.png",
+        "sha256": "36b428eccbef6619a5c7f7d781fe66b1479ed6d4db7bc1fd8e343f77ba0aae2e"
+      }
     },
     {
       "id": "npc.r01.shift-worker",
       "name": "shift-worker",
-      "label": "Сотрудник дежурной смены",
+      "label": "Синоптик дежурной смены",
       "role": "crowd",
       "displayHeight": 48,
       "pivot": [
@@ -655,11 +667,11 @@
         ]
       },
       "source": "assets/source/characters/r01/shift-worker.aseprite",
-      "source_credit": "Original pixel cels authored for 26063",
+      "source_credit": "SpriteCook base sprite with hand-authored production cels",
       "outputs": {
         "idle": {
-          "sha256": "2638d37a7467153e22a51d5a3026f4e178525084c454564c7e8f03284f6b3460",
-          "bytes": 727,
+          "sha256": "6b954d5c6da1ce03334ed381b9e26e9068f50dbc618aabf88116fa54c47f7689",
+          "bytes": 1033,
           "frameSize": [
             32,
             48
@@ -670,16 +682,16 @@
           ],
           "frameBounds": [
             [
-              9,
-              8,
-              26,
+              2,
+              2,
+              30,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "f5291eba0d791001c7b1a867c09cf6e4a5fe0ab725d7360b217f1469a58efe4a",
-          "bytes": 1302,
+          "sha256": "0a55feaf8d6d561ba751815c65c4743ddfb636251f4ec973cfe92432de1747ff",
+          "bytes": 1607,
           "frameSize": [
             32,
             48
@@ -693,34 +705,34 @@
           ],
           "frameBounds": [
             [
-              5,
-              8,
-              26,
+              2,
+              2,
+              30,
               46
             ],
             [
-              9,
-              7,
-              26,
+              2,
+              3,
+              30,
               46
             ],
             [
-              9,
-              8,
-              26,
+              2,
+              2,
+              30,
               46
             ],
             [
-              9,
-              7,
-              26,
+              2,
+              3,
+              30,
               46
             ]
           ]
         },
         "sit": {
-          "sha256": "d4fa48fa6afd235018a2d65704208e7e5065644411cd604ac14ac53f8323aeed",
-          "bytes": 702,
+          "sha256": "26f71259dd9e487e2bba885b7762fd97b16ec209722d3cca50c5bebea9840f47",
+          "bytes": 1028,
           "frameSize": [
             32,
             48
@@ -731,16 +743,16 @@
           ],
           "frameBounds": [
             [
-              9,
-              16,
-              28,
+              2,
+              4,
+              30,
               46
             ]
           ]
         },
         "talk": {
-          "sha256": "fd607904f7e7b7ed6e80019b006e2234b0ca7572b0d144a3e5744b8a73bbcd50",
-          "bytes": 921,
+          "sha256": "c402df658038dc9539c65abe4141b367d1b5276a28a828601378b5d6415139b3",
+          "bytes": 1261,
           "frameSize": [
             32,
             48
@@ -752,25 +764,31 @@
           ],
           "frameBounds": [
             [
-              9,
-              8,
-              26,
+              2,
+              2,
+              30,
               46
             ],
             [
-              9,
-              8,
+              2,
+              2,
               30,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "a22686c107af32ff9c5d364cb9e34990e710c105d2f7e396eeb6f93a515977c4"
+      "sourceSha256": "7ac3bb5958784e97daab991c793be523bf004453e6fa4cbfb941892bb6e60149",
+      "provider": {
+        "assetId": "6d40b2c5-8690-4864-866e-f5ee3de8c826",
+        "model": "pixel-engine-image-v1",
+        "source": "assets/source/characters/r01/provider/station-crew/shift-worker.png",
+        "sha256": "31e8a1c265b27cb07c1424a9c2ee3dbb5e3231ca61d20764e52236df477a58ac"
+      }
     }
   ],
   "budget": {
-    "compressedPngBytes": 22976,
+    "compressedPngBytes": 25877,
     "decodedRgbaBytes": 317880,
     "animatedActors": 3,
     "maximumDecodedRgbaBytes": 4194304

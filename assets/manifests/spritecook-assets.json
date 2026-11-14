@@ -594,6 +594,30 @@
       "asset_id": "9769fad4-55eb-4316-9518-1cc8da9b1f4f",
       "sha12": "14a4f0dc8b65",
       "label": "Большая синица на территории станции"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/station-crew/field-worker.png",
+      "asset_id": "28399742-b406-45be-a0e9-b1ea41241000",
+      "sha12": "3e207fa1800c",
+      "label": "Инженер метеоплощадки"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/station-crew/map-worker.png",
+      "asset_id": "2e012b9b-ae72-4f12-ad71-a23aa798457b",
+      "sha12": "36b428eccbef",
+      "label": "Метеоролог"
+    },
+    {
+      "id": "assets/source/characters/r01/provider/station-crew/shift-worker.png",
+      "asset_id": "6d40b2c5-8690-4864-866e-f5ee3de8c826",
+      "sha12": "31e8a1c265b2",
+      "label": "Синоптик дежурной смены"
+    },
+    {
+      "id": "assets/source/environment/hub/distant-ridges/spritecook.png",
+      "asset_id": "68d5cde2-1898-44b1-b5d6-963c3c9d31b8",
+      "sha12": "154796740c75",
+      "label": "assets/source/environment/hub/distant-ridges/spritecook.png"
     }
   ]
 }

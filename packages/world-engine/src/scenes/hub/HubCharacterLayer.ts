@@ -102,7 +102,7 @@ export class HubCharacterLayer {
   private destroyed = false;
 
   constructor(private readonly scene: Phaser.Scene) {
-    this.layout = getR01Layout(scene.scale.width, scene.scale.height);
+    this.layout = getR01Layout(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
     this.preferences = normalizeWorldPreferences(scene.registry.get('ui.preferences'));
     this.errors = [...(scene.registry.get(ERROR_REGISTRY) as string[] ?? [])];
     this.pack = scene.registry.get(PACK_REGISTRY) as WorldCharacterManifest | undefined;
@@ -166,7 +166,7 @@ export class HubCharacterLayer {
   }
 
   private resize(): void {
-    this.layout = getR01Layout(this.scene.scale.width, this.scene.scale.height);
+    this.layout = getR01Layout(this.scene.scale.width, this.scene.scale.height, this.scene.registry.get('world.pixelRatio'));
     for (const actor of this.actors) {
       const point = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
       actor.image.setPosition(point[0], point[1]);

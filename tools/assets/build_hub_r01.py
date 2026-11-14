@@ -22,7 +22,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFESTS = ("ui.hub-r01.json", "hub.r01-buildings.json", "hub.r01-landscape.json", "hub.r01-ground.json", "hub.r01-props.json", "hub.r07-environment.json")
+MANIFESTS = ("ui.hub-r01.json", "hub.r01-buildings.json", "hub.r01-landscape.json", "hub.r01-ground.json", "hub.r01-props.json", "hub.r07-environment.json", "hub.distant-ridges.json")
 
 
 def digest(data: bytes) -> str:

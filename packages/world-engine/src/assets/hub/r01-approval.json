@@ -63,6 +63,16 @@
   ],
   "optionalAssets": [
     {
+      "id": "distant-ridges",
+      "key": "hub-distant-ridges",
+      "url": "/hub/distant-ridges/horizon.png",
+      "enabled": true,
+      "required": true,
+      "status": "approved",
+      "review": "docs/art/reviews/2026-11-14-station-living-plaza.md",
+      "sha256": "b2e35e0ebf89bf0eb09c3d658beb36745be1eecf058001dc063217df8210b92d"
+    },
+    {
       "id": "coastal-sky",
       "key": "hub-r01-coastal-sky",
       "url": "/hub/r01/coastal-sky.png",
@@ -131,7 +141,6 @@
       "key": "hub-r07-coastal-neutral",
       "url": "/hub/r07/coastal-neutral.png",
       "enabled": true,
-      "required": true,
       "status": "approved",
       "sha256": "13df6482e28f43025fee32b5c60c86c0b3522061adcbe0aa6275b302c5afebc1"
     },

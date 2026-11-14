@@ -64,7 +64,10 @@ export class HubScene extends Phaser.Scene {
       this.useR01 = true;
       preloadHubCharacters(this);
       for (const asset of r01Assets.assets) this.load.image(asset.key, asset.url);
+      const ridges = r01Assets.optionalAssets.find((asset) => asset.id === 'distant-ridges');
+      const hasRidges = ridges?.enabled && (preview || ridges.status === 'approved');
       for (const asset of r01Assets.optionalAssets) {
+        if (hasRidges && (asset.id === 'coastal-sky' || asset.id === 'coastal-neutral')) continue;
         if (asset.enabled && (preview || asset.status === 'approved')) this.load.image(asset.key, asset.url);
       }
       return;
@@ -85,7 +88,7 @@ export class HubScene extends Phaser.Scene {
     // The home screen must not silently replace a failed station download with
     // the legacy scene. React keeps navigation available and offers a retry.
     if (this.useR01) {
-      const required = [...r01Assets.assets, ...r01Assets.optionalAssets.filter((asset) => 'required' in asset && asset.required)];
+      const required = [...r01Assets.assets, ...r01Assets.optionalAssets.filter((asset) => asset.enabled && 'required' in asset && asset.required)];
       const missing = required.filter((asset) => !this.textures.exists(asset.key)).map((asset) => asset.key);
       if (missing.length > 0) {
         this.registry.set('world.load_error', { scene: 'hub', assets: missing });
@@ -359,15 +362,16 @@ export class HubScene extends Phaser.Scene {
     if (this.r01Layer) return;
     const camera = this.cameras.main;
     const zoom = camera.zoom;
+    const ratio = this.registry.get('world.pixelRatio') ?? 1;
     const offsetX = camera.x + camera.width / 2 - WORLD_LOGICAL_WIDTH * zoom / 2;
     const offsetY = camera.y + camera.height / 2 - WORLD_LOGICAL_HEIGHT * zoom / 2;
     const visible = HUB_BUILDINGS.filter((building) => !building.service);
     worldBridge.emit('world:interaction_layout', visible.map((building) => ({
       id: building.id, label: building.name, state: this.buildingLayer?.getBuildingState(building.id) ?? building.defaultState,
-      x: offsetX + building.bounds.x * zoom,
-      y: offsetY + building.bounds.y * zoom,
-      width: Math.max(44, building.bounds.width * zoom),
-      height: Math.max(44, building.bounds.height * zoom),
+      x: (offsetX + building.bounds.x * zoom) / ratio,
+      y: (offsetY + building.bounds.y * zoom) / ratio,
+      width: Math.max(44, building.bounds.width * zoom / ratio),
+      height: Math.max(44, building.bounds.height * zoom / ratio),
     })));
   }
 }

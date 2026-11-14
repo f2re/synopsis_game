@@ -38,13 +38,13 @@ export class HubR01Layer {
 
   constructor(private readonly scene: Phaser.Scene) {
     this.grid = new R01PixelTextures(scene.textures);
-    this.layout = getR01Layout(scene.scale.width, scene.scale.height);
+    this.layout = getR01Layout(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
     this.terrain = scene.add.graphics().setDepth(2);
     this.lights = scene.add.graphics().setDepth(9);
     this.accents = scene.add.graphics().setDepth(32);
     this.focus = scene.add.graphics().setDepth(35);
     this.rain = scene.add.graphics().setDepth(34);
-    this.coastalBackground = (this.optionalImage('coastal-neutral') ?? this.optionalImage('coastal-sky'))
+    this.coastalBackground = (this.optionalImage('distant-ridges') ?? this.optionalImage('coastal-neutral') ?? this.optionalImage('coastal-sky'))
       ?.setDepth(1);
     this.campusGround = this.optionalImage('campus-ground')?.setOrigin(.5, 0).setDepth(2.5);
     for (const building of this.layout.buildings) {
@@ -73,19 +73,20 @@ export class HubR01Layer {
 
   private resize(): void {
     const scene = this.scene;
-    this.layout = getR01Layout(scene.scale.width, scene.scale.height);
-    const {width, height, zoom, portrait, shore} = this.layout;
+    this.layout = getR01Layout(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
+    const {width, zoom, offsetX, offsetY, portrait, shore} = this.layout;
     scene.cameras.main.setViewport(0, 0, scene.scale.width, scene.scale.height);
-    scene.cameras.main.setZoom(zoom).centerOn(width / 2, height / 2);
+    const camera = scene.cameras.main.setZoom(zoom);
+    camera.centerOn((scene.scale.width / 2 - offsetX) / zoom, (scene.scale.height / 2 - offsetY) / zoom);
     const visibleWidth = scene.scale.width / zoom;
     const visibleHeight = scene.scale.height / zoom;
     if (this.campusGround) {
-      const bottom = height / 2 + visibleHeight / 2;
+      const bottom = visibleHeight - offsetY / zoom;
       const key = this.optionalKey('campus-ground')!;
       const source = scene.textures.get(key).getSourceImage();
       // The source has empty pavement behind the railing. Trim the distant strip
       // and register the resulting edge to the river in both orientations.
-      const trim = 24;
+      const trim = 47;
       const scale = Math.max((visibleWidth + 2) / source.width, (bottom - shore + 2) / (source.height - trim));
       this.grid.fit(this.campusGround, key, scale, width / 2, shore, false, trim);
     }
@@ -159,8 +160,8 @@ export class HubR01Layer {
   private positionBackground(key: string, waterline: number): void {
     const plate = this.coastalBackground;
     if (!plate) return;
-    const { width, height, zoom, horizon, shore } = this.layout;
-    const top = (height - this.scene.scale.height / zoom) / 2;
+    const { width, zoom, offsetY, horizon, shore } = this.layout;
+    const top = -offsetY / zoom;
     const source = this.scene.textures.get(key).getSourceImage();
     const scale = Math.max((this.scene.scale.width / zoom + 2) / source.width,
       (horizon - top + 2) / (source.height * waterline));
@@ -169,17 +170,18 @@ export class HubR01Layer {
   }
 
   private publishTargets(): void {
-    const {width, height, zoom} = this.layout;
-    const offsetX = (this.scene.scale.width - width * zoom) / 2;
-    const offsetY = (this.scene.scale.height - height * zoom) / 2;
+    const {zoom, offsetX, offsetY} = this.layout;
+    const ratio = this.scene.registry.get('world.pixelRatio') ?? 1;
+    const screenWidth = this.scene.scale.width / ratio;
+    const screenHeight = this.scene.scale.height / ratio;
     const targets: WorldInteractionTarget[] = this.layout.buildings.map((building) => {
       const box = this.bounds.get(building.id)!;
-      const hitWidth = Math.max(44, box.width * zoom * .78);
-      const hitHeight = Math.max(44, box.height * zoom * .72);
+      const hitWidth = Math.max(44, box.width * zoom * .78 / ratio);
+      const hitHeight = Math.max(44, box.height * zoom * .72 / ratio);
       return {
         id: building.id, label: building.label, state: building.state,
-        x: Math.max(0, Math.min(this.scene.scale.width - hitWidth, offsetX + (box.x + box.width / 2) * zoom - hitWidth / 2)),
-        y: Math.max(0, Math.min(this.scene.scale.height - hitHeight, offsetY + (box.y + box.height) * zoom - hitHeight)),
+        x: Math.max(0, Math.min(screenWidth - hitWidth, (offsetX + (box.x + box.width / 2) * zoom) / ratio - hitWidth / 2)),
+        y: Math.max(0, Math.min(screenHeight - hitHeight, (offsetY + (box.y + box.height) * zoom) / ratio - hitHeight)),
         width: hitWidth, height: hitHeight,
       };
     });
@@ -187,8 +189,8 @@ export class HubR01Layer {
   }
 
   private drawStatic(): void {
-    const {width: w, height: h, portrait, zoom, shore} = this.layout;
-    const bottom = (h + this.scene.scale.height / zoom) / 2;
+    const {width: w, portrait, zoom, offsetY, shore} = this.layout;
+    const bottom = (this.scene.scale.height - offsetY) / zoom;
     this.terrain.clear();
     this.lights.clear();
     const style = getR01PhaseStyle(this.phase, this.weather.mode);
@@ -197,9 +199,10 @@ export class HubR01Layer {
     this.scene.cameras.main.setBackgroundColor(this.colors.skyTop);
     if (!this.campusGround) this.terrain.fillStyle(P.stoneConcrete0).fillRect(-w, shore, w * 3, bottom - shore + 8);
     const skyId = style.sunset ? 'coastal-sky' : 'coastal-neutral';
-    const skyKey = this.optionalKey(skyId) ?? this.optionalKey('coastal-neutral') ?? this.optionalKey('coastal-sky');
+    const ridgesKey = this.optionalKey('distant-ridges');
+    const skyKey = ridgesKey ?? this.optionalKey(skyId) ?? this.optionalKey('coastal-neutral') ?? this.optionalKey('coastal-sky');
     if (skyKey) this.positionBackground(skyKey, .625);
-    this.coastalBackground?.setTint(style.skyTint);
+    this.coastalBackground?.setTint(ridgesKey && style.sunset ? 0xffd8bb : style.skyTint);
     this.campusGround?.setTint(style.sceneryTint);
     this.sprites.forEach((sprite) => sprite.setTint(style.sceneryTint));
     this.decor.forEach((sprite) => sprite.setTint(style.sceneryTint));
@@ -265,11 +268,11 @@ export class HubR01Layer {
   private drawRain(): void {
     this.rain.clear();
     if (!this.weather.animate) return;
-    const { width, height, zoom } = this.layout;
+    const { zoom, offsetX, offsetY } = this.layout;
     const visibleWidth = this.scene.scale.width / zoom;
     const visibleHeight = this.scene.scale.height / zoom;
-    const left = (width - visibleWidth) / 2;
-    const top = (height - visibleHeight) / 2;
+    const left = -offsetX / zoom;
+    const top = -offsetY / zoom;
     this.rain.lineStyle(1, P.waterGulf4, .45);
     for (let i = 0; i < R01_RAIN_DROP_LIMIT; i++) {
       const drop = r01RainDrop(i, this.ambientTime, visibleWidth, visibleHeight);

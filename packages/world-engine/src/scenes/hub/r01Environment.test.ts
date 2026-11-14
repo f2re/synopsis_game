@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getR01PhaseStyle, normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT } from './r01Environment.ts';
 import { getR01Layout } from './r01Layout.ts';
+import { getWorldPixelSurface } from '../../runtime/worldPixelSurface.ts';
 
 test('Солнце в фоне остаётся только в ясном золотом часе', () => {
   for (const phase of ['day', 'dawn', 'night', 'twilight', 'white_nights'] as const) {
@@ -40,4 +41,20 @@ test('Входы нижнего ряда на коротком экране на
       assert.ok(foot <= height - 68 - 8 + .01, `${width}×${height}: ${building.id}`);
     }
   }
+});
+
+test('Камера приближает настольный кадр и сохраняет место для панели при разных DPR', () => {
+  for (const [width, height, ratio] of [[1366, 768, 1], [1440, 900, 2], [390, 844, 1], [390, 844, 2], [844, 390, 2], [844, 390, 1.25]]) {
+    const surface = getWorldPixelSurface(width, height, ratio);
+    const layout = getR01Layout(surface.width, surface.height, surface.ratio);
+    if (width === 1366 || width === 1440) assert.equal(layout.zoom, 1.375);
+    else assert.ok(Number.isInteger(layout.zoom) || Number.isInteger(1 / layout.zoom));
+    assert.ok(Number.isInteger(layout.offsetX) && Number.isInteger(layout.offsetY));
+    const dock = layout.portrait ? 152 : height <= 540 ? 76 : 0;
+    for (const building of layout.buildings) {
+      assert.ok((layout.offsetY + (building.y + building.height) * layout.zoom) / surface.ratio <= height - dock + 1);
+    }
+  }
+  assert.equal(getWorldPixelSurface(1366, 768, 2).ratio, 1);
+  assert.equal(getWorldPixelSurface(390, 844, 2).ratio, 2);
 });
