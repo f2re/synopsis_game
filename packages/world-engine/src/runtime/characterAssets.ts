@@ -1,7 +1,4 @@
-/** Public, semantic contract for the authored R01 character pack.
- * R01 uses its own presentation scale; this is not the four-direction modular
- * 32×48 avatar family specified for the later character production milestone.
- */
+/** Public, semantic contract for the authored R01 character pack. */
 export interface WorldCharacterClip {
   assetId: string;
   url: string;
@@ -16,7 +13,7 @@ export interface WorldCharacterClip {
 export interface WorldCharacterDefinition {
   id: string;
   label: string;
-  role: 'player' | 'npc' | 'companion';
+  role: 'player' | 'npc' | 'companion' | 'crowd';
   displayHeight: number;
   pivot: [number, number];
   positions: { landscape: [number, number]; portrait: [number, number] };
@@ -25,7 +22,7 @@ export interface WorldCharacterDefinition {
   motion?: { type: 'walk-across'; direction: 'left' | 'right'; speed: number };
 }
 
-const ACTIONS = ['walk', 'run', 'hop', 'flutter'] as const;
+const ACTIONS = ['walk', 'run', 'hop', 'flutter', 'sit', 'talk'] as const;
 export type WorldCharacterAction = 'idle' | typeof ACTIONS[number];
 
 export interface WorldEquipmentDefinition {
@@ -54,7 +51,7 @@ function identifier(value: unknown): value is string {
 }
 function localAsset(value: unknown): value is string {
   // No external requests, path traversal, credentials or runtime-generated data URLs.
-  return typeof value === 'string' && /^\/(hub\/characters|assets)\/[a-zA-Z0-9/_-]+\.png$/.test(value);
+  return typeof value === 'string' && /^\/(hub\/characters|assets)\/[a-zA-Z0-9/_-]+\.png(?:\?v=[a-f0-9]{12})?$/.test(value);
 }
 function finite(value: unknown, minimum: number, maximum: number): value is number {
   return typeof value === 'number' && Number.isFinite(value) && value >= minimum && value <= maximum;
@@ -94,7 +91,7 @@ export function parseCharacterManifest(value: unknown): WorldCharacterManifest {
     const positions = record(actor?.positions);
     const clips = record(actor?.clips);
     if (!actor || !identifier(actor.id) || typeof actor.label !== 'string' || actor.label.length > 100 ||
-        !['player', 'npc', 'companion'].includes(String(actor.role)) ||
+        !['player', 'npc', 'companion', 'crowd'].includes(String(actor.role)) ||
         !finite(actor.displayHeight, 8, 128) || !pair(actor.pivot, 0, 1) ||
         !pair(positions?.landscape, 0, 960) || !pair(positions?.portrait, 0, 780) || !clips) {
       throw new Error('Invalid character definition');
@@ -110,6 +107,9 @@ export function parseCharacterManifest(value: unknown): WorldCharacterManifest {
       actions[action] = clip;
     }
     const walk = actions.walk;
+    if (actor.role === 'crowd' && (!walk || !actions.sit || !actions.talk || actor.displayHeight !== idle.frameHeight)) {
+      throw new Error('Station crowds need walk, sit and talk poses on the scene pixel grid');
+    }
     const motion = record(actor.motion);
     if (actor.motion !== undefined && (!motion || actor.role !== 'npc' || motion.type !== 'walk-across' ||
         !['left', 'right'].includes(String(motion.direction)) || !finite(motion.speed, 4, 60) || !walk ||

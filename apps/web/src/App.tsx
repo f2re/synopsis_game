@@ -6,6 +6,7 @@ import { PixelIcon, PixelCard } from './features/ui';
 import { PixelScrollArea } from './features/ui/PixelScrollArea';
 import { HubModalLayer } from './features/hub/HubModalLayer';
 import { HubDialog } from './features/hub/HubDialog';
+import { useStationPresence } from './features/hub/useStationPresence';
 import { WorldLoadBoundary } from './features/hub/WorldLoadBoundary';
 import { ExitScreen } from './features/title/ExitScreen';
 import { HelpScreen } from './features/help/HelpScreen';
@@ -140,6 +141,7 @@ export function App() {
   }
 
   const activeSessionToken = getSessionToken();
+  const stationPresence = useStationPresence(user && !user.roles.includes('display') && path !== '/arena-tv' && path !== '/admin' && path !== '/exit' && !exiting ? activeSessionToken : null);
   function acceptUpdatedProfile(profile: SessionUser) {
     if (activeSessionToken && getSessionToken() === activeSessionToken) {
       setUser((current) => current?.id === profile.id ? profile : current);
@@ -176,7 +178,7 @@ export function App() {
     onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
     externalModalOpen={loginModalOpen || setCodeModalOpen || exitDialogOpen}
-    sessionPending={booting} sessionNotice={sessionNotice}
+    sessionPending={booting} sessionNotice={sessionNotice} stationPresence={stationPresence}
   />;
   else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь на станцию: там доступны занятия, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>На станцию</button></section></main>;
 

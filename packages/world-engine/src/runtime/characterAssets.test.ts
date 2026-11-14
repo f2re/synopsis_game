@@ -18,7 +18,10 @@ function fixture() {
 }
 
 test('accepted local manifest retains authored pivot, duration and semantic IDs', () => {
-  const pack = parseCharacterManifest(fixture());
+  const raw = fixture();
+  raw.actors[0].clips.idle.url += '?v=fe219c128faa';
+  const pack = parseCharacterManifest(raw);
+  assert.equal(pack.actors[0].clips.idle.url, raw.actors[0].clips.idle.url);
   assert.deepEqual(pack.actors[0].pivot, [.5, .96875]);
   assert.deepEqual(pack.actors[0].clips.idle.durationsMs, [100, 200, 300]);
   assert.equal(pack.equipment[0].id, 'held.tablet');
@@ -34,7 +37,7 @@ test('frame boundaries and full-loop wrap follow source durations independently 
 test('missing approval, unsafe external paths and malformed frame counts cannot enter loader', () => {
   const pending = fixture(); pending.artAcceptance = 'PENDING';
   assert.throws(() => parseCharacterManifest(pending), /unaccepted/);
-  for (const url of ['https://example.com/observer.png', '//example.com/observer.png', '/hub/characters/../../secret.png', '/hub/characters/x.svg', 'data:image/png;base64,AA']) {
+  for (const url of ['https://example.com/observer.png', '//example.com/observer.png', '/hub/characters/../../secret.png', '/hub/characters/x.svg', 'data:image/png;base64,AA', '/hub/characters/x.png?v=fe219c128faa&redirect=1']) {
     const pack = fixture(); pack.actors[0].clips.idle.url = url;
     assert.throws(() => parseCharacterManifest(pack), /local asset path/);
   }

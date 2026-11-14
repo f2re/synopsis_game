@@ -104,6 +104,46 @@ test('repeated wrong code produces temporary lockout', async () => {
   });
 });
 
+test('station presence counts distinct other accounts until logout, disable, or lease expiry', async (context) => {
+  await withService(async (service) => {
+    await service.bootstrapAdmin('Администратор', '1234');
+    const admin = await service.adminLogin('1234', '127.0.0.1');
+    const student = await service.createUser(admin.token, { displayName: 'Игрок', groupId: 'Группа', roles: ['student'] });
+    const screen = await service.createUser(admin.token, { displayName: 'Проектор', groupId: 'Группа', roles: ['display'] });
+    const viewer = await service.login(screen.id, '', '127.0.0.2');
+    const first = await service.login(student.id, '', '127.0.0.3');
+    const second = await service.login(student.id, '', '127.0.0.4');
+
+    let now = Date.now();
+    const clock = context.mock.method(Date, 'now', () => now);
+
+    assert.throws(() => service.renewStationPresence('invalid'), { code: 'invalid_session' });
+    assert.throws(() => service.renewStationPresence(viewer.token), { code: 'game_session_required' });
+    assert.deepEqual(service.renewStationPresence(admin.token), { online: 0 }, 'login itself does not report presence');
+    assert.throws(() => service.renewStationPresence(admin.token), { status: 429, code: 'presence_rate_limited' });
+    assert.deepEqual(service.renewStationPresence(first.token), { online: 1 });
+    assert.deepEqual(service.renewStationPresence(second.token), { online: 1 }, 'exclude both sessions of the caller');
+    const start = now;
+    now += 1_000;
+    assert.deepEqual(service.renewStationPresence(admin.token), { online: 1 }, 'count both sessions as one other account');
+    service.logout(first.token);
+    now += 1_000;
+    assert.deepEqual(service.renewStationPresence(admin.token), { online: 1 });
+
+    now = start + 44_000;
+    assert.deepEqual(service.renewStationPresence(admin.token), { online: 1 });
+    now = start + 45_000;
+    assert.deepEqual(service.renewStationPresence(admin.token), { online: 0 }, 'expiry is exclusive');
+
+    assert.deepEqual(service.renewStationPresence(second.token), { online: 1 }, 'reconnection renews a lapsed lease');
+    await service.setUserStatus(admin.token, student.id, 'disabled');
+    now += 1_000;
+    assert.deepEqual(service.renewStationPresence(admin.token), { online: 0 });
+    assert.throws(() => service.renewStationPresence(second.token), { code: 'invalid_session' });
+    clock.mock.restore();
+  });
+});
+
 test('batch create users from list with auto-generated and custom codes', async () => {
   await withService(async (service) => {
     await service.bootstrapAdmin('Администратор', '1234');

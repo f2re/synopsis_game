@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 from PIL import Image, ImageOps
-from build_characters_r01 import clean, png, read_aseprite, sha, write_aseprite
+from build_characters_r01 import clean, png, read_aseprite, sha, versioned_png_url, write_aseprite
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / 'assets/manifests/station.fauna.json'
@@ -77,14 +77,28 @@ def publish(name: str, image: Image.Image, check: bool) -> None:
             target.write_bytes(png(image))
 
 
+def world_grid(image: Image.Image, pivot: tuple[int, int], display_height: float) -> Image.Image:
+    """Reproject an older fitted frame around the same foot anchor at 1×."""
+    width, height = image.size
+    scale = display_height / height
+    size = (round(width * scale), round(height * scale))
+    result = Image.new('RGBA', image.size)
+    result.paste(image.resize(size, Image.Resampling.NEAREST),
+                 (pivot[0] - round(pivot[0] * scale), pivot[1] - round(pivot[1] * scale)))
+    return clean(result)
+
+
 def motion_clip(actor: dict, motion: dict, size: tuple[int, int], check: bool, importing: bool) -> dict:
     name = f"{actor['name']}-{motion['action']}"
-    path = SOURCE / 'editable' / f'{name}.aseprite'
-    strip = load_provider(motion)
-    frame_width = motion['sourceFrameWidth']
-    if frame_width < 1 or strip.width % frame_width:
-        raise ValueError(f'{name}: incomplete provider frame grid')
+    source_name = actor.get('campusSource', actor['name'])
+    path = SOURCE / 'editable' / f"{source_name}-{motion['action']}.aseprite"
+    strip = load_provider(motion) if 'file' in motion else None
     if importing and not path.exists():
+        if strip is None:
+            raise ValueError(f'{name}: missing editable motion')
+        frame_width = motion['sourceFrameWidth']
+        if frame_width < 1 or strip.width % frame_width:
+            raise ValueError(f'{name}: incomplete provider frame grid')
         frames = []
         for index, x, y in motion['frames']:
             if not 0 <= index < strip.width // frame_width:
@@ -107,9 +121,10 @@ def motion_clip(actor: dict, motion: dict, size: tuple[int, int], check: bool, i
     for index, frame in enumerate(frames):
         if frame.size != size:
             raise ValueError(f'{name}: frame box mismatch')
-        output.paste(clean(frame), (index * size[0], 0))
+        frame = world_grid(frame, (24, 38), actor['legacyWorldHeight']) if 'legacyWorldHeight' in actor else clean(frame)
+        output.paste(frame, (index * size[0], 0))
     publish(f'{name}.png', output, check)
-    return {'assetId': f"{actor['worldId']}.{motion['action']}", 'url': f'/assets/fauna/station/{name}.png',
+    return {'assetId': f"{actor['worldId']}.{motion['action']}", 'url': versioned_png_url(f'/assets/fauna/station/{name}.png', output),
             'frameWidth': size[0], 'frameHeight': size[1], 'frameCount': len(frames), 'durationsMs': durations}
 
 
@@ -134,7 +149,8 @@ def build(check: bool, importing: bool) -> None:
         fitting_file = f'{name}-fitting.png'
         publish(fitting_file, strip, check)
         runtime['fitting'][actor['companionId']] = f'/assets/fauna/station/{fitting_file}'
-        campus, durations, tags = read_aseprite(editable / f'{name}-campus.aseprite')
+        source_name = actor.get('campusSource', name)
+        campus, durations, tags = read_aseprite(editable / f'{source_name}-campus.aseprite')
         if tags != {'idle': [0, 0]} or durations != [1000] or len(campus) != 1:
             raise ValueError(f'{name}: missing campus still')
         image = clean(campus[0])
@@ -146,15 +162,17 @@ def build(check: bool, importing: bool) -> None:
         animation_size = (48, 48)
         animation_pivot = (24, 38)
         image = normalized(image, animation_size, pivot_x, animation_pivot)
+        if 'legacyWorldHeight' in actor:
+            image = world_grid(image, animation_pivot, actor['legacyWorldHeight'])
         pivot_x, pivot_y = animation_pivot
         publish(campus_file, image, check)
-        clips = {'idle': {'assetId': actor['worldId'] + '.idle', 'url': f'/assets/fauna/station/{campus_file}',
+        clips = {'idle': {'assetId': actor['worldId'] + '.idle', 'url': versioned_png_url(f'/assets/fauna/station/{campus_file}', image),
                           'frameWidth': image.width, 'frameHeight': image.height, 'frameCount': 1, 'durationsMs': durations}}
         for motion in actor.get('motions', []):
             clips[motion['action']] = motion_clip(actor, motion, animation_size, check, importing)
         runtime['station'].append({
             'id': actor['worldId'], 'label': actor['label'], 'role': 'npc',
-            'positions': actor['positions'], 'displayHeight': actor['displayHeight'] * image.height / campus[0].height,
+            'positions': actor['positions'], 'displayHeight': image.height,
             'pivot': [pivot_x / image.width, pivot_y / image.height],
             'clips': clips,
         })

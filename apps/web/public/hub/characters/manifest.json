@@ -6,10 +6,10 @@
       "id": "character.r01.observer",
       "label": "Наблюдатель кампуса",
       "role": "npc",
-      "displayHeight": 64,
+      "displayHeight": 48,
       "pivot": [
         0.5,
-        0.9555555555555556
+        0.9583333333333334
       ],
       "positions": {
         "landscape": [
@@ -29,9 +29,9 @@
       "clips": {
         "idle": {
           "assetId": "character.r01.observer.idle",
-          "url": "/hub/characters/observer-idle.png",
-          "frameWidth": 180,
-          "frameHeight": 180,
+          "url": "/hub/characters/observer-idle.png?v=5b97dec071bf",
+          "frameWidth": 48,
+          "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
             125
@@ -39,9 +39,9 @@
         },
         "walk": {
           "assetId": "character.r01.observer.walk",
-          "url": "/hub/characters/observer-walk.png",
-          "frameWidth": 180,
-          "frameHeight": 180,
+          "url": "/hub/characters/observer-walk.png?v=364b72e4d666",
+          "frameWidth": 48,
+          "frameHeight": 48,
           "frameCount": 8,
           "durationsMs": [
             125,
@@ -61,15 +61,15 @@
       "id": "npc.r01.vera",
       "label": "Вера Павловна Ладожская",
       "role": "npc",
-      "displayHeight": 60,
+      "displayHeight": 54,
       "pivot": [
         0.5,
-        0.9555555555555556
+        0.9629629629629629
       ],
       "positions": {
         "landscape": [
-          386,
-          412
+          366,
+          398
         ],
         "portrait": [
           250,
@@ -79,9 +79,9 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.vera.idle",
-          "url": "/hub/characters/vera-idle.png",
-          "frameWidth": 180,
-          "frameHeight": 180,
+          "url": "/hub/characters/vera-idle.png?v=5578770c8bec",
+          "frameWidth": 54,
+          "frameHeight": 54,
           "frameCount": 6,
           "durationsMs": [
             280,
@@ -98,27 +98,27 @@
       "id": "companion.r01.pascal",
       "label": "Кот Паскаль",
       "role": "npc",
-      "displayHeight": 30,
+      "displayHeight": 27,
       "pivot": [
-        0.5,
-        0.9444444444444444
+        0.5185185185185185,
+        0.9629629629629629
       ],
       "positions": {
         "landscape": [
-          405,
-          489
+          453,
+          469
         ],
         "portrait": [
-          219,
-          653
+          218,
+          639
         ]
       },
       "clips": {
         "idle": {
           "assetId": "companion.r01.pascal.idle",
-          "url": "/hub/characters/pascal-idle.png",
-          "frameWidth": 144,
-          "frameHeight": 144,
+          "url": "/hub/characters/pascal-idle.png?v=f8e1b19f522e",
+          "frameWidth": 27,
+          "frameHeight": 27,
           "frameCount": 6,
           "durationsMs": [
             260,
@@ -127,6 +127,207 @@
             260,
             260,
             260
+          ]
+        }
+      }
+    },
+    {
+      "id": "npc.r01.field-worker",
+      "label": "Сотрудник метеоплощадки",
+      "role": "crowd",
+      "displayHeight": 48,
+      "pivot": [
+        0.5,
+        0.9583333333333334
+      ],
+      "positions": {
+        "landscape": [
+          0,
+          0
+        ],
+        "portrait": [
+          0,
+          0
+        ]
+      },
+      "clips": {
+        "idle": {
+          "assetId": "npc.r01.field-worker.idle",
+          "url": "/hub/characters/field-worker-idle.png?v=9f148686cfd8",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ]
+        },
+        "walk": {
+          "assetId": "npc.r01.field-worker.walk",
+          "url": "/hub/characters/field-worker-walk.png?v=3ef091d7e6c1",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 4,
+          "durationsMs": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "facing": "right"
+        },
+        "sit": {
+          "assetId": "npc.r01.field-worker.sit",
+          "url": "/hub/characters/field-worker-sit.png?v=1e39efe97e93",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ]
+        },
+        "talk": {
+          "assetId": "npc.r01.field-worker.talk",
+          "url": "/hub/characters/field-worker-talk.png?v=5001e9c69ac6",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 2,
+          "durationsMs": [
+            150,
+            150
+          ]
+        }
+      }
+    },
+    {
+      "id": "npc.r01.map-worker",
+      "label": "Сотрудница картографического зала",
+      "role": "crowd",
+      "displayHeight": 48,
+      "pivot": [
+        0.5,
+        0.9583333333333334
+      ],
+      "positions": {
+        "landscape": [
+          0,
+          0
+        ],
+        "portrait": [
+          0,
+          0
+        ]
+      },
+      "clips": {
+        "idle": {
+          "assetId": "npc.r01.map-worker.idle",
+          "url": "/hub/characters/map-worker-idle.png?v=154d7fc2b162",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ]
+        },
+        "walk": {
+          "assetId": "npc.r01.map-worker.walk",
+          "url": "/hub/characters/map-worker-walk.png?v=dc4a396fae69",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 4,
+          "durationsMs": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "facing": "right"
+        },
+        "sit": {
+          "assetId": "npc.r01.map-worker.sit",
+          "url": "/hub/characters/map-worker-sit.png?v=0c187f7056ed",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ]
+        },
+        "talk": {
+          "assetId": "npc.r01.map-worker.talk",
+          "url": "/hub/characters/map-worker-talk.png?v=055b3c0ff3b3",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 2,
+          "durationsMs": [
+            150,
+            150
+          ]
+        }
+      }
+    },
+    {
+      "id": "npc.r01.shift-worker",
+      "label": "Сотрудник дежурной смены",
+      "role": "crowd",
+      "displayHeight": 48,
+      "pivot": [
+        0.5,
+        0.9583333333333334
+      ],
+      "positions": {
+        "landscape": [
+          0,
+          0
+        ],
+        "portrait": [
+          0,
+          0
+        ]
+      },
+      "clips": {
+        "idle": {
+          "assetId": "npc.r01.shift-worker.idle",
+          "url": "/hub/characters/shift-worker-idle.png?v=31161f7953b6",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ]
+        },
+        "walk": {
+          "assetId": "npc.r01.shift-worker.walk",
+          "url": "/hub/characters/shift-worker-walk.png?v=1d2bc5749605",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 4,
+          "durationsMs": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "facing": "right"
+        },
+        "sit": {
+          "assetId": "npc.r01.shift-worker.sit",
+          "url": "/hub/characters/shift-worker-sit.png?v=5578e5762b0a",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ]
+        },
+        "talk": {
+          "assetId": "npc.r01.shift-worker.talk",
+          "url": "/hub/characters/shift-worker-talk.png?v=6a59866ca03a",
+          "frameWidth": 32,
+          "frameHeight": 48,
+          "frameCount": 2,
+          "durationsMs": [
+            150,
+            150
           ]
         }
       }

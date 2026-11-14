@@ -66,7 +66,6 @@
         36
       ],
       "campusSupportX": 15,
-      "displayHeight": 26,
       "positions": {
         "landscape": [
           337,
@@ -147,7 +146,8 @@
           "assetId": "6f1cc603-0319-4811-a587-df8064ee4023",
           "sha256": "4aabcd45a0e2f269828bdfcd160e297f0b8309946aac5cceb5054a0f2b11d611"
         }
-      ]
+      ],
+      "legacyWorldHeight": 31
     },
     {
       "name": "tit",
@@ -212,19 +212,18 @@
         }
       ],
       "campusPivot": [
-        13,
-        28
+        12,
+        19
       ],
-      "campusSupportX": 9,
-      "displayHeight": 19,
+      "campusSupportX": 7,
       "positions": {
         "landscape": [
-          427,
-          409
+          410,
+          416
         ],
         "portrait": [
-          225,
-          492
+          204,
+          495
         ]
       },
       "provider": {
@@ -234,113 +233,23 @@
           "sha256": "54e534f86cbe94ab4ef9482aac5c1c78dc5a3a0f78ba1a964c47abce26c7f9f9"
         },
         "campus": {
-          "file": "provider/tit-campus.png",
-          "assetId": "9f5f7cb1-62de-42f8-b168-dd30a5333ecb",
-          "sha256": "c6e67b3a9acd43e81ee3cb9b214008e519db4c9eb46e59d656a7985b0e79dc26"
+          "file": "provider/tit-world-spritecook.png",
+          "assetId": "9769fad4-55eb-4316-9518-1cc8da9b1f4f",
+          "sha256": "14a4f0dc8b65aa59f33c843e504d4ce9716ac471a490d3e3d179e4f076b0d8ac"
         }
       },
       "fittingScale": 0.65,
       "motions": [
         {
           "action": "hop",
-          "sourceFrameWidth": 36,
-          "frameMs": 92,
-          "frames": [
-            [
-              0,
-              9,
-              8
-            ],
-            [
-              1,
-              9,
-              8
-            ],
-            [
-              2,
-              9,
-              8
-            ],
-            [
-              3,
-              9,
-              8
-            ],
-            [
-              4,
-              9,
-              8
-            ]
-          ],
-          "sourceAssetId": "9f5f7cb1-62de-42f8-b168-dd30a5333ecb",
-          "file": "provider/hop.png",
-          "assetId": "0564a215-3740-4596-9de0-372f00ec4ba8",
-          "sha256": "dc9d912b1290d497859d0e8c876165c97c8d9d4fe85dcec142b3234e7f060c15"
+          "sourceAssetId": "9769fad4-55eb-4316-9518-1cc8da9b1f4f"
         },
         {
           "action": "flutter",
-          "sourceFrameWidth": 36,
-          "frameMs": 130,
-          "frames": [
-            [
-              0,
-              9,
-              8
-            ],
-            [
-              1,
-              9,
-              8
-            ],
-            [
-              2,
-              9,
-              7
-            ],
-            [
-              3,
-              9,
-              6
-            ],
-            [
-              4,
-              9,
-              6
-            ],
-            [
-              5,
-              9,
-              5
-            ],
-            [
-              6,
-              9,
-              5
-            ],
-            [
-              7,
-              9,
-              4
-            ]
-          ],
-          "sourceAssetId": "9f5f7cb1-62de-42f8-b168-dd30a5333ecb",
-          "file": "provider/flutter.png",
-          "assetId": "c80f3ac1-29af-41d2-bd60-328b504988ce",
-          "sha256": "f4dcdcdaea2ca55a2393110a11730da15377500f34d8cb41cd78a35a55949dad",
-          "removePixels": {
-            "3": [
-              [
-                24,
-                35
-              ],
-              [
-                24,
-                36
-              ]
-            ]
-          }
+          "sourceAssetId": "9769fad4-55eb-4316-9518-1cc8da9b1f4f"
         }
-      ]
+      ],
+      "campusSource": "tit-world"
     }
   ]
 }

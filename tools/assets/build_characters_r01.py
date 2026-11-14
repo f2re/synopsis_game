@@ -4,6 +4,7 @@
 The explicit one-time --import-source step wraps inspected provider PNG strips
 in real Aseprite frames, tags and durations. Normal builds use only .aseprite
 sources. No paid call, image interpolation or synthesized animation occurs here.
+Previously accepted detailed cels can be sampled onto the world pixel grid on export.
 Only the documented subset of Aseprite is accepted; unsupported cels/blends fail.
 Specification: https://github.com/aseprite/aseprite/blob/main/docs/ase-file-specs.md
 """
@@ -156,6 +157,13 @@ def save(path: Path, data: bytes, check: bool) -> None:
             path.write_bytes(data)
 
 
+def versioned_png_url(path: str, sheet: Image.Image) -> str:
+    # Asset URLs are immutable at the reverse proxy. Tie the cache key to the
+    # actual RGBA and frame-strip dimensions, independently of PNG compression.
+    content = struct.pack('<II', *sheet.size) + sheet.tobytes()
+    return f'{path}?v={sha(content)[:12]}'
+
+
 def build(check: bool, import_sources: bool) -> None:
     manifest = json.loads(MANIFEST.read_text())
     before = json.dumps(manifest, sort_keys=True)
@@ -163,7 +171,7 @@ def build(check: bool, import_sources: bool) -> None:
     total_bytes, decoded = 0, 0
     for actor in manifest['actors']:
         source = ROOT / actor['source']
-        if import_sources and not source.exists():
+        if import_sources and not source.exists() and 'provider_sheet' in actor:
             strip = Image.open(ROOT / actor['provider_sheet']).convert('RGBA')
             w, h = actor['provider_frame_size']
             count = actor['provider_frame_count']
@@ -186,6 +194,14 @@ def build(check: bool, import_sources: bool) -> None:
         frames, durations, tags = read_aseprite(source)
         w, h = frames[0].size
         definition = {k: actor[k] for k in ('id', 'label', 'role', 'displayHeight', 'pivot', 'positions')}
+        export_height = actor.get('export_height', h)
+        if export_height != h:
+            # Existing R01 cels use a finer source grid. Keep them editable and
+            # sample them onto the same world-texel grid as the new crew.
+            w = round(w * export_height / h)
+            h = export_height
+            frames = [clean(frame.resize((w, h), Image.Resampling.NEAREST)) for frame in frames]
+            definition['pivot'] = [round(x * size) / size for x, size in zip(actor['pivot'], (w, h))]
         if actor.get('motion'):
             definition['motion'] = actor['motion']
         definition['clips'] = {}
@@ -200,10 +216,10 @@ def build(check: bool, import_sources: bool) -> None:
             public_path = '/hub/characters/' + filename
             save(ROOT / 'assets/generated/characters/r01' / filename, data, check)
             save(ROOT / 'apps/web/public' / public_path.lstrip('/'), data, check)
-            definition['clips'][tag] = {'assetId': actor['id'] + '.' + tag, 'url': public_path,
+            definition['clips'][tag] = {'assetId': actor['id'] + '.' + tag, 'url': versioned_png_url(public_path, sheet),
                 'frameWidth': w, 'frameHeight': h, 'frameCount': len(selected), 'durationsMs': durations[bounds[0]:bounds[1] + 1]}
             if tag == 'walk':
-                definition['clips'][tag]['facing'] = actor['motion']['direction']
+                definition['clips'][tag]['facing'] = actor.get('motion', {}).get('direction', 'right')
             outputs[tag] = {'sha256': sha(data), 'bytes': len(data), 'frameSize': [w, h],
                 'frameCount': len(selected), 'durationsMs': durations[bounds[0]:bounds[1] + 1],
                 'frameBounds': [list(frame.getbbox()) for frame in selected]}
@@ -213,7 +229,8 @@ def build(check: bool, import_sources: bool) -> None:
             raise ValueError('Every actor needs a reduced-motion still/idle tag')
         actor['outputs'] = outputs
         actor['sourceSha256'] = sha(source.read_bytes())
-        actor['providerSha256'] = sha((ROOT / actor['provider_sheet']).read_bytes())
+        if 'provider_sheet' in actor:
+            actor['providerSha256'] = sha((ROOT / actor['provider_sheet']).read_bytes())
         runtime['actors'].append(definition)
     manifest['budget'] = {'compressedPngBytes': total_bytes, 'decodedRgbaBytes': decoded, 'animatedActors': 3,
         'maximumDecodedRgbaBytes': 4_194_304}

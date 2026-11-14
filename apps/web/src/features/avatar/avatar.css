@@ -688,6 +688,7 @@
 }
 .game-viewport .world-canvas-host canvas {
   display: block;
+  image-rendering: pixelated;
   width: 100% !important;
   height: 100% !important;
   max-width: none;

@@ -34,6 +34,9 @@ interface SessionRecord {
   expiresAt: number;
 }
 
+const PRESENCE_LEASE_MS = 45_000;
+const PRESENCE_MIN_INTERVAL_MS = 1_000;
+
 interface IpAttempt {
   count: number;
   lockedUntil: number;
@@ -120,6 +123,7 @@ async function verifyCode(code: string, salt: string, expectedHash: string): Pro
 export class IdentityService {
   private state: IdentityState = { version: 1, users: [] };
   private readonly sessions = new Map<string, SessionRecord>();
+  private readonly presenceLeases = new Map<string, number>();
   private readonly ipAttempts = new Map<string, IpAttempt>();
   private readonly securityProfile: SecurityProfile;
   private readonly maxAttempts: number;
@@ -352,10 +356,36 @@ export class IdentityService {
 
   logout(token: string): void {
     this.sessions.delete(token);
+    this.presenceLeases.delete(token);
   }
 
   me(token: string): SessionUser {
     return toSessionUser(this.requireSession(token));
+  }
+
+  /** Renew the caller's lease and count the other active accounts on this server. */
+  renewStationPresence(token: string): { online: number } {
+    const now = Date.now();
+    const user = this.requireSession(token, now);
+    if (user.roles.includes('display')) {
+      throw new IdentityError(403, 'Требуется игровая сессия', 'game_session_required');
+    }
+    const previous = this.presenceLeases.get(token);
+    if (previous !== undefined && now < previous - PRESENCE_LEASE_MS + PRESENCE_MIN_INTERVAL_MS) {
+      throw new IdentityError(429, 'Подождите перед обновлением присутствия', 'presence_rate_limited');
+    }
+    this.presenceLeases.set(token, now + PRESENCE_LEASE_MS);
+
+    const online = new Set<string>();
+    for (const [sessionToken, leaseDeadline] of this.presenceLeases) {
+      const session = this.sessions.get(sessionToken);
+      if (!session || session.expiresAt <= now || leaseDeadline <= now) {
+        this.presenceLeases.delete(sessionToken);
+      } else if (session.userId !== user.id) {
+        online.add(session.userId);
+      }
+    }
+    return { online: online.size };
   }
 
   async updateAvatar(token: string, input: unknown): Promise<SessionUser> {
@@ -463,7 +493,7 @@ export class IdentityService {
     if (status === 'disabled') {
       user.disabledAt = new Date().toISOString();
       for (const [sessionToken, session] of this.sessions) {
-        if (session.userId === user.id) this.sessions.delete(sessionToken);
+        if (session.userId === user.id) this.logout(sessionToken);
       }
     } else {
       delete user.disabledAt;
@@ -490,7 +520,7 @@ export class IdentityService {
     user.failedAttempts = 0;
     delete user.lockedUntil;
     for (const [sessionToken, session] of this.sessions) {
-      if (session.userId === user.id) this.sessions.delete(sessionToken);
+      if (session.userId === user.id) this.logout(sessionToken);
     }
     await this.persist();
   }
@@ -546,10 +576,10 @@ export class IdentityService {
     return user;
   }
 
-  private requireSession(token: string): UserRecord {
+  private requireSession(token: string, now = Date.now()): UserRecord {
     const session = this.sessions.get(token);
-    if (!session || session.expiresAt <= Date.now()) {
-      if (session) this.sessions.delete(token);
+    if (!session || session.expiresAt <= now) {
+      if (session) this.logout(token);
       throw new IdentityError(401, 'Сессия недействительна или истекла', 'invalid_session');
     }
     const user = this.findUser(session.userId);

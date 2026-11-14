@@ -26,6 +26,7 @@ const preferences = moduleFrom('runtime/uiPreferences.ts');
 const bridgeModule = moduleFrom('bridge/WorldBridge.ts');
 const { worldBridge } = bridgeModule;
 const faunaMotion = moduleFrom('scenes/hub/stationFaunaMotion.ts');
+const crowd = moduleFrom('scenes/hub/stationCrowd.ts', { './r01Layout.ts': moduleFrom('scenes/hub/r01Layout.ts') });
 const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCharacterLayer.ts', {
   phaser: { Textures: { FilterMode: { NEAREST: 0 } }, Scale: { Events: { RESIZE: 'resize' } }, Scenes: { Events: { SHUTDOWN: 'shutdown', DESTROY: 'destroy' } }, Loader: { Events: { FILE_LOAD_ERROR: 'loaderror', COMPLETE: 'complete' } } },
   '../../assets/hub/station-fauna.json': require('../packages/world-engine/src/assets/hub/station-fauna.json'),
@@ -33,6 +34,7 @@ const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCh
   '../../runtime/characterAssets': assets,
   '../../runtime/uiPreferences': preferences,
   './r01Layout': { getR01Layout(w, h) { return { width: w, height: h, portrait: w < h, shore: 150, zoom: 1 }; } },
+  './stationCrowd': crowd,
   './stationFaunaMotion': faunaMotion,
 });
 const pack = assets.parseCharacterManifest({ version: 1, artAcceptance: 'PASS', actors: [
@@ -56,6 +58,7 @@ function makeScene(withPack = true) {
         setPosition(x, y) { this.x = x; this.y = y; return this; },
         setDepth(depth) { this.depth = depth; return this; },
         setVisible(value) { this.visible = value; return this; },
+        setFlipX(value) { this.flipX = value; return this; },
         setTexture(key, frame) { this.key = key; this.frame = frame; return this; },
         setFrame(frame) { this.frame = frame; this.frameWrites++; return this; },
         destroy() { this.destroyed = true; },
@@ -117,6 +120,53 @@ const stillX = walker.x;
 ambientLayer.update(100); assert.equal(walker.x, stillX); assert.equal(walker.frame, 0);
 ambientLayer.destroy();
 
+const visitorsScene = makeScene();
+const generated = require('../apps/web/public/hub/characters/manifest.json');
+const crowdPack = assets.parseCharacterManifest({ ...generated, actors: generated.actors.filter(({role}) => role === 'crowd') });
+const geometryByKey = new Map(crowdPack.actors.flatMap((actor) => Object.values(actor.clips).map((clip) => [
+  assets.characterTextureKey(clip.assetId), { source: [{width: clip.frameWidth * clip.frameCount, height: clip.frameHeight}], has: () => true, setFilter() {} },
+])));
+visitorsScene.textures.get = (key) => geometryByKey.get(key);
+visitorsScene.registry.set('world.characters.manifest', crowdPack);
+visitorsScene.registry.set('server:station_presence', 1);
+const visitorsLayer = new HubCharacterLayer(visitorsScene);
+const diagnostics = () => visitorsScene.registry.get('world.characters.diagnostics');
+assert.equal(diagnostics().onlineVisitors, 1, 'Registry seeds the first frame after a scene mount');
+assert.equal(diagnostics().actors.filter(({state}) => state === 'sit').length, 2, 'Both benches have ambient occupants');
+worldBridge.emit('server:station_presence', 0);
+assert.equal(diagnostics().onlineVisitors, 0);
+assert.equal(diagnostics().visibleActors, 5, 'Empty online count leaves autonomous station staff present');
+worldBridge.emit('server:station_presence', 3);
+assert.equal(diagnostics().onlineVisitors, 3);
+worldBridge.emit('server:station_presence', 99);
+assert.equal(diagnostics().onlineVisitors, 6, 'Large rosters respect the scene budget');
+visitorsScene.events.emit('ui:preferences', {lowPower: true});
+assert.equal(diagnostics().onlineVisitors, 3, 'Low-power mode limits extra sprites');
+visitorsScene.events.emit('ui:preferences', {reducedMotion: true});
+const stillPositions = visitorsScene.images.map(({x,y,key,frame}) => [x,y,key,frame]);
+visitorsLayer.update(100);
+assert.deepEqual(visitorsScene.images.map(({x,y,key,frame}) => [x,y,key,frame]), stillPositions);
+assert.equal(diagnostics().actors.filter(({state}) => state === 'sit').length, 4, 'Reduced motion keeps both bench poses');
+visitorsLayer.destroy();
+worldBridge.emit('server:station_presence', 0);
+assert.equal(diagnostics().onlineVisitors, 6, 'Destroyed scene no longer observes presence');
+assert.ok(visitorsScene.images.every(({destroyed}) => destroyed));
+
+for (const portrait of [false, true]) {
+  const plan = crowd.stationCrowdPlan(portrait);
+  const walker = plan.find(({id}) => id === 'rounds');
+  const exactStart = crowd.stationCrowdPose(walker, 0, false, 0);
+  const nextCycleStart = crowd.stationCrowdPose(walker, (walker.travelMs + 1100) * 2, false, 0);
+  assert.deepEqual(exactStart, nextCycleStart);
+  assert.notEqual(exactStart.x, crowd.stationCrowdPose(walker, 200, false, 0).x, 'Walker crosses a finite route');
+  for (let time = 0; time < 6400; time += 100) {
+    const talking = plan.filter(({visitors}) => !visitors).filter((entry) => crowd.stationCrowdPose(entry, time, false, 0).action === 'talk');
+    assert.ok(talking.length <= 1, 'Colleagues take turns gesturing');
+    const unmatched = plan.find(({id}) => id === 'visitor-2');
+    assert.equal(crowd.stationCrowdPose(unmatched, time, false, 2).action, 'idle', 'A single waiting visitor does not gesture at empty air');
+  }
+}
+
 // The async loader must retire callbacks on shutdown and avoid adding stale sheets.
 const loaderScene = makeScene(false);
 loaderScene.cache = { json: { exists() { return false; } } };
@@ -144,4 +194,4 @@ for (const portrait of [false, true]) {
   assert.deepEqual([...moves.get('animal_squirrel')], ['idle', 'run']);
   assert.deepEqual([...moves.get('bird_tit')], ['idle', 'hop', 'flutter']);
 }
-console.log('PASS: no personal player or account items; NPC cadence/pivot, reduced motion, three-actor budget, low-power sampling, portrait placement, offscreen-only employee wrap, missing-art diagnostic and loader/layer cleanup.');
+console.log('PASS: NPC cadence, pivot, reduced motion, low-power sampling, portrait placement, bounded online crowd, seated actors, conversational turns, closed routes, fauna and loader/layer cleanup.');

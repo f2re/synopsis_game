@@ -3,8 +3,9 @@
   "schemaVersion": 1,
   "art_status": "pass",
   "art_review": "docs/art/reviews/2026-11-10-characters-inventory-review.md",
+  "crowd_art_review": "docs/art/reviews/2026-11-14-station-living-plaza.md",
   "source_format": "aseprite-rgba-frames-tags-v1",
-  "class": "R01 detailed campus NPCs; separate from modular world_character32x48",
+  "class": "R01 campus actors on the station world grid",
   "rights": "Generated for the selected project using built-in ImageGen; animated in the user-connected SpriteCook account. No third-party photographs or game art.",
   "actors": [
     {
@@ -12,7 +13,7 @@
       "name": "observer",
       "label": "Наблюдатель кампуса",
       "role": "npc",
-      "displayHeight": 64,
+      "displayHeight": 48,
       "pivot": [
         0.5,
         0.9555555555555556
@@ -62,11 +63,11 @@
       },
       "outputs": {
         "idle": {
-          "sha256": "44bdd7e75eef87a449b7d65b2ae8553bdacf83a29fc92ad6451df3b056ad5a3f",
-          "bytes": 7760,
+          "sha256": "61dbb4e5cdeef5b864700062158a17d03e1aa7a4547ad27e208d0a82857da24f",
+          "bytes": 1129,
           "frameSize": [
-            180,
-            180
+            48,
+            48
           ],
           "frameCount": 1,
           "durationsMs": [
@@ -74,19 +75,19 @@
           ],
           "frameBounds": [
             [
-              52,
-              28,
-              128,
-              172
+              14,
+              7,
+              34,
+              46
             ]
           ]
         },
         "walk": {
-          "sha256": "f34d679f2718e66d091110e094cba212d4009a3e8aea15ac970fe3a821c470f9",
-          "bytes": 48894,
+          "sha256": "c22d861552e6e4b6e4b439fbe67221c09e9d004c9b69b36d1406113b18b449e4",
+          "bytes": 6131,
           "frameSize": [
-            180,
-            180
+            48,
+            48
           ],
           "frameCount": 8,
           "durationsMs": [
@@ -101,73 +102,74 @@
           ],
           "frameBounds": [
             [
-              52,
-              28,
-              128,
-              172
+              14,
+              7,
+              34,
+              46
             ],
             [
-              56,
+              15,
+              8,
+              31,
+              46
+            ],
+            [
+              15,
+              7,
               29,
-              116,
-              172
+              46
             ],
             [
-              58,
-              25,
-              109,
-              172
-            ],
-            [
-              57,
-              25,
-              113,
-              172
-            ],
-            [
-              52,
+              15,
+              7,
               30,
-              131,
-              172
+              46
             ],
             [
-              48,
+              14,
+              8,
+              35,
+              46
+            ],
+            [
+              13,
+              9,
               32,
-              120,
-              172
+              46
             ],
             [
-              56,
-              28,
-              110,
-              172
+              15,
+              8,
+              29,
+              46
             ],
             [
-              58,
-              26,
-              109,
-              172
+              15,
+              7,
+              29,
+              46
             ]
           ]
         }
       },
       "sourceSha256": "aaa6f3b17c0b08cec6e4dc7e17338d20e624b5e7f97b05b2ac89736da267a64a",
-      "providerSha256": "79bbf62de8c71a4bcc08d4731d0e9e8e5fef2e8355d5e1daad549aabaa54d8f4"
+      "providerSha256": "79bbf62de8c71a4bcc08d4731d0e9e8e5fef2e8355d5e1daad549aabaa54d8f4",
+      "export_height": 48
     },
     {
       "id": "npc.r01.vera",
       "name": "vera",
       "label": "Вера Павловна Ладожская",
       "role": "npc",
-      "displayHeight": 60,
+      "displayHeight": 54,
       "pivot": [
         0.5,
         0.9555555555555556
       ],
       "positions": {
         "landscape": [
-          386,
-          412
+          366,
+          398
         ],
         "portrait": [
           250,
@@ -200,11 +202,11 @@
       "reduced_motion": "first idle frame, no timer",
       "outputs": {
         "idle": {
-          "sha256": "7fc8dfcad85df3db6eb115ad88b79803202bc3e8b8508345a785e05cbe12c25a",
-          "bytes": 19879,
+          "sha256": "5b9b14e9437ad9ca3d4cdec2e7367a7b5818ed9ef8af26845f7271fa4d5f5afa",
+          "bytes": 3089,
           "frameSize": [
-            180,
-            180
+            54,
+            54
           ],
           "frameCount": 6,
           "durationsMs": [
@@ -217,65 +219,66 @@
           ],
           "frameBounds": [
             [
-              66,
-              28,
-              112,
-              172
+              20,
+              8,
+              34,
+              52
             ],
             [
-              66,
-              28,
-              112,
-              172
+              20,
+              8,
+              34,
+              52
             ],
             [
-              66,
-              28,
-              112,
-              172
+              20,
+              8,
+              34,
+              52
             ],
             [
-              66,
-              29,
-              112,
-              172
+              20,
+              9,
+              34,
+              52
             ],
             [
-              66,
-              29,
-              112,
-              172
+              20,
+              9,
+              34,
+              52
             ],
             [
-              66,
-              29,
-              112,
-              172
+              20,
+              9,
+              34,
+              52
             ]
           ]
         }
       },
       "sourceSha256": "b352a0c6df1c34fe28797150c1cfb50b599b1bd69837df4ae6513d042b912fd0",
-      "providerSha256": "300255e887fe3567bfef69c094ce8713e546edddd7beafd58d6dff729fa8aa88"
+      "providerSha256": "300255e887fe3567bfef69c094ce8713e546edddd7beafd58d6dff729fa8aa88",
+      "export_height": 54
     },
     {
       "id": "companion.r01.pascal",
       "name": "pascal",
       "label": "Кот Паскаль",
       "role": "npc",
-      "displayHeight": 30,
+      "displayHeight": 27,
       "pivot": [
         0.5,
         0.9444444444444444
       ],
       "positions": {
         "landscape": [
-          405,
-          489
+          453,
+          469
         ],
         "portrait": [
-          219,
-          653
+          218,
+          639
         ]
       },
       "source": "assets/source/characters/r01/pascal.aseprite",
@@ -304,11 +307,11 @@
       "reduced_motion": "first idle frame, no timer",
       "outputs": {
         "idle": {
-          "sha256": "56117bcd43df4b89a84de2c20666c86926eb2caa9ac7cb46be83b6763156d01b",
-          "bytes": 14490,
+          "sha256": "1a8e23824ed49141c06bb0e28fdf3b17a04db25c9d5ef842a55010596d33c2a2",
+          "bytes": 1114,
           "frameSize": [
-            144,
-            144
+            27,
+            27
           ],
           "frameCount": 6,
           "durationsMs": [
@@ -321,51 +324,454 @@
           ],
           "frameBounds": [
             [
-              27,
-              24,
-              119,
-              136
+              5,
+              5,
+              22,
+              26
             ],
             [
-              27,
-              24,
-              119,
-              136
+              5,
+              5,
+              22,
+              26
             ],
             [
-              27,
-              25,
-              119,
-              136
+              5,
+              5,
+              22,
+              26
             ],
             [
-              27,
-              24,
-              119,
-              136
+              5,
+              5,
+              22,
+              26
             ],
             [
-              27,
-              24,
-              119,
-              136
+              5,
+              5,
+              22,
+              26
             ],
             [
-              27,
-              24,
-              119,
-              136
+              5,
+              5,
+              22,
+              26
             ]
           ]
         }
       },
       "sourceSha256": "e878d2873b5b7be105a004fd0be511c48a22b784cf18e5009385801df0568124",
-      "providerSha256": "ca0cc39769c07b45428c688d2ee454541c145b48840c0b7564f6247c773563ee"
+      "providerSha256": "ca0cc39769c07b45428c688d2ee454541c145b48840c0b7564f6247c773563ee",
+      "export_height": 27
+    },
+    {
+      "id": "npc.r01.field-worker",
+      "name": "field-worker",
+      "label": "Сотрудник метеоплощадки",
+      "role": "crowd",
+      "displayHeight": 48,
+      "pivot": [
+        0.5,
+        0.9583333333333334
+      ],
+      "positions": {
+        "landscape": [
+          0,
+          0
+        ],
+        "portrait": [
+          0,
+          0
+        ]
+      },
+      "source": "assets/source/characters/r01/field-worker.aseprite",
+      "source_credit": "Original pixel cels authored for 26063",
+      "outputs": {
+        "idle": {
+          "sha256": "044b27c7b5012213fe28c442098c89d9581dba53707923bbc5664720969a454b",
+          "bytes": 810,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ],
+          "frameBounds": [
+            [
+              6,
+              9,
+              25,
+              46
+            ]
+          ]
+        },
+        "walk": {
+          "sha256": "eeda77908badcf88516ec745ab9b6ba299e4dd694c4554a94c47271479d82455",
+          "bytes": 1465,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 4,
+          "durationsMs": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "frameBounds": [
+            [
+              5,
+              9,
+              25,
+              46
+            ],
+            [
+              6,
+              8,
+              23,
+              46
+            ],
+            [
+              6,
+              9,
+              23,
+              46
+            ],
+            [
+              6,
+              8,
+              23,
+              46
+            ]
+          ]
+        },
+        "sit": {
+          "sha256": "55f34408f7b5c051047fc107526291bfb44695053f62d2e3a380db8aa28584ed",
+          "bytes": 765,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ],
+          "frameBounds": [
+            [
+              6,
+              16,
+              28,
+              46
+            ]
+          ]
+        },
+        "talk": {
+          "sha256": "dd200dbbeb335f7e454a01f4fc05c17d5cc0782e869f9454237c74ce436b366e",
+          "bytes": 983,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 2,
+          "durationsMs": [
+            150,
+            150
+          ],
+          "frameBounds": [
+            [
+              6,
+              9,
+              25,
+              46
+            ],
+            [
+              6,
+              9,
+              29,
+              46
+            ]
+          ]
+        }
+      },
+      "sourceSha256": "de64e4ff4f1720f4760709c70d1ee7550ce8efa1d0c381f9a22986c626b383a7"
+    },
+    {
+      "id": "npc.r01.map-worker",
+      "name": "map-worker",
+      "label": "Сотрудница картографического зала",
+      "role": "crowd",
+      "displayHeight": 48,
+      "pivot": [
+        0.5,
+        0.9583333333333334
+      ],
+      "positions": {
+        "landscape": [
+          0,
+          0
+        ],
+        "portrait": [
+          0,
+          0
+        ]
+      },
+      "source": "assets/source/characters/r01/map-worker.aseprite",
+      "source_credit": "Original pixel cels authored for 26063",
+      "outputs": {
+        "idle": {
+          "sha256": "7f7c2d9de6e24b6f340168fa08be3f876e1e2672c315eb1496af049b24823581",
+          "bytes": 767,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ],
+          "frameBounds": [
+            [
+              8,
+              9,
+              26,
+              46
+            ]
+          ]
+        },
+        "walk": {
+          "sha256": "f552f82711cd96e303ba1c3fd0f91951ad1ee293ce72c0ecb3e18dd442dab42e",
+          "bytes": 1355,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 4,
+          "durationsMs": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "frameBounds": [
+            [
+              4,
+              9,
+              24,
+              46
+            ],
+            [
+              8,
+              8,
+              22,
+              46
+            ],
+            [
+              9,
+              9,
+              23,
+              46
+            ],
+            [
+              9,
+              8,
+              22,
+              46
+            ]
+          ]
+        },
+        "sit": {
+          "sha256": "318f26d1b62ce9e450571d1c2459ee1d1c7de405c98fe020d022e4032abc70a3",
+          "bytes": 755,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ],
+          "frameBounds": [
+            [
+              9,
+              16,
+              28,
+              46
+            ]
+          ]
+        },
+        "talk": {
+          "sha256": "acea40c090ffb39d2a64597ac0cd8deb71194916b93be6cba1871ea691ba1888",
+          "bytes": 961,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 2,
+          "durationsMs": [
+            150,
+            150
+          ],
+          "frameBounds": [
+            [
+              8,
+              9,
+              26,
+              46
+            ],
+            [
+              8,
+              9,
+              30,
+              46
+            ]
+          ]
+        }
+      },
+      "sourceSha256": "a257ef8da7dcb858922c330c763d7ce8382309a23e3cf6ab7e57e3f6de1e4f54"
+    },
+    {
+      "id": "npc.r01.shift-worker",
+      "name": "shift-worker",
+      "label": "Сотрудник дежурной смены",
+      "role": "crowd",
+      "displayHeight": 48,
+      "pivot": [
+        0.5,
+        0.9583333333333334
+      ],
+      "positions": {
+        "landscape": [
+          0,
+          0
+        ],
+        "portrait": [
+          0,
+          0
+        ]
+      },
+      "source": "assets/source/characters/r01/shift-worker.aseprite",
+      "source_credit": "Original pixel cels authored for 26063",
+      "outputs": {
+        "idle": {
+          "sha256": "2638d37a7467153e22a51d5a3026f4e178525084c454564c7e8f03284f6b3460",
+          "bytes": 727,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ],
+          "frameBounds": [
+            [
+              9,
+              8,
+              26,
+              46
+            ]
+          ]
+        },
+        "walk": {
+          "sha256": "f5291eba0d791001c7b1a867c09cf6e4a5fe0ab725d7360b217f1469a58efe4a",
+          "bytes": 1302,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 4,
+          "durationsMs": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "frameBounds": [
+            [
+              5,
+              8,
+              26,
+              46
+            ],
+            [
+              9,
+              7,
+              26,
+              46
+            ],
+            [
+              9,
+              8,
+              26,
+              46
+            ],
+            [
+              9,
+              7,
+              26,
+              46
+            ]
+          ]
+        },
+        "sit": {
+          "sha256": "d4fa48fa6afd235018a2d65704208e7e5065644411cd604ac14ac53f8323aeed",
+          "bytes": 702,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 1,
+          "durationsMs": [
+            150
+          ],
+          "frameBounds": [
+            [
+              9,
+              16,
+              28,
+              46
+            ]
+          ]
+        },
+        "talk": {
+          "sha256": "fd607904f7e7b7ed6e80019b006e2234b0ca7572b0d144a3e5744b8a73bbcd50",
+          "bytes": 921,
+          "frameSize": [
+            32,
+            48
+          ],
+          "frameCount": 2,
+          "durationsMs": [
+            150,
+            150
+          ],
+          "frameBounds": [
+            [
+              9,
+              8,
+              26,
+              46
+            ],
+            [
+              9,
+              8,
+              30,
+              46
+            ]
+          ]
+        }
+      },
+      "sourceSha256": "a22686c107af32ff9c5d364cb9e34990e710c105d2f7e396eeb6f93a515977c4"
     }
   ],
   "budget": {
-    "compressedPngBytes": 91023,
-    "decodedRgbaBytes": 2441664,
+    "compressedPngBytes": 22976,
+    "decodedRgbaBytes": 317880,
     "animatedActors": 3,
     "maximumDecodedRgbaBytes": 4194304
   }

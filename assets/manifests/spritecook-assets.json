@@ -588,6 +588,12 @@
       "asset_id": "aec6e652-df8e-46e2-a040-df7d04b66acd",
       "sha12": "eea6823e6af0",
       "label": "assets/source/environment/hub/r07/coastal-neutral-source.png"
+    },
+    {
+      "id": "assets/source/animals/station/provider/tit-world-spritecook.png",
+      "asset_id": "9769fad4-55eb-4316-9518-1cc8da9b1f4f",
+      "sha12": "14a4f0dc8b65",
+      "label": "Большая синица на территории станции"
     }
   ]
 }

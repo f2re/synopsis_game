@@ -12,8 +12,8 @@ import { getSettings } from '../features/settings/settingsStore';
 import { useAmbientWeather } from '../features/atmosphere/AtmosphereProvider';
 import { AUDIO_UNLOCK_EVENT, isAudioUnlocked } from '../features/atmosphere/audioGate';
 
-/** The world contains campus NPCs only; the account portrait belongs to React. */
-export function WorldCanvas() {
+/** The world receives aggregate presence; the account portrait belongs to React. */
+export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const hoveredBuilding = useRef<string | null>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
@@ -21,6 +21,7 @@ export function WorldCanvas() {
   const weatherRef = useRef(weather);
   const applyAudioRef = useRef<(() => void) | null>(null);
   const applyWeatherRef = useRef<(() => void) | null>(null);
+  const publishPresenceRef = useRef<((online: number) => void) | null>(null);
   weatherRef.current = weather;
 
   function publishBuildingFocus() {
@@ -53,6 +54,10 @@ export function WorldCanvas() {
     let disposed = false;
     worldAudio.setMuted(!preferences.soundEnabled || !isAudioUnlocked() || document.hidden);
     const game = createWorldGame({ parent: host });
+    publishPresenceRef.current = (online) => {
+      game.registry.set('server:station_presence', online);
+      worldBridge.emit('server:station_presence', online);
+    };
 
     const applyInput = () => {
       game.registry.set('ui.modal_open', modalOpen);
@@ -220,6 +225,7 @@ export function WorldCanvas() {
       disposed = true;
       applyAudioRef.current = null;
       applyWeatherRef.current = null;
+      publishPresenceRef.current = null;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
       window.removeEventListener(HUB_PREFERENCES_EVENT, handleStoredPreferences);
       window.removeEventListener(AUDIO_UNLOCK_EVENT, applyAudio);
@@ -234,6 +240,10 @@ export function WorldCanvas() {
       game.destroy(true);
     };
   }, []);
+
+  useEffect(() => {
+    publishPresenceRef.current?.(stationPresence);
+  }, [stationPresence]);
 
   return (
     <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание." onPointerLeave={clearBuildingHover}>

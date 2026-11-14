@@ -6,6 +6,7 @@ import type { WorldInteractionTarget } from '../../runtime/uiPreferences';
 import { getR01Layout, getR01Decor, type HubR01BuildingId } from './r01Layout';
 import type { PhaseColors } from './HubTimeOfDay';
 import { getR01PhaseStyle, normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT, R01_RAIN_FRAME_MS, type R01WeatherPresentation } from './r01Environment';
+import { R01PixelTextures } from './R01PixelTextures';
 
 type Bounds = { x: number; y: number; width: number; height: number };
 
@@ -16,6 +17,7 @@ export class HubR01Layer {
   private readonly accents: Phaser.GameObjects.Graphics;
   private readonly focus: Phaser.GameObjects.Graphics;
   private readonly rain: Phaser.GameObjects.Graphics;
+  private readonly grid: R01PixelTextures;
   private readonly coastalBackground?: Phaser.GameObjects.Image;
   private readonly campusGround?: Phaser.GameObjects.Image;
   private readonly sprites = new Map<HubR01BuildingId, Phaser.GameObjects.Image>();
@@ -35,13 +37,15 @@ export class HubR01Layer {
   private readonly unsubs: (() => void)[] = [];
 
   constructor(private readonly scene: Phaser.Scene) {
+    this.grid = new R01PixelTextures(scene.textures);
     this.layout = getR01Layout(scene.scale.width, scene.scale.height);
     this.terrain = scene.add.graphics().setDepth(2);
     this.lights = scene.add.graphics().setDepth(9);
     this.accents = scene.add.graphics().setDepth(32);
     this.focus = scene.add.graphics().setDepth(35);
     this.rain = scene.add.graphics().setDepth(34);
-    this.coastalBackground = (this.optionalImage('coastal-neutral') ?? this.optionalImage('coastal-sky'))?.setOrigin(.5, 0).setDepth(1);
+    this.coastalBackground = (this.optionalImage('coastal-neutral') ?? this.optionalImage('coastal-sky'))
+      ?.setDepth(1);
     this.campusGround = this.optionalImage('campus-ground')?.setOrigin(.5, 0).setDepth(2.5);
     for (const building of this.layout.buildings) {
       const asset = r01Assets.assets.find((candidate) => candidate.id === building.id)!;
@@ -58,38 +62,50 @@ export class HubR01Layer {
   }
 
   private optionalImage(id: string): Phaser.GameObjects.Image | undefined {
+    const key = this.optionalKey(id);
+    return key ? this.scene.add.image(0, 0, key) : undefined;
+  }
+
+  private optionalKey(id: string): string | undefined {
     const asset = r01Assets.optionalAssets.find((candidate) => candidate.id === id);
-    return asset?.enabled && this.scene.textures.exists(asset.key) ? this.scene.add.image(0, 0, asset.key) : undefined;
+    return asset?.enabled && this.scene.textures.exists(asset.key) ? asset.key : undefined;
   }
 
   private resize(): void {
     const scene = this.scene;
     this.layout = getR01Layout(scene.scale.width, scene.scale.height);
-    const {width, height, zoom, portrait, horizon, shore} = this.layout;
+    const {width, height, zoom, portrait, shore} = this.layout;
     scene.cameras.main.setViewport(0, 0, scene.scale.width, scene.scale.height);
     scene.cameras.main.setZoom(zoom).centerOn(width / 2, height / 2);
     const visibleWidth = scene.scale.width / zoom;
     const visibleHeight = scene.scale.height / zoom;
-    const top = (height - visibleHeight) / 2;
     if (this.campusGround) {
       const bottom = height / 2 + visibleHeight / 2;
-      // Cover preserves native paving and rail proportions; portrait crops the
-      // empty side paving while retaining the authored central staircase.
-      const ground = this.campusGround;
-      const scale = Math.max(visibleWidth / ground.width, (bottom - shore + 8) / ground.height);
-      ground.setPosition(width / 2, shore).setScale(scale);
+      const key = this.optionalKey('campus-ground')!;
+      const source = scene.textures.get(key).getSourceImage();
+      // The source has empty pavement behind the railing. Trim the distant strip
+      // and register the resulting edge to the river in both orientations.
+      const trim = 24;
+      const scale = Math.max((visibleWidth + 2) / source.width, (bottom - shore + 2) / (source.height - trim));
+      this.grid.fit(this.campusGround, key, scale, width / 2, shore, false, trim);
     }
 
     this.bounds.clear();
     for (const [index, building] of this.layout.buildings.entries()) {
       const sprite = this.sprites.get(building.id)!;
-      const scale = Math.min(building.width / sprite.width, building.height / sprite.height);
-      sprite.setScale(scale).setPosition(building.x + building.width / 2, building.y + building.height);
+      const key = r01Assets.assets.find((asset) => asset.id === building.id)!.key;
+      const source = scene.textures.get(key).getSourceImage();
+      const scale = Math.min(building.width / source.width, building.height / source.height);
+      this.grid.fit(sprite, key, scale, building.x + building.width / 2, building.y + building.height, true);
       sprite.setDepth(10 + index);
-      this.windowLights.get(building.id)?.setScale(scale).setPosition(sprite.x, sprite.y).setDepth(sprite.depth + .1);
+      const light = this.windowLights.get(building.id);
+      if (light) {
+        this.grid.fit(light, this.optionalKey(`light-${building.id}`)!, scale, sprite.x, sprite.y, true);
+        light.setDepth(sprite.depth + .1);
+      }
       this.bounds.set(building.id, {
-        x: sprite.x - sprite.displayWidth / 2,
-        y: sprite.y - sprite.displayHeight,
+        x: sprite.x - sprite.displayOriginX,
+        y: sprite.y - sprite.displayOriginY,
         width: sprite.displayWidth,
         height: sprite.displayHeight,
       });
@@ -102,19 +118,22 @@ export class HubR01Layer {
     for (const placement of getR01Decor(portrait)) {
       const sprite = this.optionalImage(placement.id);
       if (!sprite) continue;
-      sprite.setOrigin(.5, 1).setPosition(placement.x, placement.y).setDepth(placement.depth);
-      sprite.setScale(Math.min(placement.width / sprite.width, placement.height / sprite.height));
+      sprite.setDepth(placement.depth);
+      const scale = Math.min(placement.width / sprite.width, placement.height / sprite.height);
+      this.grid.fit(sprite, this.optionalKey(placement.id)!, scale, placement.x, placement.y, true);
       this.decor.push(sprite);
       if (placement.id === 'prop-fountain') this.fountain = sprite;
       if (placement.id === 'prop-lamp') {
         const light = this.optionalImage('light-lamp');
         if (light) {
-          light.setOrigin(.5, 1).setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setDepth(sprite.depth + .1);
+          this.grid.fit(light, this.optionalKey('light-lamp')!, scale, sprite.x, sprite.y, true);
+          light.setDepth(sprite.depth + .1);
           this.lampLights.push(light);
         }
       }
     }
     this.drawStatic();
+    this.grid.finishLayout();
     this.drawMarkers();
     this.publishTargets();
   }
@@ -137,17 +156,16 @@ export class HubR01Layer {
     return { weather: this.weather.mode, rainDrops: this.weather.animate ? R01_RAIN_DROP_LIMIT : 0, rainAnimated: this.weather.animate };
   }
 
-  private positionBackground(): void {
+  private positionBackground(key: string, waterline: number): void {
     const plate = this.coastalBackground;
     if (!plate) return;
     const { width, height, zoom, horizon, shore } = this.layout;
     const top = (height - this.scene.scale.height / zoom) / 2;
-    // Both independently authored plates share the flat shore at 62.5% height.
-    // Cover keeps their own pixel proportions; changing phase never stretches a plate.
-    const scale = Math.max(this.scene.scale.width / zoom / plate.width, (horizon - top + 8) / (plate.height * .625));
-    plate.setScale(scale).setPosition(width / 2, horizon - plate.height * scale * .625);
-    // Opaque paving covers the lower sky/water pixels. Avoid filling them twice.
-    plate.setCrop(0, 0, plate.width, this.campusGround ? Math.min(plate.height, Math.ceil((shore - plate.y) / scale) + 1) : plate.height);
+    const source = this.scene.textures.get(key).getSourceImage();
+    const scale = Math.max((this.scene.scale.width / zoom + 2) / source.width,
+      (horizon - top + 2) / (source.height * waterline));
+    this.grid.fit(plate, key, scale, width / 2, horizon - Math.round(source.height * scale) * waterline, false);
+    if (this.campusGround) plate.setCrop(0, 0, plate.width, Math.min(plate.height, Math.ceil((shore - plate.y + 1) / plate.scaleY)));
   }
 
   private publishTargets(): void {
@@ -170,9 +188,7 @@ export class HubR01Layer {
 
   private drawStatic(): void {
     const {width: w, height: h, portrait, zoom, shore} = this.layout;
-    const visibleHeight = this.scene.scale.height / zoom;
-    const top = (h - visibleHeight) / 2;
-    const bottom = h / 2 + visibleHeight / 2;
+    const bottom = (h + this.scene.scale.height / zoom) / 2;
     this.terrain.clear();
     this.lights.clear();
     const style = getR01PhaseStyle(this.phase, this.weather.mode);
@@ -181,10 +197,9 @@ export class HubR01Layer {
     this.scene.cameras.main.setBackgroundColor(this.colors.skyTop);
     if (!this.campusGround) this.terrain.fillStyle(P.stoneConcrete0).fillRect(-w, shore, w * 3, bottom - shore + 8);
     const skyId = style.sunset ? 'coastal-sky' : 'coastal-neutral';
-    const skyAsset = r01Assets.optionalAssets.find((asset) => asset.id === skyId);
-    if (skyAsset && this.scene.textures.exists(skyAsset.key)) this.coastalBackground?.setTexture(skyAsset.key);
+    const skyKey = this.optionalKey(skyId) ?? this.optionalKey('coastal-neutral') ?? this.optionalKey('coastal-sky');
+    if (skyKey) this.positionBackground(skyKey, .625);
     this.coastalBackground?.setTint(style.skyTint);
-    this.positionBackground();
     this.campusGround?.setTint(style.sceneryTint);
     this.sprites.forEach((sprite) => sprite.setTint(style.sceneryTint));
     this.decor.forEach((sprite) => sprite.setTint(style.sceneryTint));
@@ -285,6 +300,7 @@ export class HubR01Layer {
     this.lampLights.forEach((sprite) => sprite.destroy());
     this.coastalBackground?.destroy();
     this.campusGround?.destroy();
+    this.grid.destroy();
     [this.terrain,this.lights,this.accents,this.focus,this.rain].forEach((graphic) => graphic.destroy());
   }
 }

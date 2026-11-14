@@ -171,6 +171,10 @@ const server = createServer(async (request, response) => {
       sendJson(response, 200, { user: identity.me(bearer(request)) });
       return;
     }
+    if (request.method === 'POST' && path === '/api/station/presence') {
+      sendJson(response, 200, identity.renewStationPresence(bearer(request)));
+      return;
+    }
     if (request.method === 'GET' && path === '/api/identity/avatar/catalog') {
       sendJson(response, 200, { catalog: identity.getAvatarCatalog() });
       return;

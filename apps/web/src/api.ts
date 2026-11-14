@@ -312,6 +312,10 @@ export const api = {
     await revocation;
   },
   async me(signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/me', { signal }, true)).user; },
+  async renewStationPresence(signal: AbortSignal): Promise<number> {
+    const { online } = await request<{ online: unknown }>('/api/station/presence', { method: 'POST', signal }, true);
+    return typeof online === 'number' && Number.isSafeInteger(online) && online >= 0 ? online : 0;
+  },
   async updateAvatar(avatar: AvatarProfile, signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }), signal }, true)).user; },
   async equipment(signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment', { signal }, true); },
   async selectEquipmentBadge(badgeId: string | null, signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }), signal }, true); },

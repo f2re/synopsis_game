@@ -68,7 +68,7 @@ vm.runInNewContext(code, { exports: exportsObject, require: (id) => { assert(id 
 
 function render() {
   hookIndex = 0; effects.length = 0;
-  const output = exportsObject.WorldCanvas();
+  const output = exportsObject.WorldCanvas({ stationPresence: 0 });
   for (const effect of effects) effect();
   return output;
 }
