@@ -48,11 +48,37 @@ function statusForSlot(
   return expected ? 'expected' : undefined;
 }
 
+function revealKeyboardPosition(target: SVGGElement) {
+  // Keep pointer focus({preventScroll:true}) still. Only keyboard focus needs
+  // the nested-viewport correction after the browser's native focus scroll.
+  if (!target.matches(':focus-visible')) return;
+  requestAnimationFrame(() => {
+    if (!target.isConnected || document.activeElement !== target || !target.matches(':focus-visible')) return;
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+      if (!parent.classList.contains('pixel-scroll-area__viewport')) continue;
+      const rect = target.getBoundingClientRect(), frame = parent.getBoundingClientRect();
+      const style = getComputedStyle(parent);
+      const padding = (value: string) => {
+        const pixels = value.endsWith('px') ? Number.parseFloat(value) : NaN;
+        return Number.isFinite(pixels) ? Math.max(8, pixels) : 8;
+      };
+      const left = frame.left + parent.clientLeft + padding(style.scrollPaddingLeft);
+      const top = frame.top + parent.clientTop + padding(style.scrollPaddingTop);
+      const right = frame.left + parent.clientLeft + parent.clientWidth - padding(style.scrollPaddingRight);
+      const bottom = frame.top + parent.clientTop + parent.clientHeight - padding(style.scrollPaddingBottom);
+      const x = rect.left < left ? rect.left - left : rect.right > right ? rect.right - right : 0;
+      const y = rect.top < top ? rect.top - top : rect.bottom > bottom ? rect.bottom - bottom : 0;
+      if (x || y) parent.scrollBy({ left: x, top: y, behavior: 'instant' });
+    }
+  });
+}
+
 export function StationPlotTask({ payload, placements, onChange, disabled = false, results }: StationPlotTaskProps) {
   const observations = payload.observations ?? [];
   const slots = payload.slots ?? [];
   const [selectedObservationId, setSelectedObservationId] = useState<string | null>(observations[0]?.id ?? null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const suppressFocusReveal = useRef(false);
   const [minimumHitSize, setMinimumHitSize] = useState(0);
 
   useLayoutEffect(() => {
@@ -110,7 +136,12 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
     if (matches.length !== 1) return;
     const slotId = matches[0].getAttribute('data-slot-id');
     if (!slotId || !slots.some(slot => slot.id === slotId)) return;
-    matches[0].closest<SVGGElement>('.station-slot')?.focus({ preventScroll: true });
+    suppressFocusReveal.current = true;
+    try {
+      matches[0].closest<SVGGElement>('.station-slot')?.focus({ preventScroll: true });
+    } finally {
+      suppressFocusReveal.current = false;
+    }
     assign(slotId);
   }
 
@@ -179,6 +210,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                   aria-disabled={disabled}
                   tabIndex={disabled ? -1 : 0}
                   aria-label={`Позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
+                  onFocus={(event) => { if (!suppressFocusReveal.current) revealKeyboardPosition(event.currentTarget); }}
                   onClick={() => assign(slot.id)}
                   onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
                 >
@@ -203,6 +235,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                 aria-disabled={disabled}
                 tabIndex={disabled ? -1 : 0}
                 aria-label={`Позиция ${position}${observation ? `: ${observation.label}` : ', свободна'}`}
+                onFocus={(event) => { if (!suppressFocusReveal.current) revealKeyboardPosition(event.currentTarget); }}
                 onClick={() => assign(slot.id)}
                 onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
               >

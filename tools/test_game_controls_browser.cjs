@@ -410,24 +410,40 @@ async function checkStationPlotTargets(positions) {
   };
 }
 
-async function checkMapTabVisibility(page, positions) {
+async function checkMapTabVisibility(page, positions, evidence) {
   await positions.first().focus();
   for (let index = 0; index < await positions.count(); index++) {
     if (index) await page.keyboard.press('Tab');
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    assert.ok(await positions.nth(index).evaluate(node => {
-      if (document.activeElement !== node) return false;
-      const rect = node.getBoundingClientRect();
+    await settleSvgLayout(page);
+    const focus = await positions.nth(index).evaluate(node => {
+      const box = rect => ({ left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height });
+      const rect = node.getBoundingClientRect(), frames = [];
       for (let parent = node.parentElement; parent; parent = parent.parentElement) {
         if (!parent.classList.contains('pixel-scroll-area__viewport')) continue;
         const frame = parent.getBoundingClientRect();
         const left = frame.left + parent.clientLeft, top = frame.top + parent.clientTop;
-        if (rect.left < left - 2 || rect.right > left + parent.clientWidth + 2 || rect.top < top - 2 || rect.bottom > top + parent.clientHeight + 2) return false;
+        const right = left + parent.clientWidth, bottom = top + parent.clientHeight;
+        frames.push({ id: parent.id, bounds: box(frame), client: { left, top, right, bottom },
+          scrollTop: parent.scrollTop, scrollLeft: parent.scrollLeft,
+          containsFocusedShape: rect.left >= left - 2 && rect.right <= right + 2 && rect.top >= top - 2 && rect.bottom <= bottom + 2 });
       }
-      return node.contains(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2));
-    }), `Map position ${index + 1}: keyboard focus remains visible inside every scrolling frame`);
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      const target = node.querySelector('.station-slot-target');
+      return {
+        label: node.getAttribute('aria-label'), active: document.activeElement === node, focusVisible: node.matches(':focus-visible'),
+        activeTag: document.activeElement?.tagName, activeClass: document.activeElement?.getAttribute('class'),
+        activeLabel: document.activeElement?.getAttribute('aria-label'), bounds: box(rect),
+        targetBounds: target ? box(target.getBoundingClientRect()) : null, frames,
+        centerQuery: { belongsToPosition: node.contains(hit), tag: hit?.tagName, className: hit?.getAttribute('class') },
+      };
+    });
+    const visible = focus.active && focus.frames.every(frame => frame.containsFocusedShape) && focus.centerQuery.belongsToPosition;
+    if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-map-tab-${page.viewportSize().width}-${index + 1}`, viewport: page.viewportSize(), ...focus, visible });
+    if (!visible && evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-map-tab-failure-${page.viewportSize().width}-${index + 1}`);
+    assert.ok(visible, `Map position ${index + 1}: keyboard focus remains visible inside every scrolling frame: ${JSON.stringify(focus)}`);
   }
 }
+
 async function fillTask(page, task, evidence) {
   const kind = task.response.kind;
   if (kind === 'numeric') {
@@ -491,7 +507,7 @@ async function fillTask(page, task, evidence) {
       }
     }
     assert.equal(await page.locator(board ? '.station-board-observations .is-placed' : '.station-observation.is-placed').count(), task.payload.observations.length);
-    if (board) await checkMapTabVisibility(page, positions);
+    if (board) await checkMapTabVisibility(page, positions, evidence);
     else {
       const geometry = await checkStationPlotTargets(positions);
       if (evidence) evidence.report.cases.push({
@@ -696,7 +712,7 @@ async function checkShift({page, base, viewport, report, capture}) {
         await page.setViewportSize(size);
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await fillTask(page, task, { report, capture, phase: 'shift-resize' });
-        await checkMapTabVisibility(page, page.locator('.station-slot'));
+        await checkMapTabVisibility(page, page.locator('.station-slot'), { report, capture, phase: 'shift-resize' });
         await capture(page, `all-station-plot-resize-${size.width}`);
       }
     }
