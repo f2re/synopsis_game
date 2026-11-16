@@ -1,0 +1,414 @@
+{
+  "id": "environment.workrooms-r01",
+  "schemaVersion": 1,
+  "rooms": [
+    {
+      "id": "station.workroom.telegraph",
+      "class": "large_scene",
+      "art_status": "pass",
+      "source": "assets/source/environment/workrooms-r01/telegraph.aseprite",
+      "logicalSize": [
+        512,
+        288
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "provider": {
+        "name": "SpriteCook",
+        "model": "gemini-nano-banana-2.1",
+        "asset_id": "d6e112a3-024d-4a6b-9d21-a76de48552bc",
+        "source": "assets/source/environment/workrooms-r01/provider/telegraph.png",
+        "date": "2026-11-15",
+        "reference_asset_id": "1bc2db16-788b-4e09-8148-e7a1a634e8c5",
+        "sha256": "0915443bf14a959cce52377e85eb02574f4dc167cf281f4e2f7dbf1bb100ac94"
+      },
+      "provenance": {
+        "origin": "Создано SpriteCook для проекта 26063 по поручению пользователя; восстановлено 16 ноября из сохранённого ресурса",
+        "license": "project-internal-generated",
+        "thirdPartySource": false
+      },
+      "glassPolygons": [
+        [
+          [
+            90,
+            26
+          ],
+          [
+            135,
+            26
+          ],
+          [
+            135,
+            65
+          ],
+          [
+            90,
+            65
+          ]
+        ],
+        [
+          [
+            142,
+            26
+          ],
+          [
+            246,
+            26
+          ],
+          [
+            246,
+            65
+          ],
+          [
+            142,
+            65
+          ]
+        ],
+        [
+          [
+            253,
+            26
+          ],
+          [
+            294,
+            26
+          ],
+          [
+            294,
+            65
+          ],
+          [
+            253,
+            65
+          ]
+        ],
+        [
+          [
+            90,
+            74
+          ],
+          [
+            135,
+            74
+          ],
+          [
+            135,
+            155
+          ],
+          [
+            90,
+            155
+          ]
+        ],
+        [
+          [
+            142,
+            74
+          ],
+          [
+            246,
+            74
+          ],
+          [
+            246,
+            170
+          ],
+          [
+            142,
+            170
+          ]
+        ],
+        [
+          [
+            253,
+            74
+          ],
+          [
+            294,
+            74
+          ],
+          [
+            294,
+            170
+          ],
+          [
+            253,
+            170
+          ]
+        ]
+      ],
+      "occluderPolygons": [
+        [
+          [
+            108,
+            155
+          ],
+          [
+            147,
+            155
+          ],
+          [
+            147,
+            157
+          ],
+          [
+            156,
+            157
+          ],
+          [
+            159,
+            160
+          ],
+          [
+            160,
+            163
+          ],
+          [
+            160,
+            174
+          ],
+          [
+            108,
+            174
+          ]
+        ]
+      ],
+      "normalization": "Взаимно дополняющее разложение исходного изображения без изменения цвета, размеров и видимых пикселей.",
+      "assets": [
+        {
+          "id": "station.workroom.telegraph.window-view",
+          "layer": "window-view",
+          "generated": "assets/generated/environment/workrooms-r01/telegraph/window-view.png",
+          "url": "/assets/atmosphere/workrooms-r01/telegraph/window-view.png",
+          "sha256": "dac09cb90cb6f6595f0a88011a9d42a1c0a428706250e49d10f6c6c503b28521",
+          "bytes": 47388
+        },
+        {
+          "id": "station.workroom.telegraph.room-front",
+          "layer": "room-front",
+          "generated": "assets/generated/environment/workrooms-r01/telegraph/room-front.png",
+          "url": "/assets/atmosphere/workrooms-r01/telegraph/room-front.png",
+          "sha256": "129496a49632ed68f8df441688ae285f01d5f31acff6301e208b24921963405b",
+          "bytes": 182980
+        },
+        {
+          "id": "station.workroom.telegraph.window-mask",
+          "layer": "window-mask",
+          "generated": "assets/generated/environment/workrooms-r01/telegraph/window-mask.png",
+          "url": "/assets/atmosphere/workrooms-r01/telegraph/window-mask.png",
+          "sha256": "0bbb954c722c7a4286697a056efcfdb039bb1ecbe3c31871c3e1a3e4a64185e8",
+          "bytes": 921
+        }
+      ],
+      "sourceSha256": "f56e4d8462aa57dd761413eeff556ded47da4bcdb3c68ff66a03b222c32c80ab",
+      "occlusionNote": "Верх и правая грань радиоприёмника остаются в переднем слое; дождь не проходит поверх корпуса и ручки настройки.",
+      "art_review": "docs/art/reviews/2026-11-16-workrooms-source-review.md",
+      "approval": {
+        "reviewer": "/root/repository_audit",
+        "date": "2026-11-16",
+        "scope": "technical-pixel-and-source-art",
+        "sourceSha256": "f56e4d8462aa57dd761413eeff556ded47da4bcdb3c68ff66a03b222c32c80ab",
+        "outputs": {
+          "station.workroom.telegraph.window-view": "dac09cb90cb6f6595f0a88011a9d42a1c0a428706250e49d10f6c6c503b28521",
+          "station.workroom.telegraph.room-front": "129496a49632ed68f8df441688ae285f01d5f31acff6301e208b24921963405b",
+          "station.workroom.telegraph.window-mask": "0bbb954c722c7a4286697a056efcfdb039bb1ecbe3c31871c3e1a3e4a64185e8"
+        }
+      }
+    },
+    {
+      "id": "station.workroom.synoptic",
+      "class": "large_scene",
+      "art_status": "pass",
+      "source": "assets/source/environment/workrooms-r01/synoptic.aseprite",
+      "logicalSize": [
+        512,
+        288
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "provider": {
+        "name": "SpriteCook",
+        "model": "gemini-nano-banana-2.1",
+        "asset_id": "e1466f8b-85a0-4b49-a8de-40982572accc",
+        "source": "assets/source/environment/workrooms-r01/provider/synoptic.png",
+        "date": "2026-11-15",
+        "reference_asset_id": "1bc2db16-788b-4e09-8148-e7a1a634e8c5",
+        "sha256": "dfc42e61eefdc5ea646235a6827f68f01c42463f83f4b838d7968297e5a2f90b"
+      },
+      "provenance": {
+        "origin": "Создано SpriteCook для проекта 26063 по поручению пользователя; восстановлено 16 ноября из сохранённого ресурса",
+        "license": "project-internal-generated",
+        "thirdPartySource": false
+      },
+      "glassPolygons": [
+        [
+          [
+            24,
+            26
+          ],
+          [
+            70,
+            26
+          ],
+          [
+            70,
+            64
+          ],
+          [
+            24,
+            64
+          ]
+        ],
+        [
+          [
+            80,
+            26
+          ],
+          [
+            175,
+            26
+          ],
+          [
+            175,
+            64
+          ],
+          [
+            80,
+            64
+          ]
+        ],
+        [
+          [
+            184,
+            26
+          ],
+          [
+            223,
+            26
+          ],
+          [
+            223,
+            64
+          ],
+          [
+            184,
+            64
+          ]
+        ],
+        [
+          [
+            24,
+            74
+          ],
+          [
+            70,
+            74
+          ],
+          [
+            70,
+            165
+          ],
+          [
+            24,
+            165
+          ]
+        ],
+        [
+          [
+            80,
+            74
+          ],
+          [
+            175,
+            74
+          ],
+          [
+            175,
+            157
+          ],
+          [
+            80,
+            157
+          ]
+        ],
+        [
+          [
+            184,
+            74
+          ],
+          [
+            223,
+            74
+          ],
+          [
+            223,
+            157
+          ],
+          [
+            184,
+            157
+          ]
+        ]
+      ],
+      "occluderPolygons": [],
+      "normalization": "Взаимно дополняющее разложение исходного изображения без изменения цвета, размеров и видимых пикселей.",
+      "assets": [
+        {
+          "id": "station.workroom.synoptic.window-view",
+          "layer": "window-view",
+          "generated": "assets/generated/environment/workrooms-r01/synoptic/window-view.png",
+          "url": "/assets/atmosphere/workrooms-r01/synoptic/window-view.png",
+          "sha256": "e0e38c1525b9f1cab3e35ab116289ced7fe26e50a72595458208694b354bfe40",
+          "bytes": 43369
+        },
+        {
+          "id": "station.workroom.synoptic.room-front",
+          "layer": "room-front",
+          "generated": "assets/generated/environment/workrooms-r01/synoptic/room-front.png",
+          "url": "/assets/atmosphere/workrooms-r01/synoptic/room-front.png",
+          "sha256": "e98bb691d61d0210d365bb5cc3776a69a96d46ae3939f99d8ee76fc4ee78f2da",
+          "bytes": 184569
+        },
+        {
+          "id": "station.workroom.synoptic.window-mask",
+          "layer": "window-mask",
+          "generated": "assets/generated/environment/workrooms-r01/synoptic/window-mask.png",
+          "url": "/assets/atmosphere/workrooms-r01/synoptic/window-mask.png",
+          "sha256": "362909062b4ce62bedae02d398de911b907c50e00f24522ba9c2810439eb6239",
+          "bytes": 899
+        }
+      ],
+      "sourceSha256": "c15b68d0ba3ea1b9825a5126a34d7de8ffabd094dc76e45ba05591eb052be5e1",
+      "art_review": "docs/art/reviews/2026-11-16-workrooms-source-review.md",
+      "approval": {
+        "reviewer": "/root/repository_audit",
+        "date": "2026-11-16",
+        "scope": "technical-pixel-and-source-art",
+        "sourceSha256": "c15b68d0ba3ea1b9825a5126a34d7de8ffabd094dc76e45ba05591eb052be5e1",
+        "outputs": {
+          "station.workroom.synoptic.window-view": "e0e38c1525b9f1cab3e35ab116289ced7fe26e50a72595458208694b354bfe40",
+          "station.workroom.synoptic.room-front": "e98bb691d61d0210d365bb5cc3776a69a96d46ae3939f99d8ee76fc4ee78f2da",
+          "station.workroom.synoptic.window-mask": "362909062b4ce62bedae02d398de911b907c50e00f24522ba9c2810439eb6239"
+        }
+      }
+    }
+  ],
+  "budgets": {
+    "pngBytes": 650000,
+    "decodedBytes": 3600000,
+    "animatedDomElementsPerRoom": 12
+  },
+  "totals": {
+    "pngBytes": 460126,
+    "decodedBytes": 3538944
+  },
+  "browserReview": {
+    "status": "pending",
+    "scope": "live-ui-layout-input-and-performance",
+    "reason": "Локальный Chromium блокируется на socket(); браузерная приёмка ожидает артефактов CI."
+  }
+}

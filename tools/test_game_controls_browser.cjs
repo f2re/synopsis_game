@@ -5,6 +5,37 @@ const assert = require('node:assert/strict');
 const { login } = require('./test_saved_portrait_browser.cjs');
 const { exerciseScrollbar } = require('./test_all_screens_browser.cjs');
 const pathOf = response => new URL(response.url()).pathname;
+async function checkWorkroom(page, expected, report, phase) {
+  const art = page.locator('.workroom-backdrop').last();
+  await art.waitFor();
+  const geometry = await art.evaluate(async node => {
+    const images = [...node.querySelectorAll('img')];
+    await Promise.all(images.map(image => image.decode()));
+    const box = node.getBoundingClientRect(), plane = node.querySelector('.station-room-art__plane').getBoundingClientRect();
+    const viewport = document.querySelector('.app-page-viewport');
+    return {
+      room: node.dataset.room,
+      imageSizes: images.map(image => [image.naturalWidth, image.naturalHeight]),
+      imageRendering: images.map(image => getComputedStyle(image).imageRendering),
+      fixed: getComputedStyle(node).position === 'fixed',
+      passive: getComputedStyle(node).pointerEvents === 'none',
+      coversViewport: box.left <= 1 && box.top <= 1 && box.right >= innerWidth - 1 && box.bottom >= innerHeight - 1,
+      planeRatio: plane.width / plane.height,
+      paused: node.dataset.paused,
+      noPageOverflowX: !viewport || viewport.scrollWidth <= viewport.clientWidth + 1,
+      glassMask: getComputedStyle(node).getPropertyValue('--room-glass-mask'),
+    };
+  });
+  assert.equal(geometry.room, expected, `The ${phase} opens its matching room`);
+  assert.deepEqual(geometry.imageSizes, [[512, 288], [512, 288]], 'Both actual production layers have their native dimensions');
+  assert.ok(geometry.imageRendering.every(value => value === 'pixelated'), 'Room pixels are not interpolated');
+  assert.ok(geometry.fixed && geometry.passive && geometry.coversViewport, 'The full-screen room stays behind scrolling controls');
+  assert.ok(Math.abs(geometry.planeRatio - 16 / 9) < 0.005, 'Window, mask and room share an undistorted 16:9 plane');
+  assert.ok(geometry.noPageOverflowX, 'Scientific overflow stays inside its own region');
+  assert.equal(geometry.paused, 'true', 'Reduced-motion keeps the room still');
+  assert.ok(geometry.glassMask.includes(expected === 'reading' ? 'station-room-r01' : `/workrooms-r01/${expected}/`), 'Rain uses this room’s window mask');
+  report.cases.push({ name: `workroom-${phase}-${page.viewportSize().width}`, ...geometry });
+}
 async function afterClick(page, control, path, method = 'POST') {
   const pending = page.waitForResponse(response => pathOf(response) === path && response.request().method() === method);
   await control.click(); const response = await pending;
@@ -220,6 +251,14 @@ async function fillTask(page, task, evidence) {
     const stations = page.locator('.find-error-station');
     await pressWithoutPageScroll(page, stations.first());
     assert.equal(await stations.first().getAttribute('aria-pressed'), 'true');
+    const focused = await stations.first().evaluate(node => {
+      const style = getComputedStyle(node.querySelector('.find-error-hit'));
+      const bounds = node.querySelector('.find-error-hit').getBoundingClientRect();
+      return { keyboardFocus: node === document.activeElement && node.matches(':focus-visible'),
+        dashedFocus: style.strokeDasharray !== 'none', width: bounds.width, height: bounds.height };
+    });
+    assert.ok(focused.keyboardFocus && focused.dashedFocus, 'Keyboard focus is distinct from the selected station');
+    assert.ok(focused.width >= 44 && focused.height >= 44, 'Physical-control targets remain large enough');
     await stations.last().click(); assert.equal(await stations.last().getAttribute('aria-pressed'), 'true');
   } else throw new Error(`Uncovered task kind: ${kind}`);
 }
@@ -341,6 +380,7 @@ async function checkShift({page, base, viewport, report, capture}) {
   }
   await page.goto(base + '/shift');
   await page.getByRole('heading', { name: 'Записка на краю стола', exact: true }).waitFor();
+  await checkWorkroom(page, 'telegraph', report, 'handover');
   await capture(page, `all-shift-handover-${viewport.width}`);
   let state = await afterClick(page, page.getByRole('button', { name: 'Принять смену', exact: true }), '/api/shifts');
   const id = state.shiftId, kinds = new Set();
@@ -366,6 +406,13 @@ async function checkShift({page, base, viewport, report, capture}) {
   while (state.task && answered++ < 15) {
     const task = state.task; kinds.add(task.response.kind);
     await page.getByRole('heading', { name: task.question, exact: true }).waitFor();
+    const room = ['stationPlot', 'stationBoard', 'findError', 'dependencySequence'].includes(task.response.kind) ? 'synoptic' : 'telegraph';
+    await checkWorkroom(page, room, report, `shift-${task.response.kind}-${answered}`);
+    const instructions = page.locator('.shift-context > summary');
+    await instructions.focus(); await instructions.press('Enter');
+    assert.ok(await page.locator('.shift-context').evaluate(node => node.open), 'The task guide opens from keyboard');
+    await instructions.click();
+    assert.equal(await page.locator('.shift-context').evaluate(node => node.open), false, 'The task guide closes from pointer');
     const referenceButton = page.locator('.shift-assistance__button').filter({ hasText: 'Открыть справку' });
     if (!reference && await referenceButton.count() && await referenceButton.isEnabled()) {
       await afterClick(page, referenceButton, `/api/shifts/${id}/reference`); reference = true;
@@ -415,6 +462,7 @@ async function checkShift({page, base, viewport, report, capture}) {
   assert.deepEqual([...kinds].sort(), ['choice','dependencySequence','findError','numeric','sequence','stationBoard','stationPlot']);
   assert.ok(reference && retried && revealed && skippedRetry, 'Reference, reveal, leaving a retry and a second answer are all exercised against the actual server');
   const final = page.locator('.shift-debrief-overlay[open]'); await final.waitFor();
+  await checkWorkroom(page, 'reading', report, 'shift-result');
   await exerciseScrollbar(page, final.locator('.shift-debrief-scroll'), report, `all-shift-result-scroll-${viewport.width}`);
   await capture(page, `all-shift-result-${viewport.width}`);
   await final.getByRole('button', { name: 'На станцию', exact: true }).click();
@@ -423,6 +471,7 @@ async function checkShift({page, base, viewport, report, capture}) {
 async function checkBlitz({page, base, viewport, report, capture}) {
   await page.goto(base + '/blitz');
   await page.locator('.blitz-card h1').waitFor();
+  await checkWorkroom(page, 'telegraph', report, 'blitz-lobby');
   await page.locator('.blitz-profile summary').click();
   await capture(page, `all-blitz-lobby-${viewport.width}`);
   let state = await afterClick(page, page.getByRole('button', { name: /^(Начать|Новый) блиц · 90 с$/ }), '/api/blitz-practice');
@@ -444,6 +493,7 @@ async function checkBlitz({page, base, viewport, report, capture}) {
     state = result.session;
   }
   assert.equal(state.status, 'completed'); assert.equal(state.progress.answered, 6, 'Six actual UI answers finish before the actual deadline');
+  await checkWorkroom(page, 'reading', report, 'blitz-result');
   const reviews = page.locator('.blitz-review summary');
   for (let i = 0; i < await reviews.count(); i++) await reviews.nth(i).click();
   await exerciseScrollbar(page, page.locator('.app-page-scroll'), report, `all-blitz-result-scroll-${viewport.width}`);

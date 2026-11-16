@@ -5,6 +5,7 @@ import { PixelIcon } from '../ui';
 import { PixelScrollArea } from '../ui/PixelScrollArea';
 import { keepTabInDialog } from '../ui/modalFocus';
 import { AwardBadgeAnimation } from './AwardBadgeAnimation';
+import { WorkroomBackdrop } from './WorkroomBackdrop';
 import {
   ShiftWorkspace,
   type ShiftAnswerEvent,
@@ -103,7 +104,8 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
 
   if (phase === 'handover') {
     return (
-      <main className="shift-lore-shell" aria-labelledby="shift-handover-title">
+      <main className="shift-lore-shell workroom-screen workroom-screen--handover" aria-labelledby="shift-handover-title">
+        <WorkroomBackdrop />
         <section className="shift-lore-card shift-handover-card">
           <div className="shift-lore-eyebrow">
             <PixelIcon name="kn01" size="sm" />
@@ -252,6 +254,7 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
 
       {debriefReason && (
         <dialog ref={debriefDialog} className="shift-debrief-overlay" tabIndex={-1} aria-labelledby="shift-debrief-title" onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (completed) onExit(); else setDebriefReason(null); }}>
+          <WorkroomBackdrop room="reading" />
           <section className="shift-lore-card shift-debrief-card">
             <PixelScrollArea label="Итоги смены" className="shift-debrief-scroll">
             <div className="shift-lore-eyebrow">

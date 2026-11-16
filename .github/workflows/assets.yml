@@ -43,6 +43,7 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check -r tools/assets/requirements-r01.txt
           python tools/assets/build_hub_r01.py --check
+          python tools/assets/build_workrooms_r01.py --check --require-approved
       - name: Проверка структуры манифестов
         run: |
           python tools/assets/check_asset_manifests.py
