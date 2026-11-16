@@ -1,0 +1,393 @@
+{
+  "purpose": "Negative result: whole-SVG CSS origin alignment did not change the failing document.elementFromPoint probe. Temporary variants ran only after that failure and could not change the failed assertion.",
+  "sourceHead": "4e54e20a6202c14bb1e16ef01411ce4941411d41",
+  "testedMergeSha": "2f3267239ada3242f36ff681bf9f43fe96ebec4b",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43879195584,
+  "jobId": 133340209441,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43879195584",
+  "artifact": {
+    "id": 14231857208,
+    "zipSha256": "2c3f7315f0d65a2446c95a4e0092a664c9796f14e0d8697c87bfa25589851675",
+    "zipBytes": 69133425
+  },
+  "browser": "153.0",
+  "status": "FAIL",
+  "sourceRunnerSha256": {
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "813470b5953fdb172c1d3a1cc0b3445091178a02e6abff380cd8363d1c6a4d3f",
+    ".github/workflows/station-screens.yml": "4b2cbf8ca9b8460c3fc1e29af121f897fddb91b4599ef8593f35fa93be22cf71"
+  },
+  "originalReportSha256": "6cddf84a4cc5036224434e097d7be7f5e28c01fe368f6654afc4bbb75b71745e",
+  "screenshotInArtifact": {
+    "file": "all-blitz-svg-hit-failure-1366-4.png",
+    "sha256": "fa5fa62dfdf62a23a287e60f34001c88db523be30699b35b3463e28ba38a578e",
+    "retainedDuplicate": false
+  },
+  "interpretation": "The grid changes from hit at y707.883316 to miss at y708.133316 although the rectangle ends at y708.633316. square-rect, opaque-fill, pointer-fill and translate-z variants all miss. unsnapped-origin hits only after moving the shape +0.4833 CSS px relative to the fixed point; it is not a pass of the same 0.5px edge condition. Restoring the original shape restores the failure. This evidence does not identify an upstream browser bug number.",
+  "case": {
+    "name": "all-blitz-svg-edge-1366-1-4",
+    "ready": false,
+    "beforePointer": {
+      "point": {
+        "x": 943.8583526611328,
+        "y": 708.1333160400391
+      },
+      "receivesPointer": false,
+      "label": "Позиция слева сверху: Температура воздуха T",
+      "targetIndex": 0,
+      "fill": "rgba(46, 115, 150, 0.08)",
+      "fillOpacity": "1",
+      "pointerEvents": "all",
+      "hitTag": "svg",
+      "hitClass": "station-plot-svg",
+      "bounds": {
+        "left": 888.9166870117188,
+        "top": 655.0833129882812,
+        "width": 109.88333129882812,
+        "height": 53.55000305175781
+      },
+      "localPoint": {
+        "x": 300.0072189831335,
+        "y": 355.96890066024935
+      },
+      "localBox": {
+        "x": 183,
+        "y": 243,
+        "width": 234,
+        "height": 114
+      },
+      "isPointInFill": true,
+      "matrix": {
+        "a": 0.46951666474342346,
+        "b": 0,
+        "c": 0,
+        "d": 0.46951666474342346,
+        "e": 803,
+        "f": 541
+      },
+      "svgBounds": {
+        "left": 803,
+        "top": 541,
+        "right": 1272.5166625976562,
+        "bottom": 1010.5166625976562
+      },
+      "viewport": {
+        "left": 0,
+        "top": 0,
+        "right": 1340,
+        "bottom": 768,
+        "clientWidth": 1340,
+        "clientHeight": 768,
+        "scrollTop": 158.51666259765625,
+        "scrollLeft": 0
+      }
+    },
+    "afterPointer": {
+      "receivesPointer": false,
+      "hitTag": "svg",
+      "hitClass": "station-plot-svg",
+      "bounds": {
+        "left": 888.9166870117188,
+        "top": 655.0833129882812,
+        "width": 109.88333129882812,
+        "height": 53.55000305175781
+      }
+    }
+  },
+  "diagnostic": {
+    "name": "all-blitz-svg-failure-diagnostic-1366",
+    "diagnosticOnly": true,
+    "pointUnchanged": {
+      "x": 943.8583526611328,
+      "y": 708.1333160400391
+    },
+    "grid": [
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 706.1333160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 706.3833160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 706.6333160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 706.8833160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 707.1333160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 707.3833160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 707.6333160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 707.8833160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.3833160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.6333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.8833160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 709.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 709.3833160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 709.6333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 709.8833160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      },
+      {
+        "point": {
+          "x": 943.8583526611328,
+          "y": 710.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg"
+      }
+    ],
+    "variants": [
+      {
+        "name": "square-rect",
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg",
+        "bounds": {
+          "left": 888.9166870117188,
+          "top": 655.0833129882812,
+          "width": 109.88333129882812,
+          "height": 53.55000305175781
+        },
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803,
+          "f": 541
+        }
+      },
+      {
+        "name": "opaque-fill",
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg",
+        "bounds": {
+          "left": 888.9166870117188,
+          "top": 655.0833129882812,
+          "width": 109.88333129882812,
+          "height": 53.55000305175781
+        },
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803,
+          "f": 541
+        }
+      },
+      {
+        "name": "pointer-fill",
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg",
+        "bounds": {
+          "left": 888.9166870117188,
+          "top": 655.0833129882812,
+          "width": 109.88333129882812,
+          "height": 53.55000305175781
+        },
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803,
+          "f": 541
+        }
+      },
+      {
+        "name": "translate-z",
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.1333160400391
+        },
+        "receivesPointer": false,
+        "tag": "svg",
+        "className": "station-plot-svg",
+        "bounds": {
+          "left": 888.9166870117188,
+          "top": 655.0833129882812,
+          "width": 109.88333129882812,
+          "height": 53.55000305175781
+        },
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803,
+          "f": 541
+        }
+      },
+      {
+        "name": "unsnapped-origin",
+        "point": {
+          "x": 943.8583526611328,
+          "y": 708.1333160400391
+        },
+        "receivesPointer": true,
+        "tag": "rect",
+        "className": "station-slot-target",
+        "bounds": {
+          "left": 889.4000244140625,
+          "top": 655.566650390625,
+          "width": 109.88334655761719,
+          "height": 53.55000305175781
+        },
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803.4833374023438,
+          "f": 541.4833374023438
+        }
+      }
+    ],
+    "restored": {
+      "point": {
+        "x": 943.8583526611328,
+        "y": 708.1333160400391
+      },
+      "receivesPointer": false,
+      "tag": "svg",
+      "className": "station-plot-svg"
+    }
+  },
+  "historicalCoverageLimit": "The assertion stopped the runner before page.mouse.click at the failing point. Native mouse.move occurred, but no trusted click event target or assignment outcome was recorded there. This proves a disagreement between isPointInFill and document.elementFromPoint, not that a player click failed or that a future root resolver was exercised."
+}

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { stationPositionLabel } from './stationPositionLabel';
 import type {
   StationPlotComponentResult,
@@ -53,60 +53,22 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
   const slots = payload.slots ?? [];
   const [selectedObservationId, setSelectedObservationId] = useState<string | null>(observations[0]?.id ?? null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const refreshSvgGeometry = useRef<() => void>(() => {});
   const [minimumHitSize, setMinimumHitSize] = useState(0);
 
   useLayoutEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
-    let offsetX = 0, offsetY = 0, measuredHitSize = 0, frame = 0, disposed = false;
     const measure = () => {
-      if (disposed) return;
       const bounds = svg.getBoundingClientRect();
-      // Align the whole SVG viewport, including its paint and input, to one
-      // CSS-pixel origin. Keep all diagram coordinates and its scale intact.
-      // Subtract the previous translation so repeated measurements cannot
-      // accumulate an offset or alternate between two positions.
-      const left = bounds.left - offsetX, top = bounds.top - offsetY;
-      const nextX = Math.round(left) - left, nextY = Math.round(top) - top;
-      if (Math.abs(nextX - offsetX) > 0.00001 || Math.abs(nextY - offsetY) > 0.00001) {
-        offsetX = nextX; offsetY = nextY;
-        svg.style.setProperty('--station-plot-offset-x', `${offsetX}px`);
-        svg.style.setProperty('--station-plot-offset-y', `${offsetY}px`);
-      }
       // The square viewBox uses xMidYMid meet, so its scale follows the shorter side.
       const renderedSize = Math.min(bounds.width, bounds.height);
-      if (renderedSize > 0) {
-        const next = Math.ceil(44 * 1000 / renderedSize);
-        if (next !== measuredHitSize) { measuredHitSize = next; setMinimumHitSize(next); }
-      }
+      if (renderedSize > 0) setMinimumHitSize(Math.ceil(44 * 1000 / renderedSize));
     };
-    const schedule = () => {
-      if (!disposed && !frame) frame = requestAnimationFrame(() => { frame = 0; measure(); });
-    };
-    refreshSvgGeometry.current = measure;
     measure();
-    const observer = new ResizeObserver(schedule);
+    const observer = new ResizeObserver(measure);
     observer.observe(svg);
-    if (svg.parentElement) observer.observe(svg.parentElement);
-    // Native or rail scrolling may settle at a fractional offset. Only the
-    // SVG translation changes; scrolling, focus and React state stay native.
-    window.addEventListener('scroll', schedule, { capture: true, passive: true });
-    window.addEventListener('resize', schedule);
-    return () => {
-      disposed = true;
-      if (frame) cancelAnimationFrame(frame);
-      observer.disconnect();
-      window.removeEventListener('scroll', schedule, true);
-      window.removeEventListener('resize', schedule);
-      if (refreshSvgGeometry.current === measure) refreshSvgGeometry.current = () => {};
-      svg.style.removeProperty('--station-plot-offset-x');
-      svg.style.removeProperty('--station-plot-offset-y');
-    };
+    return () => observer.disconnect();
   }, []);
-
-  // An answer, clear button or wrapped caption can move an unchanged-size SVG.
-  useLayoutEffect(() => { refreshSvgGeometry.current(); });
 
   // Include the visible four-unit outline while keeping it out of hit testing.
   const targetWidth = Math.max(234, minimumHitSize);
@@ -132,6 +94,24 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
     const next = { ...placements };
     delete next[observationId];
     onChange(next);
+  }
+
+  function assignUnclaimedSvgClick(event: MouseEvent<SVGSVGElement>) {
+    const svg = event.currentTarget;
+    // Some SVG hit-test paths omit a fractional edge that is inside its fill.
+    // Resolve only otherwise-unclaimed clicks using the existing exact shape.
+    // Native group clicks and keyboard activation keep their normal handlers.
+    if (disabled || !selected || event.target !== svg) return;
+    const point = new DOMPoint(event.clientX, event.clientY);
+    const matches = [...svg.querySelectorAll<SVGGeometryElement>('.station-slot-target')].filter(target => {
+      const matrix = target.getScreenCTM();
+      return matrix !== null && target.isPointInFill(point.matrixTransform(matrix.inverse()));
+    });
+    if (matches.length !== 1) return;
+    const slotId = matches[0].getAttribute('data-slot-id');
+    if (!slotId || !slots.some(slot => slot.id === slotId)) return;
+    matches[0].closest<SVGGElement>('.station-slot')?.focus({ preventScroll: true });
+    assign(slotId);
   }
 
   return (
@@ -177,6 +157,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
           role="group"
           aria-label="Интерактивная станционная модель"
           preserveAspectRatio="xMidYMid meet"
+          onClick={assignUnclaimedSvgClick}
         >
           <circle className="station-center" cx="500" cy="500" r="56" />
           <circle className="station-center-dot" cx="500" cy="500" r="7" />
@@ -201,7 +182,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                   onClick={() => assign(slot.id)}
                   onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
                 >
-                  <circle className="station-slot-target" cx="500" cy="500" r={Math.max(127, minimumHitSize / 2)} stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
+                  <circle className="station-slot-target" data-slot-id={slot.id} cx="500" cy="500" r={Math.max(127, minimumHitSize / 2)} stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
                   <circle className="station-slot-hit wind-hit" cx="500" cy="500" r="125" pointerEvents="none" />
                   <line className="station-wind-line" x1="500" y1="500" x2={end.x} y2={end.y} />
                   {wind && (
@@ -225,7 +206,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                 onClick={() => assign(slot.id)}
                 onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
               >
-                <rect className="station-slot-target" x={slot.x - targetWidth / 2} y={slot.y - targetHeight / 2} width={targetWidth} height={targetHeight} rx="24" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
+                <rect className="station-slot-target" data-slot-id={slot.id} x={slot.x - targetWidth / 2} y={slot.y - targetHeight / 2} width={targetWidth} height={targetHeight} rx="24" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
                 <rect className="station-slot-hit" x={slot.x - 115} y={slot.y - 55} width="230" height="110" rx="22" pointerEvents="none" />
                 <text className="station-slot-text" x={slot.x} y={slot.y + 12} textAnchor="middle">
                   {observation ? observationText(observation) : '· · ·'}

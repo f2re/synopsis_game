@@ -1,5 +1,5 @@
 {
-  "purpose": "Historical failure used to compare the identical production bottom-edge sample after the painted-target change. This is diagnostic evidence, not release acceptance.",
+  "purpose": "Historical document.elementFromPoint failure for a production bottom-edge sample. Diagnostic evidence only, not release acceptance or a recorded failed native click.",
   "sourceHead": "aa8c4a5b839833c401d837aa7a7682f94e92e59e",
   "testedMergeSha": "fa95b3ac4b391ac59c60a7428193829ea38bffd3",
   "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
@@ -88,5 +88,6 @@
         "height": 53.55000305175781
       }
     }
-  }
+  },
+  "historicalCoverageLimit": "The assertion stopped the runner before page.mouse.click at the failing point. Native mouse.move occurred, but no trusted click event target or assignment outcome was recorded there. This proves a disagreement between isPointInFill and document.elementFromPoint, not that a player click failed or that a future root resolver was exercised."
 }

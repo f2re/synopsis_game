@@ -1,0 +1,540 @@
+{
+  "reviewer": "/root/task_rooms",
+  "sourceHead": "6c5d1eb515b1701c87d3ade71357e4473cfa6c4a",
+  "testedMerge": "b90185288491e32a4003bf6b03f5295c0725780f",
+  "workflowRun": "https://github.com/f2re/synopsis_game/actions/runs/43876478510",
+  "status": "PASS",
+  "scope": "Independent pixel presentation and art direction of station characters, saved portrait and modular wardrobe only. Overall Firefox screen suite failed on unrelated stationPlot SVG edge; this is not an integration PASS.",
+  "sourceReviews": [
+    "docs/art/reviews/2026-11-16-station-r02-world-source-review.md",
+    "docs/testing/2026-11-16-station-r02-modular-review.md"
+  ],
+  "reports": [
+    {
+      "artifactPath": "artifacts/pr132-6c5d1eb-screens-firefox/browser-report.json",
+      "sha256": "f4722986b11797f38046115d1004c04e4bba9b624b0a03b347ff111916059cc1",
+      "overallStatus": "FAIL",
+      "engine": "firefox",
+      "browserVersion": "153.0",
+      "caseCount": 397,
+      "screenshotCount": 226,
+      "errors": [],
+      "relevantPortraitCases": [
+        {
+          "name": "portrait-editor-static-1440",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "9af0e2e447955ed69d928aad28884b5682da4967e5b3bfc5a8b5a7b5f70dd297",
+            "up": "46c83c835090c17078865abdcefe729315f9172e393cf4e5cfef2a1260506c7f",
+            "right": "0260efaa6702c442d4d2bde1d675e19aebcfd3354e7f8bfc556539d249c555fc",
+            "down": "7286b3e86d75790a3725d9c8c56015823a3ba5f2ed052f6504b717e230f38041"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/fitting-palettes.json",
+            "/assets/avatar/modular-r01/atlas.png",
+            "/assets/avatar/modular-r01/fitting-palettes-4b37943c8315e840.png"
+          ]
+        },
+        {
+          "name": "portrait-session-snapshots-1440",
+          "ordinaryStartAndResultSha": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "blitzStartAndResultSha": "b494810f6216eea724b8d3c543f1a4b94e191adc8edd84be51e0620358efc53d",
+          "currentProfileSha": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-fresh-login-1440",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-editor-static-390",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "88c8c738b43f7c6e746bd833a938f719ada4a40cf59586e3376900a159035b93",
+            "up": "ec3b542cd294d5143a1e5e1dec7e33ec1f080cf3637e53124b5098a98082c8ba",
+            "right": "e23550f97ea5c0f953b3518234f8b3768a0eb4a4514e2c49f068466ff0433165",
+            "down": "4f6b98cb47385d7b06b4981a6fd0299ea18d8d517a0ca6865bb0e7ea06981b81"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/fitting-palettes.json",
+            "/assets/avatar/modular-r01/atlas.png",
+            "/assets/avatar/modular-r01/fitting-palettes-4b37943c8315e840.png"
+          ]
+        },
+        {
+          "name": "portrait-session-snapshots-390",
+          "ordinaryStartAndResultSha": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "blitzStartAndResultSha": "b494810f6216eea724b8d3c543f1a4b94e191adc8edd84be51e0620358efc53d",
+          "currentProfileSha": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-fresh-login-390",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-editor-static-844",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "207464d681d7bb27aa49f417ef1575758865061e1d09b6c81bbf318931bb6cc1",
+            "up": "016271196265f515c03934f9cc0057d264f6f044f7a1180b4c53f75361bff063",
+            "right": "28395ab8ab612f16b8c0ea09987fc442e8c24e850aef3626e507a916aaa3a36e",
+            "down": "87a1dccbd3fdc914fd8539f0be3c4b54405bc4978294a47623222a111ab275e8"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/fitting-palettes.json",
+            "/assets/avatar/modular-r01/atlas.png",
+            "/assets/avatar/modular-r01/fitting-palettes-4b37943c8315e840.png"
+          ]
+        },
+        {
+          "name": "portrait-session-snapshots-844",
+          "ordinaryStartAndResultSha": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "blitzStartAndResultSha": "b494810f6216eea724b8d3c543f1a4b94e191adc8edd84be51e0620358efc53d",
+          "currentProfileSha": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-fresh-login-844",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        }
+      ]
+    },
+    {
+      "artifactPath": "artifacts/pr132-6c5d1eb-screens-chromium/browser-report.json",
+      "sha256": "fea4899bedc442cc760aa3c87323500bcc916dea86783d243cd98d2ad22887c0",
+      "overallStatus": "PASS",
+      "engine": "chromium",
+      "browserVersion": "151.0.7922.34",
+      "caseCount": 637,
+      "screenshotCount": 315,
+      "errors": [],
+      "relevantPortraitCases": [
+        {
+          "name": "portrait-editor-static-1440",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "33baa24c6c4544d141caab4774c7b2816fd8392f168f8428203cbd91f960cae0",
+            "up": "16b1f6b279fcd11d79e72d58a84b864ea27f574aaa1048fd3f45c688ac7df751",
+            "right": "ae9755986136c6559017ba9b0e57e03951a12129ee3088d4dc977d8abcd8f312",
+            "down": "2e9e33dbd620cbae6462d3f352fe2d12164b83a1aa65816a0ffc029bd4da8e39"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 64,
+              "scrollWidth": 64
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/fitting-palettes.json",
+            "/assets/avatar/modular-r01/atlas.png",
+            "/assets/avatar/modular-r01/fitting-palettes-4b37943c8315e840.png"
+          ]
+        },
+        {
+          "name": "portrait-session-snapshots-1440",
+          "ordinaryStartAndResultSha": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "blitzStartAndResultSha": "b494810f6216eea724b8d3c543f1a4b94e191adc8edd84be51e0620358efc53d",
+          "currentProfileSha": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-fresh-login-1440",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-editor-static-390",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "33baa24c6c4544d141caab4774c7b2816fd8392f168f8428203cbd91f960cae0",
+            "up": "16b1f6b279fcd11d79e72d58a84b864ea27f574aaa1048fd3f45c688ac7df751",
+            "right": "ae9755986136c6559017ba9b0e57e03951a12129ee3088d4dc977d8abcd8f312",
+            "down": "2e9e33dbd620cbae6462d3f352fe2d12164b83a1aa65816a0ffc029bd4da8e39"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 73,
+              "scrollWidth": 73
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/fitting-palettes.json",
+            "/assets/avatar/modular-r01/atlas.png",
+            "/assets/avatar/modular-r01/fitting-palettes-4b37943c8315e840.png"
+          ]
+        },
+        {
+          "name": "portrait-session-snapshots-390",
+          "ordinaryStartAndResultSha": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "blitzStartAndResultSha": "b494810f6216eea724b8d3c543f1a4b94e191adc8edd84be51e0620358efc53d",
+          "currentProfileSha": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-fresh-login-390",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-editor-static-844",
+          "observedStaticMs": 400,
+          "directions": {
+            "left": "33baa24c6c4544d141caab4774c7b2816fd8392f168f8428203cbd91f960cae0",
+            "up": "16b1f6b279fcd11d79e72d58a84b864ea27f574aaa1048fd3f45c688ac7df751",
+            "right": "ae9755986136c6559017ba9b0e57e03951a12129ee3088d4dc977d8abcd8f312",
+            "down": "2e9e33dbd620cbae6462d3f352fe2d12164b83a1aa65816a0ffc029bd4da8e39"
+          },
+          "directionLabels": [
+            {
+              "label": "Спереди",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            },
+            {
+              "label": "Слева",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            },
+            {
+              "label": "Сзади",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            },
+            {
+              "label": "Справа",
+              "clientWidth": 120,
+              "scrollWidth": 120
+            }
+          ],
+          "savedFields": {
+            "skinTone": "skin.deep",
+            "hair": "hair.curl",
+            "hairColor": "haircolor.auburn",
+            "headwear": "headwear.cap",
+            "top": "top.field-jacket",
+            "bottom": "bottom.field-trousers",
+            "footwear": "footwear.boots",
+            "backpack": "backpack.field",
+            "heldItem": "held.pencil",
+            "companion": "companion.none",
+            "badge": "badge.meteo"
+          },
+          "sha256": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "fittingAtlasRequests": [
+            "/assets/avatar/modular-r01/manifest.json",
+            "/assets/avatar/modular-r01/fitting-palettes.json",
+            "/assets/avatar/modular-r01/atlas.png",
+            "/assets/avatar/modular-r01/fitting-palettes-4b37943c8315e840.png"
+          ]
+        },
+        {
+          "name": "portrait-session-snapshots-844",
+          "ordinaryStartAndResultSha": "60d7b38dd2c06167e5eb9d78ebaee33e0d3c08e8fcceea3912255b7856ed8995",
+          "blitzStartAndResultSha": "b494810f6216eea724b8d3c543f1a4b94e191adc8edd84be51e0620358efc53d",
+          "currentProfileSha": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6",
+          "ordinaryCompleted": true,
+          "blitzCompleted": "completed",
+          "faultInjection": "One aborted avatar PATCH; confirmed image and server data preserved"
+        },
+        {
+          "name": "portrait-fresh-login-844",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        }
+      ]
+    },
+    {
+      "artifactPath": "artifacts/pr132-6c5d1eb-environment-firefox/candidate/artifacts/station-environment-r07/browser-report.json",
+      "sha256": "a99357750950429288de7b1d51d1533e79db8dff12739b73987a0d1ed3712821",
+      "overallStatus": "PASS",
+      "engine": "firefox",
+      "browserVersion": "153.0",
+      "caseCount": 53,
+      "screenshotCount": 72,
+      "errors": [],
+      "relevantPortraitCases": []
+    },
+    {
+      "artifactPath": "artifacts/pr132-6c5d1eb-environment-chromium/candidate/artifacts/station-environment-r07/browser-report.json",
+      "sha256": "480867d5121c6e2edbf717e6e27ba4376663e68497cf11da57d2184812176749",
+      "overallStatus": "PASS",
+      "engine": "chromium",
+      "browserVersion": "151.0.7922.34",
+      "caseCount": 56,
+      "screenshotCount": 74,
+      "errors": [],
+      "relevantPortraitCases": []
+    }
+  ],
+  "selectedScreenshots": [
+    {
+      "selectedName": "chromium-environment-solar-day-1366.png",
+      "artifactPath": "artifacts/pr132-6c5d1eb-environment-chromium/candidate/artifacts/station-environment-r07/solar-day-1366.png",
+      "size": [
+        1366,
+        768
+      ],
+      "sha256": "e3fc5a8077a19b996d66ddbe1cf2cee1c750fc8ee620a631369dbaf4cd06d1f1"
+    },
+    {
+      "selectedName": "firefox-screens-home-390.png",
+      "artifactPath": "artifacts/pr132-6c5d1eb-screens-firefox/home-390.png",
+      "size": [
+        390,
+        844
+      ],
+      "sha256": "804a42c54dde14063e7ef286954956f704e0dbb84ad0c40d20978f10e7778a67"
+    },
+    {
+      "selectedName": "chromium-screens-home-844.png",
+      "artifactPath": "artifacts/pr132-6c5d1eb-screens-chromium/home-844.png",
+      "size": [
+        844,
+        390
+      ],
+      "sha256": "ee783b72e7df47fe518eecc040030df92ab1ef4cc613bc2d64ad30f82f109a39"
+    },
+    {
+      "selectedName": "firefox-environment-solar-night-1366.png",
+      "artifactPath": "artifacts/pr132-6c5d1eb-environment-firefox/candidate/artifacts/station-environment-r07/solar-night-1366.png",
+      "size": [
+        1366,
+        768
+      ],
+      "sha256": "9fbb71368a73bf9981cae216cc1b5bcdf51d7798c70de1e7301b9e7d09704944"
+    },
+    {
+      "selectedName": "chromium-screens-portrait-editor-saved-1440.png",
+      "artifactPath": "artifacts/pr132-6c5d1eb-screens-chromium/portrait-editor-saved-1440.png",
+      "size": [
+        1440,
+        1000
+      ],
+      "sha256": "16f74c646aa6b368f26a762d590c0662897b47fb1c9816a505fec0b54b4091a3"
+    },
+    {
+      "selectedName": "firefox-screens-portrait-editor-restored-390.png",
+      "artifactPath": "artifacts/pr132-6c5d1eb-screens-firefox/portrait-editor-restored-390.png",
+      "size": [
+        390,
+        844
+      ],
+      "sha256": "745bdf67b7a2e3e45facb0e50567285cf17ba30b16c6b51d8baff4c8a90a7afd"
+    }
+  ],
+  "reviewedFilesSha256": {
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": "6c667f15c6c4e8e4bc9942429294f09c9ed59aac79205c427014e7c0974b64fb",
+    "packages/world-engine/src/runtime/characterAssets.ts": "a674480b92a1fa30da1b707f23148ef6d93bc135974f15d1138c3233b006bc49",
+    "apps/web/public/hub/characters/manifest.json": "d1d901c1f6fae8795910c5afd4dbd32c2e3b4776cc12a54fb4d721aa6f0261c8",
+    "assets/manifests/characters.r01.json": "87745a33d7ae3a1f8790ed8b2c3bcd2fc255ef3cb0e5546b9cd381d6b0dd5d2b",
+    "packages/world-engine/src/assets/hub/station-fauna.json": "2676e1731b115e35ded68d59bdf289990e484a1caff8508bf3c97ce0ecae8b06",
+    "assets/manifests/player-modular-r01.json": "19fdca9e625358a7f62a83b6497b8d76f81e73de035d8e2a2a7ca99d1cf4333a",
+    "docs/testing/evidence/station-r02/independent-occlusion-check.json": "e7d0ea6b8c38bd1125ef94475843d21cacb414955403e992fb298e4df88fdb25",
+    "docs/testing/evidence/station-r02/station-r02-all-actors-occlusion.json": "b605f6557d8785ce046f36de6b8108aaa96149d6e58db7c901d3150b2829d633"
+  },
+  "limits": [
+    "Static browser images and actual loader diagnostics were reviewed; no full browser animation video was captured.",
+    "Runtime motion and frame cadence are supported separately by tools/test_world_characters.cjs.",
+    "Occlusion model uses authored alpha, depth and runtime poses; it excludes HUD, VFX and actor-on-actor overlap.",
+    "This review does not reapprove the pre-existing campus background or task-room UI authored by the reviewer."
+  ]
+}
