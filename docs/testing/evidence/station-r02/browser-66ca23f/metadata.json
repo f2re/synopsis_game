@@ -1,0 +1,938 @@
+{
+  "sourceHead": "66ca23f22b460211eae00a11db1d1385328546c0",
+  "sourceTree": "c3f751919d51c6edd5396fd68f5c4115d0036b7d",
+  "testedMergeSha": "de3248aa121bbdadefad9be92fa8be49eb6e7642",
+  "testedMergeTree": "c3f751919d51c6edd5396fd68f5c4115d0036b7d",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43890220174,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43890220174",
+  "checks": [
+    {
+      "id": 133379081959,
+      "name": "station-screens (chromium)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081959",
+      "completedAt": "2026-11-16T15:04:58Z"
+    },
+    {
+      "id": 133379081946,
+      "name": "Свет и погода — firefox",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081946",
+      "completedAt": "2026-11-16T14:56:39Z"
+    },
+    {
+      "id": 133379081764,
+      "name": "station-screens (firefox)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081764",
+      "completedAt": "2026-11-16T15:00:26Z"
+    },
+    {
+      "id": 133379081751,
+      "name": "validate",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220206/job/133379081751",
+      "completedAt": "2026-11-16T14:52:11Z"
+    },
+    {
+      "id": 133379081348,
+      "name": "Свет и погода — chromium",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081348",
+      "completedAt": "2026-11-16T15:02:37Z"
+    },
+    {
+      "id": 133379081307,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220141/job/133379081307",
+      "completedAt": "2026-11-16T14:55:25Z"
+    },
+    {
+      "id": 133379080581,
+      "name": "check-assets",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220113/job/133379080581",
+      "completedAt": "2026-11-16T14:52:41Z"
+    },
+    {
+      "id": 133379036049,
+      "name": "validate",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890207768/job/133379036049",
+      "completedAt": "2026-11-16T14:52:15Z"
+    },
+    {
+      "id": 133379035966,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890207903/job/133379035966",
+      "completedAt": "2026-11-16T14:55:20Z"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 14238245812,
+      "name": "station-screens-chromium-de3248aa121bbdadefad9be92fa8be49eb6e7642",
+      "bytes": 70775141,
+      "sha256": "4b78ee8d4e40be95293f3192de07c6ab0ed553e4ea290d2b4704fc6fb5490596",
+      "sourceHead": "66ca23f22b460211eae00a11db1d1385328546c0",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/artifacts/14238245812",
+      "jobId": 133379081959,
+      "jobUrl": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081959"
+    },
+    {
+      "id": 14238155192,
+      "name": "station-screens-firefox-de3248aa121bbdadefad9be92fa8be49eb6e7642",
+      "bytes": 78452353,
+      "sha256": "a901546145485c4df1e371e982a858e96a7c7ff95d01e3bb88d5ad035ff6417b",
+      "sourceHead": "66ca23f22b460211eae00a11db1d1385328546c0",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/artifacts/14238155192",
+      "jobId": 133379081764,
+      "jobUrl": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081764"
+    },
+    {
+      "id": 14238135609,
+      "name": "station-environment-chromium-de3248aa121bbdadefad9be92fa8be49eb6e7642",
+      "bytes": 71247897,
+      "sha256": "03794e251efaafd4b83beb696f41270f8a6f6531f7eb05ac2bde6c533f0eead7",
+      "sourceHead": "66ca23f22b460211eae00a11db1d1385328546c0",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/artifacts/14238135609",
+      "jobId": 133379081348,
+      "jobUrl": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081348"
+    },
+    {
+      "id": 14236019162,
+      "name": "station-environment-firefox-de3248aa121bbdadefad9be92fa8be49eb6e7642",
+      "bytes": 69811057,
+      "sha256": "1983afa49a5a3b4dabbffde727c28d72cd7de19848402649bc85608818477406",
+      "sourceHead": "66ca23f22b460211eae00a11db1d1385328546c0",
+      "url": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/artifacts/14236019162",
+      "jobId": 133379081946,
+      "jobUrl": "https://github.com/f2re/synopsis_game/actions/runs/43890220174/job/133379081946"
+    }
+  ],
+  "reviewer": "/root/repository_audit",
+  "reviewedAt": "2026-11-16T15:09:52.380727+00:00",
+  "status": "PASS",
+  "verdicts": {
+    "integration": "RELEASE_ACCEPTED for this tested source head and documented CI scope",
+    "workroomsPixelAndArt": "PASS: independent source and final browser composition review",
+    "performance": "PERF_ACCEPTED for the current change within the measured CI comparison and documented resource budgets"
+  },
+  "sourceSha256": {
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "33a4ee65eb7d2b828b6a6d5cbea57f59a96b7407b9aed0a170001f0f7aa07a1b",
+    "tools/test_saved_portrait_browser.cjs": "761e5ebaf83ced404112fad4737d48c9b9252a0e966dc7ff685b6d1b108d61e5",
+    "tools/test_station_environment_browser.cjs": "a8803c776f93e3a7ff24ed2a879b16970deeedb3e787aeb007da2e6c6c1534b9",
+    "tools/test_station_plot_hit_fallback.cjs": "fe01e6c3fccde30ce0d723f2ad2a977a9dd951a6ec377df33f5822d83dff0f40",
+    ".github/workflows/station-screens.yml": "8687a090c954a49bc06ed01ad485095d1bdabf6ef924222597f7e2ef50a37195",
+    ".github/workflows/ci.yml": "2abfb69f0fa941598de0b13634b605e8aacf8e85c7ec666ad3b4bfc3dd0f4edf",
+    "apps/web/src/features/shift/StationPlotTask.tsx": "39176a1e28d5f79573023eb48c82d41a34a057868a28be2c0de24fa68117acc8",
+    "apps/web/src/features/shift/StationPlotTask.css": "8b455f34bd77e3e2078d78d4b770e8ee5c3b4d11005ea9c5878c211df8020a1c",
+    "assets/manifests/environment.workrooms-r01.json": "9794fef14130b2cbd62d459964f1b67eee213bf666c7473e7c9a0b8ab14388ce"
+  },
+  "reportsUnmodified": true,
+  "files": [
+    {
+      "path": "reports/chromium-screens.json",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "browser-report.json",
+      "bytes": 2671007,
+      "sha256": "3740fc518d96d6bc4e1c28313348a9a97acc9646a77be1d3447410bfc6e013b0",
+      "unmodified": true,
+      "status": "PASS",
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "caseRecords": 1033,
+      "screenshotCount": 315
+    },
+    {
+      "path": "reports/firefox-screens.json",
+      "sourceArtifactId": 14238155192,
+      "sourceArtifactPath": "browser-report.json",
+      "bytes": 2707940,
+      "sha256": "c49de1ceac084923736bfb51118d64ff9c36a8f6cff8fb37d124f78fe8ab0480",
+      "unmodified": true,
+      "status": "PASS",
+      "engine": "firefox",
+      "browser": "153.0",
+      "caseRecords": 1023,
+      "screenshotCount": 312
+    },
+    {
+      "path": "reports/chromium-environment.json",
+      "sourceArtifactId": 14238135609,
+      "sourceArtifactPath": "candidate/artifacts/station-environment-r07/browser-report.json",
+      "bytes": 374881,
+      "sha256": "78323d35aaaff101eeb863ed66fb23a9763dfd17569ce591f8d9bcfc1450b31b",
+      "unmodified": true,
+      "status": "PASS",
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "caseRecords": 56,
+      "screenshotCount": 74
+    },
+    {
+      "path": "reports/firefox-environment.json",
+      "sourceArtifactId": 14236019162,
+      "sourceArtifactPath": "candidate/artifacts/station-environment-r07/browser-report.json",
+      "bytes": 363154,
+      "sha256": "a0edf9c4524ddaa2b389741ce5e1c41abf6f0b4e2c0937f180a984a185132748",
+      "unmodified": true,
+      "status": "PASS",
+      "engine": "firefox",
+      "browser": "153.0",
+      "caseRecords": 53,
+      "screenshotCount": 72
+    },
+    {
+      "path": "reports/chromium-baseline.json",
+      "sourceArtifactId": 14238135609,
+      "sourceArtifactPath": "baseline/artifacts/station-environment-r07/browser-report.json",
+      "bytes": 44071,
+      "sha256": "a826fffc260e30360aa00eaed21f687dc46f90ee8ef032a36298160587728fdd",
+      "unmodified": true,
+      "status": "PASS",
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "caseRecords": 8,
+      "screenshotCount": 8
+    },
+    {
+      "path": "screenshots/chromium-environment-solar-day-1366.png",
+      "sourceArtifactId": 14238135609,
+      "sourceArtifactPath": "candidate/artifacts/station-environment-r07/solar-day-1366.png",
+      "bytes": 1007791,
+      "sha256": "e3fc5a8077a19b996d66ddbe1cf2cee1c750fc8ee620a631369dbaf4cd06d1f1",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/chromium-screens-all-shift-handover-1366.png",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "all-shift-handover-1366.png",
+      "bytes": 395471,
+      "sha256": "546dc811d29fe4da8ae8266bcd03f43f685c7e90d8a09dab26af16310bc517ab",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/chromium-screens-all-shift-handover-844.png",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "all-shift-handover-844.png",
+      "bytes": 136858,
+      "sha256": "11622af2ca499d55ca5c269c41640dc1a398c6963ba9eb79e6f5dd22f4fe7be1",
+      "dimensions": [
+        844,
+        390
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/chromium-screens-all-task-stationPlot-6-1366.png",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "all-task-stationPlot-6-1366.png",
+      "bytes": 226027,
+      "sha256": "53628888953aa181c56dd2ad100ffbbadadbab79b846bbaed36f45f61d4e0c28",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/chromium-screens-all-task-stationPlot-6-844.png",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "all-task-stationPlot-6-844.png",
+      "bytes": 92714,
+      "sha256": "d07296bcfe228319a0486c2887716ae6e976b86ced918f43cb2c089c0f7c89ae",
+      "dimensions": [
+        844,
+        390
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/chromium-screens-home-844.png",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "home-844.png",
+      "bytes": 410022,
+      "sha256": "0cf64c1aa9e77f59c90f8b9b592babcb4f9b64c040922db42b5295a1f104f0ff",
+      "dimensions": [
+        844,
+        390
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/chromium-screens-portrait-editor-saved-1440.png",
+      "sourceArtifactId": 14238245812,
+      "sourceArtifactPath": "portrait-editor-saved-1440.png",
+      "bytes": 708567,
+      "sha256": "16f74c646aa6b368f26a762d590c0662897b47fb1c9816a505fec0b54b4091a3",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/firefox-environment-solar-night-1366.png",
+      "sourceArtifactId": 14236019162,
+      "sourceArtifactPath": "candidate/artifacts/station-environment-r07/solar-night-1366.png",
+      "bytes": 1043735,
+      "sha256": "9fbb71368a73bf9981cae216cc1b5bcdf51d7798c70de1e7301b9e7d09704944",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/firefox-screens-all-blitz-active-390.png",
+      "sourceArtifactId": 14238155192,
+      "sourceArtifactPath": "all-blitz-active-390.png",
+      "bytes": 58882,
+      "sha256": "2ea5a8b8b050a2f8f02d547002762c6bacd471cb8871f41adb696e7ba3dfbd5a",
+      "dimensions": [
+        390,
+        844
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/firefox-screens-all-station-plot-resize-844.png",
+      "sourceArtifactId": 14238155192,
+      "sourceArtifactPath": "all-station-plot-resize-844.png",
+      "bytes": 104277,
+      "sha256": "2f5852fe58cf03a43b6071c68d109d662a91dd64c47ab6d23a3cd61322eae90d",
+      "dimensions": [
+        844,
+        390
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/firefox-screens-all-task-stationPlot-6-390.png",
+      "sourceArtifactId": 14238155192,
+      "sourceArtifactPath": "all-task-stationPlot-6-390.png",
+      "bytes": 67484,
+      "sha256": "abd4fc199ce20b328be51cc05493f892d62d86ebaab7c5a410add5c0af4b402b",
+      "dimensions": [
+        390,
+        844
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/firefox-screens-home-390.png",
+      "sourceArtifactId": 14238155192,
+      "sourceArtifactPath": "home-390.png",
+      "bytes": 474033,
+      "sha256": "4821da7b3e76baa0b06fc82842da389b91542aec54f80df34b045d438c830d20",
+      "dimensions": [
+        390,
+        844
+      ],
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/firefox-screens-portrait-editor-restored-390.png",
+      "sourceArtifactId": 14238155192,
+      "sourceArtifactPath": "portrait-editor-restored-390.png",
+      "bytes": 308184,
+      "sha256": "745bdf67b7a2e3e45facb0e50567285cf17ba30b16c6b51d8baff4c8a90a7afd",
+      "dimensions": [
+        390,
+        844
+      ],
+      "unmodified": true
+    }
+  ],
+  "browserSummary": {
+    "chromium": {
+      "caseRecords": 1033,
+      "screenshots": 315,
+      "freshAssignments": 324,
+      "trustedClickRecords": 354,
+      "rootAssignmentsWithStateChange": 0,
+      "gapNegatives": 9,
+      "disabledNegatives": 3,
+      "resizeKeyboardRecords": 12,
+      "allResizeKeyboardActiveAndVisible": true,
+      "realTabFocusVisible": true,
+      "nativeLifecycle": {
+        "focusEmulation": false,
+        "isolatedProfile": true,
+        "realVisibility": true
+      }
+    },
+    "firefox": {
+      "caseRecords": 1023,
+      "screenshots": 312,
+      "freshAssignments": 324,
+      "trustedClickRecords": 354,
+      "rootAssignmentsWithStateChange": 31,
+      "gapNegatives": 9,
+      "disabledNegatives": 3,
+      "resizeKeyboardRecords": 12,
+      "allResizeKeyboardActiveAndVisible": true,
+      "realTabFocusVisible": true,
+      "nativeLifecycle": null
+    }
+  },
+  "firefoxRegressionEvidence": {
+    "all-blitz-svg-assignment-1366-1-4-filled-replacement": {
+      "nominal": {
+        "x": 944.3416976928711,
+        "y": 708.6166534423828
+      },
+      "dispatched": {
+        "x": 944,
+        "y": 709
+      },
+      "dispatchOffset": {
+        "x": -0.34169769287109375,
+        "y": 0.3833465576171875
+      },
+      "bounds": {
+        "left": 889.4000244140625,
+        "top": 655.566650390625,
+        "width": 109.88334655761719,
+        "height": 53.55000305175781
+      },
+      "viewport": {
+        "left": 0,
+        "top": 0,
+        "right": 1340,
+        "bottom": 768,
+        "clientWidth": 1340,
+        "clientHeight": 768,
+        "scrollTop": 158.51666259765625,
+        "scrollLeft": 0,
+        "scrollPadding": {
+          "left": "8px",
+          "top": "96px",
+          "right": "8px",
+          "bottom": "8px"
+        },
+        "availableArea": {
+          "left": 8,
+          "top": 96,
+          "right": 1332,
+          "bottom": 760
+        }
+      },
+      "nativeEvents": [
+        {
+          "isTrusted": true,
+          "clientX": 944,
+          "clientY": 709,
+          "button": 0,
+          "targetIsSvg": true,
+          "targetTag": "svg",
+          "targetClass": "station-plot-svg",
+          "targetSlotId": null,
+          "exactHits": [
+            "slot_01"
+          ]
+        }
+      ],
+      "beforeLabel": "Позиция слева сверху: Температура воздуха T",
+      "afterLabel": "Позиция слева сверху: Точка росы Td"
+    },
+    "all-blitz-svg-assignment-844-3-2": {
+      "nominal": {
+        "x": 642.625,
+        "y": 216.8333282470703
+      },
+      "dispatched": {
+        "x": 643,
+        "y": 217
+      },
+      "dispatchOffset": {
+        "x": 0.375,
+        "y": 0.1666717529296875
+      },
+      "bounds": {
+        "left": 597.2333374023438,
+        "top": 216.3333282470703,
+        "width": 90.7833251953125,
+        "height": 44.25
+      },
+      "viewport": {
+        "left": 0,
+        "top": 0,
+        "right": 818,
+        "bottom": 390,
+        "clientWidth": 818,
+        "clientHeight": 390,
+        "scrollTop": 597.9166870117188,
+        "scrollLeft": 0,
+        "scrollPadding": {
+          "left": "8px",
+          "top": "96px",
+          "right": "8px",
+          "bottom": "8px"
+        },
+        "availableArea": {
+          "left": 8,
+          "top": 96,
+          "right": 810,
+          "bottom": 382
+        }
+      },
+      "nativeEvents": [
+        {
+          "isTrusted": true,
+          "clientX": 643,
+          "clientY": 217,
+          "button": 0,
+          "targetIsSvg": false,
+          "targetTag": "rect",
+          "targetClass": "station-slot-target",
+          "targetSlotId": "slot_03",
+          "exactHits": [
+            "slot_03"
+          ]
+        }
+      ],
+      "beforeLabel": "Позиция справа сверху, свободна",
+      "afterLabel": "Позиция справа сверху: Давление, приведённое к уровню моря p"
+    }
+  },
+  "performance": {
+    "comparison": {
+      "baselineRevision": "a381888c034f12ec17a27b501952989b114253d1",
+      "candidateRevision": "de3248aa121bbdadefad9be92fa8be49eb6e7642",
+      "sameRunnerAndJob": true,
+      "strictPerformanceGate": false,
+      "rainScope": "Rain is measured for the candidate only; the matched baseline comparison covers clear weather.",
+      "values": [
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weatherMode": "clear",
+          "lowPower": false,
+          "comparable": true,
+          "differences": [],
+          "baselineP50Ms": 116.60000000000036,
+          "candidateP50Ms": 83.30000000000291,
+          "baselineP95Ms": 116.70000000000073,
+          "candidateP95Ms": 100,
+          "p95Ratio": 0.8568980291345276
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weatherMode": "clear",
+          "lowPower": true,
+          "comparable": true,
+          "differences": [],
+          "baselineP50Ms": 83.30000000000109,
+          "candidateP50Ms": 83.30000000000109,
+          "baselineP95Ms": 100,
+          "candidateP95Ms": 100,
+          "p95Ratio": 1
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weatherMode": "clear",
+          "lowPower": false,
+          "comparable": true,
+          "differences": [],
+          "baselineP50Ms": 100,
+          "candidateP50Ms": 100,
+          "baselineP95Ms": 116.70000000000073,
+          "candidateP95Ms": 116.70000000000073,
+          "p95Ratio": 1
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weatherMode": "clear",
+          "lowPower": true,
+          "comparable": true,
+          "differences": [],
+          "baselineP50Ms": 100,
+          "candidateP50Ms": 100,
+          "baselineP95Ms": 116.70000000000073,
+          "candidateP95Ms": 116.70000000000073,
+          "p95Ratio": 1
+        }
+      ]
+    },
+    "measurements": {
+      "chromium-baseline.json": [
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 116.60000000000036,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            24588577,
+            28384181
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 83.30000000000109,
+          "medianP95Ms": 100,
+          "heapBytesRange": [
+            26683641,
+            28004105
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 100,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            24887337,
+            28248385
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 100,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            24997910,
+            27981702
+          ]
+        }
+      ],
+      "chromium-environment.json": [
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 83.30000000000291,
+          "medianP95Ms": 100,
+          "heapBytesRange": [
+            24140853,
+            25886213
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 83.30000000000109,
+          "medianP95Ms": 100,
+          "heapBytesRange": [
+            24212033,
+            27677405
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 83.39999999999964,
+          "medianP95Ms": 100.10000000000036,
+          "heapBytesRange": [
+            25235023,
+            28139407
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 83.30000000000109,
+          "medianP95Ms": 100,
+          "heapBytesRange": [
+            24325398,
+            27930978
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 100,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            24818773,
+            26277769
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 100,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            25419010,
+            28422062
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 100,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            26162874,
+            26679038
+          ]
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 100,
+          "medianP95Ms": 116.70000000000073,
+          "heapBytesRange": [
+            24795123,
+            28094307
+          ]
+        }
+      ],
+      "firefox-environment.json": [
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.079999999999927,
+          "medianP95Ms": 17.81999999999971,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.079999999999927,
+          "medianP95Ms": 17.100000000000364,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.079999999999927,
+          "medianP95Ms": 33.02000000000044,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.099999999998545,
+          "medianP95Ms": 17.100000000002183,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.100000000002183,
+          "medianP95Ms": 34.42000000000007,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.099999999998545,
+          "medianP95Ms": 17.700000000000728,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.159999999999854,
+          "medianP95Ms": 34.35999999999967,
+          "heapBytesRange": null
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "runs": 3,
+          "warmupMs": 3000,
+          "medianP50Ms": 17.099999999999454,
+          "medianP95Ms": 17.68000000000029,
+          "heapBytesRange": null
+        }
+      ]
+    },
+    "metric": "Native browser RAF callback intervals; not guaranteed rendered FPS",
+    "softwareRendering": true,
+    "renderer": {
+      "chromium": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "firefox": {
+        "type": "webgl",
+        "renderer": "llvmpipe, or similar",
+        "vendor": "Mozilla",
+        "version": "WebGL 1.0",
+        "unmaskedRenderer": "llvmpipe, or similar",
+        "unmaskedVendor": "Mesa"
+      }
+    },
+    "fixedDateOnly": true,
+    "nativeTimersAndRaf": true,
+    "rainBaselineAvailable": false
+  },
+  "explicitSkipsAndLimits": {
+    "firefoxEnvironmentNativeHiddenResume": [
+      {
+        "name": "native-hidden-resume",
+        "reason": "Native visibility is accepted in Chromium without CDP focus emulation; Firefox is not represented as passing this check."
+      }
+    ],
+    "firefoxScreensNativeAudioAndVisibility": "NOT EXECUTED: Firefox returns after admin checks, before the Chromium-only native audio/visibility branch; a requested audio phase label does not imply execution.",
+    "firefoxHeap": "Unavailable in these measurements.",
+    "physicalDevices": "No physical phone/GPU/projector or 60 FPS claim.",
+    "longRun": "No long-duration leak, projector uptime or listening acceptance claim.",
+    "latency": "Actual input outcomes were tested; quantitative input-latency percentiles were not measured.",
+    "animation": "Source frames, logical movement and browser snapshots were checked separately; no full-cycle video claim.",
+    "resourceBytes": "PNG/decoded RGBA sizes are calculated assets, not whole-process or GPU memory."
+  },
+  "fileTotals": {
+    "reports": 6161053,
+    "screenshots": 5034045
+  }
+}

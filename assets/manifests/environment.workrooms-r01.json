@@ -407,8 +407,15 @@
     "decodedBytes": 3538944
   },
   "browserReview": {
-    "status": "pending",
+    "status": "pass",
     "scope": "live-ui-layout-input-and-performance",
-    "reason": "Локальный Chromium блокируется на socket(); браузерная приёмка ожидает артефактов CI."
+    "reviewer": "/root/repository_audit",
+    "date": "2026-11-16",
+    "headSha": "66ca23f22b460211eae00a11db1d1385328546c0",
+    "testedMergeSha": "de3248aa121bbdadefad9be92fa8be49eb6e7642",
+    "workflowRunUrl": "https://github.com/f2re/synopsis_game/actions/runs/43890220174",
+    "report": "docs/testing/2026-11-16-station-r02-integration-review.md",
+    "evidence": "docs/testing/evidence/station-r02/browser-66ca23f/metadata.json",
+    "limits": "Пределы измерений и пропуски браузерных проверок перечислены в независимом протоколе."
   }
 }

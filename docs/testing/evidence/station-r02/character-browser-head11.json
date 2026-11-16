@@ -1,0 +1,180 @@
+{
+  "reviewer": "/root/task_rooms",
+  "sourceHead": "66ca23f22b460211eae00a11db1d1385328546c0",
+  "testedMerge": "de3248aa121bbdadefad9be92fa8be49eb6e7642",
+  "workflowRun": "https://github.com/f2re/synopsis_game/actions/runs/43890220174",
+  "status": "PASS",
+  "scope": "Independent pixel presentation and art direction of station characters, animals, modular wardrobe and saved portrait. Room/UI and overall release acceptance belong to independent repository_audit.",
+  "sourceReviews": [
+    "docs/art/reviews/2026-11-16-station-r02-world-source-review.md",
+    "docs/testing/2026-11-16-station-r02-modular-review.md"
+  ],
+  "priorScopedReview": "docs/testing/evidence/station-r02/character-browser-head5.json",
+  "evidenceIndex": "docs/testing/evidence/station-r02/README.md",
+  "selectedScreenshots": [
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/screenshots/chromium-environment-solar-day-1366.png",
+      "sha256": "e3fc5a8077a19b996d66ddbe1cf2cee1c750fc8ee620a631369dbaf4cd06d1f1",
+      "size": [
+        1366,
+        768
+      ],
+      "visualStatus": "PASS",
+      "observation": "Day: all five human types and the animals retain readable silhouettes, scale and contact with the paving."
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/screenshots/firefox-environment-solar-night-1366.png",
+      "sha256": "9fbb71368a73bf9981cae216cc1b5bcdf51d7798c70de1e7301b9e7d09704944",
+      "size": [
+        1366,
+        768
+      ],
+      "visualStatus": "PASS",
+      "observation": "Night: character outlines and light accents remain visible; no bright alpha fringe."
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/screenshots/firefox-screens-home-390.png",
+      "sha256": "4821da7b3e76baa0b06fc82842da389b91542aec54f80df34b045d438c830d20",
+      "size": [
+        390,
+        844
+      ],
+      "visualStatus": "PASS",
+      "observation": "Portrait phone: observer remains complete in front of the hall facade; Pascal is visible beside the fountain; the dock does not cover their feet."
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/screenshots/chromium-screens-home-844.png",
+      "sha256": "0cf64c1aa9e77f59c90f8b9b592babcb4f9b64c040922db42b5295a1f104f0ff",
+      "size": [
+        844,
+        390
+      ],
+      "visualStatus": "PASS",
+      "observation": "Short landscape: character footlines remain above the dock and the scene retains its authored scale."
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/screenshots/chromium-screens-portrait-editor-saved-1440.png",
+      "sha256": "16f74c646aa6b368f26a762d590c0662897b47fb1c9816a505fec0b54b4091a3",
+      "size": [
+        1440,
+        1000
+      ],
+      "visualStatus": "PASS",
+      "observation": "Saved field outfit: cap, dark skin, jacket, trousers and boots join cleanly; the header portrait matches the saved appearance."
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/screenshots/firefox-screens-portrait-editor-restored-390.png",
+      "sha256": "745bdf67b7a2e3e45facb0e50567285cf17ba30b16c6b51d8baff4c8a90a7afd",
+      "size": [
+        390,
+        844
+      ],
+      "visualStatus": "PASS",
+      "observation": "Restored phone fitting: long light hair, dark skin, clothing and boots remain aligned; the header portrait matches the restored appearance."
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/reports/chromium-screens.json",
+      "sha256": "3740fc518d96d6bc4e1c28313348a9a97acc9646a77be1d3447410bfc6e013b0",
+      "status": "PASS",
+      "engine": "chromium",
+      "browserVersion": "151.0.7922.34",
+      "caseRecordCount": 1033,
+      "screenshotCount": 315,
+      "errors": [],
+      "portraitRestoration": [
+        {
+          "name": "portrait-fresh-login-1440",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-fresh-login-390",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-fresh-login-844",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        }
+      ]
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/reports/firefox-screens.json",
+      "sha256": "c49de1ceac084923736bfb51118d64ff9c36a8f6cff8fb37d124f78fe8ab0480",
+      "status": "PASS",
+      "engine": "firefox",
+      "browserVersion": "153.0",
+      "caseRecordCount": 1023,
+      "screenshotCount": 312,
+      "errors": [],
+      "portraitRestoration": [
+        {
+          "name": "portrait-fresh-login-1440",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-fresh-login-390",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        },
+        {
+          "name": "portrait-fresh-login-844",
+          "restoredAllElevenFields": true,
+          "restoredOffCropBoots": true,
+          "atlasRequestsBeforeEditor": 0,
+          "sha256": "8349e7ffc1be45c57a7e6bd0dac83f0eaa9b6a0698ff6325dc9eaa4acc93d2a6"
+        }
+      ]
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/reports/chromium-environment.json",
+      "sha256": "78323d35aaaff101eeb863ed66fb23a9763dfd17569ce591f8d9bcfc1450b31b",
+      "status": "PASS",
+      "engine": "chromium",
+      "browserVersion": "151.0.7922.34",
+      "caseRecordCount": 56,
+      "screenshotCount": 74,
+      "errors": []
+    },
+    {
+      "path": "docs/testing/evidence/station-r02/browser-66ca23f/reports/firefox-environment.json",
+      "sha256": "a0edf9c4524ddaa2b389741ce5e1c41abf6f0b4e2c0937f180a984a185132748",
+      "status": "PASS",
+      "engine": "firefox",
+      "browserVersion": "153.0",
+      "caseRecordCount": 53,
+      "screenshotCount": 72,
+      "errors": []
+    }
+  ],
+  "reviewedFilesSha256": {
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": "6c667f15c6c4e8e4bc9942429294f09c9ed59aac79205c427014e7c0974b64fb",
+    "packages/world-engine/src/runtime/characterAssets.ts": "a674480b92a1fa30da1b707f23148ef6d93bc135974f15d1138c3233b006bc49",
+    "apps/web/public/hub/characters/manifest.json": "d1d901c1f6fae8795910c5afd4dbd32c2e3b4776cc12a54fb4d721aa6f0261c8",
+    "assets/manifests/characters.r01.json": "87745a33d7ae3a1f8790ed8b2c3bcd2fc255ef3cb0e5546b9cd381d6b0dd5d2b",
+    "packages/world-engine/src/assets/hub/station-fauna.json": "2676e1731b115e35ded68d59bdf289990e484a1caff8508bf3c97ce0ecae8b06",
+    "assets/manifests/player-modular-r01.json": "19fdca9e625358a7f62a83b6497b8d76f81e73de035d8e2a2a7ca99d1cf4333a",
+    "docs/testing/evidence/station-r02/independent-occlusion-check.json": "e7d0ea6b8c38bd1125ef94475843d21cacb414955403e992fb298e4df88fdb25",
+    "docs/testing/evidence/station-r02/station-r02-all-actors-occlusion.json": "b605f6557d8785ce046f36de6b8108aaa96149d6e58db7c901d3150b2829d633"
+  },
+  "reviewedFilesIdenticalToHead5": true,
+  "limits": [
+    "Static screenshots do not demonstrate every frame of a full animation cycle. Loader frame counts, source inspection, logical motion tests and alpha-occlusion calculations are separate evidence.",
+    "The alpha-occlusion model does not include HUD, weather effects or actor-on-actor overlap. Actual screenshots separately confirm the reviewed placements relative to the dock.",
+    "No performance or full-campus redesign acceptance is inferred from this art review. Existing background art remains unchanged."
+  ]
+}
