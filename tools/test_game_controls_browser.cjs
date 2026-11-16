@@ -53,6 +53,47 @@ async function pressWithoutPageScroll(page, control) {
   assert.equal(await parent.evaluate(node => node.scrollTop), before, 'Space selects the diagram position without scrolling the page');
 }
 
+// Run only after the unchanged production probe has failed. These temporary
+// variants explain a failure; none can change the result of the asserted gate.
+async function diagnoseSvgEdge(control, point) {
+  return control.evaluate(async (node, point) => {
+    const target = node.querySelector('.station-slot-target');
+    if (!target) return null;
+    const svg = target.ownerSVGElement;
+    const saved = { targetStyle: target.getAttribute('style'), svgStyle: svg.getAttribute('style'), rx: target.getAttribute('rx') };
+    const restoreAttribute = (element, name, value) => value === null ? element.removeAttribute(name) : element.setAttribute(name, value);
+    const restore = () => {
+      restoreAttribute(target, 'style', saved.targetStyle);
+      restoreAttribute(svg, 'style', saved.svgStyle);
+      restoreAttribute(target, 'rx', saved.rx);
+    };
+    const hitAt = point => {
+      const hit = document.elementFromPoint(point.x, point.y);
+      return { point, receivesPointer: node.contains(hit), tag: hit?.tagName, className: hit?.getAttribute('class') };
+    };
+    const settle = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const grid = [];
+    for (let delta = -2; delta <= 2; delta += .25) grid.push(hitAt({ x: point.x, y: point.y + delta }));
+    const variants = [];
+    const changes = [
+      ['square-rect', () => { if (target.tagName === 'rect') target.setAttribute('rx', '0'); }],
+      ['opaque-fill', () => { target.style.fill = '#fff'; target.style.fillOpacity = '1'; target.style.opacity = '1'; }],
+      ['pointer-fill', () => { target.style.pointerEvents = 'fill'; }],
+      ['translate-z', () => { svg.style.transform = `${getComputedStyle(svg).transform} translateZ(0)`; }],
+      ['unsnapped-origin', () => { svg.style.transform = 'none'; }],
+    ];
+    try {
+      for (const [name, change] of changes) {
+        restore(); change(); await settle();
+        const rect = target.getBoundingClientRect(), matrix = target.getScreenCTM();
+        variants.push({ name, ...hitAt(point), bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+          matrix: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, e: matrix.e, f: matrix.f } });
+      }
+    } finally { restore(); await settle(); }
+    return { diagnosticOnly: true, pointUnchanged: point, grid, variants, restored: hitAt(point) };
+  }, point);
+}
+
 async function clickSvgPosition(page, control, evidence) {
   // Firefox's automatic SVG-group scrolling can miss an inner HTML viewport.
   // Use the same wheel interaction as a player, then verify the actual hit target.
@@ -85,6 +126,9 @@ async function clickSvgPosition(page, control, evidence) {
     }, { id: viewportId, axis, target: movement[axis] }, { timeout: 3_000 });
   }
   await viewport.scrollIntoViewIfNeeded();
+  // Settle the production viewport alignment before choosing a point. Once
+  // sampled, both that point and its rectangle must stay unchanged below.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const handle = await control.elementHandle();
   await page.waitForFunction(node => {
     const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
@@ -162,7 +206,11 @@ async function clickSvgPosition(page, control, evidence) {
           bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height } };
       }, probe.point);
       if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-edge-${page.viewportSize().width}-${probe.targetIndex + 1}-${index + 1}`, ready, beforePointer: probe, afterPointer });
-      if (!ready && evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-hit-failure-${page.viewportSize().width}-${index + 1}`);
+      if (!ready) {
+        if (evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-hit-failure-${page.viewportSize().width}-${index + 1}`);
+        const diagnostic = await diagnoseSvgEdge(control, probe.point);
+        if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-failure-diagnostic-${page.viewportSize().width}`, ...diagnostic });
+      }
       assert.ok(ready, `The unchanged SVG target receives click ${index + 1}: ${JSON.stringify({ ...probe, afterPointer })}`);
     }
     await page.mouse.click(probe.point.x, probe.point.y);
@@ -186,6 +234,8 @@ async function checkStationPlotTargets(positions) {
       width: rect.width, height: rect.height,
       radius: target.tagName === 'circle' ? rect.width / 2 : Number(target.getAttribute('rx') || 0) * scale,
       insideSvg: rect.left >= svg.left && rect.right <= svg.right && rect.top >= svg.top && rect.bottom <= svg.bottom,
+      outerOrigin: { x: svg.left, y: svg.top },
+      alignedOuterOrigin: Math.abs(svg.left - Math.round(svg.left)) < .025 && Math.abs(svg.top - Math.round(svg.top)) < .025,
       painted: style.fill !== 'none' && style.fill !== 'transparent' && Number(fillAlpha) > 0
         && Number(style.fillOpacity) > 0 && Number(style.opacity) > 0,
       fill: style.fill,
@@ -197,6 +247,7 @@ async function checkStationPlotTargets(positions) {
     assert.ok(target, 'Every station plot position has an explicit hit area');
     assert.ok(target.width >= 44 - 0.01 && target.height >= 44 - 0.01, `Station plot target is at least 44 CSS px: ${JSON.stringify(target)}`);
     assert.ok(target.insideSvg, 'The entire hit area remains inside its SVG');
+    assert.ok(target.alignedOuterOrigin, `The whole SVG has a stable CSS-pixel origin: ${JSON.stringify(target.outerOrigin)}`);
     assert.ok(target.painted, 'The explicit hit shape owns the visible slot fill');
     assert.ok(target.soleHitArea, 'Visible outlines and wind marks cannot extend the interactive target');
   }

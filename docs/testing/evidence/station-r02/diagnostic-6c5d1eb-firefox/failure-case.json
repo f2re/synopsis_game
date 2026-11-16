@@ -1,0 +1,107 @@
+{
+  "purpose": "Negative result: moving the state fill onto the unchanged SVG hit shape did not fix the Firefox edge failure. Historical diagnostic evidence, not release acceptance.",
+  "sourceHead": "6c5d1eb515b1701c87d3ade71357e4473cfa6c4a",
+  "testedMergeSha": "b90185288491e32a4003bf6b03f5295c0725780f",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43876478510,
+  "jobId": 133330741681,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43876478510",
+  "artifact": {
+    "id": 14229792917,
+    "zipSha256": "6cb13ea467017af24e9b3e8948fb4614fb4c41cbe2cc87b74026d9f20affdc32",
+    "zipBytes": 68818686
+  },
+  "browser": "153.0",
+  "status": "FAIL",
+  "sourceRunnerSha256": {
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "752e713fecadc3b5c38974aeb845c22781cd77868756fe9cf51bdea7a09bf87e",
+    ".github/workflows/station-screens.yml": "4b2cbf8ca9b8460c3fc1e29af121f897fddb91b4599ef8593f35fa93be22cf71"
+  },
+  "originalReportSha256": "f4722986b11797f38046115d1004c04e4bba9b624b0a03b347ff111916059cc1",
+  "screenshotInArtifact": {
+    "file": "all-blitz-svg-hit-failure-1366-4.png",
+    "sha256": "aafece7a9d841629057474c18e9c460f29463c6ec1aa213f9ab0d49eedd436a1",
+    "retainedDuplicate": false,
+    "earlierEquivalentDiagnostic": "../diagnostic-aa8c4a5-firefox/all-blitz-svg-hit-failure-1366-4.png"
+  },
+  "comparisonWithPreviousFailure": {
+    "point": true,
+    "bounds": true,
+    "localPoint": true,
+    "localBox": true,
+    "matrix": true,
+    "svgBounds": true,
+    "viewport": true
+  },
+  "case": {
+    "name": "all-blitz-svg-edge-1366-1-4",
+    "ready": false,
+    "beforePointer": {
+      "point": {
+        "x": 944.3416976928711,
+        "y": 708.6166534423828
+      },
+      "receivesPointer": false,
+      "label": "Позиция слева сверху: Температура воздуха T",
+      "targetIndex": 0,
+      "fill": "rgba(46, 115, 150, 0.08)",
+      "fillOpacity": "1",
+      "pointerEvents": "all",
+      "hitTag": "svg",
+      "hitClass": "station-plot-svg",
+      "bounds": {
+        "left": 889.4000244140625,
+        "top": 655.566650390625,
+        "width": 109.88334655761719,
+        "height": 53.55000305175781
+      },
+      "localPoint": {
+        "x": 300.0072524105235,
+        "y": 355.9689178381741
+      },
+      "localBox": {
+        "x": 183,
+        "y": 243,
+        "width": 234,
+        "height": 114
+      },
+      "isPointInFill": true,
+      "matrix": {
+        "a": 0.46951666474342346,
+        "b": 0,
+        "c": 0,
+        "d": 0.46951666474342346,
+        "e": 803.4833374023438,
+        "f": 541.4833374023438
+      },
+      "svgBounds": {
+        "left": 803.4833374023438,
+        "top": 541.4833374023438,
+        "right": 1273,
+        "bottom": 1011
+      },
+      "viewport": {
+        "left": 0,
+        "top": 0,
+        "right": 1340,
+        "bottom": 768,
+        "clientWidth": 1340,
+        "clientHeight": 768,
+        "scrollTop": 158.51666259765625,
+        "scrollLeft": 0
+      }
+    },
+    "afterPointer": {
+      "receivesPointer": false,
+      "hitTag": "svg",
+      "hitClass": "station-plot-svg",
+      "bounds": {
+        "left": 889.4000244140625,
+        "top": 655.566650390625,
+        "width": 109.88334655761719,
+        "height": 53.55000305175781
+      }
+    }
+  }
+}

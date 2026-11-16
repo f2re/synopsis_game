@@ -1,0 +1,92 @@
+{
+  "purpose": "Historical failure used to compare the identical production bottom-edge sample after the painted-target change. This is diagnostic evidence, not release acceptance.",
+  "sourceHead": "aa8c4a5b839833c401d837aa7a7682f94e92e59e",
+  "testedMergeSha": "fa95b3ac4b391ac59c60a7428193829ea38bffd3",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43873505129,
+  "jobId": 133320471705,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43873505129",
+  "artifact": {
+    "id": 14229062610,
+    "zipSha256": "b4158de5abb7cfab9a8cef12144039f6d490c2336ea215d4c10ccdda9fab334e",
+    "zipBytes": 73048333
+  },
+  "browser": "153.0",
+  "status": "FAIL",
+  "sourceRunnerSha256": {
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "5b1c080d064efe8fd07e2d494d910da8abc5358db7022b19bd2b1499396fc76e",
+    ".github/workflows/station-screens.yml": "4b2cbf8ca9b8460c3fc1e29af121f897fddb91b4599ef8593f35fa93be22cf71"
+  },
+  "originalReportSha256": "ab43e50e5165ea0a75950826007cbeb59f5ac25fb73bd0938c8acc95f21564ae",
+  "screenshot": {
+    "file": "all-blitz-svg-hit-failure-1366-4.png",
+    "sha256": "f07d8c8c8d41be7b320899755332dc5bb1499ade042787c3c0546e8d2074780e"
+  },
+  "case": {
+    "name": "all-blitz-svg-edge-1366-4",
+    "ready": false,
+    "beforePointer": {
+      "point": {
+        "x": 944.3416976928711,
+        "y": 708.6166534423828
+      },
+      "receivesPointer": false,
+      "label": "Позиция слева сверху: Температура воздуха T",
+      "hitTag": "svg",
+      "hitClass": "station-plot-svg",
+      "bounds": {
+        "left": 889.4000244140625,
+        "top": 655.566650390625,
+        "width": 109.88334655761719,
+        "height": 53.55000305175781
+      },
+      "localPoint": {
+        "x": 300.0072524105235,
+        "y": 355.9689178381741
+      },
+      "localBox": {
+        "x": 183,
+        "y": 243,
+        "width": 234,
+        "height": 114
+      },
+      "isPointInFill": true,
+      "matrix": {
+        "a": 0.46951666474342346,
+        "b": 0,
+        "c": 0,
+        "d": 0.46951666474342346,
+        "e": 803.4833374023438,
+        "f": 541.4833374023438
+      },
+      "svgBounds": {
+        "left": 803.4833374023438,
+        "top": 541.4833374023438,
+        "right": 1273,
+        "bottom": 1011
+      },
+      "viewport": {
+        "left": 0,
+        "top": 0,
+        "right": 1340,
+        "bottom": 768,
+        "clientWidth": 1340,
+        "clientHeight": 768,
+        "scrollTop": 158.51666259765625,
+        "scrollLeft": 0
+      }
+    },
+    "afterPointer": {
+      "receivesPointer": false,
+      "hitTag": "svg",
+      "hitClass": "station-plot-svg",
+      "bounds": {
+        "left": 889.4000244140625,
+        "top": 655.566650390625,
+        "width": 109.88334655761719,
+        "height": 53.55000305175781
+      }
+    }
+  }
+}

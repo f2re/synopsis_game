@@ -53,22 +53,60 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
   const slots = payload.slots ?? [];
   const [selectedObservationId, setSelectedObservationId] = useState<string | null>(observations[0]?.id ?? null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const refreshSvgGeometry = useRef<() => void>(() => {});
   const [minimumHitSize, setMinimumHitSize] = useState(0);
 
   useLayoutEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
+    let offsetX = 0, offsetY = 0, measuredHitSize = 0, frame = 0, disposed = false;
     const measure = () => {
+      if (disposed) return;
       const bounds = svg.getBoundingClientRect();
+      // Align the whole SVG viewport, including its paint and input, to one
+      // CSS-pixel origin. Keep all diagram coordinates and its scale intact.
+      // Subtract the previous translation so repeated measurements cannot
+      // accumulate an offset or alternate between two positions.
+      const left = bounds.left - offsetX, top = bounds.top - offsetY;
+      const nextX = Math.round(left) - left, nextY = Math.round(top) - top;
+      if (Math.abs(nextX - offsetX) > 0.00001 || Math.abs(nextY - offsetY) > 0.00001) {
+        offsetX = nextX; offsetY = nextY;
+        svg.style.setProperty('--station-plot-offset-x', `${offsetX}px`);
+        svg.style.setProperty('--station-plot-offset-y', `${offsetY}px`);
+      }
       // The square viewBox uses xMidYMid meet, so its scale follows the shorter side.
       const renderedSize = Math.min(bounds.width, bounds.height);
-      if (renderedSize > 0) setMinimumHitSize(Math.ceil(44 * 1000 / renderedSize));
+      if (renderedSize > 0) {
+        const next = Math.ceil(44 * 1000 / renderedSize);
+        if (next !== measuredHitSize) { measuredHitSize = next; setMinimumHitSize(next); }
+      }
     };
+    const schedule = () => {
+      if (!disposed && !frame) frame = requestAnimationFrame(() => { frame = 0; measure(); });
+    };
+    refreshSvgGeometry.current = measure;
     measure();
-    const observer = new ResizeObserver(measure);
+    const observer = new ResizeObserver(schedule);
     observer.observe(svg);
-    return () => observer.disconnect();
+    if (svg.parentElement) observer.observe(svg.parentElement);
+    // Native or rail scrolling may settle at a fractional offset. Only the
+    // SVG translation changes; scrolling, focus and React state stay native.
+    window.addEventListener('scroll', schedule, { capture: true, passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      disposed = true;
+      if (frame) cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('scroll', schedule, true);
+      window.removeEventListener('resize', schedule);
+      if (refreshSvgGeometry.current === measure) refreshSvgGeometry.current = () => {};
+      svg.style.removeProperty('--station-plot-offset-x');
+      svg.style.removeProperty('--station-plot-offset-y');
+    };
   }, []);
+
+  // An answer, clear button or wrapped caption can move an unchanged-size SVG.
+  useLayoutEffect(() => { refreshSvgGeometry.current(); });
 
   // Include the visible four-unit outline while keeping it out of hit testing.
   const targetWidth = Math.max(234, minimumHitSize);
