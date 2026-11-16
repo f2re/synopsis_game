@@ -1,0 +1,246 @@
+{
+  "candidatePascal": [
+    548,
+    471
+  ],
+  "source": "station-r02-occlusion-poses.json",
+  "method": "Independent numpy alpha intersection with native RGBA cels and actual rounded min-fit prop masks; source PNG hashes separately matched. Actor-on-actor overlap, HUD and VFX excluded.",
+  "layouts": [
+    {
+      "orientation": "landscape",
+      "actors": [
+        {
+          "id": "character.r01.observer",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 409
+        },
+        {
+          "id": "npc.r01.vera",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 457
+        },
+        {
+          "id": "companion.r01.pascal",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 226
+        },
+        {
+          "id": "animal_squirrel",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0268,
+          "minVisiblePixels": 240
+        },
+        {
+          "id": "bird_tit",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 100
+        },
+        {
+          "id": "bench-west",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614
+        },
+        {
+          "id": "bench-east",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 488
+        },
+        {
+          "id": "colleague-west",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 416
+        },
+        {
+          "id": "colleague-east",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 553
+        },
+        {
+          "id": "rounds",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0135,
+          "minVisiblePixels": 429
+        },
+        {
+          "id": "visitor-1",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.466,
+          "minVisiblePixels": 228
+        },
+        {
+          "id": "visitor-2",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0339,
+          "minVisiblePixels": 428
+        },
+        {
+          "id": "visitor-3",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0865,
+          "minVisiblePixels": 380
+        },
+        {
+          "id": "visitor-4",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.7577,
+          "minVisiblePixels": 134
+        },
+        {
+          "id": "visitor-5",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 484
+        },
+        {
+          "id": "visitor-6",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614
+        }
+      ],
+      "differencesFromAuthor": []
+    },
+    {
+      "orientation": "portrait",
+      "actors": [
+        {
+          "id": "character.r01.observer",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 409
+        },
+        {
+          "id": "npc.r01.vera",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 457
+        },
+        {
+          "id": "companion.r01.pascal",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 226
+        },
+        {
+          "id": "animal_squirrel",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.2447,
+          "minVisiblePixels": 209
+        },
+        {
+          "id": "bird_tit",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 100
+        },
+        {
+          "id": "bench-west",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614
+        },
+        {
+          "id": "bench-east",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 488
+        },
+        {
+          "id": "colleague-west",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 416
+        },
+        {
+          "id": "colleague-east",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 553
+        },
+        {
+          "id": "rounds",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 429
+        },
+        {
+          "id": "visitor-1",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.3582,
+          "minVisiblePixels": 267
+        },
+        {
+          "id": "visitor-2",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 443
+        },
+        {
+          "id": "visitor-3",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 416
+        },
+        {
+          "id": "visitor-4",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0334,
+          "minVisiblePixels": 521
+        },
+        {
+          "id": "visitor-5",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 484
+        },
+        {
+          "id": "visitor-6",
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614
+        }
+      ],
+      "differencesFromAuthor": []
+    }
+  ]
+}

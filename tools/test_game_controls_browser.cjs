@@ -124,8 +124,11 @@ async function clickSvgPosition(page, control, evidence) {
       const svg = hitArea.ownerSVGElement.getBoundingClientRect();
       const viewport = node.closest('.pixel-scroll-area__viewport');
       const frame = viewport.getBoundingClientRect();
+      const style = getComputedStyle(hitArea);
       return {
         point, receivesPointer: node.contains(hit), label: node.getAttribute('aria-label'),
+        targetIndex: [...hitArea.ownerSVGElement.querySelectorAll('.station-slot')].indexOf(node),
+        fill: style.fill, fillOpacity: style.fillOpacity, pointerEvents: style.pointerEvents,
         hitTag: hit?.tagName, hitClass: hit?.getAttribute('class'),
         bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
         localPoint: { x: local.x, y: local.y },
@@ -148,14 +151,17 @@ async function clickSvgPosition(page, control, evidence) {
       const sameRectangle = ['left', 'top', 'width', 'height'].every(key => Math.abs(rect[key] - bounds[key]) < 0.02);
       return sameRectangle && node.contains(document.elementFromPoint(point.x, point.y));
     }, { node: handle, point: probe.point, bounds: probe.bounds }, { timeout: 1_500, polling: 'raf' }).then(() => true, () => false);
-    if (!probe.receivesPointer || !ready) {
+    // Preserve the formerly failing bottom-edge geometry even after it passes.
+    // This is the actual production component after real UI answers and scroll,
+    // not a reconstructed SVG fixture with different layout or paint state.
+    if (!probe.receivesPointer || !ready || (pointCount > 1 && index === 3)) {
       const afterPointer = await control.evaluate((node, point) => {
         const target = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
         const rect = target.getBoundingClientRect(), hit = document.elementFromPoint(point.x, point.y);
         return { receivesPointer: node.contains(hit), hitTag: hit?.tagName, hitClass: hit?.getAttribute('class'),
           bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height } };
       }, probe.point);
-      if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-edge-${page.viewportSize().width}-${index + 1}`, ready, beforePointer: probe, afterPointer });
+      if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-edge-${page.viewportSize().width}-${probe.targetIndex + 1}-${index + 1}`, ready, beforePointer: probe, afterPointer });
       if (!ready && evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-hit-failure-${page.viewportSize().width}-${index + 1}`);
       assert.ok(ready, `The unchanged SVG target receives click ${index + 1}: ${JSON.stringify({ ...probe, afterPointer })}`);
     }
@@ -173,12 +179,16 @@ async function checkStationPlotTargets(positions) {
     const scale = Math.hypot(matrix.a, matrix.b);
     const svg = target.ownerSVGElement.getBoundingClientRect();
     const style = getComputedStyle(target);
+    const fillAlpha = style.fill.match(/^rgba\(.+,\s*([.\d]+)\)$/)?.[1] ?? '1';
     return {
       label: node.getAttribute('aria-label'), kind: target.tagName,
       left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
       width: rect.width, height: rect.height,
       radius: target.tagName === 'circle' ? rect.width / 2 : Number(target.getAttribute('rx') || 0) * scale,
       insideSvg: rect.left >= svg.left && rect.right <= svg.right && rect.top >= svg.top && rect.bottom <= svg.bottom,
+      painted: style.fill !== 'none' && style.fill !== 'transparent' && Number(fillAlpha) > 0
+        && Number(style.fillOpacity) > 0 && Number(style.opacity) > 0,
+      fill: style.fill,
       soleHitArea: style.pointerEvents === 'all' && style.stroke === 'none' && Number.parseFloat(style.strokeWidth) === 0
         && [...node.querySelectorAll(':scope > :not(.station-slot-target)')].every(shape => getComputedStyle(shape).pointerEvents === 'none'),
     };
@@ -187,6 +197,7 @@ async function checkStationPlotTargets(positions) {
     assert.ok(target, 'Every station plot position has an explicit hit area');
     assert.ok(target.width >= 44 - 0.01 && target.height >= 44 - 0.01, `Station plot target is at least 44 CSS px: ${JSON.stringify(target)}`);
     assert.ok(target.insideSvg, 'The entire hit area remains inside its SVG');
+    assert.ok(target.painted, 'The explicit hit shape owns the visible slot fill');
     assert.ok(target.soleHitArea, 'Visible outlines and wind marks cannot extend the interactive target');
   }
   const center = shape => ({ x: (shape.left + shape.right) / 2, y: (shape.top + shape.bottom) / 2 });

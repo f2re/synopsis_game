@@ -163,7 +163,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                   onClick={() => assign(slot.id)}
                   onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
                 >
-                  <circle className="station-slot-target" cx="500" cy="500" r={Math.max(127, minimumHitSize / 2)} fill="transparent" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
+                  <circle className="station-slot-target" cx="500" cy="500" r={Math.max(127, minimumHitSize / 2)} stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
                   <circle className="station-slot-hit wind-hit" cx="500" cy="500" r="125" pointerEvents="none" />
                   <line className="station-wind-line" x1="500" y1="500" x2={end.x} y2={end.y} />
                   {wind && (
@@ -187,7 +187,7 @@ export function StationPlotTask({ payload, placements, onChange, disabled = fals
                 onClick={() => assign(slot.id)}
                 onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); assign(slot.id); } }}
               >
-                <rect className="station-slot-target" x={slot.x - targetWidth / 2} y={slot.y - targetHeight / 2} width={targetWidth} height={targetHeight} rx="24" fill="transparent" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
+                <rect className="station-slot-target" x={slot.x - targetWidth / 2} y={slot.y - targetHeight / 2} width={targetWidth} height={targetHeight} rx="24" stroke="none" strokeWidth="0" pointerEvents="all" aria-hidden="true" />
                 <rect className="station-slot-hit" x={slot.x - 115} y={slot.y - 55} width="230" height="110" rx="22" pointerEvents="none" />
                 <text className="station-slot-text" x={slot.x} y={slot.y + 12} textAnchor="middle">
                   {observation ? observationText(observation) : '· · ·'}

@@ -104,37 +104,61 @@
   cursor: pointer;
 }
 
-.station-slot-hit {
+.station-slot-target {
+  /* Paint the same geometry that owns input. The fractional-scroll browser
+     regression checks its full edge. The separate outline remains decorative
+     and cannot enlarge this hit area. */
   fill: rgba(77, 112, 130, 0.03);
+  transition: fill 120ms ease;
+}
+
+.station-slot-hit {
+  fill: none;
   stroke: rgba(77, 112, 130, 0.35);
   stroke-width: 4;
   stroke-dasharray: 14 10;
-  transition: fill 120ms ease, stroke 120ms ease;
+  transition: stroke 120ms ease;
+}
+
+.station-slot:not([aria-disabled="true"]):hover .station-slot-target,
+.station-slot:not([aria-disabled="true"]):focus-visible .station-slot-target {
+  fill: rgba(46, 115, 150, 0.08);
 }
 
 .station-slot:not([aria-disabled="true"]):hover .station-slot-hit,
 .station-slot:not([aria-disabled="true"]):focus-visible .station-slot-hit {
-  fill: rgba(46, 115, 150, 0.08);
   stroke: #2e7396;
 }
 
-.station-slot.is-filled .station-slot-hit {
+.station-slot.is-filled .station-slot-target {
   fill: rgba(255, 255, 255, 0.84);
+}
+
+.station-slot.is-filled .station-slot-hit {
   stroke-dasharray: none;
 }
 
-.station-slot.is-correct .station-slot-hit {
+.station-slot.is-correct .station-slot-target {
   fill: rgba(77, 153, 95, 0.12);
+}
+
+.station-slot.is-correct .station-slot-hit {
   stroke: #4d995f;
 }
 
-.station-slot.is-wrong .station-slot-hit {
+.station-slot.is-wrong .station-slot-target {
   fill: rgba(186, 73, 67, 0.1);
+}
+
+.station-slot.is-wrong .station-slot-hit {
   stroke: #ba4943;
 }
 
-.station-slot.is-expected .station-slot-hit {
+.station-slot.is-expected .station-slot-target {
   fill: rgba(200, 151, 47, 0.12);
+}
+
+.station-slot.is-expected .station-slot-hit {
   stroke: #c8972f;
 }
 
@@ -142,10 +166,6 @@
   fill: #1f3039;
   font: 700 46px/1 system-ui, sans-serif;
   pointer-events: none;
-}
-
-.wind-hit {
-  fill: transparent;
 }
 
 .station-wind-line {

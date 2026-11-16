@@ -1,0 +1,737 @@
+{
+  "scope": "All 5 fixed actors and 11 crowd instances at online=6; defaultVisible identifies the 10 default actors. Both layouts, 34 seconds at 100ms, poses/frames from actual exported runtime helpers. Candidate Pascal landscape [548,471]; portrait unchanged.",
+  "method": "Static scenery uses actual source PNG alpha, min-fit scale, JS round of fitted dimensions and anchors, floor(width/2) origin, nearest-neighbour sampling matching R01PixelTextures.fit. Occlusion respects each rendered depth. Counts use actor alpha>0; opaque occlusion uses scenery alpha>=250. Transparent VFX, HUD and actor-on-actor overlap are separate browser gates.",
+  "layouts": [
+    {
+      "orientation": "landscape",
+      "actors": [
+        {
+          "id": "character.r01.observer",
+          "sourceId": "character.r01.observer",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 409,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "npc.r01.vera",
+          "sourceId": "npc.r01.vera",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 457,
+          "framesSeen": {
+            "idle": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "companion.r01.pascal",
+          "sourceId": "companion.r01.pascal",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 226,
+          "framesSeen": {
+            "idle": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "animal_squirrel",
+          "sourceId": "animal_squirrel",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0268,
+          "minVisiblePixels": 240,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "run": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "occluders": {
+            "prop-lamp@278,323": 0.0268
+          },
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "bird_tit",
+          "sourceId": "bird_tit",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 100,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "hop": [
+              0,
+              1,
+              2
+            ],
+            "flutter": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "bench-west",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "bench-east",
+          "sourceId": "npc.r01.shift-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 488,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "colleague-west",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 416,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "talk": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "colleague-east",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 553,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "talk": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "rounds",
+          "sourceId": "npc.r01.shift-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0135,
+          "minVisiblePixels": 429,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-fountain@430,375": 0.0135
+          },
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-1",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.466,
+          "minVisiblePixels": 228,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-hedge@707,439": 0.466,
+            "prop-hedge@674,461": 0.0048
+          },
+          "t0OccludedFraction": 0.1499
+        },
+        {
+          "id": "visitor-2",
+          "sourceId": "npc.r01.shift-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0339,
+          "minVisiblePixels": 428,
+          "framesSeen": {
+            "talk": [
+              0
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-lamp@278,323": 0.0339
+          },
+          "t0OccludedFraction": 0.0339
+        },
+        {
+          "id": "visitor-3",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0865,
+          "minVisiblePixels": 380,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "talk": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-bench@315,429": 0.0385,
+            "prop-lamp@305,415": 0.0481
+          },
+          "t0OccludedFraction": 0.0865
+        },
+        {
+          "id": "visitor-4",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.7577,
+          "minVisiblePixels": 134,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-hedge@177,453": 0.2875,
+            "prop-hedge@236,434": 0.6763
+          },
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-5",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 484,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-6",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        }
+      ],
+      "sceneryCount": 53,
+      "buildingDepths": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "orientation": "portrait",
+      "actors": [
+        {
+          "id": "character.r01.observer",
+          "sourceId": "character.r01.observer",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 409,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "npc.r01.vera",
+          "sourceId": "npc.r01.vera",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 457,
+          "framesSeen": {
+            "idle": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "companion.r01.pascal",
+          "sourceId": "companion.r01.pascal",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 226,
+          "framesSeen": {
+            "idle": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "animal_squirrel",
+          "sourceId": "animal_squirrel",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.2447,
+          "minVisiblePixels": 209,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "run": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "occluders": {
+            "prop-lamp@28,536": 0.2447
+          },
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "bird_tit",
+          "sourceId": "bird_tit",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 100,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "hop": [
+              0,
+              1,
+              2
+            ],
+            "flutter": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "bench-west",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "bench-east",
+          "sourceId": "npc.r01.shift-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 488,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "colleague-west",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 416,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "talk": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "colleague-east",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 553,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "talk": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "rounds",
+          "sourceId": "npc.r01.shift-worker",
+          "defaultVisible": true,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 429,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-1",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.3582,
+          "minVisiblePixels": 267,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-lamp@243,575": 0.3582
+          },
+          "t0OccludedFraction": 0.0047
+        },
+        {
+          "id": "visitor-2",
+          "sourceId": "npc.r01.shift-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 443,
+          "framesSeen": {
+            "talk": [
+              0
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-3",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 416,
+          "framesSeen": {
+            "idle": [
+              0
+            ],
+            "talk": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-4",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0.0334,
+          "minVisiblePixels": 521,
+          "framesSeen": {
+            "walk": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "idle": [
+              0
+            ]
+          },
+          "occluders": {
+            "prop-lamp@28,536": 0.0334
+          },
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-5",
+          "sourceId": "npc.r01.map-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 484,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        },
+        {
+          "id": "visitor-6",
+          "sourceId": "npc.r01.field-worker",
+          "defaultVisible": false,
+          "samples": 341,
+          "fullyHiddenSamples": 0,
+          "maxOccludedFraction": 0,
+          "minVisiblePixels": 614,
+          "framesSeen": {
+            "sit": [
+              0
+            ]
+          },
+          "occluders": {},
+          "t0OccludedFraction": 0.0
+        }
+      ],
+      "sceneryCount": 33,
+      "buildingDepths": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  ],
+  "pngSha256": {
+    "apps/web/public/hub/r01/building-radar.png": "43a97268a0a83e3c6e32e9a575b5392b022a4bbeac7a82ccba423217ad09ec96",
+    "apps/web/public/hub/r01/building-lab.png": "bf06f7c58ab748bac863b4cd0ed835fe84eeaef536fa790e0d001a3cfd1ed5dc",
+    "apps/web/public/hub/r01/building-codepost.png": "64f40cf4429e75fc61713f6e3dbb6331c9eb083fb54197e611cf831f73373c40",
+    "apps/web/public/hub/r01/building-cartography.png": "bd0a6147a3d343f381307a98bb282006c8ae10adc35ea04e9ad952fba69c0464",
+    "apps/web/public/hub/r01/building-archive.png": "ab243f75edaad9b49e880f904fc8db6278312ff655851a7df6faf418b45927a9",
+    "apps/web/public/hub/r01/building-hall.png": "f0dccc87515713b225b02ff06b31659e2a43a4ce7664adf7d176fda59c105c22",
+    "apps/web/public/hub/r01/prop-pine.png": "7855c227de3ec78e4119557ac8ee1dd9eb7696ff0ad6ff80e07d2d9304e4c3fe",
+    "apps/web/public/hub/r01/prop-tree.png": "21cbe2212ae6e2ea65c2b74553254a9ec09a34df6c07e30ffebc1580b6f7ef30",
+    "apps/web/public/hub/r01/prop-hedge.png": "58d1b0d914d4b842ffe9086d8ec97be3b9d0cad2bef7412dd9204ab70d90630d",
+    "apps/web/public/hub/r01/prop-bench.png": "82dc057c2f4c989d1bd633da47074568349ab4ef61dadd33117c4aa4bdb17e3c",
+    "apps/web/public/hub/r01/prop-fountain.png": "d8b723f82fa52d8365c32f54efca3902a011b56aa4c3c02122db03750c24c6a2",
+    "apps/web/public/hub/r01/prop-lamp.png": "9de9f553a8eaec1bcdb67eb65080a61337d4cd58b98464f364480f1b8ae569be",
+    "apps/web/public/hub/characters/observer-walk.png": "52b990a3579af96e5cedbba5f1f33e468af90c6ace08919cd81c41da74ad4872",
+    "apps/web/public/hub/characters/vera-idle.png": "0935d25b9e9ea857dcb63a717647f488576bf25307e0f02297ef74759752aaaf",
+    "apps/web/public/hub/characters/pascal-idle.png": "2e9a3775ddcfe0639feb14ddefcb6cae3a56b00e8bf66c7c4a47ccebd1d97e00",
+    "apps/web/public/assets/fauna/station/squirrel-campus.png": "8405c1df5852826b7fc1f112341b953c24cb171fd58053c07e442c52944a19af",
+    "apps/web/public/assets/fauna/station/tit-campus.png": "3cea0791a48b465965e243d369a67915fd157b4c2a23fdd0c5301d8d61cf7c56",
+    "apps/web/public/hub/characters/field-worker-sit.png": "5c014c527da8d1d7a4d09d0b99b2ef2a478fa98300c7114781217df391da5162",
+    "apps/web/public/hub/characters/shift-worker-sit.png": "74602b05f9e63811c1739b9e358ea125573b0bd86306a52d7cb4297e5526caed",
+    "apps/web/public/hub/characters/map-worker-idle.png": "4f12d8517a52e1060c71cf6bdabe2116497966ce376be7877e5871c42949a772",
+    "apps/web/public/hub/characters/field-worker-idle.png": "8640e621315f0ee377bb10219bd2445704504aa679a05b28cb876b5c2bb739af",
+    "apps/web/public/hub/characters/shift-worker-walk.png": "704a1c77feb3e106b817b270740f179e18c8f748f3b9bb6ec7b8e427336d9221",
+    "apps/web/public/hub/characters/map-worker-walk.png": "bfad67073b706243254b36dc1262655342cbf54a6a4caf5b1a42b702e887cf5e",
+    "apps/web/public/hub/characters/shift-worker-talk.png": "84a406e63c3303c4e7631c03402eb455023f7c117bc42c812e647ddc10177b40",
+    "apps/web/public/hub/characters/field-worker-walk.png": "e1999a0a4a513abfe44da86632e01f6a1fb311d9cfcabd3457a3af20d4200b9b",
+    "apps/web/public/hub/characters/map-worker-sit.png": "9db97ace8c5d008c2f042a26c771b8dc7cdc35f542ded160a7c62e4fa9f1c7a7",
+    "apps/web/public/hub/characters/shift-worker-idle.png": "84a406e63c3303c4e7631c03402eb455023f7c117bc42c812e647ddc10177b40",
+    "apps/web/public/hub/characters/map-worker-talk.png": "4f12d8517a52e1060c71cf6bdabe2116497966ce376be7877e5871c42949a772",
+    "apps/web/public/assets/fauna/station/squirrel-run.png": "e5a0ea6c0a5672d5d674aa899e64063d34c8080a1bf4761e8dbcb0fc9f38929d",
+    "apps/web/public/hub/characters/field-worker-talk.png": "8640e621315f0ee377bb10219bd2445704504aa679a05b28cb876b5c2bb739af",
+    "apps/web/public/assets/fauna/station/tit-hop.png": "a6a3fa8db1858c5399670603dea9beac5a6c2576604ee58aebe605b7822188f6",
+    "apps/web/public/assets/fauna/station/tit-flutter.png": "6c46132d076c00d5699edb09d0820d504be9079a9ebf49d90039d7678459b8ac"
+  }
+}
