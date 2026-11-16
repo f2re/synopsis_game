@@ -218,18 +218,28 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
         }
       }
       const point = points[index], svgNode = hitArea.ownerSVGElement;
+      // Native Firefox MouseEvent coordinates in the measured CI path are
+      // integer CSS pixels. Choose the nearest representable input once,
+      // before dispatch, instead of letting truncation send an edge outside.
+      // The nominal half-pixel sample and its exact-fill proof stay separate.
+      const dispatchedPoint = { x: Math.round(point.x), y: Math.round(point.y) };
+      const dispatchOffset = { x: dispatchedPoint.x - point.x, y: dispatchedPoint.y - point.y };
       const hit = document.elementFromPoint(point.x, point.y);
+      const dispatchedHit = document.elementFromPoint(dispatchedPoint.x, dispatchedPoint.y);
       const matrix = hitArea.getScreenCTM();
       const local = new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse());
       const box = hitArea.getBBox(), svg = svgNode.getBoundingClientRect();
       const viewport = node.closest('.pixel-scroll-area__viewport'), frame = viewport.getBoundingClientRect();
       const style = getComputedStyle(hitArea);
-      const exactHits = [...svgNode.querySelectorAll('.station-slot-target')].filter(target => {
+      const exactHitsAt = point => [...svgNode.querySelectorAll('.station-slot-target')].filter(target => {
         const matrix = target.getScreenCTM();
         return matrix && target.isPointInFill(new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse()));
       }).map(target => target.getAttribute('data-slot-id'));
       return {
-        point, receivesPointer: node.contains(hit), queriedSvgRoot: hit === svgNode, exactHits,
+        point, dispatchedPoint, dispatchOffset, inputGridCss: 1, devicePixelRatio,
+        receivesPointer: node.contains(hit), queriedSvgRoot: hit === svgNode, exactHits: exactHitsAt(point),
+        dispatchedReceivesPointer: node.contains(dispatchedHit), dispatchedQueriedSvgRoot: dispatchedHit === svgNode,
+        dispatchedExactHits: exactHitsAt(dispatchedPoint),
         label: node.getAttribute('aria-label'), slotId: hitArea.getAttribute('data-slot-id'),
         targetIndex: [...svgNode.querySelectorAll('.station-slot')].indexOf(node),
         fill: style.fill, fillOpacity: style.fillOpacity, pointerEvents: style.pointerEvents,
@@ -243,6 +253,11 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
           clientWidth: viewport.clientWidth, clientHeight: viewport.clientHeight, scrollTop: viewport.scrollTop, scrollLeft: viewport.scrollLeft },
       };
     }, index);
+    assert.ok(Math.abs(probe.dispatchOffset.x) <= .5 && Math.abs(probe.dispatchOffset.y) <= .5, 'Nearest representable input differs by at most half a CSS pixel per axis');
+    if (stationPlot) {
+      assert.deepEqual(probe.exactHits, [probe.slotId], 'The unchanged nominal half-pixel point belongs to exactly this shape');
+      assert.deepEqual(probe.dispatchedExactHits, [probe.slotId], 'The nearest representable pointer point stays inside exactly the original shape');
+    }
     if (options.historicalGeometry) {
       const expected = options.historicalGeometry;
       if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-filled-regression-geometry-${page.viewportSize().width}`, before, probe, expected });
@@ -251,8 +266,9 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
     }
     // elementFromPoint is diagnostic, not proof that a click changes state.
     // Root hits are actionable only inside this one exact production shape.
-    // The same physical point and rectangle remain fixed until mouse.click.
-    await page.mouse.move(probe.point.x, probe.point.y);
+    // The chosen representable point and original rectangle remain fixed
+    // until mouse.click; no inward retry or larger target is allowed.
+    await page.mouse.move(probe.dispatchedPoint.x, probe.dispatchedPoint.y);
     const ready = await page.waitForFunction(({ node, point, bounds }) => {
       const target = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
       const rect = target.getBoundingClientRect();
@@ -265,18 +281,18 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
         return matrix && shape.isPointInFill(new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse()));
       });
       return matches.length === 1 && matches[0] === target;
-    }, { node: handle, point: probe.point, bounds: probe.bounds }, { timeout: 1_500, polling: 'raf' }).then(() => true, () => false);
+    }, { node: handle, point: probe.dispatchedPoint, bounds: probe.bounds }, { timeout: 1_500, polling: 'raf' }).then(() => true, () => false);
     if (!ready) {
       if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-unactionable-${page.viewportSize().width}-${index + 1}`, probe, before });
       if (evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-hit-failure-${page.viewportSize().width}-${index + 1}`);
-      const diagnostic = await diagnoseSvgEdge(control, probe.point);
+      const diagnostic = await diagnoseSvgEdge(control, probe.dispatchedPoint);
       if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-failure-diagnostic-${page.viewportSize().width}`, ...diagnostic });
       assert.fail(`The unchanged SVG point is neither a native nor a unique exact-fill target: ${JSON.stringify(probe)}`);
     }
     const trace = await recordNativeSvgClick(control);
     let events;
     try {
-      await page.mouse.click(probe.point.x, probe.point.y);
+      await page.mouse.click(probe.dispatchedPoint.x, probe.dispatchedPoint.y);
       await settleSvgLayout(page);
       events = await trace.evaluate(trace => trace.events);
     } finally {
@@ -289,6 +305,7 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
     if (evidence && stationPlot) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-assignment-${page.viewportSize().width}-${probe.targetIndex + 1}-${index + 1}${options.name ? `-${options.name}` : ''}`, ...result });
     assert.equal(events.length, 1, 'Exactly one native SVG click is received');
     assert.ok(events[0].isTrusted && events[0].button === 0, 'The probe uses a trusted primary-pointer click');
+    assert.deepEqual({ x: events[0].clientX, y: events[0].clientY }, probe.dispatchedPoint, 'The actual native coordinates equal the explicitly dispatched representable point');
     if (stationPlot) {
       assert.deepEqual(events[0].exactHits, [probe.slotId], 'The actual native client coordinates belong to exactly this target');
       assert.ok(events[0].targetIsSvg || events[0].targetSlotId === probe.slotId, 'The actual event reaches this slot or the root geometry resolver');
@@ -480,7 +497,8 @@ async function fillTask(page, task, evidence) {
       if (evidence) evidence.report.cases.push({
         name: `all-${evidence.phase}-station-plot-targets-${page.viewportSize().width}`,
         viewport: page.viewportSize(), task: task.definitionId,
-        pointerSamplesPerTarget: 9, ...geometry,
+        pointerSamplesPerTarget: 9, nominalEdgeInsetCss: .5, inputCoordinateGridCss: 1,
+        actualFlatEdgeInsetCssRange: [0, 1], ...geometry,
       });
     }
   } else if (kind === 'findError') {
