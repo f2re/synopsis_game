@@ -1,0 +1,349 @@
+{
+  "purpose": "Keyboard visibility passed all twelve resize/Tab records; the Firefox suite later stopped before clicking a point occluded by the existing sticky Blitz header.",
+  "sourceHead": "172e39d8bccff48b44dcd0ab6122ff2eb193efcf",
+  "testedMergeSha": "823c2c9533f4c837e6b01c8da1e4a7a8b29e3c82",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43887830830,
+  "jobId": 133370646944,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43887830830",
+  "artifact": {
+    "id": 14236216437,
+    "zipSha256": "c0f1b5c9258b19c462c807d145ee172273955d0f0a6e5f867934c2ca5f2f113e",
+    "zipBytes": 73721322
+  },
+  "browser": "153.0",
+  "status": "FAIL",
+  "caseRecords": 918,
+  "screenshotCount": 271,
+  "sourceSha256": {
+    "apps/web/src/features/shift/StationPlotTask.tsx": "39176a1e28d5f79573023eb48c82d41a34a057868a28be2c0de24fa68117acc8",
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "fefa2a433ad2359911e97a0890d087f879cc1e46986d32f843d99f1727336dc0",
+    "tools/test_station_plot_hit_fallback.cjs": "fe01e6c3fccde30ce0d723f2ad2a977a9dd951a6ec377df33f5822d83dff0f40",
+    ".github/workflows/station-screens.yml": "8687a090c954a49bc06ed01ad485095d1bdabf6ef924222597f7e2ef50a37195"
+  },
+  "originalReportSha256": "9e90d49b516cbcfde8c9a08dde5c38f92bd2435c8a2cf9238e0d7803d71f32cb",
+  "screenshot": {
+    "file": "all-blitz-svg-hit-failure-844-2.png",
+    "bytes": 92210,
+    "sha256": "1a6eec4394e81ae8fdba18decdc9d2c7faa2bb6b04a2e9f9558b852290d01753"
+  },
+  "keyboardSummary": [
+    {
+      "name": "all-shift-resize-map-tab-844-1",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "active": true,
+      "focusVisible": false,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-844-2",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-844-3",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-844-4",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-320-1",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": false,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-320-2",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-320-3",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-320-4",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-390-1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": false,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-390-2",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-390-3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    },
+    {
+      "name": "all-shift-resize-map-tab-390-4",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "active": true,
+      "focusVisible": true,
+      "visible": true
+    }
+  ],
+  "failure": {
+    "logTimestamp": "2026-11-16T14:47:28.8007511Z",
+    "message": "The unchanged SVG point is neither a native nor a unique exact-fill target",
+    "file": "tools/test_game_controls_browser.cjs",
+    "line": 290,
+    "nativeClickAttempted": false,
+    "coverageLimit": "The actual click was not dispatched because the ready gate correctly rejected a HEADER target. No native input route or state mutation is claimed for this failed sample."
+  },
+  "interpretation": "The failure PNG visibly places the pressure target top beneath the sticky timer. The wheel-preparation helper used an eight-pixel viewport margin while the production CSS already reserved scroll-padding-top:96px for the Blitz header. Exact shape membership alone does not permit clicking through that header. The next harness must honor the existing scroll-padding before choosing its fixed probe, using real wheel movement; no production geometry expansion, HEADER allowance, inward retries or change to historical fixed-scroll bounds is justified.",
+  "selectedOriginalCases": [
+    {
+      "name": "all-shift-resize-map-tab-844-2",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "label": "Позиция слева снизу: Точка росы Td",
+      "active": true,
+      "focusVisible": true,
+      "activeTag": "g",
+      "activeClass": "station-slot is-filled",
+      "activeLabel": "Позиция слева снизу: Точка росы Td",
+      "bounds": {
+        "left": 453.16668701171875,
+        "top": 337.33331298828125,
+        "right": 540.7833557128906,
+        "bottom": 381.5166473388672,
+        "width": 87.61666870117188,
+        "height": 44.18333435058594
+      },
+      "targetBounds": {
+        "left": 453.16668701171875,
+        "top": 337.33331298828125,
+        "right": 540.7833557128906,
+        "bottom": 381.5166473388672,
+        "width": 87.61666870117188,
+        "height": 44.18333435058594
+      },
+      "frames": [
+        {
+          "id": "_r_5_",
+          "bounds": {
+            "left": 0,
+            "top": 0,
+            "right": 818,
+            "bottom": 390,
+            "width": 818,
+            "height": 390
+          },
+          "client": {
+            "left": 0,
+            "top": 0,
+            "right": 818,
+            "bottom": 390
+          },
+          "scrollTop": 456,
+          "scrollLeft": 0,
+          "containsFocusedShape": true
+        }
+      ],
+      "centerQuery": {
+        "belongsToPosition": true,
+        "tag": "rect",
+        "className": "station-slot-target"
+      },
+      "visible": true
+    },
+    {
+      "name": "all-blitz-svg-unactionable-844-2",
+      "probe": {
+        "point": {
+          "x": 642.625,
+          "y": 80.83332824707031
+        },
+        "dispatchedPoint": {
+          "x": 643,
+          "y": 81
+        },
+        "dispatchOffset": {
+          "x": 0.375,
+          "y": 0.1666717529296875
+        },
+        "inputGridCss": 1,
+        "devicePixelRatio": 1,
+        "receivesPointer": false,
+        "queriedSvgRoot": false,
+        "exactHits": [
+          "slot_03"
+        ],
+        "dispatchedReceivesPointer": false,
+        "dispatchedQueriedSvgRoot": false,
+        "dispatchedExactHits": [
+          "slot_03"
+        ],
+        "label": "Позиция справа сверху, свободна",
+        "slotId": "slot_03",
+        "targetIndex": 2,
+        "fill": "rgba(77, 112, 130, 0.03)",
+        "fillOpacity": "1",
+        "pointerEvents": "all",
+        "hitTag": "HEADER",
+        "hitClass": "shift-topbar blitz-topbar is-active",
+        "bounds": {
+          "left": 597.2333374023438,
+          "top": 80.33332824707031,
+          "width": 90.7833251953125,
+          "height": 44.25
+        },
+        "localPoint": {
+          "x": 699.9999494552612,
+          "y": 244.25348115095403
+        },
+        "localBox": {
+          "x": 583,
+          "y": 243,
+          "width": 234,
+          "height": 114
+        },
+        "isPointInFill": true,
+        "matrix": {
+          "a": 0.3879166543483734,
+          "b": 0,
+          "c": 0,
+          "d": 0.3879166543483734,
+          "e": 371.0833435058594,
+          "f": -13.916667938232422
+        },
+        "svgBounds": {
+          "left": 371.08331298828125,
+          "top": -13.916671752929688,
+          "right": 759,
+          "bottom": 374.00001525878906
+        },
+        "viewport": {
+          "left": 0,
+          "top": 0,
+          "right": 818,
+          "bottom": 390,
+          "clientWidth": 818,
+          "clientHeight": 390,
+          "scrollTop": 733.9166870117188,
+          "scrollLeft": 0
+        }
+      },
+      "before": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху: Температура воздуха T",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу: Точка росы Td",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре, свободна",
+            "disabled": "false"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": true,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": true,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": false,
+            "selected": true,
+            "disabled": false
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          }
+        ]
+      }
+    }
+  ]
+}

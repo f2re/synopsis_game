@@ -109,13 +109,22 @@ async function scrollSvgControl(page, control, requestedScrollTop) {
     const viewport = node.closest('.pixel-scroll-area__viewport');
     const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
     const target = hitArea.getBoundingClientRect(), frame = viewport.getBoundingClientRect();
-    const left = frame.left + viewport.clientLeft, top = frame.top + viewport.clientTop;
-    const right = left + viewport.clientWidth, bottom = top + viewport.clientHeight;
+    const style = getComputedStyle(viewport);
+    const padding = value => {
+      const pixels = value.endsWith('px') ? Number.parseFloat(value) : NaN;
+      return Number.isFinite(pixels) ? Math.max(8, pixels) : 8;
+    };
+    // Honor the production 96px top inset under the sticky blitz timer.
+    // This prepares the viewport with real wheel input before any sample.
+    const left = frame.left + viewport.clientLeft + padding(style.scrollPaddingLeft);
+    const top = frame.top + viewport.clientTop + padding(style.scrollPaddingTop);
+    const right = frame.left + viewport.clientLeft + viewport.clientWidth - padding(style.scrollPaddingRight);
+    const bottom = frame.top + viewport.clientTop + viewport.clientHeight - padding(style.scrollPaddingBottom);
     const clamp = (value, maximum) => Math.max(0, Math.min(maximum, value));
     return {
       left: viewport.scrollLeft, top: viewport.scrollTop,
-      x: clamp(viewport.scrollLeft + (target.left < left + 8 || target.right > right - 8 ? target.left + target.width / 2 - (left + right) / 2 : 0), viewport.scrollWidth - viewport.clientWidth),
-      y: clamp(requestedScrollTop ?? (viewport.scrollTop + (target.top < top + 8 || target.bottom > bottom - 8 ? target.top + target.height / 2 - (top + bottom) / 2 : 0)), viewport.scrollHeight - viewport.clientHeight),
+      x: clamp(viewport.scrollLeft + (target.left < left || target.right > right ? target.left + target.width / 2 - (left + right) / 2 : 0), viewport.scrollWidth - viewport.clientWidth),
+      y: clamp(requestedScrollTop ?? (viewport.scrollTop + (target.top < top || target.bottom > bottom ? target.top + target.height / 2 - (top + bottom) / 2 : 0)), viewport.scrollHeight - viewport.clientHeight),
     };
   }, requestedScrollTop);
   for (const [axis, orientation, offset] of [['x', 'horizontal', 'left'], ['y', 'vertical', 'top']]) {
@@ -231,6 +240,13 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
       const box = hitArea.getBBox(), svg = svgNode.getBoundingClientRect();
       const viewport = node.closest('.pixel-scroll-area__viewport'), frame = viewport.getBoundingClientRect();
       const style = getComputedStyle(hitArea);
+      const viewportStyle = getComputedStyle(viewport);
+      const scrollPadding = { left: viewportStyle.scrollPaddingLeft, top: viewportStyle.scrollPaddingTop,
+        right: viewportStyle.scrollPaddingRight, bottom: viewportStyle.scrollPaddingBottom };
+      const padding = value => {
+        const pixels = value.endsWith('px') ? Number.parseFloat(value) : NaN;
+        return Number.isFinite(pixels) ? Math.max(8, pixels) : 8;
+      };
       const exactHitsAt = point => [...svgNode.querySelectorAll('.station-slot-target')].filter(target => {
         const matrix = target.getScreenCTM();
         return matrix && target.isPointInFill(new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse()));
@@ -250,7 +266,13 @@ async function clickSvgPosition(page, control, evidence, options = {}) {
         matrix: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, e: matrix.e, f: matrix.f },
         svgBounds: { left: svg.left, top: svg.top, right: svg.right, bottom: svg.bottom },
         viewport: { left: frame.left, top: frame.top, right: frame.right, bottom: frame.bottom,
-          clientWidth: viewport.clientWidth, clientHeight: viewport.clientHeight, scrollTop: viewport.scrollTop, scrollLeft: viewport.scrollLeft },
+          clientWidth: viewport.clientWidth, clientHeight: viewport.clientHeight, scrollTop: viewport.scrollTop, scrollLeft: viewport.scrollLeft,
+          scrollPadding, availableArea: {
+            left: frame.left + viewport.clientLeft + padding(scrollPadding.left),
+            top: frame.top + viewport.clientTop + padding(scrollPadding.top),
+            right: frame.left + viewport.clientLeft + viewport.clientWidth - padding(scrollPadding.right),
+            bottom: frame.top + viewport.clientTop + viewport.clientHeight - padding(scrollPadding.bottom),
+          } },
       };
     }, index);
     assert.ok(Math.abs(probe.dispatchOffset.x) <= .5 && Math.abs(probe.dispatchOffset.y) <= .5, 'Nearest representable input differs by at most half a CSS pixel per axis');
