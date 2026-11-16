@@ -167,6 +167,10 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await assertPortrait(page, '.inventory-saved-portrait .saved-avatar-portrait', initial, 80);
     const saved = await saveFromEditor(page); checkSaved(saved, FIELD);
     assert.notEqual(saved.avatarPortrait.sha256, initial.avatarPortrait.sha256);
+    // Appearance and inventory are separate panels; inspect the saved clothes
+    // through the real tab instead of waiting for an unmounted inventory slot.
+    await page.getByRole('tab', { name: /^Инвентарь/ }).click();
+    assert.equal(await page.getByRole('tab', { name: /^Инвентарь/ }).getAttribute('aria-selected'), 'true');
     await page.getByRole('button', { name: 'Обувь: Полевые ботинки. Выбрать предмет', exact: true }).waitFor();
     await capture(page, `portrait-editor-saved-${viewport.width}`);
     report.cases.push({ name: `portrait-editor-static-${viewport.width}`, observedStaticMs: 400, directions, directionLabels, savedFields: saved.avatar,

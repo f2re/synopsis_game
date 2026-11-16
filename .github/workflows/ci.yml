@@ -34,6 +34,7 @@ jobs:
           python tools/assets/build_hub_r01.py --check
           python tools/assets/build_hub_lighting_r07.py --check
           python tools/assets/build_station_room_r01.py --check --require-approved
+          python tools/assets/build_workrooms_r01.py --check --require-approved
           python tools/assets/build_characters_r01.py --check
           python tools/assets/build_inventory_icons_r01.py --check
           python tools/assets/build_equipment_r01.py --check
@@ -73,6 +74,7 @@ jobs:
           node tools/test_avatar_world_boundary.cjs
           node tools/test_hub_scene_lifecycle.cjs
           node tools/test_blitz_lifecycle.cjs
+          node tools/test_station_plot_hit_fallback.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts

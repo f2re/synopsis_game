@@ -52,6 +52,7 @@ const deps = {
   '../avatar/SavedAvatarPortrait': portraitModule, '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' },
   '../ui/radioGroupKeys': load('apps/web/src/features/ui/radioGroupKeys.ts'),
   './StationPlotTask': { StationPlotTask: 'StationPlotTask' }, './ShiftWorkspace.css': {}, './BlitzWorkspace.css': {},
+  './WorkroomBackdrop': require('./workroom_test_fixture.cjs'),
 };
 const code = ts.transpileModule(fs.readFileSync('apps/web/src/features/shift/BlitzWorkspace.tsx', 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },

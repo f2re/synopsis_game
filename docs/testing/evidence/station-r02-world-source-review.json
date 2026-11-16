@@ -1,0 +1,1009 @@
+{
+  "reviewer": "/root/task_rooms",
+  "date": "2026-11-16",
+  "scope": "station-r02-world-source-art",
+  "sources": [
+    {
+      "file": "assets/source/characters/station-r02/editable/observer.aseprite",
+      "sha256": "27b36eb89df7688be4dbad6e4cc75dcb1a52d7ffe8d150f7c2c0ba981521db84",
+      "frameSize": [
+        32,
+        48
+      ],
+      "frames": 5,
+      "durationsMs": [
+        1000,
+        125,
+        125,
+        125,
+        125
+      ],
+      "tags": {
+        "idle": [
+          0,
+          0
+        ],
+        "walk": [
+          1,
+          4
+        ]
+      },
+      "bounds": [
+        [
+          7,
+          2,
+          23,
+          46
+        ],
+        [
+          7,
+          2,
+          23,
+          46
+        ],
+        [
+          7,
+          3,
+          25,
+          46
+        ],
+        [
+          7,
+          3,
+          24,
+          46
+        ],
+        [
+          7,
+          2,
+          23,
+          46
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 23,
+      "paletteColorsPerFrame": [
+        21,
+        21,
+        21,
+        23,
+        21
+      ]
+    },
+    {
+      "file": "assets/source/characters/station-r02/editable/shift-worker.aseprite",
+      "sha256": "fa68ab19b2e277592bf5680529a28381083c5701dd55aec429c266de5c89de69",
+      "frameSize": [
+        32,
+        48
+      ],
+      "frames": 6,
+      "durationsMs": [
+        1000,
+        125,
+        125,
+        125,
+        125,
+        1000
+      ],
+      "tags": {
+        "idle": [
+          0,
+          0
+        ],
+        "walk": [
+          1,
+          4
+        ],
+        "sit": [
+          5,
+          5
+        ],
+        "talk": [
+          0,
+          0
+        ]
+      },
+      "bounds": [
+        [
+          8,
+          2,
+          24,
+          46
+        ],
+        [
+          8,
+          2,
+          24,
+          46
+        ],
+        [
+          7,
+          2,
+          25,
+          46
+        ],
+        [
+          7,
+          2,
+          26,
+          46
+        ],
+        [
+          6,
+          2,
+          27,
+          46
+        ],
+        [
+          6,
+          3,
+          26,
+          46
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 28,
+      "paletteColorsPerFrame": [
+        24,
+        24,
+        27,
+        27,
+        26,
+        25
+      ]
+    },
+    {
+      "file": "assets/source/characters/station-r02/editable/field-worker.aseprite",
+      "sha256": "1036327d0899f28039d6c0165f001e9ef2846839dc281e12eda4fae66532f0da",
+      "frameSize": [
+        32,
+        48
+      ],
+      "frames": 6,
+      "durationsMs": [
+        1000,
+        125,
+        125,
+        125,
+        125,
+        1000
+      ],
+      "tags": {
+        "idle": [
+          0,
+          0
+        ],
+        "walk": [
+          1,
+          4
+        ],
+        "sit": [
+          5,
+          5
+        ],
+        "talk": [
+          0,
+          0
+        ]
+      },
+      "bounds": [
+        [
+          6,
+          2,
+          25,
+          46
+        ],
+        [
+          6,
+          2,
+          25,
+          46
+        ],
+        [
+          6,
+          2,
+          27,
+          46
+        ],
+        [
+          6,
+          2,
+          25,
+          45
+        ],
+        [
+          6,
+          2,
+          26,
+          46
+        ],
+        [
+          4,
+          2,
+          29,
+          46
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 25,
+      "paletteColorsPerFrame": [
+        25,
+        25,
+        23,
+        24,
+        24,
+        24
+      ]
+    },
+    {
+      "file": "assets/source/characters/station-r02/editable/pascal.aseprite",
+      "sha256": "efe7e9ec7789f94c6e428d0d9fcdd5cdee4591c270ce0024cd3ceeebbab1c916",
+      "frameSize": [
+        40,
+        32
+      ],
+      "frames": 9,
+      "durationsMs": [
+        1800,
+        100,
+        1200,
+        220,
+        220,
+        400,
+        500,
+        600,
+        1200
+      ],
+      "tags": {
+        "idle": [
+          0,
+          8
+        ]
+      },
+      "bounds": [
+        [
+          12,
+          8,
+          29,
+          28
+        ],
+        [
+          12,
+          8,
+          30,
+          28
+        ],
+        [
+          12,
+          8,
+          29,
+          28
+        ],
+        [
+          12,
+          8,
+          30,
+          29
+        ],
+        [
+          10,
+          8,
+          31,
+          28
+        ],
+        [
+          12,
+          8,
+          30,
+          29
+        ],
+        [
+          12,
+          7,
+          29,
+          28
+        ],
+        [
+          12,
+          7,
+          30,
+          28
+        ],
+        [
+          12,
+          7,
+          30,
+          28
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 40,
+      "paletteColorsPerFrame": [
+        40,
+        38,
+        39,
+        39,
+        39,
+        39,
+        38,
+        39,
+        39
+      ]
+    },
+    {
+      "file": "assets/source/characters/station-r02/editable/vera.aseprite",
+      "sha256": "cb64614c895bdbf0e4d3001fb079011d2880486721cbe5ed789ec0b2e6230f60",
+      "frameSize": [
+        40,
+        48
+      ],
+      "frames": 9,
+      "durationsMs": [
+        1400,
+        100,
+        1300,
+        240,
+        320,
+        320,
+        240,
+        240,
+        400
+      ],
+      "tags": {
+        "idle": [
+          0,
+          8
+        ],
+        "talk": [
+          3,
+          8
+        ]
+      },
+      "bounds": [
+        [
+          10,
+          2,
+          27,
+          46
+        ],
+        [
+          10,
+          2,
+          27,
+          46
+        ],
+        [
+          10,
+          2,
+          27,
+          46
+        ],
+        [
+          9,
+          1,
+          28,
+          46
+        ],
+        [
+          8,
+          1,
+          35,
+          46
+        ],
+        [
+          10,
+          1,
+          33,
+          46
+        ],
+        [
+          11,
+          2,
+          30,
+          46
+        ],
+        [
+          10,
+          2,
+          30,
+          46
+        ],
+        [
+          11,
+          2,
+          27,
+          46
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 39,
+      "paletteColorsPerFrame": [
+        38,
+        39,
+        39,
+        39,
+        39,
+        39,
+        39,
+        38,
+        39
+      ]
+    },
+    {
+      "file": "assets/source/characters/station-r02/editable/map-worker.aseprite",
+      "sha256": "7888b188353c46209a841d30255e94692c66117c067879c7e59e6628fa2fbc4f",
+      "frameSize": [
+        32,
+        48
+      ],
+      "frames": 6,
+      "durationsMs": [
+        1000,
+        125,
+        125,
+        125,
+        125,
+        1000
+      ],
+      "tags": {
+        "idle": [
+          0,
+          0
+        ],
+        "walk": [
+          1,
+          4
+        ],
+        "sit": [
+          5,
+          5
+        ],
+        "talk": [
+          0,
+          0
+        ]
+      },
+      "bounds": [
+        [
+          7,
+          2,
+          23,
+          46
+        ],
+        [
+          7,
+          2,
+          23,
+          46
+        ],
+        [
+          7,
+          2,
+          23,
+          45
+        ],
+        [
+          6,
+          2,
+          26,
+          45
+        ],
+        [
+          6,
+          2,
+          23,
+          45
+        ],
+        [
+          7,
+          3,
+          26,
+          46
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 23,
+      "paletteColorsPerFrame": [
+        23,
+        23,
+        23,
+        23,
+        21,
+        23
+      ]
+    },
+    {
+      "file": "assets/source/animals/station/editable/tit-flutter.aseprite",
+      "sha256": "c038d399ce74ebcb98751522249a7fcf11331ec207fcde522152ece0de523ff9",
+      "frameSize": [
+        48,
+        48
+      ],
+      "frames": 5,
+      "durationsMs": [
+        150,
+        150,
+        150,
+        150,
+        150
+      ],
+      "tags": {
+        "flutter": [
+          0,
+          4
+        ]
+      },
+      "bounds": [
+        [
+          15,
+          25,
+          33,
+          38
+        ],
+        [
+          16,
+          19,
+          32,
+          38
+        ],
+        [
+          16,
+          21,
+          33,
+          38
+        ],
+        [
+          16,
+          19,
+          32,
+          38
+        ],
+        [
+          16,
+          24,
+          33,
+          38
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 31,
+      "paletteColorsPerFrame": [
+        28,
+        28,
+        29,
+        28,
+        25
+      ]
+    },
+    {
+      "file": "assets/source/animals/station/editable/tit-hop.aseprite",
+      "sha256": "5e5cd8e3f47ed73ddad292bc51763c633a88e8f4a7959abc9581f4bc70f0409f",
+      "frameSize": [
+        48,
+        48
+      ],
+      "frames": 3,
+      "durationsMs": [
+        150,
+        150,
+        150
+      ],
+      "tags": {
+        "hop": [
+          0,
+          2
+        ]
+      },
+      "bounds": [
+        [
+          15,
+          25,
+          33,
+          38
+        ],
+        [
+          16,
+          24,
+          32,
+          38
+        ],
+        [
+          16,
+          24,
+          33,
+          38
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 29,
+      "paletteColorsPerFrame": [
+        28,
+        24,
+        25
+      ]
+    },
+    {
+      "file": "assets/source/animals/station/editable/squirrel-run.aseprite",
+      "sha256": "808cae129423f1156d34f79764671d14b019be6cd3c554f4f0c14e585fbb2774",
+      "frameSize": [
+        48,
+        48
+      ],
+      "frames": 5,
+      "durationsMs": [
+        95,
+        95,
+        95,
+        95,
+        95
+      ],
+      "tags": {
+        "run": [
+          0,
+          4
+        ]
+      },
+      "bounds": [
+        [
+          11,
+          15,
+          38,
+          38
+        ],
+        [
+          10,
+          15,
+          38,
+          38
+        ],
+        [
+          10,
+          21,
+          39,
+          38
+        ],
+        [
+          11,
+          13,
+          38,
+          38
+        ],
+        [
+          12,
+          16,
+          37,
+          38
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 39,
+      "paletteColorsPerFrame": [
+        39,
+        34,
+        35,
+        38,
+        35
+      ]
+    },
+    {
+      "file": "assets/source/animals/station/editable/squirrel-campus.aseprite",
+      "sha256": "5cbdd184e9174f8ca06f357d7539bc10501615aba8fbdc59b4c5bba91b819992",
+      "frameSize": [
+        48,
+        48
+      ],
+      "frames": 1,
+      "durationsMs": [
+        1000
+      ],
+      "tags": {
+        "idle": [
+          0,
+          0
+        ]
+      },
+      "bounds": [
+        [
+          12,
+          15,
+          36,
+          38
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 36,
+      "paletteColorsPerFrame": [
+        36
+      ]
+    },
+    {
+      "file": "assets/source/animals/station/editable/tit-campus.aseprite",
+      "sha256": "2b364a7355a107ef7df14b9d103dbbf4cebf55f81a79abd96a1dec9e6c30c92f",
+      "frameSize": [
+        48,
+        48
+      ],
+      "frames": 1,
+      "durationsMs": [
+        1000
+      ],
+      "tags": {
+        "idle": [
+          0,
+          0
+        ]
+      },
+      "bounds": [
+        [
+          16,
+          22,
+          32,
+          38
+        ]
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "paletteColors": 25,
+      "paletteColorsPerFrame": [
+        25
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "file": "assets/generated/characters/r01/field-worker-idle.png",
+      "sha256": "8640e621315f0ee377bb10219bd2445704504aa679a05b28cb876b5c2bb739af",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 1257,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/field-worker-sit.png",
+      "sha256": "5c014c527da8d1d7a4d09d0b99b2ef2a478fa98300c7114781217df391da5162",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 1451,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/field-worker-talk.png",
+      "sha256": "8640e621315f0ee377bb10219bd2445704504aa679a05b28cb876b5c2bb739af",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 1257,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/field-worker-walk.png",
+      "sha256": "e1999a0a4a513abfe44da86632e01f6a1fb311d9cfcabd3457a3af20d4200b9b",
+      "size": [
+        128,
+        48
+      ],
+      "bytes": 3538,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/map-worker-idle.png",
+      "sha256": "4f12d8517a52e1060c71cf6bdabe2116497966ce376be7877e5871c42949a772",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 990,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/map-worker-sit.png",
+      "sha256": "9db97ace8c5d008c2f042a26c771b8dc7cdc35f542ded160a7c62e4fa9f1c7a7",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 1190,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/map-worker-talk.png",
+      "sha256": "4f12d8517a52e1060c71cf6bdabe2116497966ce376be7877e5871c42949a772",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 990,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/map-worker-walk.png",
+      "sha256": "bfad67073b706243254b36dc1262655342cbf54a6a4caf5b1a42b702e887cf5e",
+      "size": [
+        128,
+        48
+      ],
+      "bytes": 2604,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/observer-idle.png",
+      "sha256": "0adb90e4c3a18a2dbd177acb0b9567cc123337262b6264bc5acbbfcc968a50e9",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 927,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/observer-walk.png",
+      "sha256": "52b990a3579af96e5cedbba5f1f33e468af90c6ace08919cd81c41da74ad4872",
+      "size": [
+        128,
+        48
+      ],
+      "bytes": 2351,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/pascal-idle.png",
+      "sha256": "2e9a3775ddcfe0639feb14ddefcb6cae3a56b00e8bf66c7c4a47ccebd1d97e00",
+      "size": [
+        360,
+        32
+      ],
+      "bytes": 6412,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/shift-worker-idle.png",
+      "sha256": "84a406e63c3303c4e7631c03402eb455023f7c117bc42c812e647ddc10177b40",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 978,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/shift-worker-sit.png",
+      "sha256": "74602b05f9e63811c1739b9e358ea125573b0bd86306a52d7cb4297e5526caed",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 1148,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/shift-worker-talk.png",
+      "sha256": "84a406e63c3303c4e7631c03402eb455023f7c117bc42c812e647ddc10177b40",
+      "size": [
+        32,
+        48
+      ],
+      "bytes": 978,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/shift-worker-walk.png",
+      "sha256": "704a1c77feb3e106b817b270740f179e18c8f748f3b9bb6ec7b8e427336d9221",
+      "size": [
+        128,
+        48
+      ],
+      "bytes": 2795,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/vera-idle.png",
+      "sha256": "0935d25b9e9ea857dcb63a717647f488576bf25307e0f02297ef74759752aaaf",
+      "size": [
+        360,
+        48
+      ],
+      "bytes": 8409,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/r01/vera-talk.png",
+      "sha256": "b22512adfd538c988fb14c3757c85d6f2d54652aa23b2159a8d67e25082cecf8",
+      "size": [
+        240,
+        48
+      ],
+      "bytes": 6227,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/animals/station/squirrel-campus.png",
+      "sha256": "8405c1df5852826b7fc1f112341b953c24cb171fd58053c07e442c52944a19af",
+      "size": [
+        48,
+        48
+      ],
+      "bytes": 1140,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/animals/station/squirrel-run.png",
+      "sha256": "e5a0ea6c0a5672d5d674aa899e64063d34c8080a1bf4761e8dbcb0fc9f38929d",
+      "size": [
+        240,
+        48
+      ],
+      "bytes": 4306,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/animals/station/tit-campus.png",
+      "sha256": "3cea0791a48b465965e243d369a67915fd157b4c2a23fdd0c5301d8d61cf7c56",
+      "size": [
+        48,
+        48
+      ],
+      "bytes": 543,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/animals/station/tit-flutter.png",
+      "sha256": "6c46132d076c00d5699edb09d0820d504be9079a9ebf49d90039d7678459b8ac",
+      "size": [
+        240,
+        48
+      ],
+      "bytes": 1919,
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/animals/station/tit-hop.png",
+      "sha256": "a6a3fa8db1858c5399670603dea9beac5a6c2576604ee58aebe605b7822188f6",
+      "size": [
+        144,
+        48
+      ],
+      "bytes": 1118,
+      "publicCopyMatches": true
+    }
+  ],
+  "pngBytes": 52528,
+  "decodedBytes": 459264
+}

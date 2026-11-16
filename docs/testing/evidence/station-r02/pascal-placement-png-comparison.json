@@ -1,0 +1,19 @@
+{
+  "actor": "companion.r01.pascal",
+  "landscapeBefore": [
+    453,
+    469
+  ],
+  "landscapeAfter": [
+    548,
+    471
+  ],
+  "portrait": [
+    218,
+    639
+  ],
+  "checkedPngs": 204,
+  "builderPngWritesRefused": 34,
+  "pngBytesAndMtimeUnchanged": true,
+  "sourceArtApprovalUnchanged": true
+}

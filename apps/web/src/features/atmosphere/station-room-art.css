@@ -147,10 +147,10 @@
   z-index: 1;
   overflow: hidden;
   background: rgb(91 128 153 / 12%);
-  mask-image: url('/assets/atmosphere/station-room-r01/window-mask.png');
+  mask-image: var(--room-glass-mask, url('/assets/atmosphere/station-room-r01/window-mask.png'));
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
-  -webkit-mask-image: url('/assets/atmosphere/station-room-r01/window-mask.png');
+  -webkit-mask-image: var(--room-glass-mask, url('/assets/atmosphere/station-room-r01/window-mask.png'));
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
 }

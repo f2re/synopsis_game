@@ -23,6 +23,7 @@ import { createCodePostBridge } from '../../game/worldBridge';
 import { worldAudio } from '@synopsis/world-engine';
 import { OPTIONS } from '../avatar/avatarOptions';
 import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
+import { WorkroomBackdrop, taskWorkroom } from './WorkroomBackdrop';
 import './ShiftWorkspace.css';
 
 function normalizedNumber(value: string): number { return Number(value.trim().replace(',', '.')); }
@@ -246,7 +247,8 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
 
   if (loading) {
     return (
-      <main className="shift-shell">
+      <main className="shift-shell workroom-screen">
+        <WorkroomBackdrop />
         <section className="shift-loading" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
           <p>Готовим учебную смену…</p>
@@ -257,7 +259,8 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
   }
   if (error && !task) {
     return (
-      <main className="shift-shell">
+      <main className="shift-shell workroom-screen">
+        <WorkroomBackdrop />
         <section className="shift-loading" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <img src="/ui/ui_station_crest_badge_v2.png" alt="26063" className="overlay-crest" style={{ width: 52, height: 52 }} />
           <strong>Смена не запущена</strong>
@@ -282,7 +285,8 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
   const displayedTaskNumber = feedback ? feedback.progress.answered : progress.current;
 
   return (
-    <main className="shift-shell">
+    <main className={`shift-shell workroom-screen${wideTask ? ' workroom-screen--map' : ''}`}>
+      <WorkroomBackdrop room={taskWorkroom(task.response.kind)} />
       <header className="shift-topbar">
         <div className="shift-heading">
           <PixelIcon
@@ -320,11 +324,11 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
       {resumed && <p className="shift-resumed" role="status">Продолжена ваша незавершённая смена. Задание, снаряжение и оставшиеся заряды восстановлены.</p>}
 
       <section className="shift-stage" aria-live="polite">
-        <aside className="shift-context">
-          <div className="shift-context-topic-badge">
+        <details className="shift-context">
+          <summary className="shift-context-topic-badge">
             <PixelIcon name={stationTask ? 'cartography' : dependencySequence ? 'trend' : 'doc'} size="sm" />
-            <span>Тема</span>
-          </div>
+            <span>Как работать с заданием</span>
+          </summary>
           <strong>{dependencySequence ? 'Конструктор зависимостей анализа' : findError ? 'Критика и физический контроль' : stationBoard ? 'Планшет приземных наблюдений' : stationPlot ? 'Нанесение данных станции' : 'Дешифрирование КН-01'}</strong>
           <p>{dependencySequence
             ? 'Здесь нет единственной правильной линейной цепочки. Расположите операции так, чтобы соблюдались обязательные зависимости методического профиля.'
@@ -335,8 +339,8 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
                 : stationPlot
                   ? 'Разместите метеоэлементы по их нормативным позициям вокруг знака станции.'
                   : 'Сначала читаем кодовую группу, затем переводим её в физическую величину или смысл.'}</p>
-          {contentStatus !== 'published' && <div className="shift-draft">Задания проходят методическую проверку.</div>}
-        </aside>
+        </details>
+        {contentStatus !== 'published' && <div className="shift-draft">Задания проходят методическую проверку.</div>}
 
         <article className={`shift-card ${wideTask ? 'shift-card-wide' : ''}`}>
           <div className="shift-card-meta">

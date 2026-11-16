@@ -1,0 +1,1050 @@
+{
+  "status": "PASS",
+  "mode": "baseline",
+  "engine": "chromium",
+  "browser": "151.0.7922.34",
+  "revision": "a381888c034f12ec17a27b501952989b114253d1",
+  "appVersion": "0.5.3",
+  "runnerSha256": "a8803c776f93e3a7ff24ed2a879b16970deeedb3e787aeb007da2e6c6c1534b9",
+  "ci": {
+    "runId": "43890220174",
+    "attempt": "1",
+    "job": "station-environment",
+    "runner": "GitHub Actions 1000028153"
+  },
+  "graphicsSetup": {
+    "configuredChromiumFlags": [
+      "--no-sandbox",
+      "--enable-unsafe-swiftshader"
+    ],
+    "firefoxUserPrefs": null,
+    "softwareEnvironment": "1",
+    "rendererSource": "Read from the existing production canvas after scene readiness."
+  },
+  "productionAssets": true,
+  "realServer": true,
+  "fixedDateOnly": true,
+  "cases": [
+    {
+      "name": "raf-clear-1366-normal",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5033.200000000001,
+          "frames": 44,
+          "p50Ms": 116.69999999999891,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 133.39999999999964,
+          "jsHeapBytes": 24588577
+        },
+        {
+          "elapsedMs": 5083.0999999999985,
+          "frames": 45,
+          "p50Ms": 116.60000000000036,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 133.39999999999964,
+          "jsHeapBytes": 27326601
+        },
+        {
+          "elapsedMs": 5033.100000000002,
+          "frames": 58,
+          "p50Ms": 83.30000000000291,
+          "p95Ms": 100.09999999999854,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 28384181
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":4,\"faunaAnimationBudget\":1,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1366-normal",
+      "reducedMotion": "false",
+      "lowPower": "false",
+      "fpsLimit": "60",
+      "weather": "clear",
+      "weatherAnimated": "false",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":4,\"faunaAnimationBudget\":1,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+      "lightingMode": "solar",
+      "phase": "golden_hour",
+      "renderedWeather": "clear",
+      "rainDrops": "0",
+      "rainAnimated": "false",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1366,
+        768
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1366,
+        768
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1366,
+        768
+      ],
+      "canvasSha256": "7e254bb2b199d1904eed3c6aac40849d8fbf6fa694fc0d403d45e52f161fff4d"
+    },
+    {
+      "name": "raf-clear-1366-low-power",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5016.500000000001,
+          "frames": 77,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 26683641
+        },
+        {
+          "elapsedMs": 5033.1,
+          "frames": 59,
+          "p50Ms": 83.30000000000109,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 27340557
+        },
+        {
+          "elapsedMs": 5016.6,
+          "frames": 59,
+          "p50Ms": 83.30000000000109,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 28004105
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":2,\"faunaAnimationBudget\":0,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1366-low-power",
+      "reducedMotion": "false",
+      "lowPower": "true",
+      "fpsLimit": "30",
+      "weather": "clear",
+      "weatherAnimated": "false",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":2,\"faunaAnimationBudget\":0,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+      "lightingMode": "solar",
+      "phase": "golden_hour",
+      "renderedWeather": "clear",
+      "rainDrops": "0",
+      "rainAnimated": "false",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1366,
+        768
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1366,
+        768
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1366,
+        768
+      ],
+      "canvasSha256": "84e4983dbd9a80d38793cd3cf01428d26eb22ad1b268b619566df73297d9257b"
+    },
+    {
+      "name": "raf-clear-1440-normal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5049.7,
+          "frames": 48,
+          "p50Ms": 100,
+          "p95Ms": 116.69999999999982,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 25353161
+        },
+        {
+          "elapsedMs": 5016.4,
+          "frames": 48,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 24887337
+        },
+        {
+          "elapsedMs": 5116.399999999998,
+          "frames": 49,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 28248385
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":4,\"faunaAnimationBudget\":1,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1440-normal",
+      "reducedMotion": "false",
+      "lowPower": "false",
+      "fpsLimit": "60",
+      "weather": "clear",
+      "weatherAnimated": "false",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":4,\"faunaAnimationBudget\":1,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+      "lightingMode": "solar",
+      "phase": "golden_hour",
+      "renderedWeather": "clear",
+      "rainDrops": "0",
+      "rainAnimated": "false",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1440,
+        1000
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1440,
+        1000
+      ],
+      "canvasSha256": "e449af20c7d4a71fcd9980a8785e8f0133ff4e86d0593a558d624cef24480e3f"
+    },
+    {
+      "name": "raf-clear-1440-low-power",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5016.500000000001,
+          "frames": 71,
+          "p50Ms": 100,
+          "p95Ms": 116.60000000000036,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 25893390
+        },
+        {
+          "elapsedMs": 5049.800000000001,
+          "frames": 48,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 116.80000000000109,
+          "jsHeapBytes": 24997910
+        },
+        {
+          "elapsedMs": 5033,
+          "frames": 47,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 133.3000000000011,
+          "jsHeapBytes": 27981702
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":2,\"faunaAnimationBudget\":0,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "name": "measured-clear-1440-low-power",
+      "reducedMotion": "false",
+      "lowPower": "true",
+      "fpsLimit": "30",
+      "weather": "clear",
+      "weatherAnimated": "false",
+      "soundMuted": "true",
+      "context": "ready",
+      "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":2,\"faunaAnimationBudget\":0,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+      "lightingMode": "solar",
+      "phase": "golden_hour",
+      "renderedWeather": "clear",
+      "rainDrops": "0",
+      "rainAnimated": "false",
+      "scene": "hub",
+      "clock": {
+        "fixedEpoch": 1793109600000,
+        "dateOnly": true,
+        "nativeTiming": {
+          "requestAnimationFrame": true,
+          "cancelAnimationFrame": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "performance": true,
+          "performanceNow": true
+        }
+      },
+      "ambientWeather": "clear",
+      "storedWeather": "clear",
+      "visibility": "visible",
+      "date": "2026-10-27T14:00:00.000Z",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "dpr": 1,
+      "canvasCount": 1,
+      "canvasSize": [
+        1440,
+        1000
+      ],
+      "renderer": {
+        "type": "webgl",
+        "renderer": "WebKit WebGL",
+        "vendor": "WebKit",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+        "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "unmaskedVendor": "Google Inc. (Google)"
+      },
+      "documentSize": [
+        1440,
+        1000
+      ],
+      "canvasSha256": "e3ef6f5a22c55132d7935dc967321e33c70a507a4cdc072287c71fbd4c076e36"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "measured-clear-1366-normal.png",
+      "sha256": "92142cbbc723f74055257ac53c967157f84ab000dfa7cd8a86d149e74f515d18"
+    },
+    {
+      "name": "measured-clear-1366-normal-canvas.png",
+      "sha256": "7e254bb2b199d1904eed3c6aac40849d8fbf6fa694fc0d403d45e52f161fff4d"
+    },
+    {
+      "name": "measured-clear-1366-low-power.png",
+      "sha256": "47a9c2db61f899f2c8d75105df92ec1b4dda382c523d7b40e287d5b311c2a6e2"
+    },
+    {
+      "name": "measured-clear-1366-low-power-canvas.png",
+      "sha256": "84e4983dbd9a80d38793cd3cf01428d26eb22ad1b268b619566df73297d9257b"
+    },
+    {
+      "name": "measured-clear-1440-normal.png",
+      "sha256": "1d710778a0ba9eb6430cb1a2aa293cb047d354354f9fa79a7010432d2787785d"
+    },
+    {
+      "name": "measured-clear-1440-normal-canvas.png",
+      "sha256": "e449af20c7d4a71fcd9980a8785e8f0133ff4e86d0593a558d624cef24480e3f"
+    },
+    {
+      "name": "measured-clear-1440-low-power.png",
+      "sha256": "d4f2c32b0ca01e229560f896179ec23c9c276f5ebb6e596f4416fdcc606b0bb0"
+    },
+    {
+      "name": "measured-clear-1440-low-power-canvas.png",
+      "sha256": "e3ef6f5a22c55132d7935dc967321e33c70a507a4cdc072287c71fbd4c076e36"
+    }
+  ],
+  "measurements": [
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5033.200000000001,
+          "frames": 44,
+          "p50Ms": 116.69999999999891,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 133.39999999999964,
+          "jsHeapBytes": 24588577
+        },
+        {
+          "elapsedMs": 5083.0999999999985,
+          "frames": 45,
+          "p50Ms": 116.60000000000036,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 133.39999999999964,
+          "jsHeapBytes": 27326601
+        },
+        {
+          "elapsedMs": 5033.100000000002,
+          "frames": 58,
+          "p50Ms": 83.30000000000291,
+          "p95Ms": 100.09999999999854,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 28384181
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":4,\"faunaAnimationBudget\":1,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5016.500000000001,
+          "frames": 77,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 26683641
+        },
+        {
+          "elapsedMs": 5033.1,
+          "frames": 59,
+          "p50Ms": 83.30000000000109,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 27340557
+        },
+        {
+          "elapsedMs": 5016.6,
+          "frames": 59,
+          "p50Ms": 83.30000000000109,
+          "p95Ms": 100,
+          "maxMs": 100.10000000000036,
+          "jsHeapBytes": 28004105
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":2,\"faunaAnimationBudget\":0,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1366,
+          768
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1366,
+          768
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1366,
+          768
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": false,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5049.7,
+          "frames": 48,
+          "p50Ms": 100,
+          "p95Ms": 116.69999999999982,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 25353161
+        },
+        {
+          "elapsedMs": 5016.4,
+          "frames": 48,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 24887337
+        },
+        {
+          "elapsedMs": 5116.399999999998,
+          "frames": 49,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 28248385
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "false",
+        "fpsLimit": "60",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":4,\"faunaAnimationBudget\":1,\"reducedMotion\":false,\"lowPower\":false,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "weatherMode": "clear",
+      "lowPower": true,
+      "fixedDate": "2026-10-27T17:00:00+03:00",
+      "warmupMs": 3000,
+      "runs": [
+        {
+          "elapsedMs": 5016.500000000001,
+          "frames": 71,
+          "p50Ms": 100,
+          "p95Ms": 116.60000000000036,
+          "maxMs": 116.70000000000073,
+          "jsHeapBytes": 25893390
+        },
+        {
+          "elapsedMs": 5049.800000000001,
+          "frames": 48,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 116.80000000000109,
+          "jsHeapBytes": 24997910
+        },
+        {
+          "elapsedMs": 5033,
+          "frames": 47,
+          "p50Ms": 100,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 133.3000000000011,
+          "jsHeapBytes": 27981702
+        }
+      ],
+      "state": {
+        "reducedMotion": "false",
+        "lowPower": "true",
+        "fpsLimit": "30",
+        "weather": "clear",
+        "weatherAnimated": "false",
+        "soundMuted": "true",
+        "context": "ready",
+        "characters": "{\"artAccepted\":true,\"characterClass\":\"r01-detailed-actor\",\"playerPresent\":false,\"personalizationScope\":\"saved-portrait\",\"visibleActors\":9,\"onlineVisitors\":0,\"animatedActors\":2,\"animationBudget\":3,\"crowdAnimationBudget\":2,\"faunaAnimationBudget\":0,\"reducedMotion\":false,\"lowPower\":true,\"actors\":[{\"id\":\"npc.r01.vera\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5,0.9629629629629629]},{\"id\":\"companion.r01.pascal\",\"state\":\"idle\",\"frames\":6,\"pivot\":[0.5185185185185185,0.9629629629629629]},{\"id\":\"animal_squirrel\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bird_tit\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.7916666666666666]},{\"id\":\"bench-west\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"bench-east\",\"state\":\"sit\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-west\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"colleague-east\",\"state\":\"idle\",\"frames\":1,\"pivot\":[0.5,0.9583333333333334]},{\"id\":\"rounds\",\"state\":\"walk\",\"frames\":4,\"pivot\":[0.5,0.9583333333333334]}],\"errors\":[]}",
+        "lightingMode": "solar",
+        "phase": "golden_hour",
+        "renderedWeather": "clear",
+        "rainDrops": "0",
+        "rainAnimated": "false",
+        "scene": "hub",
+        "clock": {
+          "fixedEpoch": 1793109600000,
+          "dateOnly": true,
+          "nativeTiming": {
+            "requestAnimationFrame": true,
+            "cancelAnimationFrame": true,
+            "setTimeout": true,
+            "clearTimeout": true,
+            "setInterval": true,
+            "clearInterval": true,
+            "performance": true,
+            "performanceNow": true
+          }
+        },
+        "ambientWeather": "clear",
+        "storedWeather": "clear",
+        "visibility": "visible",
+        "date": "2026-10-27T14:00:00.000Z",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "dpr": 1,
+        "canvasCount": 1,
+        "canvasSize": [
+          1440,
+          1000
+        ],
+        "renderer": {
+          "type": "webgl",
+          "renderer": "WebKit WebGL",
+          "vendor": "WebKit",
+          "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+          "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "unmaskedVendor": "Google Inc. (Google)"
+        },
+        "documentSize": [
+          1440,
+          1000
+        ]
+      },
+      "metric": "Native browser RAF callback intervals, not guaranteed rendered FPS"
+    }
+  ],
+  "focusTrace": [],
+  "interactionGeometry": [],
+  "errors": [],
+  "skipped": [],
+  "limits": "RAF intervals and JS heap on this browser host; no physical GPU, sound-listening or pixel-art acceptance claim."
+}

@@ -124,6 +124,67 @@ ambientLayer.destroy();
 
 const visitorsScene = makeScene();
 const generated = require('../apps/web/public/hub/characters/manifest.json');
+const fauna = require('../packages/world-engine/src/assets/hub/station-fauna.json');
+const productionPack = assets.parseCharacterManifest({ ...generated, actors: [...generated.actors, ...fauna.station] });
+const productionGeometry = new Map(productionPack.actors.flatMap((actor) => Object.values(actor.clips).map((clip) => [
+  assets.characterTextureKey(clip.assetId), { source: [{width: clip.frameWidth * clip.frameCount, height: clip.frameHeight}], has: () => true, setFilter() {} },
+])));
+// Exercise the complete published pack: the crowd must not suppress a fixed NPC.
+for (const [width, height] of [[960, 540], [480, 780]]) {
+  const stationScene = makeScene();
+  stationScene.scale.width = width; stationScene.scale.height = height;
+  stationScene.registry.set('world.characters.manifest', productionPack);
+  stationScene.textures.get = (key) => productionGeometry.get(key);
+  const stationLayer = new HubCharacterLayer(stationScene);
+  const diagnostic = () => stationScene.registry.get('world.characters.diagnostics');
+  const fixedIds = ['character.r01.observer', 'npc.r01.vera', 'companion.r01.pascal', 'animal_squirrel', 'bird_tit'];
+  for (const id of fixedIds) assert.equal(diagnostic().actors.filter((actor) => actor.id === id).length, 1, `Published station must retain ${id} alongside its crowd`);
+  assert.equal(diagnostic().visibleActors, 10, 'Five fixed actors and five autonomous staff remain visible without online visitors');
+  assert.equal(diagnostic().animatedActors, 3, 'Observer, Vera and Pascal use exactly the existing three-actor budget');
+  assert.equal(diagnostic().animationBudget, 3);
+  assert.equal(diagnostic().characterClass, 'r02-station-actor');
+  const definition = productionPack.actors.find(({id}) => id === 'character.r01.observer');
+  const observer = stationScene.images.find(({key}) => key === assets.characterTextureKey(definition.clips.walk.assetId));
+  assert(observer, 'The authored observer walk must reach the default scene');
+  const point = width < height ? definition.positions.portrait : definition.positions.landscape;
+  const patrol = definition.motion.patrol;
+  assert(patrol, 'The published observer needs a bounded visible promenade');
+  const bounds = width < height ? patrol.portrait : patrol.landscape;
+  assert.deepEqual([observer.x, observer.y], [...point]);
+  assert.equal(observer.depth, patrol.depth, 'The front promenade must remain in front of benches and fountain');
+  assert.equal(observer.originY * definition.clips.walk.frameHeight, 46, 'The published foot support survives runtime placement');
+  const vera = stationScene.images.find(({key}) => key === assets.characterTextureKey(productionPack.actors.find(({id}) => id === 'npc.r01.vera').clips.idle.assetId));
+  const pascal = stationScene.images.find(({key}) => key === assets.characterTextureKey(productionPack.actors.find(({id}) => id === 'companion.r01.pascal').clips.idle.assetId));
+  const frames = new Set(), facings = new Set(), positions = new Set();
+  const initialVeraWrites = vera.frameWrites, initialPascalWrites = pascal.frameWrites;
+  for (let frame = 0; frame < 240; frame++) {
+    const lastX = observer.x;
+    stationLayer.update(100); frames.add(observer.frame); facings.add(observer.flipX); positions.add(observer.x);
+    assert(observer.x >= bounds[0] && observer.x <= bounds[1]);
+    assert(Math.abs(observer.x - lastX) <= 3, 'Patrol endpoints must not wrap or teleport inside the scene');
+    assert.equal(observer.y, point[1], 'Walking and turns share one stable foot line');
+  }
+  assert.equal(frames.size, 4, 'All four authored observer walk frames play while the crowd is active');
+  assert.equal(facings.size, 2, 'The visible route turns back in both layouts');
+  assert(positions.size > 2, 'The restored observer must move along its promenade');
+  assert(vera.frameWrites > initialVeraWrites && pascal.frameWrites > initialPascalWrites, 'The observer must not starve Vera or Pascal animation');
+  worldBridge.emit('server:station_presence', 99);
+  assert.equal(diagnostic().visibleActors, 16, 'Online visitors remain bounded independently of fixed station actors');
+  assert.equal(diagnostic().onlineVisitors, 6);
+  assert.equal(diagnostic().actors.filter(({id}) => id === definition.id).length, 1);
+  stationScene.events.emit('ui:preferences', { lowPower: true });
+  assert.equal(diagnostic().onlineVisitors, 3);
+  assert.equal(diagnostic().visibleActors, 13);
+  assert.equal(diagnostic().animationBudget, 3);
+  stationScene.events.emit('ui:preferences', { reducedMotion: true });
+  assert.equal(diagnostic().animatedActors, 0);
+  assert.deepEqual([observer.x, observer.y, observer.frame], [...point, 0]);
+  assert.equal(observer.flipX, false, 'Reduced motion restores the authored facing as well as the start');
+  stationLayer.update(100);
+  assert.deepEqual([observer.x, observer.y, observer.frame], [...point, 0]);
+  stationLayer.destroy();
+  assert(stationScene.images.every(({destroyed}) => destroyed));
+}
 const crowdPack = assets.parseCharacterManifest({ ...generated, actors: generated.actors.filter(({role}) => role === 'crowd') });
 const geometryByKey = new Map(crowdPack.actors.flatMap((actor) => Object.values(actor.clips).map((clip) => [
   assets.characterTextureKey(clip.assetId), { source: [{width: clip.frameWidth * clip.frameCount, height: clip.frameHeight}], has: () => true, setFilter() {} },
@@ -202,4 +263,4 @@ for (const portrait of [false, true]) {
   assert.deepEqual([...moves.get('animal_squirrel')], ['idle', 'run']);
   assert.deepEqual([...moves.get('bird_tit')], ['idle', 'hop', 'flutter']);
 }
-console.log('PASS: NPC cadence, pivot, reduced motion, low-power sampling, portrait placement, bounded online crowd, seated actors, conversational turns, closed routes, fauna and loader/layer cleanup.');
+console.log('PASS: NPC cadence, pivot, reduced motion, low-power sampling, portrait placement, complete published station staff, bounded online crowd, seated actors, conversational turns, closed routes, fauna and loader/layer cleanup.');

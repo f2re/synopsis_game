@@ -57,3 +57,4 @@
 }
 
 .find-error-station[aria-disabled="true"] { cursor: default; }
+.find-error-station:focus-visible .find-error-hit { stroke-width: 8; stroke-dasharray: 12 8; }

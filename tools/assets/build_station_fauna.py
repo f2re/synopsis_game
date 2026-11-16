@@ -148,7 +148,7 @@ def build(check: bool, importing: bool) -> None:
             strip.paste(clean(frame), (index * 64, 0))
         fitting_file = f'{name}-fitting.png'
         publish(fitting_file, strip, check)
-        runtime['fitting'][actor['companionId']] = f'/assets/fauna/station/{fitting_file}'
+        runtime['fitting'][actor['companionId']] = versioned_png_url(f'/assets/fauna/station/{fitting_file}', strip)
         source_name = actor.get('campusSource', name)
         campus, durations, tags = read_aseprite(editable / f'{source_name}-campus.aseprite')
         if tags != {'idle': [0, 0]} or durations != [1000] or len(campus) != 1:

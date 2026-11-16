@@ -1,0 +1,12 @@
+{
+  "beforeHead": "c621eebf8bd14dc3cfbbb1bb1c797ef3d6f36207",
+  "afterBaseHead": "c621eebf8bd14dc3cfbbb1bb1c797ef3d6f36207",
+  "files": 403,
+  "jsCssFiles": 22,
+  "added": [],
+  "removed": [],
+  "changed": [],
+  "byteIdentical": true,
+  "beforeDigest": "86f3a7f58e8d8514e323643467f330b51c01053a7f918aed7832ff0c30988041",
+  "afterDigest": "86f3a7f58e8d8514e323643467f330b51c01053a7f918aed7832ff0c30988041"
+}

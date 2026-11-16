@@ -5,6 +5,7 @@ import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvata
 import { PixelIcon, PixelProgressBar } from '../ui';
 import { handleRadioGroupKeyDown } from '../ui/radioGroupKeys';
 import { StationPlotTask } from './StationPlotTask';
+import { WorkroomBackdrop, taskWorkroom } from './WorkroomBackdrop';
 import './ShiftWorkspace.css';
 import './BlitzWorkspace.css';
 
@@ -172,7 +173,8 @@ export function BlitzWorkspace({ user, onExit, onStartPractice }: BlitzWorkspace
   const portrait = session ? session.equipment.avatarPortrait : user.avatarPortrait;
   const total = session?.progress.total ?? lobby?.total ?? 6;
 
-  return <main className="shift-shell blitz-shell">
+  return <main className={`shift-shell blitz-shell workroom-screen${active ? ' workroom-screen--active' : ''}`}>
+    <WorkroomBackdrop room={completed ? 'reading' : taskWorkroom(session?.task?.response.kind)} />
     <header className={`shift-topbar blitz-topbar${active ? ' is-active' : ''}`}>
       <div className="shift-heading"><PixelIcon name="kn01" size="md" /><div className="shift-heading__text"><span className="shift-kicker">{GAME_MARK} · тренировка</span><strong>Блиц-практика · 90 с</strong></div></div>
       {active && <div className={`blitz-timer ${remaining <= 15 ? 'blitz-timer--ending' : ''}`} aria-label={`Осталось ${remaining} секунд`}><span aria-hidden="true">{Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, '0')}</span><small>на весь раунд</small></div>}

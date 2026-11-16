@@ -1,0 +1,415 @@
+{
+  "version": 1,
+  "task": "STATION-R02-RECOVERY-20261116",
+  "rights": "User-commissioned SpriteCook art for this project; existing project-owned references. Provider terms apply.",
+  "source_dates": [
+    "2026-11-15",
+    "2026-11-16"
+  ],
+  "records": [
+    {
+      "asset_id": "69bab40b-cd8e-419c-890b-c581559188c0",
+      "label": "26063 · companion.squirrel · R02 wardrobe icon from canonical fauna",
+      "prompt": "Imported via API: 26063 · companion.squirrel · R02 wardrobe icon from canonical fauna",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/69bab40b-cd8e-419c-890b-c581559188c0.png",
+      "sha256": "7d74af32fbcf5b4561e3ddcc092c7d17286ce45d5442e764743bd1c64e457b8d"
+    },
+    {
+      "asset_id": "8f1b0e81-45a0-43a2-94f0-c27ed3d566e0",
+      "label": "26063 · companion.tit · R02 wardrobe icon from canonical fauna",
+      "prompt": "Imported via API: 26063 · companion.tit · R02 wardrobe icon from canonical fauna",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/8f1b0e81-45a0-43a2-94f0-c27ed3d566e0.png",
+      "sha256": "bdbe18c11e9a3f5e0c4e42dd146ffefbb92abf491887c41ad9e7db4f56dcb0c0"
+    },
+    {
+      "asset_id": "1574919b-a8c1-46cf-869b-840cc7bdf2fc",
+      "label": "26063 · companion.squirrel · four directions · R02 shared station fauna",
+      "prompt": "Imported via API: 26063 · companion.squirrel · four directions · R02 shared station fauna",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/1574919b-a8c1-46cf-869b-840cc7bdf2fc.png",
+      "sha256": "bdc82665cba5a59d5b8c2827b743706edc96c55086ea8e07a6336d7a93a1e78c"
+    },
+    {
+      "asset_id": "ecfda920-f974-4358-ad4a-ff3ea68ab740",
+      "label": "26063 · companion.tit · four directions · R02 shared station fauna",
+      "prompt": "Imported via API: 26063 · companion.tit · four directions · R02 shared station fauna",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/ecfda920-f974-4358-ad4a-ff3ea68ab740.png",
+      "sha256": "cfea419a7f2c8c89e857347c423fdc526a851fde1fd9d427ccf2ace33c40e847"
+    },
+    {
+      "asset_id": "0305ab7f-6843-4cc7-aa51-59ee0885e7b3",
+      "label": "Slice 5 Animation",
+      "prompt": "The young shift worker with chestnut hair, muted teal jacket, cream shirt and dark trousers walks at a calm ordinary pace to the right IN PLACE through a continuous four-frame looping walk cycle. Maintain the same slight three-quarter right-facing view throughout; alternate two natural adult-length leg strides and crossing steps, small opposite arm swing only when the hand is free. Keep head size, face, clothing colours, notebook or bag and adult 5.5-head proportions stable. Do not rotate toward camera or morph. Feet stay on the same ground line. No background, no shadows, no text, no extra objects. Each frame is a complete body from head to shoe soles. Seamless cycle with no pause.",
+      "kind": "animation",
+      "file": "assets/source/characters/station-r02/provider/0305ab7f-6843-4cc7-aa51-59ee0885e7b3-sheet.png",
+      "sha256": "076e0f1824fea620b82a76fc4e28ed05954816198f443aa830cc79183b3de554",
+      "preview": "assets/source/characters/station-r02/provider/0305ab7f-6843-4cc7-aa51-59ee0885e7b3-preview.webp"
+    },
+    {
+      "asset_id": "b0724626-9479-42c6-86eb-64dd16306ecc",
+      "label": "",
+      "prompt": "Three isolated full-body pixel sprites in ONE HORIZONTAL ROW, all seated in a natural RIGHT-facing three-quarter profile pose on an INVISIBLE bench. Do NOT draw a bench or chair. Exactly the same adult people, clothing, faces, proportions and muted palette as reference. LEFT: olive-jacket technician in charcoal cap with shoulder bag now at hip. CENTRE: woman with brown bob, muted teal cardigan, cream folded map resting on lap. RIGHT: young chestnut-haired shift worker in muted teal jacket, cream shirt, charcoal trousers. Adult5.5-head anatomy, upright torso, hips seated, upper thighs horizontal rightward, knees bent naturally90degrees, shins down, complete brown shoes visible, both hands resting on lap or the map. Generous transparent space between and under all figures, no cropping, no props except stated worn bag/map. Fine controlled game pixel clusters, no dark sticker outline, no large heads, all consistent person scale. No labels, no grid, no ground or shadows.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/b0724626-9479-42c6-86eb-64dd16306ecc.png",
+      "sha256": "99c35dacbd11c6390a43f07f151548b6fd849d6b7bcecf13623dcd44098288de"
+    },
+    {
+      "asset_id": "11d73992-b9e5-4469-80ed-dda15c12c254",
+      "label": "",
+      "prompt": "A production sprite sheet of the same natural red squirrel from the reference, small head, one-pixel dark eye, white-cream underside, slender paws, warm russet fur and long elegant curved fluffy tail. Regular 3 by 3 grid, NINE COMPLETE isolated full-body sprites with all paws, wings and tails inside each cell, generous transparent gutters on every side, consistent size and lighting. No ground, shadows, props, text, labels or visible grid. ROW1: frontal standing toward viewer; LEFT-facing profile standing; back view away from viewer. ROW2: RIGHT-facing profile standing; RIGHT-facing run gather phase all paws gathered under body; RIGHT-facing run push-off with hind legs pushing back and forelegs forward. ROW3: RIGHT-facing run airborne body extended with all paws off ground; RIGHT-facing run landing on forepaws and lifted tail; RIGHT-facing run compression/recovery ready for next push. These five running phases are a coherent continuous natural squirrel gait. Same anatomy, body width and tail length in all cells, actual leg and tail pose change, not translation of a still. Readable small logical sprites approximately32x32 each, strict aligned small pixels. Do not cut off any subject or overlap cells.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/11d73992-b9e5-4469-80ed-dda15c12c254.png",
+      "sha256": "d0f49d927e9f5e1d154cbe8575cd2fb214bed9060a13fbceaf813c26ddebafbc"
+    },
+    {
+      "asset_id": "ccbd3324-8b16-4fc2-b37e-6ae2a1096490",
+      "label": "",
+      "prompt": "A production sprite sheet of the same natural great tit from the reference, small black head, one-pixel eye, cream cheek, subdued yellow belly, grey olive wings, slender short legs and slim tail. Regular 3 by 3 grid, NINE COMPLETE isolated full-body sprites with all paws, wings and tails inside each cell, generous transparent gutters on every side, consistent size and lighting. No ground, shadows, props, text, labels or visible grid. ROW1: frontal standing toward viewer; LEFT-facing profile standing; back view away from viewer. ROW2: RIGHT-facing profile standing; LEFT-facing hop crouch with knees bent; LEFT-facing hop airborne with feet tucked. ROW3: LEFT-facing hop landing with legs extending; LEFT-facing flutter with both wings raised wide up; LEFT-facing flutter with wings lowered and partly spread. The three hop poses are a continuous action. Preserve same head, belly, tail length and body width across every frame; wings change pose without turning into arms. Readable small logical sprites approximately32x32 each, strict aligned small pixels. Do not cut off any subject or overlap cells.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/ccbd3324-8b16-4fc2-b37e-6ae2a1096490.png",
+      "sha256": "3d73d5dd882868f8916cab772b993bf9cb909e5451d208475f62da6e9dc6a937"
+    },
+    {
+      "asset_id": "f3b312fb-e7e1-4fa9-93a7-7f99f89495a2",
+      "label": "26063 · held.pencil · four directions · station R02",
+      "prompt": "Imported via API: 26063 · held.pencil · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/f3b312fb-e7e1-4fa9-93a7-7f99f89495a2.png",
+      "sha256": "924200442280a9f3c951889e47aa7932a1e90c5163f412f264248a6dba297844"
+    },
+    {
+      "asset_id": "5f73e016-4054-49f8-a249-7b8b2f5aa7ce",
+      "label": "26063 · held.map-folder · four directions · station R02",
+      "prompt": "Imported via API: 26063 · held.map-folder · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/5f73e016-4054-49f8-a249-7b8b2f5aa7ce.png",
+      "sha256": "89be8cc6e915a22716a5d2d6fa7399da74a5998ebba6c987489ec5a5296e3a71"
+    },
+    {
+      "asset_id": "93fb8a9a-75ef-4079-a47c-ae83b9132a9b",
+      "label": "26063 · held.tablet · four directions · station R02",
+      "prompt": "Imported via API: 26063 · held.tablet · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/93fb8a9a-75ef-4079-a47c-ae83b9132a9b.png",
+      "sha256": "1ee48727f166a3497d53b215f8e7d01e483e09e9b39ac68b4e718d24207bc906"
+    },
+    {
+      "asset_id": "27640e40-41f8-42a4-92c6-b83853610245",
+      "label": "26063 · backpack.field · four directions · station R02",
+      "prompt": "Imported via API: 26063 · backpack.field · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/27640e40-41f8-42a4-92c6-b83853610245.png",
+      "sha256": "31cfd84579294888d424a98d83427a91a1489c41d134d6242f2cddee1e654998"
+    },
+    {
+      "asset_id": "80b0e609-6ecd-4f21-b8b3-cabbc689fc1c",
+      "label": "26063 · backpack.city · four directions · station R02",
+      "prompt": "Imported via API: 26063 · backpack.city · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/80b0e609-6ecd-4f21-b8b3-cabbc689fc1c.png",
+      "sha256": "5c18e5e0ffc73e8b2286d90abc25a3781aca94ec04f477f628acbbfa9dd6f7a7"
+    },
+    {
+      "asset_id": "293d4a9f-f706-42e7-af2b-f315f8c4bc1d",
+      "label": "26063 · footwear.shoes · four directions · station R02",
+      "prompt": "Imported via API: 26063 · footwear.shoes · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/293d4a9f-f706-42e7-af2b-f315f8c4bc1d.png",
+      "sha256": "5b7f05322e7e60bace45f8fc90a5ea2a42768d2d0c1d0bd9fa4dd8e2199fd64a"
+    },
+    {
+      "asset_id": "501276fd-b79c-41cf-8394-b22e2a3b757a",
+      "label": "26063 · footwear.boots · four directions · station R02",
+      "prompt": "Imported via API: 26063 · footwear.boots · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/501276fd-b79c-41cf-8394-b22e2a3b757a.png",
+      "sha256": "75ebf9d3e4cdda809866a1bdcf6dc32a6fd10825357bff0d07bfaecc3ab15db9"
+    },
+    {
+      "asset_id": "3cfc7a29-d205-4140-8ef1-3e49db3faaef",
+      "label": "26063 · footwear.sneakers · four directions · station R02",
+      "prompt": "Imported via API: 26063 · footwear.sneakers · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/3cfc7a29-d205-4140-8ef1-3e49db3faaef.png",
+      "sha256": "81ee4bcf30e5afc3e1927cec4d99e73c680bef5ff1e54d7d55e1d9c42f8fa77b"
+    },
+    {
+      "asset_id": "3ed79833-3540-4044-a975-af955d60b586",
+      "label": "26063 · bottom.jeans · four directions · station R02",
+      "prompt": "Imported via API: 26063 · bottom.jeans · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/3ed79833-3540-4044-a975-af955d60b586.png",
+      "sha256": "8140d5864e1617fcff34727e5b8648ecc6dbbd3cf443c90fc95e606f3d3fe704"
+    },
+    {
+      "asset_id": "d69e9a12-a300-4590-8a44-9984122fdb68",
+      "label": "Slice 2 Animation",
+      "prompt": "The young observer in indigo jacket and dark trousers holding a small cream notebook close to his torso walks at a calm ordinary pace to the right IN PLACE through a continuous four-frame looping walk cycle. Maintain the same slight three-quarter right-facing view throughout; alternate two natural adult-length leg strides and crossing steps, small opposite arm swing only when the hand is free. Keep head size, face, clothing colours, notebook or bag and adult 5.5-head proportions stable. Do not rotate toward camera or morph. Feet stay on the same ground line. No background, no shadows, no text, no extra objects. Each frame is a complete body from head to shoe soles. Seamless cycle with no pause.",
+      "kind": "animation",
+      "file": "assets/source/characters/station-r02/provider/d69e9a12-a300-4590-8a44-9984122fdb68-sheet.png",
+      "sha256": "484299536cdc977b89cdbc236e71602b2d13b376d27fd141c06db9d616ca14ff",
+      "preview": "assets/source/characters/station-r02/provider/d69e9a12-a300-4590-8a44-9984122fdb68-preview.webp"
+    },
+    {
+      "asset_id": "876f9a09-4180-4beb-baab-1db82f3c96a7",
+      "label": "26063 · bottom.field-trousers · four directions · station R02",
+      "prompt": "Imported via API: 26063 · bottom.field-trousers · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/876f9a09-4180-4beb-baab-1db82f3c96a7.png",
+      "sha256": "3652c0bce7f0831a1736c3323ca9d43606ce7ca225caea966482e698e94dda85"
+    },
+    {
+      "asset_id": "3af678a5-003d-43b9-b0c8-a2e0652fe5ac",
+      "label": "26063 · bottom.dark-trousers · four directions · station R02",
+      "prompt": "Imported via API: 26063 · bottom.dark-trousers · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/3af678a5-003d-43b9-b0c8-a2e0652fe5ac.png",
+      "sha256": "cae2f733983a46e705430eaf181775105873c9e5f17c35294c1445aaabe69726"
+    },
+    {
+      "asset_id": "aa58d65a-7a23-4b0a-8fec-766a7936a33e",
+      "label": "26063 · top.shirt · four directions · station R02",
+      "prompt": "Imported via API: 26063 · top.shirt · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/aa58d65a-7a23-4b0a-8fec-766a7936a33e.png",
+      "sha256": "17914f335b49ea805b65d5c3ad0176823453a6d5092ccd7dcc50ad8ff81ddb87"
+    },
+    {
+      "asset_id": "88163dc6-1867-413a-8734-efac1429eada",
+      "label": "Slice 3 Animation",
+      "prompt": "The adult map specialist with brown bob haircut, muted teal cardigan and folded cream map held against her torso walks at a calm ordinary pace to the right IN PLACE through a continuous four-frame looping walk cycle. Maintain the same slight three-quarter right-facing view throughout; alternate two natural adult-length leg strides and crossing steps, small opposite arm swing only when the hand is free. Keep head size, face, clothing colours, notebook or bag and adult 5.5-head proportions stable. Do not rotate toward camera or morph. Feet stay on the same ground line. No background, no shadows, no text, no extra objects. Each frame is a complete body from head to shoe soles. Seamless cycle with no pause.",
+      "kind": "animation",
+      "file": "assets/source/characters/station-r02/provider/88163dc6-1867-413a-8734-efac1429eada-sheet.png",
+      "sha256": "88198053d338831d178057428593b3685c06360a630fe7f959f4d25c948e35f1",
+      "preview": "assets/source/characters/station-r02/provider/88163dc6-1867-413a-8734-efac1429eada-preview.webp"
+    },
+    {
+      "asset_id": "461592d0-e13c-4d54-8230-59bd5a0d3f70",
+      "label": "26063 · top.sweater · four directions · station R02",
+      "prompt": "Imported via API: 26063 · top.sweater · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/461592d0-e13c-4d54-8230-59bd5a0d3f70.png",
+      "sha256": "0aed873478f491ebe2068beb75a75beeea155f7dcd5eec9d705de9b7b5b8ea2d"
+    },
+    {
+      "asset_id": "98d8a43d-4edd-471b-b765-582ea19edc9e",
+      "label": "26063 · top.hoodie · four directions · station R02",
+      "prompt": "Imported via API: 26063 · top.hoodie · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/98d8a43d-4edd-471b-b765-582ea19edc9e.png",
+      "sha256": "c38bf4d1edbace638e40c8b38892c12c52e967dd7c705b61c59fba0b8bdccee9"
+    },
+    {
+      "asset_id": "bd474e4d-a2fc-4a8d-a98f-d0aa61a56b70",
+      "label": "26063 · top.field-jacket · four directions · station R02",
+      "prompt": "Imported via API: 26063 · top.field-jacket · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/bd474e4d-a2fc-4a8d-a98f-d0aa61a56b70.png",
+      "sha256": "6c932db5da2481e92d598fd1d230401a05520e2f64d1fd7215e3e5d839293136"
+    },
+    {
+      "asset_id": "5efb0b22-5023-424e-8509-db999a6894b0",
+      "label": "26063 · top.center-jacket · four directions · station R02",
+      "prompt": "Imported via API: 26063 · top.center-jacket · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/5efb0b22-5023-424e-8509-db999a6894b0.png",
+      "sha256": "dfed736c5b43709789e2151e9a7bf45adb6f0c46e3cc5965cf1fcf891592aef3"
+    },
+    {
+      "asset_id": "874e7204-55a1-4125-8dce-0d6f1bf549cb",
+      "label": "Slice 1 Animation",
+      "prompt": "The mature technician in olive canvas jacket, charcoal knit cap, shoulder bag and brown boots walks at a calm ordinary pace to the right IN PLACE through a continuous four-frame looping walk cycle. Maintain the same slight three-quarter right-facing view throughout; alternate two natural adult-length leg strides and crossing steps, small opposite arm swing only when the hand is free. Keep head size, face, clothing colours, notebook or bag and adult 5.5-head proportions stable. Do not rotate toward camera or morph. Feet stay on the same ground line. No background, no shadows, no text, no extra objects. Each frame is a complete body from head to shoe soles. Seamless cycle with no pause.",
+      "kind": "animation",
+      "file": "assets/source/characters/station-r02/provider/874e7204-55a1-4125-8dce-0d6f1bf549cb-sheet.png",
+      "sha256": "006e0553c50857a3bd8c4a0ea946a01ce81df4e8072a0e39b0cab3b8f2a50edc",
+      "preview": "assets/source/characters/station-r02/provider/874e7204-55a1-4125-8dce-0d6f1bf549cb-preview.webp"
+    },
+    {
+      "asset_id": "eed40778-4d3b-4890-8a51-e098a94e4dcc",
+      "label": "26063 · headwear.goggles · four directions · station R02",
+      "prompt": "Imported via API: 26063 · headwear.goggles · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/eed40778-4d3b-4890-8a51-e098a94e4dcc.png",
+      "sha256": "a732ed41ff26eaf8d32686f09f43c560188f2b69a433703059b1a55501520ad7"
+    },
+    {
+      "asset_id": "40aafe1d-fb36-4840-9d7d-ef6dd56c6acb",
+      "label": "26063 · headwear.scarf · four directions · station R02",
+      "prompt": "Imported via API: 26063 · headwear.scarf · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/40aafe1d-fb36-4840-9d7d-ef6dd56c6acb.png",
+      "sha256": "35950a59c97c806b84d43853985df53016767c95b29e1b7e7e7b705cf3064402"
+    },
+    {
+      "asset_id": "923b4511-d963-4d80-a061-ff83851c3a76",
+      "label": "26063 · headwear.beanie · four directions · station R02",
+      "prompt": "Imported via API: 26063 · headwear.beanie · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/923b4511-d963-4d80-a061-ff83851c3a76.png",
+      "sha256": "bf29903e916e81b14e01b988c431cf74282db22bb0df2a98cc700e13a5edb0ea"
+    },
+    {
+      "asset_id": "7234660f-5df3-48c1-aae2-ac487a357258",
+      "label": "26063 · headwear.cap · four directions · station R02",
+      "prompt": "Imported via API: 26063 · headwear.cap · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/7234660f-5df3-48c1-aae2-ac487a357258.png",
+      "sha256": "5deadb99a0688a1c13b4757de5bcb6a84fd1cef82ff80debba7f7b388e4cc86f"
+    },
+    {
+      "asset_id": "75859a3f-55fc-4e7d-9834-0f341d6cb9bb",
+      "label": "26063 · body · four directions · station R02",
+      "prompt": "Imported via API: 26063 · body · four directions · station R02",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/75859a3f-55fc-4e7d-9834-0f341d6cb9bb.png",
+      "sha256": "eb8db4f32db3cbd624611c38b43b4d929910ab665060f40e5939b1c2133d20ac"
+    },
+    {
+      "asset_id": "18c8feb4-0b28-48f1-83f7-4db692d97f0a",
+      "label": "Slice 9",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/18c8feb4-0b28-48f1-83f7-4db692d97f0a.png",
+      "sha256": "d43578d13b8cd27682219bb88dff6113662d8b0f46014221529d2b7a85a976f6"
+    },
+    {
+      "asset_id": "bf2eb02f-7fc1-4488-af8a-3a6d46fb34b4",
+      "label": "Slice 8",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/bf2eb02f-7fc1-4488-af8a-3a6d46fb34b4.png",
+      "sha256": "7762c85ec8166b90cdbf2a2735806b783acb39e1d51552d299da2e10b8a1dd9c"
+    },
+    {
+      "asset_id": "a3189f0c-ec87-4f8c-adaf-a3a508990a85",
+      "label": "Slice 7",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/a3189f0c-ec87-4f8c-adaf-a3a508990a85.png",
+      "sha256": "66d3b26bb8e5190b73c6720865643c8b2e568aa8fe3e4f609658ace703df1c05"
+    },
+    {
+      "asset_id": "eb30b260-2880-484f-8e74-c4071269d6d1",
+      "label": "Slice 6",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/eb30b260-2880-484f-8e74-c4071269d6d1.png",
+      "sha256": "fe1635da29b2a6252876f44009067c5e70c77a1849ab537ff770bc827f822334"
+    },
+    {
+      "asset_id": "ce4ae9d9-80ba-4fed-8285-2de56321a81f",
+      "label": "Slice 5",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/ce4ae9d9-80ba-4fed-8285-2de56321a81f.png",
+      "sha256": "0167ff572ccd03a0e7de87916c07bcb1273a4d612bfffe000a5afa65f2237ef6"
+    },
+    {
+      "asset_id": "09306496-1cfd-4f2b-8ef7-2863c8dd9f16",
+      "label": "Slice 4",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/09306496-1cfd-4f2b-8ef7-2863c8dd9f16.png",
+      "sha256": "d5c84ac74a57b13de00ccd24faf711a5828d38c8e4e4c10b410f84e92e974c83"
+    },
+    {
+      "asset_id": "983ddd3d-2a64-43ba-a480-182c94873659",
+      "label": "Slice 3",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/983ddd3d-2a64-43ba-a480-182c94873659.png",
+      "sha256": "13ece81daf5060a8105c28380ee2e11babaebc189b3c3c8e931a00c593e03c5d"
+    },
+    {
+      "asset_id": "1f893082-dba9-430b-bd23-4b47c160006c",
+      "label": "Slice 2",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/1f893082-dba9-430b-bd23-4b47c160006c.png",
+      "sha256": "1418a0ed2cc104a0c5b22a94651a1eb6558d2b7b8680227a96a90e561d5b1c6b"
+    },
+    {
+      "asset_id": "726c7c7a-fc92-47ae-8926-821cc63c5899",
+      "label": "Slice 1",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/726c7c7a-fc92-47ae-8926-821cc63c5899.png",
+      "sha256": "74a965220eb5a87fd4aa8cb20bc49ccd9a521eaae91b0f5c4731ffd1756d2dd3"
+    },
+    {
+      "asset_id": "7dac6492-849a-471b-af09-3c00cc354520",
+      "label": "Slice 3",
+      "prompt": "ONLY the three characters from TOP ROW of the source, redrawn correctly as COMPLETE STANDING FULL-BODY adults from crown to soles with both entire trouser legs AND shoes visible. Three separate full-body sprites in ONE HORIZONTAL ROW with generous transparent space between and 10 percent transparent margin on EVERY side. LEFT field technician in muted olive canvas jacket, charcoal beanie, shoulder bag, short grey stubble, full charcoal trousers and brown work boots. CENTRE young male observer in indigo jacket/cream collar, small notebook held at waist, full dark trousers and brown shoes. RIGHT female map worker with dark bob, muted teal cardigan and folded cream map, full dark trousers and brown shoes. Preserve exact recognizable faces, hair, clothes and palette from the source but continue missing anatomy down to shoes. Full human height identical for all three about44 logical pixels, head8 pixels, 5.5 heads adult proportion. Relaxed three-quarter front facing slightly right. Nothing touches cell edges, NEVER crop at knees/waist. No ground/shadow/backdrop/text/labels/grid. Not busts or portraits. Each complete sprite fits32x48 logical pixels.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/7dac6492-849a-471b-af09-3c00cc354520.png",
+      "sha256": "e83672b0c4922d3b1de6dad3fcb772d8f60ab8537a3775d7bb91b2010c04cf8b"
+    },
+    {
+      "asset_id": "edf395f1-b3e1-4283-a19f-6295dc1a0809",
+      "label": "Slice 2",
+      "prompt": "ONLY the three characters from TOP ROW of the source, redrawn correctly as COMPLETE STANDING FULL-BODY adults from crown to soles with both entire trouser legs AND shoes visible. Three separate full-body sprites in ONE HORIZONTAL ROW with generous transparent space between and 10 percent transparent margin on EVERY side. LEFT field technician in muted olive canvas jacket, charcoal beanie, shoulder bag, short grey stubble, full charcoal trousers and brown work boots. CENTRE young male observer in indigo jacket/cream collar, small notebook held at waist, full dark trousers and brown shoes. RIGHT female map worker with dark bob, muted teal cardigan and folded cream map, full dark trousers and brown shoes. Preserve exact recognizable faces, hair, clothes and palette from the source but continue missing anatomy down to shoes. Full human height identical for all three about44 logical pixels, head8 pixels, 5.5 heads adult proportion. Relaxed three-quarter front facing slightly right. Nothing touches cell edges, NEVER crop at knees/waist. No ground/shadow/backdrop/text/labels/grid. Not busts or portraits. Each complete sprite fits32x48 logical pixels.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/edf395f1-b3e1-4283-a19f-6295dc1a0809.png",
+      "sha256": "223636f1fdf86d69e55308ca86965620bba43efb9bc29f04c921f7619454feb3"
+    },
+    {
+      "asset_id": "a426b2b5-1c83-4a70-83e7-c7c9759cc854",
+      "label": "Slice 1",
+      "prompt": "ONLY the three characters from TOP ROW of the source, redrawn correctly as COMPLETE STANDING FULL-BODY adults from crown to soles with both entire trouser legs AND shoes visible. Three separate full-body sprites in ONE HORIZONTAL ROW with generous transparent space between and 10 percent transparent margin on EVERY side. LEFT field technician in muted olive canvas jacket, charcoal beanie, shoulder bag, short grey stubble, full charcoal trousers and brown work boots. CENTRE young male observer in indigo jacket/cream collar, small notebook held at waist, full dark trousers and brown shoes. RIGHT female map worker with dark bob, muted teal cardigan and folded cream map, full dark trousers and brown shoes. Preserve exact recognizable faces, hair, clothes and palette from the source but continue missing anatomy down to shoes. Full human height identical for all three about44 logical pixels, head8 pixels, 5.5 heads adult proportion. Relaxed three-quarter front facing slightly right. Nothing touches cell edges, NEVER crop at knees/waist. No ground/shadow/backdrop/text/labels/grid. Not busts or portraits. Each complete sprite fits32x48 logical pixels.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/a426b2b5-1c83-4a70-83e7-c7c9759cc854.png",
+      "sha256": "0f3b99e01932cae3feb9a02314c2ae9d797cbc6d65d185cab6a227c1097b39f5"
+    },
+    {
+      "asset_id": "c4fd92fc-3400-4a28-843e-208917957721",
+      "label": "",
+      "prompt": "ONLY the three characters from TOP ROW of the source, redrawn correctly as COMPLETE STANDING FULL-BODY adults from crown to soles with both entire trouser legs AND shoes visible. Three separate full-body sprites in ONE HORIZONTAL ROW with generous transparent space between and 10 percent transparent margin on EVERY side. LEFT field technician in muted olive canvas jacket, charcoal beanie, shoulder bag, short grey stubble, full charcoal trousers and brown work boots. CENTRE young male observer in indigo jacket/cream collar, small notebook held at waist, full dark trousers and brown shoes. RIGHT female map worker with dark bob, muted teal cardigan and folded cream map, full dark trousers and brown shoes. Preserve exact recognizable faces, hair, clothes and palette from the source but continue missing anatomy down to shoes. Full human height identical for all three about44 logical pixels, head8 pixels, 5.5 heads adult proportion. Relaxed three-quarter front facing slightly right. Nothing touches cell edges, NEVER crop at knees/waist. No ground/shadow/backdrop/text/labels/grid. Not busts or portraits. Each complete sprite fits32x48 logical pixels.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/c4fd92fc-3400-4a28-843e-208917957721.png",
+      "sha256": "f6450f30aaed91962418a37844366d177a43f3913c16f0897c049d120d6b3fa4"
+    },
+    {
+      "asset_id": "93e516df-4089-41f4-a35d-3ef0178421e0",
+      "label": "",
+      "prompt": "Refine the SAME main character design into a clean four-view production turnaround for a modular wardrobe. One horizontal row of FOUR full-body views FRONT, RIGHT PROFILE, BACK, LEFT PROFILE, no labels or borders, transparent empty background. Same adult youthful male trainee as reference, same short dark brown textured hair, human small eyes, cream collar, navy-grey station jacket with two subtle pockets, dark trousers and worn brown shoes. Keep 5.5-head adult proportions, slim realistic neck and shoulders, relaxed arms lowered, no props. Each view on equivalent 96x144 logical canvas, identical standing height about130px, foot baseline at136px. Same fixed lighting upper left and exact coherent palette/materials across views. Clean up the current noisy tiny highlights into intentional 2-4pixel cloth planes, more readable jaw/brows/eyes, subdued blue-teal cloth shadows and soft warm edge light; no heavy black sticker outline, no patchy checkerboard skin, no chibi anatomy. Calm professional in the warm/cool world of the reading room. Pixel art keeps each small pixel exact with human facial features and readable fabric, no vector or smooth painted rendering. Do not change outfit design or add accessories.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/93e516df-4089-41f4-a35d-3ef0178421e0.png",
+      "sha256": "7bd95fa5a7c5204d79602bca7f2283303b777f7d5b4fc04b40db94af9837693d"
+    },
+    {
+      "asset_id": "61cfe99c-5671-4c25-84cc-3cd753178a2b",
+      "label": "",
+      "prompt": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete full-body game sprites, generous empty gutters, no text, no visible grid, no shadows or scenery. Exact same art family throughout, equivalent human height and head proportions, each human designed as a legible 32x48 world sprite with adult 5 to 6 head tall proportions, not chibi, no huge eyes. Use adult professional realism of the character style reference, the warm subtle colours and controlled pixel clusters of room reference. Camera slight three-quarter front, facing right. ROW ONE: (1) field technician, 51-year-old sturdy man in muted olive jacket, charcoal knit cap and shoulder canvas bag, grey stubble; (2) young weather observer in muted indigo field jacket with cream collar, dark trousers, small centre-held notebook; (3) female map specialist with dark-brown bob, desaturated teal cardigan, charcoal trousers, folded cream map held against torso. ROW TWO: (1) Vera Pavlovna, 58-year-old slim woman with grey-brown hair in a bun and fine small glasses, muted oxblood wool cardigan over cream blouse, navy trousers, relaxed arms; (2) young shift worker with short chestnut hair, dusty dark teal jacket over cream shirt, dark grey trousers, no prop; (3) trainee protagonist with short textured dark-brown hair, navy jacket, cream collar, dark trousers and worn brown shoes, recognizable as the style reference hero but compact world silhouette. ROW THREE: (1) seated ginger-white fluffy station cat Pascal, compact natural cat with green eyes, (2) natural great tit with small black head, cream cheeks, subdued yellow breast and grey wings, (3) natural red squirrel with elegant curved tail. Animals visibly smaller than human cells and consistently proportioned. Preserve clothing texture in clear small clusters, no black outer sticker borders, no highly saturated arcade costumes.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/61cfe99c-5671-4c25-84cc-3cd753178a2b.png",
+      "sha256": "b9895f6494f6df969509e0b2c02cee95b3a0f29858fe49a882cdaf9d06915436"
+    },
+    {
+      "asset_id": "42014330-72cf-43f2-9051-fbf572dfa99e",
+      "label": "26063 — текущий взрослый герой, ориентир семейства",
+      "prompt": "26063 — текущий взрослый герой, ориентир семейства",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/42014330-72cf-43f2-9051-fbf572dfa99e.png",
+      "sha256": "4bc84cf430a559ea49cf76caf6394a9610fced9eab735714e2287f85d3770d45"
+    },
+    {
+      "asset_id": "eba57b9c-072c-445c-8063-764689be22cc",
+      "label": "Vera idle and explaining poses",
+      "prompt": "Nine row-major poses. First six lower bodies were absent in provider framing; canonical leg layer is retained in authored source.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/eba57b9c-072c-445c-8063-764689be22cc.png",
+      "sha256": "33513a379b9270bb1a6e3574a11066c30324a3070359e38b1f765bbe5004f76e"
+    },
+    {
+      "asset_id": "c6867f7d-9525-4c7e-bf00-fc26f9df9585",
+      "label": "Pascal blink, tail and glance poses",
+      "prompt": "Nine complete seated poses: blink, tail tip, ear and head glance.",
+      "kind": "image",
+      "file": "assets/source/characters/station-r02/provider/c6867f7d-9525-4c7e-bf00-fc26f9df9585.png",
+      "sha256": "53d4a41b5cb0bc6648a9db1ad50589d91b840851a8aecf6c82ee993bf4c699a3"
+    }
+  ]
+}

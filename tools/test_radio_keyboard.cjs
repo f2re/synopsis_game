@@ -48,6 +48,7 @@ const blitz = load('apps/web/src/features/shift/BlitzWorkspace.tsx', {
   '../avatar/SavedAvatarPortrait': {}, '../ui': {},
   '../ui/radioGroupKeys': { handleRadioGroupKeyDown },
   './StationPlotTask': {}, './ShiftWorkspace.css': {}, './BlitzWorkspace.css': {},
+  './WorkroomBackdrop': require('./workroom_test_fixture.cjs'),
 }, {}, '\nexports.testQuestion = BlitzQuestion;');
 const task = { instanceId: 'keyboard-contract', question: 'Выберите вариант', response: { kind: 'choice' },
   payload: { options: [{ id: 4, label: 'Первый' }, { id: 8, label: 'Второй' }, { id: 12, label: 'Третий' }] } };

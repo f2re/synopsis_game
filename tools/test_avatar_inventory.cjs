@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const net = require('node:net');
+const { createHash } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const ts = require('../apps/web/node_modules/typescript');
@@ -28,6 +29,25 @@ const ui = sourceModule('apps/web/src/features/avatar/avatarOptions.ts');
 const server = sourceModule('apps/server/src/modules/identity/model.ts');
 const { AVATAR_OPTIONS, DEFAULT_AVATAR, validateAvatar } = server;
 const drafts = sourceModule('apps/web/src/features/avatar/avatarDraft.ts', { './avatarOptions': ui });
+const iconManifest = JSON.parse(fs.readFileSync(path.join(repo, 'assets/manifests/wardrobe-icons.json'), 'utf8'));
+const registeredIcons = new Map(iconManifest.icons.map((icon) => [icon.id, icon]));
+assert.equal(registeredIcons.size, iconManifest.icons.length, 'Registered icon IDs must be unique');
+function localIconPath(image, id) {
+  assert(typeof image === 'string' && image.startsWith('/assets/items/wardrobe/'), `Non-local image URL: ${id}`);
+  const url = new URL(image, 'https://inventory.invalid');
+  assert.equal(url.origin, 'https://inventory.invalid', `Non-local image origin: ${id}`);
+  assert.equal(url.pathname, `/assets/items/wardrobe/${id}.png`, `Icon path differs from its semantic ID: ${id}`);
+  assert.equal(url.hash, '', `Unexpected icon fragment: ${id}`);
+  assert.equal(image, url.pathname + url.search, `Non-canonical image path: ${id}`);
+  if (url.search) {
+    const parameters = [...url.searchParams];
+    assert.deepEqual(parameters.map(([key]) => key), ['v'], `Only one icon version query is permitted: ${id}`);
+    const version = parameters[0][1];
+    assert(/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(version), `Invalid icon version: ${id}`);
+    assert.equal(url.search, `?v=${version}`, `Non-canonical icon query: ${id}`);
+  }
+  return url.pathname;
+}
 let optionCount = 0;
 let imageCount = 0;
 const allIds = new Set();
@@ -42,10 +62,14 @@ for (const [slot, options] of Object.entries(ui.OPTIONS)) {
     assert.equal(validateAvatar({ ...DEFAULT_AVATAR, [slot]: item.id })[slot], item.id);
     assert(item.name.trim() && item.desc.trim(), `Missing accessible item text: ${item.id}`);
     if (item.image) {
-      assert(/^\/assets\/items\/[a-z_]+\.png$/.test(item.image), `Non-local or invalid image path: ${item.id}`);
-      const file = fs.readFileSync(path.join(repo, 'apps/web/public', item.image.slice(1)));
+      const icon = registeredIcons.get(item.id);
+      assert(icon, `Unregistered inventory artwork: ${item.id}`);
+      const imagePath = localIconPath(item.image, item.id);
+      const source = fs.readFileSync(path.join(repo, 'assets/source/ui/wardrobe-icons', `${item.id}.png`));
+      assert.equal(createHash('sha256').update(source).digest('hex'), icon.sha256, `Icon source differs from its registered checksum: ${item.id}`);
+      const file = fs.readFileSync(path.join(repo, 'apps/web/public', imagePath.slice(1)));
       assert.equal(file.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', `Not a PNG: ${item.image}`);
-      assert(file.readUInt32BE(16) > 0 && file.readUInt32BE(20) > 0, `Empty image: ${item.image}`);
+      assert.deepEqual([file.readUInt32BE(16), file.readUInt32BE(20)], iconManifest.runtimeSize, `Incorrect icon dimensions: ${item.image}`);
       imageCount++;
     }
     optionCount++;
@@ -60,15 +84,11 @@ for (const slot of ui.EQUIPMENT_SLOTS) {
   assert.deepEqual(actual.map((item) => item.id).sort(), expected.map((item) => item.id).sort());
   for (const item of actual) assert((item.image || item.iconLabel) && item.category === slot.category, `Missing equipment visual/category: ${item.id}`);
 }
-const reviewedReplacements = {
-  'headwear.scarf': '/assets/items/scarf_reviewed.png',
-  'headwear.goggles': '/assets/items/goggles_reviewed.png',
-  'badge.meteo': '/assets/items/badge_meteo_reviewed.png',
-  'badge.aerology': '/assets/items/badge_aerology_reviewed.png',
-};
-for (const [id, image] of Object.entries(reviewedReplacements)) {
+const reviewedReplacements = ['headwear.scarf', 'headwear.goggles', 'badge.meteo', 'badge.aerology'];
+for (const id of reviewedReplacements) {
   const item = ui.INVENTORY_ITEMS.find((entry) => entry.id === id);
-  assert(item.iconLabel && item.image === image, `Unreviewed legacy artwork reintroduced: ${id}`);
+  assert(item.iconLabel && registeredIcons.has(id), `Missing registered artwork or accessible icon label: ${id}`);
+  assert.equal(localIconPath(item.image, id), `/assets/items/wardrobe/${id}.png`, `Unreviewed legacy artwork reintroduced: ${id}`);
 }
 assert.equal(new Set(ui.INVENTORY_ITEMS.map((item) => item.id)).size, ui.INVENTORY_ITEMS.length);
 // Browser Back unmounts the editor: recover its cosmetic draft without touching

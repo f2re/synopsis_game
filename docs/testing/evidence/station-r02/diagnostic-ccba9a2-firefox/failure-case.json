@@ -1,0 +1,698 @@
+{
+  "purpose": "First confirmed native root-SVG edge assignment and preserved outside/disabled guards; overall Firefox suite remains failed at a later keyboard-focus check after portrait-to-landscape resize.",
+  "sourceHead": "ccba9a232e01203bb5cac756d2d282ef5e53e0a4",
+  "testedMergeSha": "8ffffa8a59dbb71a302691b88259beff56d69083",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43884866142,
+  "jobId": 133360147091,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43884866142",
+  "artifact": {
+    "id": 14233323950,
+    "zipSha256": "62931853a860c32d23d2fb1c7be419a5c1b382cd1d1b64daad4ba0a0676c5c0c",
+    "zipBytes": 69872324
+  },
+  "browser": "153.0",
+  "status": "FAIL",
+  "sourceRunnerSha256": {
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "54d1c8c081f0e9287f39e41bc8cd2925e9598b2b269e9705fba60708d4c720d9",
+    "tools/test_station_plot_hit_fallback.cjs": "fe01e6c3fccde30ce0d723f2ad2a977a9dd951a6ec377df33f5822d83dff0f40",
+    ".github/workflows/station-screens.yml": "8687a090c954a49bc06ed01ad485095d1bdabf6ef924222597f7e2ef50a37195"
+  },
+  "originalReportSha256": "fcb16ba2ad730b9db3d46f4f6ff846906f87650c8ecc7ddddd6b8d3cbca6f32e",
+  "countsBeforeFailure": {
+    "caseRecords": 579,
+    "pngs": 237,
+    "trustedClickRecords": 157,
+    "freshAssignments": 144,
+    "rootTargets": 27,
+    "rootAssignmentsWithStateChange": 22,
+    "gapNegatives": 4,
+    "disabledNegatives": 1
+  },
+  "failure": {
+    "logTimestamp": "2026-11-16T14:28:38.3413168Z",
+    "message": "Map position 2: keyboard focus remains visible inside every scrolling frame",
+    "file": "tools/test_game_controls_browser.cjs",
+    "line": 418,
+    "scenario": "checkShift: viewport390x844 -> viewport844x390, after successful fillTask and before resize screenshot",
+    "lastRecordedCase": "all-shift-resize-station-plot-targets-844",
+    "coverageLimit": "The helper did not record activeElement, per-parent clipping, center elementFromPoint or a failure screenshot. This log does not distinguish focus order, scrolling/visibility or hit-query causes."
+  },
+  "interpretation": "The original fractional Blitz target bounds and nominal point were reproduced. The nearest integer dispatched coordinates (944,709) were emitted unchanged by a trusted native event. Its actual target was the root SVG, exactHits was slot_01, and the observation changed from T to Td. This proves the production exact-fill fallback was used, unlike the earlier pre-click query failures. The original shape and scientific coordinates were not enlarged. The nominal half-pixel sample and dispatched point both remain in the same unique shape; input displacement is at most 0.5 CSS pixels per axis. The 0..1 CSS pixel physical inset applies only to four cardinal flat-edge samples, not to all diagonal samples.",
+  "selectedOriginalCases": [
+    {
+      "name": "all-blitz-svg-filled-regression-geometry-1366",
+      "before": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху: Температура воздуха T",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре, свободна",
+            "disabled": "false"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": true,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": false,
+            "selected": true,
+            "disabled": false
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          }
+        ]
+      },
+      "probe": {
+        "point": {
+          "x": 944.3416976928711,
+          "y": 708.6166534423828
+        },
+        "dispatchedPoint": {
+          "x": 944,
+          "y": 709
+        },
+        "dispatchOffset": {
+          "x": -0.34169769287109375,
+          "y": 0.3833465576171875
+        },
+        "inputGridCss": 1,
+        "devicePixelRatio": 1,
+        "receivesPointer": false,
+        "queriedSvgRoot": true,
+        "exactHits": [
+          "slot_01"
+        ],
+        "dispatchedReceivesPointer": false,
+        "dispatchedQueriedSvgRoot": true,
+        "dispatchedExactHits": [
+          "slot_01"
+        ],
+        "label": "Позиция слева сверху: Температура воздуха T",
+        "slotId": "slot_01",
+        "targetIndex": 0,
+        "fill": "rgba(255, 255, 255, 0.84)",
+        "fillOpacity": "1",
+        "pointerEvents": "all",
+        "hitTag": "svg",
+        "hitClass": "station-plot-svg",
+        "bounds": {
+          "left": 889.4000244140625,
+          "top": 655.566650390625,
+          "width": 109.88334655761719,
+          "height": 53.55000305175781
+        },
+        "localPoint": {
+          "x": 300.0072524105235,
+          "y": 355.9689178381741
+        },
+        "localBox": {
+          "x": 183,
+          "y": 243,
+          "width": 234,
+          "height": 114
+        },
+        "isPointInFill": true,
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803.4833374023438,
+          "f": 541.4833374023438
+        },
+        "svgBounds": {
+          "left": 803.4833374023438,
+          "top": 541.4833374023438,
+          "right": 1273,
+          "bottom": 1011
+        },
+        "viewport": {
+          "left": 0,
+          "top": 0,
+          "right": 1340,
+          "bottom": 768,
+          "clientWidth": 1340,
+          "clientHeight": 768,
+          "scrollTop": 158.51666259765625,
+          "scrollLeft": 0
+        }
+      },
+      "expected": {
+        "scrollTop": 158.51666259765625,
+        "bounds": {
+          "left": 889.4000244140625,
+          "top": 655.566650390625,
+          "width": 109.88334655761719,
+          "height": 53.55000305175781
+        }
+      }
+    },
+    {
+      "name": "all-blitz-svg-assignment-1366-1-4-filled-replacement",
+      "sample": 4,
+      "fresh": false,
+      "disabled": false,
+      "beforePointer": {
+        "point": {
+          "x": 944.3416976928711,
+          "y": 708.6166534423828
+        },
+        "dispatchedPoint": {
+          "x": 944,
+          "y": 709
+        },
+        "dispatchOffset": {
+          "x": -0.34169769287109375,
+          "y": 0.3833465576171875
+        },
+        "inputGridCss": 1,
+        "devicePixelRatio": 1,
+        "receivesPointer": false,
+        "queriedSvgRoot": true,
+        "exactHits": [
+          "slot_01"
+        ],
+        "dispatchedReceivesPointer": false,
+        "dispatchedQueriedSvgRoot": true,
+        "dispatchedExactHits": [
+          "slot_01"
+        ],
+        "label": "Позиция слева сверху: Температура воздуха T",
+        "slotId": "slot_01",
+        "targetIndex": 0,
+        "fill": "rgba(255, 255, 255, 0.84)",
+        "fillOpacity": "1",
+        "pointerEvents": "all",
+        "hitTag": "svg",
+        "hitClass": "station-plot-svg",
+        "bounds": {
+          "left": 889.4000244140625,
+          "top": 655.566650390625,
+          "width": 109.88334655761719,
+          "height": 53.55000305175781
+        },
+        "localPoint": {
+          "x": 300.0072524105235,
+          "y": 355.9689178381741
+        },
+        "localBox": {
+          "x": 183,
+          "y": 243,
+          "width": 234,
+          "height": 114
+        },
+        "isPointInFill": true,
+        "matrix": {
+          "a": 0.46951666474342346,
+          "b": 0,
+          "c": 0,
+          "d": 0.46951666474342346,
+          "e": 803.4833374023438,
+          "f": 541.4833374023438
+        },
+        "svgBounds": {
+          "left": 803.4833374023438,
+          "top": 541.4833374023438,
+          "right": 1273,
+          "bottom": 1011
+        },
+        "viewport": {
+          "left": 0,
+          "top": 0,
+          "right": 1340,
+          "bottom": 768,
+          "clientWidth": 1340,
+          "clientHeight": 768,
+          "scrollTop": 158.51666259765625,
+          "scrollLeft": 0
+        }
+      },
+      "nativeEvents": [
+        {
+          "isTrusted": true,
+          "clientX": 944,
+          "clientY": 709,
+          "button": 0,
+          "targetIsSvg": true,
+          "targetTag": "svg",
+          "targetClass": "station-plot-svg",
+          "targetSlotId": null,
+          "exactHits": [
+            "slot_01"
+          ]
+        }
+      ],
+      "before": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху: Температура воздуха T",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре, свободна",
+            "disabled": "false"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": true,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": false,
+            "selected": true,
+            "disabled": false
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          }
+        ]
+      },
+      "after": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху: Точка росы Td",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре, свободна",
+            "disabled": "false"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": true,
+            "selected": true,
+            "disabled": false
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "all-shift-disabled-svg-assignment-1366-1-4-guard",
+      "sample": 4,
+      "fresh": false,
+      "disabled": true,
+      "beforePointer": {
+        "point": {
+          "x": 900.2416915893555,
+          "y": 205.5500030517578
+        },
+        "dispatchedPoint": {
+          "x": 900,
+          "y": 206
+        },
+        "dispatchOffset": {
+          "x": -0.24169158935546875,
+          "y": 0.4499969482421875
+        },
+        "inputGridCss": 1,
+        "devicePixelRatio": 1,
+        "receivesPointer": true,
+        "queriedSvgRoot": false,
+        "exactHits": [
+          "slot_01"
+        ],
+        "dispatchedReceivesPointer": false,
+        "dispatchedQueriedSvgRoot": true,
+        "dispatchedExactHits": [
+          "slot_01"
+        ],
+        "label": "Позиция слева сверху: Температура воздуха T",
+        "slotId": "slot_01",
+        "targetIndex": 0,
+        "fill": "rgba(77, 153, 95, 0.12)",
+        "fillOpacity": "1",
+        "pointerEvents": "all",
+        "hitTag": "rect",
+        "hitClass": "station-slot-target",
+        "bounds": {
+          "left": 839.4000244140625,
+          "top": 146.75,
+          "width": 121.68333435058594,
+          "height": 59.30000305175781
+        },
+        "localPoint": {
+          "x": 299.99994921401685,
+          "y": 356.05771049031864
+        },
+        "localBox": {
+          "x": 183,
+          "y": 243,
+          "width": 234,
+          "height": 114
+        },
+        "isPointInFill": true,
+        "matrix": {
+          "a": 0.5199999809265137,
+          "b": 0,
+          "c": 0,
+          "d": 0.5199999809265137,
+          "e": 744.24169921875,
+          "f": 20.399999618530273
+        },
+        "svgBounds": {
+          "left": 735.4833374023438,
+          "top": 20.399993896484375,
+          "right": 1273,
+          "bottom": 540.3999938964844
+        },
+        "viewport": {
+          "left": 0,
+          "top": 0,
+          "right": 1340,
+          "bottom": 768,
+          "clientWidth": 1340,
+          "clientHeight": 768,
+          "scrollTop": 533,
+          "scrollLeft": 0
+        }
+      },
+      "nativeEvents": [
+        {
+          "isTrusted": true,
+          "clientX": 900,
+          "clientY": 206,
+          "button": 0,
+          "targetIsSvg": true,
+          "targetTag": "svg",
+          "targetClass": "station-plot-svg",
+          "targetSlotId": null,
+          "exactHits": [
+            "slot_01"
+          ]
+        }
+      ],
+      "before": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху: Температура воздуха T",
+            "disabled": "true"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу: Точка росы Td",
+            "disabled": "true"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху: Давление, приведённое к уровню моря p",
+            "disabled": "true"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре: Ветер dd/ff",
+            "disabled": "true"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": true,
+            "selected": false,
+            "disabled": true
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": true,
+            "selected": false,
+            "disabled": true
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": true,
+            "selected": false,
+            "disabled": true
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": true,
+            "selected": true,
+            "disabled": true
+          }
+        ]
+      },
+      "after": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху: Температура воздуха T",
+            "disabled": "true"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу: Точка росы Td",
+            "disabled": "true"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху: Давление, приведённое к уровню моря p",
+            "disabled": "true"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре: Ветер dd/ff",
+            "disabled": "true"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": true,
+            "selected": false,
+            "disabled": true
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": true,
+            "selected": false,
+            "disabled": true
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": true,
+            "selected": false,
+            "disabled": true
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": true,
+            "selected": true,
+            "disabled": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "all-shift-svg-gap-1366",
+      "probe": {
+        "point": {
+          "x": 1004.2416896820068,
+          "y": 709.4000186920166
+        },
+        "queriedSvgRoot": true,
+        "exactHits": []
+      },
+      "nativeEvents": [
+        {
+          "isTrusted": true,
+          "clientX": 1004,
+          "clientY": 709,
+          "button": 0,
+          "targetIsSvg": true,
+          "targetTag": "svg",
+          "targetClass": "station-plot-svg",
+          "targetSlotId": null,
+          "exactHits": []
+        }
+      ],
+      "before": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре, свободна",
+            "disabled": "false"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": false,
+            "selected": true,
+            "disabled": false
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          }
+        ]
+      },
+      "after": {
+        "positions": [
+          {
+            "id": "slot_01",
+            "label": "Позиция слева сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_02",
+            "label": "Позиция слева снизу, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_03",
+            "label": "Позиция справа сверху, свободна",
+            "disabled": "false"
+          },
+          {
+            "id": "slot_04",
+            "label": "Позиция в центре, свободна",
+            "disabled": "false"
+          }
+        ],
+        "observations": [
+          {
+            "label": "Температура воздуха T",
+            "placed": false,
+            "selected": true,
+            "disabled": false
+          },
+          {
+            "label": "Точка росы Td",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Давление, приведённое к уровню моря p",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          },
+          {
+            "label": "Ветер dd/ff",
+            "placed": false,
+            "selected": false,
+            "disabled": false
+          }
+        ]
+      }
+    }
+  ]
+}

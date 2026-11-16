@@ -3,7 +3,7 @@ import {
   type AvatarAction, type AvatarCel, type AvatarClip, type AvatarDirection, type AvatarFrameBox,
   type ModularAvatarManifest, type ModularAvatarProfile,
 } from './modularAvatarManifest.ts';
-import stationFauna from '../assets/hub/station-fauna.json';
+import stationFauna from '../assets/hub/station-fauna.json' with { type: 'json' };
 
 /** Bounded CPU resources for the static fitting room only. */
 export const AVATAR_CACHE_BUDGET = { composites: 12 * 1024 * 1024 } as const;

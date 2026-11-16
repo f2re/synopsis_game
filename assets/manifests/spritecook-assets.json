@@ -357,9 +357,9 @@
     },
     {
       "id": "assets/generated/characters/player-r01/library/body.png",
-      "asset_id": "6633da16-fe90-4623-9917-6f68dcdac10d",
-      "sha12": "e76907cf912e",
-      "label": "26063 · body · four directions · R01"
+      "asset_id": "75859a3f-55fc-4e7d-9834-0f341d6cb9bb",
+      "sha12": "69105de7aaf0",
+      "label": "26063 · body · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/hair.short.png",
@@ -393,123 +393,123 @@
     },
     {
       "id": "assets/generated/characters/player-r01/library/headwear.cap.png",
-      "asset_id": "1f1c4cc9-fac9-4c8c-b5ab-8a0432771814",
-      "sha12": "4cb09735212a",
-      "label": "26063 · headwear.cap · four directions · R01"
+      "asset_id": "7234660f-5df3-48c1-aae2-ac487a357258",
+      "sha12": "8ca057768e89",
+      "label": "26063 · headwear.cap · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/headwear.beanie.png",
-      "asset_id": "1b301fa2-405b-40bf-a085-d1b6fc246ad6",
-      "sha12": "adae023add74",
-      "label": "26063 · headwear.beanie · four directions · R01"
+      "asset_id": "923b4511-d963-4d80-a061-ff83851c3a76",
+      "sha12": "47f369c87b9f",
+      "label": "26063 · headwear.beanie · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/headwear.scarf.png",
-      "asset_id": "e7e0120a-f441-4aa0-84f2-fbbba64aad49",
-      "sha12": "9e68027a9e5d",
-      "label": "26063 · headwear.scarf · four directions · R01"
+      "asset_id": "40aafe1d-fb36-4840-9d7d-ef6dd56c6acb",
+      "sha12": "52f4e871eb97",
+      "label": "26063 · headwear.scarf · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/headwear.goggles.png",
-      "asset_id": "94360315-d7eb-4bbe-aee4-17025cc30b3e",
-      "sha12": "58bb45c3cb81",
-      "label": "26063 · headwear.goggles · four directions · R01"
+      "asset_id": "eed40778-4d3b-4890-8a51-e098a94e4dcc",
+      "sha12": "f7e343ed17e1",
+      "label": "26063 · headwear.goggles · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/top.center-jacket.png",
-      "asset_id": "6d3be27d-e17d-4577-a831-5c4199102419",
-      "sha12": "57ea7848e32a",
-      "label": "26063 · top.center-jacket · four directions · R01"
+      "asset_id": "5efb0b22-5023-424e-8509-db999a6894b0",
+      "sha12": "0e5b8160fe23",
+      "label": "26063 · top.center-jacket · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/top.field-jacket.png",
-      "asset_id": "f18c63dd-980d-4ab1-94c0-33b911379433",
-      "sha12": "e690a4e0f2c6",
-      "label": "26063 · top.field-jacket · four directions · R01"
+      "asset_id": "bd474e4d-a2fc-4a8d-a98f-d0aa61a56b70",
+      "sha12": "b96a72a63b29",
+      "label": "26063 · top.field-jacket · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/top.hoodie.png",
-      "asset_id": "baa194a9-5348-4518-8530-aae4a61e8c6c",
-      "sha12": "39f080dffb68",
-      "label": "26063 · top.hoodie · four directions · R01"
+      "asset_id": "98d8a43d-4edd-471b-b765-582ea19edc9e",
+      "sha12": "459f8b02bd70",
+      "label": "26063 · top.hoodie · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/top.sweater.png",
-      "asset_id": "3b3b5410-e760-4301-bcac-331262c77ad2",
-      "sha12": "91184941cf8f",
-      "label": "26063 · top.sweater · four directions · R01"
+      "asset_id": "461592d0-e13c-4d54-8230-59bd5a0d3f70",
+      "sha12": "6ab1aecf10e6",
+      "label": "26063 · top.sweater · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/top.shirt.png",
-      "asset_id": "153c5324-b9f7-4053-8b65-1fbaa401c082",
-      "sha12": "e354a4a8bc36",
-      "label": "26063 · top.shirt · four directions · R01"
+      "asset_id": "aa58d65a-7a23-4b0a-8fec-766a7936a33e",
+      "sha12": "2b17cd2eeb97",
+      "label": "26063 · top.shirt · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/bottom.dark-trousers.png",
-      "asset_id": "23d67b62-7b4c-4c5d-ac92-498606efd808",
-      "sha12": "4d53d693b07a",
-      "label": "26063 · bottom.dark-trousers · four directions · R01"
+      "asset_id": "3af678a5-003d-43b9-b0c8-a2e0652fe5ac",
+      "sha12": "6d458b6e48c7",
+      "label": "26063 · bottom.dark-trousers · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/bottom.field-trousers.png",
-      "asset_id": "12267108-1e27-4f3e-af18-ba8d8ad93731",
-      "sha12": "2fc2c728f358",
-      "label": "26063 · bottom.field-trousers · four directions · R01"
+      "asset_id": "876f9a09-4180-4beb-baab-1db82f3c96a7",
+      "sha12": "0c8b421b85a6",
+      "label": "26063 · bottom.field-trousers · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/bottom.jeans.png",
-      "asset_id": "e32075c7-a331-4bce-b4cc-fbf07a26813a",
-      "sha12": "ecb59fdc67ae",
-      "label": "26063 · bottom.jeans · four directions · R01"
+      "asset_id": "3ed79833-3540-4044-a975-af955d60b586",
+      "sha12": "02091fa537cd",
+      "label": "26063 · bottom.jeans · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/footwear.sneakers.png",
-      "asset_id": "47ebb3d6-4f75-4554-9b47-62203c589ec9",
-      "sha12": "72035cccc539",
-      "label": "26063 · footwear.sneakers · four directions · R01"
+      "asset_id": "3cfc7a29-d205-4140-8ef1-3e49db3faaef",
+      "sha12": "e3509a429737",
+      "label": "26063 · footwear.sneakers · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/footwear.boots.png",
-      "asset_id": "fc015b50-3ac6-4c1f-b61e-33c4fcd28fe1",
-      "sha12": "88a668260b09",
-      "label": "26063 · footwear.boots · four directions · R01"
+      "asset_id": "501276fd-b79c-41cf-8394-b22e2a3b757a",
+      "sha12": "2d1aa16e1290",
+      "label": "26063 · footwear.boots · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/footwear.shoes.png",
-      "asset_id": "4fa43d78-8753-480b-89a6-5af9c51d251e",
-      "sha12": "bddff35e800f",
-      "label": "26063 · footwear.shoes · four directions · R01"
+      "asset_id": "293d4a9f-f706-42e7-af2b-f315f8c4bc1d",
+      "sha12": "4fe572ea4a52",
+      "label": "26063 · footwear.shoes · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/backpack.city.png",
-      "asset_id": "980334ee-6b3f-4d2e-b1a4-a7a20be7956b",
-      "sha12": "c9fb156191c0",
-      "label": "26063 · backpack.city · four directions · R01"
+      "asset_id": "80b0e609-6ecd-4f21-b8b3-cabbc689fc1c",
+      "sha12": "4f77ff683ca3",
+      "label": "26063 · backpack.city · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/backpack.field.png",
-      "asset_id": "1a07072a-0d4d-451a-bee0-2a6d5bb42da5",
-      "sha12": "413c89824353",
-      "label": "26063 · backpack.field · four directions · R01"
+      "asset_id": "27640e40-41f8-42a4-92c6-b83853610245",
+      "sha12": "118b3d0e5f49",
+      "label": "26063 · backpack.field · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/held.tablet.png",
-      "asset_id": "ca65d617-caa0-4b43-b8e2-5379931f097c",
-      "sha12": "3798ebc74de7",
-      "label": "26063 · held.tablet · four directions · R01"
+      "asset_id": "93fb8a9a-75ef-4079-a47c-ae83b9132a9b",
+      "sha12": "f6462a2d5ee8",
+      "label": "26063 · held.tablet · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/held.map-folder.png",
-      "asset_id": "9b93f745-41b2-4a2c-968c-3b8c35925045",
-      "sha12": "f22b59e50fc2",
-      "label": "26063 · held.map-folder · four directions · R01"
+      "asset_id": "5f73e016-4054-49f8-a249-7b8b2f5aa7ce",
+      "sha12": "406ce207a8ef",
+      "label": "26063 · held.map-folder · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/held.pencil.png",
-      "asset_id": "1130d00c-9bbb-43b2-a6a3-b7727b325019",
-      "sha12": "729198510ec3",
-      "label": "26063 · held.pencil · four directions · R01"
+      "asset_id": "f3b312fb-e7e1-4fa9-93a7-7f99f89495a2",
+      "sha12": "6042111db4aa",
+      "label": "26063 · held.pencil · four directions · station R02"
     },
     {
       "id": "assets/generated/characters/player-r01/library/badge.meteo.png",
@@ -525,15 +525,15 @@
     },
     {
       "id": "assets/generated/characters/player-r01/library/companion.tit.png",
-      "asset_id": "b927e9e2-1ec9-49de-98a7-f1ddfb790c72",
-      "sha12": "fb474dccd3fb",
-      "label": "26063 · companion.tit · four directions · R01"
+      "asset_id": "ecfda920-f974-4358-ad4a-ff3ea68ab740",
+      "sha12": "0733696ec906",
+      "label": "26063 · companion.tit · four directions · R02 shared station fauna"
     },
     {
       "id": "assets/generated/characters/player-r01/library/companion.squirrel.png",
-      "asset_id": "3f92695e-c920-4e8a-8a30-31de436b6116",
-      "sha12": "f55b1b456f9e",
-      "label": "26063 · companion.squirrel · four directions · R01"
+      "asset_id": "1574919b-a8c1-46cf-869b-840cc7bdf2fc",
+      "sha12": "c1e63d6bec32",
+      "label": "26063 · companion.squirrel · four directions · R02 shared station fauna"
     },
     {
       "id": "assets/source/characters/player-r01/motion-reference/body-down-spritecook.png",
@@ -618,6 +618,330 @@
       "asset_id": "68d5cde2-1898-44b1-b5d6-963c3c9d31b8",
       "sha12": "154796740c75",
       "label": "assets/source/environment/hub/distant-ridges/spritecook.png"
+    },
+    {
+      "id": "assets/source/environment/workrooms-r01/provider/telegraph.png",
+      "asset_id": "d6e112a3-024d-4a6b-9d21-a76de48552bc",
+      "sha12": "0915443bf14a",
+      "label": "26063 — телеграфная R01"
+    },
+    {
+      "id": "assets/source/environment/workrooms-r01/provider/synoptic.png",
+      "asset_id": "e1466f8b-85a0-4b49-a8de-40982572accc",
+      "sha12": "dfc42e61eefd",
+      "label": "26063 — синоптическая комната R01"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/eba57b9c-072c-445c-8063-764689be22cc.png",
+      "asset_id": "eba57b9c-072c-445c-8063-764689be22cc",
+      "sha12": "33513a379b92",
+      "label": "Vera idle and explaining poses"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/c6867f7d-9525-4c7e-bf00-fc26f9df9585.png",
+      "asset_id": "c6867f7d-9525-4c7e-bf00-fc26f9df9585",
+      "sha12": "53d4a41b5cb0",
+      "label": "Pascal blink, tail and glance poses"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/69bab40b-cd8e-419c-890b-c581559188c0.png",
+      "asset_id": "69bab40b-cd8e-419c-890b-c581559188c0",
+      "sha12": "7d74af32fbcf",
+      "label": "26063 · companion.squirrel · R02 wardrobe icon from canonical fauna"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/8f1b0e81-45a0-43a2-94f0-c27ed3d566e0.png",
+      "asset_id": "8f1b0e81-45a0-43a2-94f0-c27ed3d566e0",
+      "sha12": "bdbe18c11e9a",
+      "label": "26063 · companion.tit · R02 wardrobe icon from canonical fauna"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/1574919b-a8c1-46cf-869b-840cc7bdf2fc.png",
+      "asset_id": "1574919b-a8c1-46cf-869b-840cc7bdf2fc",
+      "sha12": "bdc82665cba5",
+      "label": "26063 · companion.squirrel · four directions · R02 shared station fauna"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/ecfda920-f974-4358-ad4a-ff3ea68ab740.png",
+      "asset_id": "ecfda920-f974-4358-ad4a-ff3ea68ab740",
+      "sha12": "cfea419a7f2c",
+      "label": "26063 · companion.tit · four directions · R02 shared station fauna"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/0305ab7f-6843-4cc7-aa51-59ee0885e7b3-sheet.png",
+      "asset_id": "0305ab7f-6843-4cc7-aa51-59ee0885e7b3",
+      "sha12": "076e0f1824fe",
+      "label": "Slice 5 Animation"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/b0724626-9479-42c6-86eb-64dd16306ecc.png",
+      "asset_id": "b0724626-9479-42c6-86eb-64dd16306ecc",
+      "sha12": "99c35dacbd11",
+      "label": "Three isolated full-body pixel sprites in ONE HORIZONTAL ROW, all seated in a natural RIGHT-facing t"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/11d73992-b9e5-4469-80ed-dda15c12c254.png",
+      "asset_id": "11d73992-b9e5-4469-80ed-dda15c12c254",
+      "sha12": "d0f49d927e9f",
+      "label": "A production sprite sheet of the same natural red squirrel from the reference, small head, one-pixel"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/ccbd3324-8b16-4fc2-b37e-6ae2a1096490.png",
+      "asset_id": "ccbd3324-8b16-4fc2-b37e-6ae2a1096490",
+      "sha12": "3d73d5dd8828",
+      "label": "A production sprite sheet of the same natural great tit from the reference, small black head, one-pi"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/f3b312fb-e7e1-4fa9-93a7-7f99f89495a2.png",
+      "asset_id": "f3b312fb-e7e1-4fa9-93a7-7f99f89495a2",
+      "sha12": "924200442280",
+      "label": "26063 · held.pencil · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/5f73e016-4054-49f8-a249-7b8b2f5aa7ce.png",
+      "asset_id": "5f73e016-4054-49f8-a249-7b8b2f5aa7ce",
+      "sha12": "89be8cc6e915",
+      "label": "26063 · held.map-folder · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/93fb8a9a-75ef-4079-a47c-ae83b9132a9b.png",
+      "asset_id": "93fb8a9a-75ef-4079-a47c-ae83b9132a9b",
+      "sha12": "1ee48727f166",
+      "label": "26063 · held.tablet · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/27640e40-41f8-42a4-92c6-b83853610245.png",
+      "asset_id": "27640e40-41f8-42a4-92c6-b83853610245",
+      "sha12": "31cfd8457929",
+      "label": "26063 · backpack.field · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/80b0e609-6ecd-4f21-b8b3-cabbc689fc1c.png",
+      "asset_id": "80b0e609-6ecd-4f21-b8b3-cabbc689fc1c",
+      "sha12": "5c18e5e0ffc7",
+      "label": "26063 · backpack.city · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/293d4a9f-f706-42e7-af2b-f315f8c4bc1d.png",
+      "asset_id": "293d4a9f-f706-42e7-af2b-f315f8c4bc1d",
+      "sha12": "5b7f05322e7e",
+      "label": "26063 · footwear.shoes · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/501276fd-b79c-41cf-8394-b22e2a3b757a.png",
+      "asset_id": "501276fd-b79c-41cf-8394-b22e2a3b757a",
+      "sha12": "75ebf9d3e4cd",
+      "label": "26063 · footwear.boots · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/3cfc7a29-d205-4140-8ef1-3e49db3faaef.png",
+      "asset_id": "3cfc7a29-d205-4140-8ef1-3e49db3faaef",
+      "sha12": "81ee4bcf30e5",
+      "label": "26063 · footwear.sneakers · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/3ed79833-3540-4044-a975-af955d60b586.png",
+      "asset_id": "3ed79833-3540-4044-a975-af955d60b586",
+      "sha12": "8140d5864e16",
+      "label": "26063 · bottom.jeans · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/d69e9a12-a300-4590-8a44-9984122fdb68-sheet.png",
+      "asset_id": "d69e9a12-a300-4590-8a44-9984122fdb68",
+      "sha12": "484299536cdc",
+      "label": "Slice 2 Animation"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/876f9a09-4180-4beb-baab-1db82f3c96a7.png",
+      "asset_id": "876f9a09-4180-4beb-baab-1db82f3c96a7",
+      "sha12": "3652c0bce7f0",
+      "label": "26063 · bottom.field-trousers · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/3af678a5-003d-43b9-b0c8-a2e0652fe5ac.png",
+      "asset_id": "3af678a5-003d-43b9-b0c8-a2e0652fe5ac",
+      "sha12": "cae2f733983a",
+      "label": "26063 · bottom.dark-trousers · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/aa58d65a-7a23-4b0a-8fec-766a7936a33e.png",
+      "asset_id": "aa58d65a-7a23-4b0a-8fec-766a7936a33e",
+      "sha12": "17914f335b49",
+      "label": "26063 · top.shirt · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/88163dc6-1867-413a-8734-efac1429eada-sheet.png",
+      "asset_id": "88163dc6-1867-413a-8734-efac1429eada",
+      "sha12": "88198053d338",
+      "label": "Slice 3 Animation"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/461592d0-e13c-4d54-8230-59bd5a0d3f70.png",
+      "asset_id": "461592d0-e13c-4d54-8230-59bd5a0d3f70",
+      "sha12": "0aed873478f4",
+      "label": "26063 · top.sweater · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/98d8a43d-4edd-471b-b765-582ea19edc9e.png",
+      "asset_id": "98d8a43d-4edd-471b-b765-582ea19edc9e",
+      "sha12": "c38bf4d1edba",
+      "label": "26063 · top.hoodie · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/bd474e4d-a2fc-4a8d-a98f-d0aa61a56b70.png",
+      "asset_id": "bd474e4d-a2fc-4a8d-a98f-d0aa61a56b70",
+      "sha12": "6c932db5da24",
+      "label": "26063 · top.field-jacket · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/5efb0b22-5023-424e-8509-db999a6894b0.png",
+      "asset_id": "5efb0b22-5023-424e-8509-db999a6894b0",
+      "sha12": "dfed736c5b43",
+      "label": "26063 · top.center-jacket · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/874e7204-55a1-4125-8dce-0d6f1bf549cb-sheet.png",
+      "asset_id": "874e7204-55a1-4125-8dce-0d6f1bf549cb",
+      "sha12": "006e0553c508",
+      "label": "Slice 1 Animation"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/eed40778-4d3b-4890-8a51-e098a94e4dcc.png",
+      "asset_id": "eed40778-4d3b-4890-8a51-e098a94e4dcc",
+      "sha12": "a732ed41ff26",
+      "label": "26063 · headwear.goggles · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/40aafe1d-fb36-4840-9d7d-ef6dd56c6acb.png",
+      "asset_id": "40aafe1d-fb36-4840-9d7d-ef6dd56c6acb",
+      "sha12": "35950a59c97c",
+      "label": "26063 · headwear.scarf · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/923b4511-d963-4d80-a061-ff83851c3a76.png",
+      "asset_id": "923b4511-d963-4d80-a061-ff83851c3a76",
+      "sha12": "bf29903e916e",
+      "label": "26063 · headwear.beanie · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/7234660f-5df3-48c1-aae2-ac487a357258.png",
+      "asset_id": "7234660f-5df3-48c1-aae2-ac487a357258",
+      "sha12": "5deadb99a068",
+      "label": "26063 · headwear.cap · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/75859a3f-55fc-4e7d-9834-0f341d6cb9bb.png",
+      "asset_id": "75859a3f-55fc-4e7d-9834-0f341d6cb9bb",
+      "sha12": "eb8db4f32db3",
+      "label": "26063 · body · four directions · station R02"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/18c8feb4-0b28-48f1-83f7-4db692d97f0a.png",
+      "asset_id": "18c8feb4-0b28-48f1-83f7-4db692d97f0a",
+      "sha12": "d43578d13b8c",
+      "label": "Slice 9"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/bf2eb02f-7fc1-4488-af8a-3a6d46fb34b4.png",
+      "asset_id": "bf2eb02f-7fc1-4488-af8a-3a6d46fb34b4",
+      "sha12": "7762c85ec816",
+      "label": "Slice 8"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/a3189f0c-ec87-4f8c-adaf-a3a508990a85.png",
+      "asset_id": "a3189f0c-ec87-4f8c-adaf-a3a508990a85",
+      "sha12": "66d3b26bb8e5",
+      "label": "Slice 7"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/eb30b260-2880-484f-8e74-c4071269d6d1.png",
+      "asset_id": "eb30b260-2880-484f-8e74-c4071269d6d1",
+      "sha12": "fe1635da29b2",
+      "label": "Slice 6"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/ce4ae9d9-80ba-4fed-8285-2de56321a81f.png",
+      "asset_id": "ce4ae9d9-80ba-4fed-8285-2de56321a81f",
+      "sha12": "0167ff572ccd",
+      "label": "Slice 5"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/09306496-1cfd-4f2b-8ef7-2863c8dd9f16.png",
+      "asset_id": "09306496-1cfd-4f2b-8ef7-2863c8dd9f16",
+      "sha12": "d5c84ac74a57",
+      "label": "Slice 4"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/983ddd3d-2a64-43ba-a480-182c94873659.png",
+      "asset_id": "983ddd3d-2a64-43ba-a480-182c94873659",
+      "sha12": "13ece81daf50",
+      "label": "Slice 3"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/1f893082-dba9-430b-bd23-4b47c160006c.png",
+      "asset_id": "1f893082-dba9-430b-bd23-4b47c160006c",
+      "sha12": "1418a0ed2cc1",
+      "label": "Slice 2"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/726c7c7a-fc92-47ae-8926-821cc63c5899.png",
+      "asset_id": "726c7c7a-fc92-47ae-8926-821cc63c5899",
+      "sha12": "74a965220eb5",
+      "label": "Slice 1"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/7dac6492-849a-471b-af09-3c00cc354520.png",
+      "asset_id": "7dac6492-849a-471b-af09-3c00cc354520",
+      "sha12": "e83672b0c492",
+      "label": "Slice 3"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/edf395f1-b3e1-4283-a19f-6295dc1a0809.png",
+      "asset_id": "edf395f1-b3e1-4283-a19f-6295dc1a0809",
+      "sha12": "223636f1fdf8",
+      "label": "Slice 2"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/a426b2b5-1c83-4a70-83e7-c7c9759cc854.png",
+      "asset_id": "a426b2b5-1c83-4a70-83e7-c7c9759cc854",
+      "sha12": "0f3b99e01932",
+      "label": "Slice 1"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/c4fd92fc-3400-4a28-843e-208917957721.png",
+      "asset_id": "c4fd92fc-3400-4a28-843e-208917957721",
+      "sha12": "f6450f30aaed",
+      "label": "ONLY the three characters from TOP ROW of the source, redrawn correctly as COMPLETE STANDING FULL-BO"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/93e516df-4089-41f4-a35d-3ef0178421e0.png",
+      "asset_id": "93e516df-4089-41f4-a35d-3ef0178421e0",
+      "sha12": "7bd95fa5a7c5",
+      "label": "Refine the SAME main character design into a clean four-view production turnaround for a modular war"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/61cfe99c-5671-4c25-84cc-3cd753178a2b.png",
+      "asset_id": "61cfe99c-5671-4c25-84cc-3cd753178a2b",
+      "sha12": "b9895f6494f6",
+      "label": "Production sprite sheet in a regular 3 by 3 grid on transparent background, nine isolated complete f"
+    },
+    {
+      "id": "assets/source/characters/station-r02/provider/42014330-72cf-43f2-9051-fbf572dfa99e.png",
+      "asset_id": "42014330-72cf-43f2-9051-fbf572dfa99e",
+      "sha12": "4bc84cf430a5",
+      "label": "26063 — текущий взрослый герой, ориентир семейства"
+    },
+    {
+      "id": "assets/source/ui/wardrobe-icons/companion.squirrel.png",
+      "asset_id": "69bab40b-cd8e-419c-890b-c581559188c0",
+      "sha12": "7d74af32fbcf",
+      "label": "26063 · companion.squirrel · R02 wardrobe icon from canonical fauna"
+    },
+    {
+      "id": "assets/source/ui/wardrobe-icons/companion.tit.png",
+      "asset_id": "8f1b0e81-45a0-43a2-94f0-c27ed3d566e0",
+      "sha12": "bdbe18c11e9a",
+      "label": "26063 · companion.tit · R02 wardrobe icon from canonical fauna"
     }
   ]
 }

@@ -302,11 +302,18 @@ async function interactionCases(base) {
   const { context, page } = await createPage(viewports[0], { dpr: 2, reducedMotion: 'reduce' });
   await setDate(page, dates[2].iso); await page.goto(base); await ready(page);
   let previousGeometry;
-  for (const viewport of [...viewports, { width: 844, height: 390 }]) {
+  // Fixed expected backing sizes exercise both sides of the 2M pixel budget.
+  // Pointer rectangles remain in CSS pixels even when the world uses HiDPI.
+  const resizeCases = [
+    { viewport: viewports[0], backing: [1366, 768] },
+    { viewport: viewports[1], backing: [780, 1688] },
+    { viewport: { width: 844, height: 390 }, backing: [1688, 780] },
+  ];
+  for (const { viewport, backing } of resizeCases) {
     await page.setViewportSize(viewport); await ready(page);
-    const boxes = await settledEntranceGeometry(page, viewport, previousGeometry);
+    const boxes = await settledEntranceGeometry(page, viewport, backing, previousGeometry);
     previousGeometry = JSON.stringify(boxes);
-    report.interactionGeometry.push({ viewport, boxes });
+    report.interactionGeometry.push({ viewport, expectedBacking: backing, boxes });
     for (const box of boxes) {
       assert.ok(box.width >= 44 && box.height >= 44, `${box.id}: readable touch target after resize`);
       assert.ok(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width + 1 && box.y + box.height <= viewport.height + 1, `${box.id}: target inside viewport`);
@@ -348,18 +355,25 @@ async function interactionCases(base) {
         assert.equal(await target.evaluate(node => document.activeElement === node), true, `${box.id}: Escape restores the entrance after ${activationKey}`);
       }
     }
-    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
+    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, expectedBacking: backing, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
     await capture(page, `entrances-${viewport.width}-dpr2`);
   }
+  // The reverse transition must also restore the desktop surface and targets.
+  await page.setViewportSize(viewports[0]); await ready(page);
+  const restored = await settledEntranceGeometry(page, viewports[0], resizeCases[0].backing, previousGeometry);
+  assert.deepEqual(restored, report.interactionGeometry[0].boxes, 'Returning to desktop restores the same entrance geometry');
+  record('entrances-desktop-restored-dpr2', { viewport: viewports[0], expectedBacking: resizeCases[0].backing, boxes: restored });
   await context.close();
 }
-async function settledEntranceGeometry(page, viewport, previousGeometry) {
-  await page.waitForFunction(({ width, height }) => {
+async function settledEntranceGeometry(page, viewport, backing, previousGeometry) {
+  await page.waitForFunction(({ viewport: { width, height }, backing }) => {
     const canvas = document.querySelector('canvas');
+    const presentation = canvas?.getBoundingClientRect();
     const host = document.querySelector('.world-canvas-host > div')?.getBoundingClientRect();
-    return canvas?.width === width && canvas?.height === height && host &&
+    return canvas?.width === backing[0] && canvas?.height === backing[1] && presentation && host &&
+      Math.abs(presentation.width - width) < .5 && Math.abs(presentation.height - height) < .5 &&
       Math.abs(host.width - width) < .5 && Math.abs(host.height - height) < .5;
-  }, viewport);
+  }, { viewport, backing });
   return page.evaluate(async previous => {
     const deadline = performance.now() + 15_000;
     let last, stable = 0;
@@ -477,7 +491,7 @@ function compareBaseline() {
   const sameCi = ciKnown ? ['runId', 'attempt', 'job', 'runner'].every(key => before.ci[key] === report.ci[key]) : null;
   report.comparison = { baselineRevision: before.revision, candidateRevision: report.revision,
     sameRunnerAndJob: sameCi === null ? null : sameCi && before.runnerSha256 === report.runnerSha256,
-    strictPerformanceGate: false, rainScope: 'Candidate-only measurement group; baseline has no visible rain implementation.',
+    strictPerformanceGate: false, rainScope: 'Rain is measured for the candidate only; the matched baseline comparison covers clear weather.',
     values: report.measurements.filter(value => value.weatherMode === 'clear').map(current => {
       const prior = before.measurements.find(value => value.viewport.width === current.viewport.width && value.viewport.height === current.viewport.height && value.lowPower === current.lowPower && value.weatherMode === current.weatherMode);
       assert.ok(prior, 'Matching baseline viewport/power mode');

@@ -54,10 +54,13 @@ def clean(image: Image.Image) -> Image.Image:
     return Image.frombytes('RGBA', image.size, bytes(raw))
 
 
-def write_aseprite(path: Path, frames: list[Image.Image], duration: int, tags: dict) -> None:
+def write_aseprite(path: Path, frames: list[Image.Image], duration: int | list[int], tags: dict) -> None:
     if path.exists():
         raise ValueError(f'Refusing to overwrite editable source: {path}')
     width, height = frames[0].size
+    durations = duration if isinstance(duration, list) else [duration] * len(frames)
+    if len(durations) != len(frames) or any(type(ms) is not int or not 60 <= ms <= 60_000 for ms in durations):
+        raise ValueError('Every source frame requires one bounded integer duration')
     encoded = []
     for index, image in enumerate(frames):
         if image.size != (width, height):
@@ -73,10 +76,10 @@ def write_aseprite(path: Path, frames: list[Image.Image], duration: int, tags: d
         cel = struct.pack('<HhhBHh5xHH', 0, 0, 0, 255, 2, 0, width, height)
         chunks.append(chunk(0x2005, cel + zlib.compress(clean(image).tobytes(), 9)))
         body = b''.join(chunks)
-        encoded.append(struct.pack('<IHHH2xI', len(body) + 16, 0xF1FA, len(chunks), duration, 0) + body)
+        encoded.append(struct.pack('<IHHH2xI', len(body) + 16, 0xF1FA, len(chunks), durations[index], 0) + body)
     payload = b''.join(encoded)
     header = bytearray(128)
-    struct.pack_into('<IHHHHHIH', header, 0, 128 + len(payload), 0xA5E0, len(frames), width, height, 32, 1, duration)
+    struct.pack_into('<IHHHHHIH', header, 0, 128 + len(payload), 0xA5E0, len(frames), width, height, 32, 1, durations[0])
     header[34:36] = bytes((1, 1))
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(bytes(header) + payload)
@@ -147,6 +150,33 @@ def png(image: Image.Image) -> bytes:
     return stream.getvalue()
 
 
+def canonical_png(image: Image.Image) -> bytes:
+    """Keep Pillow's pixel filters and encode IDAT with the pinned zlib path.
+
+    Pillow wheels can use a different bundled zlib from Python.  This is the
+    same encoding used by the modular-player atlas, so a system Pillow build
+    and the CI wheel no longer disagree solely about compressed PNG bytes.
+    """
+    encoded = png(image)
+    offset = 8
+    headers, pixels = [], []
+    while offset < len(encoded):
+        length, kind = struct.unpack_from('>I4s', encoded, offset)
+        end = offset + length + 12
+        if kind == b'IDAT':
+            pixels.append(encoded[offset + 8:end - 4])
+        elif kind != b'IEND':
+            headers.append(encoded[offset:end])
+        offset = end
+    compressor = zlib.compressobj(9, zlib.DEFLATED, 15, 9, zlib.Z_FILTERED)
+    data = compressor.compress(zlib.decompress(b''.join(pixels))) + compressor.flush()
+    blocks = []
+    for start in range(0, len(data), 65536):
+        block = b'IDAT' + data[start:start + 65536]
+        blocks.append(struct.pack('>I', len(block) - 4) + block + struct.pack('>I', zlib.crc32(block)))
+    return b''.join([encoded[:8], *headers, *blocks, encoded[-12:]])
+
+
 def save(path: Path, data: bytes, check: bool) -> None:
     if check:
         if not path.exists() or path.read_bytes() != data:
@@ -211,7 +241,7 @@ def build(check: bool, import_sources: bool) -> None:
             sheet = Image.new('RGBA', (w * len(selected), h))
             for index, frame in enumerate(selected):
                 sheet.paste(frame, (index * w, 0))
-            data = png(sheet)
+            data = canonical_png(sheet)
             filename = f"{actor['name']}-{tag}.png"
             public_path = '/hub/characters/' + filename
             save(ROOT / 'assets/generated/characters/r01' / filename, data, check)
@@ -232,7 +262,8 @@ def build(check: bool, import_sources: bool) -> None:
         if 'provider_sheet' in actor:
             actor['providerSha256'] = sha((ROOT / actor['provider_sheet']).read_bytes())
         runtime['actors'].append(definition)
-    manifest['budget'] = {'compressedPngBytes': total_bytes, 'decodedRgbaBytes': decoded, 'animatedActors': 3,
+    animated = sum(any(clip['frameCount'] > 1 for clip in actor['clips'].values()) for actor in runtime['actors'])
+    manifest['budget'] = {'compressedPngBytes': total_bytes, 'decodedRgbaBytes': decoded, 'animatedActors': animated,
         'maximumDecodedRgbaBytes': 4_194_304}
     if decoded > manifest['budget']['maximumDecodedRgbaBytes']:
         raise ValueError('Character pack exceeds the 4 MiB decoded budget')

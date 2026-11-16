@@ -1,0 +1,218 @@
+{
+  "purpose": "Negative harness result with the first recorded trusted native click: the requested fractional point was inside, but the emitted integer clientX was outside the target. The exact-fill application guard correctly left the assignment unchanged.",
+  "sourceHead": "a9adfd6483d06a423d2df9500725ee849c3ae7f4",
+  "testedMergeSha": "761c3442bb7f3ef2bfc8d6ca2187c2b2f6a3aab9",
+  "baselineSha": "a381888c034f12ec17a27b501952989b114253d1",
+  "runId": 43883073322,
+  "jobId": 133353808187,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/43883073322",
+  "artifact": {
+    "id": 14233871687,
+    "zipSha256": "864a7b17e788533b94ef615385a0f7afc0ed9a7d56d4899a1a142c99d6a4a6d9",
+    "zipBytes": 66579930
+  },
+  "browser": "153.0",
+  "status": "FAIL",
+  "sourceRunnerSha256": {
+    "tools/test_station_screens.cjs": "b4d47148c3357f725c68a970a3282304505f8d658abda051ca97e9b5d05d62d0",
+    "tools/test_game_controls_browser.cjs": "ca38801c9bdcbdda6dcb64dac773a8dafea11dcd985772ecb4fa4d03dac57053",
+    "tools/test_station_plot_hit_fallback.cjs": "fe01e6c3fccde30ce0d723f2ad2a977a9dd951a6ec377df33f5822d83dff0f40",
+    ".github/workflows/station-screens.yml": "8687a090c954a49bc06ed01ad485095d1bdabf6ef924222597f7e2ef50a37195"
+  },
+  "originalReportSha256": "93f77c09324fb4d371f3ddccb6850cba2020f9e84677b65da564535695b082ad",
+  "quantization": {
+    "requested": {
+      "x": 839.9000244140625,
+      "y": 709.4000015258789
+    },
+    "actualClient": {
+      "x": 839,
+      "y": 709
+    },
+    "delta": {
+      "x": -0.9000244140625,
+      "y": -0.40000152587890625
+    },
+    "actualClientOutsideLeft": true
+  },
+  "interpretation": "Four earlier fresh samples assigned the observation through trusted clicks. This fifth requested point had a 0.5 CSS pixel left inset, but native clientX839 was less than rect.left839.400024. Both native exactHits=[] and unchanged before/after agree with the intended outside-shape guard. No expansion of production geometry is justified. The next harness must record nominal, representable dispatch and actual native coordinates separately, with exact shape checks and real state mutation.",
+  "case": {
+    "name": "all-shift-svg-assignment-1366-1-5",
+    "sample": 5,
+    "fresh": true,
+    "disabled": false,
+    "beforePointer": {
+      "point": {
+        "x": 839.9000244140625,
+        "y": 709.4000015258789
+      },
+      "receivesPointer": true,
+      "queriedSvgRoot": false,
+      "exactHits": [
+        "slot_01"
+      ],
+      "label": "Позиция слева сверху, свободна",
+      "slotId": "slot_01",
+      "targetIndex": 0,
+      "fill": "rgba(77, 112, 130, 0.03)",
+      "fillOpacity": "1",
+      "pointerEvents": "all",
+      "hitTag": "rect",
+      "hitClass": "station-slot-target",
+      "bounds": {
+        "left": 839.4000244140625,
+        "top": 679.75,
+        "width": 121.68333435058594,
+        "height": 59.30000305175781
+      },
+      "localPoint": {
+        "x": 183.95827769591415,
+        "y": 299.99998274032896
+      },
+      "localBox": {
+        "x": 183,
+        "y": 243,
+        "width": 234,
+        "height": 114
+      },
+      "isPointInFill": true,
+      "matrix": {
+        "a": 0.5199999809265137,
+        "b": 0,
+        "c": 0,
+        "d": 0.5199999809265137,
+        "e": 744.24169921875,
+        "f": 553.4000244140625
+      },
+      "svgBounds": {
+        "left": 735.4833374023438,
+        "top": 553.4000244140625,
+        "right": 1273,
+        "bottom": 1073.4000244140625
+      },
+      "viewport": {
+        "left": 0,
+        "top": 0,
+        "right": 1340,
+        "bottom": 768,
+        "clientWidth": 1340,
+        "clientHeight": 768,
+        "scrollTop": 0,
+        "scrollLeft": 0
+      }
+    },
+    "nativeEvents": [
+      {
+        "isTrusted": true,
+        "clientX": 839,
+        "clientY": 709,
+        "button": 0,
+        "targetIsSvg": true,
+        "targetTag": "svg",
+        "targetClass": "station-plot-svg",
+        "targetSlotId": null,
+        "exactHits": []
+      }
+    ],
+    "before": {
+      "positions": [
+        {
+          "id": "slot_01",
+          "label": "Позиция слева сверху, свободна",
+          "disabled": "false"
+        },
+        {
+          "id": "slot_02",
+          "label": "Позиция слева снизу, свободна",
+          "disabled": "false"
+        },
+        {
+          "id": "slot_03",
+          "label": "Позиция справа сверху, свободна",
+          "disabled": "false"
+        },
+        {
+          "id": "slot_04",
+          "label": "Позиция в центре, свободна",
+          "disabled": "false"
+        }
+      ],
+      "observations": [
+        {
+          "label": "Температура воздуха T",
+          "placed": false,
+          "selected": true,
+          "disabled": false
+        },
+        {
+          "label": "Точка росы Td",
+          "placed": false,
+          "selected": false,
+          "disabled": false
+        },
+        {
+          "label": "Давление, приведённое к уровню моря p",
+          "placed": false,
+          "selected": false,
+          "disabled": false
+        },
+        {
+          "label": "Ветер dd/ff",
+          "placed": false,
+          "selected": false,
+          "disabled": false
+        }
+      ]
+    },
+    "after": {
+      "positions": [
+        {
+          "id": "slot_01",
+          "label": "Позиция слева сверху, свободна",
+          "disabled": "false"
+        },
+        {
+          "id": "slot_02",
+          "label": "Позиция слева снизу, свободна",
+          "disabled": "false"
+        },
+        {
+          "id": "slot_03",
+          "label": "Позиция справа сверху, свободна",
+          "disabled": "false"
+        },
+        {
+          "id": "slot_04",
+          "label": "Позиция в центре, свободна",
+          "disabled": "false"
+        }
+      ],
+      "observations": [
+        {
+          "label": "Температура воздуха T",
+          "placed": false,
+          "selected": true,
+          "disabled": false
+        },
+        {
+          "label": "Точка росы Td",
+          "placed": false,
+          "selected": false,
+          "disabled": false
+        },
+        {
+          "label": "Давление, приведённое к уровню моря p",
+          "placed": false,
+          "selected": false,
+          "disabled": false
+        },
+        {
+          "label": "Ветер dd/ff",
+          "placed": false,
+          "selected": false,
+          "disabled": false
+        }
+      ]
+    }
+  }
+}

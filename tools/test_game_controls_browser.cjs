@@ -5,6 +5,37 @@ const assert = require('node:assert/strict');
 const { login } = require('./test_saved_portrait_browser.cjs');
 const { exerciseScrollbar } = require('./test_all_screens_browser.cjs');
 const pathOf = response => new URL(response.url()).pathname;
+async function checkWorkroom(page, expected, report, phase) {
+  const art = page.locator('.workroom-backdrop').last();
+  await art.waitFor();
+  const geometry = await art.evaluate(async node => {
+    const images = [...node.querySelectorAll('img')];
+    await Promise.all(images.map(image => image.decode()));
+    const box = node.getBoundingClientRect(), plane = node.querySelector('.station-room-art__plane').getBoundingClientRect();
+    const viewport = document.querySelector('.app-page-viewport');
+    return {
+      room: node.dataset.room,
+      imageSizes: images.map(image => [image.naturalWidth, image.naturalHeight]),
+      imageRendering: images.map(image => getComputedStyle(image).imageRendering),
+      fixed: getComputedStyle(node).position === 'fixed',
+      passive: getComputedStyle(node).pointerEvents === 'none',
+      coversViewport: box.left <= 1 && box.top <= 1 && box.right >= innerWidth - 1 && box.bottom >= innerHeight - 1,
+      planeRatio: plane.width / plane.height,
+      paused: node.dataset.paused,
+      noPageOverflowX: !viewport || viewport.scrollWidth <= viewport.clientWidth + 1,
+      glassMask: getComputedStyle(node).getPropertyValue('--room-glass-mask'),
+    };
+  });
+  assert.equal(geometry.room, expected, `The ${phase} opens its matching room`);
+  assert.deepEqual(geometry.imageSizes, [[512, 288], [512, 288]], 'Both actual production layers have their native dimensions');
+  assert.ok(geometry.imageRendering.every(value => value === 'pixelated'), 'Room pixels are not interpolated');
+  assert.ok(geometry.fixed && geometry.passive && geometry.coversViewport, 'The full-screen room stays behind scrolling controls');
+  assert.ok(Math.abs(geometry.planeRatio - 16 / 9) < 0.005, 'Window, mask and room share an undistorted 16:9 plane');
+  assert.ok(geometry.noPageOverflowX, 'Scientific overflow stays inside its own region');
+  assert.equal(geometry.paused, 'true', 'Reduced-motion keeps the room still');
+  assert.ok(geometry.glassMask.includes(expected === 'reading' ? 'station-room-r01' : `/workrooms-r01/${expected}/`), 'Rain uses this room’s window mask');
+  report.cases.push({ name: `workroom-${phase}-${page.viewportSize().width}`, ...geometry });
+}
 async function afterClick(page, control, path, method = 'POST') {
   const pending = page.waitForResponse(response => pathOf(response) === path && response.request().method() === method);
   await control.click(); const response = await pending;
@@ -12,7 +43,8 @@ async function afterClick(page, control, path, method = 'POST') {
   return response.json();
 }
 async function pressWithoutPageScroll(page, control) {
-  await control.scrollIntoViewIfNeeded(); await control.focus();
+  await control.scrollIntoViewIfNeeded();
+  if (!await control.evaluate(node => node === document.activeElement)) await control.focus();
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const parent = page.locator('.app-page-viewport');
   const before = await parent.evaluate(node => node.scrollTop);
@@ -21,49 +53,159 @@ async function pressWithoutPageScroll(page, control) {
   assert.equal(await parent.evaluate(node => node.scrollTop), before, 'Space selects the diagram position without scrolling the page');
 }
 
-async function clickSvgPosition(page, control) {
-  // Firefox's automatic SVG-group scrolling can miss an inner HTML viewport.
-  // Use the same wheel interaction as a player, then verify the actual hit target.
+// Run only after the unchanged production probe has failed. These temporary
+// variants explain a failure; none can change the result of the asserted gate.
+async function diagnoseSvgEdge(control, point) {
+  return control.evaluate(async (node, point) => {
+    const target = node.querySelector('.station-slot-target');
+    if (!target) return null;
+    const svg = target.ownerSVGElement;
+    const saved = { targetStyle: target.getAttribute('style'), svgStyle: svg.getAttribute('style'), rx: target.getAttribute('rx') };
+    const restoreAttribute = (element, name, value) => value === null ? element.removeAttribute(name) : element.setAttribute(name, value);
+    const restore = () => {
+      restoreAttribute(target, 'style', saved.targetStyle);
+      restoreAttribute(svg, 'style', saved.svgStyle);
+      restoreAttribute(target, 'rx', saved.rx);
+    };
+    const hitAt = point => {
+      const hit = document.elementFromPoint(point.x, point.y);
+      return { point, receivesPointer: node.contains(hit), tag: hit?.tagName, className: hit?.getAttribute('class') };
+    };
+    const settle = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const grid = [];
+    for (let delta = -2; delta <= 2; delta += .25) grid.push(hitAt({ x: point.x, y: point.y + delta }));
+    const variants = [];
+    const changes = [
+      ['square-rect', () => { if (target.tagName === 'rect') target.setAttribute('rx', '0'); }],
+      ['opaque-fill', () => { target.style.fill = '#fff'; target.style.fillOpacity = '1'; target.style.opacity = '1'; }],
+      ['pointer-fill', () => { target.style.pointerEvents = 'fill'; }],
+      ['translate-z', () => { svg.style.transform = `${getComputedStyle(svg).transform} translateZ(0)`; }],
+      ['unsnapped-origin', () => { svg.style.transform = 'none'; }],
+    ];
+    try {
+      for (const [name, change] of changes) {
+        restore(); change(); await settle();
+        const rect = target.getBoundingClientRect(), matrix = target.getScreenCTM();
+        variants.push({ name, ...hitAt(point), bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+          matrix: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, e: matrix.e, f: matrix.f } });
+      }
+    } finally { restore(); await settle(); }
+    return { diagnosticOnly: true, pointUnchanged: point, grid, variants, restored: hitAt(point) };
+  }, point);
+}
+
+async function settleSvgLayout(page) {
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
+async function scrollSvgControl(page, control, requestedScrollTop) {
+  // A real clear/select click can scroll the observations back into view.
+  // Restore the diagram with the same scrollbar wheel input a player uses.
   const viewportId = await control.evaluate(node => node.closest('.pixel-scroll-area__viewport')?.id);
   assert.ok(viewportId, 'The diagram belongs to a known scroll viewport');
   const viewport = page.locator(`[id=${JSON.stringify(viewportId)}]`);
   await viewport.scrollIntoViewIfNeeded();
-  const movement = await control.evaluate(node => {
+  const movement = await control.evaluate((node, requestedScrollTop) => {
     const viewport = node.closest('.pixel-scroll-area__viewport');
     const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
     const target = hitArea.getBoundingClientRect(), frame = viewport.getBoundingClientRect();
-    const left = frame.left + viewport.clientLeft, top = frame.top + viewport.clientTop;
-    const right = left + viewport.clientWidth, bottom = top + viewport.clientHeight;
+    const style = getComputedStyle(viewport);
+    const padding = value => {
+      const pixels = value.endsWith('px') ? Number.parseFloat(value) : NaN;
+      return Number.isFinite(pixels) ? Math.max(8, pixels) : 8;
+    };
+    // Honor the production 96px top inset under the sticky blitz timer.
+    // This prepares the viewport with real wheel input before any sample.
+    const left = frame.left + viewport.clientLeft + padding(style.scrollPaddingLeft);
+    const top = frame.top + viewport.clientTop + padding(style.scrollPaddingTop);
+    const right = frame.left + viewport.clientLeft + viewport.clientWidth - padding(style.scrollPaddingRight);
+    const bottom = frame.top + viewport.clientTop + viewport.clientHeight - padding(style.scrollPaddingBottom);
     const clamp = (value, maximum) => Math.max(0, Math.min(maximum, value));
     return {
       left: viewport.scrollLeft, top: viewport.scrollTop,
-      x: clamp(viewport.scrollLeft + (target.left < left + 8 || target.right > right - 8 ? target.left + target.width / 2 - (left + right) / 2 : 0), viewport.scrollWidth - viewport.clientWidth),
-      y: clamp(viewport.scrollTop + (target.top < top + 8 || target.bottom > bottom - 8 ? target.top + target.height / 2 - (top + bottom) / 2 : 0), viewport.scrollHeight - viewport.clientHeight),
+      x: clamp(viewport.scrollLeft + (target.left < left || target.right > right ? target.left + target.width / 2 - (left + right) / 2 : 0), viewport.scrollWidth - viewport.clientWidth),
+      y: clamp(requestedScrollTop ?? (viewport.scrollTop + (target.top < top || target.bottom > bottom ? target.top + target.height / 2 - (top + bottom) / 2 : 0)), viewport.scrollHeight - viewport.clientHeight),
     };
-  });
+  }, requestedScrollTop);
   for (const [axis, orientation, offset] of [['x', 'horizontal', 'left'], ['y', 'vertical', 'top']]) {
     const delta = movement[axis] - movement[offset];
-    if (Math.abs(delta) <= 1) continue;
+    if (Math.abs(delta) <= (requestedScrollTop === undefined ? 1 : 0.02)) continue;
     const rail = viewport.locator('..').locator(`:scope > [role="scrollbar"][aria-orientation="${orientation}"]`);
     await rail.hover();
     await page.mouse.wheel(axis === 'x' ? delta : 0, axis === 'y' ? delta : 0);
-    await page.waitForFunction(({ id, axis, target }) => {
+    await page.waitForFunction(({ id, axis, target, tolerance }) => {
       const viewport = document.getElementById(id);
-      return Math.abs((axis === 'x' ? viewport.scrollLeft : viewport.scrollTop) - target) <= 2;
-    }, { id: viewportId, axis, target: movement[axis] }, { timeout: 3_000 });
+      return Math.abs((axis === 'x' ? viewport.scrollLeft : viewport.scrollTop) - target) <= tolerance;
+    }, { id: viewportId, axis, target: movement[axis], tolerance: requestedScrollTop === undefined ? 2 : 0.03 }, { timeout: 3_000 });
   }
   await viewport.scrollIntoViewIfNeeded();
-  const handle = await control.elementHandle();
-  await page.waitForFunction(node => {
-    const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
-    const rect = hitArea.getBoundingClientRect();
-    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    return node.contains(hit);
-  }, handle, { timeout: 3_000 });
-  const pointCount = await control.evaluate(node => node.querySelector('.station-slot-target') ? 9 : 1);
-  for (let index = 0; index < pointCount; index++) {
-    // Placing an observation can add a clear button and reflow its card.
-    // Read current coordinates for every click instead of reusing the first box.
+  await settleSvgLayout(page);
+  return control.elementHandle();
+}
+
+async function stationPlotState(control) {
+  return control.evaluate(node => {
+    const workspace = node.closest('.station-plot-workspace');
+    if (!workspace) return null;
+    return {
+      positions: [...workspace.querySelectorAll('.station-slot')].map(slot => ({
+        id: slot.querySelector('.station-slot-target').getAttribute('data-slot-id'),
+        label: slot.getAttribute('aria-label'), disabled: slot.getAttribute('aria-disabled'),
+      })),
+      observations: [...workspace.querySelectorAll('.station-observation')].map(button => ({
+        label: button.querySelector('span').textContent, placed: button.classList.contains('is-placed'),
+        selected: button.classList.contains('is-selected'), disabled: button.disabled,
+      })),
+    };
+  });
+}
+
+async function recordNativeSvgClick(control) {
+  return control.evaluateHandle(node => {
+    const svg = node.ownerSVGElement;
+    const trace = { events: [] };
+    const listener = event => {
+      const point = new DOMPoint(event.clientX, event.clientY);
+      trace.events.push({
+        isTrusted: event.isTrusted, clientX: event.clientX, clientY: event.clientY, button: event.button,
+        targetIsSvg: event.target === svg, targetTag: event.target.tagName, targetClass: event.target.getAttribute('class'),
+        targetSlotId: event.target.closest('.station-slot')?.querySelector('.station-slot-target')?.getAttribute('data-slot-id') ?? null,
+        exactHits: [...svg.querySelectorAll('.station-slot-target')].filter(target => {
+          const matrix = target.getScreenCTM();
+          return matrix && target.isPointInFill(point.matrixTransform(matrix.inverse()));
+        }).map(target => target.getAttribute('data-slot-id')),
+      });
+    };
+    svg.addEventListener('click', listener, true);
+    trace.stop = () => svg.removeEventListener('click', listener, true);
+    return trace;
+  });
+}
+
+async function clickSvgPosition(page, control, evidence, options = {}) {
+  const stationPlot = await control.evaluate(node => Boolean(node.querySelector('.station-slot-target')));
+  const indices = options.indices ?? (stationPlot ? [0, 1, 2, 3, 4, 5, 6, 7, 8] : [0]);
+  const selected = page.locator('.station-observation.is-selected');
+  const expectedLabel = stationPlot ? await selected.locator('span').textContent() : null;
+  const actualClicks = [];
+  for (const index of indices) {
+    if (stationPlot && options.fresh !== false) {
+      // Each edge must cause a new assignment; an already-filled slot would
+      // let a dropped click pass unnoticed. Clearing uses the real UI control.
+      const clear = selected.locator('..').getByRole('button', { name: `Снять ${expectedLabel}`, exact: true });
+      if (await clear.count()) await clear.click();
+      assert.equal(await selected.evaluate(node => node.classList.contains('is-placed')), false, 'The selected observation is unassigned before every fresh pointer sample');
+    }
+    const handle = await scrollSvgControl(page, control, options.scrollTop);
+    const before = stationPlot ? await stationPlotState(control) : null;
+    if (stationPlot && !options.disabled) {
+      assert.equal(await control.getAttribute('aria-disabled'), 'false');
+      assert.ok(!(await control.getAttribute('aria-label')).endsWith(`: ${expectedLabel}`), 'This click must change the target assignment');
+    }
+    if (options.disabled) {
+      assert.equal(await control.getAttribute('aria-disabled'), 'true');
+      assert.ok(!(await control.getAttribute('aria-label')).endsWith(`: ${expectedLabel}`), 'The disabled probe would change the assignment if its guard were broken');
+    }
     const probe = await control.evaluate((node, index) => {
       const hitArea = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
       const rect = hitArea.getBoundingClientRect();
@@ -84,18 +226,153 @@ async function clickSvgPosition(page, control) {
           for (const y of [rect.top + cornerInset, rect.bottom - cornerInset]) points.push({ x, y });
         }
       }
-      const point = points[index];
+      const point = points[index], svgNode = hitArea.ownerSVGElement;
+      // Native Firefox MouseEvent coordinates in the measured CI path are
+      // integer CSS pixels. Choose the nearest representable input once,
+      // before dispatch, instead of letting truncation send an edge outside.
+      // The nominal half-pixel sample and its exact-fill proof stay separate.
+      const dispatchedPoint = { x: Math.round(point.x), y: Math.round(point.y) };
+      const dispatchOffset = { x: dispatchedPoint.x - point.x, y: dispatchedPoint.y - point.y };
       const hit = document.elementFromPoint(point.x, point.y);
+      const dispatchedHit = document.elementFromPoint(dispatchedPoint.x, dispatchedPoint.y);
+      const matrix = hitArea.getScreenCTM();
+      const local = new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse());
+      const box = hitArea.getBBox(), svg = svgNode.getBoundingClientRect();
+      const viewport = node.closest('.pixel-scroll-area__viewport'), frame = viewport.getBoundingClientRect();
+      const style = getComputedStyle(hitArea);
+      const viewportStyle = getComputedStyle(viewport);
+      const scrollPadding = { left: viewportStyle.scrollPaddingLeft, top: viewportStyle.scrollPaddingTop,
+        right: viewportStyle.scrollPaddingRight, bottom: viewportStyle.scrollPaddingBottom };
+      const padding = value => {
+        const pixels = value.endsWith('px') ? Number.parseFloat(value) : NaN;
+        return Number.isFinite(pixels) ? Math.max(8, pixels) : 8;
+      };
+      const exactHitsAt = point => [...svgNode.querySelectorAll('.station-slot-target')].filter(target => {
+        const matrix = target.getScreenCTM();
+        return matrix && target.isPointInFill(new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse()));
+      }).map(target => target.getAttribute('data-slot-id'));
       return {
-        point, receivesPointer: node.contains(hit), label: node.getAttribute('aria-label'),
+        point, dispatchedPoint, dispatchOffset, inputGridCss: 1, devicePixelRatio,
+        receivesPointer: node.contains(hit), queriedSvgRoot: hit === svgNode, exactHits: exactHitsAt(point),
+        dispatchedReceivesPointer: node.contains(dispatchedHit), dispatchedQueriedSvgRoot: dispatchedHit === svgNode,
+        dispatchedExactHits: exactHitsAt(dispatchedPoint),
+        label: node.getAttribute('aria-label'), slotId: hitArea.getAttribute('data-slot-id'),
+        targetIndex: [...svgNode.querySelectorAll('.station-slot')].indexOf(node),
+        fill: style.fill, fillOpacity: style.fillOpacity, pointerEvents: style.pointerEvents,
         hitTag: hit?.tagName, hitClass: hit?.getAttribute('class'),
         bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+        localPoint: { x: local.x, y: local.y }, localBox: { x: box.x, y: box.y, width: box.width, height: box.height },
+        isPointInFill: typeof hitArea.isPointInFill === 'function' ? hitArea.isPointInFill(local) : null,
+        matrix: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, e: matrix.e, f: matrix.f },
+        svgBounds: { left: svg.left, top: svg.top, right: svg.right, bottom: svg.bottom },
+        viewport: { left: frame.left, top: frame.top, right: frame.right, bottom: frame.bottom,
+          clientWidth: viewport.clientWidth, clientHeight: viewport.clientHeight, scrollTop: viewport.scrollTop, scrollLeft: viewport.scrollLeft,
+          scrollPadding, availableArea: {
+            left: frame.left + viewport.clientLeft + padding(scrollPadding.left),
+            top: frame.top + viewport.clientTop + padding(scrollPadding.top),
+            right: frame.left + viewport.clientLeft + viewport.clientWidth - padding(scrollPadding.right),
+            bottom: frame.top + viewport.clientTop + viewport.clientHeight - padding(scrollPadding.bottom),
+          } },
       };
     }, index);
-    assert.ok(probe.receivesPointer, `The SVG target receives click ${index + 1}: ${JSON.stringify(probe)}`);
-    await page.mouse.click(probe.point.x, probe.point.y);
-    if (pointCount > 1) await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    assert.ok(Math.abs(probe.dispatchOffset.x) <= .5 && Math.abs(probe.dispatchOffset.y) <= .5, 'Nearest representable input differs by at most half a CSS pixel per axis');
+    if (stationPlot) {
+      assert.deepEqual(probe.exactHits, [probe.slotId], 'The unchanged nominal half-pixel point belongs to exactly this shape');
+      assert.deepEqual(probe.dispatchedExactHits, [probe.slotId], 'The nearest representable pointer point stays inside exactly the original shape');
+    }
+    if (options.historicalGeometry) {
+      const expected = options.historicalGeometry;
+      if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-filled-regression-geometry-${page.viewportSize().width}`, before, probe, expected });
+      for (const key of ['left', 'top', 'width', 'height']) assert.ok(Math.abs(probe.bounds[key] - expected.bounds[key]) < .03, `The original filled-slot regression preserves ${key}: ${JSON.stringify(probe.bounds)}`);
+      assert.ok(Math.abs(probe.viewport.scrollTop - expected.scrollTop) < .03, 'The filled regression preserves the original fractional scroll');
+    }
+    // elementFromPoint is diagnostic, not proof that a click changes state.
+    // Root hits are actionable only inside this one exact production shape.
+    // The chosen representable point and original rectangle remain fixed
+    // until mouse.click; no inward retry or larger target is allowed.
+    await page.mouse.move(probe.dispatchedPoint.x, probe.dispatchedPoint.y);
+    const ready = await page.waitForFunction(({ node, point, bounds }) => {
+      const target = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+      const rect = target.getBoundingClientRect();
+      if (!['left', 'top', 'width', 'height'].every(key => Math.abs(rect[key] - bounds[key]) < 0.02)) return false;
+      const svg = target.ownerSVGElement, hit = document.elementFromPoint(point.x, point.y);
+      if (node.contains(hit)) return true;
+      if (hit !== svg || !target.classList.contains('station-slot-target')) return false;
+      const matches = [...svg.querySelectorAll('.station-slot-target')].filter(shape => {
+        const matrix = shape.getScreenCTM();
+        return matrix && shape.isPointInFill(new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse()));
+      });
+      return matches.length === 1 && matches[0] === target;
+    }, { node: handle, point: probe.dispatchedPoint, bounds: probe.bounds }, { timeout: 1_500, polling: 'raf' }).then(() => true, () => false);
+    if (!ready) {
+      if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-unactionable-${page.viewportSize().width}-${index + 1}`, probe, before });
+      if (evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-hit-failure-${page.viewportSize().width}-${index + 1}`);
+      const diagnostic = await diagnoseSvgEdge(control, probe.dispatchedPoint);
+      if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-failure-diagnostic-${page.viewportSize().width}`, ...diagnostic });
+      assert.fail(`The unchanged SVG point is neither a native nor a unique exact-fill target: ${JSON.stringify(probe)}`);
+    }
+    const trace = await recordNativeSvgClick(control);
+    let events;
+    try {
+      await page.mouse.click(probe.dispatchedPoint.x, probe.dispatchedPoint.y);
+      await settleSvgLayout(page);
+      events = await trace.evaluate(trace => trace.events);
+    } finally {
+      await trace.evaluate(trace => trace.stop());
+      await trace.dispose();
+    }
+    const after = stationPlot ? await stationPlotState(control) : null;
+    const result = { sample: index + 1, fresh: options.fresh !== false, disabled: Boolean(options.disabled), beforePointer: probe, nativeEvents: events, before, after };
+    actualClicks.push(result);
+    if (evidence && stationPlot) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-assignment-${page.viewportSize().width}-${probe.targetIndex + 1}-${index + 1}${options.name ? `-${options.name}` : ''}`, ...result });
+    assert.equal(events.length, 1, 'Exactly one native SVG click is received');
+    assert.ok(events[0].isTrusted && events[0].button === 0, 'The probe uses a trusted primary-pointer click');
+    assert.deepEqual({ x: events[0].clientX, y: events[0].clientY }, probe.dispatchedPoint, 'The actual native coordinates equal the explicitly dispatched representable point');
+    if (stationPlot) {
+      assert.deepEqual(events[0].exactHits, [probe.slotId], 'The actual native client coordinates belong to exactly this target');
+      assert.ok(events[0].targetIsSvg || events[0].targetSlotId === probe.slotId, 'The actual event reaches this slot or the root geometry resolver');
+      if (options.disabled) assert.deepEqual(after, before, 'A real click on a different disabled slot cannot move the selected observation');
+      else {
+        const placed = after.positions.find(position => position.id === probe.slotId);
+        if (!placed.label.endsWith(`: ${expectedLabel}`)) {
+          if (evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-assignment-failure-${page.viewportSize().width}-${index + 1}`);
+          assert.fail(`The real pointer click did not assign ${expectedLabel}: ${JSON.stringify(result)}`);
+        }
+        assert.ok(after.observations.find(observation => observation.label === expectedLabel).placed, 'The source observation also reflects its new placement');
+        assert.notDeepEqual(after.positions, before.positions, 'Every successful point changes the actual assignment');
+      }
+    }
   }
+  return actualClicks;
+}
+
+async function checkStationPlotGap(page, control, evidence) {
+  await scrollSvgControl(page, control);
+  const before = await stationPlotState(control);
+  assert.equal(before.observations.find(observation => observation.selected).placed, false, 'An unassigned observation makes a spurious gap assignment detectable');
+  const probe = await control.evaluate(node => {
+    const svg = node.ownerSVGElement;
+    const point = new DOMPoint(500, 300).matrixTransform(svg.getScreenCTM());
+    const hit = document.elementFromPoint(point.x, point.y);
+    return { point: { x: point.x, y: point.y }, queriedSvgRoot: hit === svg,
+      exactHits: [...svg.querySelectorAll('.station-slot-target')].filter(target => target.isPointInFill(point.matrixTransform(target.getScreenCTM().inverse()))).map(target => target.getAttribute('data-slot-id')) };
+  });
+  assert.deepEqual(probe.exactHits, [], 'The negative point lies in the real gap between all targets');
+  assert.ok(probe.queriedSvgRoot, 'The visible gap is not covered by another UI element');
+  const trace = await recordNativeSvgClick(control);
+  let events;
+  try {
+    await page.mouse.move(probe.point.x, probe.point.y);
+    await page.mouse.click(probe.point.x, probe.point.y);
+    await settleSvgLayout(page);
+    events = await trace.evaluate(trace => trace.events);
+  } finally { await trace.evaluate(trace => trace.stop()); await trace.dispose(); }
+  const after = await stationPlotState(control);
+  if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-gap-${page.viewportSize().width}`, probe, nativeEvents: events, before, after });
+  assert.equal(events.length, 1);
+  assert.ok(events[0].isTrusted && events[0].targetIsSvg, 'The negative probe is a trusted native root SVG click');
+  assert.deepEqual(events[0].exactHits, []);
+  assert.deepEqual(after, before, 'An actual click between shapes leaves every placement unchanged');
 }
 
 async function checkStationPlotTargets(positions) {
@@ -107,12 +384,17 @@ async function checkStationPlotTargets(positions) {
     const scale = Math.hypot(matrix.a, matrix.b);
     const svg = target.ownerSVGElement.getBoundingClientRect();
     const style = getComputedStyle(target);
+    const fillAlpha = style.fill.match(/^rgba\(.+,\s*([.\d]+)\)$/)?.[1] ?? '1';
     return {
       label: node.getAttribute('aria-label'), kind: target.tagName,
       left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
       width: rect.width, height: rect.height,
       radius: target.tagName === 'circle' ? rect.width / 2 : Number(target.getAttribute('rx') || 0) * scale,
       insideSvg: rect.left >= svg.left && rect.right <= svg.right && rect.top >= svg.top && rect.bottom <= svg.bottom,
+      outerOrigin: { x: svg.left, y: svg.top },
+      painted: style.fill !== 'none' && style.fill !== 'transparent' && Number(fillAlpha) > 0
+        && Number(style.fillOpacity) > 0 && Number(style.opacity) > 0,
+      fill: style.fill,
       soleHitArea: style.pointerEvents === 'all' && style.stroke === 'none' && Number.parseFloat(style.strokeWidth) === 0
         && [...node.querySelectorAll(':scope > :not(.station-slot-target)')].every(shape => getComputedStyle(shape).pointerEvents === 'none'),
     };
@@ -121,6 +403,7 @@ async function checkStationPlotTargets(positions) {
     assert.ok(target, 'Every station plot position has an explicit hit area');
     assert.ok(target.width >= 44 - 0.01 && target.height >= 44 - 0.01, `Station plot target is at least 44 CSS px: ${JSON.stringify(target)}`);
     assert.ok(target.insideSvg, 'The entire hit area remains inside its SVG');
+    assert.ok(target.painted, 'The explicit hit shape owns the visible slot fill');
     assert.ok(target.soleHitArea, 'Visible outlines and wind marks cannot extend the interactive target');
   }
   const center = shape => ({ x: (shape.left + shape.right) / 2, y: (shape.top + shape.bottom) / 2 });
@@ -149,24 +432,40 @@ async function checkStationPlotTargets(positions) {
   };
 }
 
-async function checkMapTabVisibility(page, positions) {
+async function checkMapTabVisibility(page, positions, evidence) {
   await positions.first().focus();
   for (let index = 0; index < await positions.count(); index++) {
     if (index) await page.keyboard.press('Tab');
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    assert.ok(await positions.nth(index).evaluate(node => {
-      if (document.activeElement !== node) return false;
-      const rect = node.getBoundingClientRect();
+    await settleSvgLayout(page);
+    const focus = await positions.nth(index).evaluate(node => {
+      const box = rect => ({ left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height });
+      const rect = node.getBoundingClientRect(), frames = [];
       for (let parent = node.parentElement; parent; parent = parent.parentElement) {
         if (!parent.classList.contains('pixel-scroll-area__viewport')) continue;
         const frame = parent.getBoundingClientRect();
         const left = frame.left + parent.clientLeft, top = frame.top + parent.clientTop;
-        if (rect.left < left - 2 || rect.right > left + parent.clientWidth + 2 || rect.top < top - 2 || rect.bottom > top + parent.clientHeight + 2) return false;
+        const right = left + parent.clientWidth, bottom = top + parent.clientHeight;
+        frames.push({ id: parent.id, bounds: box(frame), client: { left, top, right, bottom },
+          scrollTop: parent.scrollTop, scrollLeft: parent.scrollLeft,
+          containsFocusedShape: rect.left >= left - 2 && rect.right <= right + 2 && rect.top >= top - 2 && rect.bottom <= bottom + 2 });
       }
-      return node.contains(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2));
-    }), `Map position ${index + 1}: keyboard focus remains visible inside every scrolling frame`);
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      const target = node.querySelector('.station-slot-target');
+      return {
+        label: node.getAttribute('aria-label'), active: document.activeElement === node, focusVisible: node.matches(':focus-visible'),
+        activeTag: document.activeElement?.tagName, activeClass: document.activeElement?.getAttribute('class'),
+        activeLabel: document.activeElement?.getAttribute('aria-label'), bounds: box(rect),
+        targetBounds: target ? box(target.getBoundingClientRect()) : null, frames,
+        centerQuery: { belongsToPosition: node.contains(hit), tag: hit?.tagName, className: hit?.getAttribute('class') },
+      };
+    });
+    const visible = focus.active && focus.frames.every(frame => frame.containsFocusedShape) && focus.centerQuery.belongsToPosition;
+    if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-map-tab-${page.viewportSize().width}-${index + 1}`, viewport: page.viewportSize(), ...focus, visible });
+    if (!visible && evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-map-tab-failure-${page.viewportSize().width}-${index + 1}`);
+    assert.ok(visible, `Map position ${index + 1}: keyboard focus remains visible inside every scrolling frame: ${JSON.stringify(focus)}`);
   }
 }
+
 async function fillTask(page, task, evidence) {
   const kind = task.response.kind;
   if (kind === 'numeric') {
@@ -197,29 +496,77 @@ async function fillTask(page, task, evidence) {
     for (let index = 0; index < task.payload.observations.length; index++) {
       await observations.nth(index).click();
       const position = positions.nth(index % task.payload.slots.length);
-      if (index === 0) await pressWithoutPageScroll(page, position); else await clickSvgPosition(page, position);
+      if (index === 0) await pressWithoutPageScroll(page, position); else await clickSvgPosition(page, position, evidence);
       assert.ok((await position.getAttribute('aria-label')).endsWith(`: ${task.payload.observations[index].label}`), 'The intended position receives the selected observation');
       if (!board && index === 0) {
         const clear = page.locator('.station-observation-clear').first();
         await clear.press('Space');
         assert.ok(await observations.first().evaluate(node => node === document.activeElement), 'Removing a placement returns focus to its observation');
-        await clickSvgPosition(page, position);
+        await checkStationPlotGap(page, position, evidence);
+        await clickSvgPosition(page, position, evidence);
+        // Keep T assigned and its clear button present. Selecting the other
+        // observation changes no placements; this reproduces the filled state
+        // of the former Firefox failure, instead of replacing it with a reset.
+        const originalState = await stationPlotState(position);
+        await observations.nth(1).click();
+        const selectedState = await stationPlotState(position);
+        assert.deepEqual(selectedState.positions, originalState.positions, 'Selecting a replacement preserves the populated diagram');
+        assert.ok(await observations.first().evaluate(node => node.classList.contains('is-placed')), 'The original observation remains placed before the regression click');
+        assert.equal(await observations.first().locator('..').locator('.station-observation-clear').count(), 1, 'The original clear button remains in the layout');
+        const historical = evidence?.phase === 'blitz' && page.viewportSize().width === 1366
+          && page.context().browser().browserType().name() === 'firefox';
+        const replacements = await clickSvgPosition(page, position, evidence, {
+          indices: [3], fresh: false, name: 'filled-replacement',
+          ...(historical ? {
+            scrollTop: 158.51666259765625,
+            historicalGeometry: { scrollTop: 158.51666259765625,
+              bounds: { left: 889.4000244140625, top: 655.566650390625, width: 109.88334655761719, height: 53.55000305175781 } },
+          } : {}),
+        });
+        assert.ok(!replacements[0].after.observations[0].placed && replacements[0].after.observations[1].placed, 'The real edge click replaces T with the other observation');
+        await observations.first().click();
+        await clickSvgPosition(page, position, evidence, { indices: [0], fresh: false, name: 'restore-original' });
       }
     }
     assert.equal(await page.locator(board ? '.station-board-observations .is-placed' : '.station-observation.is-placed').count(), task.payload.observations.length);
-    if (board) await checkMapTabVisibility(page, positions);
+    if (board) await checkMapTabVisibility(page, positions, evidence);
     else {
       const geometry = await checkStationPlotTargets(positions);
       if (evidence) evidence.report.cases.push({
         name: `all-${evidence.phase}-station-plot-targets-${page.viewportSize().width}`,
         viewport: page.viewportSize(), task: task.definitionId,
-        pointerSamplesPerTarget: 9, ...geometry,
+        pointerSamplesPerTarget: 9, nominalEdgeInsetCss: .5, inputCoordinateGridCss: 1,
+        actualFlatEdgeInsetCssRange: [0, 1], ...geometry,
       });
     }
   } else if (kind === 'findError') {
     const stations = page.locator('.find-error-station');
+    assert.ok(await stations.count() >= 2, 'Physical control offers multiple stations');
+    // A programmatic focus after pointer input does not establish keyboard
+    // modality consistently. Traverse the actual tab order before checking
+    // the keyboard-only ring, then preserve that focus through Space.
+    await stations.nth(1).focus();
+    await page.keyboard.press('Shift+Tab');
+    const reachedByTab = await stations.first().evaluate(node => node === document.activeElement);
+    assert.ok(reachedByTab, 'Shift+Tab reaches the preceding physical-control station');
     await pressWithoutPageScroll(page, stations.first());
     assert.equal(await stations.first().getAttribute('aria-pressed'), 'true');
+    const focused = await stations.first().evaluate(node => {
+      const style = getComputedStyle(node.querySelector('.find-error-hit'));
+      const bounds = node.querySelector('.find-error-hit').getBoundingClientRect();
+      return { keyboardFocus: node === document.activeElement && node.matches(':focus-visible'),
+        activeTag: document.activeElement?.tagName, activeLabel: document.activeElement?.getAttribute('aria-label'),
+        dashedFocus: style.strokeDasharray !== 'none', strokeDasharray: style.strokeDasharray,
+        width: bounds.width, height: bounds.height };
+    });
+    if (evidence) evidence.report.cases.push({
+      name: `all-${evidence.phase}-find-error-focus-${page.viewportSize().width}`,
+      viewport: page.viewportSize(), reachedByTab, ...focused,
+    });
+    if (evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-find-error-keyboard-${page.viewportSize().width}`);
+    assert.ok(focused.keyboardFocus && focused.dashedFocus,
+      `Keyboard focus is distinct from the selected station: ${JSON.stringify(focused)}`);
+    assert.ok(focused.width >= 44 && focused.height >= 44, 'Physical-control targets remain large enough');
     await stations.last().click(); assert.equal(await stations.last().getAttribute('aria-pressed'), 'true');
   } else throw new Error(`Uncovered task kind: ${kind}`);
 }
@@ -341,6 +688,7 @@ async function checkShift({page, base, viewport, report, capture}) {
   }
   await page.goto(base + '/shift');
   await page.getByRole('heading', { name: 'Записка на краю стола', exact: true }).waitFor();
+  await checkWorkroom(page, 'telegraph', report, 'handover');
   await capture(page, `all-shift-handover-${viewport.width}`);
   let state = await afterClick(page, page.getByRole('button', { name: 'Принять смену', exact: true }), '/api/shifts');
   const id = state.shiftId, kinds = new Set();
@@ -366,20 +714,27 @@ async function checkShift({page, base, viewport, report, capture}) {
   while (state.task && answered++ < 15) {
     const task = state.task; kinds.add(task.response.kind);
     await page.getByRole('heading', { name: task.question, exact: true }).waitFor();
+    const room = ['stationPlot', 'stationBoard', 'findError', 'dependencySequence'].includes(task.response.kind) ? 'synoptic' : 'telegraph';
+    await checkWorkroom(page, room, report, `shift-${task.response.kind}-${answered}`);
+    const instructions = page.locator('.shift-context > summary');
+    await instructions.focus(); await instructions.press('Enter');
+    assert.ok(await page.locator('.shift-context').evaluate(node => node.open), 'The task guide opens from keyboard');
+    await instructions.click();
+    assert.equal(await page.locator('.shift-context').evaluate(node => node.open), false, 'The task guide closes from pointer');
     const referenceButton = page.locator('.shift-assistance__button').filter({ hasText: 'Открыть справку' });
     if (!reference && await referenceButton.count() && await referenceButton.isEnabled()) {
       await afterClick(page, referenceButton, `/api/shifts/${id}/reference`); reference = true;
       await page.getByRole('heading', { name: 'Справка к заданию', exact: true }).waitFor();
     }
-    await fillTask(page, task, { report, phase: 'shift' });
+    await fillTask(page, task, { report, capture, phase: 'shift' });
     if (task.response.kind === 'stationPlot' && viewport.width === 390) {
       // Repeat the populated diagram across orientation and narrow-width changes.
       // Clear/reassign must still use the current layout, without extra server answers.
       for (const size of [{ width: 844, height: 390 }, { width: 320, height: 844 }, viewport]) {
         await page.setViewportSize(size);
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await fillTask(page, task, { report, phase: 'shift-resize' });
-        await checkMapTabVisibility(page, page.locator('.station-slot'));
+        await fillTask(page, task, { report, capture, phase: 'shift-resize' });
+        await checkMapTabVisibility(page, page.locator('.station-slot'), { report, capture, phase: 'shift-resize' });
         await capture(page, `all-station-plot-resize-${size.width}`);
       }
     }
@@ -407,6 +762,12 @@ async function checkShift({page, base, viewport, report, capture}) {
       }
     }
     await page.locator('.shift-feedback').waitFor();
+    if (task.response.kind === 'stationPlot') {
+      const disabledTarget = page.locator('.station-slot').first();
+      await clickSvgPosition(page, disabledTarget, { report, capture, phase: 'shift-disabled' }, {
+        indices: [3], fresh: false, disabled: true, name: 'guard',
+      });
+    }
     if (result.completed) { await page.getByRole('button', { name: /^Завершить смену ·/ }).click(); break; }
     assert.ok(result.nextTask, 'The authoritative answer contains the next task');
     await page.getByRole('button', { name: 'Следующее задание', exact: true }).click();
@@ -415,22 +776,33 @@ async function checkShift({page, base, viewport, report, capture}) {
   assert.deepEqual([...kinds].sort(), ['choice','dependencySequence','findError','numeric','sequence','stationBoard','stationPlot']);
   assert.ok(reference && retried && revealed && skippedRetry, 'Reference, reveal, leaving a retry and a second answer are all exercised against the actual server');
   const final = page.locator('.shift-debrief-overlay[open]'); await final.waitFor();
+  await checkWorkroom(page, 'reading', report, 'shift-result');
   await exerciseScrollbar(page, final.locator('.shift-debrief-scroll'), report, `all-shift-result-scroll-${viewport.width}`);
   await capture(page, `all-shift-result-${viewport.width}`);
   await final.getByRole('button', { name: 'На станцию', exact: true }).click();
   report.cases.push({ name: `all-shift-controls-${viewport.width}`, actualAnswered: answered, kinds: [...kinds], reference, retried, revealed, skippedRetry, mentorTabs: true, earlyExitContinue: true, completed: true });
 }
 async function checkBlitz({page, base, viewport, report, capture}) {
+  const pendingLobby = page.waitForResponse(response => pathOf(response) === '/api/blitz-practice' && response.request().method() === 'GET');
   await page.goto(base + '/blitz');
-  await page.locator('.blitz-card h1').waitFor();
+  const lobbyResponse = await pendingLobby;
+  assert.ok(lobbyResponse.ok(), `GET /api/blitz-practice: ${lobbyResponse.status()}`);
+  const lobby = await lobbyResponse.json();
+  assert.ok(!lobby.session || lobby.session.status === 'completed', 'The previous test round finished before starting another');
+  // Completed rounds are intentionally restored on entry, including between
+  // viewport checks. Wait for the server-backed action, not the loading h1.
+  const restored = lobby.session?.status === 'completed';
+  const start = page.getByRole('button', { name: restored ? 'Новый блиц · 90 с' : 'Начать блиц · 90 с', exact: true });
+  await start.waitFor();
+  await checkWorkroom(page, restored ? 'reading' : 'telegraph', report, restored ? 'blitz-restored-result' : 'blitz-lobby');
   await page.locator('.blitz-profile summary').click();
   await capture(page, `all-blitz-lobby-${viewport.width}`);
-  let state = await afterClick(page, page.getByRole('button', { name: /^(Начать|Новый) блиц · 90 с$/ }), '/api/blitz-practice');
+  let state = await afterClick(page, start, '/api/blitz-practice');
   // The clock is the actual server clock; no time or response is substituted.
   let count = 0;
   while (state.status === 'active' && state.task && count++ < 8) {
     await page.getByRole('heading', { name: state.task.question, exact: true }).waitFor();
-    await fillTask(page, state.task, { report, phase: 'blitz' });
+    await fillTask(page, state.task, { report, capture, phase: 'blitz' });
     const submit = page.getByRole('button', { name: 'Отправить ответ', exact: true });
     await submit.scrollIntoViewIfNeeded();
     const timedControls = await submit.evaluate(button => {
@@ -444,6 +816,8 @@ async function checkBlitz({page, base, viewport, report, capture}) {
     state = result.session;
   }
   assert.equal(state.status, 'completed'); assert.equal(state.progress.answered, 6, 'Six actual UI answers finish before the actual deadline');
+  await page.locator('.blitz-result').waitFor();
+  await checkWorkroom(page, 'reading', report, 'blitz-result');
   const reviews = page.locator('.blitz-review summary');
   for (let i = 0; i < await reviews.count(); i++) await reviews.nth(i).click();
   await exerciseScrollbar(page, page.locator('.app-page-scroll'), report, `all-blitz-result-scroll-${viewport.width}`);
