@@ -3,6 +3,7 @@ import { worldBridge } from '../../bridge/WorldBridge';
 import stationFauna from '../../assets/hub/station-fauna.json';
 import {
   characterFrameAtTime,
+  characterPatrolPose,
   characterTextureKey,
   parseCharacterManifest,
   type WorldCharacterClip,
@@ -121,7 +122,7 @@ export class HubCharacterLayer {
     });
     for (const definition of this.pack?.actors ?? []) {
       // Fixed employees and campus fauna never receive account clothing or tools.
-      if (definition.role !== 'npc' || (crowdEnabled && definition.id === 'character.r01.observer')) continue;
+      if (definition.role !== 'npc') continue;
       const clip = definition.clips.idle;
       if (!this.validTexture(clip)) continue;
       const actions = definition.id === 'animal_squirrel' ? ['run'] as const : ['hop', 'flutter'] as const;
@@ -170,11 +171,12 @@ export class HubCharacterLayer {
     for (const actor of this.actors) {
       const point = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
       actor.image.setPosition(point[0], point[1]);
+      if (actor.definition.motion) actor.image.setFlipX(false);
       this.setClip(actor, actor.definition.motion && !this.preferences.reducedMotion ? 'walk' : 'idle');
       actor.elapsedMs = 0;
       actor.frame = 0;
       actor.image.setFrame(0);
-      actor.image.setDepth(24 + point[1] / this.layout.height * 4);
+      actor.image.setDepth(actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
     }
     if (this.crowd.length > 0) {
       const plans = stationCrowdPlan(this.layout.portrait);
@@ -197,6 +199,7 @@ export class HubCharacterLayer {
         if (actor.definition.motion) {
           const position = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
           actor.image.setPosition(position[0], position[1]);
+          actor.image.setFlipX(false);
         }
         this.setClip(actor, 'idle');
         actor.elapsedMs = 0;
@@ -296,15 +299,21 @@ export class HubCharacterLayer {
       }
       actor.elapsedMs += delta;
       if (actor.definition.motion && actor.state === 'walk') {
-        const direction = actor.definition.motion.direction === 'right' ? 1 : -1;
-        const visibleWidth = this.scene.scale.width / this.layout.zoom;
-        const margin = actor.definition.displayHeight * actor.clip.frameWidth / actor.clip.frameHeight + 16;
-        const left = (this.layout.width - visibleWidth) / 2 - margin;
-        const right = (this.layout.width + visibleWidth) / 2 + margin;
-        let x = actor.image.x + direction * actor.definition.motion.speed * delta / 1000;
-        if (direction > 0 && x > right) x = left;
-        else if (direction < 0 && x < left) x = right;
-        actor.image.setPosition(x, actor.image.y);
+        const patrol = characterPatrolPose(actor.definition, actor.elapsedMs, this.layout.portrait);
+        if (patrol) {
+          if (actor.image.x !== patrol.x || actor.image.y !== patrol.y) actor.image.setPosition(patrol.x, patrol.y);
+          if (actor.image.flipX !== patrol.flipX) actor.image.setFlipX(patrol.flipX);
+        } else {
+          const direction = actor.definition.motion.direction === 'right' ? 1 : -1;
+          const visibleWidth = this.scene.scale.width / this.layout.zoom;
+          const margin = actor.definition.displayHeight * actor.clip.frameWidth / actor.clip.frameHeight + 16;
+          const left = (this.layout.width - visibleWidth) / 2 - margin;
+          const right = (this.layout.width + visibleWidth) / 2 + margin;
+          let x = actor.image.x + direction * actor.definition.motion.speed * delta / 1000;
+          if (direction > 0 && x > right) x = left;
+          else if (direction < 0 && x < left) x = right;
+          actor.image.setPosition(x, actor.image.y);
+        }
       }
       if (!sample) continue;
       const frame = characterFrameAtTime(actor.clip, actor.elapsedMs);
@@ -319,7 +328,7 @@ export class HubCharacterLayer {
     const animated = visible.filter((actor) => !isMovingFauna(actor.definition.id) && actor.clip.frameCount > 1).length;
     const diagnostics = {
       artAccepted: this.pack?.artAcceptance === 'PASS',
-      characterClass: 'r01-detailed-actor',
+      characterClass: 'r02-station-actor',
       playerPresent: false,
       personalizationScope: 'saved-portrait',
       visibleActors: visible.length + crowd.length,

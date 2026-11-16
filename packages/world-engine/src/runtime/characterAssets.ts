@@ -6,7 +6,7 @@ export interface WorldCharacterClip {
   frameHeight: number;
   frameCount: number;
   durationsMs: number[];
-  /** Optional authored facing for fixed NPC movement. No mirroring is inferred. */
+  /** Optional authored facing; only an explicit patrol may mirror it on return. */
   facing?: 'left' | 'right' | 'front' | 'back';
 }
 
@@ -18,8 +18,12 @@ export interface WorldCharacterDefinition {
   pivot: [number, number];
   positions: { landscape: [number, number]; portrait: [number, number] };
   clips: { idle: WorldCharacterClip } & Partial<Record<WorldCharacterAction, WorldCharacterClip>>;
-  /** A fixed-facing employee crosses the viewport and wraps only out of sight. */
-  motion?: { type: 'walk-across'; direction: 'left' | 'right'; speed: number };
+  /** Without a patrol, a fixed-facing employee wraps only beyond the viewport. */
+  motion?: {
+    type: 'walk-across'; direction: 'left' | 'right'; speed: number;
+    /** Horizontal return route on the authored foot line, with explicit scene depth. */
+    patrol?: { landscape: [number, number]; portrait: [number, number]; depth: number };
+  };
 }
 
 const ACTIONS = ['walk', 'run', 'hop', 'flutter', 'sit', 'talk'] as const;
@@ -116,12 +120,28 @@ export function parseCharacterManifest(value: unknown): WorldCharacterManifest {
         (walk.facing !== undefined && walk.facing !== motion.direction))) {
       throw new Error('Ambient walk needs an NPC, authored facing and a bounded speed');
     }
+    const patrol = record(motion?.patrol);
+    if (motion?.patrol !== undefined && (!patrol ||
+        !pair(patrol.landscape, 0, 960) || patrol.landscape[0] >= patrol.landscape[1] ||
+        !pair(patrol.portrait, 0, 480) || patrol.portrait[0] >= patrol.portrait[1] ||
+        !finite(patrol.depth, 0, 64) ||
+        (positions!.landscape as [number, number])[0] < patrol.landscape[0] ||
+        (positions!.landscape as [number, number])[0] > patrol.landscape[1] ||
+        (positions!.portrait as [number, number])[0] < patrol.portrait[0] ||
+        (positions!.portrait as [number, number])[0] > patrol.portrait[1])) {
+      throw new Error('Ambient patrol needs ordered local bounds, a contained start and bounded depth');
+    }
     return {
       id: actor.id, label: actor.label, role: actor.role as WorldCharacterDefinition['role'],
       displayHeight: actor.displayHeight, pivot: [...actor.pivot],
       positions: { landscape: [...positions!.landscape as [number, number]], portrait: [...positions!.portrait as [number, number]] },
       clips: actions,
-      ...(motion ? { motion: { type: 'walk-across' as const, direction: motion.direction as 'left' | 'right', speed: motion.speed as number } } : {}),
+      ...(motion ? { motion: {
+        type: 'walk-across' as const, direction: motion.direction as 'left' | 'right', speed: motion.speed as number,
+        ...(patrol ? { patrol: {
+          landscape: [...patrol.landscape as [number, number]], portrait: [...patrol.portrait as [number, number]], depth: patrol.depth as number,
+        } } : {}),
+      } } : {}),
     };
   });
   const equipment = (manifest.equipment ?? [] as unknown[]) as unknown[];
@@ -156,6 +176,24 @@ export function characterFrameAtTime(clip: WorldCharacterClip, elapsedMs: number
     remaining -= clip.durationsMs[index];
   }
   return 0;
+}
+
+/** A bounded patrol turns continuously; authored foot height never changes. */
+export function characterPatrolPose(actor: WorldCharacterDefinition, elapsedMs: number, portrait: boolean) {
+  const motion = actor.motion, patrol = motion?.patrol;
+  if (!motion || !patrol) return undefined;
+  const [left, right] = portrait ? patrol.portrait : patrol.landscape;
+  const [startX, y] = portrait ? actor.positions.portrait : actor.positions.landscape;
+  const span = right - left;
+  const authoredRight = motion.direction === 'right';
+  const initial = authoredRight ? startX - left : 2 * span - (startX - left);
+  const time = Math.max(0, Number.isFinite(elapsedMs) ? elapsedMs : 0);
+  const phase = (initial + motion.speed * time / 1000) % (2 * span);
+  const movingRight = phase < span;
+  return {
+    x: Math.round(left + (movingRight ? phase : 2 * span - phase)), y,
+    flipX: movingRight !== authoredRight,
+  };
 }
 
 export function characterTextureKey(assetId: string): string { return `character:${assetId}`; }

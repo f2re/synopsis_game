@@ -53,7 +53,7 @@ async function pressWithoutPageScroll(page, control) {
   assert.equal(await parent.evaluate(node => node.scrollTop), before, 'Space selects the diagram position without scrolling the page');
 }
 
-async function clickSvgPosition(page, control) {
+async function clickSvgPosition(page, control, evidence) {
   // Firefox's automatic SVG-group scrolling can miss an inner HTML viewport.
   // Use the same wheel interaction as a player, then verify the actual hit target.
   const viewportId = await control.evaluate(node => node.closest('.pixel-scroll-area__viewport')?.id);
@@ -118,13 +118,47 @@ async function clickSvgPosition(page, control) {
       }
       const point = points[index];
       const hit = document.elementFromPoint(point.x, point.y);
+      const matrix = hitArea.getScreenCTM();
+      const local = new DOMPoint(point.x, point.y).matrixTransform(matrix.inverse());
+      const box = hitArea.getBBox();
+      const svg = hitArea.ownerSVGElement.getBoundingClientRect();
+      const viewport = node.closest('.pixel-scroll-area__viewport');
+      const frame = viewport.getBoundingClientRect();
       return {
         point, receivesPointer: node.contains(hit), label: node.getAttribute('aria-label'),
         hitTag: hit?.tagName, hitClass: hit?.getAttribute('class'),
         bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+        localPoint: { x: local.x, y: local.y },
+        localBox: { x: box.x, y: box.y, width: box.width, height: box.height },
+        isPointInFill: typeof hitArea.isPointInFill === 'function' ? hitArea.isPointInFill(local) : null,
+        matrix: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, e: matrix.e, f: matrix.f },
+        svgBounds: { left: svg.left, top: svg.top, right: svg.right, bottom: svg.bottom },
+        viewport: { left: frame.left, top: frame.top, right: frame.right, bottom: frame.bottom,
+          clientWidth: viewport.clientWidth, clientHeight: viewport.clientHeight, scrollTop: viewport.scrollTop, scrollLeft: viewport.scrollLeft },
       };
     }, index);
-    assert.ok(probe.receivesPointer, `The SVG target receives click ${index + 1}: ${JSON.stringify(probe)}`);
+    // Move the real pointer before consulting the browser's hit-test display
+    // list. Keep the very same half-pixel edge sample and rectangle throughout
+    // the bounded wait; an inset, centre fallback or synthetic click would
+    // conceal an actual unusable edge.
+    await page.mouse.move(probe.point.x, probe.point.y);
+    const ready = await page.waitForFunction(({ node, point, bounds }) => {
+      const target = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+      const rect = target.getBoundingClientRect();
+      const sameRectangle = ['left', 'top', 'width', 'height'].every(key => Math.abs(rect[key] - bounds[key]) < 0.02);
+      return sameRectangle && node.contains(document.elementFromPoint(point.x, point.y));
+    }, { node: handle, point: probe.point, bounds: probe.bounds }, { timeout: 1_500, polling: 'raf' }).then(() => true, () => false);
+    if (!probe.receivesPointer || !ready) {
+      const afterPointer = await control.evaluate((node, point) => {
+        const target = node.querySelector('.station-slot-target, .station-slot-hit, .find-error-hit') || node.querySelector('rect') || node;
+        const rect = target.getBoundingClientRect(), hit = document.elementFromPoint(point.x, point.y);
+        return { receivesPointer: node.contains(hit), hitTag: hit?.tagName, hitClass: hit?.getAttribute('class'),
+          bounds: { left: rect.left, top: rect.top, width: rect.width, height: rect.height } };
+      }, probe.point);
+      if (evidence) evidence.report.cases.push({ name: `all-${evidence.phase}-svg-edge-${page.viewportSize().width}-${index + 1}`, ready, beforePointer: probe, afterPointer });
+      if (!ready && evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-svg-hit-failure-${page.viewportSize().width}-${index + 1}`);
+      assert.ok(ready, `The unchanged SVG target receives click ${index + 1}: ${JSON.stringify({ ...probe, afterPointer })}`);
+    }
     await page.mouse.click(probe.point.x, probe.point.y);
     if (pointCount > 1) await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   }
@@ -229,13 +263,13 @@ async function fillTask(page, task, evidence) {
     for (let index = 0; index < task.payload.observations.length; index++) {
       await observations.nth(index).click();
       const position = positions.nth(index % task.payload.slots.length);
-      if (index === 0) await pressWithoutPageScroll(page, position); else await clickSvgPosition(page, position);
+      if (index === 0) await pressWithoutPageScroll(page, position); else await clickSvgPosition(page, position, evidence);
       assert.ok((await position.getAttribute('aria-label')).endsWith(`: ${task.payload.observations[index].label}`), 'The intended position receives the selected observation');
       if (!board && index === 0) {
         const clear = page.locator('.station-observation-clear').first();
         await clear.press('Space');
         assert.ok(await observations.first().evaluate(node => node === document.activeElement), 'Removing a placement returns focus to its observation');
-        await clickSvgPosition(page, position);
+        await clickSvgPosition(page, position, evidence);
       }
     }
     assert.equal(await page.locator(board ? '.station-board-observations .is-placed' : '.station-observation.is-placed').count(), task.payload.observations.length);

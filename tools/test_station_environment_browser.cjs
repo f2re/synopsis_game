@@ -491,7 +491,7 @@ function compareBaseline() {
   const sameCi = ciKnown ? ['runId', 'attempt', 'job', 'runner'].every(key => before.ci[key] === report.ci[key]) : null;
   report.comparison = { baselineRevision: before.revision, candidateRevision: report.revision,
     sameRunnerAndJob: sameCi === null ? null : sameCi && before.runnerSha256 === report.runnerSha256,
-    strictPerformanceGate: false, rainScope: 'Candidate-only measurement group; baseline has no visible rain implementation.',
+    strictPerformanceGate: false, rainScope: 'Rain is measured for the candidate only; the matched baseline comparison covers clear weather.',
     values: report.measurements.filter(value => value.weatherMode === 'clear').map(current => {
       const prior = before.measurements.find(value => value.viewport.width === current.viewport.width && value.viewport.height === current.viewport.height && value.lowPower === current.lowPower && value.weatherMode === current.weatherMode);
       assert.ok(prior, 'Matching baseline viewport/power mode');

@@ -20,20 +20,31 @@
       ],
       "positions": {
         "landscape": [
-          370,
-          486
+          410,
+          478
         ],
         "portrait": [
-          210,
-          700
+          310,
+          712
         ]
       },
       "source": "assets/source/characters/station-r02/editable/observer.aseprite",
-      "reduced_motion": "paused walk frame at visible path anchor",
+      "reduced_motion": "idle at the authored visible path anchor; patrol clock and facing reset",
       "motion": {
         "type": "walk-across",
         "direction": "right",
-        "speed": 22
+        "speed": 22,
+        "patrol": {
+          "landscape": [
+            400,
+            560
+          ],
+          "portrait": [
+            285,
+            355
+          ],
+          "depth": 34
+        }
       },
       "outputs": {
         "idle": {
