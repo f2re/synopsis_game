@@ -69,13 +69,13 @@
     },
     {
       "id": "companion.squirrel",
-      "asset_id": "ae3366f6-78a3-4ca7-8c08-dbd413ae8277",
-      "sha256": "613200682bd02b58fd3f0a0d06852278a2b21b12bc3969d9066875be4b794635"
+      "asset_id": "69bab40b-cd8e-419c-890b-c581559188c0",
+      "sha256": "7d74af32fbcf5b4561e3ddcc092c7d17286ce45d5442e764743bd1c64e457b8d"
     },
     {
       "id": "companion.tit",
-      "asset_id": "5c2cf33a-fd68-439d-b3a6-15f0970bba0d",
-      "sha256": "ed149f9c6b00b94a71439d85bdfea97fa47fc740324b0108fdfec64eaafcdd11"
+      "asset_id": "8f1b0e81-45a0-43a2-94f0-c27ed3d566e0",
+      "sha256": "bdbe18c11e9a3f5e0c4e42dd146ffefbb92abf491887c41ad9e7db4f56dcb0c0"
     },
     {
       "id": "footwear.boots",

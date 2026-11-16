@@ -1,7 +1,7 @@
 {
   "version": 2,
   "rigId": "player.modular.r01.v1",
-  "runtimeRevision": "r01-fitting-20261114",
+  "runtimeRevision": "station-r02-20261116",
   "description": "Source assembly contract for the accepted four-view idle family. Attachment points describe this standing artwork only; they are not a skeleton or evidence of walk/inspect readiness.",
   "directions": ["down", "right", "up", "left"],
   "frame": {"width": 96, "height": 144, "pivot": [48, 136]},

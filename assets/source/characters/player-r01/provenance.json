@@ -202,5 +202,11 @@
     "material_reduction": "Local near-RGB consolidation per material only; separate protected neutral face-detail ramp; exact4-color skin and hair ramps. No global scene posterization.",
     "runtime_animation": "Authored restrained idle upper-body breathing [0,-1,-1,0]; lower body planted. No walk/inspect in published pack."
   },
-  "canonical_sources": "editable/*.aseprite + rig.json; provider and prepared files preserve provenance/review and are not hand-edited runtime outputs."
+  "canonical_sources": "editable/*.aseprite + rig.json; provider and prepared files preserve provenance/review and are not hand-edited runtime outputs.",
+  "stationR02": {
+    "recovered": "2026-11-16",
+    "providerIndex": "assets/source/characters/station-r02/recovery.json",
+    "method": "Exact 2x2 source sheets recovered at their original 96x144/64x64 frame geometry. Palette harmonisation only for human parts; shared new fauna for companions.",
+    "preserved": "All profile option IDs, four-view pivots, skin/hair ramps and fitting geometry."
+  }
 }

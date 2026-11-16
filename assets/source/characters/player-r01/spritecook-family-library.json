@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "task": "MODULAR-PLAYER-R02",
-  "date": "2026-11-11",
+  "task": "STATION-CHARACTERS-R02-RECOVERY",
+  "date": "2026-11-16",
   "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
   "collection_id": "c1a9513a-e50b-4721-8b37-6b36f3b3ff02",
   "rigId": "player.modular.r01.v1",
@@ -17,16 +17,13 @@
     ]
   ],
   "purpose": "Exact four-direction reference sheets for reuse and targeted edits; not direct animation inputs.",
-  "credits_before": 668,
-  "credits_after": 668,
-  "credits_spent": 0,
   "families": [
     {
       "id": "body",
       "file": "assets/generated/characters/player-r01/library/body.png",
-      "sha12": "e76907cf912e",
-      "asset_id": "6633da16-fe90-4623-9917-6f68dcdac10d",
-      "label": "26063 · body · four directions · R01",
+      "sha12": "69105de7aaf0",
+      "asset_id": "75859a3f-55fc-4e7d-9834-0f341d6cb9bb",
+      "label": "26063 · body · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -318,9 +315,9 @@
     {
       "id": "headwear.cap",
       "file": "assets/generated/characters/player-r01/library/headwear.cap.png",
-      "sha12": "4cb09735212a",
-      "asset_id": "1f1c4cc9-fac9-4c8c-b5ab-8a0432771814",
-      "label": "26063 · headwear.cap · four directions · R01",
+      "sha12": "8ca057768e89",
+      "asset_id": "7234660f-5df3-48c1-aae2-ac487a357258",
+      "label": "26063 · headwear.cap · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -367,9 +364,9 @@
     {
       "id": "headwear.beanie",
       "file": "assets/generated/characters/player-r01/library/headwear.beanie.png",
-      "sha12": "adae023add74",
-      "asset_id": "1b301fa2-405b-40bf-a085-d1b6fc246ad6",
-      "label": "26063 · headwear.beanie · four directions · R01",
+      "sha12": "47f369c87b9f",
+      "asset_id": "923b4511-d963-4d80-a061-ff83851c3a76",
+      "label": "26063 · headwear.beanie · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -416,9 +413,9 @@
     {
       "id": "headwear.scarf",
       "file": "assets/generated/characters/player-r01/library/headwear.scarf.png",
-      "sha12": "9e68027a9e5d",
-      "asset_id": "e7e0120a-f441-4aa0-84f2-fbbba64aad49",
-      "label": "26063 · headwear.scarf · four directions · R01",
+      "sha12": "52f4e871eb97",
+      "asset_id": "40aafe1d-fb36-4840-9d7d-ef6dd56c6acb",
+      "label": "26063 · headwear.scarf · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -465,9 +462,9 @@
     {
       "id": "headwear.goggles",
       "file": "assets/generated/characters/player-r01/library/headwear.goggles.png",
-      "sha12": "58bb45c3cb81",
-      "asset_id": "94360315-d7eb-4bbe-aee4-17025cc30b3e",
-      "label": "26063 · headwear.goggles · four directions · R01",
+      "sha12": "f7e343ed17e1",
+      "asset_id": "eed40778-4d3b-4890-8a51-e098a94e4dcc",
+      "label": "26063 · headwear.goggles · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -514,9 +511,9 @@
     {
       "id": "top.center-jacket",
       "file": "assets/generated/characters/player-r01/library/top.center-jacket.png",
-      "sha12": "57ea7848e32a",
-      "asset_id": "6d3be27d-e17d-4577-a831-5c4199102419",
-      "label": "26063 · top.center-jacket · four directions · R01",
+      "sha12": "0e5b8160fe23",
+      "asset_id": "5efb0b22-5023-424e-8509-db999a6894b0",
+      "label": "26063 · top.center-jacket · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -563,9 +560,9 @@
     {
       "id": "top.field-jacket",
       "file": "assets/generated/characters/player-r01/library/top.field-jacket.png",
-      "sha12": "e690a4e0f2c6",
-      "asset_id": "f18c63dd-980d-4ab1-94c0-33b911379433",
-      "label": "26063 · top.field-jacket · four directions · R01",
+      "sha12": "b96a72a63b29",
+      "asset_id": "bd474e4d-a2fc-4a8d-a98f-d0aa61a56b70",
+      "label": "26063 · top.field-jacket · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -612,9 +609,9 @@
     {
       "id": "top.hoodie",
       "file": "assets/generated/characters/player-r01/library/top.hoodie.png",
-      "sha12": "39f080dffb68",
-      "asset_id": "baa194a9-5348-4518-8530-aae4a61e8c6c",
-      "label": "26063 · top.hoodie · four directions · R01",
+      "sha12": "459f8b02bd70",
+      "asset_id": "98d8a43d-4edd-471b-b765-582ea19edc9e",
+      "label": "26063 · top.hoodie · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -661,9 +658,9 @@
     {
       "id": "top.sweater",
       "file": "assets/generated/characters/player-r01/library/top.sweater.png",
-      "sha12": "91184941cf8f",
-      "asset_id": "3b3b5410-e760-4301-bcac-331262c77ad2",
-      "label": "26063 · top.sweater · four directions · R01",
+      "sha12": "6ab1aecf10e6",
+      "asset_id": "461592d0-e13c-4d54-8230-59bd5a0d3f70",
+      "label": "26063 · top.sweater · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -710,9 +707,9 @@
     {
       "id": "top.shirt",
       "file": "assets/generated/characters/player-r01/library/top.shirt.png",
-      "sha12": "e354a4a8bc36",
-      "asset_id": "153c5324-b9f7-4053-8b65-1fbaa401c082",
-      "label": "26063 · top.shirt · four directions · R01",
+      "sha12": "2b17cd2eeb97",
+      "asset_id": "aa58d65a-7a23-4b0a-8fec-766a7936a33e",
+      "label": "26063 · top.shirt · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -759,9 +756,9 @@
     {
       "id": "bottom.dark-trousers",
       "file": "assets/generated/characters/player-r01/library/bottom.dark-trousers.png",
-      "sha12": "4d53d693b07a",
-      "asset_id": "23d67b62-7b4c-4c5d-ac92-498606efd808",
-      "label": "26063 · bottom.dark-trousers · four directions · R01",
+      "sha12": "6d458b6e48c7",
+      "asset_id": "3af678a5-003d-43b9-b0c8-a2e0652fe5ac",
+      "label": "26063 · bottom.dark-trousers · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -808,9 +805,9 @@
     {
       "id": "bottom.field-trousers",
       "file": "assets/generated/characters/player-r01/library/bottom.field-trousers.png",
-      "sha12": "2fc2c728f358",
-      "asset_id": "12267108-1e27-4f3e-af18-ba8d8ad93731",
-      "label": "26063 · bottom.field-trousers · four directions · R01",
+      "sha12": "0c8b421b85a6",
+      "asset_id": "876f9a09-4180-4beb-baab-1db82f3c96a7",
+      "label": "26063 · bottom.field-trousers · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -857,9 +854,9 @@
     {
       "id": "bottom.jeans",
       "file": "assets/generated/characters/player-r01/library/bottom.jeans.png",
-      "sha12": "ecb59fdc67ae",
-      "asset_id": "e32075c7-a331-4bce-b4cc-fbf07a26813a",
-      "label": "26063 · bottom.jeans · four directions · R01",
+      "sha12": "02091fa537cd",
+      "asset_id": "3ed79833-3540-4044-a975-af955d60b586",
+      "label": "26063 · bottom.jeans · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -906,9 +903,9 @@
     {
       "id": "footwear.sneakers",
       "file": "assets/generated/characters/player-r01/library/footwear.sneakers.png",
-      "sha12": "72035cccc539",
-      "asset_id": "47ebb3d6-4f75-4554-9b47-62203c589ec9",
-      "label": "26063 · footwear.sneakers · four directions · R01",
+      "sha12": "e3509a429737",
+      "asset_id": "3cfc7a29-d205-4140-8ef1-3e49db3faaef",
+      "label": "26063 · footwear.sneakers · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -955,9 +952,9 @@
     {
       "id": "footwear.boots",
       "file": "assets/generated/characters/player-r01/library/footwear.boots.png",
-      "sha12": "88a668260b09",
-      "asset_id": "fc015b50-3ac6-4c1f-b61e-33c4fcd28fe1",
-      "label": "26063 · footwear.boots · four directions · R01",
+      "sha12": "2d1aa16e1290",
+      "asset_id": "501276fd-b79c-41cf-8394-b22e2a3b757a",
+      "label": "26063 · footwear.boots · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1004,9 +1001,9 @@
     {
       "id": "footwear.shoes",
       "file": "assets/generated/characters/player-r01/library/footwear.shoes.png",
-      "sha12": "bddff35e800f",
-      "asset_id": "4fa43d78-8753-480b-89a6-5af9c51d251e",
-      "label": "26063 · footwear.shoes · four directions · R01",
+      "sha12": "4fe572ea4a52",
+      "asset_id": "293d4a9f-f706-42e7-af2b-f315f8c4bc1d",
+      "label": "26063 · footwear.shoes · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1053,9 +1050,9 @@
     {
       "id": "backpack.city",
       "file": "assets/generated/characters/player-r01/library/backpack.city.png",
-      "sha12": "c9fb156191c0",
-      "asset_id": "980334ee-6b3f-4d2e-b1a4-a7a20be7956b",
-      "label": "26063 · backpack.city · four directions · R01",
+      "sha12": "4f77ff683ca3",
+      "asset_id": "80b0e609-6ecd-4f21-b8b3-cabbc689fc1c",
+      "label": "26063 · backpack.city · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1102,9 +1099,9 @@
     {
       "id": "backpack.field",
       "file": "assets/generated/characters/player-r01/library/backpack.field.png",
-      "sha12": "413c89824353",
-      "asset_id": "1a07072a-0d4d-451a-bee0-2a6d5bb42da5",
-      "label": "26063 · backpack.field · four directions · R01",
+      "sha12": "118b3d0e5f49",
+      "asset_id": "27640e40-41f8-42a4-92c6-b83853610245",
+      "label": "26063 · backpack.field · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1151,9 +1148,9 @@
     {
       "id": "held.tablet",
       "file": "assets/generated/characters/player-r01/library/held.tablet.png",
-      "sha12": "3798ebc74de7",
-      "asset_id": "ca65d617-caa0-4b43-b8e2-5379931f097c",
-      "label": "26063 · held.tablet · four directions · R01",
+      "sha12": "f6462a2d5ee8",
+      "asset_id": "93fb8a9a-75ef-4079-a47c-ae83b9132a9b",
+      "label": "26063 · held.tablet · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1200,9 +1197,9 @@
     {
       "id": "held.map-folder",
       "file": "assets/generated/characters/player-r01/library/held.map-folder.png",
-      "sha12": "f22b59e50fc2",
-      "asset_id": "9b93f745-41b2-4a2c-968c-3b8c35925045",
-      "label": "26063 · held.map-folder · four directions · R01",
+      "sha12": "406ce207a8ef",
+      "asset_id": "5f73e016-4054-49f8-a249-7b8b2f5aa7ce",
+      "label": "26063 · held.map-folder · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1249,9 +1246,9 @@
     {
       "id": "held.pencil",
       "file": "assets/generated/characters/player-r01/library/held.pencil.png",
-      "sha12": "729198510ec3",
-      "asset_id": "1130d00c-9bbb-43b2-a6a3-b7727b325019",
-      "label": "26063 · held.pencil · four directions · R01",
+      "sha12": "6042111db4aa",
+      "asset_id": "f3b312fb-e7e1-4fa9-93a7-7f99f89495a2",
+      "label": "26063 · held.pencil · four directions · station R02",
       "frameSize": [
         96,
         144
@@ -1396,9 +1393,9 @@
     {
       "id": "companion.tit",
       "file": "assets/generated/characters/player-r01/library/companion.tit.png",
-      "sha12": "fb474dccd3fb",
-      "asset_id": "b927e9e2-1ec9-49de-98a7-f1ddfb790c72",
-      "label": "26063 · companion.tit · four directions · R01",
+      "sha12": "0733696ec906",
+      "asset_id": "ecfda920-f974-4358-ad4a-ff3ea68ab740",
+      "label": "26063 · companion.tit · four directions · R02 shared station fauna",
       "frameSize": [
         64,
         64
@@ -1445,9 +1442,9 @@
     {
       "id": "companion.squirrel",
       "file": "assets/generated/characters/player-r01/library/companion.squirrel.png",
-      "sha12": "f55b1b456f9e",
-      "asset_id": "3f92695e-c920-4e8a-8a30-31de436b6116",
-      "label": "26063 · companion.squirrel · four directions · R01",
+      "sha12": "c1e63d6bec32",
+      "asset_id": "1574919b-a8c1-46cf-869b-840cc7bdf2fc",
+      "label": "26063 · companion.squirrel · four directions · R02 shared station fauna",
       "frameSize": [
         64,
         64

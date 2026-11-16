@@ -2,11 +2,11 @@
   "id": "characters.r01",
   "schemaVersion": 1,
   "art_status": "pass",
-  "art_review": "docs/art/reviews/2026-11-10-characters-inventory-review.md",
-  "crowd_art_review": "docs/art/reviews/2026-11-14-station-living-plaza.md",
+  "art_review": "docs/art/reviews/2026-11-16-station-r02-world-source-review.md",
+  "crowd_art_review": "docs/art/reviews/2026-11-16-station-r02-world-source-review.md",
   "source_format": "aseprite-rgba-frames-tags-v1",
-  "class": "R01 campus actors on the station world grid",
-  "rights": "Generated for the selected project using built-in ImageGen; animated in the user-connected SpriteCook account. No third-party photographs or game art.",
+  "class": "R02 station actors on the shared world grid",
+  "rights": "User-commissioned SpriteCook generated and animated art using existing project-owned references. No third-party photographs or game artwork; provider terms apply.",
   "actors": [
     {
       "id": "character.r01.observer",
@@ -16,7 +16,7 @@
       "displayHeight": 48,
       "pivot": [
         0.5,
-        0.9555555555555556
+        0.9583333333333334
       ],
       "positions": {
         "landscape": [
@@ -28,33 +28,7 @@
           700
         ]
       },
-      "source": "assets/source/characters/r01/observer.aseprite",
-      "provider_sheet": "assets/source/characters/r01/provider/observer-animation.png",
-      "provider_frame_size": [
-        164,
-        164
-      ],
-      "provider_frame_count": 8,
-      "frame_duration_ms": 125,
-      "normalization": {
-        "padding": 8,
-        "align": "bottom-alpha-support-line",
-        "resampling": "none"
-      },
-      "tags": {
-        "idle": [
-          0,
-          0
-        ],
-        "walk": [
-          0,
-          7
-        ]
-      },
-      "asset_id": "ebbdb5a6-89b8-4a95-b4ee-94340dae2c4e",
-      "source_asset_id": "5c958981-2866-4579-9e6d-aef51cd65cc7",
-      "job_id": "07353a12-dd5b-4c3a-9ec8-82e6458fff14",
-      "credits_used": 20,
+      "source": "assets/source/characters/station-r02/editable/observer.aseprite",
       "reduced_motion": "paused walk frame at visible path anchor",
       "motion": {
         "type": "walk-across",
@@ -63,38 +37,34 @@
       },
       "outputs": {
         "idle": {
-          "sha256": "61dbb4e5cdeef5b864700062158a17d03e1aa7a4547ad27e208d0a82857da24f",
-          "bytes": 1129,
+          "sha256": "0adb90e4c3a18a2dbd177acb0b9567cc123337262b6264bc5acbbfcc968a50e9",
+          "bytes": 927,
           "frameSize": [
-            48,
+            32,
             48
           ],
           "frameCount": 1,
           "durationsMs": [
-            125
+            1000
           ],
           "frameBounds": [
             [
-              14,
               7,
-              34,
+              2,
+              23,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "c22d861552e6e4b6e4b439fbe67221c09e9d004c9b69b36d1406113b18b449e4",
-          "bytes": 6131,
+          "sha256": "52b990a3579af96e5cedbba5f1f33e468af90c6ace08919cd81c41da74ad4872",
+          "bytes": 2351,
           "frameSize": [
-            48,
+            32,
             48
           ],
-          "frameCount": 8,
+          "frameCount": 4,
           "durationsMs": [
-            125,
-            125,
-            125,
-            125,
             125,
             125,
             125,
@@ -102,69 +72,47 @@
           ],
           "frameBounds": [
             [
-              14,
               7,
-              34,
+              2,
+              23,
               46
             ],
             [
-              15,
-              8,
-              31,
-              46
-            ],
-            [
-              15,
               7,
-              29,
+              3,
+              25,
               46
             ],
             [
-              15,
               7,
-              30,
+              3,
+              24,
               46
             ],
             [
-              14,
-              8,
-              35,
-              46
-            ],
-            [
-              13,
-              9,
-              32,
-              46
-            ],
-            [
-              15,
-              8,
-              29,
-              46
-            ],
-            [
-              15,
               7,
-              29,
+              2,
+              23,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "aaa6f3b17c0b08cec6e4dc7e17338d20e624b5e7f97b05b2ac89736da267a64a",
-      "providerSha256": "79bbf62de8c71a4bcc08d4731d0e9e8e5fef2e8355d5e1daad549aabaa54d8f4",
-      "export_height": 48
+      "sourceSha256": "27b36eb89df7688be4dbad6e4cc75dcb1a52d7ffe8d150f7c2c0ba981521db84",
+      "source_credit": "Recovered SpriteCook R02 walk and seated poses; shared stable foot anchor.",
+      "provider_assets": [
+        "d69e9a12-a300-4590-8a44-9984122fdb68"
+      ]
     },
     {
       "id": "npc.r01.vera",
       "name": "vera",
       "label": "Вера Павловна Ладожская",
       "role": "npc",
-      "displayHeight": 54,
+      "displayHeight": 48,
       "pivot": [
         0.5,
-        0.9555555555555556
+        0.9583333333333334
       ],
       "positions": {
         "landscape": [
@@ -176,100 +124,157 @@
           485
         ]
       },
-      "source": "assets/source/characters/r01/vera.aseprite",
-      "provider_sheet": "assets/source/characters/r01/provider/vera-animation.png",
-      "provider_frame_size": [
-        164,
-        164
-      ],
-      "provider_frame_count": 6,
-      "frame_duration_ms": 280,
-      "normalization": {
-        "padding": 8,
-        "align": "bottom-alpha-support-line",
-        "resampling": "none"
-      },
-      "tags": {
-        "idle": [
-          0,
-          5
-        ]
-      },
-      "asset_id": "8378bacb-7fe6-492d-a9b5-6903f5fe458e",
-      "source_asset_id": "1602ffa6-cd66-4454-8ab1-c341b3b53cc9",
-      "job_id": "f5013ada-cde5-4cd5-8f43-fc6449397c52",
-      "credits_used": 20,
+      "source": "assets/source/characters/station-r02/editable/vera.aseprite",
       "reduced_motion": "first idle frame, no timer",
       "outputs": {
         "idle": {
-          "sha256": "5b9b14e9437ad9ca3d4cdec2e7367a7b5818ed9ef8af26845f7271fa4d5f5afa",
-          "bytes": 3089,
+          "sha256": "0935d25b9e9ea857dcb63a717647f488576bf25307e0f02297ef74759752aaaf",
+          "bytes": 8409,
           "frameSize": [
-            54,
-            54
+            40,
+            48
           ],
-          "frameCount": 6,
+          "frameCount": 9,
           "durationsMs": [
-            280,
-            280,
-            280,
-            280,
-            280,
-            280
+            1400,
+            100,
+            1300,
+            240,
+            320,
+            320,
+            240,
+            240,
+            400
           ],
           "frameBounds": [
             [
-              20,
-              8,
-              34,
-              52
+              10,
+              2,
+              27,
+              46
             ],
             [
-              20,
-              8,
-              34,
-              52
+              10,
+              2,
+              27,
+              46
             ],
             [
-              20,
-              8,
-              34,
-              52
+              10,
+              2,
+              27,
+              46
             ],
             [
-              20,
               9,
-              34,
-              52
+              1,
+              28,
+              46
             ],
             [
-              20,
-              9,
-              34,
-              52
+              8,
+              1,
+              35,
+              46
             ],
             [
-              20,
+              10,
+              1,
+              33,
+              46
+            ],
+            [
+              11,
+              2,
+              30,
+              46
+            ],
+            [
+              10,
+              2,
+              30,
+              46
+            ],
+            [
+              11,
+              2,
+              27,
+              46
+            ]
+          ]
+        },
+        "talk": {
+          "sha256": "b22512adfd538c988fb14c3757c85d6f2d54652aa23b2159a8d67e25082cecf8",
+          "bytes": 6227,
+          "frameSize": [
+            40,
+            48
+          ],
+          "frameCount": 6,
+          "durationsMs": [
+            240,
+            320,
+            320,
+            240,
+            240,
+            400
+          ],
+          "frameBounds": [
+            [
               9,
-              34,
-              52
+              1,
+              28,
+              46
+            ],
+            [
+              8,
+              1,
+              35,
+              46
+            ],
+            [
+              10,
+              1,
+              33,
+              46
+            ],
+            [
+              11,
+              2,
+              30,
+              46
+            ],
+            [
+              10,
+              2,
+              30,
+              46
+            ],
+            [
+              11,
+              2,
+              27,
+              46
             ]
           ]
         }
       },
-      "sourceSha256": "b352a0c6df1c34fe28797150c1cfb50b599b1bd69837df4ae6513d042b912fd0",
-      "providerSha256": "300255e887fe3567bfef69c094ce8713e546edddd7beafd58d6dff729fa8aa88",
-      "export_height": 54
+      "sourceSha256": "cb64614c895bdbf0e4d3001fb079011d2880486721cbe5ed789ec0b2e6230f60",
+      "provider_assets": [
+        "09306496-1cfd-4f2b-8ef7-2863c8dd9f16",
+        "eba57b9c-072c-445c-8063-764689be22cc"
+      ],
+      "source_credit": "SpriteCook R02 poses; editable source with registered support line."
     },
     {
       "id": "companion.r01.pascal",
       "name": "pascal",
       "label": "Кот Паскаль",
       "role": "npc",
-      "displayHeight": 27,
+      "displayHeight": 32,
       "pivot": [
         0.5,
-        0.9444444444444444
+        0.90625
       ],
       "positions": {
         "landscape": [
@@ -281,90 +286,91 @@
           639
         ]
       },
-      "source": "assets/source/characters/r01/pascal.aseprite",
-      "provider_sheet": "assets/source/characters/r01/provider/pascal-animation.png",
-      "provider_frame_size": [
-        128,
-        128
-      ],
-      "provider_frame_count": 6,
-      "frame_duration_ms": 260,
-      "normalization": {
-        "padding": 8,
-        "align": "bottom-alpha-support-line",
-        "resampling": "none"
-      },
-      "tags": {
-        "idle": [
-          0,
-          5
-        ]
-      },
-      "asset_id": "28daea1a-54eb-4498-9e3d-4e48833c8750",
-      "source_asset_id": "d94f82fb-c959-40f8-986a-4a4632fb89d4",
-      "job_id": "269e9718-4810-4257-ad0b-14270c780cfc",
-      "credits_used": 20,
+      "source": "assets/source/characters/station-r02/editable/pascal.aseprite",
       "reduced_motion": "first idle frame, no timer",
       "outputs": {
         "idle": {
-          "sha256": "1a8e23824ed49141c06bb0e28fdf3b17a04db25c9d5ef842a55010596d33c2a2",
-          "bytes": 1114,
+          "sha256": "2e9a3775ddcfe0639feb14ddefcb6cae3a56b00e8bf66c7c4a47ccebd1d97e00",
+          "bytes": 6412,
           "frameSize": [
-            27,
-            27
+            40,
+            32
           ],
-          "frameCount": 6,
+          "frameCount": 9,
           "durationsMs": [
-            260,
-            260,
-            260,
-            260,
-            260,
-            260
+            1800,
+            100,
+            1200,
+            220,
+            220,
+            400,
+            500,
+            600,
+            1200
           ],
           "frameBounds": [
             [
-              5,
-              5,
-              22,
-              26
+              12,
+              8,
+              29,
+              28
             ],
             [
-              5,
-              5,
-              22,
-              26
+              12,
+              8,
+              30,
+              28
             ],
             [
-              5,
-              5,
-              22,
-              26
+              12,
+              8,
+              29,
+              28
             ],
             [
-              5,
-              5,
-              22,
-              26
+              12,
+              8,
+              30,
+              29
             ],
             [
-              5,
-              5,
-              22,
-              26
+              10,
+              8,
+              31,
+              28
             ],
             [
-              5,
-              5,
-              22,
-              26
+              12,
+              8,
+              30,
+              29
+            ],
+            [
+              12,
+              7,
+              29,
+              28
+            ],
+            [
+              12,
+              7,
+              30,
+              28
+            ],
+            [
+              12,
+              7,
+              30,
+              28
             ]
           ]
         }
       },
-      "sourceSha256": "e878d2873b5b7be105a004fd0be511c48a22b784cf18e5009385801df0568124",
-      "providerSha256": "ca0cc39769c07b45428c688d2ee454541c145b48840c0b7564f6247c773563ee",
-      "export_height": 27
+      "sourceSha256": "efe7e9ec7789f94c6e428d0d9fcdd5cdee4591c270ce0024cd3ceeebbab1c916",
+      "provider_assets": [
+        "c6867f7d-9525-4c7e-bf00-fc26f9df9585"
+      ],
+      "source_credit": "SpriteCook R02 poses; editable source with registered support line."
     },
     {
       "id": "npc.r01.field-worker",
@@ -386,125 +392,122 @@
           0
         ]
       },
-      "source": "assets/source/characters/r01/field-worker.aseprite",
-      "source_credit": "SpriteCook base sprite with hand-authored production cels",
+      "source": "assets/source/characters/station-r02/editable/field-worker.aseprite",
+      "source_credit": "Recovered SpriteCook R02 walk and seated poses; shared stable foot anchor.",
       "outputs": {
         "idle": {
-          "sha256": "a49b56c18b9d7cb599cafb364f1b99139b381dc24078088e3e852096bdc6d65d",
-          "bytes": 945,
+          "sha256": "8640e621315f0ee377bb10219bd2445704504aa679a05b28cb876b5c2bb739af",
+          "bytes": 1257,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ],
           "frameBounds": [
             [
-              7,
+              6,
               2,
-              30,
+              25,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "0de82ee6d2881f47a954d7f68025f5d2f7c0ce4a4476c8d13557b896813ca5ee",
-          "bytes": 1556,
+          "sha256": "e1999a0a4a513abfe44da86632e01f6a1fb311d9cfcabd3457a3af20d4200b9b",
+          "bytes": 3538,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 4,
           "durationsMs": [
-            150,
-            150,
-            150,
-            150
+            125,
+            125,
+            125,
+            125
           ],
           "frameBounds": [
             [
-              4,
+              6,
               2,
-              30,
+              25,
               46
             ],
             [
-              7,
-              3,
-              30,
-              46
-            ],
-            [
-              7,
+              6,
               2,
-              30,
+              27,
               46
             ],
             [
-              7,
-              3,
-              30,
+              6,
+              2,
+              25,
+              45
+            ],
+            [
+              6,
+              2,
+              26,
               46
             ]
           ]
         },
         "sit": {
-          "sha256": "838c3d991e710961f53bf8a604454a5eaa35a3661343e468a31b7f4172460c9a",
-          "bytes": 1001,
+          "sha256": "5c014c527da8d1d7a4d09d0b99b2ef2a478fa98300c7114781217df391da5162",
+          "bytes": 1451,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ],
           "frameBounds": [
             [
-              7,
-              3,
-              28,
+              4,
+              2,
+              29,
               46
             ]
           ]
         },
         "talk": {
-          "sha256": "f0f1c5dec508a6b1864504dad75512bb1d3b3d32943c18232c0c553298862d09",
-          "bytes": 1124,
+          "sha256": "8640e621315f0ee377bb10219bd2445704504aa679a05b28cb876b5c2bb739af",
+          "bytes": 1257,
           "frameSize": [
             32,
             48
           ],
-          "frameCount": 2,
+          "frameCount": 1,
           "durationsMs": [
-            150,
-            150
+            1000
           ],
           "frameBounds": [
             [
-              7,
+              6,
               2,
-              30,
-              46
-            ],
-            [
-              7,
-              2,
-              30,
+              25,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "ca10a79a7abf672f19ad57f2598671639b60eb0027d1275002e0206ee070f8a5",
+      "sourceSha256": "1036327d0899f28039d6c0165f001e9ef2846839dc281e12eda4fae66532f0da",
       "provider": {
         "assetId": "28399742-b406-45be-a0e9-b1ea41241000",
         "model": "pixel-engine-image-v1",
         "source": "assets/source/characters/r01/provider/station-crew/field-worker.png",
         "sha256": "3e207fa1800cdcaf8ad919359fb2cd83b4a04131f9ee3b42b49dee7dddd1d1e8"
-      }
+      },
+      "provider_assets": [
+        "874e7204-55a1-4125-8dce-0d6f1bf549cb",
+        "b0724626-9479-42c6-86eb-64dd16306ecc"
+      ]
     },
     {
       "id": "npc.r01.map-worker",
@@ -526,11 +529,11 @@
           0
         ]
       },
-      "source": "assets/source/characters/r01/map-worker.aseprite",
-      "source_credit": "SpriteCook base sprite with hand-authored production cels",
+      "source": "assets/source/characters/station-r02/editable/map-worker.aseprite",
+      "source_credit": "Recovered SpriteCook R02 walk and seated poses; shared stable foot anchor.",
       "outputs": {
         "idle": {
-          "sha256": "e447fa6c2649fe354f0999daaa31eef7d729610df8cfd8594e7d2666189cd11d",
+          "sha256": "4f12d8517a52e1060c71cf6bdabe2116497966ce376be7877e5871c42949a772",
           "bytes": 990,
           "frameSize": [
             32,
@@ -538,113 +541,110 @@
           ],
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ],
           "frameBounds": [
             [
-              5,
-              1,
-              30,
+              7,
+              2,
+              23,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "47e7187ee1fef5816fab8a05dd24679a754e0aa64e6dc25bf990a260a6615e52",
-          "bytes": 1631,
+          "sha256": "bfad67073b706243254b36dc1262655342cbf54a6a4caf5b1a42b702e887cf5e",
+          "bytes": 2604,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 4,
           "durationsMs": [
-            150,
-            150,
-            150,
-            150
+            125,
+            125,
+            125,
+            125
           ],
           "frameBounds": [
             [
-              3,
-              1,
-              30,
-              46
-            ],
-            [
-              5,
+              7,
               2,
-              30,
+              23,
               46
             ],
             [
-              5,
-              1,
-              30,
-              46
-            ],
-            [
-              5,
+              7,
               2,
-              30,
-              46
+              23,
+              45
+            ],
+            [
+              6,
+              2,
+              26,
+              45
+            ],
+            [
+              6,
+              2,
+              23,
+              45
             ]
           ]
         },
         "sit": {
-          "sha256": "310e815df1dfe78e406f6ce9f233755a12c778edc07f0f8a3959275e297bf40f",
-          "bytes": 1095,
+          "sha256": "9db97ace8c5d008c2f042a26c771b8dc7cdc35f542ded160a7c62e4fa9f1c7a7",
+          "bytes": 1190,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ],
           "frameBounds": [
             [
-              5,
-              2,
-              30,
+              7,
+              3,
+              26,
               46
             ]
           ]
         },
         "talk": {
-          "sha256": "e7332db6168087fa7bdba87b193d193c0ad594afad45ddaaffccf28a27da44a3",
-          "bytes": 1143,
+          "sha256": "4f12d8517a52e1060c71cf6bdabe2116497966ce376be7877e5871c42949a772",
+          "bytes": 990,
           "frameSize": [
             32,
             48
           ],
-          "frameCount": 2,
+          "frameCount": 1,
           "durationsMs": [
-            150,
-            150
+            1000
           ],
           "frameBounds": [
             [
-              5,
-              1,
-              30,
-              46
-            ],
-            [
-              5,
-              1,
-              30,
+              7,
+              2,
+              23,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "8d99641e5293f2e961c5de408359988885a21992193142c772982bddcb7891ce",
+      "sourceSha256": "7888b188353c46209a841d30255e94692c66117c067879c7e59e6628fa2fbc4f",
       "provider": {
         "assetId": "2e012b9b-ae72-4f12-ad71-a23aa798457b",
         "model": "pixel-engine-image-v1",
         "source": "assets/source/characters/r01/provider/station-crew/map-worker.png",
         "sha256": "36b428eccbef6619a5c7f7d781fe66b1479ed6d4db7bc1fd8e343f77ba0aae2e"
-      }
+      },
+      "provider_assets": [
+        "88163dc6-1867-413a-8734-efac1429eada",
+        "b0724626-9479-42c6-86eb-64dd16306ecc"
+      ]
     },
     {
       "id": "npc.r01.shift-worker",
@@ -666,131 +666,134 @@
           0
         ]
       },
-      "source": "assets/source/characters/r01/shift-worker.aseprite",
-      "source_credit": "SpriteCook base sprite with hand-authored production cels",
+      "source": "assets/source/characters/station-r02/editable/shift-worker.aseprite",
+      "source_credit": "Recovered SpriteCook R02 walk and seated poses; shared stable foot anchor.",
       "outputs": {
         "idle": {
-          "sha256": "6b954d5c6da1ce03334ed381b9e26e9068f50dbc618aabf88116fa54c47f7689",
-          "bytes": 1033,
+          "sha256": "84a406e63c3303c4e7631c03402eb455023f7c117bc42c812e647ddc10177b40",
+          "bytes": 978,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ],
           "frameBounds": [
             [
+              8,
               2,
-              2,
-              30,
+              24,
               46
             ]
           ]
         },
         "walk": {
-          "sha256": "0a55feaf8d6d561ba751815c65c4743ddfb636251f4ec973cfe92432de1747ff",
-          "bytes": 1607,
+          "sha256": "704a1c77feb3e106b817b270740f179e18c8f748f3b9bb6ec7b8e427336d9221",
+          "bytes": 2795,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 4,
           "durationsMs": [
-            150,
-            150,
-            150,
-            150
+            125,
+            125,
+            125,
+            125
           ],
           "frameBounds": [
             [
+              8,
               2,
-              2,
-              30,
+              24,
               46
             ],
             [
+              7,
               2,
-              3,
-              30,
+              25,
               46
             ],
             [
+              7,
               2,
-              2,
-              30,
+              26,
               46
             ],
             [
+              6,
               2,
-              3,
-              30,
+              27,
               46
             ]
           ]
         },
         "sit": {
-          "sha256": "26f71259dd9e487e2bba885b7762fd97b16ec209722d3cca50c5bebea9840f47",
-          "bytes": 1028,
+          "sha256": "74602b05f9e63811c1739b9e358ea125573b0bd86306a52d7cb4297e5526caed",
+          "bytes": 1148,
           "frameSize": [
             32,
             48
           ],
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ],
           "frameBounds": [
             [
-              2,
-              4,
-              30,
+              6,
+              3,
+              26,
               46
             ]
           ]
         },
         "talk": {
-          "sha256": "c402df658038dc9539c65abe4141b367d1b5276a28a828601378b5d6415139b3",
-          "bytes": 1261,
+          "sha256": "84a406e63c3303c4e7631c03402eb455023f7c117bc42c812e647ddc10177b40",
+          "bytes": 978,
           "frameSize": [
             32,
             48
           ],
-          "frameCount": 2,
+          "frameCount": 1,
           "durationsMs": [
-            150,
-            150
+            1000
           ],
           "frameBounds": [
             [
+              8,
               2,
-              2,
-              30,
-              46
-            ],
-            [
-              2,
-              2,
-              30,
+              24,
               46
             ]
           ]
         }
       },
-      "sourceSha256": "7ac3bb5958784e97daab991c793be523bf004453e6fa4cbfb941892bb6e60149",
+      "sourceSha256": "fa68ab19b2e277592bf5680529a28381083c5701dd55aec429c266de5c89de69",
       "provider": {
         "assetId": "6d40b2c5-8690-4864-866e-f5ee3de8c826",
         "model": "pixel-engine-image-v1",
         "source": "assets/source/characters/r01/provider/station-crew/shift-worker.png",
         "sha256": "31e8a1c265b27cb07c1424a9c2ee3dbb5e3231ca61d20764e52236df477a58ac"
-      }
+      },
+      "provider_assets": [
+        "0305ab7f-6843-4cc7-aa51-59ee0885e7b3",
+        "b0724626-9479-42c6-86eb-64dd16306ecc"
+      ]
     }
   ],
   "budget": {
-    "compressedPngBytes": 25877,
-    "decodedRgbaBytes": 317880,
-    "animatedActors": 3,
+    "compressedPngBytes": 43502,
+    "decodedRgbaBytes": 321024,
+    "animatedActors": 6,
     "maximumDecodedRgbaBytes": 4194304
+  },
+  "provenance_r02": "assets/source/characters/station-r02/recovery.json",
+  "technical_status": "pass",
+  "source_review": {
+    "evidence": "docs/testing/evidence/station-r02-world-source-review.json",
+    "sha256": "f57fc9cf26aa99584ea115f7f69a387ccaff15d041f5ceefab3bb6a67be35984"
   }
 }

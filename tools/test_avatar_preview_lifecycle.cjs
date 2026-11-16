@@ -5,13 +5,20 @@ const { load, Runner, deferred, flush, nodes, text } = require('./ui_test_harnes
 const contract = load('packages/world-engine/src/runtime/modularAvatarManifest.ts');
 const pending = [], draws = [];
 const canvas = { getContext: () => ({}) };
-const api = { ...contract, avatarPreviewBounds: () => ({ width: 114, height: 144 }),
+// The fitted canvas is positioned by the body's support point, including the
+// space reserved to its left for a companion. Keep that geometry in the double.
+const bounds = { width: 114, height: 144, bodyAt: [18, 0], childAt: [0, 76] };
+function composite(key, direction) {
+  return { key, direction, manifest: { revision: 'lifecycle-fixture' },
+    body: { canvas: {}, frame: { width: 96, height: 144, pivot: [48, 136] } }, companion: null };
+}
+const api = { ...contract, avatarPreviewBounds: () => bounds,
   drawAvatarComposite(_ctx, composite, frame) { draws.push({ composite, frame }); },
   modularAvatarCompositor: { acquireStatic(profile, direction) { const request = { ...deferred(), profile, direction }; pending.push(request); return request.promise; } },
 };
 const preview = load('apps/web/src/features/avatar/AvatarPreview.tsx', { '@synopsis/world-engine/avatar': api }, {}, '\nexports.StaticAvatarCanvas = StaticAvatarCanvas;');
 function resolve(request) {
-  const lease = { value: { key: `${contract.avatarProfileKey(request.profile)}:${request.direction}`, direction: request.direction }, releases: 0, release() { this.releases++; } };
+  const lease = { value: composite(`${contract.avatarProfileKey(request.profile)}:${request.direction}`, request.direction), releases: 0, release() { this.releases++; } };
   request.resolve(lease); return lease;
 }
 (async () => {
@@ -42,13 +49,15 @@ function resolve(request) {
   const late = resolve(afterUnmount); await flush(runner);
   assert.equal(late.releases, 1); assert.equal(runner.lateWrites, 0);
 
-  const staticCanvas = new Runner(preview.StaticAvatarCanvas, { composite: { key: 'first', direction: 'down' } }, { effects: false });
+  const staticCanvas = new Runner(preview.StaticAvatarCanvas, { composite: composite('first', 'down'), hairstyleThumbnail: false }, { effects: false });
   staticCanvas.hooks[0].value.current = canvas;
   staticCanvas.runEffects = true; staticCanvas.render();
   assert.equal(draws.length, 1); assert.equal(draws[0].frame, 0);
   assert.equal(staticCanvas.output.props.style.width, 228); assert.equal(staticCanvas.output.props.style.height, 288);
+  assert.equal(staticCanvas.output.props.style.left, 'calc(50% - 132px)', 'The support point, not the padded canvas center, aligns with the fitting rug');
+  assert.equal(staticCanvas.output.props.style.top, 'calc(var(--fitting-rug-y) - 272px)');
   staticCanvas.render(); assert.equal(draws.length, 1, 'Unchanged fitting rerenders do not redraw or schedule');
-  staticCanvas.render({ composite: { key: 'second', direction: 'up' } });
+  staticCanvas.render({ composite: composite('second', 'up') });
   assert.equal(draws.length, 2); assert.equal(draws[1].frame, 0);
   staticCanvas.unmount();
   // No window, timers, animation frame or observer was provided to either component.

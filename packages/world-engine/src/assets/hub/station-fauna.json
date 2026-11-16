@@ -1,7 +1,7 @@
 {
   "fitting": {
-    "companion.squirrel": "/assets/fauna/station/squirrel-fitting.png",
-    "companion.tit": "/assets/fauna/station/tit-fitting.png"
+    "companion.squirrel": "/assets/fauna/station/squirrel-fitting.png?v=6927d3c8e534",
+    "companion.tit": "/assets/fauna/station/tit-fitting.png?v=edb053ee74d2"
   },
   "station": [
     {
@@ -26,7 +26,7 @@
       "clips": {
         "idle": {
           "assetId": "animal_squirrel.idle",
-          "url": "/assets/fauna/station/squirrel-campus.png?v=d2b2e9793524",
+          "url": "/assets/fauna/station/squirrel-campus.png?v=ec479e615fd1",
           "frameWidth": 48,
           "frameHeight": 48,
           "frameCount": 1,
@@ -36,19 +36,16 @@
         },
         "run": {
           "assetId": "animal_squirrel.run",
-          "url": "/assets/fauna/station/squirrel-run.png?v=458b013772af",
+          "url": "/assets/fauna/station/squirrel-run.png?v=6e93991dbab9",
           "frameWidth": 48,
           "frameHeight": 48,
-          "frameCount": 8,
+          "frameCount": 5,
           "durationsMs": [
-            64,
-            64,
-            64,
-            64,
-            64,
-            64,
-            64,
-            64
+            95,
+            95,
+            95,
+            95,
+            95
           ]
         }
       }
@@ -75,7 +72,7 @@
       "clips": {
         "idle": {
           "assetId": "bird_tit.idle",
-          "url": "/assets/fauna/station/tit-campus.png?v=49858fb1f4e2",
+          "url": "/assets/fauna/station/tit-campus.png?v=f0749f4b66e7",
           "frameWidth": 48,
           "frameHeight": 48,
           "frameCount": 1,
@@ -85,33 +82,28 @@
         },
         "hop": {
           "assetId": "bird_tit.hop",
-          "url": "/assets/fauna/station/tit-hop.png?v=5e0d033a57a4",
+          "url": "/assets/fauna/station/tit-hop.png?v=8ef8b016f6b2",
           "frameWidth": 48,
           "frameHeight": 48,
-          "frameCount": 5,
+          "frameCount": 3,
           "durationsMs": [
-            92,
-            92,
-            92,
-            92,
-            92
+            150,
+            150,
+            150
           ]
         },
         "flutter": {
           "assetId": "bird_tit.flutter",
-          "url": "/assets/fauna/station/tit-flutter.png?v=4aa36cb8c5e4",
+          "url": "/assets/fauna/station/tit-flutter.png?v=1e8855946a51",
           "frameWidth": 48,
           "frameHeight": 48,
-          "frameCount": 8,
+          "frameCount": 5,
           "durationsMs": [
-            130,
-            130,
-            130,
-            130,
-            130,
-            130,
-            130,
-            130
+            150,
+            150,
+            150,
+            150,
+            150
           ]
         }
       }

@@ -29,25 +29,21 @@
       "clips": {
         "idle": {
           "assetId": "character.r01.observer.idle",
-          "url": "/hub/characters/observer-idle.png?v=5b97dec071bf",
-          "frameWidth": 48,
+          "url": "/hub/characters/observer-idle.png?v=41c30dc01e5f",
+          "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            125
+            1000
           ]
         },
         "walk": {
           "assetId": "character.r01.observer.walk",
-          "url": "/hub/characters/observer-walk.png?v=364b72e4d666",
-          "frameWidth": 48,
+          "url": "/hub/characters/observer-walk.png?v=6b65dd87da86",
+          "frameWidth": 32,
           "frameHeight": 48,
-          "frameCount": 8,
+          "frameCount": 4,
           "durationsMs": [
-            125,
-            125,
-            125,
-            125,
             125,
             125,
             125,
@@ -61,10 +57,10 @@
       "id": "npc.r01.vera",
       "label": "Вера Павловна Ладожская",
       "role": "npc",
-      "displayHeight": 54,
+      "displayHeight": 48,
       "pivot": [
         0.5,
-        0.9629629629629629
+        0.9583333333333334
       ],
       "positions": {
         "landscape": [
@@ -79,17 +75,35 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.vera.idle",
-          "url": "/hub/characters/vera-idle.png?v=5578770c8bec",
-          "frameWidth": 54,
-          "frameHeight": 54,
+          "url": "/hub/characters/vera-idle.png?v=6c3b371c4073",
+          "frameWidth": 40,
+          "frameHeight": 48,
+          "frameCount": 9,
+          "durationsMs": [
+            1400,
+            100,
+            1300,
+            240,
+            320,
+            320,
+            240,
+            240,
+            400
+          ]
+        },
+        "talk": {
+          "assetId": "npc.r01.vera.talk",
+          "url": "/hub/characters/vera-talk.png?v=3ba8be088169",
+          "frameWidth": 40,
+          "frameHeight": 48,
           "frameCount": 6,
           "durationsMs": [
-            280,
-            280,
-            280,
-            280,
-            280,
-            280
+            240,
+            320,
+            320,
+            240,
+            240,
+            400
           ]
         }
       }
@@ -98,10 +112,10 @@
       "id": "companion.r01.pascal",
       "label": "Кот Паскаль",
       "role": "npc",
-      "displayHeight": 27,
+      "displayHeight": 32,
       "pivot": [
-        0.5185185185185185,
-        0.9629629629629629
+        0.5,
+        0.90625
       ],
       "positions": {
         "landscape": [
@@ -116,17 +130,20 @@
       "clips": {
         "idle": {
           "assetId": "companion.r01.pascal.idle",
-          "url": "/hub/characters/pascal-idle.png?v=f8e1b19f522e",
-          "frameWidth": 27,
-          "frameHeight": 27,
-          "frameCount": 6,
+          "url": "/hub/characters/pascal-idle.png?v=f807ac0b06fe",
+          "frameWidth": 40,
+          "frameHeight": 32,
+          "frameCount": 9,
           "durationsMs": [
-            260,
-            260,
-            260,
-            260,
-            260,
-            260
+            1800,
+            100,
+            1200,
+            220,
+            220,
+            400,
+            500,
+            600,
+            1200
           ]
         }
       }
@@ -153,47 +170,46 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.field-worker.idle",
-          "url": "/hub/characters/field-worker-idle.png?v=484e8166545e",
+          "url": "/hub/characters/field-worker-idle.png?v=f08a2defea7d",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ]
         },
         "walk": {
           "assetId": "npc.r01.field-worker.walk",
-          "url": "/hub/characters/field-worker-walk.png?v=231036ae7f46",
+          "url": "/hub/characters/field-worker-walk.png?v=3f22779becd6",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 4,
           "durationsMs": [
-            150,
-            150,
-            150,
-            150
+            125,
+            125,
+            125,
+            125
           ],
           "facing": "right"
         },
         "sit": {
           "assetId": "npc.r01.field-worker.sit",
-          "url": "/hub/characters/field-worker-sit.png?v=f7bbf4004851",
+          "url": "/hub/characters/field-worker-sit.png?v=6e18c8198359",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ]
         },
         "talk": {
           "assetId": "npc.r01.field-worker.talk",
-          "url": "/hub/characters/field-worker-talk.png?v=f769bed47974",
+          "url": "/hub/characters/field-worker-talk.png?v=f08a2defea7d",
           "frameWidth": 32,
           "frameHeight": 48,
-          "frameCount": 2,
+          "frameCount": 1,
           "durationsMs": [
-            150,
-            150
+            1000
           ]
         }
       }
@@ -220,47 +236,46 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.map-worker.idle",
-          "url": "/hub/characters/map-worker-idle.png?v=792d85a5773a",
+          "url": "/hub/characters/map-worker-idle.png?v=e2f468c2b2b3",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ]
         },
         "walk": {
           "assetId": "npc.r01.map-worker.walk",
-          "url": "/hub/characters/map-worker-walk.png?v=546d2db72ddd",
+          "url": "/hub/characters/map-worker-walk.png?v=a77a7a8ff92c",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 4,
           "durationsMs": [
-            150,
-            150,
-            150,
-            150
+            125,
+            125,
+            125,
+            125
           ],
           "facing": "right"
         },
         "sit": {
           "assetId": "npc.r01.map-worker.sit",
-          "url": "/hub/characters/map-worker-sit.png?v=20fe8ecf8313",
+          "url": "/hub/characters/map-worker-sit.png?v=b46a9bd33bb4",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ]
         },
         "talk": {
           "assetId": "npc.r01.map-worker.talk",
-          "url": "/hub/characters/map-worker-talk.png?v=62fed011be96",
+          "url": "/hub/characters/map-worker-talk.png?v=e2f468c2b2b3",
           "frameWidth": 32,
           "frameHeight": 48,
-          "frameCount": 2,
+          "frameCount": 1,
           "durationsMs": [
-            150,
-            150
+            1000
           ]
         }
       }
@@ -287,47 +302,46 @@
       "clips": {
         "idle": {
           "assetId": "npc.r01.shift-worker.idle",
-          "url": "/hub/characters/shift-worker-idle.png?v=2598d01e536c",
+          "url": "/hub/characters/shift-worker-idle.png?v=86ef76c4dec4",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ]
         },
         "walk": {
           "assetId": "npc.r01.shift-worker.walk",
-          "url": "/hub/characters/shift-worker-walk.png?v=139f3cbc31fb",
+          "url": "/hub/characters/shift-worker-walk.png?v=7b0a05083c39",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 4,
           "durationsMs": [
-            150,
-            150,
-            150,
-            150
+            125,
+            125,
+            125,
+            125
           ],
           "facing": "right"
         },
         "sit": {
           "assetId": "npc.r01.shift-worker.sit",
-          "url": "/hub/characters/shift-worker-sit.png?v=436168d0227b",
+          "url": "/hub/characters/shift-worker-sit.png?v=50e0c2f9e8df",
           "frameWidth": 32,
           "frameHeight": 48,
           "frameCount": 1,
           "durationsMs": [
-            150
+            1000
           ]
         },
         "talk": {
           "assetId": "npc.r01.shift-worker.talk",
-          "url": "/hub/characters/shift-worker-talk.png?v=fb601660029b",
+          "url": "/hub/characters/shift-worker-talk.png?v=86ef76c4dec4",
           "frameWidth": 32,
           "frameHeight": 48,
-          "frameCount": 2,
+          "frameCount": 1,
           "durationsMs": [
-            150,
-            150
+            1000
           ]
         }
       }

@@ -1,0 +1,2383 @@
+{
+  "reviewer": "/root/task_rooms",
+  "date": "2026-11-16",
+  "sourceRecords": [
+    {
+      "file": "assets/source/characters/player-r01/editable/backpack.city.aseprite",
+      "sha256": "cffe54dc20222eec009fecd2dafec2ef93248030bcb4c80728a9db2b6948d326",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          33,
+          39,
+          63,
+          77
+        ],
+        [
+          25,
+          38,
+          55,
+          77
+        ],
+        [
+          31,
+          38,
+          65,
+          77
+        ],
+        [
+          45,
+          38,
+          75,
+          77
+        ]
+      ],
+      "paletteColors": 15,
+      "paletteColorsPerFrame": [
+        7,
+        9,
+        9,
+        7
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/backpack.field.aseprite",
+      "sha256": "8ef956310b7babba1cceb0a965fa83c1e928375671758f7ff878e50175cecd2d",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          33,
+          39,
+          63,
+          77
+        ],
+        [
+          25,
+          38,
+          55,
+          81
+        ],
+        [
+          31,
+          38,
+          65,
+          81
+        ],
+        [
+          45,
+          38,
+          75,
+          81
+        ]
+      ],
+      "paletteColors": 17,
+      "paletteColorsPerFrame": [
+        10,
+        10,
+        12,
+        10
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/badge.aerology.aseprite",
+      "sha256": "a93ea6adbf67fb059597cdffba656b13e4f147b08c5ff05f92cd6da6036e23b6",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          54,
+          49,
+          61,
+          56
+        ],
+        [
+          59,
+          48,
+          63,
+          55
+        ],
+        [
+          34,
+          49,
+          41,
+          56
+        ],
+        [
+          32,
+          48,
+          36,
+          55
+        ]
+      ],
+      "paletteColors": 70,
+      "paletteColorsPerFrame": [
+        18,
+        17,
+        19,
+        18
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/badge.meteo.aseprite",
+      "sha256": "8992912d889e8a99c22b09f76cb82fee2a1ae027ddae69dd8caef01a34c12e53",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          54,
+          49,
+          61,
+          56
+        ],
+        [
+          59,
+          48,
+          63,
+          55
+        ],
+        [
+          34,
+          49,
+          41,
+          56
+        ],
+        [
+          32,
+          48,
+          36,
+          55
+        ]
+      ],
+      "paletteColors": 73,
+      "paletteColorsPerFrame": [
+        18,
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/body.aseprite",
+      "sha256": "c9c46f581e248ee5cbb6bf9129d3db4435faff4ca13ddbb28887edd8fe8cf816",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          21,
+          10,
+          74,
+          136
+        ],
+        [
+          35,
+          10,
+          60,
+          136
+        ],
+        [
+          21,
+          10,
+          75,
+          136
+        ],
+        [
+          35,
+          10,
+          60,
+          136
+        ]
+      ],
+      "paletteColors": 39,
+      "paletteColorsPerFrame": [
+        24,
+        19,
+        19,
+        20
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/bottom.dark-trousers.aseprite",
+      "sha256": "4fc4c61cd522376e1ec2dc79138f95d556c4120e37fe6f9b6e0fa1dbb6fa9a1c",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          30,
+          78,
+          66,
+          130
+        ],
+        [
+          36,
+          78,
+          61,
+          130
+        ],
+        [
+          30,
+          78,
+          66,
+          130
+        ],
+        [
+          35,
+          78,
+          60,
+          130
+        ]
+      ],
+      "paletteColors": 3,
+      "paletteColorsPerFrame": [
+        3,
+        2,
+        2,
+        3
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/bottom.field-trousers.aseprite",
+      "sha256": "8062b20ace1a4cf9f69f43c191ecce987b3dcdc6ed0394f84ef4ecec7959d6da",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          30,
+          78,
+          66,
+          130
+        ],
+        [
+          36,
+          78,
+          61,
+          130
+        ],
+        [
+          30,
+          78,
+          66,
+          130
+        ],
+        [
+          35,
+          78,
+          60,
+          130
+        ]
+      ],
+      "paletteColors": 6,
+      "paletteColorsPerFrame": [
+        6,
+        5,
+        5,
+        6
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/bottom.jeans.aseprite",
+      "sha256": "9cbca095f9fb0b9b0fafa8d79ec1f63ed6deaff1e60493fcfc945ed0bf203458",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          30,
+          78,
+          66,
+          130
+        ],
+        [
+          36,
+          78,
+          61,
+          130
+        ],
+        [
+          30,
+          78,
+          66,
+          130
+        ],
+        [
+          35,
+          78,
+          60,
+          130
+        ]
+      ],
+      "paletteColors": 7,
+      "paletteColorsPerFrame": [
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/companion.squirrel.aseprite",
+      "sha256": "f18a39cc5fae3d5a8205fdb6f048a8c8bb574bb6099b8b247258c66e65ab2b33",
+      "size": [
+        64,
+        64
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          24,
+          30,
+          39,
+          60
+        ],
+        [
+          13,
+          30,
+          46,
+          60
+        ],
+        [
+          24,
+          31,
+          40,
+          60
+        ],
+        [
+          19,
+          30,
+          52,
+          60
+        ]
+      ],
+      "paletteColors": 1036,
+      "paletteColorsPerFrame": [
+        315,
+        491,
+        283,
+        492
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/companion.tit.aseprite",
+      "sha256": "5a4c482569eb309fa162d242e3047b1099c33602afb54b557d0453b7bcdf04e0",
+      "size": [
+        64,
+        64
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          26,
+          41,
+          39,
+          60
+        ],
+        [
+          19,
+          40,
+          42,
+          60
+        ],
+        [
+          26,
+          39,
+          38,
+          60
+        ],
+        [
+          25,
+          40,
+          47,
+          60
+        ]
+      ],
+      "paletteColors": 414,
+      "paletteColorsPerFrame": [
+        110,
+        158,
+        117,
+        143
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/footwear.boots.aseprite",
+      "sha256": "c818a8d2b8b959e1d26666b984964d2a3bb0419a413eca3c756ccb62271fe577",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          25,
+          118,
+          71,
+          136
+        ],
+        [
+          33,
+          118,
+          66,
+          136
+        ],
+        [
+          25,
+          118,
+          71,
+          136
+        ],
+        [
+          30,
+          118,
+          63,
+          136
+        ]
+      ],
+      "paletteColors": 15,
+      "paletteColorsPerFrame": [
+        10,
+        10,
+        9,
+        10
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/footwear.shoes.aseprite",
+      "sha256": "258fe442a49879753d166bc93b069e5384e8e4ba728048f734c94663de255a56",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          26,
+          124,
+          70,
+          136
+        ],
+        [
+          34,
+          124,
+          66,
+          136
+        ],
+        [
+          26,
+          124,
+          70,
+          136
+        ],
+        [
+          30,
+          124,
+          62,
+          136
+        ]
+      ],
+      "paletteColors": 8,
+      "paletteColorsPerFrame": [
+        5,
+        6,
+        7,
+        6
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/footwear.sneakers.aseprite",
+      "sha256": "67619365d383f2e2a1ffdc7178f7e5256e54e6c558af18b419c9f91478aecc52",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          25,
+          123,
+          71,
+          136
+        ],
+        [
+          34,
+          123,
+          66,
+          136
+        ],
+        [
+          25,
+          123,
+          71,
+          136
+        ],
+        [
+          30,
+          123,
+          62,
+          136
+        ]
+      ],
+      "paletteColors": 14,
+      "paletteColorsPerFrame": [
+        11,
+        10,
+        11,
+        10
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.bob.aseprite",
+      "sha256": "58bc99ff488fa99014d7b57d17a4aac2e9717b66f553d6ec15898eb3169b52e2",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          32,
+          6,
+          64,
+          41
+        ],
+        [
+          33,
+          6,
+          65,
+          41
+        ],
+        [
+          32,
+          6,
+          64,
+          41
+        ],
+        [
+          30,
+          6,
+          62,
+          41
+        ]
+      ],
+      "paletteColors": 4,
+      "paletteColorsPerFrame": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.curl.aseprite",
+      "sha256": "1b4b348b63ecd6feb94acf83e2364a8fefd743cac5c10c61e857df12a2e12b94",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          31,
+          5,
+          65,
+          33
+        ],
+        [
+          33,
+          5,
+          66,
+          34
+        ],
+        [
+          31,
+          5,
+          65,
+          38
+        ],
+        [
+          30,
+          5,
+          63,
+          34
+        ]
+      ],
+      "paletteColors": 4,
+      "paletteColorsPerFrame": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.long.aseprite",
+      "sha256": "f9bdc41f6a66a673af9fb8d68335dbb9416afaa9a5a1563ae80386c51b690138",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          31,
+          6,
+          65,
+          49
+        ],
+        [
+          33,
+          6,
+          66,
+          49
+        ],
+        [
+          31,
+          6,
+          65,
+          49
+        ],
+        [
+          30,
+          6,
+          63,
+          49
+        ]
+      ],
+      "paletteColors": 4,
+      "paletteColorsPerFrame": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.short.aseprite",
+      "sha256": "678bfc60a4006ce4ccf7df9fa5fdd6f9c54d0641268b1f423ed5cb0ae33ca4a2",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          33,
+          6,
+          63,
+          30
+        ],
+        [
+          35,
+          6,
+          64,
+          32
+        ],
+        [
+          33,
+          6,
+          63,
+          38
+        ],
+        [
+          32,
+          6,
+          61,
+          31
+        ]
+      ],
+      "paletteColors": 4,
+      "paletteColorsPerFrame": [
+        3,
+        3,
+        4,
+        3
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.wave.aseprite",
+      "sha256": "605f1c626db9ad1dee5401d2db3c219a7e393189010bb35277e60f385be7f799",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          32,
+          6,
+          64,
+          34
+        ],
+        [
+          34,
+          6,
+          65,
+          35
+        ],
+        [
+          32,
+          6,
+          64,
+          39
+        ],
+        [
+          31,
+          6,
+          62,
+          35
+        ]
+      ],
+      "paletteColors": 4,
+      "paletteColorsPerFrame": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.beanie.aseprite",
+      "sha256": "d491c34df73090003ca77d8369fb11981c4d07354e2dc4f4d0d3996b5247862d",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          31,
+          3,
+          65,
+          21
+        ],
+        [
+          33,
+          3,
+          66,
+          22
+        ],
+        [
+          31,
+          3,
+          65,
+          26
+        ],
+        [
+          30,
+          3,
+          63,
+          22
+        ]
+      ],
+      "paletteColors": 9,
+      "paletteColorsPerFrame": [
+        9,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.cap.aseprite",
+      "sha256": "c5083bf14390e150e3379beca36c842b572cb149c79c6881c51202fd031a2a15",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          31,
+          3,
+          65,
+          21
+        ],
+        [
+          31,
+          3,
+          68,
+          22
+        ],
+        [
+          31,
+          3,
+          65,
+          25
+        ],
+        [
+          28,
+          3,
+          65,
+          22
+        ]
+      ],
+      "paletteColors": 11,
+      "paletteColorsPerFrame": [
+        8,
+        7,
+        7,
+        6
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.goggles.aseprite",
+      "sha256": "39ddfb649c90f91052a73be5ba765be1ae6a26bc14ec02adc7894cf00fe0d227",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          35,
+          20,
+          61,
+          28
+        ],
+        [
+          36,
+          20,
+          62,
+          28
+        ],
+        [
+          35,
+          20,
+          61,
+          26
+        ],
+        [
+          32,
+          20,
+          58,
+          28
+        ]
+      ],
+      "paletteColors": 20,
+      "paletteColorsPerFrame": [
+        10,
+        12,
+        7,
+        12
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.scarf.aseprite",
+      "sha256": "ba344a78c751df5354e6354e7046007fb097e534175c8ba1a13062d9bbeff0ef",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          34,
+          34,
+          62,
+          57
+        ],
+        [
+          35,
+          34,
+          63,
+          57
+        ],
+        [
+          34,
+          34,
+          62,
+          57
+        ],
+        [
+          32,
+          34,
+          60,
+          57
+        ]
+      ],
+      "paletteColors": 8,
+      "paletteColorsPerFrame": [
+        7,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/held.map-folder.aseprite",
+      "sha256": "c9e5525e5aa48bbda62db4a0d69863910bd7e799266d9e811ddcb0f4c8351800",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          17,
+          79,
+          33,
+          102
+        ],
+        [
+          43,
+          80,
+          49,
+          103
+        ],
+        [
+          64,
+          79,
+          80,
+          102
+        ],
+        [
+          45,
+          80,
+          51,
+          103
+        ]
+      ],
+      "paletteColors": 18,
+      "paletteColorsPerFrame": [
+        8,
+        9,
+        9,
+        11
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/held.pencil.aseprite",
+      "sha256": "d70c6ef73372dcfec9e41c037a8af99f64bf4c141a6677dd896409753b1bdc78",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          22,
+          82,
+          27,
+          99
+        ],
+        [
+          43,
+          82,
+          47,
+          99
+        ],
+        [
+          68,
+          82,
+          73,
+          99
+        ],
+        [
+          46,
+          82,
+          50,
+          99
+        ]
+      ],
+      "paletteColors": 25,
+      "paletteColorsPerFrame": [
+        12,
+        9,
+        10,
+        10
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/held.tablet.aseprite",
+      "sha256": "946922c6ef07d594f15cdf56ddd28b257c3f34905ef776e036f56ffa1a29707f",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          17,
+          79,
+          33,
+          102
+        ],
+        [
+          43,
+          80,
+          49,
+          103
+        ],
+        [
+          64,
+          79,
+          80,
+          102
+        ],
+        [
+          45,
+          80,
+          51,
+          103
+        ]
+      ],
+      "paletteColors": 16,
+      "paletteColorsPerFrame": [
+        11,
+        10,
+        5,
+        6
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.center-jacket.aseprite",
+      "sha256": "fdcf0b606d1907554184fab04458aea35b9ae08d618ef3d1af0e74a0e836b557",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          33,
+          36,
+          64,
+          84
+        ],
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          32,
+          36,
+          63,
+          84
+        ]
+      ],
+      "paletteColors": 8,
+      "paletteColorsPerFrame": [
+        5,
+        5,
+        4,
+        5
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.field-jacket.aseprite",
+      "sha256": "479dc088a64a4e816ff4f7b6e18576ab3e335e9f256cf9141042a4ead3240135",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          33,
+          36,
+          64,
+          84
+        ],
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          32,
+          36,
+          63,
+          84
+        ]
+      ],
+      "paletteColors": 11,
+      "paletteColorsPerFrame": [
+        7,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.hoodie.aseprite",
+      "sha256": "090eae086d69595abd8b03fc034c101eef5d2671195ea4d84e129a77527fdfdc",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          33,
+          36,
+          64,
+          84
+        ],
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          32,
+          36,
+          63,
+          84
+        ]
+      ],
+      "paletteColors": 7,
+      "paletteColorsPerFrame": [
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.shirt.aseprite",
+      "sha256": "18cb2b86453c81537d82001fb8fd54ca28a9542708cd6e90435a7f1eab524774",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          23,
+          36,
+          73,
+          79
+        ],
+        [
+          34,
+          36,
+          63,
+          79
+        ],
+        [
+          23,
+          36,
+          73,
+          79
+        ],
+        [
+          33,
+          36,
+          62,
+          79
+        ]
+      ],
+      "paletteColors": 13,
+      "paletteColorsPerFrame": [
+        10,
+        9,
+        8,
+        10
+      ]
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.sweater.aseprite",
+      "sha256": "b650f9501c07a5c2a87ecd0b005fa9d87edf11f46ef7466f1b7a609ac15825af",
+      "size": [
+        96,
+        144
+      ],
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "tags": {
+        "down.idle": [
+          0,
+          0
+        ],
+        "right.idle": [
+          1,
+          1
+        ],
+        "up.idle": [
+          2,
+          2
+        ],
+        "left.idle": [
+          3,
+          3
+        ]
+      },
+      "alpha": [
+        0,
+        255
+      ],
+      "bounds": [
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          33,
+          36,
+          64,
+          84
+        ],
+        [
+          17,
+          36,
+          79,
+          84
+        ],
+        [
+          32,
+          36,
+          63,
+          84
+        ]
+      ],
+      "paletteColors": 9,
+      "paletteColorsPerFrame": [
+        8,
+        8,
+        7,
+        8
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "file": "assets/generated/characters/player-r01/atlas.png",
+      "sha256": "2d0b74323ec156571ad2af0627a1f89d4f2998bbdd95ed005e0625440ade945b",
+      "size": [
+        512,
+        480
+      ],
+      "bytes": 80432,
+      "alpha": [
+        0,
+        255
+      ],
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/player-r01/fitting-palettes-4b37943c8315e840.png",
+      "sha256": "e2a2bdb5500794ff5b2a70afc8e6287da9c6a8daeca150dc142cdc60c0e659f4",
+      "size": [
+        512,
+        384
+      ],
+      "bytes": 42855,
+      "alpha": [
+        0,
+        255
+      ],
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/player-r01/fitting-palettes-5c046cfb47b0ab5e.png",
+      "sha256": "c35acd85f928b898d7e3f9a7071367d4d541a79e9a340f72d0a82de000a34936",
+      "size": [
+        512,
+        320
+      ],
+      "bytes": 51164,
+      "alpha": [
+        0,
+        255
+      ],
+      "publicCopyMatches": true
+    },
+    {
+      "file": "assets/generated/characters/player-r01/fitting-palettes-65379d6946fbc63c.png",
+      "sha256": "a5a06e28127c03378c9ed33a2c01c7c1300e31eacc4585c8b56b9613257afb80",
+      "size": [
+        512,
+        384
+      ],
+      "bytes": 49709,
+      "alpha": [
+        0,
+        255
+      ],
+      "publicCopyMatches": true
+    }
+  ],
+  "comparisonToMain": [
+    {
+      "file": "assets/source/characters/player-r01/editable/backpack.city.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/backpack.field.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/badge.aerology.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/badge.meteo.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/body.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/bottom.dark-trousers.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/bottom.field-trousers.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/bottom.jeans.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/companion.squirrel.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": false,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/companion.tit.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": false,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/footwear.boots.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/footwear.shoes.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/footwear.sneakers.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.bob.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.curl.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.long.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.short.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/hair.wave.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": true
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.beanie.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.cap.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.goggles.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/headwear.scarf.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/held.map-folder.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/held.pencil.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/held.tablet.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.center-jacket.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.field-jacket.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.hoodie.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.shirt.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    },
+    {
+      "file": "assets/source/characters/player-r01/editable/top.sweater.aseprite",
+      "frameGeometrySame": true,
+      "durationsAndTagsSame": true,
+      "alphaPlanesSame": true,
+      "rgbaSame": false
+    }
+  ],
+  "modularFingerprints": {
+    "atlasSha256": "2d0b74323ec156571ad2af0627a1f89d4f2998bbdd95ed005e0625440ade945b",
+    "compositionSha256": "36459c517aa804aebd5c3ca10b5cb17f5fd3be258c71c334c09d394467f53422",
+    "sourceContractSha256": "ef221a1fc7831d16d9317c26a518babbde9920caeb74933601d847f3693ee559"
+  },
+  "sampledComposites": 496,
+  "scope": "modular-player-and-fitting-source-art"
+}

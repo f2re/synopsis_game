@@ -19,7 +19,7 @@ export interface StylePreset {
   avatar: Partial<AvatarProfile>;
 }
 
-export const wardrobeIcon = (id: string) => `/assets/items/wardrobe/${id}.png`;
+export const wardrobeIcon = (id: string) => `/assets/items/wardrobe/${id}.png?v=station-r02-20261116`;
 
 /** IDs are the persisted identity contract, not display labels or image filenames. */
 export const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {

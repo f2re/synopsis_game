@@ -43,7 +43,8 @@ async function afterClick(page, control, path, method = 'POST') {
   return response.json();
 }
 async function pressWithoutPageScroll(page, control) {
-  await control.scrollIntoViewIfNeeded(); await control.focus();
+  await control.scrollIntoViewIfNeeded();
+  if (!await control.evaluate(node => node === document.activeElement)) await control.focus();
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const parent = page.locator('.app-page-viewport');
   const before = await parent.evaluate(node => node.scrollTop);
@@ -249,15 +250,31 @@ async function fillTask(page, task, evidence) {
     }
   } else if (kind === 'findError') {
     const stations = page.locator('.find-error-station');
+    assert.ok(await stations.count() >= 2, 'Physical control offers multiple stations');
+    // A programmatic focus after pointer input does not establish keyboard
+    // modality consistently. Traverse the actual tab order before checking
+    // the keyboard-only ring, then preserve that focus through Space.
+    await stations.nth(1).focus();
+    await page.keyboard.press('Shift+Tab');
+    const reachedByTab = await stations.first().evaluate(node => node === document.activeElement);
+    assert.ok(reachedByTab, 'Shift+Tab reaches the preceding physical-control station');
     await pressWithoutPageScroll(page, stations.first());
     assert.equal(await stations.first().getAttribute('aria-pressed'), 'true');
     const focused = await stations.first().evaluate(node => {
       const style = getComputedStyle(node.querySelector('.find-error-hit'));
       const bounds = node.querySelector('.find-error-hit').getBoundingClientRect();
       return { keyboardFocus: node === document.activeElement && node.matches(':focus-visible'),
-        dashedFocus: style.strokeDasharray !== 'none', width: bounds.width, height: bounds.height };
+        activeTag: document.activeElement?.tagName, activeLabel: document.activeElement?.getAttribute('aria-label'),
+        dashedFocus: style.strokeDasharray !== 'none', strokeDasharray: style.strokeDasharray,
+        width: bounds.width, height: bounds.height };
     });
-    assert.ok(focused.keyboardFocus && focused.dashedFocus, 'Keyboard focus is distinct from the selected station');
+    if (evidence) evidence.report.cases.push({
+      name: `all-${evidence.phase}-find-error-focus-${page.viewportSize().width}`,
+      viewport: page.viewportSize(), reachedByTab, ...focused,
+    });
+    if (evidence?.capture) await evidence.capture(page, `all-${evidence.phase}-find-error-keyboard-${page.viewportSize().width}`);
+    assert.ok(focused.keyboardFocus && focused.dashedFocus,
+      `Keyboard focus is distinct from the selected station: ${JSON.stringify(focused)}`);
     assert.ok(focused.width >= 44 && focused.height >= 44, 'Physical-control targets remain large enough');
     await stations.last().click(); assert.equal(await stations.last().getAttribute('aria-pressed'), 'true');
   } else throw new Error(`Uncovered task kind: ${kind}`);
@@ -418,14 +435,14 @@ async function checkShift({page, base, viewport, report, capture}) {
       await afterClick(page, referenceButton, `/api/shifts/${id}/reference`); reference = true;
       await page.getByRole('heading', { name: 'Справка к заданию', exact: true }).waitFor();
     }
-    await fillTask(page, task, { report, phase: 'shift' });
+    await fillTask(page, task, { report, capture, phase: 'shift' });
     if (task.response.kind === 'stationPlot' && viewport.width === 390) {
       // Repeat the populated diagram across orientation and narrow-width changes.
       // Clear/reassign must still use the current layout, without extra server answers.
       for (const size of [{ width: 844, height: 390 }, { width: 320, height: 844 }, viewport]) {
         await page.setViewportSize(size);
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await fillTask(page, task, { report, phase: 'shift-resize' });
+        await fillTask(page, task, { report, capture, phase: 'shift-resize' });
         await checkMapTabVisibility(page, page.locator('.station-slot'));
         await capture(page, `all-station-plot-resize-${size.width}`);
       }
@@ -469,17 +486,26 @@ async function checkShift({page, base, viewport, report, capture}) {
   report.cases.push({ name: `all-shift-controls-${viewport.width}`, actualAnswered: answered, kinds: [...kinds], reference, retried, revealed, skippedRetry, mentorTabs: true, earlyExitContinue: true, completed: true });
 }
 async function checkBlitz({page, base, viewport, report, capture}) {
+  const pendingLobby = page.waitForResponse(response => pathOf(response) === '/api/blitz-practice' && response.request().method() === 'GET');
   await page.goto(base + '/blitz');
-  await page.locator('.blitz-card h1').waitFor();
-  await checkWorkroom(page, 'telegraph', report, 'blitz-lobby');
+  const lobbyResponse = await pendingLobby;
+  assert.ok(lobbyResponse.ok(), `GET /api/blitz-practice: ${lobbyResponse.status()}`);
+  const lobby = await lobbyResponse.json();
+  assert.ok(!lobby.session || lobby.session.status === 'completed', 'The previous test round finished before starting another');
+  // Completed rounds are intentionally restored on entry, including between
+  // viewport checks. Wait for the server-backed action, not the loading h1.
+  const restored = lobby.session?.status === 'completed';
+  const start = page.getByRole('button', { name: restored ? 'Новый блиц · 90 с' : 'Начать блиц · 90 с', exact: true });
+  await start.waitFor();
+  await checkWorkroom(page, restored ? 'reading' : 'telegraph', report, restored ? 'blitz-restored-result' : 'blitz-lobby');
   await page.locator('.blitz-profile summary').click();
   await capture(page, `all-blitz-lobby-${viewport.width}`);
-  let state = await afterClick(page, page.getByRole('button', { name: /^(Начать|Новый) блиц · 90 с$/ }), '/api/blitz-practice');
+  let state = await afterClick(page, start, '/api/blitz-practice');
   // The clock is the actual server clock; no time or response is substituted.
   let count = 0;
   while (state.status === 'active' && state.task && count++ < 8) {
     await page.getByRole('heading', { name: state.task.question, exact: true }).waitFor();
-    await fillTask(page, state.task, { report, phase: 'blitz' });
+    await fillTask(page, state.task, { report, capture, phase: 'blitz' });
     const submit = page.getByRole('button', { name: 'Отправить ответ', exact: true });
     await submit.scrollIntoViewIfNeeded();
     const timedControls = await submit.evaluate(button => {
@@ -493,6 +519,7 @@ async function checkBlitz({page, base, viewport, report, capture}) {
     state = result.session;
   }
   assert.equal(state.status, 'completed'); assert.equal(state.progress.answered, 6, 'Six actual UI answers finish before the actual deadline');
+  await page.locator('.blitz-result').waitFor();
   await checkWorkroom(page, 'reading', report, 'blitz-result');
   const reviews = page.locator('.blitz-review summary');
   for (let i = 0; i < await reviews.count(); i++) await reviews.nth(i).click();
