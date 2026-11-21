@@ -58,7 +58,7 @@
 .level-one-journal summary:hover { color: #ffe5a5; }
 .level-one-journal > details > p { color: #d2ded7; }
 .level-one-note { grid-column: auto; }
-@media (min-width: 1200px) { .level-one-desk { margin-top: 52px; } }
+@media (min-width: 1200px) { .level-one-desk { margin-top: 24px; } }
 @media (max-width: 780px) {
   .level-one-topbar, .level-one-desk { width: calc(100% - 24px); margin-left: 12px; margin-right: 12px; }
   .level-one-topbar { padding: 10px 12px; }

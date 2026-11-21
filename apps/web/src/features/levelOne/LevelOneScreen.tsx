@@ -118,7 +118,7 @@ export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice 
     try {
       const next = await withRequest(signal => api.startLevelOne(startKey.current!, signal));
       if (!isCurrent(operation)) return;
-      adoptSession(next); setNotice('Бланк получен. Начните с первого задания.');
+      adoptSession(next); setNotice('');
       clearLevelOneStartKey(localDraftStore(), user.id); startKey.current = null;
       playDeskSound('audio.equip.paper-turn');
     } catch (reason) { if (isCurrent(operation)) setError(reason instanceof Error ? reason.message : 'Не удалось получить бланк. Повторите запрос.'); }
@@ -204,6 +204,7 @@ export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice 
   const blocked = Boolean(busy || checked || uncertain);
   const firstIssue = session?.review.find(item => !item.correct);
   const portrait = session ? session.equipment.avatarPortrait : user.avatarPortrait;
+  const numericUnit = task?.response.unit === 'degC' ? '°C' : task?.response.unit;
 
   return <main className="workroom-screen level-one-shell" data-level-state={busy === 'loading' ? 'loading' : complete ? 'completed' : task ? checked ? 'feedback' : 'task' : 'ready'}>
     <WorkroomBackdrop room="telegraph" />
@@ -235,7 +236,7 @@ export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice 
             {task.payload?.group && <div className="kn01-group">Группа: <code>{task.payload.group}</code></div>}
             <form onSubmit={submit} aria-label="Ответ на задание">
               {task.response.kind === 'choice' && <div className="shift-options" role="radiogroup" aria-label="Варианты ответа" onKeyDown={handleRadioGroupKeyDown}>{(task.payload?.options ?? []).map((option, index) => <button key={option.id} type="button" role="radio" aria-checked={draft.choiceIndex === option.id} disabled={blocked} tabIndex={!blocked && (draft.choiceIndex ?? task.payload?.options?.[0]?.id) === option.id ? 0 : -1} className={draft.choiceIndex === option.id ? 'is-selected' : ''} onClick={() => setDraft(current => ({ ...current, choiceIndex: option.id }))}><span aria-hidden="true">{index + 1}</span>{option.label}</button>)}</div>}
-              {task.response.kind === 'numeric' && <div className="level-one-number"><label htmlFor="level-one-number">Числовой ответ{task.response.unit === 'degC' ? ', °C' : ''}</label><div><button type="button" className="level-one-sign" aria-label="Изменить знак числа" disabled={blocked} onClick={() => { setDraft(current => ({ ...current, numeric: toggleLevelOneSign(current.numeric) })); input.current?.focus(); }}>±</button><input id="level-one-number" ref={input} type="text" inputMode="decimal" autoComplete="off" maxLength={80} value={draft.numeric} disabled={blocked} onChange={event => setDraft(current => ({ ...current, numeric: event.target.value }))} aria-describedby="level-one-number-help" />{task.response.unit && <span>{task.response.unit === 'degC' ? '°C' : task.response.unit}</span>}</div><p id="level-one-number-help">Можно использовать запятую или точку. Кнопка ± меняет знак.</p></div>}
+              {task.response.kind === 'numeric' && <div className="level-one-number"><label htmlFor="level-one-number">Числовой ответ{numericUnit ? `, ${numericUnit}` : ''}</label><div><button type="button" className="level-one-sign" aria-label="Изменить знак числа" disabled={blocked} onClick={() => { setDraft(current => ({ ...current, numeric: toggleLevelOneSign(current.numeric) })); input.current?.focus(); }}>±</button><input id="level-one-number" ref={input} type="text" inputMode="decimal" autoComplete="off" maxLength={80} value={draft.numeric} disabled={blocked} onChange={event => setDraft(current => ({ ...current, numeric: event.target.value }))} aria-describedby="level-one-number-help" />{numericUnit && <span aria-hidden="true">{numericUnit}</span>}</div><p id="level-one-number-help">Можно использовать запятую или точку. Кнопка ± меняет знак.</p></div>}
               {!checked && <button type="submit" className="shift-primary" disabled={!answerReady || blocked}>{busy === 'answer' ? 'Проверяем и сохраняем…' : 'Проверить ответ'}</button>}
             </form>
             {!checked && <div className="level-one-help"><button type="button" className="level-one-text-button" onClick={() => void openReference()} disabled={Boolean(busy || uncertain || session?.reference)}>{busy === 'reference' ? 'Открываем объяснение…' : session?.reference ? 'Объяснение открыто' : 'Открыть объяснение'}</button><p>Объяснение может содержать ответ. Его использование учитывается отдельно.</p></div>}

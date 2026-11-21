@@ -85,6 +85,21 @@ async function runLevelOneChecks({ base, browser, report, capture, fixture }) {
       for (let index = 0; index < 6; index++) {
         const task = run.task;
         await waitForTask(page, task);
+        if (index === 0 && viewport.width === 1366 && viewport.height === 768) {
+          // No click, focus or scroll before this measurement: the first action
+          // must already fit even while disabled until the player chooses an answer.
+          const submitGeometry = await page.getByRole('button', { name: 'Проверить ответ', exact: true }).evaluate(node => {
+            const box = node.getBoundingClientRect();
+            const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+            return { left: box.left, top: box.top, right: box.right, bottom: box.bottom,
+              width: box.width, height: box.height, viewport: [innerWidth, innerHeight], disabled: node.disabled,
+              fullyInsideViewport: box.left >= 0 && box.top >= 0 && box.right <= innerWidth && box.bottom <= innerHeight,
+              centerReachesControl: node.contains(hit) };
+          });
+          assert.ok(submitGeometry.fullyInsideViewport, `The first submit action is entirely visible without scrolling: ${JSON.stringify(submitGeometry)}`);
+          assert.ok(submitGeometry.centerReachesControl, 'The first submit center is not covered by another element');
+          report.cases.push({ name: 'level-one-first-submit-visible-1366', ...submitGeometry });
+        }
         if (task.response.kind === 'choice') {
           const target = task.payload.options.findIndex(option => index === 0 ? option.label !== correctChoices[index] : option.label === correctChoices[index]);
           assert.ok(target >= 0, `The authored choice exists for task ${index + 1}`);

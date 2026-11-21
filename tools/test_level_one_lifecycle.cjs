@@ -41,6 +41,12 @@ function click(runner, label) {
 function fill(runner, value) {
   const control = numberInput(runner);
   assert(control && !control.props.disabled);
+  const label = nodes(runner.output).find(node => node.type === 'label' && node.props.htmlFor === control.props.id);
+  assert(label, 'The numeric field has an associated label');
+  // Native adjacent text nodes concatenate; the harness's general text() helper
+  // inserts separators and would invent a space before the comma here.
+  const labelText = Array.isArray(label.props.children) ? label.props.children.join('') : label.props.children;
+  assert.equal(labelText, 'Числовой ответ, °C', 'The accessible label includes the actual task temperature unit');
   control.props.onChange({ target: { value } }); runner.render();
 }
 function choose(runner, label) {
@@ -266,7 +272,7 @@ function submit(runner) {
     assert.equal(current().review.length, 6);
     assert.equal(service.equipment.getEquipment(user.id, user.avatar).stats.completedShifts, 0);
     assert.equal((await service.blitzLobby(user.id)).eligible, false);
-    outputs.push('sign-button handler and typographic minus reach server numbers; failed unsaved answer recovers without erasing input; complete summary is accurate');
+    outputs.push('numeric fields expose Celsius in their associated labels; sign-button handler and typographic minus reach server numbers; failed unsaved answer recovers without erasing input; complete summary is accurate');
 
     screen.unmount(); service = await createService();
     screen = level(); await settle(screen);
@@ -318,7 +324,8 @@ function submit(runner) {
       realModules: ['Web api.ts request serialization', 'AvatarEditor handlers', 'LevelOneScreen handlers', 'IdentityService', 'ShiftService', 'EquipmentService', 'TrainingStore', 'content-engine', 'kn01-codec'],
       limits: ['No browser, HTTP listener, native DOM, layout, pointer/keyboard execution or screenshot.', 'Hook doubles model lifecycle contracts; useLayoutEffect is an effect alias, not a paint/focus measurement.', 'In-process request routing mirrors the endpoint mapping; production HTTP dispatch and deployment are not exercised.'],
       sha256: Object.fromEntries(files.map(file => [file, createHash('sha256').update(fs.readFileSync(file)).digest('hex')])) };
-    fs.writeFileSync('docs/testing/evidence/level-one/integration-lifecycle.json', JSON.stringify(report, null, 2) + '\n');
+    const evidenceFile = process.env.SYNOPSIS_LEVEL_ONE_EVIDENCE || 'docs/testing/evidence/level-one/integration-lifecycle.json';
+    fs.writeFileSync(evidenceFile, JSON.stringify(report, null, 2) + '\n');
     console.log(JSON.stringify(report));
   } finally { await fsp.rm(directory, { recursive: true, force: true }); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
