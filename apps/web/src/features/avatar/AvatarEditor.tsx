@@ -16,19 +16,23 @@ interface AvatarEditorProps {
   user: SessionUser;
   onSaved: (user: SessionUser) => void;
   onBack: () => void;
-  initialSection?: 'inventory' | 'badges';
+  onContinueToLevel?: () => void;
+  continueLabel?: string;
+  backLabel?: string;
+  initialSection?: 'inventory' | 'badges' | 'appearance';
 }
 
 type Notice = { kind: 'success' | 'error' | 'info'; text: string } | null;
+type SaveDestination = 'stay' | 'back' | 'level';
 const DIRECTIONS: AvatarDirection[] = ['down', 'left', 'up', 'right'];
 const DIRECTION_LABELS: Record<AvatarDirection, string> = { down: 'Спереди', left: 'Слева', up: 'Сзади', right: 'Справа' };
 const SECTIONS = ['inventory', 'badges', 'appearance'] as const;
 
-export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventory' }: AvatarEditorProps) {
+export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continueLabel = 'К первому уровню', backLabel = 'На станцию', initialSection }: AvatarEditorProps) {
   const [avatar, setAvatar] = useState<AvatarProfile>({ ...user.avatar });
   const [savedAvatar, setSavedAvatar] = useState<AvatarProfile>({ ...user.avatar });
   const [savedPortrait, setSavedPortrait] = useState<AvatarPortrait | undefined>(user.avatarPortrait);
-  const [section, setSection] = useState<typeof SECTIONS[number]>(initialSection);
+  const [section, setSection] = useState<typeof SECTIONS[number]>(initialSection ?? (isSavedAvatarPortrait(user.avatarPortrait) ? 'inventory' : 'appearance'));
   const [category, setCategory] = useState<InventoryCategory>('all');
   const [query, setQuery] = useState('');
   const [equippedOnly, setEquippedOnly] = useState(false);
@@ -60,6 +64,12 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
   const portraitOutdated = portraitSaved && Boolean(rigRevision && !savedPortrait.sourceRevision.startsWith(`portrait-v1:${rigRevision}:`));
   const visibleEquipment = equipmentOwner === user.id ? equipment : null;
   const busy = saving || selectingBadge;
+  const saveRequired = dirty || !portraitSaved || portraitOutdated;
+
+  useEffect(() => {
+    // A route may select another tab without discarding an unsaved fitting.
+    if (initialSection) setSection(initialSection);
+  }, [initialSection]);
 
   useEffect(() => {
     if (notice?.kind === 'error') saveFooter.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
@@ -71,7 +81,7 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     setSavedPortrait(user.avatarPortrait);
     setSelectedId(user.avatar.heldItem !== 'held.none' ? user.avatar.heldItem : user.avatar.top);
     setQuery(''); setEquippedOnly(false);
-    setCategory('all'); setSection(initialSection);
+    setCategory('all'); setSection(initialSection ?? (isSavedAvatarPortrait(user.avatarPortrait) ? 'inventory' : 'appearance'));
     setConfirmExit(false);
     setSaving(false); setDirection('down'); setShowFace(false);
     const draft = readAvatarDraft(avatarDraftStorage(), user.id);
@@ -225,29 +235,39 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
     event.currentTarget.querySelector<HTMLButtonElement>(`#${next}-tab`)?.focus();
   }
 
-  async function save(exitAfter = false) {
+  function completeDestination(destination: SaveDestination) {
+    if (destination === 'stay') return;
+    setConfirmExit(false);
+    if (destination === 'level') onContinueToLevel?.();
+    else onBack();
+  }
+
+  async function save(destination: SaveDestination = 'stay') {
     if (busy || pendingDraft || avatarSave.current) return;
-    if (!dirty && portraitSaved && !portraitOutdated) { if (exitAfter) onBack(); return; }
+    if (destination === 'level' && !onContinueToLevel) return;
+    if (!saveRequired) { completeDestination(destination); return; }
     const requestId = ++avatarRequest.current;
     const owner = user.id;
+    const requestedAvatar = { ...avatar };
     const pending = { abort: new AbortController(), timer: 0 };
     pending.timer = window.setTimeout(() => pending.abort.abort(), 8_000);
     avatarSave.current = pending;
-    if (!exitAfter) saveFooter.current?.focus();
+    if (destination === 'stay') saveFooter.current?.focus();
     setSaving(true); setNotice(null);
     try {
-      const updated = await api.updateAvatar({ ...avatar }, pending.abort.signal);
+      const updated = await api.updateAvatar(requestedAvatar, pending.abort.signal);
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
-      if (updated.id !== owner || !isSavedAvatarPortrait(updated.avatarPortrait)) {
+      if (!updated || updated.id !== owner || !updated.avatar || !sameAvatar(updated.avatar, requestedAvatar) || !isSavedAvatarPortrait(updated.avatarPortrait) ||
+        (portraitSaved && !sameAvatar(requestedAvatar, savedAvatar) && updated.avatarPortrait.appearanceKey === savedPortrait.appearanceKey)) {
         throw new Error('Сервер не подтвердил сохранение портрета. Изменения остались в примерке; повторите попытку.');
       }
       clearAvatarDraft(avatarDraftStorage(), owner);
       setAvatar({ ...updated.avatar }); setSavedAvatar({ ...updated.avatar });
       setSavedPortrait(updated.avatarPortrait);
       onSaved(updated);
-      void loadEquipment();
+      if (destination === 'stay') void loadEquipment();
       setNotice({ kind: 'success', text: 'Портрет, одежда и цвета сохранены. Этот портрет виден на станции и появится в новых сменах и блицах.' });
-      if (exitAfter) { setConfirmExit(false); onBack(); }
+      completeDestination(destination);
     } catch (reason) {
       if (requestId !== avatarRequest.current || accountId.current !== owner) return;
       setConfirmExit(false);
@@ -273,8 +293,10 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
       <div className="inventory-shell">
         <header className="inventory-header">
           <div className="inventory-heading"><SavedAvatarPortrait portrait={savedPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /><div><span className="inventory-eyebrow">26063 · {user.displayName}</span><h1 id="inventory-title">Персонаж и инвентарь</h1></div></div>
-          <button type="button" className="inventory-button" disabled={busy} onClick={() => dirty ? setConfirmExit(true) : onBack()}>← На станцию</button>
+          <button type="button" className="inventory-button" disabled={busy} onClick={() => dirty ? setConfirmExit(true) : onBack()}>← {backLabel}</button>
         </header>
+
+        {onContinueToLevel && <p className="inventory-entry-context">Выберите готовый комплект или настройте внешность. Сохраните образ и продолжайте к уровню. Уже начатый уровень сохранит прежний портрет.</p>}
 
         {pendingDraft && <section className="inventory-draft-recovery" aria-labelledby="inventory-draft-title">
           <div><h2 id="inventory-draft-title">Осталась незавершённая примерка</h2><p>Она сохранена в этой вкладке. Восстановите её или оставьте образ из профиля.</p>
@@ -331,7 +353,11 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
 
         <footer ref={saveFooter} className="inventory-footer" tabIndex={-1} aria-label="Сохранение персонажа">
           <div className="inventory-save-state"><strong>{saving ? 'Сохраняем…' : notice?.kind === 'error' ? 'Сохранение не подтверждено' : dirty ? 'Есть несохранённые изменения' : portraitOutdated ? 'Доступен обновлённый портрет' : portraitSaved ? 'Персонаж сохранён' : 'Портрет ещё не сохранён'}</strong>{notice ? <p className={`inventory-notice inventory-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.text}</p> : dirty && <span>{draftStored ? 'Сохраните образ, чтобы обновить портрет в профиле.' : 'Сохраните персонажа перед уходом: браузер не сохранил черновик.'}</span>}</div>
-          <div className="inventory-footer__actions"><button type="button" className="inventory-button" disabled={!dirty || busy} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button><button type="button" className="inventory-button inventory-button--primary" disabled={(!dirty && portraitSaved && !portraitOutdated) || busy} onClick={() => void save()}>{saving ? 'Сохранение…' : !dirty && portraitOutdated ? 'Обновить портрет' : 'Сохранить персонажа'}</button></div>
+          <div className="inventory-footer__actions">
+            <button type="button" className="inventory-button" disabled={!dirty || busy || Boolean(pendingDraft)} onClick={() => { setAvatar({ ...savedAvatar }); setNotice({ kind: 'info', text: 'Возвращён сохранённый образ.' }); }}>Отменить изменения</button>
+            <button type="button" className={`inventory-button${onContinueToLevel ? '' : ' inventory-button--primary'}`} disabled={!saveRequired || busy || Boolean(pendingDraft)} onClick={() => void save()}>{saving ? 'Сохранение…' : !dirty && portraitOutdated ? 'Обновить портрет' : 'Сохранить персонажа'}</button>
+            {onContinueToLevel && <button type="button" className="inventory-button inventory-button--primary inventory-continue" disabled={busy || Boolean(pendingDraft)} onClick={() => void save('level')}>{saving ? 'Сохранение…' : saveRequired ? 'Сохранить и продолжить' : continueLabel}</button>}
+          </div>
         </footer>
         <section className="inventory-profile-summary" aria-labelledby="inventory-saved-portrait-title">
           <div className="inventory-saved-portrait" data-confirmed-portrait={savedPortrait?.sha256}>
@@ -353,8 +379,8 @@ export function AvatarEditor({ user, onSaved, onBack, initialSection = 'inventor
       </div>
       <dialog ref={exitDialog} className="inventory-exit-dialog" tabIndex={-1} onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (!saving) setConfirmExit(false); }} aria-labelledby="inventory-exit-title">
         <PixelScrollArea label="Несохранённая примерка" className="inventory-exit-scroll">
-        <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед возвращением на станцию его можно сохранить.</p>
-        <div className="inventory-exit-actions"><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save(true)}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
+        <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед выходом из примерочной его можно сохранить.</p>
+        <div className="inventory-exit-actions"><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save('back')}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
         </PixelScrollArea>
       </dialog>
     </main>

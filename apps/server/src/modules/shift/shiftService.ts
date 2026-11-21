@@ -14,6 +14,10 @@ import { composeAvatarPortrait, validateAvatarPortrait } from '../identity/avata
 import { EquipmentService, effectsAllowed } from '../equipment/equipmentService.js';
 import type { EquipmentSnapshot, ReferenceView, TrainingReward, TrainingShift, TrainingState } from '../equipment/model.js';
 import { BLITZ_DURATION_MS, BLITZ_MAX_START_KEYS, BLITZ_MODE, BLITZ_REQUEST_ID, BLITZ_RULES_VERSION, BLITZ_TASK_IDS, type BlitzSessionView } from './blitzRules.js';
+import {
+  LEVEL_ONE_ID, LEVEL_ONE_MAX_START_KEYS, LEVEL_ONE_MODE, LEVEL_ONE_PACK, LEVEL_ONE_REQUEST_ID,
+  LEVEL_ONE_RULES_VERSION, LEVEL_ONE_TASK_IDS, LEVEL_ONE_TITLE, type LevelOneLobbyView, type LevelOneSessionView,
+} from './levelOneRules.js';
 
 interface ContentPack {
   id: string;
@@ -21,6 +25,7 @@ interface ContentPack {
   status: string;
   method_profile: string;
   tasks: string[];
+  review?: { source_check?: string; methodical?: string; independent_verification?: string; publication_allowed?: boolean };
 }
 
 interface SourceRecord {
@@ -89,16 +94,18 @@ export class ShiftService {
   private auditQueue: Promise<void> = Promise.resolve();
   private readonly auditIds = new Set<string>();
   private pack: ContentPack | null = null;
+  private levelOnePack: ContentPack | null = null;
 
   constructor(private readonly options: ShiftServiceOptions) { this.equipment = options.equipment ?? new EquipmentService(); }
 
   async init(): Promise<void> {
     await this.equipment.init();
-    const [taskFiles, methodFiles, pack, sourceFile] = await Promise.all([
+    const [taskFiles, methodFiles, pack, sourceFile, levelOnePack] = await Promise.all([
       this.readTaskFiles(),
       this.readMethodProfileFiles(),
       this.readJson<ContentPack>(join(this.options.contentRoot, 'packs/core_ru_001.json')),
       this.readJson<{ sources: SourceRecord[] }>(join(this.options.contentRoot, 'sources/sources.json')),
+      this.readJson<ContentPack>(join(this.options.contentRoot, 'packs/kn01_level1.json')),
     ]);
 
     this.methodProfiles.clear();
@@ -117,7 +124,9 @@ export class ShiftService {
     this.sources.clear();
     for (const source of sourceFile.sources) this.sources.set(source.id, source);
     this.pack = pack;
+    this.levelOnePack = levelOnePack;
     this.validateContent();
+    this.validateLevelOneContent();
     await this.migrateActivityPortraits();
     try {
       const log = await readFile(this.options.attemptLogPath, 'utf8');
@@ -247,6 +256,96 @@ export class ShiftService {
       unassistedCorrect: state.unassistedCorrect,
       ...(state.reward ? { reward: state.reward } : {}),
     };
+  }
+
+  levelOneLobby(userId: string): LevelOneLobbyView {
+    const sessions = Object.values(this.equipment.store.read().shifts)
+      .filter((shift) => shift.userId === userId && shift.mode === LEVEL_ONE_MODE);
+    const current = sessions.find((shift) => !shift.completedAt) ?? sessions.at(-1);
+    const completed = sessions.filter((shift) => shift.completedAt);
+    return { levelId: LEVEL_ONE_ID, title: LEVEL_ONE_TITLE, total: LEVEL_ONE_TASK_IDS.length,
+      help: { reference: 'free', retry: false, timer: false }, completedRuns: completed.length,
+      bestCorrect: completed.reduce((best, shift) => Math.max(best, shift.correct), 0),
+      session: current ? this.levelOneView(current) : null };
+  }
+
+  async startLevelOne(userId: string, avatar: AvatarProfile, requestId: unknown, avatarPortrait?: AvatarPortrait): Promise<LevelOneSessionView> {
+    if (typeof requestId !== 'string' || !LEVEL_ONE_REQUEST_ID.test(requestId)) {
+      throw new ShiftError(400, 'Для начала уровня нужен идентификатор запроса', 'invalid_request_id');
+    }
+    return this.equipment.store.transaction(async (draft) => {
+      const sessions = Object.values(draft.shifts).filter((shift) => shift.userId === userId && shift.mode === LEVEL_ONE_MODE);
+      // A lost start response must replay the same run even after its completion.
+      const replay = sessions.find((shift) => shift.levelOne?.requestIds.includes(requestId));
+      if (replay) return this.levelOneView(replay);
+      const active = sessions.find((shift) => !shift.completedAt);
+      if (active) {
+        if (active.levelOne!.requestIds.length >= LEVEL_ONE_MAX_START_KEYS) {
+          throw new ShiftError(429, 'Для продолжения уровня обновите его состояние', 'level_start_limit');
+        }
+        active.levelOne!.requestIds.push(requestId);
+        return this.levelOneView(active);
+      }
+      const pack = this.requireLevelOnePack();
+      const appearance = await this.activityAppearance(avatar, avatarPortrait);
+      const state: ShiftState = {
+        id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...LEVEL_ONE_TASK_IDS],
+        currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: this.now(),
+        mode: LEVEL_ONE_MODE, contentPack: this.contentPackId(pack), contentStatus: pack.status,
+        equipment: this.equipment.snapshot(this.equipment.requireUser(draft, userId), appearance.avatar, LEVEL_ONE_MODE, appearance.portrait),
+        assistedTaskIds: [], references: {}, responses: {},
+        levelOne: { rulesVersion: LEVEL_ONE_RULES_VERSION, requestIds: [requestId], review: [] },
+      };
+      draft.shifts[state.id] = state;
+      return this.levelOneView(state);
+    });
+  }
+
+  getLevelOne(userId: string, runId: string): LevelOneSessionView {
+    return this.levelOneView(this.requireLevelOne(userId, runId, this.equipment.store.read()));
+  }
+
+  async openLevelOneReference(userId: string, runId: string, instanceId: string) {
+    return this.equipment.store.transaction((draft) => {
+      const state = this.requireLevelOne(userId, runId, draft);
+      const current = this.requireCurrentTask(state, instanceId);
+      if (!state.references[instanceId]) {
+        state.references[instanceId] = { instanceId, explanation: current.definition.explanation ?? '',
+          sources: this.resolveSources(current.definition), assisted: true };
+        this.markAssisted(state, instanceId);
+      }
+      // The first level's help is independent of loadout and does not consume charges.
+      return { ...state.references[instanceId], equipment: state.equipment };
+    });
+  }
+
+  async submitLevelOneAnswer(userId: string, runId: string, instanceId: string, submitted: unknown) {
+    const fingerprint = this.fingerprint(submitted);
+    const result = await this.equipment.store.transaction((draft) => {
+      const state = this.requireLevelOne(userId, runId, draft);
+      const key = `${instanceId}:1`;
+      const previous = state.responses[key];
+      if (previous) {
+        if (previous.fingerprint !== fingerprint) throw new ShiftError(409, 'Этот ответ уже зафиксирован', 'answer_already_recorded');
+        return { accepted: true as const, feedback: (previous.response as ShiftAnswerResult).feedback, session: this.levelOneView(state) };
+      }
+      const current = this.requireCurrentTask(state, instanceId);
+      this.assertLevelOneAnswerShape(current.publicTask, submitted);
+      const validation = validateTaskAnswer(current.definition, current.validationContext, submitted);
+      const assisted = state.assistedTaskIds.includes(instanceId);
+      draft.attempts.push({ eventId: `${state.id}:${state.currentIndex + 1}:attempt:1`, occurredAt: this.now(),
+        userId, shiftId: runId, instanceId, definitionId: current.definition.id, contentPack: state.contentPack,
+        rulesetId: KN01_RULESET_ID, mode: LEVEL_ONE_MODE, modeRulesVersion: state.levelOne!.rulesVersion,
+        answer: validation.normalizedAnswer, correct: validation.correct, attempt: 1, assisted });
+      const response = this.finishTask(draft, state, current.definition, validation, validation.correct, false);
+      state.responses[key] = { fingerprint, response };
+      state.levelOne!.review.push({ instanceId, definitionId: current.definition.id, question: current.publicTask.question,
+        answer: validation.normalizedAnswer, correct: validation.correct, assisted, correctAnswer: validation.correctAnswer,
+        explanation: response.feedback.explanation, sources: response.feedback.sources });
+      return { accepted: true as const, feedback: response.feedback, session: this.levelOneView(state) };
+    });
+    await this.flushAudit();
+    return result;
   }
 
   async blitzLobby(userId: string) {
@@ -406,6 +505,44 @@ export class ShiftService {
     return state;
   }
 
+  private requireLevelOne(userId: string, runId: string, draft: TrainingState): ShiftState {
+    const state = this.requireShift(userId, runId, draft);
+    if (state.mode !== LEVEL_ONE_MODE || !state.levelOne) throw new ShiftError(404, 'Прохождение уровня не найдено', 'level_not_found');
+    return state;
+  }
+
+  private assertLevelOneAnswerShape(task: PublicTaskInstance, submitted: unknown): void {
+    if (!submitted || typeof submitted !== 'object' || Array.isArray(submitted)) {
+      throw new ShiftError(400, 'Выберите вариант или введите числовой ответ', 'invalid_answer');
+    }
+    const answer = submitted as Record<string, unknown>;
+    if (task.response.kind === 'numeric') {
+      if (typeof answer.value !== 'number' || !Number.isFinite(answer.value)) {
+        throw new ShiftError(400, 'Введите конечное число', 'invalid_answer');
+      }
+    } else if (task.response.kind === 'choice') {
+      const options = task.payload?.options as Array<{ id: number }>;
+      if (!Number.isSafeInteger(answer.choiceIndex) || !options.some((option) => option.id === answer.choiceIndex)) {
+        throw new ShiftError(400, 'Выберите один из предложенных вариантов', 'invalid_answer');
+      }
+    }
+  }
+
+  private levelOneView(state: ShiftState): LevelOneSessionView {
+    const level = state.levelOne!;
+    if (!state.completedAt && (state.contentPack !== this.contentPackId(this.requireLevelOnePack()) || level.rulesVersion !== LEVEL_ONE_RULES_VERSION)) {
+      throw new ShiftError(409, 'Версия первого уровня изменилась. Для продолжения нужна прежняя версия.', 'content_version_changed');
+    }
+    const task = state.completedAt ? null : this.buildCurrentTask(state).publicTask;
+    return { id: state.id, shiftId: state.id, levelId: LEVEL_ONE_ID, title: LEVEL_ONE_TITLE, mode: LEVEL_ONE_MODE,
+      status: state.completedAt ? 'completed' : 'active', rulesVersion: level.rulesVersion,
+      startedAt: state.createdAt, ...(state.completedAt ? { completedAt: state.completedAt } : {}),
+      contentPack: state.contentPack, contentStatus: state.contentStatus, progress: this.progress(state),
+      unassistedCorrect: state.unassistedCorrect, assistedTasks: state.assistedTaskIds.length,
+      task, equipment: state.equipment, review: level.review,
+      ...(task && state.references[task.instanceId] ? { reference: state.references[task.instanceId] } : {}) };
+  }
+
   private finishTask(draft: TrainingState, state: ShiftState, definition: TaskDefinition,
     validation: ReturnType<typeof validateTaskAnswer>, firstCorrect: boolean, retried: boolean, completedAt = this.now()): ShiftAnswerResult {
     const instanceId = `${state.id}:${state.currentIndex + 1}`;
@@ -419,6 +556,8 @@ export class ShiftService {
       if (state.mode === BLITZ_MODE && state.blitz) {
         state.completedAt = completedAt;
         state.blitz.finishReason = 'answered';
+      } else if (state.mode === LEVEL_ONE_MODE && state.levelOne) {
+        state.completedAt = completedAt;
       } else this.equipment.complete(draft, state, completedAt);
     }
     return { status: 'answered', retryAvailable: false,
@@ -443,7 +582,9 @@ export class ShiftService {
 
   private requireCurrentTask(state: ShiftState, instanceId: string) {
     if (state.currentIndex >= state.taskIds.length) throw new ShiftError(409, 'Смена уже завершена', 'shift_completed');
-    if (state.contentPack !== this.contentPackId(this.requirePack())) throw new ShiftError(409, 'Версия учебного пакета изменилась', 'content_version_changed');
+    if (state.contentPack !== this.contentPackId(state.mode === LEVEL_ONE_MODE ? this.requireLevelOnePack() : this.requirePack())) {
+      throw new ShiftError(409, 'Версия учебного пакета изменилась', 'content_version_changed');
+    }
     const current = this.buildCurrentTask(state);
     if (current.publicTask.instanceId !== instanceId) throw new ShiftError(409, 'Ответ относится не к текущему заданию', 'task_instance_mismatch');
     return current;
@@ -495,7 +636,7 @@ export class ShiftService {
     const built = createTaskInstance(definition, {
       seed: state.seed + state.currentIndex,
       instanceId: `${state.id}:${state.currentIndex + 1}`,
-      contentPack: this.contentPackId(this.requirePack()),
+      contentPack: state.contentPack,
     });
     assertPublicTaskSafe(built.publicTask);
     return { ...built, definition };
@@ -520,6 +661,33 @@ export class ShiftService {
     }
   }
 
+  private validateLevelOneContent(): void {
+    const pack = this.requireLevelOnePack();
+    if (this.contentPackId(pack) !== LEVEL_ONE_PACK || pack.status !== 'approved' || pack.review?.publication_allowed !== true
+      || pack.review.source_check !== 'passed' || pack.review.methodical !== 'passed' || pack.review.independent_verification !== 'passed') {
+      throw new Error('Первый уровень требует принятого и независимо проверенного пакета КН-01');
+    }
+    for (const taskId of LEVEL_ONE_TASK_IDS) {
+      const definition = this.tasks.get(taskId);
+      const review = definition?.review as { source_checked?: boolean; method_reviewed?: boolean; publication_allowed?: boolean } | undefined;
+      if (!pack.tasks.includes(taskId) || !definition || review?.source_checked !== true
+        || review?.method_reviewed !== true || review?.publication_allowed !== true) {
+        throw new Error(`Первый уровень ссылается на непринятое задание ${taskId}`);
+      }
+      const built = createTaskInstance(definition, { seed: 1, instanceId: `level-validation:${taskId}`, contentPack: this.contentPackId(pack) });
+      assertPublicTaskSafe(built.publicTask);
+      if (!['numeric', 'choice'].includes(built.publicTask.response.kind)) throw new Error(`Неожиданный вид ответа первого уровня: ${taskId}`);
+      if (definition.type === 'decode' && definition.answer?.kind === 'numeric') {
+        const payload = definition.payload as { group?: string; encoded?: string } | undefined;
+        if (!payload?.group || !payload.encoded) throw new Error(`У задания ${taskId} отсутствуют group/encoded`);
+        const decoded = decodeGroup(payload.encoded, payload.group as SupportedKn01Group, KN01_RULESET_ID);
+        if (typeof decoded.value !== 'number' || decoded.value !== Number(definition.answer.value)) {
+          throw new Error(`Эталон первого уровня ${taskId} расходится с кодеком`);
+        }
+      }
+    }
+  }
+
   private resolveSources(definition: TaskDefinition) {
     return (definition.sources ?? []).map((reference: { source_id: string; locator?: string }) => ({
       sourceId: reference.source_id,
@@ -535,6 +703,11 @@ export class ShiftService {
   private requirePack(): ContentPack {
     if (!this.pack) throw new ShiftError(503, 'Учебный пакет ещё не загружен', 'content_not_ready');
     return this.pack;
+  }
+
+  private requireLevelOnePack(): ContentPack {
+    if (!this.levelOnePack) throw new ShiftError(503, 'Первый уровень ещё не загружен', 'content_not_ready');
+    return this.levelOnePack;
   }
 
   private requireShift(userId: string, shiftId: string, data = this.equipment.store.read()): ShiftState {

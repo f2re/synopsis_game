@@ -1,0 +1,208 @@
+{
+  "task": "LEVEL-ONE-PLAYABLE",
+  "reviewer": "/root/playability_review",
+  "reviewedAt": "2026-11-21T18:18:42.447953+00:00",
+  "base": "fac9275af6d6d0f53e4ca6d62035dc7fcf80120d",
+  "branch": "agent/playable-level/level-one-character",
+  "versionKind": "working-tree-with-sha256",
+  "productCodeAuthoredByReviewer": false,
+  "verdict": {
+    "handlersAndServices": "PASS",
+    "independentCharacterChecks": "PASS",
+    "sourceRouteInspection": "PASS",
+    "browserAcceptance": "BLOCKED",
+    "visualAcceptance": "NOT_CLAIMED",
+    "releaseAuthorization": "NOT_GIVEN"
+  },
+  "executed": [
+    {
+      "command": "node tools/test_level_one_lifecycle.cjs",
+      "status": "PASS",
+      "assertionGroups": 10,
+      "evidence": "integration-lifecycle.json"
+    },
+    {
+      "command": "node tools/test_character_setup_lifecycle.cjs",
+      "status": "PASS",
+      "assertionGroups": 9
+    },
+    {
+      "command": "node tools/test_modular_avatar.cjs",
+      "status": "PASS",
+      "assertionGroups": 11
+    },
+    {
+      "command": "node --check tools/test_station_screens.cjs",
+      "status": "PASS",
+      "scope": "syntax-only"
+    },
+    {
+      "command": "node --check tools/test_station_ui_browser.cjs",
+      "status": "PASS",
+      "scope": "syntax-only"
+    },
+    {
+      "command": "node --check tools/test_saved_portrait_browser.cjs",
+      "status": "PASS",
+      "scope": "syntax-only"
+    },
+    {
+      "command": "node --check tools/test_game_controls_browser.cjs",
+      "status": "PASS",
+      "scope": "syntax-only"
+    },
+    {
+      "command": "node --check tools/test_level_one_browser.cjs",
+      "status": "PASS",
+      "scope": "syntax-only"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "actualLifecycleResult": {
+    "runCount": 2,
+    "completedRuns": 1,
+    "reviewedAnswers": 6,
+    "correct": 5,
+    "unassistedCorrect": 4,
+    "assistedTasks": 1
+  },
+  "actualChecks": [
+    "real character save acknowledges matching PNG before level navigation",
+    "lost start response retries same request key without a second run",
+    "wrong answer is durable; help preserves choice and is recorded separately; native note has no state handler",
+    "service restart and component reload resume the same run with durable review and immutable saved portrait",
+    "comma input draft survives reload; exact payload replay recovers a persisted answer without duplicate grading",
+    "sign-button handler and typographic minus reach server numbers; failed unsaved answer recovers without erasing input; complete summary is accurate",
+    "completed reload performs only GET; explicit replay captures new character exactly once and does not grant ordinary-shift rewards",
+    "StrictMode cleanup/setup rejects stale request writes without replacing the current task",
+    "finite startup timeout has a working read-only retry and releases request timers",
+    "another account cannot read or answer the run"
+  ],
+  "realModules": [
+    "Web api.ts request serialization",
+    "AvatarEditor handlers",
+    "LevelOneScreen handlers",
+    "IdentityService",
+    "ShiftService",
+    "EquipmentService",
+    "TrainingStore",
+    "content-engine",
+    "kn01-codec"
+  ],
+  "testDoubles": [
+    "React hook lifecycle",
+    "window events and request deadlines",
+    "DOM references",
+    "in-process fetch routing",
+    "audio event sink"
+  ],
+  "limits": [
+    "No browser, HTTP listener, native DOM, layout, pointer/keyboard execution or screenshot.",
+    "Hook doubles model lifecycle contracts; useLayoutEffect is an effect alias, not a paint/focus measurement.",
+    "In-process request routing mirrors the endpoint mapping; production HTTP dispatch and deployment are not exercised."
+  ],
+  "browser": {
+    "status": "BLOCKED",
+    "reason": "Ранее прямой доступ браузера, HTTP-прослушивание и альтернативные пути к интерфейсу запрещены политикой среды; обход не выполнялся.",
+    "executed": false,
+    "newScreenshots": 0,
+    "preparedScript": "tools/test_level_one_browser.cjs",
+    "preparedPhase": "level-one",
+    "viewports": [
+      {
+        "width": 1366,
+        "height": 768
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 844,
+        "height": 390
+      }
+    ],
+    "requiredChecks": [
+      "Настоящий переход после подтверждения сохранения",
+      "Шесть заданий и сохранённый результат",
+      "Native details Enter/Space без замены задачи",
+      "Реальный DOM-фокус после ответа",
+      "Числовые цели и горизонтальная прокрутка",
+      "Перезагрузка активного и завершённого прохождения",
+      "Длинные подписи нижней панели станции",
+      "Сообщение ошибки рядом с обеими сохраняющими кнопками редактора",
+      "Снимки первого бланка, числового задания и результата"
+    ],
+    "requiredDesktopViewport": {
+      "width": 1366,
+      "height": 768
+    }
+  },
+  "browserRunnerAdaptations": {
+    "tools/test_station_screens.cjs": "Обычная смена открывается через явный маршрут; добавлена отдельная фаза level-one.",
+    "tools/test_station_ui_browser.cjs": "Гостевая кнопка персонажа открывает защищённый /profile/avatar с возвратом на станцию.",
+    "tools/test_saved_portrait_browser.cjs": "Измеряется именно повтор сохранения в редакторе, а не новая главная кнопка продолжения.",
+    "tools/test_game_controls_browser.cjs": "Просмотрен без изменения: Инвентарь остаётся вкладкой, /shift — обычной сменой."
+  },
+  "otherRoleEvidence": [
+    "security-review.md",
+    "methodology-review.md",
+    "methodology-independent-review.md"
+  ],
+  "sha256": {
+    "apps/web/src/App.tsx": "db85d3107daae40f3768fec4caf7319be6eb681ad3cb3d2b46052c0c183bc904",
+    "apps/web/src/api.ts": "3983c4dc6a4e9338fb02f40c9906c1dd4c8804aece0c8d6b4c6f03a4fc9a1cff",
+    "apps/web/src/appNavigation.ts": "e84148e6ba9628f7b0bf01347b59dc64e9f3b5a523ff9891e61c369482cb4a49",
+    "apps/web/src/features/hub/HubScreen.tsx": "d75ab7f9f59a14b6c870f045179b0a613e27bcb81033572e28afc6656feb7a9a",
+    "apps/web/src/features/ui/StationNavDock.tsx": "9ded2023770873ca5a589896721d671fd336506212f690eb08ffdb2a3474301d",
+    "apps/web/src/features/levelOne/LevelOneScreen.tsx": "f17948b6002d03825dab454dcfdd91e172a8c3dd9c575aca19b6a11b844dff18",
+    "apps/web/src/features/levelOne/levelOneModel.ts": "c05bf9eeb229851d8bd1c2522bcf3af796c89ca79d7d6c0491202a5b2b1a250a",
+    "apps/web/src/features/levelOne/levelOne.css": "6a9c0661e3d7c4bb246b40d9e46e706a9658ce02bb52e53722afd7d999609466",
+    "apps/web/src/features/avatar/AvatarEditor.tsx": "9cc3bb96f2481931895aabea08c2a0d1eee59891bbd5730126775ca03a7e9a50",
+    "apps/web/src/features/avatar/SavedAvatarPortrait.tsx": "28517d16993de6468879d77eada5c9399509b5130aa6a8ed028c3c8a87034f57",
+    "apps/web/src/features/avatar/inventory.css": "90c23401afce82efb03bd8c9b20fa6ee07acace04a0baa68bd7f33e26980193d",
+    "apps/server/src/index.ts": "e1ccea748ef0bb9f5c1034148dde0398f6b4acee6487500792858a1f98a0f164",
+    "apps/server/src/modules/shift/shiftService.ts": "cad0e95d75b6cf49876b669530aab87cac96110cc0e2cb7006a2e0a823356492",
+    "apps/server/src/modules/shift/levelOneRules.ts": "847bdac44160c34f03ee69d2ac653d97e16919eb12c1896b5e057bd07ae257a7",
+    "apps/server/src/modules/shift/levelOneAccess.ts": "e1dfef047ae35798b5e23e95ccde489daa5d07b1108bc1ae5fed9ddc0e1ef502",
+    "apps/server/src/modules/equipment/model.ts": "fedcc5d8673f4bc81f6dd39d9b34496e8703b14869d60a9ace48480f53028a31",
+    "apps/server/src/modules/equipment/trainingStore.ts": "66bb6094b5ffbb51af25af2406977d0fb9ac5b4079a99716f2b05672d9cc8dbe",
+    "tools/ui_test_harness.cjs": "59e952993c478d823c2ab43f1fabd06b9e0bdb43d82ea2ece2e45640dd372d7a",
+    "tools/test_level_one_lifecycle.cjs": "49d972949b6056312896d1895b89262ed0065a866ad0530b7e30aef1eaf8d56b",
+    "tools/test_character_setup_lifecycle.cjs": "4ad8f44337cc0b1fa32a7b77adf570f1b5c7943e7b8fc8495d54ce88da8ef5b7",
+    "tools/test_modular_avatar.cjs": "95686c3af946553826861aae926d240f412a0864f3e3e9e9b1443f05fa0e678e",
+    "tools/test_level_one_browser.cjs": "9cb64b83096863f594ffe7832947963b19e08fb4169841e321f51884dbd1bf22",
+    "tools/test_station_screens.cjs": "62ac30e7184f0277ab38304c044abe2bdaf1b8aa4ba669b5eb69b015017f730d",
+    "tools/test_station_ui_browser.cjs": "15a55c05361d47476f5a4ef83d9946799680bcdead751cf2acfa65a29b9442e6",
+    "tools/test_saved_portrait_browser.cjs": "a33c24ada3f529f92c836b004e78a2682d752f3e85a7017d5840012c0af8f8bd",
+    "tools/test_game_controls_browser.cjs": "150f70ddd66212458c1dbd6e165f87f349b5af02242f07cace09aab2329e5688",
+    "docs/testing/evidence/level-one/integration-lifecycle.json": "87137a754d10e33bb66f2419ae20ac9c8fa35332298d84518f480db71910ce59",
+    "docs/testing/evidence/level-one/integration-review.md": "08bae100c094c49ff9e90417fe051adc910578f1c8c0dcb609f4d487ef0f4148"
+  },
+  "executedServerBuildSha256": {
+    "apps/server/dist/modules/identity/identityService.js": "3f088f45a5ee4d84126e6c5272c6445de496b0dcff7e1244a06645e652abea9b",
+    "apps/server/dist/modules/equipment/equipmentService.js": "d32c98c9e94aa867250bf1e81d7a65c19cc36786f6e76a39f3a7c3d73d9ebcf1",
+    "apps/server/dist/modules/equipment/trainingStore.js": "dfbbd6a52c5dda3b41af981bbb07e8c7df66383bf2b5476fec851fd42ce39683",
+    "apps/server/dist/modules/shift/shiftService.js": "30df2506e21af1671a72c290beb0dee0b6ee195144f883297eb93af632ae1518",
+    "apps/server/dist/modules/shift/levelOneRules.js": "7dc498ae990cc6ba3e1012c6156ed2a54f259ce80a822d6f0afb0595870d79e9"
+  },
+  "documentationUpdatedAt": "2026-11-21T18:20:34.061052+00:00",
+  "reportedAttempts": [
+    {
+      "actor": "/root",
+      "command": "node tools/test_modular_avatar_layout.cjs",
+      "source": "Сообщение интегратора после финального общего запуска проверок",
+      "status": "FAILED_BEFORE_CHROMIUM",
+      "error": "ENOENT /tmp/playwright-artifacts",
+      "accidentalInvocation": true,
+      "browserStarted": false,
+      "retried": false,
+      "workaroundAttempted": false,
+      "countedAsPass": false,
+      "effectOnIndependentHandlerAndServiceResults": "NONE"
+    }
+  ]
+}

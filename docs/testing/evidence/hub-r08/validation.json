@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-21",
+  "scope": "R08 generated candidates, provenance and documentation; no application/runtime changes",
+  "checks": [
+    {
+      "command": "python3 tools/validate_repo.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/validate_architecture.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/validate_brand.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/validate_fonts.py",
+      "result": "pass"
+    }
+  ],
+  "asset_contract_existing_warnings": [
+    "assets/source/ui/icons/candidates/brand_mark_sheet_v2.png is absent for existing brand.mark.v3.json",
+    "assets/source/ui/frames/candidates/ui_frames_v2.png is absent for existing effects.level1.json and ui.kit.v3.json"
+  ],
+  "asset_manifest_count": 53,
+  "previous_spritecook_records_preserved": 157,
+  "new_spritecook_records": 5,
+  "exact_local_cutout_roundtrip": true,
+  "imported_cutouts_rgba_verified": true,
+  "browser_validation": "not performed; application unchanged",
+  "production_art_acceptance": "pending"
+}

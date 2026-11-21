@@ -1,0 +1,127 @@
+{
+  "reviewer": "/root/meteo_verifier",
+  "date": "2026-11-21",
+  "status": "VERIFIED",
+  "baseline": "fac9275af6d6d0f53e4ca6d62035dc7fcf80120d",
+  "source": {
+    "url": "https://meteoinfo.ru/images/media/books-docs/RHM/kn-01-synop.pdf",
+    "edition": "Москва, 2013",
+    "printedPages": [
+      3,
+      9,
+      10,
+      11,
+      60
+    ],
+    "table": "3845"
+  },
+  "profile": "RUS_SURFACE_STATION_V1",
+  "checks": [
+    {
+      "id": "tmpl_c1_aaxx_header",
+      "status": "VERIFIED",
+      "sourcePages": [
+        3,
+        9
+      ],
+      "expected": "Сводка погоды с наземной метеорологической станции",
+      "seeds": 64,
+      "correctPositions": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "distinctPermutations": 23,
+      "definitionSha256": "56ad502b85555792024306ba4ec5b06817145ca1d35db0865c85805b1c4224f0"
+    },
+    {
+      "id": "tmpl_c2_temp_vs_dewpoint",
+      "status": "VERIFIED",
+      "sourcePages": [
+        10,
+        11
+      ],
+      "expected": "1 — температура воздуха, 2 — точка росы",
+      "seeds": 64,
+      "correctPositions": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "distinctPermutations": 23,
+      "definitionSha256": "c88dcad0d0558aab7e9658314fa07ce71eb4599e24170557254cb9c4bef70939"
+    },
+    {
+      "id": "tmpl_c2_sign_bit_sn",
+      "status": "VERIFIED",
+      "sourcePages": [
+        60
+      ],
+      "expected": "sn = 1",
+      "seeds": 64,
+      "correctPositions": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "distinctPermutations": 23,
+      "definitionSha256": "58195ede23e4d8a8d5e0941fade5242f1ca325a7c4e558082cf793de726335ae"
+    },
+    {
+      "id": "tmpl_c2_positive_temp",
+      "status": "VERIFIED",
+      "sourcePages": [
+        10,
+        11,
+        60
+      ],
+      "group": "10234",
+      "independent": 23.4,
+      "codecValue": 23.4,
+      "unit": "°C",
+      "definitionSha256": "14e4ac5c31f1b7e21546e1f3a3ad719b1114ecad47d64c435f6a68b474fb6660"
+    },
+    {
+      "id": "tmpl_c2_negative_dewpoint",
+      "status": "VERIFIED",
+      "sourcePages": [
+        10,
+        11,
+        60
+      ],
+      "group": "21008",
+      "independent": -0.8,
+      "codecValue": -0.8,
+      "unit": "°C",
+      "definitionSha256": "2169e5acdeb575dc9ec727d1dce2fd7eb19613f3de5a9198646095c6fb5aca4f"
+    },
+    {
+      "id": "tmpl_c2_encode_temp",
+      "status": "VERIFIED",
+      "sourcePages": [
+        10,
+        11,
+        60
+      ],
+      "group": "11128",
+      "independent": -12.8,
+      "codecValue": -12.8,
+      "unit": "°C",
+      "definitionSha256": "fe483d03c533df4fcb617242501576e81d7b8580879b716f5492350fa2881660"
+    }
+  ],
+  "optionJudgments": 768,
+  "numericJudgments": 18,
+  "boundaryChecks": 5,
+  "rejectedSignCodes": 2,
+  "publicPayloadsChecked": 195,
+  "scope": "Только шесть перечисленных неизменённых учебных примеров. Это не один снимок наблюдений, не квалификация и не приёмка всего пакета.",
+  "limitations": [
+    "Не выполнялись браузерные действия.",
+    "Жизненный цикл сервера и сохранение профиля не проверялись этим скриптом.",
+    "Актуальность всех более поздних нормативных изменений не заявляется."
+  ]
+}

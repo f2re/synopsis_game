@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { WorldBridge } from '@synopsis/world-engine';
-import type { SessionUser } from '../../api';
+import { api, type LevelOneLobby, type SessionUser } from '../../api';
 import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from '../../brand';
 import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { PixelIcon } from '../ui/PixelIcon';
@@ -20,6 +20,7 @@ interface HubScreenProps {
   onOpenSetCode: () => void;
   onStartShift: () => void;
   onStartBlitz: () => void;
+  onStartLevelOne: () => void;
   onOpenAvatar: () => void;
   onOpenAdmin: () => void;
   onOpenLibrary: () => void;
@@ -48,7 +49,7 @@ const facilities: Record<string, { title: string; icon: string; description: str
   hall: { title: 'Турнирный зал', icon: 'trophy', description: 'Дуэли, турниры и рейтинговые матчи пока не доступны в этой версии.' },
 };
 
-export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onStartBlitz, onOpenAvatar, onOpenAdmin, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false, sessionPending = false, sessionNotice = '', stationPresence }: HubScreenProps) {
+export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onStartBlitz, onStartLevelOne, onOpenAvatar, onOpenAdmin, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false, sessionPending = false, sessionNotice = '', stationPresence }: HubScreenProps) {
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
   const preferences = usePresentationPreferences();
   const [currentScene, setCurrentScene] = useState('hub');
@@ -57,11 +58,22 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
   const [slowScene, setSlowScene] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<string | null>(null);
   const [now, setNow] = useState(() => new Date());
+  const [levelOne, setLevelOne] = useState<LevelOneLobby | null>(null);
   const bridge = useRef<WorldBridge | null>(null);
   const preferencesRef = useRef(preferences);
   const modalRef = useRef(Boolean(activeModal || selectedFacility || externalModalOpen));
   preferencesRef.current = preferences;
   modalRef.current = Boolean(activeModal || selectedFacility || externalModalOpen);
+
+  useEffect(() => {
+    setLevelOne(null);
+    if (!user) return;
+    let active = true;
+    const abort = new AbortController();
+    const timer = window.setTimeout(() => abort.abort(), 8_000);
+    api.levelOneLobby(abort.signal).then(state => { if (active) setLevelOne(state); }).catch(() => { /* The level screen provides explicit recovery. */ }).finally(() => window.clearTimeout(timer));
+    return () => { active = false; abort.abort(); window.clearTimeout(timer); };
+  }, [user?.id]);
 
   useEffect(() => {
     let disposed = false;
@@ -163,7 +175,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         </button>
 
         <h1 className="hub-station-title" aria-label={GAME_TITLE}><strong>{GAME_MARK}</strong><span>{GAME_CALLSIGN}</span></h1>
-        <div className="hub-learning-status"><PixelIcon name="kn01" size={32} alt="" /><span><strong>Учебная смена</strong><small>Практика КН-01</small></span></div>
+        <div className="hub-learning-status"><PixelIcon name="kn01" size={32} alt="" /><span><strong>Первый бланк</strong><small>Уровень 1 · КН-01</small></span></div>
         <button type="button" className="hub-clock" disabled={sessionPending} onClick={() => setActiveModal('journal')} aria-label={`Журнал занятий, ${utcTime} UTC`} aria-haspopup="dialog"><strong>{utcTime} <span>UTC</span></strong><small>{utcDate}</small></button>
         <div className="hub-topbar__actions">
           <button type="button" className="hub-icon-button" aria-label="Журнал занятий" aria-haspopup="dialog" title="Журнал занятий" disabled={sessionPending} onClick={() => setActiveModal('journal')}><PixelIcon name="telegram" size={32} alt="" /></button>
@@ -179,11 +191,13 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
       {sessionNotice && <p className="hub-session-notice" role="status">{sessionNotice}</p>}
 
       <StationNavDock
-        onStartShift={onStartShift}
+        onStartShift={onStartLevelOne}
+        primaryLabel={levelOne?.session?.status === 'active' ? 'Продолжить уровень' : levelOne?.session?.status === 'completed' ? 'Результат уровня' : 'Первый уровень'}
+        primaryDescription={levelOne?.session ? `Проверено ${levelOne.session.progress.answered} из ${levelOne.session.progress.total}` : 'Первый бланк · КН-01'}
         onOpenModal={(modal) => { if (modal === 'guide') onOpenHelp(); else if (modal === 'settings') onOpenSettings(); else setActiveModal(modal); }}
         onOpenLibrary={onOpenLibrary}
         onOpenArchive={() => openScene(currentScene === 'archive' ? 'hub' : 'archive')}
-        onOpenProfile={() => user ? onOpenAvatar() : setActiveModal('profile')}
+        onOpenProfile={onOpenAvatar}
         currentScene={currentScene}
         sceneReady={sceneReady}
         sessionPending={sessionPending}
@@ -196,7 +210,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           icon={facilities[selectedFacility].icon}
           onClose={() => setSelectedFacility(null)}
           footer={facilities[selectedFacility].action === 'shift'
-            ? <><button type="button" className="hub-action hub-action--primary" disabled={sessionPending} onClick={() => closeThen(onStartShift)}>Начать смену</button><button type="button" className="hub-action" disabled={sessionPending} onClick={() => closeThen(onStartBlitz)}>Блиц-практика · 90 с</button></>
+            ? <><button type="button" className="hub-action hub-action--primary" disabled={sessionPending} onClick={() => closeThen(onStartLevelOne)}>Первый уровень</button><button type="button" className="hub-action" disabled={sessionPending} onClick={() => closeThen(onStartShift)}>Начать смену</button><button type="button" className="hub-action" disabled={sessionPending} onClick={() => closeThen(onStartBlitz)}>Блиц-практика · 90 с</button></>
             : facilities[selectedFacility].action === 'archive'
               ? <><button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenLibrary)}>Открыть библиотеку</button><button type="button" className="hub-action" onClick={() => openScene('archive')}>Посетить читальный зал</button></>
               : <button type="button" className="hub-action" onClick={() => setSelectedFacility(null)}>Вернуться на площадь</button>}
@@ -208,6 +222,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
       {activeModal === 'route' && (
         <HubDialog title="На станции" subtitle="Занятия и помещения" icon="cartography" onClose={() => setActiveModal(null)}>
           <div className="hub-route-list">
+            <button type="button" className="hub-route-card" disabled={sessionPending} onClick={() => closeThen(onStartLevelOne)}><PixelIcon name="kn01" size={40} alt="" /><span><strong>Первый уровень · первый бланк</strong><small>Температура и точка росы · 6 заданий с объяснениями</small></span><b>Открыть ›</b></button>
             <button type="button" className="hub-route-card" onClick={() => closeThen(onOpenLibrary)}><PixelIcon name="library" size={40} alt="" /><span><strong>Библиотека понятий</strong><small>Поиск, определения, памятки и закладки</small></span><b>Читать ›</b></button>
             <button type="button" className="hub-route-card" disabled={sessionPending} onClick={() => closeThen(onStartShift)}><PixelIcon name="kn01" size={40} alt="" /><span><strong>Дежурная смена КН-01</strong><small>Учебные задания с проверкой и разбором</small></span><b>Начать ›</b></button>
             <button type="button" className="hub-route-card" disabled={sessionPending} onClick={() => closeThen(onStartBlitz)}><PixelIcon name="trend" size={40} alt="" /><span><strong>Блиц-практика · 90 с</strong><small>6 заданий · после первой завершённой смены</small></span><b>Открыть ›</b></button>

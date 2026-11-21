@@ -24,8 +24,8 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const phases = new Set((process.env.STATION_SCREEN_PHASES || 'library,station,public,portraits,game,admin,audio').split(','));
-for (const phase of phases) assert.ok(['library','station','public','portraits','game','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
+const phases = new Set((process.env.STATION_SCREEN_PHASES || 'library,station,public,portraits,game,level-one,admin,audio').split(','));
+for (const phase of phases) assert.ok(['library','station','public','portraits','game','level-one','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
 const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
 let apiProcess, webServer, browser, nativeChrome;
@@ -299,6 +299,7 @@ async function waitForCampus(page) {
   if (phases.has('public')) await require('./test_all_screens_browser.cjs').runAdditionalScreenChecks({ base, browser, report, capture, waitForCampus });
   if (phases.has('portraits')) await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
   if (phases.has('game')) await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
+  if (phases.has('level-one')) await require('./test_level_one_browser.cjs').runLevelOneChecks({ base, browser, report, capture, fixture });
   if (phases.has('admin')) await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
   // Firefox exercises the same production screens, input and portrait flows above.
   // Native CDP visibility/audio observation is available only in Chromium.
@@ -367,16 +368,24 @@ async function waitForCampus(page) {
   await page.waitForFunction(() => document.visibilityState === 'visible' && window.__stationAudioProbe.oscillators > 0);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Returning resumes the shared context');
   await backgroundTab.close();
-  await page.locator('.hub-dock__primary').click();
+  // This suite intentionally exercises the ordinary ten-task shift, not the new first-level action.
+  await page.locator('.hub-dock__route').click();
+  await page.getByRole('dialog', { name: 'На станции', exact: true })
+    .getByRole('button', { name: /^Дежурная смена КН-01/ }).click();
   await page.getByRole('dialog', { name: 'Вход в учебную группу' }).waitFor();
   await page.getByLabel('Группа', { exact: true }).selectOption({ label: fixture.groupId });
   await page.getByLabel('Пользователь', { exact: true }).selectOption({ label: fixture.users[0].displayName });
   await page.getByLabel('Персональный код', { exact: true }).fill(fixture.users[0].code);
+  const startingShift = page.waitForResponse(response => new URL(response.url()).pathname === '/api/shifts' && response.request().method() === 'POST');
   await page.getByRole('dialog').getByRole('button', { name: 'Войти', exact: true }).click();
-  await page.getByRole('heading', { name: 'Записка на краю стола' }).waitFor();
+  const shiftResponse = await startingShift; assert.equal(shiftResponse.status(), 201);
+  const shift = await shiftResponse.json();
+  await page.getByRole('heading', { name: shift.task.question, exact: true }).waitFor();
+  await require('./test_saved_portrait_browser.cjs').checkOptionalShiftNote({ page, base, shiftId: shift.shiftId,
+    instanceId: shift.task.instanceId, report, name: 'authenticated-shift-note-preserves-task' });
   await page.waitForFunction(() => window.__stationAudioProbe.oscillators === 0 && window.__stationAudioProbe.buffers === 0);
   report.cases.push({ name: 'study-background-silent', ...await page.evaluate(() => window.__stationAudioProbe) });
-  await capture(page, 'shift-handover-authenticated');
+  await capture(page, 'shift-first-task-authenticated');
   const sessionToken = await page.evaluate(() => sessionStorage.getItem('synopsis.session.token'));
   assert.ok(sessionToken);
   // A direct URL must request confirmation while the real authenticated session remains valid.
@@ -388,7 +397,10 @@ async function waitForCampus(page) {
   assert.equal(await exitPage.evaluate(() => sessionStorage.getItem('synopsis.session.token')), sessionToken);
   await exitPage.close();
   await page.bringToFront();
-  await page.getByRole('button', { name: 'На станцию', exact: true }).click(); await waitForCampus(page);
+  await page.getByRole('button', { name: 'Сдать смену', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Смена сдаётся досрочно', exact: true })
+    .getByRole('button', { name: 'На станцию', exact: true }).click();
+  await waitForCampus(page);
   assert.equal(await page.evaluate(() => window.__stationAudioProbe.contexts), 1, 'Campus must reuse the station audio context');
   assert.equal(await page.locator('.world-canvas-host > div').first().getAttribute('data-fps-limit'), '60');
   await measurePresentation(page, 'campus-full-motion-performance');

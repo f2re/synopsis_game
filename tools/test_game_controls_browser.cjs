@@ -2,7 +2,7 @@
  * never the scientific correctness of content. No successful API response is mocked. */
 'use strict';
 const assert = require('node:assert/strict');
-const { login } = require('./test_saved_portrait_browser.cjs');
+const { login, checkOptionalShiftNote } = require('./test_saved_portrait_browser.cjs');
 const { exerciseScrollbar } = require('./test_all_screens_browser.cjs');
 const pathOf = response => new URL(response.url()).pathname;
 async function checkWorkroom(page, expected, report, phase) {
@@ -671,11 +671,10 @@ async function checkInventory({page, base, viewport, report, capture, token}) {
 }
 async function checkShift({page, base, viewport, report, capture}) {
   if (viewport.width === 1366) {
-    await page.goto(base + '/shift');
     let stalled;
     const stall = route => { if (route.request().method() === 'POST') stalled = route; else return route.continue(); };
     await page.route('**/api/shifts', stall);
-    await page.getByRole('button', { name: 'Принять смену', exact: true }).click();
+    await page.goto(base + '/shift');
     await page.getByText('Готовим учебную смену…', { exact: true }).waitFor();
     assert.ok(await page.getByRole('button', { name: 'На станцию', exact: true }).isEnabled(), 'Leaving is available while the shift starts');
     await page.getByText('Сервер не ответил вовремя. Вернитесь на станцию и откройте смену ещё раз.', { exact: true }).waitFor({ timeout: 12_000 });
@@ -686,13 +685,18 @@ async function checkShift({page, base, viewport, report, capture}) {
     await stalled.abort('timedout').catch(() => {}); await page.unroute('**/api/shifts', stall);
     report.cases.push({ name: 'shift-start-timeout', deadlineMs: 8000, exitAvailableWhileLoading: true, exitAfterTimeout: true, fabricatedResponse: false });
   }
+  const starting = page.waitForResponse(response => pathOf(response) === '/api/shifts' && response.request().method() === 'POST');
   await page.goto(base + '/shift');
-  await page.getByRole('heading', { name: 'Записка на краю стола', exact: true }).waitFor();
-  await checkWorkroom(page, 'telegraph', report, 'handover');
-  await capture(page, `all-shift-handover-${viewport.width}`);
-  let state = await afterClick(page, page.getByRole('button', { name: 'Принять смену', exact: true }), '/api/shifts');
+  const startResponse = await starting;
+  assert.equal(startResponse.status(), 201, 'Entering the route starts or resumes the real shift');
+  let state = await startResponse.json();
   const id = state.shiftId, kinds = new Set();
-  await page.locator('.shift-card h1').waitFor();
+  await page.getByRole('heading', { name: state.task.question, exact: true }).waitFor();
+  const entryRoom = ['stationPlot', 'stationBoard', 'findError', 'dependencySequence'].includes(state.task.response.kind) ? 'synoptic' : 'telegraph';
+  await checkWorkroom(page, entryRoom, report, 'shift-entry');
+  await checkOptionalShiftNote({ page, base, shiftId: id, instanceId: state.task.instanceId, report,
+    name: `shift-note-preserves-task-${viewport.width}` });
+  await capture(page, `all-shift-entry-${viewport.width}`);
   const mentor = page.getByRole('button', { name: /Спросить Ольхина/ });
   await mentor.click();
   const panel = page.locator('.shift-mentor-panel');
@@ -822,8 +826,12 @@ async function checkBlitz({page, base, viewport, report, capture}) {
   for (let i = 0; i < await reviews.count(); i++) await reviews.nth(i).click();
   await exerciseScrollbar(page, page.locator('.app-page-scroll'), report, `all-blitz-result-scroll-${viewport.width}`);
   await capture(page, `all-blitz-result-${viewport.width}`);
+  const ordinaryStarting = page.waitForResponse(response => pathOf(response) === '/api/shifts' && response.request().method() === 'POST');
   await page.getByRole('button', { name: 'Спокойная учебная смена', exact: true }).click();
-  await page.getByRole('heading', { name: 'Записка на краю стола', exact: true }).waitFor();
+  const ordinaryResponse = await ordinaryStarting; assert.equal(ordinaryResponse.status(), 201);
+  const ordinary = await ordinaryResponse.json();
+  await page.getByRole('heading', { name: ordinary.task.question, exact: true }).waitFor();
+  assert.equal(await page.locator('.shift-desk-note').evaluate(node => node.open), false);
   report.cases.push({ name: `all-blitz-controls-${viewport.width}`, actualAnswers: state.progress.answered, reviewAccordions: true, ordinaryShiftLink: true });
 }
 async function runGameControlChecks({base,browser,report,capture,fixture}) {

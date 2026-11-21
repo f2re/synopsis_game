@@ -1,0 +1,74 @@
+{
+  "status": "PASS",
+  "date": "2026-11-21",
+  "kind": "selected-six-methodology-and-engine-check",
+  "sourceFile": "content/tasks/kn01_level1_templates.json",
+  "sourceSha256": "cef2e81b8b49f3c809fb98aa0d36e2ad8e7c1ced571147360dca110b3f51bf79",
+  "primarySource": "https://meteoinfo.ru/images/media/books-docs/RHM/kn-01-synop.pdf",
+  "primarySourceEdition": "2013",
+  "sourceLocators": [
+    "Таблица 1, печатные страницы 9–11",
+    "Кодовая таблица 3845, печатная страница 60"
+  ],
+  "checks": [
+    {
+      "id": "tmpl_c1_aaxx_header",
+      "response": "choice",
+      "expectedAnswer": "Сводка погоды с наземной метеорологической станции",
+      "codecReproduced": false,
+      "correctAccepted": true,
+      "wrongRejected": true,
+      "publicTaskSafe": true
+    },
+    {
+      "id": "tmpl_c2_temp_vs_dewpoint",
+      "response": "choice",
+      "expectedAnswer": "1 — температура воздуха, 2 — точка росы",
+      "codecReproduced": false,
+      "correctAccepted": true,
+      "wrongRejected": true,
+      "publicTaskSafe": true
+    },
+    {
+      "id": "tmpl_c2_sign_bit_sn",
+      "response": "choice",
+      "expectedAnswer": "sn = 1",
+      "codecReproduced": false,
+      "correctAccepted": true,
+      "wrongRejected": true,
+      "publicTaskSafe": true
+    },
+    {
+      "id": "tmpl_c2_positive_temp",
+      "response": "numeric",
+      "expectedAnswer": 23.4,
+      "codecReproduced": true,
+      "correctAccepted": true,
+      "wrongRejected": true,
+      "publicTaskSafe": true
+    },
+    {
+      "id": "tmpl_c2_negative_dewpoint",
+      "response": "numeric",
+      "expectedAnswer": -0.8,
+      "codecReproduced": true,
+      "correctAccepted": true,
+      "wrongRejected": true,
+      "publicTaskSafe": true
+    },
+    {
+      "id": "tmpl_c2_encode_temp",
+      "response": "numeric",
+      "expectedAnswer": -12.8,
+      "codecReproduced": true,
+      "correctAccepted": true,
+      "wrongRejected": true,
+      "publicTaskSafe": true
+    }
+  ],
+  "limitations": [
+    "Not an independent second methodology review.",
+    "Not a browser, full service, or learner pilot test.",
+    "No approval of the remaining level-one pack or all method-profile rules."
+  ]
+}

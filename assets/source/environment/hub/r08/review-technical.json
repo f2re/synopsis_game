@@ -1,0 +1,654 @@
+{
+  "schema": "r08-candidate-technical-review/v1",
+  "task_id": "AUDIT-R08-TECHNICAL-20261121",
+  "reviewer": "/root/asset_inventory",
+  "role": "pixel-art-quality-reviewer",
+  "review_date": "2026-11-21",
+  "independent_of_generation": true,
+  "base_commit": "cb34087a7a2181faaca8c0f090a0a9b791c5c531",
+  "review_branch": "agent/pixel-asset-designer/hub-r08-candidates",
+  "scope": "Проверка конкретных байтов кандидатных изображений, их происхождения, размеров, прозрачности и различий. Это не разрешение на замену ресурсов игры.",
+  "production_review": {
+    "status": "request_changes",
+    "production_grid_approved": false,
+    "runtime_approved": false,
+    "composition_approval_by_art_director": "pending"
+  },
+  "files": [
+    {
+      "path": "assets/source/environment/hub/r08/candidates/provider/master-01.source.jpg",
+      "sha256": "a8a1ab1fcbebfb8758c98f6031b3828aea0eba9c71f22cf77d710c0a1641ad4d",
+      "sha12": "a8a1ab1fcbeb",
+      "bytes": 867023,
+      "actual_format": "JPEG",
+      "mode": "RGB",
+      "pixel_size": {
+        "width": 1376,
+        "height": 768
+      },
+      "frames": 1,
+      "rgba_unique_colors": 144931,
+      "has_stored_alpha_channel": false,
+      "decoded_alpha": {
+        "transparent_pixels": 0,
+        "partial_pixels": 0,
+        "opaque_pixels": 1056768
+      }
+    },
+    {
+      "path": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+      "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+      "sha12": "d8510e537afd",
+      "bytes": 331901,
+      "actual_format": "PNG",
+      "mode": "RGBA",
+      "pixel_size": {
+        "width": 512,
+        "height": 288
+      },
+      "frames": 1,
+      "rgba_unique_colors": 58205,
+      "has_stored_alpha_channel": true,
+      "decoded_alpha": {
+        "transparent_pixels": 0,
+        "partial_pixels": 0,
+        "opaque_pixels": 147456
+      }
+    },
+    {
+      "path": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.source.png",
+      "sha256": "c93e04198666ef50396b7abc2f867241ab969c7cb49a03fe5501ae00e8b8565e",
+      "sha12": "c93e04198666",
+      "bytes": 3652432,
+      "actual_format": "PNG",
+      "mode": "RGB",
+      "pixel_size": {
+        "width": 2048,
+        "height": 1152
+      },
+      "frames": 1,
+      "rgba_unique_colors": 447595,
+      "has_stored_alpha_channel": false,
+      "decoded_alpha": {
+        "transparent_pixels": 0,
+        "partial_pixels": 0,
+        "opaque_pixels": 2359296
+      }
+    },
+    {
+      "path": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.png",
+      "sha256": "a9fdffa28cad118da8347133b5527f0c3eea2666dbb8b0bfcfdb056d89a2c035",
+      "sha12": "a9fdffa28cad",
+      "bytes": 334814,
+      "actual_format": "PNG",
+      "mode": "RGBA",
+      "pixel_size": {
+        "width": 512,
+        "height": 288
+      },
+      "frames": 1,
+      "rgba_unique_colors": 84607,
+      "has_stored_alpha_channel": true,
+      "decoded_alpha": {
+        "transparent_pixels": 0,
+        "partial_pixels": 0,
+        "opaque_pixels": 147456
+      }
+    }
+  ],
+  "master": {
+    "spritecook_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+    "source": "assets/source/environment/hub/r08/candidates/provider/master-01.source.jpg",
+    "canonical": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+    "source_format_note": "Полученный исходник имел суффикс .png, но фактический формат JPEG. Переименование в .jpg сохранило исходные байты и SHA-256.",
+    "canonical_derivation": {
+      "operation": "RGB source resized to 512x288 using nearest-neighbour",
+      "exact_rgb_match_verified": true,
+      "mean_abs_rgb_error": 0.0,
+      "independent_pixel_cluster_refinement_demonstrated": false
+    },
+    "native_and_zoom_visual_inspection": [
+      "512x288 native canonical image",
+      "1376x768 source",
+      "3x nearest-neighbour canonical zoom"
+    ],
+    "technical_findings": [
+      "Полностью непрозрачное изображение допустимо как композиционный мастер; это не прозрачный набор отдельных ресурсов.",
+      "Канонический растр является точным nearest-уменьшением JPEG. Само это преобразование не доказывает авторскую производственную пиксельную сетку.",
+      "В мелкой кладке, растительности и приборных деталях видны дробная фактура и переменная толщина тонких линий после уменьшения.",
+      "Количество цветов записано как диагностическая величина; оно не является самостоятельным основанием принятия или отклонения."
+    ],
+    "production_grid": {
+      "candidate_size": [
+        512,
+        288
+      ],
+      "proposed_target": [
+        960,
+        540
+      ],
+      "direct_scale": 1.875,
+      "integer_scale": false,
+      "status": "not_approved",
+      "note": "Прямое nearest-увеличение до 960x540 создаёт неравномерные ширины исходного пикселя. Нужна отдельно подготовленная согласованная сетка; 480x270 при масштабе 2x является возможным вариантом, но не принятым решением."
+    },
+    "world_character_scale": {
+      "current_frame_height": 48,
+      "status": "requires_scene_scale_review",
+      "note": "Рост текущих NPC следует закреплять в координатах конечной сцены. Не масштабировать их автоматически в 1.875 раза вместе с фоновым кандидатом."
+    },
+    "recommended_usage": "composition-reference candidate, subject to Art Director review"
+  },
+  "archive_inpaint": {
+    "spritecook_asset_id": "6a1fc7d5-3644-421a-8fe8-566fc4e240f7",
+    "source": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.source.png",
+    "canonical": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.png",
+    "canonical_derivation": {
+      "operation": "RGB source resized from 2048x1152 to 512x288 using nearest-neighbour",
+      "exact_rgb_match_verified": true,
+      "integer_reduction": 4
+    },
+    "full_frame_pixel_exact_preservation": false,
+    "full_frame_replacement_approved": false,
+    "recommended_usage": "local-inpaint-donor candidate only",
+    "measurements": {
+      "base": "master-01.png",
+      "candidate": "archive-ground-01.png",
+      "comparison_space": "512x288 RGB, exact integer coordinates, no alignment or color normalization",
+      "threshold_note": "8 and16 are diagnostic per-pixel maximum-channel absolute differences, not art acceptance thresholds",
+      "proposed_archive_roi": [
+        286,
+        136,
+        369,
+        222
+      ],
+      "roi_note": "Reviewer-selected analytical rectangles; not a provider edit mask",
+      "canonical_equals_raw_nearest": true,
+      "whole": {
+        "pixels": 147456,
+        "changed_exact": 147227,
+        "changed_exact_pct": 99.845,
+        "delta_max_ge8_pct": 55.419,
+        "delta_max_ge16_pct": 32.249,
+        "mean_abs_rgb": 12.2022,
+        "p95_max_abs_channel": 55.0
+      },
+      "outside_archive_proposed": {
+        "pixels": 140318,
+        "changed_exact": 140089,
+        "changed_exact_pct": 99.837,
+        "delta_max_ge8_pct": 53.513,
+        "delta_max_ge16_pct": 29.815,
+        "mean_abs_rgb": 10.7069,
+        "p95_max_abs_channel": 45.0
+      },
+      "regions": {
+        "archive_edit_proposed": {
+          "rect": [
+            286,
+            136,
+            369,
+            222
+          ],
+          "pixels": 7138,
+          "changed_exact": 7138,
+          "changed_exact_pct": 100.0,
+          "delta_max_ge8_pct": 92.897,
+          "delta_max_ge16_pct": 80.092,
+          "mean_abs_rgb": 41.5964,
+          "p95_max_abs_channel": 112.0
+        },
+        "radar": {
+          "rect": [
+            46,
+            15,
+            145,
+            118
+          ],
+          "pixels": 10197,
+          "changed_exact": 10181,
+          "changed_exact_pct": 99.843,
+          "delta_max_ge8_pct": 62.744,
+          "delta_max_ge16_pct": 37.413,
+          "mean_abs_rgb": 13.3698,
+          "p95_max_abs_channel": 52.0
+        },
+        "cartography": {
+          "rect": [
+            0,
+            114,
+            173,
+            215
+          ],
+          "pixels": 17473,
+          "changed_exact": 17467,
+          "changed_exact_pct": 99.966,
+          "delta_max_ge8_pct": 66.754,
+          "delta_max_ge16_pct": 38.826,
+          "mean_abs_rgb": 13.1725,
+          "p95_max_abs_channel": 50.0
+        },
+        "central": {
+          "rect": [
+            164,
+            72,
+            294,
+            177
+          ],
+          "pixels": 13650,
+          "changed_exact": 13642,
+          "changed_exact_pct": 99.941,
+          "delta_max_ge8_pct": 71.905,
+          "delta_max_ge16_pct": 43.692,
+          "mean_abs_rgb": 14.2354,
+          "p95_max_abs_channel": 52.0
+        },
+        "aerology": {
+          "rect": [
+            326,
+            72,
+            402,
+            141
+          ],
+          "pixels": 5244,
+          "changed_exact": 5244,
+          "changed_exact_pct": 100.0,
+          "delta_max_ge8_pct": 73.818,
+          "delta_max_ge16_pct": 42.105,
+          "mean_abs_rgb": 14.1526,
+          "p95_max_abs_channel": 52.0
+        },
+        "hall": {
+          "rect": [
+            395,
+            130,
+            492,
+            220
+          ],
+          "pixels": 8730,
+          "changed_exact": 8726,
+          "changed_exact_pct": 99.954,
+          "delta_max_ge8_pct": 70.802,
+          "delta_max_ge16_pct": 37.789,
+          "mean_abs_rgb": 12.2579,
+          "p95_max_abs_channel": 46.0
+        },
+        "fountain": {
+          "rect": [
+            186,
+            175,
+            286,
+            227
+          ],
+          "pixels": 5200,
+          "changed_exact": 5198,
+          "changed_exact_pct": 99.962,
+          "delta_max_ge8_pct": 82.154,
+          "delta_max_ge16_pct": 54.712,
+          "mean_abs_rgb": 18.8991,
+          "p95_max_abs_channel": 69.0
+        },
+        "horizon": {
+          "rect": [
+            145,
+            0,
+            512,
+            72
+          ],
+          "pixels": 26424,
+          "changed_exact": 26314,
+          "changed_exact_pct": 99.584,
+          "delta_max_ge8_pct": 9.348,
+          "delta_max_ge16_pct": 2.558,
+          "mean_abs_rgb": 3.0451,
+          "p95_max_abs_channel": 10.0
+        },
+        "foreground": {
+          "rect": [
+            0,
+            229,
+            512,
+            288
+          ],
+          "pixels": 30208,
+          "changed_exact": 30153,
+          "changed_exact_pct": 99.818,
+          "delta_max_ge8_pct": 59.63,
+          "delta_max_ge16_pct": 31.72,
+          "mean_abs_rgb": 11.0616,
+          "p95_max_abs_channel": 45.0
+        }
+      },
+      "prompt_box_note": "Approximate prose instruction x57..74%,y45..72%; no provider mask. Porch/steps and notice wall/ivy were explicitly to remain.",
+      "additional_regions": {
+        "prompt_box_approx": {
+          "rect": [
+            292,
+            130,
+            379,
+            207
+          ],
+          "pixels": 6699,
+          "changed_exact_pct": 100.0,
+          "delta_max_ge8_pct": 93.163,
+          "delta_max_ge16_pct": 81.221,
+          "mean_abs_rgb": 42.9033
+        },
+        "archive_facade_analytic": {
+          "rect": [
+            293,
+            141,
+            366,
+            207
+          ],
+          "pixels": 4818,
+          "changed_exact_pct": 100.0,
+          "delta_max_ge8_pct": 97.323,
+          "delta_max_ge16_pct": 91.843,
+          "mean_abs_rgb": 52.8706
+        },
+        "preserve_archive_steps_analytic": {
+          "rect": [
+            291,
+            207,
+            367,
+            221
+          ],
+          "pixels": 1064,
+          "changed_exact_pct": 100.0,
+          "delta_max_ge8_pct": 80.075,
+          "delta_max_ge16_pct": 48.496,
+          "mean_abs_rgb": 15.3659
+        },
+        "preserve_notice_wall_analytic": {
+          "rect": [
+            368,
+            152,
+            396,
+            208
+          ],
+          "pixels": 1568,
+          "changed_exact_pct": 100.0,
+          "delta_max_ge8_pct": 74.043,
+          "delta_max_ge16_pct": 46.11,
+          "mean_abs_rgb": 15.2334
+        }
+      },
+      "outside_prompt_box": {
+        "pixels": 140757,
+        "changed_exact": 140528,
+        "changed_exact_pct": 99.837,
+        "delta_max_ge8_pct": 53.623,
+        "delta_max_ge16_pct": 29.918,
+        "mean_abs_rgb": 10.741
+      },
+      "interpretation": "Pixel difference establishes failure of pixel-exact preservation; it does not imply equivalent semantic/layout drift and may include sampling/compression differences."
+    },
+    "interpretation": [
+      "За пределами ориентировочной области из промпта 99.837% RGB-пикселей различаются; у 29.918% максимальное изменение канала не меньше 16. Средняя абсолютная ошибка RGB — 10.741 из 255.",
+      "Различие RGB доказывает отсутствие точного сохранения пикселей, но не равно разрушению композиции. В величины входят отличия выборки, фактуры, оттенков и возможного преобразования исходника.",
+      "Общая геометрия сохраняемых ориентиров визуально близка, однако крыльцо, ступени и правая стена с доской также не сохранились попиксельно.",
+      "Порог 8 или 16 — диагностический порог изменения канала, а не художественный критерий допуска.",
+      "ROI выбраны рецензентом как аналитические прямоугольники и не являются переданной провайдеру либо окончательной маской правки."
+    ],
+    "local_patch_recommendation": [
+      "Сохранить master-01.png неизменной основой.",
+      "Использовать заполнение нового результата только внутри отдельной бинарной маски удаляемой вывески, фасада, полок и глобуса архива.",
+      "Крыльцо, ступени, правую стену, доску объявлений, сохраняемый плющ и фонари брать из исходного мастера.",
+      "Не маскировать швы широким размытием; проверить и исправить конкретные границы при 1x и nearest-увеличении.",
+      "Сохранить результат локальной сборки отдельно вместе с маской и хешами исходных ресурсов.",
+      "Автоматически проверить точное совпадение всех пикселей вне окончательной маски и защищённых ориентиров с исходным мастером."
+    ]
+  },
+  "cutouts_and_recomposition": {
+    "status": "verified_candidate_scene_slices",
+    "technical_status": "pass_for_source_exact_scene_extraction_and_recomposition",
+    "art_director_approval": "pending",
+    "production_grid_approved": false,
+    "runtime_approved": false,
+    "reviewed_files": [
+      "candidates/layers/archive-facade.png",
+      "candidates/layers/archive-porch-steps.png",
+      "candidates/layers/archive-entry-lamp.png"
+    ],
+    "allowed_scope": "Visible slices of the existing 512×288 canonical scene at the recorded originalSceneXY coordinates; no freely placeable production sprite approval.",
+    "independent_measurements": {
+      "reviewer": "/root/asset_inventory",
+      "method": "Independent read-only PNG decode and NumPy comparisons; masks reconstructed from the declared polygon specification; producer extraction script was not executed.",
+      "pillow_version": "13.0.0",
+      "spec_sha256": "2ef0845010cf1345dfc25ee1dbdd134e944e6aea174462a3ea8ae8185d0f0c04",
+      "producer_report_sha256": "8ee6677d2196dd47fcdf1cfbc7bd3a50c9694606d0dcc2478b1b5b74656f1bc0",
+      "extractor_sha256": "941a8028e9aebfc1d823b55230afb1cd07c71438984f53cb3a0ced24bc08f4a5",
+      "master_sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+      "master_rgba_sha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+      "verified_nearest_relations": [
+        {
+          "canonical": "master-01.png",
+          "canonical_sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+          "raw": "master-01.source.jpg",
+          "raw_sha256": "a8a1ab1fcbebfb8758c98f6031b3828aea0eba9c71f22cf77d710c0a1641ad4d",
+          "raw_format": "JPEG",
+          "raw_mode": "RGB",
+          "raw_dimensions": [
+            1376,
+            768
+          ],
+          "canonical_dimensions": [
+            512,
+            288
+          ],
+          "canonical_equals_nearest_raw_rgb": true
+        },
+        {
+          "canonical": "archive-ground-01.png",
+          "canonical_sha256": "a9fdffa28cad118da8347133b5527f0c3eea2666dbb8b0bfcfdb056d89a2c035",
+          "raw": "archive-ground-01.source.png",
+          "raw_sha256": "c93e04198666ef50396b7abc2f867241ab969c7cb49a03fe5501ae00e8b8565e",
+          "raw_format": "PNG",
+          "raw_mode": "RGB",
+          "raw_dimensions": [
+            2048,
+            1152
+          ],
+          "canonical_dimensions": [
+            512,
+            288
+          ],
+          "canonical_equals_nearest_raw_rgb": true
+        }
+      ],
+      "layers": [
+        {
+          "path": "candidates/layers/archive-facade.png",
+          "format": "PNG",
+          "mode": "RGBA",
+          "bytes": 10032,
+          "sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa",
+          "rgba_sha256": "e38e539dbc40f0fbe9e2948c7c96563bb6de64ed19a4f1087515ebe8cf3012cb",
+          "dimensions": [
+            72,
+            65
+          ],
+          "crop_rect_xywh": [
+            290,
+            141,
+            72,
+            65
+          ],
+          "original_scene_xy": [
+            290,
+            141
+          ],
+          "anchor_scene_px": [
+            322,
+            205
+          ],
+          "pivot_local_px": [
+            32,
+            64
+          ],
+          "alpha_values": [
+            0,
+            255
+          ],
+          "opaque_pixels": 4021,
+          "transparent_pixels": 659,
+          "nonzero_rgb_in_transparent_pixels": 0,
+          "mask_matches_specification": true,
+          "source_rgba_mismatched_pixels": 0,
+          "max_source_channel_difference": 0,
+          "hashes_match_producer_report": true,
+          "anchor_role": "visible lower facade support, meeting porch layer; not a complete building footprint"
+        },
+        {
+          "path": "candidates/layers/archive-porch-steps.png",
+          "format": "PNG",
+          "mode": "RGBA",
+          "bytes": 1572,
+          "sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51",
+          "rgba_sha256": "0844056d09573b7c03cae0f33dfe8d004338e4a09ac60a69cf6bdf5a76cd45f9",
+          "dimensions": [
+            69,
+            10
+          ],
+          "crop_rect_xywh": [
+            292,
+            206,
+            69,
+            10
+          ],
+          "original_scene_xy": [
+            292,
+            206
+          ],
+          "anchor_scene_px": [
+            322,
+            215
+          ],
+          "pivot_local_px": [
+            30,
+            9
+          ],
+          "alpha_values": [
+            0,
+            255
+          ],
+          "opaque_pixels": 583,
+          "transparent_pixels": 107,
+          "nonzero_rgb_in_transparent_pixels": 0,
+          "mask_matches_specification": true,
+          "source_rgba_mismatched_pixels": 0,
+          "max_source_channel_difference": 0,
+          "hashes_match_producer_report": true,
+          "anchor_role": "lower visible step edge; archive threshold remains at scene [322,205]"
+        },
+        {
+          "path": "candidates/layers/archive-entry-lamp.png",
+          "format": "PNG",
+          "mode": "RGBA",
+          "bytes": 330,
+          "sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e",
+          "rgba_sha256": "e6ca005d650d5ddbd264987cb2d6c134863d13f8a95005e4cd4fff69b10579c7",
+          "dimensions": [
+            7,
+            12
+          ],
+          "crop_rect_xywh": [
+            290,
+            182,
+            7,
+            12
+          ],
+          "original_scene_xy": [
+            290,
+            182
+          ],
+          "anchor_scene_px": [
+            293,
+            193
+          ],
+          "pivot_local_px": [
+            3,
+            11
+          ],
+          "alpha_values": [
+            0,
+            255
+          ],
+          "opaque_pixels": 60,
+          "transparent_pixels": 24,
+          "nonzero_rgb_in_transparent_pixels": 0,
+          "mask_matches_specification": true,
+          "source_rgba_mismatched_pixels": 0,
+          "max_source_channel_difference": 0,
+          "hashes_match_producer_report": true,
+          "anchor_role": "wall-mounted local detail anchor; not a ground pivot"
+        }
+      ],
+      "recomposition": {
+        "union_opaque_pixels": 4664,
+        "overlapping_pixels": 0,
+        "max_channel_difference_inside_union": 0,
+        "mismatched_pixels_inside_union": 0,
+        "nonzero_pixels_outside_union": 0,
+        "stored_union_mask_matches": true,
+        "stored_recomposed_image_matches": true,
+        "scope": "Selected visible source slices in their original scene coordinates."
+      },
+      "local_plate": {
+        "donor_path": "candidates/provider/archive-ground-01.png",
+        "donor_sha256": "a9fdffa28cad118da8347133b5527f0c3eea2666dbb8b0bfcfdb056d89a2c035",
+        "diagnostic_patch_file": "r08-archive-ground-local-patch.png",
+        "diagnostic_patch_sha256": "db1c5597abe6f15358b7b0813014a8fe8ca1841e2a8bfa0809b9d184e14f36fb",
+        "diagnostic_patch_rgba_sha256": "eeadb3b68624683f83f051de48d6ead1a773d0a77e2fb65b78bc0cdc17772b24",
+        "owned_mask": "hub.r08.candidate.archive.facade-visible with lamp excluded",
+        "owned_mask_pixels": 4021,
+        "changed_pixels_inside_mask": 4021,
+        "changed_pixels_outside_mask": 0,
+        "patch_exactly_equals_master_with_donor_under_owned_mask": true,
+        "preserved_selected_layers_changed_pixels": {
+          "archive-porch-steps.png": 0,
+          "archive-entry-lamp.png": 0
+        },
+        "neighboring_pixels_outside_owned_mask": "All original master RGBA pixels retained exactly, including neighboring ivy and notice wall.",
+        "diagnostic_roundtrip_file": "r08-archive-source-roundtrip.png",
+        "diagnostic_roundtrip_sha256": "2a3dd724b0a76f578b7fdf8f2c62cdd174f8397e454c15d0d6dfe95ceaf80d87",
+        "roundtrip_rgba_sha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+        "roundtrip_equals_master_rgba": true,
+        "roundtrip_mismatched_pixels": 0,
+        "scope": "Reversible extraction/compositing proof only, not aesthetic approval of newly invented wall/terrain."
+      }
+    },
+    "visual_review": {
+      "inspected": [
+        "candidates/provider/master-01.png at native 512×288",
+        "candidates/layers/archive-facade.png at native 72×65",
+        "candidates/layers/archive-porch-steps.png at native 69×10",
+        "candidates/layers/archive-entry-lamp.png at native 7×12",
+        "candidates/layers/inspection-preview-8x.png",
+        "r08-archive-ground-local-patch.png at native 512×288 (external diagnostic)"
+      ],
+      "findings": [
+        "В исходной позиции фасад, ступени и светлый фонарь читаются как единый Архив. Маски сохраняют исходные контуры и прилегание к соседним растениям; точная обратная сборка не создаёт новых швов.",
+        "Контур фасада намеренно обрывается у исходных перекрытий, книг, глобуса и ступеней. Это видимая часть сцены, а не восстановленный полный объём здания или самостоятельный спрайт для произвольной перестановки.",
+        "Ступени сохраняют фрагмент существующей поверхности и требуют исходного окружения. Их контакт со стеной и мощением не переносится автоматически в другую точку сцены.",
+        "Фонарь содержит исходный тёплый свет и цвет соседней стены. Отдельного выключенного состояния и emissive-маски нет; маска не даёт физически независимого источника освещения.",
+        "Соседний плющ и доска объявлений остались исходными пикселями. Отказ от отдельного растения с перекрытым основанием корректен: полноценный силуэт не восстановлен.",
+        "В открытой локальной подложке видна пустая каменная стена вместо Архива. Её художественная пригодность как видимой игровой поверхности ещё не принята; математическая обратимость не является такой приёмкой.",
+        "Многотоновая текстура и исходные особенности nearest-уменьшения JPEG сохранены. Успешная экстракция не подтверждает проработку кластеров пикселей или совместимость с окончательной производственной сеткой."
+      ],
+      "next_gate": [
+        "Арт-директор оценивает композицию и необходимость показывать локальную подложку без Архива.",
+        "Утвердить общую производственную сетку сцены и персонажей до размещения в runtime; преобразование 512×288 в 960×540 пока не одобрено.",
+        "При потребности в перемещении здания, параллаксе его частей или независимом освещении отдельно восстановить скрытую геометрию, поверхности и состояния; текущие вырезки этого не содержат."
+      ]
+    },
+    "report_bound_to_hashes": true,
+    "note": "Проверка выполнена независимым ревьюером по фактическим PNG; исходники, маски, скрипт экстрактора и его отчёт не изменялись."
+  },
+  "limitations": [
+    "Новый запуск браузера и production-рендер на 960x540 не проводились этой ролью.",
+    "Приёмка композиции, художественной атмосферы, игровых слоёв и интерактивности остаётся отдельной.",
+    "Кандидатные файлы не являются подтверждённой заменой текущих runtime-ресурсов."
+  ]
+}

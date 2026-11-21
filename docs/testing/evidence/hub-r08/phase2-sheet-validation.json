@@ -1,0 +1,1538 @@
+{
+  "schema": "synopsis-r08-phase2-sheet-validation/v1",
+  "task_id": "R08-PHASE2-SOURCE-QA",
+  "review_date": "2026-11-21",
+  "reviewer": "/root/asset_inventory",
+  "role": "independent technical source reviewer for provider generation",
+  "base_commit": "9875c93141eb376e883efbf888403fdea21e6050",
+  "source_files_changed": false,
+  "provider_calls_made": false,
+  "technical_status": "pass_for_decode_binary_alpha_and_safe_nine_group_slicing",
+  "art_status": "separate Art Director review required",
+  "production_status": "candidate",
+  "production_grid_approved": false,
+  "scope": [
+    "Independent read-only PNG decode, actual formats/dimensions, SHA-256 and alpha measurements.",
+    "8-neighbor opaque connected components and 4-neighbor enclosed transparent holes where recorded.",
+    "Transparent-gutter cut grids and complete visible-pixel bounding boxes.",
+    "Detection-only dilation experiment for organic decoration grouping; no source alpha was altered.",
+    "Native and nearest enlarged inspection; no browser or live GPU review implied."
+  ],
+  "coordinate_convention": "All boxes are half-open [left,top,right,bottom] in the canonical sheet; original source pixels are retained.",
+  "sheets": [
+    {
+      "name": "vegetation-sheet-01",
+      "path": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.png",
+      "sha256": "fc94f1e3c5370c571c85bb5a02ddcb92e5cdb569b6d0591e5dde630ffc29016b",
+      "dimensions": [
+        203,
+        200
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "alpha_opaque": 10871,
+      "alpha_zero": 29729,
+      "hidden_nonzero_rgb_pixels": 29676,
+      "grid_x": [
+        0,
+        66,
+        136,
+        203
+      ],
+      "grid_y": [
+        0,
+        67,
+        135,
+        200
+      ],
+      "vertical_split_columns_alpha_counts": {
+        "66": 0,
+        "136": 0
+      },
+      "horizontal_split_rows_alpha_counts": {
+        "67": 0,
+        "135": 0
+      },
+      "all_components_8": 14,
+      "major_components_over_50_pixels": 9,
+      "component_boxes_largest_12": [
+        {
+          "pixels": 1550,
+          "bbox": [
+            6,
+            147,
+            62,
+            184
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1422,
+          "bbox": [
+            148,
+            141,
+            191,
+            189
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1343,
+          "bbox": [
+            142,
+            77,
+            194,
+            126
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1270,
+          "bbox": [
+            71,
+            19,
+            131,
+            58
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1232,
+          "bbox": [
+            11,
+            11,
+            56,
+            59
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1182,
+          "bbox": [
+            77,
+            143,
+            124,
+            185
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1060,
+          "bbox": [
+            78,
+            75,
+            124,
+            124
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 950,
+          "bbox": [
+            16,
+            70,
+            51,
+            130
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 857,
+          "bbox": [
+            153,
+            3,
+            185,
+            65
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1,
+          "bbox": [
+            191,
+            99,
+            192,
+            100
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1,
+          "bbox": [
+            148,
+            116,
+            149,
+            117
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1,
+          "bbox": [
+            188,
+            120,
+            189,
+            121
+          ],
+          "touches_border": false
+        }
+      ],
+      "objects": [
+        {
+          "index": 1,
+          "label": "upright-shrub",
+          "safe_cell_box": [
+            0,
+            0,
+            66,
+            67
+          ],
+          "tight_alpha_box": [
+            11,
+            11,
+            56,
+            59
+          ],
+          "tight_dimensions": [
+            45,
+            48
+          ],
+          "opaque_pixels": 1232,
+          "alpha8_components": 1,
+          "largest_component_pixels": 1232,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 9,
+          "hole_pixels": 10,
+          "largest_hole_pixels": 2,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 2,
+          "label": "low-shrub",
+          "safe_cell_box": [
+            66,
+            0,
+            136,
+            67
+          ],
+          "tight_alpha_box": [
+            71,
+            19,
+            131,
+            58
+          ],
+          "tight_dimensions": [
+            60,
+            39
+          ],
+          "opaque_pixels": 1270,
+          "alpha8_components": 1,
+          "largest_component_pixels": 1270,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 12,
+          "hole_pixels": 22,
+          "largest_hole_pixels": 7,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 3,
+          "label": "young-conifer",
+          "safe_cell_box": [
+            136,
+            0,
+            203,
+            67
+          ],
+          "tight_alpha_box": [
+            153,
+            3,
+            185,
+            65
+          ],
+          "tight_dimensions": [
+            32,
+            62
+          ],
+          "opaque_pixels": 857,
+          "alpha8_components": 1,
+          "largest_component_pixels": 857,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 25,
+          "hole_pixels": 64,
+          "largest_hole_pixels": 18,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 4,
+          "label": "birch",
+          "safe_cell_box": [
+            0,
+            67,
+            66,
+            135
+          ],
+          "tight_alpha_box": [
+            16,
+            70,
+            51,
+            130
+          ],
+          "tight_dimensions": [
+            35,
+            60
+          ],
+          "opaque_pixels": 951,
+          "alpha8_components": 2,
+          "largest_component_pixels": 950,
+          "components_1_or_2_pixels": 1,
+          "enclosed_alpha_zero_holes": 17,
+          "hole_pixels": 50,
+          "largest_hole_pixels": 14,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 5,
+          "label": "wall-ivy-fragment",
+          "safe_cell_box": [
+            66,
+            67,
+            136,
+            135
+          ],
+          "tight_alpha_box": [
+            78,
+            75,
+            124,
+            124
+          ],
+          "tight_dimensions": [
+            46,
+            49
+          ],
+          "opaque_pixels": 1060,
+          "alpha8_components": 1,
+          "largest_component_pixels": 1060,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 12,
+          "hole_pixels": 25,
+          "largest_hole_pixels": 6,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 6,
+          "label": "fern",
+          "safe_cell_box": [
+            136,
+            67,
+            203,
+            135
+          ],
+          "tight_alpha_box": [
+            142,
+            77,
+            194,
+            126
+          ],
+          "tight_dimensions": [
+            52,
+            49
+          ],
+          "opaque_pixels": 1346,
+          "alpha8_components": 4,
+          "largest_component_pixels": 1343,
+          "components_1_or_2_pixels": 3,
+          "enclosed_alpha_zero_holes": 38,
+          "hole_pixels": 51,
+          "largest_hole_pixels": 6,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 7,
+          "label": "flower-planter",
+          "safe_cell_box": [
+            0,
+            135,
+            66,
+            200
+          ],
+          "tight_alpha_box": [
+            6,
+            147,
+            62,
+            184
+          ],
+          "tight_dimensions": [
+            56,
+            37
+          ],
+          "opaque_pixels": 1550,
+          "alpha8_components": 1,
+          "largest_component_pixels": 1550,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 8,
+          "label": "mossy-stone-edge",
+          "safe_cell_box": [
+            66,
+            135,
+            136,
+            200
+          ],
+          "tight_alpha_box": [
+            77,
+            143,
+            126,
+            185
+          ],
+          "tight_dimensions": [
+            49,
+            42
+          ],
+          "opaque_pixels": 1183,
+          "alpha8_components": 2,
+          "largest_component_pixels": 1182,
+          "components_1_or_2_pixels": 1,
+          "enclosed_alpha_zero_holes": 1,
+          "hole_pixels": 1,
+          "largest_hole_pixels": 1,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 9,
+          "label": "waterside-grass",
+          "safe_cell_box": [
+            136,
+            135,
+            203,
+            200
+          ],
+          "tight_alpha_box": [
+            148,
+            141,
+            191,
+            189
+          ],
+          "tight_dimensions": [
+            43,
+            48
+          ],
+          "opaque_pixels": 1422,
+          "alpha8_components": 1,
+          "largest_component_pixels": 1422,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 12,
+          "hole_pixels": 19,
+          "largest_hole_pixels": 4,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        }
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "raw_source": {
+        "path": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.source.jpg",
+        "format": "JPEG",
+        "mode": "RGB",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "bytes": 448546,
+        "sha256": "0f9ad34397f07afc5abeffcb905afe7f58210ea59079d1f66c776566e69fc67e",
+        "canonical_processing_relation": "Provider crop/downsample/matte processing is not reconstructed by this review; source-pixel preservation is measured against the saved canonical PNG."
+      }
+    },
+    {
+      "name": "terrain-connections-sheet-01",
+      "path": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.png",
+      "sha256": "364b99c27723651d26d034c8049a5e7991c126069edbf3c7128c3091d00cfb22",
+      "dimensions": [
+        240,
+        240
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "alpha_opaque": 23470,
+      "alpha_zero": 34130,
+      "hidden_nonzero_rgb_pixels": 34108,
+      "grid_x": [
+        0,
+        80,
+        160,
+        240
+      ],
+      "grid_y": [
+        0,
+        75,
+        164,
+        240
+      ],
+      "vertical_split_columns_alpha_counts": {
+        "80": 0,
+        "160": 0
+      },
+      "horizontal_split_rows_alpha_counts": {
+        "75": 0,
+        "164": 0
+      },
+      "all_components_8": 9,
+      "major_components_over_50_pixels": 9,
+      "component_boxes_largest_12": [
+        {
+          "pixels": 3511,
+          "bbox": [
+            84,
+            87,
+            158,
+            152
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 3146,
+          "bbox": [
+            164,
+            86,
+            238,
+            151
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 3059,
+          "bbox": [
+            3,
+            90,
+            77,
+            151
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 2593,
+          "bbox": [
+            163,
+            177,
+            239,
+            231
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 2488,
+          "bbox": [
+            2,
+            178,
+            77,
+            230
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 2407,
+          "bbox": [
+            84,
+            180,
+            158,
+            230
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 2259,
+          "bbox": [
+            84,
+            18,
+            158,
+            64
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 2035,
+          "bbox": [
+            164,
+            11,
+            238,
+            52
+          ],
+          "touches_border": false
+        },
+        {
+          "pixels": 1972,
+          "bbox": [
+            3,
+            11,
+            77,
+            62
+          ],
+          "touches_border": false
+        }
+      ],
+      "objects": [
+        {
+          "index": 1,
+          "label": "straight-low-curb",
+          "safe_cell_box": [
+            0,
+            0,
+            80,
+            75
+          ],
+          "tight_alpha_box": [
+            3,
+            11,
+            77,
+            62
+          ],
+          "tight_dimensions": [
+            74,
+            51
+          ],
+          "opaque_pixels": 1972,
+          "alpha8_components": 1,
+          "largest_component_pixels": 1972,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 2,
+          "label": "outside-low-corner",
+          "safe_cell_box": [
+            80,
+            0,
+            160,
+            75
+          ],
+          "tight_alpha_box": [
+            84,
+            18,
+            158,
+            64
+          ],
+          "tight_dimensions": [
+            74,
+            46
+          ],
+          "opaque_pixels": 2259,
+          "alpha8_components": 1,
+          "largest_component_pixels": 2259,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 3,
+          "label": "inside-low-corner",
+          "safe_cell_box": [
+            160,
+            0,
+            240,
+            75
+          ],
+          "tight_alpha_box": [
+            164,
+            11,
+            238,
+            52
+          ],
+          "tight_dimensions": [
+            74,
+            41
+          ],
+          "opaque_pixels": 2035,
+          "alpha8_components": 1,
+          "largest_component_pixels": 2035,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 4,
+          "label": "retaining-wall",
+          "safe_cell_box": [
+            0,
+            75,
+            80,
+            164
+          ],
+          "tight_alpha_box": [
+            3,
+            90,
+            77,
+            151
+          ],
+          "tight_dimensions": [
+            74,
+            61
+          ],
+          "opaque_pixels": 3059,
+          "alpha8_components": 1,
+          "largest_component_pixels": 3059,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 5,
+          "label": "retaining-corner",
+          "safe_cell_box": [
+            80,
+            75,
+            160,
+            164
+          ],
+          "tight_alpha_box": [
+            84,
+            87,
+            158,
+            152
+          ],
+          "tight_dimensions": [
+            74,
+            65
+          ],
+          "opaque_pixels": 3511,
+          "alpha8_components": 1,
+          "largest_component_pixels": 3511,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 6,
+          "label": "stairs",
+          "safe_cell_box": [
+            160,
+            75,
+            240,
+            164
+          ],
+          "tight_alpha_box": [
+            164,
+            86,
+            238,
+            151
+          ],
+          "tight_dimensions": [
+            74,
+            65
+          ],
+          "opaque_pixels": 3146,
+          "alpha8_components": 1,
+          "largest_component_pixels": 3146,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 7,
+          "label": "paving-grass-edge",
+          "safe_cell_box": [
+            0,
+            164,
+            80,
+            240
+          ],
+          "tight_alpha_box": [
+            2,
+            178,
+            77,
+            230
+          ],
+          "tight_dimensions": [
+            75,
+            52
+          ],
+          "opaque_pixels": 2488,
+          "alpha8_components": 1,
+          "largest_component_pixels": 2488,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 8,
+          "label": "root-ground-patch",
+          "safe_cell_box": [
+            80,
+            164,
+            160,
+            240
+          ],
+          "tight_alpha_box": [
+            84,
+            180,
+            158,
+            230
+          ],
+          "tight_dimensions": [
+            74,
+            50
+          ],
+          "opaque_pixels": 2407,
+          "alpha8_components": 1,
+          "largest_component_pixels": 2407,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 1,
+          "hole_pixels": 1,
+          "largest_hole_pixels": 1,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        },
+        {
+          "index": 9,
+          "label": "paved-threshold",
+          "safe_cell_box": [
+            160,
+            164,
+            240,
+            240
+          ],
+          "tight_alpha_box": [
+            163,
+            177,
+            239,
+            231
+          ],
+          "tight_dimensions": [
+            76,
+            54
+          ],
+          "opaque_pixels": 2593,
+          "alpha8_components": 1,
+          "largest_component_pixels": 2593,
+          "components_1_or_2_pixels": 0,
+          "enclosed_alpha_zero_holes": 0,
+          "hole_pixels": 0,
+          "largest_hole_pixels": 0,
+          "border_opaque_pixels": 0,
+          "suggested_crop_rule": "Crop this safe cell, then tight alpha bbox plus optional transparent padding; keep original native pixels and all detached fragments."
+        }
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "raw_source": {
+        "path": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.source.jpg",
+        "format": "JPEG",
+        "mode": "RGB",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "bytes": 446339,
+        "sha256": "0e9ce0402be09adfa9964959f7813a211e392314f4f3e7c7230ff6b4f2475940",
+        "canonical_processing_relation": "Provider crop/downsample/matte processing is not reconstructed by this review; source-pixel preservation is measured against the saved canonical PNG."
+      }
+    },
+    {
+      "reviewer": "/root/asset_inventory",
+      "source_changed": false,
+      "production_approval": false,
+      "canonical": {
+        "path": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.png",
+        "sha256": "3afc2a12b898de3a86fda6ddb4bb9d3985ea807411c1cf10b4ff1fe6ec88bb32",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": [
+          200,
+          200
+        ],
+        "alpha_values": [
+          0,
+          255
+        ],
+        "opaque_pixels": 8886,
+        "transparent_pixels": 31114,
+        "hidden_nonzero_rgb_pixels": 31114
+      },
+      "zero_columns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        66,
+        67,
+        68,
+        69,
+        70,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "zero_rows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "components_8": 11,
+      "component_areas": [
+        1173,
+        1167,
+        1121,
+        1039,
+        963,
+        962,
+        933,
+        811,
+        688,
+        17,
+        12
+      ],
+      "detection_dilation_only": [
+        {
+          "square_dilation_radius_source_px": 0,
+          "connected_groups_after_dilation": 11,
+          "groups_over_50_expanded_pixels": 9
+        },
+        {
+          "square_dilation_radius_source_px": 1,
+          "connected_groups_after_dilation": 9,
+          "groups_over_50_expanded_pixels": 9
+        },
+        {
+          "square_dilation_radius_source_px": 2,
+          "connected_groups_after_dilation": 9,
+          "groups_over_50_expanded_pixels": 9
+        },
+        {
+          "square_dilation_radius_source_px": 3,
+          "connected_groups_after_dilation": 9,
+          "groups_over_50_expanded_pixels": 9
+        },
+        {
+          "square_dilation_radius_source_px": 4,
+          "connected_groups_after_dilation": 6,
+          "groups_over_50_expanded_pixels": 6
+        },
+        {
+          "square_dilation_radius_source_px": 5,
+          "connected_groups_after_dilation": 3,
+          "groups_over_50_expanded_pixels": 3
+        },
+        {
+          "square_dilation_radius_source_px": 6,
+          "connected_groups_after_dilation": 3,
+          "groups_over_50_expanded_pixels": 3
+        }
+      ],
+      "safe_grid_x": [
+        0,
+        67,
+        134,
+        200
+      ],
+      "safe_grid_y": [
+        0,
+        67,
+        134,
+        200
+      ],
+      "objects": [
+        {
+          "index": 1,
+          "label": "moss-paving-transition",
+          "safe_cell_box": [
+            0,
+            0,
+            67,
+            67
+          ],
+          "tight_alpha_box": [
+            6,
+            20,
+            65,
+            53
+          ],
+          "tight_dimensions": [
+            59,
+            33
+          ],
+          "opaque_pixels": 1167,
+          "components_8": 1,
+          "largest_component_pixels": 1167,
+          "component_areas": [
+            1167
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 2,
+          "label": "short-stone-curb",
+          "safe_cell_box": [
+            67,
+            0,
+            134,
+            67
+          ],
+          "tight_alpha_box": [
+            73,
+            20,
+            127,
+            53
+          ],
+          "tight_dimensions": [
+            54,
+            33
+          ],
+          "opaque_pixels": 688,
+          "components_8": 1,
+          "largest_component_pixels": 688,
+          "component_areas": [
+            688
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 3,
+          "label": "low-mossy-edge",
+          "safe_cell_box": [
+            134,
+            0,
+            200,
+            67
+          ],
+          "tight_alpha_box": [
+            136,
+            20,
+            193,
+            54
+          ],
+          "tight_dimensions": [
+            57,
+            34
+          ],
+          "opaque_pixels": 933,
+          "components_8": 1,
+          "largest_component_pixels": 933,
+          "component_areas": [
+            933
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 4,
+          "label": "broken-stone-patch",
+          "safe_cell_box": [
+            0,
+            67,
+            67,
+            134
+          ],
+          "tight_alpha_box": [
+            7,
+            84,
+            64,
+            116
+          ],
+          "tight_dimensions": [
+            57,
+            32
+          ],
+          "opaque_pixels": 1039,
+          "components_8": 1,
+          "largest_component_pixels": 1039,
+          "component_areas": [
+            1039
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 5,
+          "label": "bare-root-soil",
+          "safe_cell_box": [
+            67,
+            67,
+            134,
+            134
+          ],
+          "tight_alpha_box": [
+            71,
+            86,
+            129,
+            114
+          ],
+          "tight_dimensions": [
+            58,
+            28
+          ],
+          "opaque_pixels": 963,
+          "components_8": 1,
+          "largest_component_pixels": 963,
+          "component_areas": [
+            963
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 6,
+          "label": "shallow-threshold",
+          "safe_cell_box": [
+            134,
+            67,
+            200,
+            134
+          ],
+          "tight_alpha_box": [
+            138,
+            84,
+            192,
+            116
+          ],
+          "tight_dimensions": [
+            54,
+            32
+          ],
+          "opaque_pixels": 962,
+          "components_8": 1,
+          "largest_component_pixels": 962,
+          "component_areas": [
+            962
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 7,
+          "label": "grass-paving-seam",
+          "safe_cell_box": [
+            0,
+            134,
+            67,
+            200
+          ],
+          "tight_alpha_box": [
+            6,
+            145,
+            66,
+            180
+          ],
+          "tight_dimensions": [
+            60,
+            35
+          ],
+          "opaque_pixels": 1173,
+          "components_8": 1,
+          "largest_component_pixels": 1173,
+          "component_areas": [
+            1173
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 8,
+          "label": "loose-leaves-and-pebbles",
+          "safe_cell_box": [
+            67,
+            134,
+            134,
+            200
+          ],
+          "tight_alpha_box": [
+            74,
+            146,
+            127,
+            175
+          ],
+          "tight_dimensions": [
+            53,
+            29
+          ],
+          "opaque_pixels": 840,
+          "components_8": 3,
+          "largest_component_pixels": 811,
+          "component_areas": [
+            811,
+            17,
+            12
+          ],
+          "border_opaque_pixels": 0
+        },
+        {
+          "index": 9,
+          "label": "low-planted-edge",
+          "safe_cell_box": [
+            134,
+            134,
+            200,
+            200
+          ],
+          "tight_alpha_box": [
+            136,
+            142,
+            193,
+            178
+          ],
+          "tight_dimensions": [
+            57,
+            36
+          ],
+          "opaque_pixels": 1121,
+          "components_8": 1,
+          "largest_component_pixels": 1121,
+          "component_areas": [
+            1121
+          ],
+          "border_opaque_pixels": 0
+        }
+      ],
+      "notes": [
+        "Dilation here is solely a detection experiment; actual source alpha/RGB was not changed.",
+        "Use nine spatial cells to group leaves/pebbles without deleting small opaque islands.",
+        "Minimum area must not drop detached decoration before grouping."
+      ],
+      "raw_source": {
+        "path": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.source.jpg",
+        "format": "JPEG",
+        "mode": "RGB",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "bytes": 339252,
+        "sha256": "a83741b89fd6c63d09fb1c8db6e63ac7473d27152314001234f8679976e6e66b",
+        "canonical_processing_relation": "Provider crop/downsample/matte processing is not reconstructed by this review; source-pixel preservation is measured against the saved canonical PNG."
+      }
+    }
+  ],
+  "manual_slice_organic_object_8": {
+    "sheet": "organic-ground-seams-02",
+    "object_index": 8,
+    "label": "loose-leaves-and-pebbles",
+    "coordinate_units": "canonical 200×200 source pixels",
+    "crop_bbox_exclusive": [
+      74,
+      146,
+      127,
+      175
+    ],
+    "crop_xywh": [
+      74,
+      146,
+      53,
+      29
+    ],
+    "safe_group_cell_bbox_exclusive": [
+      67,
+      134,
+      134,
+      200
+    ],
+    "width": 53,
+    "height": 29,
+    "opaque_pixels": 840,
+    "connected_component_areas_8": [
+      811,
+      17,
+      12
+    ],
+    "source_sha256": "3afc2a12b898de3a86fda6ddb4bb9d3985ea807411c1cf10b4ff1fe6ec88bb32",
+    "original_rgba_sha256": "dfc04af838f9684ffd6e7303d7fd9dc9c2556cb7ff62e3f6e8193f26d34606cb",
+    "clean_transparent_rgb_rgba_sha256": "839deebcde0738def9aa187b0feb935f4f9c09fb7bd811902d2047a3a1ab2642",
+    "alpha_sha256": "2c137bccd188f08a81f773afdf11bfdcfa43fc43a6abe035e3ffdf2f2ccb8dd6",
+    "opaque_rgb_row_major_sha256": "685626f1792362af3c5e457be13570f2bbbef1e3d434aeca6a0e1845b3b28ea6",
+    "island_distances_to_largest": [
+      {
+        "island_pixels": 17,
+        "closest_euclidean_pixel_center_distance": 2.236068,
+        "closest_chebyshev_pixel_center_distance": 2
+      },
+      {
+        "island_pixels": 12,
+        "closest_euclidean_pixel_center_distance": 2.828427,
+        "closest_chebyshev_pixel_center_distance": 2
+      }
+    ],
+    "validation_requirement": "Retain all 840 opaque pixels and their original RGB/alpha, including islands of 17 px and 12 px; do not keep only the largest component."
+  },
+  "recommended_organic_detection": {
+    "canonical_grid": [
+      200,
+      200
+    ],
+    "preferred_grouping": "Nine source cells, then tight alpha crop; preserve all islands in each cell.",
+    "grid_x": [
+      0,
+      67,
+      134,
+      200
+    ],
+    "grid_y": [
+      0,
+      67,
+      134,
+      200
+    ],
+    "minimum_component_area_before_grouping": 1,
+    "minimum_group_area_after_merging_example": 100,
+    "detection_square_dilation_radius_px": 1,
+    "detection_kernel": [
+      3,
+      3
+    ],
+    "tested_group_counts": [
+      {
+        "square_dilation_radius_source_px": 0,
+        "connected_groups_after_dilation": 11,
+        "groups_over_50_expanded_pixels": 9
+      },
+      {
+        "square_dilation_radius_source_px": 1,
+        "connected_groups_after_dilation": 9,
+        "groups_over_50_expanded_pixels": 9
+      },
+      {
+        "square_dilation_radius_source_px": 2,
+        "connected_groups_after_dilation": 9,
+        "groups_over_50_expanded_pixels": 9
+      },
+      {
+        "square_dilation_radius_source_px": 3,
+        "connected_groups_after_dilation": 9,
+        "groups_over_50_expanded_pixels": 9
+      },
+      {
+        "square_dilation_radius_source_px": 4,
+        "connected_groups_after_dilation": 6,
+        "groups_over_50_expanded_pixels": 6
+      },
+      {
+        "square_dilation_radius_source_px": 5,
+        "connected_groups_after_dilation": 3,
+        "groups_over_50_expanded_pixels": 3
+      },
+      {
+        "square_dilation_radius_source_px": 6,
+        "connected_groups_after_dilation": 3,
+        "groups_over_50_expanded_pixels": 3
+      }
+    ],
+    "limitation": "Provider merge-distance semantics may differ from square mask dilation; use the explicit grid/crop bounds if nine groups are not retained. Never dilate exported artwork."
+  },
+  "source_hygiene": [
+    "Provider originals retain nonzero RGB under alpha0. Clear those RGB bytes only in separately derived exports; preserve every opaque pixel unchanged.",
+    "Transparent foliage holes and detached leaf details are not automatically corruption. Do not delete small components to force the desired count.",
+    "Terrain connections are not automatically a seamless tileset or production-scale geometry. The74×65 stairs are nearly the size of the72×65 Archive facade on the common source grid.",
+    "The new organic ground family has flatter, lower fragments and explicit irregular boundaries; actual placement, perspective and material compatibility still need a scene review."
+  ],
+  "color_studies_reference_only": {
+    "reviewer": "/root/asset_inventory",
+    "review_scope": "independent source decode, dimensions, hashes, nearest relation and full-frame comparison",
+    "source_master_sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+    "studies": [
+      {
+        "name": "day-material-02",
+        "canonical": {
+          "path": "assets/source/environment/hub/r08/candidates/provider/day-material-02.png",
+          "format": "PNG",
+          "mode": "RGBA",
+          "size": [
+            512,
+            288
+          ],
+          "sha256": "a65bb3c9c25fb8519d2989c7a84f2c7afea4fce2659ab97c13ad46f9f0180d95",
+          "alpha_values": [
+            255
+          ]
+        },
+        "raw": {
+          "path": "assets/source/environment/hub/r08/candidates/provider/day-material-02.source.jpg",
+          "format": "JPEG",
+          "mode": "RGB",
+          "size": [
+            1376,
+            768
+          ],
+          "sha256": "f2b0bbb1a95046d9a18412b63e878a63b59f77c84fb31fa13c51ea70948acfa7"
+        },
+        "canonical_exact_nearest_of_raw": true,
+        "rgb_mae_vs_master": 11.9689,
+        "changed_pixels_vs_master": 146732,
+        "changed_percent_vs_master": 99.509,
+        "note": "RGB drift quantifies lack of pixel identity, not semantic destruction. Full-frame directional study only; no production geometry approval."
+      },
+      {
+        "name": "dusk-lighting-study-01",
+        "canonical": {
+          "path": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.png",
+          "format": "PNG",
+          "mode": "RGBA",
+          "size": [
+            512,
+            288
+          ],
+          "sha256": "df8396871adbea38ed7db482c23453db0875a444a03402f86511c86d5e621da8",
+          "alpha_values": [
+            255
+          ]
+        },
+        "raw": {
+          "path": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.source.jpg",
+          "format": "JPEG",
+          "mode": "RGB",
+          "size": [
+            1376,
+            768
+          ],
+          "sha256": "1bc0bca56250033243375f36cfdabf90760b4fa10df13a6cc30345f5d978f6c7"
+        },
+        "canonical_exact_nearest_of_raw": true,
+        "rgb_mae_vs_master": 49.9701,
+        "changed_pixels_vs_master": 147456,
+        "changed_percent_vs_master": 100.0,
+        "note": "RGB drift quantifies lack of pixel identity, not semantic destruction. Full-frame directional study only; no production geometry approval."
+      }
+    ],
+    "visual_findings": {
+      "day-material-02": "Adds white fountain jets and changes paving/greenery details; do not substitute as source-exact geometry.",
+      "dusk-lighting-study-01": "Useful hierarchy of warm entrance/archive light against blue atmosphere; window/paving details drift. Use colors and direction with masks on original source."
+    },
+    "production_approval": false
+  },
+  "review_artifact": "docs/art/reviews/2026-11-21-hub-r08-pilot-review.md",
+  "authoring_boundary": "The reviewer authored separate pilot masks for the preview, which require independent Art Director review. Those authored masks are not self-approved by this provider-sheet report."
+}

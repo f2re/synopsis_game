@@ -24,6 +24,8 @@ const react = {
     const hook = owner.hooks[owner.cursor++] ??= { kind: 'effect' };
     if (!hook.deps || !deps || deps.some((value, index) => !Object.is(value, hook.deps[index]))) owner.effects.push({ hook, fn, deps });
   },
+  // Lifecycle ordering only: this alias does not model layout, paint or real DOM focus.
+  useLayoutEffect(fn, deps) { return react.useEffect(fn, deps); },
   useMemo(fn) { owner.cursor++; return fn(); },
   useCallback(fn) { owner.cursor++; return fn; },
   lazy: () => 'LazyComponent', Suspense: 'Suspense',

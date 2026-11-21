@@ -1,0 +1,148 @@
+{
+  "task": "R08-ARCHIVE-EXTRACTION",
+  "source": {
+    "path": "provider/master-01.png",
+    "width": 512,
+    "height": 288,
+    "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+    "rgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "preservedProviderSource": "provider/master-01.source.jpg",
+    "coordinateSystem": "canonical source pixel coordinates; no runtime scale is implied"
+  },
+  "specSha256": "2ef0845010cf1345dfc25ee1dbdd134e944e6aea174462a3ea8ae8185d0f0c04",
+  "extractorSha256": "941a8028e9aebfc1d823b55230afb1cd07c71438984f53cb3a0ced24bc08f4a5",
+  "pillowVersion": "13.0.0",
+  "layers": [
+    {
+      "id": "hub.r08.candidate.archive.facade-visible",
+      "file": "archive-facade.png",
+      "size": [
+        72,
+        65
+      ],
+      "cropRectXYWH": [
+        290,
+        141,
+        72,
+        65
+      ],
+      "originalSceneXY": [
+        290,
+        141
+      ],
+      "anchorScenePx": [
+        322,
+        205
+      ],
+      "pivotLocalPx": [
+        32,
+        64
+      ],
+      "opaquePixels": 4021,
+      "sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa",
+      "sha12": "b355d6bf9ab5",
+      "rgbaSha256": "e38e539dbc40f0fbe9e2948c7c96563bb6de64ed19a4f1087515ebe8cf3012cb",
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "reviewStatus": "candidate, independent review pending"
+    },
+    {
+      "id": "hub.r08.candidate.archive.porch-steps-visible",
+      "file": "archive-porch-steps.png",
+      "size": [
+        69,
+        10
+      ],
+      "cropRectXYWH": [
+        292,
+        206,
+        69,
+        10
+      ],
+      "originalSceneXY": [
+        292,
+        206
+      ],
+      "anchorScenePx": [
+        322,
+        215
+      ],
+      "pivotLocalPx": [
+        30,
+        9
+      ],
+      "opaquePixels": 583,
+      "sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51",
+      "sha12": "c2779d193a73",
+      "rgbaSha256": "0844056d09573b7c03cae0f33dfe8d004338e4a09ac60a69cf6bdf5a76cd45f9",
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "reviewStatus": "candidate, independent review pending"
+    },
+    {
+      "id": "hub.r08.candidate.archive.entry-lamp",
+      "file": "archive-entry-lamp.png",
+      "size": [
+        7,
+        12
+      ],
+      "cropRectXYWH": [
+        290,
+        182,
+        7,
+        12
+      ],
+      "originalSceneXY": [
+        290,
+        182
+      ],
+      "anchorScenePx": [
+        293,
+        193
+      ],
+      "pivotLocalPx": [
+        3,
+        11
+      ],
+      "opaquePixels": 60,
+      "sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e",
+      "sha12": "bb785af4fc0f",
+      "rgbaSha256": "e6ca005d650d5ddbd264987cb2d6c134863d13f8a95005e4cd4fff69b10579c7",
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "reviewStatus": "candidate, independent review pending"
+    }
+  ],
+  "unionOpaquePixels": 4664,
+  "exactRecomposition": {
+    "passes": true,
+    "maxChannelDifference": 0,
+    "mismatchedPixels": 0,
+    "scope": "union of selected masks only; no clean plate or invented pixels"
+  },
+  "status": "candidate-scene-cutouts-not-production-sprites",
+  "previewOnly": "inspection-preview-8x.png is enlarged for inspection; never use it as art source",
+  "localPlateRoundtrip": {
+    "platePath": "provider/archive-ground-01.png",
+    "plateSha256": "a9fdffa28cad118da8347133b5527f0c3eea2666dbb8b0bfcfdb056d89a2c035",
+    "patchMask": "hub.r08.candidate.archive.facade-visible after lamp exclusion",
+    "outsideMaskChangedPixels": 0,
+    "stepsLampAndNeighboringIvy": "original source pixels retained",
+    "restoredMasterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "originalMasterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "exactRgbaEquality": true,
+    "diagnosticLocalPatch": "r08-archive-ground-local-patch.png",
+    "diagnosticRestoredMaster": "r08-archive-source-roundtrip.png",
+    "diagnosticDirectoryRole": "external inspection directory selected with --diagnostics-dir",
+    "scope": "proof of reversible layer extraction only; no acceptance of invented clean-plate terrain"
+  }
+}

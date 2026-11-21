@@ -1,0 +1,137 @@
+{
+  "schema": "r08-preview-final-hash-bundle/v1",
+  "png_count": 9,
+  "png_total_bytes": 681103,
+  "public_manifest_bytes": 10629,
+  "one_export_tree_total_bytes": 691732,
+  "rgba_texture_bytes_without_mipmaps": 2979396,
+  "generated_and_public_byte_identical": true,
+  "assets": [
+    {
+      "role": "master",
+      "file": "master.png",
+      "dimensions": [
+        512,
+        288
+      ],
+      "bytes": 331901,
+      "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c"
+    },
+    {
+      "role": "archive-local-ground",
+      "file": "archive-local-ground.png",
+      "dimensions": [
+        512,
+        288
+      ],
+      "bytes": 330074,
+      "sha256": "db1c5597abe6f15358b7b0813014a8fe8ca1841e2a8bfa0809b9d184e14f36fb"
+    },
+    {
+      "role": "archive-facade",
+      "file": "archive-facade.png",
+      "dimensions": [
+        72,
+        65
+      ],
+      "bytes": 10032,
+      "sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa"
+    },
+    {
+      "role": "archive-porch-steps",
+      "file": "archive-porch-steps.png",
+      "dimensions": [
+        69,
+        10
+      ],
+      "bytes": 1572,
+      "sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51"
+    },
+    {
+      "role": "archive-entry-lamp",
+      "file": "archive-entry-lamp.png",
+      "dimensions": [
+        7,
+        12
+      ],
+      "bytes": 330,
+      "sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e"
+    },
+    {
+      "role": "foreground-occluder",
+      "file": "foreground-occluder.png",
+      "dimensions": [
+        47,
+        45
+      ],
+      "bytes": 4862,
+      "sha256": "8d8e063766a681dccaf5d6852a92916509c75816c00b66e52f33ad0d65dea4bd"
+    },
+    {
+      "role": "window-light-mask",
+      "file": "window-light-mask.png",
+      "dimensions": [
+        512,
+        288
+      ],
+      "bytes": 900,
+      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635"
+    },
+    {
+      "role": "lamp-light-mask",
+      "file": "lamp-light-mask.png",
+      "dimensions": [
+        512,
+        288
+      ],
+      "bytes": 708,
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602"
+    },
+    {
+      "role": "ground-light-mask",
+      "file": "ground-light-mask.png",
+      "dimensions": [
+        512,
+        288
+      ],
+      "bytes": 724,
+      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7"
+    }
+  ],
+  "files": [
+    {
+      "path": "tools/assets/build_hub_r08.py",
+      "bytes": 15797,
+      "sha256": "bc015d79289415a99b58fb9fda4cf165ed552175bc828f01b1eba51206d2ea61"
+    },
+    {
+      "path": "assets/manifests/hub.r08-preview.json",
+      "bytes": 11971,
+      "sha256": "daef18e89b99be9c50906b5ba11cf1daa17bb078f36ae81195e915c23a22d9c7"
+    },
+    {
+      "path": "assets/source/environment/hub/r08/pilot/mask-spec.json",
+      "bytes": 13883,
+      "sha256": "dcaf6c8e6a607e4aec53e4dcd666aa126c8c50c9c3fa448f5cd04b33136e0961"
+    },
+    {
+      "path": "apps/web/public/hub/r08-preview/manifest.json",
+      "bytes": 10629,
+      "sha256": "33a3610b74b53959c5e83310edb085155216cb23c3bb0b67e168a548256c4655"
+    },
+    {
+      "path": "docs/testing/evidence/hub-r08/phase2-sheet-validation.json",
+      "bytes": 40260,
+      "sha256": "72cd3989274314a66b4afe1374051860d1e4aa26fd43b776c90eb1ae10415ca8"
+    }
+  ],
+  "review": {
+    "geometry": "reviewed",
+    "art": "pending",
+    "productionReady": false,
+    "pilotMaskArt": "source-contours-reviewed; rendered-lighting-pending",
+    "pilotMaskReviewer": "/root/render_audit",
+    "pilotMaskReview": "docs/art/reviews/2026-11-21-hub-r08-pilot-review.md",
+    "pilotMaskLimits": "Source contours/locality only; final lighting, depth and production acceptance remain pending."
+  }
+}

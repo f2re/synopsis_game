@@ -99,6 +99,61 @@ async function checkMentorDoesNotCoverAnswer(page) {
   return geometry;
 }
 
+/** Read the real server task around the optional note; never create a second shift. */
+async function checkOptionalShiftNote({ page, base, shiftId, instanceId, report, name }) {
+  const note = page.locator('.shift-desk-note');
+  const summary = note.locator('summary');
+  const numeric = page.getByRole('textbox', { name: 'Числовой ответ', exact: true });
+  await note.waitFor();
+  assert.equal(await summary.innerText(), 'Записка Полины');
+  assert.equal(await note.evaluate(node => node.open), false, 'The note is optional and initially closed');
+  assert.equal(await page.getByRole('button', { name: 'Принять смену', exact: true }).count(), 0, 'The task needs no handover action');
+  const token = await page.evaluate(() => sessionStorage.getItem('synopsis.session.token'));
+  assert.ok(token, 'The note check belongs to the authenticated fixture session');
+  const readTask = async () => {
+    const response = await page.request.get(`${base}/api/shifts/${encodeURIComponent(shiftId)}/task`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+    assert.equal(response.status(), 200, 'The authoritative task remains readable');
+    return response.json();
+  };
+  const before = await readTask();
+  assert.equal(before.task.instanceId, instanceId);
+  assert.equal(before.task.response.kind, 'numeric', 'This fixture begins with an editable numeric task');
+  await numeric.fill('0');
+  const taskCard = await page.locator('.shift-card').elementHandle();
+  assert.ok(taskCard);
+  let extraStarts = 0;
+  const countStarts = request => {
+    if (new URL(request.url()).pathname === '/api/shifts' && request.method() === 'POST') extraStarts++;
+  };
+  page.on('request', countStarts);
+  const keyboard = page.viewportSize().width >= 1000;
+  try {
+    if (keyboard) { await summary.focus(); await summary.press('Enter'); }
+    else await summary.click();
+    assert.equal(await note.evaluate(node => node.open), true, 'The note opens without replacing the task');
+    assert.equal(await numeric.inputValue(), '0', 'Opening the note keeps the entered answer');
+    if (keyboard) await summary.press('Space');
+    else await summary.click();
+    assert.equal(await note.evaluate(node => node.open), false, 'The note closes through the same native control');
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    assert.equal(await numeric.inputValue(), '0', 'Closing the note keeps the entered answer');
+    assert.ok(await taskCard.evaluate(node => node.isConnected), 'The original task card was not remounted');
+    const after = await readTask();
+    assert.equal(after.shiftId, before.shiftId, 'The same server shift remains active');
+    assert.equal(after.task.instanceId, before.task.instanceId, 'The same task instance survives note toggling');
+    assert.deepEqual(after.equipment, before.equipment, 'Opening the note changes neither snapshot nor charges');
+    assert.equal(extraStarts, 0, 'Opening and closing the note sends no POST /api/shifts');
+    report.cases.push({ name, shiftId, instanceId, numericInput: '0', noteInitiallyClosed: true,
+      inputPreserved: true, taskCardPreserved: true, taskInstancePreserved: true,
+      equipmentPreserved: true, extraShiftPosts: extraStarts, interaction: keyboard ? 'Enter/Space' : 'pointer' });
+  } finally {
+    page.off('request', countStarts);
+    await taskCard.dispose();
+  }
+}
+
 async function runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture }) {
   // Keep the other public fixture user untouched for the station audio/logout suite.
   const selected = fixture.users[1];
@@ -186,7 +241,10 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     assert.deepEqual((await request('/api/identity/me')).user.avatarPortrait, saved.avatarPortrait);
     const failureVisibility = await page.locator('.inventory-footer').evaluate(footer => {
       const alert = footer.querySelector('[role="alert"]')?.getBoundingClientRect();
-      const retry = footer.querySelector('.inventory-button--primary')?.getBoundingClientRect();
+      // The primary action now saves and enters the level. Inspect the same
+      // stay-in-editor save action that this scenario actually retries.
+      const retry = [...footer.querySelectorAll('button')]
+        .find(button => button.textContent === 'Сохранить персонажа')?.getBoundingClientRect();
       return { errorVisible: Boolean(alert && alert.top >= 0 && alert.bottom <= innerHeight), retryVisible: Boolean(retry && retry.top >= 0 && retry.bottom <= innerHeight) };
     });
     assert.deepEqual(failureVisibility, { errorVisible: true, retryVisible: true }, 'The actual save failure and retry action are visible together without extra scrolling');
@@ -204,20 +262,39 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await assertPortrait(page, '.hub-profile-button .saved-avatar-portrait', saved, 40);
     await capture(page, `portrait-home-${viewport.width}`);
 
-    await page.goto(base + '/shift');
-    await page.getByRole('heading', { name: 'Записка на краю стола' }).waitFor();
     const starting = page.waitForResponse(r => new URL(r.url()).pathname === '/api/shifts' && r.request().method() === 'POST');
-    await page.getByRole('button', { name: 'Принять смену', exact: true }).click();
+    await page.goto(base + '/shift');
     const practiceResponse = await starting; assert.equal(practiceResponse.status(), 201);
     const practice = await practiceResponse.json(); checkSnapshot(practice, saved);
+    await page.getByRole('heading', { name: practice.task.question, exact: true }).waitFor();
     await assertPortrait(page, '.shift-equipment .saved-avatar-portrait', saved, 40);
     const changed = (await request('/api/identity/avatar', 'PATCH', { avatar: REST })).user;
     checkSaved(changed, REST);
     checkSnapshot(await request(`/api/shifts/${practice.shiftId}/task`), saved);
     await assertPortrait(page, '.shift-equipment .saved-avatar-portrait', saved, 40);
+    // A wardrobe visit shows the new profile, while this active shift keeps its old snapshot.
+    await page.goto(base + '/profile/avatar');
+    await page.locator('canvas[data-avatar-renderer="editor-static"]').waitFor();
+    await assertPortrait(page, '.inventory-saved-portrait .saved-avatar-portrait', changed, 80);
+    const returning = page.waitForResponse(r => new URL(r.url()).pathname === '/api/shifts' && r.request().method() === 'POST');
+    await page.goto(base + '/shift');
+    const returnResponse = await returning; assert.equal(returnResponse.status(), 201);
+    const returned = await returnResponse.json();
+    assert.equal(returned.shiftId, practice.shiftId); assert.equal(returned.task.instanceId, practice.task.instanceId);
+    checkSnapshot(returned, saved);
+    await page.getByRole('heading', { name: returned.task.question, exact: true }).waitFor();
+    const resuming = page.waitForResponse(r => new URL(r.url()).pathname === '/api/shifts' && r.request().method() === 'POST');
     await page.reload();
-    await page.getByRole('button', { name: 'Принять смену', exact: true }).click();
+    const resumeResponse = await resuming; assert.equal(resumeResponse.status(), 201);
+    const resumed = await resumeResponse.json();
+    assert.equal(resumed.shiftId, practice.shiftId); assert.equal(resumed.task.instanceId, practice.task.instanceId);
+    checkSnapshot(resumed, saved);
+    await page.getByRole('heading', { name: resumed.task.question, exact: true }).waitFor();
     await assertPortrait(page, '.shift-equipment .saved-avatar-portrait', saved, 40);
+    await checkOptionalShiftNote({ page, base, shiftId: practice.shiftId, instanceId: practice.task.instanceId, report,
+      name: `portrait-shift-note-preserves-task-${viewport.width}` });
+    report.cases.push({ name: `portrait-shift-resume-${viewport.width}`, wardrobeRoundTrip: true, reload: true,
+      shiftId: practice.shiftId, instanceId: practice.task.instanceId, originalSnapshotPreserved: true });
     const initialGeometry = await checkMentorDoesNotCoverAnswer(page);
     const numeric = page.getByRole('textbox', { name: 'Числовой ответ', exact: true });
     await numeric.scrollIntoViewIfNeeded();
@@ -342,4 +419,4 @@ async function runSavedPortraitChecks({ base, browser, report, capture, waitForC
     await restoredContext.close();
   }
 }
-module.exports = { runSavedPortraitChecks, login };
+module.exports = { runSavedPortraitChecks, login, checkOptionalShiftNote };

@@ -12,6 +12,8 @@ export interface StationNavDockProps {
   currentScene?: string;
   sceneReady?: boolean;
   sessionPending?: boolean;
+  primaryLabel?: string;
+  primaryDescription?: string;
 }
 
 /** R01: the central amber action is the only primary action on the campus. */
@@ -25,6 +27,8 @@ export function StationNavDock({
   currentScene = 'hub',
   sceneReady = false,
   sessionPending = false,
+  primaryLabel = 'Начать смену',
+  primaryDescription = 'КН-01 · приём дежурства',
 }: StationNavDockProps) {
   const inArchive = currentScene === 'archive';
   return (
@@ -41,7 +45,7 @@ export function StationNavDock({
       </button>
       <button type="button" className="hub-dock__button hub-dock__primary" onClick={onStartShift} disabled={sessionPending}>
         <HubIcon name="weather" size={48} />
-        <span><strong>Начать смену</strong><small>КН-01 · приём дежурства</small></span>
+        <span><strong>{primaryLabel}</strong><small>{primaryDescription}</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
       <button type="button" className="hub-dock__button hub-dock__archive" onClick={inArchive ? onOpenArchive : onOpenLibrary ?? onOpenArchive} disabled={inArchive && !sceneReady}>
@@ -51,7 +55,7 @@ export function StationNavDock({
       </button>
       <button type="button" className="hub-dock__button hub-dock__profile" onClick={onOpenProfile} disabled={sessionPending}>
         <HubIcon name="student" size={40} />
-        <span><strong>Инвентарь</strong><small>Персонаж и снаряжение</small></span>
+        <span><strong>Персонаж</strong><small>Внешность и снаряжение</small></span>
         <span className="hub-dock__arrow" aria-hidden="true">›</span>
       </button>
     </nav>

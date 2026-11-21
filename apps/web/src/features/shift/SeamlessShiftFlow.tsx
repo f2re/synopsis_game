@@ -15,12 +15,9 @@ import {
   getSynopticRhythm,
   MENTOR_TOPICS,
   SHIFT_DEBRIEF,
-  SHIFT_HANDOVER_NOTE,
 } from './shiftLore';
 import './SeamlessShiftFlow.css';
 import './LivingShiftFeedback.css';
-
-type ShiftFlowPhase = 'handover' | 'work';
 
 type MentorReaction = {
   correct: boolean;
@@ -28,7 +25,6 @@ type MentorReaction = {
 };
 
 export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void; onEquipment?: () => void }) {
-  const [phase, setPhase] = useState<ShiftFlowPhase>('handover');
   const [mentorOpen, setMentorOpen] = useState(false);
   const [mentorTopicId, setMentorTopicId] = useState<string>(MENTOR_TOPICS[0].id);
   const [journal, setJournal] = useState<ShiftAnswerEvent[]>([]);
@@ -102,46 +98,13 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
     setMentorReaction(null);
   }
 
-  if (phase === 'handover') {
-    return (
-      <main className="shift-lore-shell workroom-screen workroom-screen--handover" aria-labelledby="shift-handover-title">
-        <WorkroomBackdrop />
-        <section className="shift-lore-card shift-handover-card">
-          <div className="shift-lore-eyebrow">
-            <PixelIcon name="kn01" size="sm" />
-            <span>{GAME_MARK} · приём смены</span>
-          </div>
-          <h1 id="shift-handover-title">Записка на краю стола</h1>
-          <div className="shift-term-strip" aria-label="Ритм синоптических сроков">
-            <span>Предыдущий основной срок <strong>{rhythm.previousTermUtc}</strong></span>
-            <span>Следующий <strong>{rhythm.nextTermUtc}</strong> · через {rhythm.minutesToNextTerm} мин</span>
-          </div>
-          <blockquote className="shift-handover-note">
-            <span>{SHIFT_HANDOVER_NOTE.author}</span>
-            <small>{SHIFT_HANDOVER_NOTE.time}</small>
-            <p>{SHIFT_HANDOVER_NOTE.text}</p>
-          </blockquote>
-          <div className="shift-handover-checklist">
-            <strong>Перед первым заданием</strong>
-            {SHIFT_HANDOVER_NOTE.checklist.map((item, index) => (
-              <div key={item}><b>{index + 1}</b><span>{item}</span></div>
-            ))}
-          </div>
-          <div className="shift-lore-actions">
-            <button type="button" className="shift-primary" onClick={() => setPhase('work')}>Принять смену</button>
-            <button type="button" className="secondary-button" onClick={onExit}>На станцию</button>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
   // The server may finish the last answer while the early-exit dialog is open.
   // Both exit buttons must show the same final result and earned badges.
   const completed = debriefReason === 'completed' || Boolean(serverProgress && serverProgress.total > 0 && serverProgress.answered >= serverProgress.total);
 
   return (
     <div className="seamless-shift-host">
+      {/* Route entry starts or resumes one server-owned shift. Optional notes never remount it. */}
       <ShiftWorkspace onExit={handleShiftExit} onAnswerEvaluated={handleAnswerEvaluated} onProgressChanged={(progress, assisted) => { setServerProgress(progress); setAssistedTasks(assisted); }} />
 
       {mentorReaction && !mentorOpen && !debriefReason && (

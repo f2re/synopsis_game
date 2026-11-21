@@ -240,7 +240,57 @@ export interface BlitzAnswerResponse {
   session: BlitzSession;
 }
 
+export interface LevelOneReview {
+  instanceId: string;
+  definitionId: string;
+  question: string;
+  answer: unknown;
+  correct: boolean;
+  assisted: boolean;
+  correctAnswer: unknown;
+  explanation: string;
+  sources: ShiftReference['sources'];
+}
+
+export interface LevelOneSession {
+  id: string;
+  shiftId: string;
+  levelId: 'first-codepost';
+  title: string;
+  mode: 'level-one';
+  status: 'active' | 'completed';
+  rulesVersion: string;
+  startedAt: string;
+  completedAt?: string;
+  contentPack: string;
+  contentStatus: string;
+  progress: ShiftProgress;
+  unassistedCorrect: number;
+  assistedTasks: number;
+  task: ShiftTask | null;
+  equipment: EquipmentSnapshot;
+  review: LevelOneReview[];
+  reference?: ShiftReference;
+}
+
+export interface LevelOneLobby {
+  levelId: 'first-codepost';
+  title: string;
+  total: number;
+  help: { reference: 'free'; retry: false; timer: false };
+  completedRuns: number;
+  bestCorrect: number;
+  session: LevelOneSession | null;
+}
+
+export interface LevelOneAnswerResponse {
+  accepted: true;
+  feedback: ShiftAnswerResponse['feedback'];
+  session: LevelOneSession;
+}
+
 const TOKEN_KEY = 'synopsis.session.token';
+export const SESSION_EXPIRED_EVENT = 'synopsis:session-expired';
 let memoryToken: string | null = null;
 let storageUnavailable = false;
 let authenticationGeneration = 0;
@@ -266,16 +316,24 @@ export function setSessionToken(token: string | null): void {
 }
 async function request<T>(path: string, init: RequestInit = {}, authenticated = false): Promise<T> {
   const headers = new Headers(init.headers);
+  let requestToken: string | null = null;
   headers.set('accept', 'application/json');
   if (init.body) headers.set('content-type', 'application/json');
   if (authenticated) {
-    const token = getSessionToken();
-    if (!token) throw new ApiError(401, 'Сессия отсутствует', 'session_required');
-    headers.set('authorization', `Bearer ${token}`);
+    requestToken = getSessionToken();
+    if (!requestToken) throw new ApiError(401, 'Сессия отсутствует', 'session_required');
+    headers.set('authorization', `Bearer ${requestToken}`);
   }
   const response = await fetch(path, { ...init, headers });
   const payload = await response.json().catch(() => ({})) as Record<string, unknown>;
-  if (!response.ok) throw new ApiError(response.status, String(payload.error ?? 'Ошибка запроса'), String(payload.code ?? ''));
+  if (!response.ok) {
+    // A late reply from an old account must never close a newer session.
+    if (response.status === 401 && requestToken && getSessionToken() === requestToken) {
+      setSessionToken(null);
+      if (typeof window !== 'undefined') window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
+    }
+    throw new ApiError(response.status, String(payload.error ?? 'Ошибка запроса'), String(payload.code ?? ''));
+  }
   return payload as T;
 }
 
@@ -326,6 +384,11 @@ export const api = {
   async submitTaskAnswer(shiftId: string, instanceId: string, answer: unknown, attempt: 1 | 2 = 1): Promise<ShiftAnswerResponse> { return request<ShiftAnswerResponse>(`/api/tasks/${encodeURIComponent(instanceId)}/answer`, { method: 'POST', body: JSON.stringify({ shiftId, answer, attempt }) }, true); },
   async shiftResult(shiftId: string): Promise<{ shiftId: string; completed: boolean; answered: number; correct: number; total: number; equipment: EquipmentSnapshot; reward?: ShiftReward }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/result`, {}, true); },
   async blitzLobby(): Promise<BlitzLobby> { return request('/api/blitz-practice', {}, true); },
+  async levelOneLobby(signal?: AbortSignal): Promise<LevelOneLobby> { return request('/api/level-one', { signal }, true); },
+  async startLevelOne(requestId: string, signal?: AbortSignal): Promise<LevelOneSession> { return request('/api/level-one', { method: 'POST', body: JSON.stringify({ requestId }), signal }, true); },
+  async levelOneSession(id: string, signal?: AbortSignal): Promise<LevelOneSession> { return request(`/api/level-one/${encodeURIComponent(id)}`, { signal }, true); },
+  async submitLevelOneAnswer(id: string, instanceId: string, answer: unknown, signal?: AbortSignal): Promise<LevelOneAnswerResponse> { return request(`/api/level-one/${encodeURIComponent(id)}/answer`, { method: 'POST', body: JSON.stringify({ instanceId, answer }), signal }, true); },
+  async levelOneReference(id: string, instanceId: string, signal?: AbortSignal): Promise<ShiftReference & { equipment: EquipmentSnapshot }> { return request(`/api/level-one/${encodeURIComponent(id)}/reference`, { method: 'POST', body: JSON.stringify({ instanceId }), signal }, true); },
   async startBlitz(requestId: string): Promise<BlitzSession> { return request('/api/blitz-practice', { method: 'POST', body: JSON.stringify({ requestId }) }, true); },
   async blitzSession(id: string): Promise<BlitzSession> { return request(`/api/blitz-practice/${encodeURIComponent(id)}`, {}, true); },
   async submitBlitzAnswer(id: string, instanceId: string, answer: unknown): Promise<BlitzAnswerResponse> { return request(`/api/blitz-practice/${encodeURIComponent(id)}/answer`, { method: 'POST', body: JSON.stringify({ instanceId, answer }) }, true); },

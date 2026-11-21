@@ -43,6 +43,15 @@
 .shift-context > span { color: #7f9aad; text-transform: uppercase; letter-spacing: .1em; font-size: 13px; font-weight: 800; }
 .shift-context > strong { display: block; margin-top: 5px; color: #edf3ef; font-size: 1.05rem; }
 .shift-context p { font-size: .87rem; }
+.shift-entry-cue { margin: 0 0 16px; color: var(--ui-text-secondary); font: 16px/1.45 var(--font-pixel-ui); }
+.shift-desk-note { grid-column: 1 / -1; min-width: 0; padding: 0 14px; color: var(--ui-text-primary); background: var(--ui-panel); border: 2px solid var(--ui-panel-border); }
+.shift-desk-note > summary { min-height: 44px; padding: 11px 0; color: var(--ui-focus); font: 16px/1.4 var(--font-pixel-ui); list-style-position: inside; cursor: pointer; }
+.shift-desk-note > summary:hover { color: var(--ui-primary-cta-highlight); background: var(--ui-panel-elevated); }
+.shift-desk-note > summary:active { background: var(--ui-panel-elevated); box-shadow: var(--ui-control-pressed); }
+.shift-desk-note > summary:focus-visible { outline: 2px solid var(--ui-focus); outline-offset: 2px; }
+.shift-desk-note blockquote { margin: 0 0 14px; padding: 0; }
+.shift-desk-note blockquote p { margin: 0 0 10px; font: 16px/1.45 var(--font-pixel-ui); }
+.shift-desk-note cite { color: var(--ui-text-secondary); font: normal 14px/1.4 var(--font-pixel-ui); }
 .shift-draft { margin-top: 24px; padding: 12px; border-left: 3px solid #d8b55b; color: #d7d1b9; background: rgba(216,181,91,.08); font-size: 14px; }
 .shift-card { padding: clamp(24px, 4vw, 46px); border: 2px solid var(--ui-chrome-edge); background: var(--ui-chrome); box-shadow: inset 0 2px 0 #ffffff12, 0 4px 0 var(--color-sky-night-0); }
 .shift-card-meta { display: flex; justify-content: space-between; gap: 16px; color: #829dac; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }

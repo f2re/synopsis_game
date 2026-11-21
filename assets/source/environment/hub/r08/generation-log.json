@@ -1,0 +1,150 @@
+{
+  "schema": "synopsis-art-generation-log/v1",
+  "date": "2026-11-21",
+  "source_revision": "cb34087a7a2181faaca8c0f090a0a9b791c5c531",
+  "spritecook_project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "spritecook_collection_id": "e5f39008-fe78-41f6-b1a9-7a756d57cb45",
+  "authorization": "User requested generation and saving according to the previous approved production plan.",
+  "budget": {
+    "available_at_start": 22,
+    "credits_spent": 21,
+    "balance_after_first_job": 10,
+    "tier_at_start": "apprentice",
+    "scope_adjustment": "P0 master at 1K because 2K requires a higher tier. Additional candidate conditional on independent review and remaining balance.",
+    "balance_after_second_job": 1,
+    "verified_final_credits": 1,
+    "verified_credits_spent": 21
+  },
+  "operations": [
+    {
+      "id": "P0-master-01",
+      "job_id": "6cc8ccfd-b609-40cf-b3c7-dfef01e8771f",
+      "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "credits_used": 12,
+      "status": "succeeded",
+      "request": {
+        "model": "gemini-nano-banana-2.1",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 512,
+        "height": 288,
+        "aspect_ratio": "16:9",
+        "bg_mode": "include",
+        "smart_crop": false,
+        "variations": 1,
+        "style_asset_ids": [
+          "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+        ],
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "theme": "26063: a welcoming lived-in meteorological research station, Northern European lakeside, the approved R01 visual world",
+        "style": "Rich detailed premium pixel-art adventure environment. Controlled crisp pixel clusters, saturated emerald foliage, cream and warm grey stone, weathered copper, teal glass, cool atmospheric distance and restrained warm interior accents. Preserve the material richness of the reference, never simplify into tiny generic building icons.",
+        "prompt": "Create the coherent environment composition master for this station game. Use the supplied R01 for its rich atmosphere, architecture family, water, and distant mountain framing, but produce ONLY the environment: no interface, no labels, no lettering, no signs, no numbers, no logos, no characters, no animals, no flying birds, no weather balloon and no flag cloth baked into this still. One unified shallow elevated three-quarter game camera, fixed framing, complete edge-to-edge 16:9 scene. Six distinct functional buildings form ONE connected stepped courtyard: upper-left a compact radar building with a closed geodesic radome; rear-centre a broad grounded two-storey synoptic operations building, the strongest focal point, simple roof and small glazed lantern (not a palace); upper-right a glazed aerology lab; lower-left a glass-fronted cartography room with visually blank neutral displays; right of the central path a warm timber-and-stone archive with visible shelves through clear windows, complete threshold and stairs; lower-right a modest assembly hall. Each doorway connects physically to the SAME branching paved walking route, continuous stone terraces, short believable stairs, retaining walls, soil and plant beds. Buildings are nestled into their actual foundations, never six isolated cutouts and never floating objects. Match roof perspective, door scale, stair rise, contact shadows and all ground edges. Plant groups overlap wall bases naturally without blocking doors; dense varied pines, birches, shrubs and small flower beds connect the architecture. Keep a modest low circular armillary fountain in the lower-middle plaza with a clear walking ring around it, open foreground routes and low planting framing the bottom corners. Avoid a huge empty square. Two cool distant mountain silhouettes frame an open central horizon above a narrow far shore and calm water. Layered soft clouds, natural neutral late-afternoon daylight with gentle upper-left illumination, cool open shadows, small warm interiors ONLY; no sunset-orange pools painted into the pavement, no strong night floodlight or bloom. Human traces without people: a folded coat on a bench, a small watering can by planted soil, an unlettered notice case near the archive. Preserve 1–2-storey human-scale scientific architecture. Readable foreground/middle/distant planes, rich materials, purposeful asymmetry, clear entrance silhouettes. This is a COMPOSITION MASTER for later layered extraction, not a collage of sprites. Keep the top sky and bottom path visually calm enough for later live HUD, but draw no HUD.",
+        "wait_seconds": 0
+      },
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "include",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 512,
+        "requested_height": 288,
+        "pixel_perfect": true,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 512,
+            "height": 288,
+            "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517"
+          }
+        ]
+      },
+      "source": "candidates/provider/master-01.png"
+    },
+    {
+      "id": "P0-archive-ground-01",
+      "job_id": "62d13560-c3b2-421d-98ee-1dbb174113fa",
+      "asset_id": "6a1fc7d5-3644-421a-8fe8-566fc4e240f7",
+      "credits_used": 9,
+      "status": "succeeded",
+      "request": {
+        "model": "gpt-image-2",
+        "quality": "medium",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 512,
+        "height": 288,
+        "aspect_ratio": "16:9",
+        "bg_mode": "include",
+        "smart_crop": false,
+        "variations": 1,
+        "edit_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "prompt": "Create a clean background plate for the EXACT same station scene. Change ONLY the small archive building just to the right of the central armillary fountain: the low warm-brown timber-and-stone open-front archive with the large blank brown fascia, bookshelves and blue globe, approximately inside x=57%..74%, y=45%..72% of the image. Remove that archive facade, its wooden roof/fascia, bookshelves, desk and globe, and reconstruct the neutral underlying stone terrace and simple rear retaining wall where they were hidden. This is the same place with the archive structure temporarily absent. PRESERVE the existing stone front porch and shallow stairs below the archive as part of the ground connection; preserve the adjacent narrow cream-stone pier and notice case to its right, and preserve the ivy on that pier. Keep the courtyard path, fountain, central steps, surrounding plant beds, front walls, sky, mountains, water, all other buildings, camera, perspective, colors, daylight, pixel scale, crop and framing exactly unchanged. Do not move the building to another place. Do not replace it with another building, garden, new stairs, new objects, extra plants or a doorway. No people, text, numbers, interface or labels. Do not restyle, recolor, relight, sharpen or blur the whole scene. This edit is a technical local ground-under-archive plate; exact surrounding landmarks and pixel alignment matter more than new detail.",
+        "wait_seconds": 0
+      },
+      "resolved_parameters": {
+        "model": "gpt-image-2",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "include",
+        "resolution": "1K",
+        "provider_image_size": "2K",
+        "quality": "medium",
+        "requested_width": 512,
+        "requested_height": 288,
+        "pixel_perfect": true,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 512,
+            "height": 288,
+            "asset_id": "6a1fc7d5-3644-421a-8fe8-566fc4e240f7"
+          }
+        ]
+      },
+      "source": "candidates/provider/archive-ground-01.png",
+      "model_change_reason": "NB2.1 requested 12 credits; remaining balance 10. GPT Image 2 medium was available at 9 credits. Controlled candidate edit; identical geometry is not assumed and must be checked."
+    }
+  ],
+  "imports": [
+    {
+      "asset_id": "263903e3-72cd-46b8-9ebd-3d9b859c5901",
+      "source": "candidates/layers/archive-facade.png",
+      "credits_used": 0,
+      "source_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "operation": "import_exact_scene_cutout",
+      "status": "saved_to_project_collection"
+    },
+    {
+      "asset_id": "95c5f156-18d1-46ca-af6f-ce13914b0d37",
+      "source": "candidates/layers/archive-porch-steps.png",
+      "credits_used": 0,
+      "source_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "operation": "import_exact_scene_cutout",
+      "status": "saved_to_project_collection"
+    },
+    {
+      "asset_id": "43aa4334-7cae-4b3c-a255-cd92586dd88e",
+      "source": "candidates/layers/archive-entry-lamp.png",
+      "credits_used": 0,
+      "source_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "operation": "import_exact_scene_cutout",
+      "status": "saved_to_project_collection"
+    }
+  ]
+}

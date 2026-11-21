@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { api, ApiError, cancelPendingLogin, getSessionToken, setSessionToken, type SessionUser } from './api';
+import { api, ApiError, cancelPendingLogin, getSessionToken, setSessionToken, SESSION_EXPIRED_EVENT, type SessionUser } from './api';
 import { GAME_MARK, GAME_TITLE } from './brand';
 import { AdminLoginScreen, AdminScreen, LoginScreen, SetCodeModal } from './features/identity/IdentityScreens';
 import { PixelIcon, PixelCard } from './features/ui';
@@ -13,14 +13,16 @@ import { HelpScreen } from './features/help/HelpScreen';
 import { ReadingRoomScreen } from './features/library/ReadingRoomScreen';
 import { Settings } from './features/settings/Settings';
 import { AtmosphereProvider } from './features/atmosphere/AtmosphereProvider';
-import { SCREEN_TITLES, safeReturnPath, screenSurface } from './appNavigation';
+import { SCREEN_TITLES, archiveReturnPath, characterReturnPath, safeReturnPath, screenSurface } from './appNavigation';
 
 const HubScreen = lazy(() => import('./features/hub/HubScreen').then((module) => ({ default: module.HubScreen })));
 const AvatarEditor = lazy(() => import('./features/avatar/AvatarEditor').then((module) => ({ default: module.AvatarEditor })));
 const LibraryScreen = lazy(() => import('./features/library/LibraryScreen').then((module) => ({ default: module.LibraryScreen })));
+const R08PreviewScreen = lazy(() => import('./features/art/R08PreviewScreen').then((module) => ({ default: module.R08PreviewScreen })));
 const Codebook = lazy(() => import('./features/codebook/Codebook').then((module) => ({ default: module.Codebook })));
 const BlitzWorkspace = lazy(() => import('./features/shift/BlitzWorkspace').then((module) => ({ default: module.BlitzWorkspace })));
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
+const LevelOneScreen = lazy(() => import('./features/levelOne/LevelOneScreen').then((module) => ({ default: module.LevelOneScreen })));
 
 function currentLocation(): string { return window.location.pathname + window.location.search; }
 function navigate(path: string, replace = false): void {
@@ -60,7 +62,7 @@ export function App() {
   const [sessionNotice, setSessionNotice] = useState('');
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [setCodeModalOpen, setSetCodeModalOpen] = useState(false);
-  const [pendingDestination, setPendingDestination] = useState<'/shift' | '/blitz' | null>(null);
+  const [pendingDestination, setPendingDestination] = useState<'/shift' | '/blitz' | '/level-one' | null>(null);
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [exitNotice, setExitNotice] = useState('');
@@ -68,6 +70,11 @@ export function App() {
   const bootAbort = useRef<AbortController | null>(null);
 
   useEffect(() => {
+    const onExpiredSession = () => {
+      setUser(null);
+      setSetCodeModalOpen(false);
+      setSessionNotice('Сеанс завершён. Войдите снова, чтобы продолжить сохранённую работу.');
+    };
     const onPopState = () => {
       cancelPendingLogin();
       setLocation(currentLocation());
@@ -77,7 +84,8 @@ export function App() {
       if (!exitInFlight.current) setExitDialogOpen(false);
     };
     window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpiredSession);
+    return () => { window.removeEventListener('popstate', onPopState); window.removeEventListener(SESSION_EXPIRED_EVENT, onExpiredSession); };
   }, []);
 
   useEffect(() => {
@@ -113,6 +121,12 @@ export function App() {
     if (user) navigate('/blitz');
     else { setPendingDestination('/blitz'); setLoginModalOpen(true); }
   }
+  function startLevelOne() {
+    if (booting) return;
+    if (user) navigate('/level-one');
+    else { setPendingDestination('/level-one'); setLoginModalOpen(true); }
+  }
+  function openLevelCharacter() { navigate('/profile/avatar?section=appearance&returnTo=/level-one'); }
   function closeLogin() { cancelPendingLogin(); setLoginModalOpen(false); setPendingDestination(null); }
   function finishLogin(profile: SessionUser) {
     setUser(profile); setSessionNotice(''); setLoginModalOpen(false);
@@ -151,7 +165,8 @@ export function App() {
   let screen: ReactNode;
   if (path === '/arena-tv') screen = <ArenaTvPlaceholder />;
   else if (path === '/library') screen = <LibraryScreen onBack={returnFromPage} initialQuery={new URLSearchParams(location.split('?')[1] ?? '').get('q') ?? ''} />;
-  else if (path === '/archive') screen = <ReadingRoomScreen onBack={() => navigate('/')} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} />;
+  else if (path === '/archive') screen = <ReadingRoomScreen onBack={() => navigate(archiveReturnPath(location.split('?')[1] ?? ''))} onOpenLibrary={() => navigate('/library')} onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} />;
+  else if (path === '/art/r08') screen = <R08PreviewScreen onBack={() => navigate('/')} onVisitArchive={() => navigate('/archive?returnTo=/art/r08')} />;
   else if (path === '/codebook') screen = <Codebook isOpen onClose={returnFromPage} />;
   else if (path === '/help') screen = <HelpScreen onBack={returnFromPage} onOpenLibrary={() => navigate('/library')} onOpenSettings={() => navigate('/settings')} onOpenCampus={() => navigate('/')} onStartShift={startShift} />;
   else if (path === '/settings') screen = <Settings onClose={returnFromPage} />;
@@ -163,17 +178,25 @@ export function App() {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : user?.roles.includes('admin')
       ? <AdminScreen currentUser={user} onBack={() => navigate('/')} />
       : <AdminLoginScreen currentUser={user} onLogin={(adminUser) => { setUser(adminUser); navigate('/admin', true); }} onBack={() => navigate('/')} />;
-  } else if (path === '/profile/avatar' || path === '/shift' || path === '/blitz') {
+  } else if (path === '/profile/avatar' || path === '/shift' || path === '/blitz' || path === '/level-one') {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : !user
-      ? <LoginScreen onLogin={(profile) => { setUser(profile); setSessionNotice(''); }} onClose={() => navigate('/')} />
+      ? <LoginScreen onLogin={(profile) => { setUser(profile); setSessionNotice(''); }} onClose={() => navigate('/')} sessionNotice={sessionNotice} />
       : path === '/profile/avatar'
-        ? <AvatarEditor key={user.id} user={user} onSaved={acceptUpdatedProfile} onBack={() => navigate('/')} initialSection={new URLSearchParams(window.location.search).get('section') === 'badges' ? 'badges' : 'inventory'} />
+        ? <AvatarEditor key={user.id} user={user} onSaved={acceptUpdatedProfile}
+            onBack={() => navigate(characterReturnPath(location.split('?')[1] ?? ''))}
+            backLabel={characterReturnPath(location.split('?')[1] ?? '') === '/level-one' ? 'К уровню' : 'На станцию'}
+            onContinueToLevel={startLevelOne}
+            initialSection={new URLSearchParams(location.split('?')[1] ?? '').get('section') === 'badges' ? 'badges' : new URLSearchParams(location.split('?')[1] ?? '').get('section') === 'appearance' ? 'appearance' : undefined} />
+        : path === '/level-one'
+          ? user.roles.includes('display')
+            ? <main className="station-page"><PixelCard variant="dialog"><h1>Профиль большого экрана</h1><p>Для первого уровня нужен учебный профиль. Этот сеанс предназначен для трансляции.</p><button type="button" className="station-back" onClick={() => navigate('/arena-tv')}>Открыть большой экран</button><button type="button" className="station-back" onClick={requestExit}>Выйти из профиля</button></PixelCard></main>
+            : <LevelOneScreen key={user.id} user={user} onExit={() => navigate('/')} onOpenCharacter={openLevelCharacter} onStartPractice={startShift} />
         : path === '/blitz'
           ? <BlitzWorkspace key={user.id} user={user} onExit={() => navigate('/')} onStartPractice={() => navigate('/shift')} />
           : <SeamlessShiftFlow key={user.id} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} />;
   } else if (path === '/' || path === '/campus') screen = <HubScreen
     user={user} onLoginClick={() => setLoginModalOpen(true)} onLogout={requestExit}
-    onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift} onStartBlitz={startBlitz}
+    onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift} onStartBlitz={startBlitz} onStartLevelOne={startLevelOne}
     onOpenAvatar={() => navigate('/profile/avatar')} onOpenAdmin={() => navigate('/admin')}
     onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
@@ -182,7 +205,7 @@ export function App() {
   />;
   else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь на станцию: там доступны занятия, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>На станцию</button></section></main>;
 
-  const focusKey = ['/shift', '/blitz', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
+  const focusKey = ['/shift', '/blitz', '/level-one', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
   const stationWorld = path === '/' || path === '/campus';
   const routeContent = <><RouteHeadingFocus key={focusKey} />{screen}</>;
   return <AtmosphereProvider surface={exiting ? 'silent' : screenSurface(path)}>

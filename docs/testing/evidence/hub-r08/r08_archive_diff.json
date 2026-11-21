@@ -1,0 +1,233 @@
+{
+  "base": "master-01.png",
+  "candidate": "archive-ground-01.png",
+  "comparison_space": "512x288 RGB, exact integer coordinates, no alignment or color normalization",
+  "threshold_note": "8 and16 are diagnostic per-pixel maximum-channel absolute differences, not art acceptance thresholds",
+  "proposed_archive_roi": [
+    286,
+    136,
+    369,
+    222
+  ],
+  "roi_note": "Reviewer-selected analytical rectangles; not a provider edit mask",
+  "canonical_equals_raw_nearest": true,
+  "whole": {
+    "pixels": 147456,
+    "changed_exact": 147227,
+    "changed_exact_pct": 99.845,
+    "delta_max_ge8_pct": 55.419,
+    "delta_max_ge16_pct": 32.249,
+    "mean_abs_rgb": 12.2022,
+    "p95_max_abs_channel": 55.0
+  },
+  "outside_archive_proposed": {
+    "pixels": 140318,
+    "changed_exact": 140089,
+    "changed_exact_pct": 99.837,
+    "delta_max_ge8_pct": 53.513,
+    "delta_max_ge16_pct": 29.815,
+    "mean_abs_rgb": 10.7069,
+    "p95_max_abs_channel": 45.0
+  },
+  "regions": {
+    "archive_edit_proposed": {
+      "rect": [
+        286,
+        136,
+        369,
+        222
+      ],
+      "pixels": 7138,
+      "changed_exact": 7138,
+      "changed_exact_pct": 100.0,
+      "delta_max_ge8_pct": 92.897,
+      "delta_max_ge16_pct": 80.092,
+      "mean_abs_rgb": 41.5964,
+      "p95_max_abs_channel": 112.0
+    },
+    "radar": {
+      "rect": [
+        46,
+        15,
+        145,
+        118
+      ],
+      "pixels": 10197,
+      "changed_exact": 10181,
+      "changed_exact_pct": 99.843,
+      "delta_max_ge8_pct": 62.744,
+      "delta_max_ge16_pct": 37.413,
+      "mean_abs_rgb": 13.3698,
+      "p95_max_abs_channel": 52.0
+    },
+    "cartography": {
+      "rect": [
+        0,
+        114,
+        173,
+        215
+      ],
+      "pixels": 17473,
+      "changed_exact": 17467,
+      "changed_exact_pct": 99.966,
+      "delta_max_ge8_pct": 66.754,
+      "delta_max_ge16_pct": 38.826,
+      "mean_abs_rgb": 13.1725,
+      "p95_max_abs_channel": 50.0
+    },
+    "central": {
+      "rect": [
+        164,
+        72,
+        294,
+        177
+      ],
+      "pixels": 13650,
+      "changed_exact": 13642,
+      "changed_exact_pct": 99.941,
+      "delta_max_ge8_pct": 71.905,
+      "delta_max_ge16_pct": 43.692,
+      "mean_abs_rgb": 14.2354,
+      "p95_max_abs_channel": 52.0
+    },
+    "aerology": {
+      "rect": [
+        326,
+        72,
+        402,
+        141
+      ],
+      "pixels": 5244,
+      "changed_exact": 5244,
+      "changed_exact_pct": 100.0,
+      "delta_max_ge8_pct": 73.818,
+      "delta_max_ge16_pct": 42.105,
+      "mean_abs_rgb": 14.1526,
+      "p95_max_abs_channel": 52.0
+    },
+    "hall": {
+      "rect": [
+        395,
+        130,
+        492,
+        220
+      ],
+      "pixels": 8730,
+      "changed_exact": 8726,
+      "changed_exact_pct": 99.954,
+      "delta_max_ge8_pct": 70.802,
+      "delta_max_ge16_pct": 37.789,
+      "mean_abs_rgb": 12.2579,
+      "p95_max_abs_channel": 46.0
+    },
+    "fountain": {
+      "rect": [
+        186,
+        175,
+        286,
+        227
+      ],
+      "pixels": 5200,
+      "changed_exact": 5198,
+      "changed_exact_pct": 99.962,
+      "delta_max_ge8_pct": 82.154,
+      "delta_max_ge16_pct": 54.712,
+      "mean_abs_rgb": 18.8991,
+      "p95_max_abs_channel": 69.0
+    },
+    "horizon": {
+      "rect": [
+        145,
+        0,
+        512,
+        72
+      ],
+      "pixels": 26424,
+      "changed_exact": 26314,
+      "changed_exact_pct": 99.584,
+      "delta_max_ge8_pct": 9.348,
+      "delta_max_ge16_pct": 2.558,
+      "mean_abs_rgb": 3.0451,
+      "p95_max_abs_channel": 10.0
+    },
+    "foreground": {
+      "rect": [
+        0,
+        229,
+        512,
+        288
+      ],
+      "pixels": 30208,
+      "changed_exact": 30153,
+      "changed_exact_pct": 99.818,
+      "delta_max_ge8_pct": 59.63,
+      "delta_max_ge16_pct": 31.72,
+      "mean_abs_rgb": 11.0616,
+      "p95_max_abs_channel": 45.0
+    }
+  },
+  "prompt_box_note": "Approximate prose instruction x57..74%,y45..72%; no provider mask. Porch/steps and notice wall/ivy were explicitly to remain.",
+  "additional_regions": {
+    "prompt_box_approx": {
+      "rect": [
+        292,
+        130,
+        379,
+        207
+      ],
+      "pixels": 6699,
+      "changed_exact_pct": 100.0,
+      "delta_max_ge8_pct": 93.163,
+      "delta_max_ge16_pct": 81.221,
+      "mean_abs_rgb": 42.9033
+    },
+    "archive_facade_analytic": {
+      "rect": [
+        293,
+        141,
+        366,
+        207
+      ],
+      "pixels": 4818,
+      "changed_exact_pct": 100.0,
+      "delta_max_ge8_pct": 97.323,
+      "delta_max_ge16_pct": 91.843,
+      "mean_abs_rgb": 52.8706
+    },
+    "preserve_archive_steps_analytic": {
+      "rect": [
+        291,
+        207,
+        367,
+        221
+      ],
+      "pixels": 1064,
+      "changed_exact_pct": 100.0,
+      "delta_max_ge8_pct": 80.075,
+      "delta_max_ge16_pct": 48.496,
+      "mean_abs_rgb": 15.3659
+    },
+    "preserve_notice_wall_analytic": {
+      "rect": [
+        368,
+        152,
+        396,
+        208
+      ],
+      "pixels": 1568,
+      "changed_exact_pct": 100.0,
+      "delta_max_ge8_pct": 74.043,
+      "delta_max_ge16_pct": 46.11,
+      "mean_abs_rgb": 15.2334
+    }
+  },
+  "outside_prompt_box": {
+    "pixels": 140757,
+    "changed_exact": 140528,
+    "changed_exact_pct": 99.837,
+    "delta_max_ge8_pct": 53.623,
+    "delta_max_ge16_pct": 29.918,
+    "mean_abs_rgb": 10.741
+  },
+  "interpretation": "Pixel difference establishes failure of pixel-exact preservation; it does not imply equivalent semantic/layout drift and may include sampling/compression differences."
+}

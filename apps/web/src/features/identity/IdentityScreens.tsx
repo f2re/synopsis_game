@@ -24,10 +24,12 @@ export function LoginScreen({
   onLogin,
   onClose,
   isModal = false,
+  sessionNotice,
 }: {
   onLogin: (user: SessionUser) => void;
   onClose?: () => void;
   isModal?: boolean;
+  sessionNotice?: string;
 }) {
   const fieldId = useId();
   const [groups, setGroups] = useState<string[]>([]);
@@ -136,6 +138,7 @@ export function LoginScreen({
       <span className="prototype-kicker">26063 · Вход пользователя</span>
       <h1 id="login-title">Вход в систему</h1>
       <p className="muted">Выберите свою учебную группу и имя, затем введите код входа.</p>
+      {sessionNotice && <p className="form-note" role="status">{sessionNotice}</p>}
 
       <form className="form-stack" onSubmit={submit} aria-busy={loading || rosterLoading || submitting}>
         <div className="login-field">

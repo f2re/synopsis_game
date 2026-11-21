@@ -942,6 +942,126 @@
       "asset_id": "8f1b0e81-45a0-43a2-94f0-c27ed3d566e0",
       "sha12": "bdbe18c11e9a",
       "label": "26063 · companion.tit · R02 wardrobe icon from canonical fauna"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+      "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "sha12": "d8510e537afd",
+      "label": "26063 · R08 · цельная площадь · мастер 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.png",
+      "asset_id": "6a1fc7d5-3644-421a-8fe8-566fc4e240f7",
+      "sha12": "a9fdffa28cad",
+      "label": "26063 · R08 · подложка под архив · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/layers/archive-facade.png",
+      "asset_id": "263903e3-72cd-46b8-9ebd-3d9b859c5901",
+      "sha12": "b355d6bf9ab5",
+      "label": "26063 · R08 · архив — фасад · слой сцены"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/layers/archive-porch-steps.png",
+      "asset_id": "95c5f156-18d1-46ca-af6f-ce13914b0d37",
+      "sha12": "c2779d193a73",
+      "label": "26063 · R08 · архив — порог и ступени · слой сцены"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/layers/archive-entry-lamp.png",
+      "asset_id": "43aa4334-7cae-4b3c-a255-cd92586dd88e",
+      "sha12": "bb785af4fc0f",
+      "label": "26063 · R08 · архив — входной фонарь · слой сцены"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/day-material-02.png",
+      "asset_id": "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665",
+      "sha12": "a65bb3c9c25f",
+      "label": "26063 · R08 · дневные материалы · этюд 02"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.png",
+      "asset_id": "126639d1-a367-4399-b2ad-527b6895f2bd",
+      "sha12": "df8396871adb",
+      "label": "26063 · R08 · вечерний свет · этюд 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.png",
+      "asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "sha12": "fc94f1e3c537",
+      "label": "26063 · R08 · растительность и посадка · лист 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.png",
+      "asset_id": "64c75a38-e8ca-4880-8172-b4f2bc25e8a8",
+      "sha12": "364b99c27723",
+      "label": "26063 · R08 · стыки земли и основания · лист 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.png",
+      "asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "sha12": "3afc2a12b898",
+      "label": "26063 · R08 · органичные стыки земли · лист 02"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/young-pine.png",
+      "asset_id": "9c69323d-c321-4384-96d1-71faf78c1b33",
+      "sha12": "a76eb1e6a78e",
+      "label": "26063 · R08 · Молодая сосна · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/upright-shrub.png",
+      "asset_id": "065ac3c8-74ee-4ebb-b9eb-c4422a6be956",
+      "sha12": "389bac38067d",
+      "label": "26063 · R08 · Вертикальный куст · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/low-shrub.png",
+      "asset_id": "e00770b8-8887-471c-a2b4-bbbb68a8380d",
+      "sha12": "62a8a46dc3f2",
+      "label": "26063 · R08 · Низкий куст · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/birch-sapling.png",
+      "asset_id": "2556bd3e-2d9b-4ca4-81b6-2c1c4bb1aefe",
+      "sha12": "9e80683c6db8",
+      "label": "26063 · R08 · Берёза · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/wall-ivy.png",
+      "asset_id": "181fc6ae-ae04-490f-9c1a-c7aa3ba24ce2",
+      "sha12": "605bd271c67a",
+      "label": "26063 · R08 · Плющ на стенке · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/fern-clump.png",
+      "asset_id": "f8f36544-721c-4927-a5e8-faf849f795c6",
+      "sha12": "7273a3b62901",
+      "label": "26063 · R08 · Папоротник · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/sedge-stone-edge.png",
+      "asset_id": "c6979f61-0fee-45ef-9708-b553a7febd36",
+      "sha12": "565b33cdb24d",
+      "label": "26063 · R08 · Осока у камня · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/mossy-stone-corner.png",
+      "asset_id": "276e368b-080e-4894-b391-a5e5fcee8f0d",
+      "sha12": "85683e89d205",
+      "label": "26063 · R08 · Каменный угол с мхом · кандидат 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/slices/vegetation/flower-bed.png",
+      "asset_id": "0e4977ee-c752-4a13-a9e5-0f74f461d4d0",
+      "sha12": "1b45cd825020",
+      "label": "26063 · R08 · Цветник · кандидат 01"
+    },
+    {
+      "asset_id": "9f045602-903c-4601-85ab-0b6e26575996",
+      "sha12": "492b983cf4e2",
+      "label": "26063 · R08 · земля, камни и листья · проба стыка",
+      "id": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png"
     }
   ]
 }

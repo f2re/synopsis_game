@@ -1,0 +1,82 @@
+.level-one-shell { min-height: 100dvh; background: #0c2a33; padding-bottom: 32px; }
+.level-one-topbar, .level-one-desk { width: min(700px, calc(100% - 48px)); margin-left: auto; margin-right: 24px; box-sizing: border-box; }
+.level-one-topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 18px; border: 2px solid var(--ui-panel-border); border-top: 0; background: #102f36f5; }
+.level-one-topbar > div { min-width: 0; }
+.level-one-topbar strong { display: block; font-size: 21px; }
+.level-one-desk { margin-top: 28px; display: grid; gap: 14px; }
+.level-one-observer { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #102f36f5; border: 2px solid var(--ui-panel-border); }
+.level-one-observer > span { display: grid; gap: 2px; min-width: 0; }
+.level-one-observer small, .level-one-small { color: #b7cac6; font-size: 14px; line-height: 1.5; }
+.level-one-observer .level-one-saved { margin-left: auto; color: #e6c07a; font-size: 14px; text-align: right; }
+.level-one-notice { margin: 0; padding: 8px 12px; background: #102f36ed; color: #d2ded7; font-size: 14px; }
+.level-one-card { position: relative; min-width: 0; padding: 24px; border: 4px solid #6b4935; background: #102e35f7; box-shadow: inset 0 0 0 2px #54716b, 0 5px #102529; }
+.level-one-card h1 { margin: 14px 0 20px; font: 28px/1.3 var(--font-pixel-ui); color: #f4efdd; }
+.level-one-card h2 { font: 21px/1.4 var(--font-pixel-ui); margin: 0 0 10px; }
+.level-one-card p { line-height: 1.5; }
+.level-one-eyebrow { color: #e6c07a; font-size: 14px; }
+.level-one-rules { display: flex; flex-wrap: wrap; gap: 10px 18px; padding: 12px 0; color: #d0ded6; }
+.level-one-rules > span { display: inline-flex; align-items: center; gap: 6px; }
+.level-one-text-button { min-height: 44px; padding: 8px 10px; border: 2px solid transparent; color: #e8c989; background: transparent; font: 16px/1.4 var(--font-pixel-ui); cursor: pointer; }
+.level-one-text-button:hover:not(:disabled) { border-color: #8b7956; color: #ffe5a5; background: #1e4144; }
+.level-one-text-button:active:not(:disabled) { background: #173335; box-shadow: var(--ui-control-pressed); }
+.level-one-text-button:disabled { color: #9bada9; cursor: default; }
+.level-one-shell :is(button, input, summary):focus-visible { outline: 2px solid #ffe5a5; outline-offset: 3px; }
+.level-one-welcome > .level-one-text-button { width: 100%; margin-top: 8px; }
+.level-one-task-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-bottom: 16px; font-size: 14px; color: #b7cac6; }
+.level-one-task .shift-options { margin: 18px 0; }
+.level-one-task .shift-options button { min-height: 52px; }
+.level-one-task .shift-options button:active:not(:disabled) { background: #37514a; box-shadow: var(--ui-control-pressed); }
+.level-one-number { display: grid; gap: 8px; margin-top: 20px; }
+.level-one-number > div { display: flex; align-items: center; background: #f3ecd8; border: 2px solid #76948c; color: #16373c; }
+.level-one-number input { min-width: 0; width: 100%; min-height: 54px; padding: 8px 12px; color: #16373c; background: transparent; border: 0; font: 24px/1.3 var(--font-pixel-ui); }
+.level-one-number > div > span { padding: 0 12px; }
+.level-one-number .level-one-sign { flex: 0 0 48px; align-self: stretch; min-width: 48px; min-height: 48px; color: #183c3c; background: #dfd4b4; border: 0; border-right: 2px solid #76948c; font-size: 24px; cursor: pointer; }
+.level-one-number .level-one-sign:hover:not(:disabled) { background: #eddfa9; }
+.level-one-number .level-one-sign:active:not(:disabled) { background: #c9bc91; }
+.level-one-number :disabled { opacity: .65; cursor: default; }
+.level-one-number p, .level-one-help p { margin: 0; color: #b7cac6; font-size: 14px; }
+.level-one-help { margin-top: 12px; }
+.level-one-help .level-one-text-button { padding-left: 0; }
+.level-one-sources { margin-top: 10px; }
+.level-one-sources > summary { min-height: 44px; padding: 10px 4px; color: #e6c07a; cursor: pointer; }
+.level-one-sources > summary:hover { color: #ffe5a5; }
+.level-one-stamp { display: inline-block; padding: 6px 10px; margin-bottom: 12px; color: #bfd7b7; border: 2px solid #78957b; font: 14px/1.4 var(--font-pixel-mono); }
+.level-one-result > .level-one-eyebrow { display: block; }
+.level-one-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }
+.level-one-stats > div { padding: 12px; background: #173d42; border-top: 2px solid #668a7d; }
+.level-one-stats dt { color: #becfc8; font-size: 14px; }
+.level-one-stats dd { margin: 8px 0 0; color: #f1d38c; font-size: 25px; }
+.level-one-actions { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin-top: 16px; }
+.level-one-actions > button { flex: 1 1 180px; margin: 0; }
+.level-one-actions > .shift-primary { flex-basis: 100%; }
+.level-one-journal { min-width: 0; padding: 18px; background: #102f36f5; border: 2px solid var(--ui-panel-border); }
+.level-one-journal > h2 { margin: 0; font-size: 20px; }
+.level-one-journal > p { color: #b7cac6; font-size: 14px; }
+.level-one-journal > details { border-top: 1px solid #426369; }
+.level-one-journal > details > summary { display: flex; gap: 12px; align-items: center; justify-content: space-between; min-height: 48px; padding: 12px 0; cursor: pointer; }
+.level-one-journal summary b { flex-shrink: 0; color: #d8c28d; font-size: 14px; }
+.level-one-journal summary:hover { color: #ffe5a5; }
+.level-one-journal > details > p { color: #d2ded7; }
+.level-one-note { grid-column: auto; }
+@media (min-width: 1200px) { .level-one-desk { margin-top: 52px; } }
+@media (max-width: 780px) {
+  .level-one-topbar, .level-one-desk { width: calc(100% - 24px); margin-left: 12px; margin-right: 12px; }
+  .level-one-topbar { padding: 10px 12px; }
+  .level-one-desk { margin-top: 28px; }
+  .level-one-card { padding: 18px 14px; }
+  .level-one-card h1 { font-size: 24px; }
+  .level-one-observer { flex-wrap: wrap; }
+  .level-one-stats { gap: 6px; }
+  .level-one-stats > div { padding: 10px 6px; }
+  .level-one-stats dt { font-size: 13px; }
+  .level-one-journal { padding: 14px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .level-one-desk, .level-one-topbar { width: min(640px, calc(100% - 80px)); margin-left: auto; margin-right: 16px; }
+  .level-one-desk { margin-top: 16px; }
+}
+@media (forced-colors: active) {
+  .level-one-card, .level-one-topbar, .level-one-observer, .level-one-journal, .level-one-stats > div { color: CanvasText; background: Canvas; border-color: CanvasText; }
+  .level-one-number > div, .level-one-number .level-one-sign { background: Field; color: FieldText; }
+  .level-one-text-button, .level-one-stamp { color: ButtonText; border-color: ButtonText; }
+}

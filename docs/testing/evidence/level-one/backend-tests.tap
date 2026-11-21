@@ -1,0 +1,263 @@
+TAP version 13
+# Subtest: ownership is server-only; locked badges and unknown IDs fail; all non-practice modes have zero effects
+ok 1 - ownership is server-only; locked badges and unknown IDs fail; all non-practice modes have zero effects
+  ---
+  duration_ms: 5.482704
+  type: 'test'
+  ...
+# Subtest: concurrent starts resume one active shift and keep the saved starting loadout snapshot
+ok 2 - concurrent starts resume one active shift and keep the saved starting loadout snapshot
+  ---
+  duration_ms: 68.297175
+  type: 'test'
+  ...
+# Subtest: reference consumes once under race, persists on restart and excludes the task from independent achievement
+ok 3 - reference consumes once under race, persists on restart and excludes the task from independent achievement
+  ---
+  duration_ms: 38.868059
+  type: 'test'
+  ...
+# Subtest: retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score
+ok 4 - retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score
+  ---
+  duration_ms: 22.682558
+  type: 'test'
+  ...
+# Subtest: reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback
+ok 5 - reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback
+  ---
+  duration_ms: 76.506234
+  type: 'test'
+  ...
+# Subtest: completion and earned badges commit together; result/answer replay and restart never grant twice
+ok 6 - completion and earned badges commit together; result/answer replay and restart never grant twice
+  ---
+  duration_ms: 98.482656
+  type: 'test'
+  ...
+# Subtest: regularity counts distinct server UTC dates and does not require consecutive days
+ok 7 - regularity counts distinct server UTC dates and does not require consecutive days
+  ---
+  duration_ms: 291.514353
+  type: 'test'
+  ...
+# Subtest: a failed completion write preserves the current task and rewards; next write and replay recover safely
+ok 8 - a failed completion write preserves the current task and rewards; next write and replay recover safely
+  ---
+  duration_ms: 33.115527
+  type: 'test'
+  ...
+# Subtest: real atomic rename failure rolls back memory; malformed existing store fails closed
+ok 9 - real atomic rename failure rolls back memory; malformed existing store fails closed
+  ---
+  duration_ms: 6.849203
+  type: 'test'
+  ...
+# Копия журнала попыток временно недоступна; запись сохранена в хранилище смен.
+# Subtest: audit-file outage does not lose a committed answer; restart reconstructs its audit projection once
+ok 10 - audit-file outage does not lose a committed answer; restart reconstructs its audit projection once
+  ---
+  duration_ms: 30.968092
+  type: 'test'
+  ...
+# Subtest: corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file
+ok 11 - corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file
+  ---
+  duration_ms: 41.674321
+  type: 'test'
+  ...
+# Subtest: блиц открывается по завершению настоящей учебной смены; черновой пакет и правила обозначены
+ok 12 - блиц открывается по завершению настоящей учебной смены; черновой пакет и правила обозначены
+  ---
+  duration_ms: 142.098143
+  type: 'test'
+  ...
+# Subtest: параллельные старты дают один раунд, один срок и неизменный полный комплект
+ok 13 - параллельные старты дают один раунд, один срок и неизменный полный комплект
+  ---
+  duration_ms: 120.704722
+  type: 'test'
+  ...
+# Subtest: повтор и конкурирующая отправка ответа фиксируются ровно один раз; другой ответ и чужой аккаунт отклонены
+ok 14 - повтор и конкурирующая отправка ответа фиксируются ровно один раз; другой ответ и чужой аккаунт отклонены
+  ---
+  duration_ms: 74.027524
+  type: 'test'
+  ...
+# Subtest: граница 90 секунд принадлежит серверу; поздний ответ не учитывается, повтор принятого ответа не меняет итог
+ok 15 - граница 90 секунд принадлежит серверу; поздний ответ не учитывается, повтор принятого ответа не меняет итог
+  ---
+  duration_ms: 67.058339
+  type: 'test'
+  ...
+# Subtest: перезапуск восстанавливает ответы и снимок одежды без добавления времени; закрытая вкладка не ставит паузу
+ok 16 - перезапуск восстанавливает ответы и снимок одежды без добавления времени; закрытая вкладка не ставит паузу
+  ---
+  duration_ms: 112.557407
+  type: 'test'
+  ...
+# Subtest: обычная смена и блиц принимают тот же сохранённый PNG; новые вещи не меняют начатые раунды и не требуют atlas
+ok 17 - обычная смена и блиц принимают тот же сохранённый PNG; новые вещи не меняют начатые раунды и не требуют atlas
+  ---
+  duration_ms: 89.412394
+  type: 'test'
+  ...
+# Subtest: legacy-блиц мигрирует по историческому полному профилю; обычная старая смена не получает выдуманный портрет
+ok 18 - legacy-блиц мигрирует по историческому полному профилю; обычная старая смена не получает выдуманный портрет
+  ---
+  duration_ms: 79.581921
+  type: 'test'
+  ...
+# Subtest: restart rejects a corrupted or substituted cached answer portrait; absent legacy copies reuse the historical PNG
+ok 19 - restart rejects a corrupted or substituted cached answer portrait; absent legacy copies reuse the historical PNG
+  ---
+  duration_ms: 79.508465
+  type: 'test'
+  ...
+# Subtest: шесть исходных заданий завершают блиц без наград, справки, повторов и обхода через API смены
+ok 20 - шесть исходных заданий завершают блиц без наград, справки, повторов и обхода через API смены
+  ---
+  duration_ms: 110.35315
+  type: 'test'
+  ...
+# Subtest: ошибка записи не создаёт фантомный раунд и не принимает недолговечный ответ
+ok 21 - ошибка записи не создаёт фантомный раунд и не принимает недолговечный ответ
+  ---
+  duration_ms: 34.245807
+  type: 'test'
+  ...
+# Subtest: повреждённый сохранённый таймер не восстанавливается молча
+ok 22 - повреждённый сохранённый таймер не восстанавливается молча
+  ---
+  duration_ms: 51.283806
+  type: 'test'
+  ...
+# Subtest: лобби первого уровня ничего не создаёт; выдача содержит только текущую задачу без эталонов
+ok 23 - лобби первого уровня ничего не создаёт; выдача содержит только текущую задачу без эталонов
+  ---
+  duration_ms: 56.38908
+  type: 'test'
+  ...
+# Subtest: конкурентный старт и возвращение сохраняют одну попытку и первоначальный портрет
+ok 24 - конкурентный старт и возвращение сохраняют одну попытку и первоначальный портрет
+  ---
+  duration_ms: 33.912828
+  type: 'test'
+  ...
+# Subtest: справка бесплатна для каждого задания, сохраняется и честно отмечает помощь
+ok 25 - справка бесплатна для каждого задания, сохраняется и честно отмечает помощь
+  ---
+  duration_ms: 100.923724
+  type: 'test'
+  ...
+# Subtest: завершение сохраняет разбор, но не даёт награды обычной смены и не открывает блиц
+ok 26 - завершение сохраняет разбор, но не даёт награды обычной смены и не открывает блиц
+  ---
+  duration_ms: 49.202051
+  type: 'test'
+  ...
+# Subtest: неверный ответ имеет сохранённый разбор; повтор доставки не пишет попытку дважды
+ok 27 - неверный ответ имеет сохранённый разбор; повтор доставки не пишет попытку дважды
+  ---
+  duration_ms: 16.013582
+  type: 'test'
+  ...
+# Subtest: перезапуск сервиса восстанавливает уровень, текущую справку и ответ после потери связи
+ok 28 - перезапуск сервиса восстанавливает уровень, текущую справку и ответ после потери связи
+  ---
+  duration_ms: 25.451912
+  type: 'test'
+  ...
+# Subtest: пользователь и режим изолированы; некорректный ввод не расходует задание
+ok 29 - пользователь и режим изолированы; некорректный ввод не расходует задание
+  ---
+  duration_ms: 19.610625
+  type: 'test'
+  ...
+# Subtest: повреждённый разбор или случайная награда первого уровня не принимаются при восстановлении
+ok 30 - повреждённый разбор или случайная награда первого уровня не принимаются при восстановлении
+  ---
+  duration_ms: 29.190471
+  type: 'test'
+  ...
+# Subtest: пакет без методического допуска не запускает первый уровень
+ok 31 - пакет без методического допуска не запускает первый уровень
+  ---
+  duration_ms: 38.015441
+  type: 'test'
+  ...
+# Subtest: пустое или нечисловое значение не превращается в проверенный ноль
+ok 32 - пустое или нечисловое значение не превращается в проверенный ноль
+  ---
+  duration_ms: 24.536005
+  type: 'test'
+  ...
+# Subtest: сбой сохранения не создаёт прохождение и не принимает последний ответ; повтор восстанавливает запись
+ok 33 - сбой сохранения не создаёт прохождение и не принимает последний ответ; повтор восстанавливает запись
+  ---
+  duration_ms: 31.721917
+  type: 'test'
+  ...
+# Subtest: сессия экрана не получает доступ к данным и операциям первого уровня
+ok 34 - сессия экрана не получает доступ к данным и операциям первого уровня
+  ---
+  duration_ms: 2.035954
+  type: 'test'
+  ...
+# Subtest: разрешённые игровые роли сохраняют собственную идентичность для проверки владения
+ok 35 - разрешённые игровые роли сохраняют собственную идентичность для проверки владения
+  ---
+  duration_ms: 0.595765
+  type: 'test'
+  ...
+# Subtest: первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал
+ok 36 - первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал
+  ---
+  duration_ms: 74.581087
+  type: 'test'
+  ...
+# Subtest: задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте
+ok 37 - задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте
+  ---
+  duration_ms: 25.243626
+  type: 'test'
+  ...
+# Subtest: stationPlot переводит к планшону на три станции
+ok 38 - stationPlot переводит к планшону на три станции
+  ---
+  duration_ms: 24.490475
+  type: 'test'
+  ...
+# Subtest: трёхстанционный планшон переводит к плотному планшону
+ok 39 - трёхстанционный планшон переводит к плотному планшону
+  ---
+  duration_ms: 24.740275
+  type: 'test'
+  ...
+# Subtest: плотный планшон ведёт к физическому контролю
+ok 40 - плотный планшон ведёт к физическому контролю
+  ---
+  duration_ms: 30.498636
+  type: 'test'
+  ...
+# Subtest: findError не раскрывает station_id и после ответа ведёт к конструктору анализа
+ok 41 - findError не раскрывает station_id и после ответа ведёт к конструктору анализа
+  ---
+  duration_ms: 22.86291
+  type: 'test'
+  ...
+# Subtest: dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок
+ok 42 - dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок
+  ---
+  duration_ms: 30.405196
+  type: 'test'
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1114.641974
