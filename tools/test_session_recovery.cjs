@@ -11,22 +11,41 @@ const client = load('apps/web/src/api.ts', {}, {
   window: { dispatchEvent: event => { events.push({ type: event.type, tokenAfterDispatch: client.getSessionToken() }); return true; } },
   fetch: (...args) => respond(...args),
 });
-const failure = status => ({ ok: false, status, json: async () => ({ error: status === 401 ? 'Сессия истекла' : 'Недостаточно прав', code: status === 401 ? 'session_expired' : 'forbidden' }) });
+const failure = (status, code = status === 401 ? 'invalid_session' : 'forbidden', error = status === 401 ? 'Сессия недействительна или истекла' : 'Недостаточно прав') => ({ ok: false, status, json: async () => ({ error, code }) });
 
 (async () => {
-  client.setSessionToken('current-test-session');
-  respond = async () => failure(401);
-  await assert.rejects(client.api.levelOneLobby(), error => error.status === 401);
-  assert.equal(client.getSessionToken(), null);
-  assert.equal(events.length, 1);
-  assert.equal(events[0].type, client.SESSION_EXPIRED_EVENT);
-  assert.equal(events[0].tokenAfterDispatch, null, 'Token is removed before notifying the app');
+  for (const code of ['invalid_session', 'session_required']) {
+    const count = events.length;
+    client.setSessionToken(`current-test-session-${code}`);
+    respond = async () => failure(401, code);
+    await assert.rejects(client.api.levelOneLobby(), error => error.status === 401 && error.code === code);
+    assert.equal(client.getSessionToken(), null);
+    assert.equal(events.length, count + 1);
+    assert.equal(events.at(-1).type, client.SESSION_EXPIRED_EVENT);
+    assert.equal(events.at(-1).tokenAfterDispatch, null, 'Token is removed before notifying the app');
+  }
+  const expiryEventCount = events.length;
 
   client.setSessionToken('preserved-test-session');
   respond = async () => failure(403);
   await assert.rejects(client.api.levelOneLobby(), error => error.status === 403);
   assert.equal(client.getSessionToken(), 'preserved-test-session');
-  assert.equal(events.length, 1, 'A permission denial does not expire the session');
+  assert.equal(events.length, expiryEventCount, 'A permission denial does not expire the session');
+
+  respond = async (path, init) => {
+    assert.equal(path, '/api/identity/set-code');
+    assert.equal(init.method, 'POST');
+    assert.equal(init.headers.get('authorization'), 'Bearer preserved-test-session');
+    return failure(401, 'invalid_code', 'Неверный текущий код');
+  };
+  await assert.rejects(client.api.setCode('newTest123', 'wrongCode'), error => error.status === 401 && error.code === 'invalid_code' && error.message === 'Неверный текущий код');
+  assert.equal(client.getSessionToken(), 'preserved-test-session', 'Wrong current code does not revoke a valid authenticated session');
+  assert.equal(events.length, expiryEventCount, 'The code dialog keeps its owning session and can show the operation error');
+
+  respond = async () => failure(401, '', 'Не удалось выполнить запрос');
+  await assert.rejects(client.api.levelOneLobby(), error => error.status === 401);
+  assert.equal(client.getSessionToken(), 'preserved-test-session', 'An unclassified 401 is not evidence that the session was rejected');
+  assert.equal(events.length, expiryEventCount);
 
   const late = deferred();
   respond = (path, init) => {
@@ -39,15 +58,18 @@ const failure = status => ({ ok: false, status, json: async () => ({ error: stat
   late.resolve(failure(401));
   await assert.rejects(pending, error => error.status === 401);
   assert.equal(client.getSessionToken(), 'new-test-session');
-  assert.equal(events.length, 1, 'A late rejection from the old account leaves the new session alone');
+  assert.equal(events.length, expiryEventCount, 'A late rejection from the old account leaves the new session alone');
 
-  respond = async () => failure(401);
+  respond = async () => failure(401, 'invalid_code', 'Неверный код входа');
   await assert.rejects(client.api.login('test-account', 'wrong-test-code'), error => error.status === 401);
   assert.equal(client.getSessionToken(), 'new-test-session');
-  assert.equal(events.length, 1, 'A rejected login is not a rejected authenticated request');
+  assert.equal(events.length, expiryEventCount, 'A rejected login is not a rejected authenticated request');
+  await assert.rejects(client.api.adminLogin('wrong-admin-code'), error => error.status === 401);
+  assert.equal(client.getSessionToken(), 'new-test-session');
+  assert.equal(events.length, expiryEventCount, 'A rejected admin login does not revoke an unrelated session');
 
   client.setSessionToken(null);
   await assert.rejects(client.api.levelOneLobby(), error => error.code === 'session_required');
-  assert.equal(events.length, 1, 'Missing-token checks do not fabricate expiry events');
-  console.log(JSON.stringify({ status: 'PASS', checks: 5, scope: 'Real api.ts: current 401, permission 403, stale-account 401, rejected login, missing token. No browser.' }));
+  assert.equal(events.length, expiryEventCount, 'Missing-token checks do not fabricate expiry events');
+  console.log(JSON.stringify({ status: 'PASS', checks: 9, scope: 'Real api.ts: both actual session error codes, invalid current code, unclassified 401, permission 403, stale-account 401, rejected user/admin logins, missing token. No browser.' }));
 })().catch(error => { console.error(error); process.exitCode = 1; });

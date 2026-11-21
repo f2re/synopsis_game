@@ -104,7 +104,10 @@ export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice 
   const complete = session?.status === 'completed' && !checked;
   const task = checked?.task ?? session?.task ?? null;
   useLayoutEffect(() => {
-    if (!checked) heading.current?.focus({ preventScroll: true });
+    if (!checked) {
+      heading.current?.focus();
+      if (complete) heading.current?.scrollIntoView({ block: 'start' });
+    }
   }, [task?.instanceId, complete, Boolean(lobby)]);
   useLayoutEffect(() => {
     if (checked) { feedbackHeading.current?.focus({ preventScroll: true }); feedbackHeading.current?.scrollIntoView({ block: 'nearest' }); }

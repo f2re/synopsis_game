@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/playability_review",
+  "reviewed_at_utc": "2026-11-21T19:05:50.815887+00:00",
+  "scope": "Prepared browser regressions and existing in-process lifecycle after the two UI fixes found in the second CI screenshots.",
+  "local_base_commit": "c16b8c3c3a4478bb1b77832a6f5be6046072eb5a",
+  "working_tree_hashes_are_not_remote_ci_evidence": true,
+  "last_remote_ci_head": "a4aeb89d257fddbb1ef0be4361c4b46c61d62c85",
+  "statuses": {
+    "browser_script_syntax": "PASS",
+    "real_handlers_and_services_in_process": "PASS",
+    "new_browser_geometry_and_visual_verification": "PENDING_AUTOMATIC_GITHUB_CI",
+    "whole_browser_workflow": "PREVIOUS_RUN_FAIL",
+    "art_and_release_acceptance": "NOT_CLAIMED"
+  },
+  "product_changes_reviewed": [
+    {
+      "file": "apps/web/src/features/levelOne/levelOne.css",
+      "change": "Visible numeric unit has flex: 0 0 auto and white-space: nowrap."
+    },
+    {
+      "file": "apps/web/src/features/levelOne/LevelOneScreen.tsx",
+      "change": "Normal heading focus; completed result heading scrollIntoView({ block: 'start' })."
+    }
+  ],
+  "prepared_regressions": [
+    {
+      "case": "numericGeometry.unit in level-one-playable-{width}",
+      "assertions": [
+        "Actual visible suffix textContent is exactly °C.",
+        "A Range over the suffix contents returns exactly one nonzero text rectangle.",
+        "Existing two numeric targets remain at least 44x44, center-hit reachable and without horizontal overflow."
+      ]
+    },
+    {
+      "case": "level-one-result-visible-{width}",
+      "assertions": [
+        "Before complete capture and without test focus or scrolling, h1 and dl.level-one-stats are fully inside the viewport.",
+        "Visible dd text equals ['5 / 6', '4', '1']."
+      ]
+    }
+  ],
+  "retained_requirements": [
+    "1366x768,390x844,844x390",
+    "Strict numeric accessible label",
+    "First desktop submit visibility before selection/test scroll",
+    "Character acknowledged save and immutable portrait",
+    "Six answers:5 correct,4 unassisted,1 assisted",
+    "Draft/resume/completed reload and explicit replay",
+    "Ordinary-shift reward isolation"
+  ],
+  "expected_level_one_cases_per_browser": 16,
+  "executed_checks": [
+    {
+      "command": "node --check tools/test_level_one_browser.cjs",
+      "status": "PASS",
+      "scope": "Syntax only"
+    },
+    {
+      "command": "env SYNOPSIS_LEVEL_ONE_EVIDENCE=docs/testing/evidence/level-one/addendum/ui-polish-lifecycle.json node tools/test_level_one_lifecycle.cjs",
+      "status": "PASS",
+      "groups": 10,
+      "reviewedAnswers": 6,
+      "correct": 5,
+      "unassistedCorrect": 4,
+      "assistedTasks": 1
+    }
+  ],
+  "evidence": {
+    "current_lifecycle": "ui-polish-lifecycle.json",
+    "historical_second_run": "second-pass-review.json",
+    "separate_security_followup": "session-code-review.json"
+  },
+  "sha256": {
+    "apps/web/src/features/levelOne/LevelOneScreen.tsx": "886c2c3610d78dad8009daad1d224770b9ac2f8435c81d5710c7df7e8eebdd44",
+    "apps/web/src/features/levelOne/levelOne.css": "02474e29d154084191cdd791aba2a0421098943a4ce2e47b00b4f28d6cbc4c89",
+    "tools/test_level_one_browser.cjs": "627b92c85f18b9bb002ac1b31e78b908bee366cc0ef503c4ca89ebde336615be",
+    "tools/test_level_one_lifecycle.cjs": "0ef05ad3979bb56ed15f858c740afd6a3aeea70adb80b0dddcdbe156a4e0513c",
+    "apps/web/src/api.ts": "38e62759f9d0ac3a8e930fb172b0aa9d1bd6be52646769b6640b030dccd2586d"
+  },
+  "limits": [
+    "No browser, HTTP listener or CI was started locally or manually.",
+    "In-process hook harness does not validate focus, scroll, DOM geometry, text wrapping or image composition.",
+    "New geometry assertions await the next automatic GitHub Actions run.",
+    "Historical first- and second-pass evidence retain their original remote heads and outcomes.",
+    "API/session changes and their tests belong to the parent and Security reviewer; this reviewer did not edit them."
+  ]
+}

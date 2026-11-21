@@ -31,14 +31,28 @@ async function inspectNumericControls(page) {
       return { width: box.width, height: box.height,
         hit: control.contains(document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2)) };
     });
+    const suffix = node.querySelector(':scope > div > span[aria-hidden="true"]');
+    let unit = null;
+    if (suffix) {
+      const range = document.createRange();
+      range.selectNodeContents(suffix);
+      const style = getComputedStyle(suffix);
+      unit = { text: suffix.textContent, visible: style.visibility === 'visible' && style.display !== 'none',
+        textRects: [...range.getClientRects()].map(box => ({ left: box.left, top: box.top,
+          right: box.right, bottom: box.bottom, width: box.width, height: box.height })) };
+    }
     const viewport = document.querySelector('.app-page-viewport');
-    return { controls, noHorizontalPageOverflow: viewport.scrollWidth <= viewport.clientWidth + 1 };
+    return { controls, unit, noHorizontalPageOverflow: viewport.scrollWidth <= viewport.clientWidth + 1 };
   });
   assert.ok(measured.noHorizontalPageOverflow, 'The answer creates no horizontal page overflow');
   assert.equal(measured.controls.length, 2);
   for (const control of measured.controls) {
     assert.ok(control.width >= 44 && control.height >= 44 && control.hit, 'Real numeric targets are reachable and at least 44 px');
   }
+  assert.equal(measured.unit?.text, '°C', 'The visible numeric suffix is exactly degrees Celsius');
+  assert.equal(measured.unit.textRects.length, 1, `The Celsius suffix stays on one text line: ${JSON.stringify(measured.unit)}`);
+  assert.ok(measured.unit.visible && measured.unit.textRects[0].width > 0 && measured.unit.textRects[0].height > 0,
+    'The one-line Celsius suffix is visibly rendered');
   return measured;
 }
 
@@ -148,6 +162,25 @@ async function runLevelOneChecks({ base, browser, report, capture, fixture }) {
       }
       await page.getByRole('heading', { name: 'Первый уровень завершён', exact: true }).waitFor();
       assert.equal(run.progress.correct, 5); assert.equal(run.unassistedCorrect, 4); assert.equal(run.assistedTasks, 1);
+      // The application must expose the result itself; no test scroll or focus
+      // may conceal the retained-scroll problem observed in the previous CI.
+      const resultGeometry = await page.locator('.level-one-result').evaluate(node => {
+        const measure = selector => {
+          const element = node.querySelector(selector);
+          if (!element) return null;
+          const box = element.getBoundingClientRect(), style = getComputedStyle(element);
+          return { left: box.left, top: box.top, right: box.right, bottom: box.bottom,
+            width: box.width, height: box.height,
+            fullyInsideViewport: box.width > 0 && box.height > 0 && style.visibility === 'visible' && style.display !== 'none'
+              && box.left >= 0 && box.top >= 0 && box.right <= innerWidth && box.bottom <= innerHeight };
+        };
+        return { viewport: [innerWidth, innerHeight], heading: measure('h1'), stats: measure('dl.level-one-stats'),
+          values: [...node.querySelectorAll('dl.level-one-stats dd')].map(value => value.textContent.trim()) };
+      });
+      assert.ok(resultGeometry.heading?.fullyInsideViewport, `The result heading is fully visible without test scrolling: ${JSON.stringify(resultGeometry)}`);
+      assert.ok(resultGeometry.stats?.fullyInsideViewport, `All result statistics are fully visible without test scrolling: ${JSON.stringify(resultGeometry)}`);
+      assert.deepEqual(resultGeometry.values, ['5 / 6', '4', '1'], 'The visible result matches the six reviewed answers');
+      report.cases.push({ name: `level-one-result-visible-${viewport.width}`, ...resultGeometry });
       await capture(page, `level-one-complete-${viewport.width}`);
       await page.reload();
       await page.getByRole('heading', { name: 'Первый уровень завершён', exact: true }).waitFor();

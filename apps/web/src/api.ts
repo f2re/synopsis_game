@@ -327,8 +327,10 @@ async function request<T>(path: string, init: RequestInit = {}, authenticated = 
   const response = await fetch(path, { ...init, headers });
   const payload = await response.json().catch(() => ({})) as Record<string, unknown>;
   if (!response.ok) {
+    // A wrong current code also uses 401, but does not invalidate its session.
+    const sessionRejected = payload.code === 'invalid_session' || payload.code === 'session_required';
     // A late reply from an old account must never close a newer session.
-    if (response.status === 401 && requestToken && getSessionToken() === requestToken) {
+    if (response.status === 401 && sessionRejected && requestToken && getSessionToken() === requestToken) {
       setSessionToken(null);
       if (typeof window !== 'undefined') window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
     }
