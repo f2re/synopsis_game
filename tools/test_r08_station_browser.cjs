@@ -159,8 +159,9 @@ async function checkR08Station({ base, browser, report, capture, waitForCampus }
       }
       await page.locator('[data-building-id="archive"]').press('Enter');
       await page.getByRole('button', { name: 'Посетить читальный зал' }).click();
-      await page.waitForURL('**/archive');
-      await page.goBack();
+      await page.waitForURL(url => url.pathname === '/archive');
+      await page.getByRole('button', { name: /На площадь/ }).click();
+      await page.waitForURL(url => url.pathname === '/' && url.searchParams.get('stationArt') === 'r08');
       await waitForCampus(page);
       assert.equal(await page.locator('canvas').count(), 1);
       assert.equal(await buttons.count(), 6);
