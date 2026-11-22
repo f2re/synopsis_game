@@ -108,6 +108,7 @@ jobs:
         run: xvfb-run -a node ../candidate/tools/test_station_environment_browser.cjs
       - name: Проверить фазы, дождь и входы после изменения размера
         env:
+          STATION_ENV_R09: '1'
           STATION_PLAYWRIGHT_MODULES: /tmp/station-environment-browser/node_modules
           STATION_BROWSER_HEADED: 'true'
           STATION_BROWSER: ${{ matrix.browser }}

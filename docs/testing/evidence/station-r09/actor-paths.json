@@ -1,0 +1,69 @@
+{
+  "task": "STATION-R09-ACTORS",
+  "agent": "/root/station_actor_paths",
+  "date": "2026-11-22",
+  "baseLocalCommit": "5590ff7ce26a122ea97eeca30a4400970b4aff36",
+  "status": "IMPLEMENTED_BEHAVIOUR_CHECKS_PASS",
+  "independentArtAcceptance": "PENDING",
+  "browserRun": false,
+  "httpServerRun": false,
+  "sourceFiles": {
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": "d9a631d776ec7a3fccfe92cca74d06a40b117f336e72c1dfb66b879bb0a767f8",
+    "packages/world-engine/src/scenes/hub/r09ActorLayout.ts": "eee3d9c27c9357aaa90413e8bfe1425dfbb034c6eed9ec3d9fc550211a4635ba",
+    "tools/test_world_characters.cjs": "9237d6340ade6b5265dd55daec5817fa86d4711ddaa66afe81b7daf92f6d141d"
+  },
+  "checks": [
+    {
+      "command": [
+        "node",
+        "tools/test_world_characters.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: NPC cadence, pivot, reduced motion, low-power sampling, portrait placement, complete published station staff, bounded online crowd, seated actors, conversational turns, closed routes, fauna and loader/layer cleanup. R09: constant native placement, source-pack preservation, bounded paved routes, resize continuity, ground contact, presence limits and cleanup.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "apps/web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--strict",
+        "--skipLibCheck",
+        "--target",
+        "ES2022",
+        "--module",
+        "ESNext",
+        "--moduleResolution",
+        "Bundler",
+        "--allowImportingTsExtensions",
+        "--resolveJsonModule",
+        "--esModuleInterop",
+        "--baseUrl",
+        "apps/web/node_modules/.pnpm/phaser@4.2.1/node_modules",
+        "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts",
+        "packages/world-engine/src/scenes/hub/r09ActorLayout.ts",
+        "tools/test_world_characters.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "limits": [
+    "Scene objects are doubled in the handler test; no DOM or GPU was tested.",
+    "Phaser sources were checked against the installed local Phaser4.2.1 types; full web package refresh and integration build remain separate.",
+    "Real browser art, spatial occlusion and performance require independent acceptance."
+  ]
+}

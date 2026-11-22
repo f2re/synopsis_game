@@ -1,0 +1,139 @@
+{
+  "reviewer": "/root/station_pixel_review",
+  "role": "pixel-art-quality-reviewer",
+  "date": "2026-11-22",
+  "verdict": "PASS_SOURCE",
+  "scope": "Actual source PNGs, layer extraction, donor exposure, source-space water/light/occlusion masks, rooted one-pixel foliage deformation, fixed-y cloud drift source contract. Not actual browser acceptance.",
+  "manifestFileSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+  "sourceSpecFileSha256": "19baa8da7ce4afb99ef2c0423916159247d531b78ed8f722eb1f948342193366",
+  "sourceCanvas": [
+    512,
+    288
+  ],
+  "findings": [
+    {
+      "id": "R09-PX-CLOUD-01",
+      "status": "CLOSED",
+      "resolution": "One whole 31x6/61-pixel cloud island plus unchanged same-row native blank-sky patch; no clear-blue sky rectangle or scene silhouettes."
+    },
+    {
+      "id": "R09-PX-WATER-01",
+      "status": "CLOSED",
+      "resolution": "729-pixel water domain excludes the fir and shore; all 5 reported non-water probe points now alpha0; manifest end-exclusive spans match PNG alpha exactly."
+    },
+    {
+      "id": "R09-PX-SKY-02",
+      "status": "CLOSED",
+      "resolution": "Separate fixed 2352-pixel six-row cloudClip excludes forest/tree tips/mast across full horizontal passage."
+    }
+  ],
+  "assetDigests": [
+    {
+      "id": "hub.r09.sky",
+      "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.water",
+      "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.architecture-ground",
+      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.foreground",
+      "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.clouds.east-wisp",
+      "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.window-light-mask",
+      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.lamp-light-mask",
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+      "sourceReview": "PASS"
+    },
+    {
+      "id": "hub.r09.ground-light-mask",
+      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+      "sourceReview": "PASS"
+    }
+  ],
+  "sourceReassembly": {
+    "restReassemblyDifferentPixels": 0,
+    "staticOutsideMovingMaskDifferentPixels": 0,
+    "movingSelectionOverlapPixels": 0,
+    "staticPlaneUnownedPixels": 0,
+    "staticPlaneMultiplyOwnedPixels": 0
+  },
+  "cloudContract": {
+    "assetId": "hub.r09.clouds.east-wisp",
+    "sourceBounds": [
+      354,
+      39,
+      31,
+      6
+    ],
+    "motion": {
+      "kind": "continuous-east-drift-v1",
+      "constantSourceY": 39,
+      "speedSourcePixelsPerSecond": 0.55,
+      "integerX": true,
+      "wrapOnlyWhenFullyOffscreen": true
+    },
+    "clipPixels": 2352,
+    "independentIntegerSourceXPoses": 544,
+    "negativeControlsAllExcluded": true
+  },
+  "fountainGlintContract": "pixel-review-fountain-glints.json",
+  "validators": {
+    "validate_repo": "PASS",
+    "validate_architecture": "PASS",
+    "validate_brand": "PASS",
+    "check_asset_contract": "PASS with existing unrelated missing-source warnings",
+    "check_asset_manifests": "PASS (55 manifests)",
+    "validate_fonts": "PASS",
+    "test_hub_r09": "PASS (20 tests)",
+    "build_hub_r09_check": "PASS",
+    "independent_pixel_review_check": "PASS_NUMERICAL_ONLY"
+  },
+  "actualBrowserFramesReviewed": false,
+  "nextReview": "Art Director and runtime reviewer with actual automatic-CI images and motion evidence",
+  "productionAcceptance": false,
+  "report": "pixel-review.md"
+}

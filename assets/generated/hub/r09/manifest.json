@@ -1,0 +1,3016 @@
+{
+  "id": "hub.r09-station",
+  "schema": "synopsis-station-r09-runtime/v1",
+  "version": 1,
+  "status": "candidate",
+  "review": {
+    "status": "candidate",
+    "pixelArt": "PASS-source-geometry; actual-game-frames-pending",
+    "artDirection": "pending-independent-review",
+    "runtime": "pending-browser-review",
+    "productionReady": false,
+    "cloudMotionReady": true,
+    "cloudMotion": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
+    "sourceReviewer": "/root/station_pixel_review",
+    "sourceReviewReport": "docs/testing/evidence/station-r09/pixel-review.md",
+    "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json"
+  },
+  "sourceCanvas": [
+    512,
+    288
+  ],
+  "worldCanvas": [
+    512,
+    288
+  ],
+  "sourceScale": 1,
+  "assets": [
+    {
+      "id": "hub.r09.sky",
+      "role": "sky",
+      "key": "hub_r09_sky",
+      "url": "/hub/r09/sky.png",
+      "width": 512,
+      "height": 76,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        512,
+        76
+      ],
+      "pivotLocalPx": [
+        256.0,
+        76
+      ],
+      "anchorScenePx": [
+        256.0,
+        76
+      ],
+      "depthSourceY": 0,
+      "alphaPolicy": "binary",
+      "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
+      "bytes": 35625,
+      "sourcePixelsExact": false
+    },
+    {
+      "id": "hub.r09.water",
+      "role": "water",
+      "key": "hub_r09_water",
+      "url": "/hub/r09/water.png",
+      "width": 206,
+      "height": 56,
+      "originalSceneXY": [
+        306,
+        76
+      ],
+      "sourceBounds": [
+        306,
+        76,
+        206,
+        56
+      ],
+      "pivotLocalPx": [
+        103.0,
+        56
+      ],
+      "anchorScenePx": [
+        409.0,
+        132
+      ],
+      "depthSourceY": 1,
+      "alphaPolicy": "binary",
+      "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
+      "bytes": 2070,
+      "sourcePixelsExact": false
+    },
+    {
+      "id": "hub.r09.architecture-ground",
+      "role": "architecture-ground",
+      "key": "hub_r09_architecture-ground",
+      "url": "/hub/r09/architecture-ground.png",
+      "width": 512,
+      "height": 278,
+      "originalSceneXY": [
+        0,
+        10
+      ],
+      "sourceBounds": [
+        0,
+        10,
+        512,
+        278
+      ],
+      "pivotLocalPx": [
+        256.0,
+        278
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 2,
+      "alphaPolicy": "binary",
+      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
+      "bytes": 251757,
+      "sourcePixelsExact": false
+    },
+    {
+      "id": "hub.r09.foreground",
+      "role": "foreground-occluder",
+      "key": "hub_r09_foreground",
+      "url": "/hub/r09/foreground.png",
+      "width": 512,
+      "height": 79,
+      "originalSceneXY": [
+        0,
+        209
+      ],
+      "sourceBounds": [
+        0,
+        209,
+        512,
+        79
+      ],
+      "pivotLocalPx": [
+        256.0,
+        79
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 260,
+      "alphaPolicy": "binary",
+      "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc",
+      "bytes": 46463,
+      "sourcePixelsExact": false
+    },
+    {
+      "id": "hub.r09.clouds.east-wisp",
+      "role": "clouds",
+      "key": "hub_r09_clouds_east-wisp",
+      "url": "/hub/r09/clouds-east-wisp.png",
+      "width": 31,
+      "height": 6,
+      "originalSceneXY": [
+        354,
+        39
+      ],
+      "sourceBounds": [
+        354,
+        39,
+        31,
+        6
+      ],
+      "pivotLocalPx": [
+        15.5,
+        6
+      ],
+      "anchorScenePx": [
+        369.5,
+        45
+      ],
+      "depthSourceY": 1,
+      "alphaPolicy": "binary",
+      "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+      "bytes": 290,
+      "sourcePixelsExact": true,
+      "motionReady": true,
+      "motionReview": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
+      "motion": {
+        "kind": "continuous-east-drift-v1",
+        "constantSourceY": 39,
+        "speedSourcePixelsPerSecond": 0.55,
+        "integerX": true,
+        "wrapOnlyWhenFullyOffscreen": true
+      },
+      "clipDomain": "cloudClip"
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_central-topiary",
+      "url": "/hub/r09/foliage-central-topiary.png",
+      "width": 16,
+      "height": 15,
+      "originalSceneXY": [
+        220,
+        232
+      ],
+      "sourceBounds": [
+        220,
+        232,
+        16,
+        15
+      ],
+      "pivotLocalPx": [
+        8.0,
+        15
+      ],
+      "anchorScenePx": [
+        228.0,
+        247
+      ],
+      "depthSourceY": 250,
+      "alphaPolicy": "binary",
+      "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6",
+      "bytes": 736,
+      "kind": "shrub",
+      "rootFraction": 0.24,
+      "gain": 1.5,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 169,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_left-front-shrub",
+      "url": "/hub/r09/foliage-left-front-shrub.png",
+      "width": 15,
+      "height": 14,
+      "originalSceneXY": [
+        125,
+        222
+      ],
+      "sourceBounds": [
+        125,
+        222,
+        15,
+        14
+      ],
+      "pivotLocalPx": [
+        7.5,
+        14
+      ],
+      "anchorScenePx": [
+        132.5,
+        236
+      ],
+      "depthSourceY": 240,
+      "alphaPolicy": "binary",
+      "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16",
+      "bytes": 660,
+      "kind": "shrub",
+      "rootFraction": 0.28,
+      "gain": 1.5,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 145,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_left-planter-topiary",
+      "url": "/hub/r09/foliage-left-planter-topiary.png",
+      "width": 15,
+      "height": 15,
+      "originalSceneXY": [
+        263,
+        230
+      ],
+      "sourceBounds": [
+        263,
+        230,
+        15,
+        15
+      ],
+      "pivotLocalPx": [
+        7.5,
+        15
+      ],
+      "anchorScenePx": [
+        270.5,
+        245
+      ],
+      "depthSourceY": 250,
+      "alphaPolicy": "binary",
+      "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65",
+      "bytes": 720,
+      "kind": "shrub",
+      "rootFraction": 0.24,
+      "gain": 1.4,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 168,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_right-planter-topiary",
+      "url": "/hub/r09/foliage-right-planter-topiary.png",
+      "width": 15,
+      "height": 15,
+      "originalSceneXY": [
+        295,
+        228
+      ],
+      "sourceBounds": [
+        295,
+        228,
+        15,
+        15
+      ],
+      "pivotLocalPx": [
+        7.5,
+        15
+      ],
+      "anchorScenePx": [
+        302.5,
+        243
+      ],
+      "depthSourceY": 249,
+      "alphaPolicy": "binary",
+      "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94",
+      "bytes": 684,
+      "kind": "shrub",
+      "rootFraction": 0.24,
+      "gain": 1.4,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 153,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_foreground-right",
+      "url": "/hub/r09/foliage-foreground-right.png",
+      "width": 67,
+      "height": 28,
+      "originalSceneXY": [
+        430,
+        260
+      ],
+      "sourceBounds": [
+        430,
+        260,
+        67,
+        28
+      ],
+      "pivotLocalPx": [
+        33.5,
+        28
+      ],
+      "anchorScenePx": [
+        463.5,
+        288
+      ],
+      "depthSourceY": 289,
+      "alphaPolicy": "binary",
+      "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c",
+      "bytes": 4061,
+      "kind": "grass",
+      "rootFraction": 0.42,
+      "gain": 1.2,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 1559,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.window-light-mask",
+      "role": "window-light-mask",
+      "key": "hub_r09_window-light-mask",
+      "url": "/hub/r09/window-light-mask.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        512,
+        288
+      ],
+      "pivotLocalPx": [
+        256.0,
+        288
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 280,
+      "alphaPolicy": "binary",
+      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+      "bytes": 900,
+      "blendMode": "receiver-mask"
+    },
+    {
+      "id": "hub.r09.lamp-light-mask",
+      "role": "lamp-light-mask",
+      "key": "hub_r09_lamp-light-mask",
+      "url": "/hub/r09/lamp-light-mask.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        512,
+        288
+      ],
+      "pivotLocalPx": [
+        256.0,
+        288
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 280,
+      "alphaPolicy": "binary",
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+      "bytes": 708,
+      "blendMode": "receiver-mask"
+    },
+    {
+      "id": "hub.r09.ground-light-mask",
+      "role": "ground-light-mask",
+      "key": "hub_r09_ground-light-mask",
+      "url": "/hub/r09/ground-light-mask.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        512,
+        288
+      ],
+      "pivotLocalPx": [
+        256.0,
+        288
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 280,
+      "alphaPolicy": "binary",
+      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+      "bytes": 724,
+      "blendMode": "receiver-mask"
+    }
+  ],
+  "lightRegions": [
+    {
+      "id": "hub.r09.light.central-entry",
+      "role": "central-entry",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        217,
+        153,
+        24,
+        14
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.34,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.central-windows",
+      "role": "central-windows",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        204,
+        121,
+        59,
+        13
+      ],
+      "tint": "#EAA85E",
+      "suggestedAlpha": 0.23,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.archive-interior",
+      "role": "archive-interior",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        300,
+        170,
+        32,
+        31
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.29,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.cool-left-lab",
+      "role": "cool-left-lab",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        0,
+        128,
+        160,
+        47
+      ],
+      "tint": "#9FBEB3",
+      "suggestedAlpha": 0.12,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.cool-upper-lab",
+      "role": "cool-upper-lab",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        333,
+        103,
+        67,
+        31
+      ],
+      "tint": "#9FBEB3",
+      "suggestedAlpha": 0.1,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.hall",
+      "role": "hall",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        410,
+        176,
+        60,
+        16
+      ],
+      "tint": "#EAA85E",
+      "suggestedAlpha": 0.15,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.archive-lamp",
+      "role": "archive-lamp",
+      "maskRole": "lamp-light-mask",
+      "sourceBounds": [
+        290,
+        182,
+        7,
+        12
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.34,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.archive-stone",
+      "role": "archive-stone",
+      "maskRole": "ground-light-mask",
+      "sourceBounds": [
+        312,
+        207,
+        29,
+        13
+      ],
+      "tint": "#B98255",
+      "suggestedAlpha": 0.13,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    }
+  ],
+  "domains": {
+    "sky": {
+      "polygons": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            511,
+            0
+          ],
+          [
+            511,
+            63
+          ],
+          [
+            498,
+            62
+          ],
+          [
+            487,
+            59
+          ],
+          [
+            477,
+            55
+          ],
+          [
+            465,
+            52
+          ],
+          [
+            452,
+            50
+          ],
+          [
+            440,
+            45
+          ],
+          [
+            427,
+            44
+          ],
+          [
+            420,
+            50
+          ],
+          [
+            410,
+            57
+          ],
+          [
+            397,
+            58
+          ],
+          [
+            390,
+            63
+          ],
+          [
+            370,
+            68
+          ],
+          [
+            352,
+            70
+          ],
+          [
+            342,
+            70
+          ],
+          [
+            336,
+            72
+          ],
+          [
+            326,
+            74
+          ],
+          [
+            310,
+            75
+          ],
+          [
+            297,
+            74
+          ],
+          [
+            286,
+            70
+          ],
+          [
+            273,
+            69
+          ],
+          [
+            261,
+            65
+          ],
+          [
+            250,
+            62
+          ],
+          [
+            240,
+            58
+          ],
+          [
+            230,
+            59
+          ],
+          [
+            221,
+            61
+          ],
+          [
+            213,
+            60
+          ],
+          [
+            205,
+            64
+          ],
+          [
+            194,
+            60
+          ],
+          [
+            184,
+            59
+          ],
+          [
+            174,
+            61
+          ],
+          [
+            165,
+            56
+          ],
+          [
+            157,
+            55
+          ],
+          [
+            149,
+            57
+          ],
+          [
+            143,
+            54
+          ],
+          [
+            136,
+            57
+          ],
+          [
+            135,
+            29
+          ],
+          [
+            130,
+            23
+          ],
+          [
+            127,
+            28
+          ],
+          [
+            127,
+            51
+          ],
+          [
+            119,
+            48
+          ],
+          [
+            110,
+            45
+          ],
+          [
+            104,
+            40
+          ],
+          [
+            99,
+            29
+          ],
+          [
+            91,
+            23
+          ],
+          [
+            83,
+            21
+          ],
+          [
+            75,
+            22
+          ],
+          [
+            69,
+            25
+          ],
+          [
+            64,
+            30
+          ],
+          [
+            60,
+            37
+          ],
+          [
+            56,
+            43
+          ],
+          [
+            49,
+            38
+          ],
+          [
+            44,
+            34
+          ],
+          [
+            39,
+            28
+          ],
+          [
+            34,
+            23
+          ],
+          [
+            29,
+            19
+          ],
+          [
+            24,
+            12
+          ],
+          [
+            20,
+            9
+          ],
+          [
+            17,
+            14
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            8,
+            13
+          ],
+          [
+            4,
+            10
+          ],
+          [
+            0,
+            10
+          ]
+        ]
+      ],
+      "rowSpans": [
+        [
+          0,
+          0,
+          512
+        ],
+        [
+          1,
+          0,
+          512
+        ],
+        [
+          2,
+          0,
+          512
+        ],
+        [
+          3,
+          0,
+          512
+        ],
+        [
+          4,
+          0,
+          512
+        ],
+        [
+          5,
+          0,
+          512
+        ],
+        [
+          6,
+          0,
+          512
+        ],
+        [
+          7,
+          0,
+          512
+        ],
+        [
+          8,
+          0,
+          512
+        ],
+        [
+          9,
+          0,
+          512
+        ],
+        [
+          10,
+          0,
+          20
+        ],
+        [
+          10,
+          21,
+          512
+        ],
+        [
+          11,
+          5,
+          20
+        ],
+        [
+          11,
+          23,
+          512
+        ],
+        [
+          12,
+          7,
+          11
+        ],
+        [
+          12,
+          14,
+          19
+        ],
+        [
+          12,
+          24,
+          512
+        ],
+        [
+          13,
+          8,
+          9
+        ],
+        [
+          13,
+          15,
+          19
+        ],
+        [
+          13,
+          25,
+          512
+        ],
+        [
+          14,
+          17,
+          18
+        ],
+        [
+          14,
+          25,
+          512
+        ],
+        [
+          15,
+          26,
+          512
+        ],
+        [
+          16,
+          27,
+          512
+        ],
+        [
+          17,
+          28,
+          512
+        ],
+        [
+          18,
+          28,
+          512
+        ],
+        [
+          19,
+          29,
+          512
+        ],
+        [
+          20,
+          30,
+          512
+        ],
+        [
+          21,
+          32,
+          512
+        ],
+        [
+          22,
+          33,
+          76
+        ],
+        [
+          22,
+          87,
+          512
+        ],
+        [
+          23,
+          34,
+          74
+        ],
+        [
+          23,
+          91,
+          512
+        ],
+        [
+          24,
+          35,
+          72
+        ],
+        [
+          24,
+          92,
+          130
+        ],
+        [
+          24,
+          131,
+          512
+        ],
+        [
+          25,
+          36,
+          70
+        ],
+        [
+          25,
+          94,
+          130
+        ],
+        [
+          25,
+          132,
+          512
+        ],
+        [
+          26,
+          37,
+          69
+        ],
+        [
+          26,
+          95,
+          129
+        ],
+        [
+          26,
+          133,
+          512
+        ],
+        [
+          27,
+          38,
+          68
+        ],
+        [
+          27,
+          96,
+          129
+        ],
+        [
+          27,
+          133,
+          512
+        ],
+        [
+          28,
+          39,
+          67
+        ],
+        [
+          28,
+          98,
+          128
+        ],
+        [
+          28,
+          134,
+          512
+        ],
+        [
+          29,
+          40,
+          66
+        ],
+        [
+          29,
+          99,
+          128
+        ],
+        [
+          29,
+          135,
+          512
+        ],
+        [
+          30,
+          41,
+          65
+        ],
+        [
+          30,
+          99,
+          128
+        ],
+        [
+          30,
+          135,
+          512
+        ],
+        [
+          31,
+          42,
+          64
+        ],
+        [
+          31,
+          100,
+          128
+        ],
+        [
+          31,
+          135,
+          512
+        ],
+        [
+          32,
+          42,
+          64
+        ],
+        [
+          32,
+          100,
+          128
+        ],
+        [
+          32,
+          135,
+          512
+        ],
+        [
+          33,
+          43,
+          63
+        ],
+        [
+          33,
+          101,
+          128
+        ],
+        [
+          33,
+          135,
+          512
+        ],
+        [
+          34,
+          44,
+          63
+        ],
+        [
+          34,
+          101,
+          128
+        ],
+        [
+          34,
+          135,
+          512
+        ],
+        [
+          35,
+          45,
+          62
+        ],
+        [
+          35,
+          102,
+          128
+        ],
+        [
+          35,
+          135,
+          512
+        ],
+        [
+          36,
+          47,
+          62
+        ],
+        [
+          36,
+          102,
+          128
+        ],
+        [
+          36,
+          135,
+          512
+        ],
+        [
+          37,
+          48,
+          61
+        ],
+        [
+          37,
+          103,
+          128
+        ],
+        [
+          37,
+          135,
+          512
+        ],
+        [
+          38,
+          49,
+          60
+        ],
+        [
+          38,
+          103,
+          128
+        ],
+        [
+          38,
+          135,
+          512
+        ],
+        [
+          39,
+          50,
+          60
+        ],
+        [
+          39,
+          104,
+          128
+        ],
+        [
+          39,
+          135,
+          512
+        ],
+        [
+          40,
+          52,
+          59
+        ],
+        [
+          40,
+          104,
+          128
+        ],
+        [
+          40,
+          135,
+          512
+        ],
+        [
+          41,
+          53,
+          58
+        ],
+        [
+          41,
+          105,
+          128
+        ],
+        [
+          41,
+          135,
+          512
+        ],
+        [
+          42,
+          55,
+          58
+        ],
+        [
+          42,
+          106,
+          128
+        ],
+        [
+          42,
+          135,
+          512
+        ],
+        [
+          43,
+          56,
+          57
+        ],
+        [
+          43,
+          108,
+          128
+        ],
+        [
+          43,
+          136,
+          512
+        ],
+        [
+          44,
+          109,
+          128
+        ],
+        [
+          44,
+          136,
+          512
+        ],
+        [
+          45,
+          110,
+          128
+        ],
+        [
+          45,
+          136,
+          427
+        ],
+        [
+          45,
+          440,
+          512
+        ],
+        [
+          46,
+          113,
+          128
+        ],
+        [
+          46,
+          136,
+          426
+        ],
+        [
+          46,
+          442,
+          512
+        ],
+        [
+          47,
+          116,
+          128
+        ],
+        [
+          47,
+          136,
+          424
+        ],
+        [
+          47,
+          445,
+          512
+        ],
+        [
+          48,
+          119,
+          128
+        ],
+        [
+          48,
+          136,
+          423
+        ],
+        [
+          48,
+          447,
+          512
+        ],
+        [
+          49,
+          122,
+          128
+        ],
+        [
+          49,
+          136,
+          422
+        ],
+        [
+          49,
+          450,
+          512
+        ],
+        [
+          50,
+          124,
+          128
+        ],
+        [
+          50,
+          136,
+          421
+        ],
+        [
+          50,
+          452,
+          512
+        ],
+        [
+          51,
+          127,
+          128
+        ],
+        [
+          51,
+          136,
+          420
+        ],
+        [
+          51,
+          459,
+          512
+        ],
+        [
+          52,
+          136,
+          418
+        ],
+        [
+          52,
+          465,
+          512
+        ],
+        [
+          53,
+          136,
+          417
+        ],
+        [
+          53,
+          469,
+          512
+        ],
+        [
+          54,
+          136,
+          415
+        ],
+        [
+          54,
+          473,
+          512
+        ],
+        [
+          55,
+          136,
+          142
+        ],
+        [
+          55,
+          145,
+          414
+        ],
+        [
+          55,
+          477,
+          512
+        ],
+        [
+          56,
+          136,
+          139
+        ],
+        [
+          56,
+          147,
+          154
+        ],
+        [
+          56,
+          165,
+          412
+        ],
+        [
+          56,
+          480,
+          512
+        ],
+        [
+          57,
+          136,
+          137
+        ],
+        [
+          57,
+          149,
+          150
+        ],
+        [
+          57,
+          167,
+          411
+        ],
+        [
+          57,
+          482,
+          512
+        ],
+        [
+          58,
+          169,
+          398
+        ],
+        [
+          58,
+          485,
+          512
+        ],
+        [
+          59,
+          170,
+          231
+        ],
+        [
+          59,
+          243,
+          397
+        ],
+        [
+          59,
+          487,
+          512
+        ],
+        [
+          60,
+          172,
+          180
+        ],
+        [
+          60,
+          194,
+          226
+        ],
+        [
+          60,
+          245,
+          395
+        ],
+        [
+          60,
+          491,
+          512
+        ],
+        [
+          61,
+          174,
+          175
+        ],
+        [
+          61,
+          197,
+          212
+        ],
+        [
+          61,
+          221,
+          222
+        ],
+        [
+          61,
+          248,
+          394
+        ],
+        [
+          61,
+          494,
+          512
+        ],
+        [
+          62,
+          200,
+          210
+        ],
+        [
+          62,
+          250,
+          392
+        ],
+        [
+          62,
+          498,
+          512
+        ],
+        [
+          63,
+          202,
+          208
+        ],
+        [
+          63,
+          254,
+          391
+        ],
+        [
+          63,
+          511,
+          512
+        ],
+        [
+          64,
+          205,
+          206
+        ],
+        [
+          64,
+          257,
+          387
+        ],
+        [
+          65,
+          261,
+          383
+        ],
+        [
+          66,
+          264,
+          379
+        ],
+        [
+          67,
+          267,
+          375
+        ],
+        [
+          68,
+          270,
+          371
+        ],
+        [
+          69,
+          273,
+          362
+        ],
+        [
+          70,
+          286,
+          353
+        ],
+        [
+          71,
+          289,
+          340
+        ],
+        [
+          72,
+          292,
+          337
+        ],
+        [
+          73,
+          294,
+          332
+        ],
+        [
+          74,
+          297,
+          327
+        ],
+        [
+          75,
+          310,
+          311
+        ]
+      ],
+      "rowSpanConvention": "[sourceY, sourceXStart, sourceXEndExclusive]"
+    },
+    "water": {
+      "rowSegments": [
+        [
+          76,
+          [
+            [
+              317,
+              328
+            ]
+          ]
+        ],
+        [
+          77,
+          [
+            [
+              313,
+              317
+            ]
+          ]
+        ],
+        [
+          78,
+          [
+            [
+              312,
+              316
+            ]
+          ]
+        ],
+        [
+          79,
+          [
+            [
+              313,
+              318
+            ]
+          ]
+        ],
+        [
+          80,
+          [
+            [
+              313,
+              328
+            ]
+          ]
+        ],
+        [
+          81,
+          [
+            [
+              306,
+              310
+            ],
+            [
+              331,
+              331
+            ],
+            [
+              333,
+              335
+            ]
+          ]
+        ],
+        [
+          82,
+          [
+            [
+              306,
+              308
+            ]
+          ]
+        ],
+        [
+          84,
+          [
+            [
+              329,
+              331
+            ]
+          ]
+        ],
+        [
+          85,
+          [
+            [
+              330,
+              331
+            ]
+          ]
+        ],
+        [
+          86,
+          [
+            [
+              310,
+              323
+            ],
+            [
+              327,
+              332
+            ]
+          ]
+        ],
+        [
+          87,
+          [
+            [
+              330,
+              333
+            ]
+          ]
+        ],
+        [
+          96,
+          [
+            [
+              444,
+              453
+            ]
+          ]
+        ],
+        [
+          97,
+          [
+            [
+              444,
+              470
+            ]
+          ]
+        ],
+        [
+          98,
+          [
+            [
+              444,
+              486
+            ]
+          ]
+        ],
+        [
+          99,
+          [
+            [
+              444,
+              487
+            ]
+          ]
+        ],
+        [
+          100,
+          [
+            [
+              444,
+              484
+            ]
+          ]
+        ],
+        [
+          101,
+          [
+            [
+              444,
+              477
+            ]
+          ]
+        ],
+        [
+          102,
+          [
+            [
+              444,
+              474
+            ]
+          ]
+        ],
+        [
+          103,
+          [
+            [
+              445,
+              472
+            ]
+          ]
+        ],
+        [
+          104,
+          [
+            [
+              445,
+              459
+            ],
+            [
+              467,
+              470
+            ]
+          ]
+        ],
+        [
+          105,
+          [
+            [
+              445,
+              458
+            ],
+            [
+              468,
+              476
+            ],
+            [
+              478,
+              481
+            ]
+          ]
+        ],
+        [
+          106,
+          [
+            [
+              445,
+              456
+            ],
+            [
+              468,
+              478
+            ]
+          ]
+        ],
+        [
+          107,
+          [
+            [
+              445,
+              456
+            ],
+            [
+              469,
+              475
+            ]
+          ]
+        ],
+        [
+          108,
+          [
+            [
+              445,
+              456
+            ],
+            [
+              469,
+              472
+            ]
+          ]
+        ],
+        [
+          109,
+          [
+            [
+              445,
+              456
+            ]
+          ]
+        ],
+        [
+          110,
+          [
+            [
+              445,
+              456
+            ]
+          ]
+        ],
+        [
+          111,
+          [
+            [
+              447,
+              456
+            ],
+            [
+              478,
+              478
+            ]
+          ]
+        ],
+        [
+          112,
+          [
+            [
+              449,
+              456
+            ],
+            [
+              479,
+              485
+            ]
+          ]
+        ],
+        [
+          113,
+          [
+            [
+              450,
+              456
+            ],
+            [
+              479,
+              488
+            ]
+          ]
+        ],
+        [
+          114,
+          [
+            [
+              451,
+              456
+            ],
+            [
+              480,
+              486
+            ]
+          ]
+        ],
+        [
+          115,
+          [
+            [
+              452,
+              456
+            ],
+            [
+              481,
+              485
+            ]
+          ]
+        ],
+        [
+          116,
+          [
+            [
+              453,
+              456
+            ],
+            [
+              481,
+              485
+            ]
+          ]
+        ],
+        [
+          117,
+          [
+            [
+              454,
+              456
+            ],
+            [
+              482,
+              486
+            ]
+          ]
+        ],
+        [
+          118,
+          [
+            [
+              455,
+              455
+            ],
+            [
+              486,
+              492
+            ]
+          ]
+        ],
+        [
+          119,
+          [
+            [
+              489,
+              496
+            ]
+          ]
+        ],
+        [
+          120,
+          [
+            [
+              490,
+              502
+            ]
+          ]
+        ],
+        [
+          121,
+          [
+            [
+              490,
+              511
+            ]
+          ]
+        ],
+        [
+          122,
+          [
+            [
+              491,
+              511
+            ]
+          ]
+        ],
+        [
+          123,
+          [
+            [
+              491,
+              511
+            ]
+          ]
+        ],
+        [
+          124,
+          [
+            [
+              492,
+              511
+            ]
+          ]
+        ],
+        [
+          125,
+          [
+            [
+              499,
+              511
+            ]
+          ]
+        ],
+        [
+          126,
+          [
+            [
+              500,
+              511
+            ]
+          ]
+        ],
+        [
+          127,
+          [
+            [
+              501,
+              511
+            ]
+          ]
+        ],
+        [
+          128,
+          [
+            [
+              501,
+              502
+            ],
+            [
+              504,
+              511
+            ]
+          ]
+        ],
+        [
+          129,
+          [
+            [
+              504,
+              511
+            ]
+          ]
+        ],
+        [
+          130,
+          [
+            [
+              505,
+              511
+            ]
+          ]
+        ],
+        [
+          131,
+          [
+            [
+              511,
+              511
+            ]
+          ]
+        ]
+      ],
+      "selectionProvenance": {
+        "initialRegions": [
+          [
+            [
+              444,
+              96
+            ],
+            [
+              459,
+              96
+            ],
+            [
+              472,
+              97
+            ],
+            [
+              480,
+              95
+            ],
+            [
+              494,
+              96
+            ],
+            [
+              483,
+              101
+            ],
+            [
+              481,
+              105
+            ],
+            [
+              469,
+              109
+            ],
+            [
+              467,
+              117
+            ],
+            [
+              455,
+              118
+            ],
+            [
+              449,
+              112
+            ],
+            [
+              445,
+              110
+            ]
+          ],
+          [
+            [
+              305,
+              79
+            ],
+            [
+              317,
+              76
+            ],
+            [
+              332,
+              76
+            ],
+            [
+              339,
+              80
+            ],
+            [
+              330,
+              83
+            ],
+            [
+              333,
+              87
+            ],
+            [
+              325,
+              88
+            ],
+            [
+              321,
+              86
+            ],
+            [
+              308,
+              86
+            ]
+          ],
+          [
+            [
+              478,
+              111
+            ],
+            [
+              493,
+              113
+            ],
+            [
+              511,
+              119
+            ],
+            [
+              511,
+              131
+            ],
+            [
+              503,
+              130
+            ],
+            [
+              499,
+              125
+            ],
+            [
+              492,
+              124
+            ],
+            [
+              489,
+              119
+            ],
+            [
+              482,
+              117
+            ]
+          ]
+        ],
+        "selectionRule": "Selected existing water pixels have B >= G + 5 and B >= R + 18 inside the original conservative water regions. A separate authored exclusion removes the full fir silhouette near x458–469,y105–118. These rules choose a glint domain; source RGB is unchanged.",
+        "firExclusion": [
+          [
+            457,
+            106
+          ],
+          [
+            460,
+            104
+          ],
+          [
+            466,
+            104
+          ],
+          [
+            469,
+            109
+          ],
+          [
+            471,
+            116
+          ],
+          [
+            469,
+            119
+          ],
+          [
+            457,
+            119
+          ]
+        ],
+        "rowSegmentConvention": "[sourceY, [[sourceXStart, sourceXEndInclusive], ...]]"
+      },
+      "rowSpans": [
+        [
+          76,
+          317,
+          329
+        ],
+        [
+          77,
+          313,
+          318
+        ],
+        [
+          78,
+          312,
+          317
+        ],
+        [
+          79,
+          313,
+          319
+        ],
+        [
+          80,
+          313,
+          329
+        ],
+        [
+          81,
+          306,
+          311
+        ],
+        [
+          81,
+          331,
+          332
+        ],
+        [
+          81,
+          333,
+          336
+        ],
+        [
+          82,
+          306,
+          309
+        ],
+        [
+          84,
+          329,
+          332
+        ],
+        [
+          85,
+          330,
+          332
+        ],
+        [
+          86,
+          310,
+          324
+        ],
+        [
+          86,
+          327,
+          333
+        ],
+        [
+          87,
+          330,
+          334
+        ],
+        [
+          96,
+          444,
+          454
+        ],
+        [
+          97,
+          444,
+          471
+        ],
+        [
+          98,
+          444,
+          487
+        ],
+        [
+          99,
+          444,
+          488
+        ],
+        [
+          100,
+          444,
+          485
+        ],
+        [
+          101,
+          444,
+          478
+        ],
+        [
+          102,
+          444,
+          475
+        ],
+        [
+          103,
+          445,
+          473
+        ],
+        [
+          104,
+          445,
+          460
+        ],
+        [
+          104,
+          467,
+          471
+        ],
+        [
+          105,
+          445,
+          459
+        ],
+        [
+          105,
+          468,
+          477
+        ],
+        [
+          105,
+          478,
+          482
+        ],
+        [
+          106,
+          445,
+          457
+        ],
+        [
+          106,
+          468,
+          479
+        ],
+        [
+          107,
+          445,
+          457
+        ],
+        [
+          107,
+          469,
+          476
+        ],
+        [
+          108,
+          445,
+          457
+        ],
+        [
+          108,
+          469,
+          473
+        ],
+        [
+          109,
+          445,
+          457
+        ],
+        [
+          110,
+          445,
+          457
+        ],
+        [
+          111,
+          447,
+          457
+        ],
+        [
+          111,
+          478,
+          479
+        ],
+        [
+          112,
+          449,
+          457
+        ],
+        [
+          112,
+          479,
+          486
+        ],
+        [
+          113,
+          450,
+          457
+        ],
+        [
+          113,
+          479,
+          489
+        ],
+        [
+          114,
+          451,
+          457
+        ],
+        [
+          114,
+          480,
+          487
+        ],
+        [
+          115,
+          452,
+          457
+        ],
+        [
+          115,
+          481,
+          486
+        ],
+        [
+          116,
+          453,
+          457
+        ],
+        [
+          116,
+          481,
+          486
+        ],
+        [
+          117,
+          454,
+          457
+        ],
+        [
+          117,
+          482,
+          487
+        ],
+        [
+          118,
+          455,
+          456
+        ],
+        [
+          118,
+          486,
+          493
+        ],
+        [
+          119,
+          489,
+          497
+        ],
+        [
+          120,
+          490,
+          503
+        ],
+        [
+          121,
+          490,
+          512
+        ],
+        [
+          122,
+          491,
+          512
+        ],
+        [
+          123,
+          491,
+          512
+        ],
+        [
+          124,
+          492,
+          512
+        ],
+        [
+          125,
+          499,
+          512
+        ],
+        [
+          126,
+          500,
+          512
+        ],
+        [
+          127,
+          501,
+          512
+        ],
+        [
+          128,
+          501,
+          503
+        ],
+        [
+          128,
+          504,
+          512
+        ],
+        [
+          129,
+          504,
+          512
+        ],
+        [
+          130,
+          505,
+          512
+        ],
+        [
+          131,
+          511,
+          512
+        ]
+      ],
+      "rowSpanConvention": "[sourceY, sourceXStart, sourceXEndExclusive]"
+    },
+    "foreground": {
+      "polygons": [
+        [
+          [
+            0,
+            212
+          ],
+          [
+            44,
+            212
+          ],
+          [
+            51,
+            217
+          ],
+          [
+            65,
+            219
+          ],
+          [
+            75,
+            223
+          ],
+          [
+            93,
+            227
+          ],
+          [
+            101,
+            235
+          ],
+          [
+            112,
+            247
+          ],
+          [
+            109,
+            261
+          ],
+          [
+            91,
+            261
+          ],
+          [
+            80,
+            273
+          ],
+          [
+            77,
+            287
+          ],
+          [
+            0,
+            287
+          ]
+        ],
+        [
+          [
+            353,
+            230
+          ],
+          [
+            367,
+            227
+          ],
+          [
+            386,
+            231
+          ],
+          [
+            411,
+            228
+          ],
+          [
+            437,
+            220
+          ],
+          [
+            456,
+            216
+          ],
+          [
+            472,
+            211
+          ],
+          [
+            511,
+            209
+          ],
+          [
+            511,
+            287
+          ],
+          [
+            321,
+            287
+          ],
+          [
+            326,
+            270
+          ],
+          [
+            345,
+            260
+          ]
+        ]
+      ]
+    },
+    "cloudClip": {
+      "rowSegments": [
+        [
+          39,
+          [
+            [
+              104,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          40,
+          [
+            [
+              104,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          41,
+          [
+            [
+              106,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          42,
+          [
+            [
+              107,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          43,
+          [
+            [
+              108,
+              110
+            ],
+            [
+              113,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          44,
+          [
+            [
+              109,
+              110
+            ],
+            [
+              113,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ]
+      ],
+      "selectionNote": "Independently reviewed cloud-only fixed-y drift domain. Excludes left forest, tree tips and the full mast silhouette. Original static sky-plane ownership is unchanged.",
+      "reviewer": "/root/station_pixel_review",
+      "reviewSource": "docs/testing/evidence/station-r09/pixel-review.md",
+      "rowSpans": [
+        [
+          39,
+          104,
+          128
+        ],
+        [
+          39,
+          141,
+          512
+        ],
+        [
+          40,
+          104,
+          128
+        ],
+        [
+          40,
+          141,
+          512
+        ],
+        [
+          41,
+          106,
+          128
+        ],
+        [
+          41,
+          141,
+          512
+        ],
+        [
+          42,
+          107,
+          128
+        ],
+        [
+          42,
+          141,
+          512
+        ],
+        [
+          43,
+          108,
+          111
+        ],
+        [
+          43,
+          113,
+          128
+        ],
+        [
+          43,
+          141,
+          512
+        ],
+        [
+          44,
+          109,
+          111
+        ],
+        [
+          44,
+          113,
+          128
+        ],
+        [
+          44,
+          141,
+          512
+        ]
+      ],
+      "rowSpanConvention": "[sourceY, sourceXStart, sourceXEndExclusive]"
+    }
+  },
+  "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
+  "sourceSpecCanonicalSha256": "19baa8da7ce4afb99ef2c0423916159247d531b78ed8f722eb1f948342193366",
+  "provenance": {
+    "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
+    "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
+    "masterAssetId": "323d3288-8cdf-41f7-af52-812d51dea517",
+    "hiddenPlateAssetId": "2a3015b5-838f-4e39-a670-2cc42d674103",
+    "hiddenPlateJobId": "524082fa-35e7-4a3f-9a0d-d2ea747399a3",
+    "sourceRegistry": "assets/manifests/hub.r08-candidates.json",
+    "sourceTransform": "No resampling, quantization, colour correction or whole-scene substitution. Provider pixels replace only owned moving selections.",
+    "skyPatch": {
+      "kind": "native-sky-region-copy",
+      "source": "master",
+      "sourceRect": [
+        385,
+        37,
+        32,
+        10
+      ],
+      "destination": [
+        354,
+        37
+      ],
+      "clipTo": "cloudSelection",
+      "sourcePixelsUnchanged": true,
+      "reason": "Use an unchanged same-row blank-sky crop from the existing master beneath only the selected cloud pixels; preserve the original colour ramp without colour arithmetic or resampling."
+    },
+    "skyDonorCandidate": {
+      "source": "assets/source/environment/hub/r09/provider/clean-sky-01.png",
+      "sha256": "f12179a3e3a7ae535cb78855dae6a73e1650f89ff482821cf2986f671b932fe7",
+      "size": [
+        512,
+        288
+      ],
+      "asset_id": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
+      "usage": "comparison-only; rejected as a production sky underlay because its exposed lower sky is about20R/15G darker than the master near the selected cloud"
+    }
+  },
+  "validation": {
+    "sourceHashesVerified": true,
+    "restRoundtripRgbaExact": true,
+    "outsideMovingMaskChangedPixels": 0,
+    "hiddenPlateUsedPixels": 2255,
+    "hiddenPlateChangedPixels": 2255,
+    "cloudPixels": 61,
+    "vegetationPieces": 5,
+    "cloudIslands": 1,
+    "cloudSilhouetteClearanceVerified": true,
+    "cloudClipPixels": 2352,
+    "cloudClipDomain": "cloudClip",
+    "skyPatchMode": "native-sky-region-copy",
+    "masterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "exportResampling": "none",
+    "paletteQuantization": false,
+    "artAcceptanceImplied": false,
+    "pngBytes": 345398,
+    "decodedRgbaBytes": 2714248
+  }
+}

@@ -9,6 +9,7 @@ import { HubTimeOfDay, PHASE_COLOR_MAP, type DayPhase } from './HubTimeOfDay';
 import approvedAssets from '../../assets/hub/runtime-approval.json';
 import r01Assets from '../../assets/hub/r01-approval.json';
 import { HubR01Layer } from './HubR01Layer';
+import { HubR09Layer, R09_STATION_MANIFEST } from './HubR09Layer';
 import { HubCharacterLayer, preloadHubCharacters } from './HubCharacterLayer';
 import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
 import { HUB_BUILDINGS } from './HubBuildingLayer';
@@ -43,8 +44,10 @@ export class HubScene extends Phaser.Scene {
   private season: Season = calculateSeason(new Date(), STATION_26063_LOCATION);
   private weatherForced = false;
   private r01Layer?: HubR01Layer;
+  private r09Layer?: HubR09Layer;
   private characterLayer?: HubCharacterLayer;
   private useR01 = false;
+  private useR09 = false;
 
   private bridgeUnsubscribers: (() => void)[] = [];
 
@@ -60,6 +63,12 @@ export class HubScene extends Phaser.Scene {
     const development = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true;
     const legacyComparator = development && query?.get('hubArtLegacy') === '1';
     this.useR01 = false;
+    this.useR09 = !legacyComparator && (query?.get('stationArt') === 'r09' || R09_STATION_MANIFEST.review.productionReady);
+    if (this.useR09) {
+      preloadHubCharacters(this);
+      for (const asset of R09_STATION_MANIFEST.assets) this.load.image(asset.key, asset.url);
+      return;
+    }
     if (!legacyComparator && (r01Assets.artAcceptance === 'PASS' || preview)) {
       this.useR01 = true;
       preloadHubCharacters(this);
@@ -85,6 +94,22 @@ export class HubScene extends Phaser.Scene {
     // DESTROY directly, without SHUTDOWN; both paths must release bridge listeners.
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
     this.events.once(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
+    if (this.useR09) {
+      const missing = R09_STATION_MANIFEST.assets.filter((asset) => !this.textures.exists(asset.key)).map((asset) => asset.key);
+      if (missing.length) {
+        this.registry.set('world.load_error', { scene: 'hub', assets: missing });
+        worldBridge.emit('world:load_error', { scene: 'hub', assets: missing });
+        return;
+      }
+      this.timeOfDay = new HubTimeOfDay(r01Assets.scene.world_location);
+      this.r09Layer = new HubR09Layer(this);
+      this.characterLayer = new HubCharacterLayer(this, { profile: 'r09' });
+      this.setupBridge();
+      this.applyDayPhase(this.timeOfDay.getCurrentPhase());
+      worldBridge.notifySeasonChanged(this.season);
+      worldBridge.notifySceneReady('hub');
+      return;
+    }
     // The home screen must not silently replace a failed station download with
     // the legacy scene. React keeps navigation available and offers a retry.
     if (this.useR01) {
@@ -164,8 +189,9 @@ export class HubScene extends Phaser.Scene {
     const effectivePhase = this.r01Layer ? this.getAuthoredPhase() ?? phase : phase;
     const colors = PHASE_COLOR_MAP[effectivePhase];
     this.r01Layer?.applyDayPhase(effectivePhase, colors);
+    this.r09Layer?.applyDayPhase(effectivePhase);
     const weather = normalizeR01Weather(this.registry.get('ui.weather'));
-    this.characterLayer?.applyLighting(getR01PhaseStyle(effectivePhase, weather.mode).sceneryTint);
+    this.characterLayer?.applyLighting(this.r09Layer?.getSceneryTint() ?? getR01PhaseStyle(effectivePhase, weather.mode).sceneryTint);
 
     this.environmentLayer?.applyDayPhase(phase, colors);
     this.groundDecorLayer?.applyDayPhase(phase, colors);
@@ -177,12 +203,12 @@ export class HubScene extends Phaser.Scene {
   }
 
   private publishEnvironment(phase = this.timeOfDay.getCurrentPhase()): void {
-    if (!this.r01Layer) return;
+    if (!this.r01Layer && !this.r09Layer) return;
     const environment = {
-      lightingMode: this.getAuthoredPhase() ? 'authored-demo' : 'solar',
+      lightingMode: !this.r09Layer && this.getAuthoredPhase() ? 'authored-demo' : 'solar',
       phase,
       worldLocation: r01Assets.scene.world_location,
-      ...this.r01Layer.getEnvironment(),
+      ...(this.r09Layer?.getEnvironment() ?? this.r01Layer!.getEnvironment()),
     };
     this.registry.set('world.environment', environment);
     worldBridge.emit('world:environment_mode', environment);
@@ -246,12 +272,13 @@ export class HubScene extends Phaser.Scene {
     const unsubPresentationWeather = worldBridge.on('ui:weather', (value: unknown) => {
       const weather = normalizeR01Weather(value);
       this.r01Layer?.setWeather(weather);
-      const phase = this.getAuthoredPhase() ?? this.timeOfDay.getCurrentPhase();
-      this.characterLayer?.applyLighting(getR01PhaseStyle(phase, weather.mode).sceneryTint);
+      this.r09Layer?.setWeather(weather);
+      const phase = (!this.r09Layer && this.getAuthoredPhase()) || this.timeOfDay.getCurrentPhase();
+      this.characterLayer?.applyLighting(this.r09Layer?.getSceneryTint() ?? getR01PhaseStyle(phase, weather.mode).sceneryTint);
       this.publishEnvironment(phase);
     });
     const unsubVisibility = worldBridge.on<boolean>('ui:world_visible', (visible) => {
-      if (visible && !this.getAuthoredPhase()) {
+      if (visible && (this.r09Layer || !this.getAuthoredPhase())) {
         this.timeOfDay.refresh(new Date(), (phase) => this.applyDayPhase(phase));
       }
     });
@@ -307,6 +334,11 @@ export class HubScene extends Phaser.Scene {
       });
     }
     const preferences = normalizeWorldPreferences(this.registry.get('ui.preferences'));
+    if (this.r09Layer) {
+      this.r09Layer.update(deltaMs);
+      if (!preferences.reducedMotion) this.characterLayer?.update(deltaMs);
+      return;
+    }
     if (preferences.reducedMotion) return;
     if (this.r01Layer) {
       this.r01Layer.update(deltaMs);
@@ -339,6 +371,8 @@ export class HubScene extends Phaser.Scene {
     this.characterLayer = undefined;
     this.r01Layer?.destroy();
     this.r01Layer = undefined;
+    this.r09Layer?.destroy();
+    this.r09Layer = undefined;
 
     this.environmentLayer?.destroy();
     this.groundDecorLayer?.destroy();
@@ -359,7 +393,7 @@ export class HubScene extends Phaser.Scene {
   }
 
   private publishLegacyTargets(): void {
-    if (this.r01Layer) return;
+    if (this.r01Layer || this.r09Layer) return;
     const camera = this.cameras.main;
     const zoom = camera.zoom;
     const ratio = this.registry.get('world.pixelRatio') ?? 1;

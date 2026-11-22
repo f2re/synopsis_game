@@ -129,12 +129,21 @@ async function checkStationUI({ page, base, viewport, report, capture, waitForCa
 }
 
 async function checkWorldLoading({ base, browser, report, capture, waitForCampus }) {
-  const { assets } = JSON.parse(fs.readFileSync('packages/world-engine/src/assets/hub/r01-approval.json', 'utf8'));
-  const texture = assets[0].url;
   const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
   await context.addInitScript(() => localStorage.setItem('synopsis_26063_settings', JSON.stringify({ soundEnabled: false, lowPower: true })));
   const page = await context.newPage();
   page.on('pageerror', error => report.errors.push({ scenario: 'world-load', message: error.message }));
+  // Probe the real selected scene first. This remains meaningful both during
+  // R09 opt-in review and after promotion, without aborting an unused R01 PNG.
+  const requested = new Set();
+  page.on('request', request => requested.add(new URL(request.url()).pathname));
+  await page.goto(base); await waitForCampus(page);
+  const profile = await page.locator('.world-canvas-host > div').evaluate(node => node.dataset.station ? JSON.parse(node.dataset.station).stationArt : 'r01');
+  assert.ok(profile === 'r01' || profile === 'r09', 'Known selected station asset profile');
+  const manifestPath = profile === 'r09' ? 'packages/world-engine/src/assets/hub/r09-manifest.json' : 'packages/world-engine/src/assets/hub/r01-approval.json';
+  const { assets } = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const texture = (assets.find(asset => asset.role === 'architecture-ground') || assets[0]).url;
+  assert.ok(requested.has(texture), 'The loading failure targets a required texture requested by the actual selected scene');
   let release;
   const held = new Promise(resolve => { release = resolve; });
   const delayed = async route => { await held; await route.continue(); };
@@ -162,7 +171,7 @@ async function checkWorldLoading({ base, browser, report, capture, waitForCampus
   await page.getByRole('button', { name: 'Перезагрузить страницу', exact: true }).click();
   await waitForCampus(page);
   await capture(page, 'ui-world-load-recovered');
-  report.cases.push({ name: 'world-load-recovery', heldRealTexture: texture, failedRequest: 'abort', navigationWhileLoading: true, navigationAfterFailure: true, retryRealAsset: true });
+  report.cases.push({ name: 'world-load-recovery', stationArt: profile, manifestPath, heldRealTexture: texture, failedRequest: 'abort', navigationWhileLoading: true, navigationAfterFailure: true, retryRealAsset: true });
   await context.close();
 
   const retina = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });

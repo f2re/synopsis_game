@@ -1,0 +1,36 @@
+{
+  "taskId": "ART-STATION-R09-WIND",
+  "agent": "/root/station_living_wind",
+  "date": "2026-11-22",
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_REVIEW",
+  "checks": [
+    {
+      "command": "node --experimental-strip-types --test packages/world-engine/src/scenes/hub/r09WindModel.test.ts",
+      "exitCode": 0,
+      "log": "wind-model-tests.tap"
+    },
+    {
+      "command": "node tools/test_station_wind_layer.cjs",
+      "exitCode": 0,
+      "log": "wind-layer-test.log"
+    }
+  ],
+  "sourceHashes": {
+    "packages/world-engine/src/scenes/hub/r09WindModel.ts": "3578c7e16fcc162d8de7034fbc6b7d8280036ec0fee2fd75d2034224d519df6b",
+    "packages/world-engine/src/scenes/hub/HubVegetationWindLayer.ts": "4c2f7797e3d6fbb4b4d0e1f1b5956ad654642376cddaa3fbecc778b646d8c8aa",
+    "packages/world-engine/src/scenes/hub/r09WindModel.test.ts": "72a2fddd369a2fa042ae5bd6b29f748b1fa560031b3158c85a20c2b1b4721d6a",
+    "tools/test_station_wind_layer.cjs": "437b9ea9cb69d318058c2f9521af890380d6d1af006ede2f56e236591feb3e09"
+  },
+  "browserRun": false,
+  "typecheck": {
+    "status": "DEPENDENCY_UNAVAILABLE",
+    "command": "node apps/web/node_modules/typescript/bin/tsc -p packages/world-engine/tsconfig.json --noEmit",
+    "reason": "Standalone world-engine package cannot resolve phaser in this environment; affects pre-existing scenes too."
+  },
+  "gatesPending": [
+    "pixel-art-quality-reviewer",
+    "art-director",
+    "web-performance-engineer",
+    "integration-release-engineer"
+  ]
+}

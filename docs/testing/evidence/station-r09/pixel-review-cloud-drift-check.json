@@ -1,0 +1,71 @@
+{
+  "rowSpansMatchIndependentReviewedContract": true,
+  "maskPixels": 2352,
+  "negativeControls": [
+    {
+      "xy": [
+        50,
+        39
+      ],
+      "allowed": false
+    },
+    {
+      "xy": [
+        56,
+        43
+      ],
+      "allowed": false
+    },
+    {
+      "xy": [
+        105,
+        41
+      ],
+      "allowed": false
+    },
+    {
+      "xy": [
+        112,
+        43
+      ],
+      "allowed": false
+    },
+    {
+      "xy": [
+        135,
+        40
+      ],
+      "allowed": false
+    },
+    {
+      "xy": [
+        138,
+        40
+      ],
+      "allowed": false
+    }
+  ],
+  "assetId": "hub.r09.clouds.east-wisp",
+  "assetSha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+  "clipDomain": "cloudClip",
+  "motion": {
+    "kind": "continuous-east-drift-v1",
+    "constantSourceY": 39,
+    "speedSourcePixelsPerSecond": 0.55,
+    "integerX": true,
+    "wrapOnlyWhenFullyOffscreen": true
+  },
+  "assetSourceBounds": [
+    354,
+    39,
+    31,
+    6
+  ],
+  "manifestFileSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+  "sourceSpecFileSha256": "19baa8da7ce4afb99ef2c0423916159247d531b78ed8f722eb1f948342193366",
+  "all544IntegerXPosesCheckedAgainstFixedClip": true,
+  "totalVisiblePixelsAcrossPoses": 23917,
+  "result": "PASS_SOURCE_GEOMETRY_ONLY",
+  "finalSourceReadyMetadataVerified": true,
+  "pngAndGeometryUnchangedFromAcceptedRevision": true
+}

@@ -1,0 +1,1921 @@
+{
+  "schema": "synopsis-station-r09-source/v1",
+  "id": "hub.r09-station",
+  "version": 1,
+  "sourceCanvas": [
+    512,
+    288
+  ],
+  "worldCanvas": [
+    512,
+    288
+  ],
+  "sourceScale": 1,
+  "sources": {
+    "master": {
+      "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+      "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+      "size": [
+        512,
+        288
+      ],
+      "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517"
+    },
+    "hiddenPlate": {
+      "source": "assets/source/environment/hub/r09/provider/clean-underlay-01.png",
+      "sha256": "8d586b87b1cf765dd218c74831abee8aa1b01198f8c89985b82669b97e83b4e2",
+      "size": [
+        512,
+        288
+      ],
+      "asset_id": "2a3015b5-838f-4e39-a670-2cc42d674103"
+    },
+    "skyDonorCandidate": {
+      "source": "assets/source/environment/hub/r09/provider/clean-sky-01.png",
+      "sha256": "f12179a3e3a7ae535cb78855dae6a73e1650f89ff482821cf2986f671b932fe7",
+      "size": [
+        512,
+        288
+      ],
+      "asset_id": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
+      "usage": "comparison-only; rejected as a production sky underlay because its exposed lower sky is about20R/15G darker than the master near the selected cloud"
+    }
+  },
+  "domains": {
+    "sky": {
+      "polygons": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            511,
+            0
+          ],
+          [
+            511,
+            63
+          ],
+          [
+            498,
+            62
+          ],
+          [
+            487,
+            59
+          ],
+          [
+            477,
+            55
+          ],
+          [
+            465,
+            52
+          ],
+          [
+            452,
+            50
+          ],
+          [
+            440,
+            45
+          ],
+          [
+            427,
+            44
+          ],
+          [
+            420,
+            50
+          ],
+          [
+            410,
+            57
+          ],
+          [
+            397,
+            58
+          ],
+          [
+            390,
+            63
+          ],
+          [
+            370,
+            68
+          ],
+          [
+            352,
+            70
+          ],
+          [
+            342,
+            70
+          ],
+          [
+            336,
+            72
+          ],
+          [
+            326,
+            74
+          ],
+          [
+            310,
+            75
+          ],
+          [
+            297,
+            74
+          ],
+          [
+            286,
+            70
+          ],
+          [
+            273,
+            69
+          ],
+          [
+            261,
+            65
+          ],
+          [
+            250,
+            62
+          ],
+          [
+            240,
+            58
+          ],
+          [
+            230,
+            59
+          ],
+          [
+            221,
+            61
+          ],
+          [
+            213,
+            60
+          ],
+          [
+            205,
+            64
+          ],
+          [
+            194,
+            60
+          ],
+          [
+            184,
+            59
+          ],
+          [
+            174,
+            61
+          ],
+          [
+            165,
+            56
+          ],
+          [
+            157,
+            55
+          ],
+          [
+            149,
+            57
+          ],
+          [
+            143,
+            54
+          ],
+          [
+            136,
+            57
+          ],
+          [
+            135,
+            29
+          ],
+          [
+            130,
+            23
+          ],
+          [
+            127,
+            28
+          ],
+          [
+            127,
+            51
+          ],
+          [
+            119,
+            48
+          ],
+          [
+            110,
+            45
+          ],
+          [
+            104,
+            40
+          ],
+          [
+            99,
+            29
+          ],
+          [
+            91,
+            23
+          ],
+          [
+            83,
+            21
+          ],
+          [
+            75,
+            22
+          ],
+          [
+            69,
+            25
+          ],
+          [
+            64,
+            30
+          ],
+          [
+            60,
+            37
+          ],
+          [
+            56,
+            43
+          ],
+          [
+            49,
+            38
+          ],
+          [
+            44,
+            34
+          ],
+          [
+            39,
+            28
+          ],
+          [
+            34,
+            23
+          ],
+          [
+            29,
+            19
+          ],
+          [
+            24,
+            12
+          ],
+          [
+            20,
+            9
+          ],
+          [
+            17,
+            14
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            8,
+            13
+          ],
+          [
+            4,
+            10
+          ],
+          [
+            0,
+            10
+          ]
+        ]
+      ]
+    },
+    "water": {
+      "rowSegments": [
+        [
+          76,
+          [
+            [
+              317,
+              328
+            ]
+          ]
+        ],
+        [
+          77,
+          [
+            [
+              313,
+              317
+            ]
+          ]
+        ],
+        [
+          78,
+          [
+            [
+              312,
+              316
+            ]
+          ]
+        ],
+        [
+          79,
+          [
+            [
+              313,
+              318
+            ]
+          ]
+        ],
+        [
+          80,
+          [
+            [
+              313,
+              328
+            ]
+          ]
+        ],
+        [
+          81,
+          [
+            [
+              306,
+              310
+            ],
+            [
+              331,
+              331
+            ],
+            [
+              333,
+              335
+            ]
+          ]
+        ],
+        [
+          82,
+          [
+            [
+              306,
+              308
+            ]
+          ]
+        ],
+        [
+          84,
+          [
+            [
+              329,
+              331
+            ]
+          ]
+        ],
+        [
+          85,
+          [
+            [
+              330,
+              331
+            ]
+          ]
+        ],
+        [
+          86,
+          [
+            [
+              310,
+              323
+            ],
+            [
+              327,
+              332
+            ]
+          ]
+        ],
+        [
+          87,
+          [
+            [
+              330,
+              333
+            ]
+          ]
+        ],
+        [
+          96,
+          [
+            [
+              444,
+              453
+            ]
+          ]
+        ],
+        [
+          97,
+          [
+            [
+              444,
+              470
+            ]
+          ]
+        ],
+        [
+          98,
+          [
+            [
+              444,
+              486
+            ]
+          ]
+        ],
+        [
+          99,
+          [
+            [
+              444,
+              487
+            ]
+          ]
+        ],
+        [
+          100,
+          [
+            [
+              444,
+              484
+            ]
+          ]
+        ],
+        [
+          101,
+          [
+            [
+              444,
+              477
+            ]
+          ]
+        ],
+        [
+          102,
+          [
+            [
+              444,
+              474
+            ]
+          ]
+        ],
+        [
+          103,
+          [
+            [
+              445,
+              472
+            ]
+          ]
+        ],
+        [
+          104,
+          [
+            [
+              445,
+              459
+            ],
+            [
+              467,
+              470
+            ]
+          ]
+        ],
+        [
+          105,
+          [
+            [
+              445,
+              458
+            ],
+            [
+              468,
+              476
+            ],
+            [
+              478,
+              481
+            ]
+          ]
+        ],
+        [
+          106,
+          [
+            [
+              445,
+              456
+            ],
+            [
+              468,
+              478
+            ]
+          ]
+        ],
+        [
+          107,
+          [
+            [
+              445,
+              456
+            ],
+            [
+              469,
+              475
+            ]
+          ]
+        ],
+        [
+          108,
+          [
+            [
+              445,
+              456
+            ],
+            [
+              469,
+              472
+            ]
+          ]
+        ],
+        [
+          109,
+          [
+            [
+              445,
+              456
+            ]
+          ]
+        ],
+        [
+          110,
+          [
+            [
+              445,
+              456
+            ]
+          ]
+        ],
+        [
+          111,
+          [
+            [
+              447,
+              456
+            ],
+            [
+              478,
+              478
+            ]
+          ]
+        ],
+        [
+          112,
+          [
+            [
+              449,
+              456
+            ],
+            [
+              479,
+              485
+            ]
+          ]
+        ],
+        [
+          113,
+          [
+            [
+              450,
+              456
+            ],
+            [
+              479,
+              488
+            ]
+          ]
+        ],
+        [
+          114,
+          [
+            [
+              451,
+              456
+            ],
+            [
+              480,
+              486
+            ]
+          ]
+        ],
+        [
+          115,
+          [
+            [
+              452,
+              456
+            ],
+            [
+              481,
+              485
+            ]
+          ]
+        ],
+        [
+          116,
+          [
+            [
+              453,
+              456
+            ],
+            [
+              481,
+              485
+            ]
+          ]
+        ],
+        [
+          117,
+          [
+            [
+              454,
+              456
+            ],
+            [
+              482,
+              486
+            ]
+          ]
+        ],
+        [
+          118,
+          [
+            [
+              455,
+              455
+            ],
+            [
+              486,
+              492
+            ]
+          ]
+        ],
+        [
+          119,
+          [
+            [
+              489,
+              496
+            ]
+          ]
+        ],
+        [
+          120,
+          [
+            [
+              490,
+              502
+            ]
+          ]
+        ],
+        [
+          121,
+          [
+            [
+              490,
+              511
+            ]
+          ]
+        ],
+        [
+          122,
+          [
+            [
+              491,
+              511
+            ]
+          ]
+        ],
+        [
+          123,
+          [
+            [
+              491,
+              511
+            ]
+          ]
+        ],
+        [
+          124,
+          [
+            [
+              492,
+              511
+            ]
+          ]
+        ],
+        [
+          125,
+          [
+            [
+              499,
+              511
+            ]
+          ]
+        ],
+        [
+          126,
+          [
+            [
+              500,
+              511
+            ]
+          ]
+        ],
+        [
+          127,
+          [
+            [
+              501,
+              511
+            ]
+          ]
+        ],
+        [
+          128,
+          [
+            [
+              501,
+              502
+            ],
+            [
+              504,
+              511
+            ]
+          ]
+        ],
+        [
+          129,
+          [
+            [
+              504,
+              511
+            ]
+          ]
+        ],
+        [
+          130,
+          [
+            [
+              505,
+              511
+            ]
+          ]
+        ],
+        [
+          131,
+          [
+            [
+              511,
+              511
+            ]
+          ]
+        ]
+      ],
+      "selectionProvenance": {
+        "initialRegions": [
+          [
+            [
+              444,
+              96
+            ],
+            [
+              459,
+              96
+            ],
+            [
+              472,
+              97
+            ],
+            [
+              480,
+              95
+            ],
+            [
+              494,
+              96
+            ],
+            [
+              483,
+              101
+            ],
+            [
+              481,
+              105
+            ],
+            [
+              469,
+              109
+            ],
+            [
+              467,
+              117
+            ],
+            [
+              455,
+              118
+            ],
+            [
+              449,
+              112
+            ],
+            [
+              445,
+              110
+            ]
+          ],
+          [
+            [
+              305,
+              79
+            ],
+            [
+              317,
+              76
+            ],
+            [
+              332,
+              76
+            ],
+            [
+              339,
+              80
+            ],
+            [
+              330,
+              83
+            ],
+            [
+              333,
+              87
+            ],
+            [
+              325,
+              88
+            ],
+            [
+              321,
+              86
+            ],
+            [
+              308,
+              86
+            ]
+          ],
+          [
+            [
+              478,
+              111
+            ],
+            [
+              493,
+              113
+            ],
+            [
+              511,
+              119
+            ],
+            [
+              511,
+              131
+            ],
+            [
+              503,
+              130
+            ],
+            [
+              499,
+              125
+            ],
+            [
+              492,
+              124
+            ],
+            [
+              489,
+              119
+            ],
+            [
+              482,
+              117
+            ]
+          ]
+        ],
+        "selectionRule": "Selected existing water pixels have B >= G + 5 and B >= R + 18 inside the original conservative water regions. A separate authored exclusion removes the full fir silhouette near x458–469,y105–118. These rules choose a glint domain; source RGB is unchanged.",
+        "firExclusion": [
+          [
+            457,
+            106
+          ],
+          [
+            460,
+            104
+          ],
+          [
+            466,
+            104
+          ],
+          [
+            469,
+            109
+          ],
+          [
+            471,
+            116
+          ],
+          [
+            469,
+            119
+          ],
+          [
+            457,
+            119
+          ]
+        ],
+        "rowSegmentConvention": "[sourceY, [[sourceXStart, sourceXEndInclusive], ...]]"
+      }
+    },
+    "foreground": {
+      "polygons": [
+        [
+          [
+            0,
+            212
+          ],
+          [
+            44,
+            212
+          ],
+          [
+            51,
+            217
+          ],
+          [
+            65,
+            219
+          ],
+          [
+            75,
+            223
+          ],
+          [
+            93,
+            227
+          ],
+          [
+            101,
+            235
+          ],
+          [
+            112,
+            247
+          ],
+          [
+            109,
+            261
+          ],
+          [
+            91,
+            261
+          ],
+          [
+            80,
+            273
+          ],
+          [
+            77,
+            287
+          ],
+          [
+            0,
+            287
+          ]
+        ],
+        [
+          [
+            353,
+            230
+          ],
+          [
+            367,
+            227
+          ],
+          [
+            386,
+            231
+          ],
+          [
+            411,
+            228
+          ],
+          [
+            437,
+            220
+          ],
+          [
+            456,
+            216
+          ],
+          [
+            472,
+            211
+          ],
+          [
+            511,
+            209
+          ],
+          [
+            511,
+            287
+          ],
+          [
+            321,
+            287
+          ],
+          [
+            326,
+            270
+          ],
+          [
+            345,
+            260
+          ]
+        ]
+      ]
+    },
+    "cloudClip": {
+      "rowSegments": [
+        [
+          39,
+          [
+            [
+              104,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          40,
+          [
+            [
+              104,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          41,
+          [
+            [
+              106,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          42,
+          [
+            [
+              107,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          43,
+          [
+            [
+              108,
+              110
+            ],
+            [
+              113,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ],
+        [
+          44,
+          [
+            [
+              109,
+              110
+            ],
+            [
+              113,
+              127
+            ],
+            [
+              141,
+              511
+            ]
+          ]
+        ]
+      ],
+      "selectionNote": "Independently reviewed cloud-only fixed-y drift domain. Excludes left forest, tree tips and the full mast silhouette. Original static sky-plane ownership is unchanged.",
+      "reviewer": "/root/station_pixel_review",
+      "reviewSource": "docs/testing/evidence/station-r09/pixel-review.md"
+    }
+  },
+  "cloudSelection": {
+    "kind": "source-cluster-islands-v1",
+    "islands": [
+      {
+        "id": "hub.r09.clouds.east-wisp",
+        "file": "clouds-east-wisp.png",
+        "selection": {
+          "rowSegments": [
+            [
+              39,
+              [
+                [
+                  371,
+                  373
+                ],
+                [
+                  382,
+                  384
+                ]
+              ]
+            ],
+            [
+              40,
+              [
+                [
+                  369,
+                  380
+                ]
+              ]
+            ],
+            [
+              41,
+              [
+                [
+                  362,
+                  364
+                ],
+                [
+                  368,
+                  376
+                ]
+              ]
+            ],
+            [
+              42,
+              [
+                [
+                  361,
+                  373
+                ]
+              ]
+            ],
+            [
+              43,
+              [
+                [
+                  356,
+                  366
+                ]
+              ]
+            ],
+            [
+              44,
+              [
+                [
+                  354,
+                  360
+                ]
+              ]
+            ]
+          ]
+        },
+        "selectionNote": "One complete detached cloud island with its two original strokes. Explicit source contours; no clear-sky rectangle and no scene silhouette enters the texture.",
+        "motion": {
+          "kind": "continuous-east-drift-v1",
+          "constantSourceY": 39,
+          "speedSourcePixelsPerSecond": 0.55,
+          "integerX": true,
+          "wrapOnlyWhenFullyOffscreen": true
+        }
+      }
+    ]
+  },
+  "vegetation": [
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "file": "foliage-central-topiary.png",
+      "kind": "shrub",
+      "depthSourceY": 250,
+      "rootFraction": 0.24,
+      "gain": 1.5,
+      "selection": {
+        "rowSpans": [
+          [
+            232,
+            226,
+            229
+          ],
+          [
+            233,
+            224,
+            230
+          ],
+          [
+            234,
+            224,
+            231
+          ],
+          [
+            235,
+            224,
+            231
+          ],
+          [
+            236,
+            223,
+            232
+          ],
+          [
+            237,
+            223,
+            232
+          ],
+          [
+            238,
+            222,
+            232
+          ],
+          [
+            239,
+            221,
+            234
+          ],
+          [
+            240,
+            221,
+            234
+          ],
+          [
+            241,
+            221,
+            234
+          ],
+          [
+            242,
+            220,
+            234
+          ],
+          [
+            243,
+            220,
+            235
+          ],
+          [
+            244,
+            220,
+            234
+          ],
+          [
+            245,
+            221,
+            233
+          ],
+          [
+            246,
+            222,
+            231
+          ]
+        ]
+      },
+      "selectionNote": "Full selected canopy row spans including dark and warm pixels; stem, pot and surrounding stone remain outside the moving selection.",
+      "maximumSourceDisplacement": 1
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "file": "foliage-left-front-shrub.png",
+      "kind": "shrub",
+      "depthSourceY": 240,
+      "rootFraction": 0.28,
+      "gain": 1.5,
+      "selection": {
+        "rowSpans": [
+          [
+            222,
+            130,
+            134
+          ],
+          [
+            223,
+            129,
+            134
+          ],
+          [
+            224,
+            129,
+            135
+          ],
+          [
+            225,
+            128,
+            136
+          ],
+          [
+            226,
+            128,
+            136
+          ],
+          [
+            227,
+            128,
+            136
+          ],
+          [
+            228,
+            127,
+            137
+          ],
+          [
+            229,
+            126,
+            138
+          ],
+          [
+            230,
+            126,
+            138
+          ],
+          [
+            231,
+            126,
+            139
+          ],
+          [
+            232,
+            125,
+            139
+          ],
+          [
+            233,
+            125,
+            138
+          ],
+          [
+            234,
+            126,
+            137
+          ],
+          [
+            235,
+            127,
+            134
+          ]
+        ]
+      },
+      "selectionNote": "Full selected canopy row spans including dark and warm pixels; stem, pot and surrounding stone remain outside the moving selection.",
+      "maximumSourceDisplacement": 1
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "file": "foliage-left-planter-topiary.png",
+      "kind": "shrub",
+      "depthSourceY": 250,
+      "rootFraction": 0.24,
+      "gain": 1.4,
+      "selection": {
+        "rowSpans": [
+          [
+            230,
+            268,
+            272
+          ],
+          [
+            231,
+            268,
+            273
+          ],
+          [
+            232,
+            267,
+            274
+          ],
+          [
+            233,
+            267,
+            274
+          ],
+          [
+            234,
+            266,
+            275
+          ],
+          [
+            235,
+            266,
+            275
+          ],
+          [
+            236,
+            264,
+            275
+          ],
+          [
+            237,
+            264,
+            277
+          ],
+          [
+            238,
+            263,
+            277
+          ],
+          [
+            239,
+            263,
+            277
+          ],
+          [
+            240,
+            263,
+            277
+          ],
+          [
+            241,
+            263,
+            277
+          ],
+          [
+            242,
+            264,
+            277
+          ],
+          [
+            243,
+            265,
+            276
+          ],
+          [
+            244,
+            266,
+            274
+          ]
+        ]
+      },
+      "selectionNote": "Full selected canopy row spans including dark and warm pixels; stem, pot and surrounding stone remain outside the moving selection.",
+      "maximumSourceDisplacement": 1
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "file": "foliage-right-planter-topiary.png",
+      "kind": "shrub",
+      "depthSourceY": 249,
+      "rootFraction": 0.24,
+      "gain": 1.4,
+      "selection": {
+        "rowSpans": [
+          [
+            228,
+            301,
+            303
+          ],
+          [
+            229,
+            300,
+            303
+          ],
+          [
+            230,
+            299,
+            304
+          ],
+          [
+            231,
+            298,
+            305
+          ],
+          [
+            232,
+            298,
+            306
+          ],
+          [
+            233,
+            298,
+            306
+          ],
+          [
+            234,
+            298,
+            305
+          ],
+          [
+            235,
+            298,
+            307
+          ],
+          [
+            236,
+            296,
+            307
+          ],
+          [
+            237,
+            295,
+            308
+          ],
+          [
+            238,
+            295,
+            308
+          ],
+          [
+            239,
+            295,
+            309
+          ],
+          [
+            240,
+            295,
+            309
+          ],
+          [
+            241,
+            295,
+            308
+          ],
+          [
+            242,
+            296,
+            307
+          ]
+        ]
+      },
+      "selectionNote": "Full selected canopy row spans including dark and warm pixels; stem, pot and surrounding stone remain outside the moving selection.",
+      "maximumSourceDisplacement": 1
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "file": "foliage-foreground-right.png",
+      "kind": "grass",
+      "depthSourceY": 289,
+      "rootFraction": 0.42,
+      "gain": 1.2,
+      "selection": {
+        "polygons": [
+          [
+            [
+              430,
+              271
+            ],
+            [
+              434,
+              267
+            ],
+            [
+              443,
+              266
+            ],
+            [
+              446,
+              260
+            ],
+            [
+              452,
+              261
+            ],
+            [
+              455,
+              266
+            ],
+            [
+              463,
+              266
+            ],
+            [
+              467,
+              262
+            ],
+            [
+              473,
+              261
+            ],
+            [
+              477,
+              264
+            ],
+            [
+              481,
+              264
+            ],
+            [
+              487,
+              266
+            ],
+            [
+              492,
+              264
+            ],
+            [
+              496,
+              268
+            ],
+            [
+              496,
+              287
+            ],
+            [
+              430,
+              287
+            ]
+          ]
+        ]
+      },
+      "selectionNote": "Bounded foreground leaf mass; the off-screen base remains fixed. Art review must check the rest of the static foliage edge.",
+      "maximumSourceDisplacement": 1
+    }
+  ],
+  "receivers": [
+    {
+      "id": "hub.r09.window-light-mask",
+      "role": "window-light-mask",
+      "file": "window-light-mask.png",
+      "source": "assets/source/environment/hub/r08/pilot/window-light-mask.png",
+      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+      "size": [
+        512,
+        288
+      ]
+    },
+    {
+      "id": "hub.r09.lamp-light-mask",
+      "role": "lamp-light-mask",
+      "file": "lamp-light-mask.png",
+      "source": "assets/source/environment/hub/r08/pilot/lamp-light-mask.png",
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+      "size": [
+        512,
+        288
+      ]
+    },
+    {
+      "id": "hub.r09.ground-light-mask",
+      "role": "ground-light-mask",
+      "file": "ground-light-mask.png",
+      "source": "assets/source/environment/hub/r08/pilot/ground-light-mask.png",
+      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+      "size": [
+        512,
+        288
+      ]
+    }
+  ],
+  "lightRegions": [
+    {
+      "id": "hub.r09.light.central-entry",
+      "role": "central-entry",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        217,
+        153,
+        24,
+        14
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.34,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.central-windows",
+      "role": "central-windows",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        204,
+        121,
+        59,
+        13
+      ],
+      "tint": "#EAA85E",
+      "suggestedAlpha": 0.23,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.archive-interior",
+      "role": "archive-interior",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        300,
+        170,
+        32,
+        31
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.29,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.cool-left-lab",
+      "role": "cool-left-lab",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        0,
+        128,
+        160,
+        47
+      ],
+      "tint": "#9FBEB3",
+      "suggestedAlpha": 0.12,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.cool-upper-lab",
+      "role": "cool-upper-lab",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        333,
+        103,
+        67,
+        31
+      ],
+      "tint": "#9FBEB3",
+      "suggestedAlpha": 0.1,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.hall",
+      "role": "hall",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        410,
+        176,
+        60,
+        16
+      ],
+      "tint": "#EAA85E",
+      "suggestedAlpha": 0.15,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.archive-lamp",
+      "role": "archive-lamp",
+      "maskRole": "lamp-light-mask",
+      "sourceBounds": [
+        290,
+        182,
+        7,
+        12
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.34,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.archive-stone",
+      "role": "archive-stone",
+      "maskRole": "ground-light-mask",
+      "sourceBounds": [
+        312,
+        207,
+        29,
+        13
+      ],
+      "tint": "#B98255",
+      "suggestedAlpha": 0.13,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    }
+  ],
+  "review": {
+    "status": "candidate",
+    "pixelArt": "PASS-source-geometry; actual-game-frames-pending",
+    "artDirection": "pending-independent-review",
+    "runtime": "pending-browser-review",
+    "productionReady": false,
+    "cloudMotionReady": true,
+    "cloudMotion": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
+    "sourceReviewer": "/root/station_pixel_review",
+    "sourceReviewReport": "docs/testing/evidence/station-r09/pixel-review.md",
+    "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json"
+  },
+  "provenance": {
+    "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
+    "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
+    "masterAssetId": "323d3288-8cdf-41f7-af52-812d51dea517",
+    "hiddenPlateAssetId": "2a3015b5-838f-4e39-a670-2cc42d674103",
+    "hiddenPlateJobId": "524082fa-35e7-4a3f-9a0d-d2ea747399a3",
+    "sourceRegistry": "assets/manifests/hub.r08-candidates.json",
+    "sourceTransform": "No resampling, quantization, colour correction or whole-scene substitution. Provider pixels replace only owned moving selections.",
+    "skyPatch": {
+      "kind": "native-sky-region-copy",
+      "source": "master",
+      "sourceRect": [
+        385,
+        37,
+        32,
+        10
+      ],
+      "destination": [
+        354,
+        37
+      ],
+      "clipTo": "cloudSelection",
+      "sourcePixelsUnchanged": true,
+      "reason": "Use an unchanged same-row blank-sky crop from the existing master beneath only the selected cloud pixels; preserve the original colour ramp without colour arithmetic or resampling."
+    },
+    "skyDonorCandidate": {
+      "source": "assets/source/environment/hub/r09/provider/clean-sky-01.png",
+      "sha256": "f12179a3e3a7ae535cb78855dae6a73e1650f89ff482821cf2986f671b932fe7",
+      "size": [
+        512,
+        288
+      ],
+      "asset_id": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
+      "usage": "comparison-only; rejected as a production sky underlay because its exposed lower sky is about20R/15G darker than the master near the selected cloud"
+    }
+  },
+  "selectionPolicy": {
+    "editableFormat": "JSON source-pixel polygons and inclusive row spans",
+    "cloudMotion": "Only the complete detached east-wisp island moves. Continuous eastward drift at 0.55 native pixels/second uses integer x, fixed source y=39, the independently reviewed fixed cloudClip scanlines and offscreen-only wrap. All other clouds remain static. The coarse sky-plane polygon is not the cloud motion clip.",
+    "vegetationMotion": "Full leaf clusters chosen as row spans; no colour threshold inside canopy cutouts.",
+    "hiddenPlate": "Never used as a whole-scene replacement. Compare exposed donor at motion limits separately from the exact rest roundtrip.",
+    "npcOcclusion": "Foreground plane is static and excludes moving foliage pixels through the local hidden plate. Runtime depth and paths require independent scene review.",
+    "windAmplitude": "Runtime rounds source-pixel offsets then hard-clamps to ±1. Gains 1.2–1.5 keep small crowns visibly active; the earlier <=0.3 proposal was rejected because it quantized all motion to zero.",
+    "water": "Exact selected source-water mask excludes the fir and green shoreline. Runtime rowSpans use end-exclusive bounds and are generated from the same alpha used by the water image."
+  },
+  "skyPatch": {
+    "kind": "native-sky-region-copy",
+    "source": "master",
+    "sourceRect": [
+      385,
+      37,
+      32,
+      10
+    ],
+    "destination": [
+      354,
+      37
+    ],
+    "clipTo": "cloudSelection",
+    "sourcePixelsUnchanged": true,
+    "reason": "Use an unchanged same-row blank-sky crop from the existing master beneath only the selected cloud pixels; preserve the original colour ramp without colour arithmetic or resampling."
+  }
+}

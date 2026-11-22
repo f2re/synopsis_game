@@ -1,6 +1,8 @@
-/** R07: built application + real isolated server + Chromium/Firefox.
+/** Station environment: built application + real server + Chromium/Firefox.
  * No API, artwork, visibility or renderer substitutions. Date alone is fixed.
  * Optional baseline mode uses this same runner from an earlier checkout.
+ * R09 opt-in adds real panorama/source-anchor and hidden clock checks; the
+ * historical R01 baseline still checks its original six simultaneous doors.
  */
 'use strict';
 const assert = require('node:assert/strict');
@@ -12,11 +14,13 @@ const crypto = require('node:crypto');
 const { spawn, execFileSync } = require('node:child_process');
 const { once } = require('node:events');
 const { chromium, firefox } = require(require.resolve('playwright', { paths: [process.env.STATION_PLAYWRIGHT_MODULES || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES || process.cwd()] }));
+const { candidateUrl, stationState, forEachStationView } = require('./test_station_r09_browser.cjs');
 
 const repo = process.cwd(), dist = path.join(repo, 'apps/web/dist');
 const browserName = process.env.STATION_BROWSER || 'chromium';
 assert.ok(['chromium', 'firefox'].includes(browserName), 'Supported browser');
 const baseline = process.env.STATION_ENV_BASELINE === '1';
+const r09OptIn = !baseline && process.env.STATION_ENV_R09 === '1';
 const output = path.resolve(process.env.STATION_ENV_EVIDENCE || 'artifacts/station-environment-r07');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-environment-'));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -35,7 +39,7 @@ const viewports = [{ width: 1366, height: 768 }, { width: 390, height: 844 }];
 const facilityNames = { codepost: 'Кодовый пост', radar: 'Радарный комплекс', lab: 'Аэрологический павильон', cartography: 'Картографический класс', archive: 'Архив наблюдений', hall: 'Турнирный зал' };
 function revision() { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim(); } catch { return 'unavailable'; } }
 const report = {
-  status: 'RUNNING', mode: baseline ? 'baseline' : 'candidate', engine: browserName, browser: '', revision: revision(),
+  status: 'RUNNING', mode: baseline ? 'baseline' : 'candidate', r09OptIn, engine: browserName, browser: '', revision: revision(),
   appVersion: JSON.parse(fs.readFileSync(path.join(repo, 'package.json'), 'utf8')).version,
   runnerSha256: sha256(fs.readFileSync(__filename)),
   ci: { runId: process.env.GITHUB_RUN_ID || null, attempt: process.env.GITHUB_RUN_ATTEMPT || null, job: process.env.GITHUB_JOB || null, runner: process.env.RUNNER_NAME || null },
@@ -90,8 +94,19 @@ async function startServers() {
 function record(name, values) { report.cases.push({ name, ...values }); console.log(`ENV ${name}`); }
 function observePage(page, scenario) { page.on('pageerror', error => report.errors.push({ scenario, message: error.message })); }
 async function ready(page) {
+  // Before promotion R09 has an explicit URL gate. Ordinary/default route
+  // persistence is still exercised by the unchanged default station suite.
+  if (r09OptIn && new URL(page.url()).searchParams.get('stationArt') !== 'r09') await page.goto(candidateUrl(page.url()));
   await page.locator('.hub-screen[data-world-state="ready"]').waitFor({ timeout: 30_000 });
-  await page.waitForFunction(() => document.querySelectorAll('canvas').length === 1 && document.querySelectorAll('[data-building-id]').length === 6);
+  await page.waitForFunction(() => {
+    if (document.querySelectorAll('canvas').length !== 1) return false;
+    const raw = document.querySelector('.world-canvas-host > div')?.dataset.station;
+    const station = raw ? JSON.parse(raw) : null;
+    const ids = [...document.querySelectorAll('[data-building-id]')].map(node => node.dataset.buildingId).sort();
+    return station?.stationArt === 'r09'
+      ? ids.length > 0 && JSON.stringify(ids) === JSON.stringify([...station.visiblePoiIds].sort())
+      : ids.length === 6;
+  });
   await page.evaluate(async () => { await document.fonts.ready; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
 }
 async function setDate(page, iso) {
@@ -154,7 +169,8 @@ async function state(page) {
       }
       if (renderer.type === 'unknown' && canvas.getContext('2d')) renderer = { type: 'canvas2d' };
     }
-    return { ...host?.dataset, clock: globalThis.__stationFixedDate?.snapshot(), ambientWeather: document.documentElement.dataset.ambientWeather,
+    return { ...host?.dataset, stationDiagnostics: host?.dataset.station ? JSON.parse(host.dataset.station) : null,
+      clock: globalThis.__stationFixedDate?.snapshot(), ambientWeather: document.documentElement.dataset.ambientWeather,
       storedWeather: JSON.parse(localStorage.getItem('synopsis_26063_settings') || '{}').weather,
       visibility: document.visibilityState, date: new Date().toISOString(), viewport: [innerWidth, innerHeight], dpr: devicePixelRatio,
       canvasCount: document.querySelectorAll('canvas').length, canvasSize: canvas ? [canvas.width, canvas.height] : null, renderer,
@@ -312,9 +328,13 @@ async function interactionCases(base) {
   for (const { viewport, backing } of resizeCases) {
     await page.setViewportSize(viewport); await ready(page);
     const boxes = await settledEntranceGeometry(page, viewport, backing, previousGeometry);
+    const panorama = (await state(page)).stationDiagnostics?.stationArt === 'r09';
     previousGeometry = JSON.stringify(boxes);
     report.interactionGeometry.push({ viewport, expectedBacking: backing, boxes });
+    const seen = new Set();
+    const exerciseBoxes = async boxes => {
     for (const box of boxes) {
+      if (seen.has(box.id)) continue;
       assert.ok(box.width >= 44 && box.height >= 44, `${box.id}: readable touch target after resize`);
       assert.ok(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width + 1 && box.y + box.height <= viewport.height + 1, `${box.id}: target inside viewport`);
       const points = [[box.width / 2, box.height / 2], [2, box.height / 2], [box.width - 3, box.height / 2], [box.width / 2, 2], [box.width / 2, box.height - 3]];
@@ -332,7 +352,13 @@ async function interactionCases(base) {
         await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/pointer-${dx}-${dy}`);
       }
       const target = page.locator(`[data-building-id="${box.id}"]`);
-      if (box === boxes[0]) {
+      if (panorama) {
+        // A narrow panorama may expose only one real door. Travel to the next
+        // document tab stop and back, without inventing off-camera entrances.
+        await target.focus();
+        await pressEntranceKey(page, 'Tab', `${viewport.width}/${box.id}/next`);
+        await pressEntranceKey(page, 'Shift+Tab', `${viewport.width}/${box.id}/return`);
+      } else if (box === boxes[0]) {
         // The first entrance has no preceding document tab stop. Start at its
         // next sibling so real keyboard traversal never visits browser chrome.
         const next = page.locator(`[data-building-id="${boxes[1].id}"]`);
@@ -354,8 +380,13 @@ async function interactionCases(base) {
         await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/keyboard-${activationKey}`);
         assert.equal(await target.evaluate(node => document.activeElement === node), true, `${box.id}: Escape restores the entrance after ${activationKey}`);
       }
+      seen.add(box.id);
     }
-    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, expectedBacking: backing, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
+    };
+    const panoramaViews = panorama ? await forEachStationView(page, exerciseBoxes) : (await exerciseBoxes(boxes), null);
+    assert.deepEqual([...seen].sort(), Object.keys(facilityNames).sort(), 'All six entrances receive actual pointer and keyboard activation');
+    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, expectedBacking: backing, boxes, panoramaViews,
+      exercisedEntranceIds: [...seen], pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
     await capture(page, `entrances-${viewport.width}-dpr2`);
   }
   // The reverse transition must also restore the desktop surface and targets.
@@ -384,7 +415,12 @@ async function settledEntranceGeometry(page, viewport, backing, previousGeometry
         return { id: node.dataset.buildingId, x: box.x, y: box.y, width: box.width, height: box.height };
       });
       const signature = JSON.stringify(boxes);
-      stable = boxes.length === 6 && signature !== previous ? (signature === last ? stable + 1 : 1) : 0;
+      const raw = document.querySelector('.world-canvas-host > div')?.dataset.station;
+      const station = raw ? JSON.parse(raw) : null;
+      const entrancesReady = station?.stationArt === 'r09'
+        ? boxes.length > 0 && JSON.stringify(boxes.map(box => box.id).sort()) === JSON.stringify([...station.visiblePoiIds].sort())
+        : boxes.length === 6;
+      stable = entrancesReady && signature !== previous ? (signature === last ? stable + 1 : 1) : 0;
       if (stable >= 3) return boxes;
       last = signature;
     }
@@ -473,6 +509,19 @@ async function nativeVisibility(base) {
   const background = await context.newPage(); await background.goto('about:blank'); await background.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'hidden', undefined, { polling: 100 });
   await weatherIs(page, 'rain', false);
+  let hiddenStation;
+  if ((await state(page)).stationDiagnostics?.stationArt === 'r09') {
+    await page.waitForFunction(() => JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station).motion.paused, undefined, { polling: 100 });
+    const before = await stationState(page);
+    await page.waitForTimeout(1_500);
+    hiddenStation = await stationState(page);
+    assert.equal(hiddenStation.motion.clockMs, before.motion.clockMs, 'The station clock stops in a genuinely hidden tab');
+    assert.equal(hiddenStation.motion.foliage.paintedFrames, before.motion.foliage.paintedFrames, 'Hidden vegetation does not repaint');
+    assert.deepEqual(hiddenStation.motion.foliage.poses, before.motion.foliage.poses, 'Hidden vegetation holds its actual pose');
+    assert.deepEqual(hiddenStation.motion.cloudOffsets, before.motion.cloudOffsets, 'Hidden clouds hold position');
+    assert.equal(hiddenStation.motion.waterFrame, before.motion.waterFrame, 'Hidden water holds its frame');
+    record('r09-native-hidden-clock-hold', { before, after: hiddenStation, hiddenDurationMs: 1_500, visibilityMocked: false });
+  }
   await setDate(page, dates[2].iso);
   record('native-hidden-date-change', { ...await state(page), visibilityMocked: false });
   const resumedAt = performance.now(); await page.bringToFront();
@@ -480,6 +529,17 @@ async function nativeVisibility(base) {
   const refreshMs = performance.now() - resumedAt;
   await weatherIs(page, 'rain', true);
   record('native-resume-refresh', { ...await state(page), refreshMs, visibilityMocked: false, expectedPhase: 'night', thresholdMs: 2_500 });
+  if (hiddenStation) {
+    await page.waitForFunction(previous => {
+      const station = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station);
+      return !station.motion.paused && station.motion.clockMs > previous;
+    }, hiddenStation.motion.clockMs, { polling: 100 });
+    const after = await stationState(page), visibleElapsedMs = performance.now() - resumedAt;
+    const clockAdvanceMs = after.motion.clockMs - hiddenStation.motion.clockMs;
+    assert.ok(clockAdvanceMs <= visibleElapsedMs + 150, 'Resume does not apply the elapsed hidden interval to station animation');
+    assert.ok(after.motion.foliage.paintedFrames > hiddenStation.motion.foliage.paintedFrames, 'Vegetation resumes painting after real foregrounding');
+    record('r09-native-clock-resume', { after, visibleElapsedMs, clockAdvanceMs, visibilityMocked: false, maximumFirstDeltaMs: 100 });
+  }
   await capture(page, 'native-night-after-resume'); await background.close();
 }
 function compareBaseline() {
@@ -511,7 +571,7 @@ function compareBaseline() {
     }) };
 }
 (async () => {
-  const base = await startServers();
+  const serverBase = await startServers(), base = r09OptIn ? candidateUrl(serverBase) : serverBase;
   browser = await (browserName === 'firefox' ? firefox : chromium).launch({ headless: process.env.STATION_BROWSER_HEADED !== 'true',
     ...(browserName === 'chromium' ? { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] }
       : { firefoxUserPrefs: { 'webgl.force-enabled': true, 'gfx.webrender.all': true } }),

@@ -17,6 +17,7 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const hoveredBuilding = useRef<string | null>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
+  const [stationView, setStationView] = useState<{canPanLeft: boolean; canPanRight: boolean} | null>(null);
   const weather = useAmbientWeather();
   const weatherRef = useRef(weather);
   const applyAudioRef = useRef<(() => void) | null>(null);
@@ -145,10 +146,17 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
         applyInput();
         applyAudio();
         host.dataset.scene = scene;
-        if (scene !== 'hub') setTargets([]);
+        if (scene !== 'hub') { setTargets([]); setStationView(null); delete host.dataset.station; }
       }),
       worldBridge.on<Record<string, unknown>>('world:characters_ready', (diagnostic) => {
         host.dataset.characters = JSON.stringify(diagnostic);
+      }),
+      worldBridge.on<Record<string, unknown>>('world:station_diagnostics', (diagnostic) => {
+        host.dataset.station = JSON.stringify(diagnostic);
+      }),
+      worldBridge.on<{canPanLeft: boolean; canPanRight: boolean} | null>('world:station_view', (view) => {
+        if (!disposed) setStationView(view);
+        if (!view) delete host.dataset.station;
       }),
       worldBridge.on<WorldInteractionTarget[]>('world:interaction_layout', (layout) => {
         if (!disposed) setTargets(layout);
@@ -248,6 +256,18 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   return (
     <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание." onPointerLeave={clearBuildingHover}>
       <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
+      {stationView && (stationView.canPanLeft || stationView.canPanRight) && (
+        <div className="station-pan-controls" role="group" aria-label="Панорама станции">
+          <button type="button" data-station-pan="left" aria-label="Посмотреть влево"
+            disabled={!stationView.canPanLeft} onClick={() => worldBridge.emit('ui:station_pan', 'left')}>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3H8v3H5v6h3v3h3v-3H8V6h3z" fill="currentColor" /></svg>
+          </button>
+          <button type="button" data-station-pan="right" aria-label="Посмотреть вправо"
+            disabled={!stationView.canPanRight} onClick={() => worldBridge.emit('ui:station_pan', 'right')}>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3h3v3h3v6h-3v3H7v-3h3V6H7z" fill="currentColor" /></svg>
+          </button>
+        </div>
+      )}
       {targets.map((target) => (
         <button
           key={target.id}

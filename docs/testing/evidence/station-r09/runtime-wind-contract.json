@@ -1,0 +1,160 @@
+{
+  "status": "PASS",
+  "contract": "actual-r09-small-foliage",
+  "manifestPath": "packages/world-engine/src/assets/hub/r09-manifest.json",
+  "manifestSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+  "sampledDurationMs": 60000,
+  "intervalMs": 100,
+  "results": [
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "weather": "clear",
+      "sourceSize": [
+        16,
+        15
+      ],
+      "gain": 1.5,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 54,
+      "firstMovementMs": 17100,
+      "maximumDisplacement": 1,
+      "signature": "5f02a0d20b23fac49f14fc9957496ce8452f27ee8454e0f8f37c1a0f07492690"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "weather": "clear",
+      "sourceSize": [
+        15,
+        14
+      ],
+      "gain": 1.5,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 40,
+      "firstMovementMs": 9300,
+      "maximumDisplacement": 1,
+      "signature": "feea9ebfecbb89a9ff7c864f01c1e028c9018c2f9f601d92a0ba9e16bd4cfd60"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "weather": "clear",
+      "sourceSize": [
+        15,
+        15
+      ],
+      "gain": 1.4,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 48,
+      "firstMovementMs": 17600,
+      "maximumDisplacement": 1,
+      "signature": "c0f85180ac3730e6c5b875101c0a17743e94a89b7d79cbf767585ca6d56aa3b3"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "weather": "clear",
+      "sourceSize": [
+        15,
+        15
+      ],
+      "gain": 1.4,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 55,
+      "firstMovementMs": 15600,
+      "maximumDisplacement": 1,
+      "signature": "df0331756ba9874645978ab94216e01fab4c5b3ec8271759d7ddfba6579f06fe"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "weather": "clear",
+      "sourceSize": [
+        67,
+        28
+      ],
+      "gain": 1.2,
+      "bands": 4,
+      "samples": 601,
+      "movingSamples": 179,
+      "firstMovementMs": 0,
+      "maximumDisplacement": 1,
+      "signature": "0e8927243d7692d8768ed4ef138d8d86dd4e958bb4c053c5219e4f9eacf25994"
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "weather": "rain",
+      "sourceSize": [
+        16,
+        15
+      ],
+      "gain": 1.5,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 134,
+      "firstMovementMs": 0,
+      "maximumDisplacement": 1,
+      "signature": "8e51b449b8b80a88fede11adb6547f88a6f15a6afec1cd4846703e9109907139"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "weather": "rain",
+      "sourceSize": [
+        15,
+        14
+      ],
+      "gain": 1.5,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 118,
+      "firstMovementMs": 1400,
+      "maximumDisplacement": 1,
+      "signature": "7087cebcc677a3b7be5a5b6a3ec31c570ce48229b1bf61b9012a91c003869a91"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "weather": "rain",
+      "sourceSize": [
+        15,
+        15
+      ],
+      "gain": 1.4,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 117,
+      "firstMovementMs": 500,
+      "maximumDisplacement": 1,
+      "signature": "0c25376ec6c4ca223161da32322e15b8c9bb0c5944c879b730bd55a3e9df8a69"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "weather": "rain",
+      "sourceSize": [
+        15,
+        15
+      ],
+      "gain": 1.4,
+      "bands": 3,
+      "samples": 601,
+      "movingSamples": 99,
+      "firstMovementMs": 15200,
+      "maximumDisplacement": 1,
+      "signature": "0d1bfea27cc17b5669d13321861abff1a00ae480923783430dc75ef297a432ae"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "weather": "rain",
+      "sourceSize": [
+        67,
+        28
+      ],
+      "gain": 1.2,
+      "bands": 4,
+      "samples": 601,
+      "movingSamples": 248,
+      "firstMovementMs": 0,
+      "maximumDisplacement": 1,
+      "signature": "d942daff4ceb8309205a779a3332805579cc4a81b18d01a664318cdb7285e459"
+    }
+  ]
+}

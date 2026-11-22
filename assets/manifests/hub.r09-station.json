@@ -1,0 +1,14 @@
+{
+  "id": "hub.r09-station",
+  "schema": "synopsis-station-r09-registry/v1",
+  "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
+  "exporter": "tools/assets/build_hub_r09.py",
+  "generated": [
+    "assets/generated/hub/r09/manifest.json",
+    "apps/web/public/hub/r09/manifest.json",
+    "packages/world-engine/src/assets/hub/r09-manifest.json"
+  ],
+  "reviewSource": "assets/source/environment/hub/r09/source-spec.json#/review",
+  "provenanceSource": "assets/source/environment/hub/r09/source-spec.json#/provenance",
+  "policy": "Independent pixel-art, Art Director, performance and integration reviews are required; exporter success does not approve art."
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "scope": "Real R09 integration handlers with Phaser scene doubles; no browser or rendered-pixel acceptance",
+  "manifestSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+  "sources": [
+    {
+      "path": "packages/world-engine/src/scenes/hub/r09WindModel.ts",
+      "sha256": "f817d78595555ac785c41aac222242e0e452ff418617d2a363d98c55c89df72d"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/HubVegetationWindLayer.ts",
+      "sha256": "4c2f7797e3d6fbb4b4d0e1f1b5956ad654642376cddaa3fbecc778b646d8c8aa"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/r09SceneModel.ts",
+      "sha256": "96241398fb0659c47f66a19ea37f0084c170477ca8608a7cf68634dcdb9611a4"
+    },
+    {
+      "path": "packages/world-engine/src/runtime/uiPreferences.ts",
+      "sha256": "24b3cc3625ee0a2e9eaf31add9acfe0e2f65acdd85e84d447f8ba16f1c04ed2b"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/r01Environment.ts",
+      "sha256": "b13fc354fe4dc4131fc0abe0d98dc709d8dffc6948fddee99fd0d43d33e985dc"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/HubR09Layer.ts",
+      "sha256": "046730fcf4fc6f3bdd187d8751434857594b74e9ae14e11e8ce82fbb0359bba0"
+    }
+  ],
+  "cycles": [
+    {
+      "cycle": 1,
+      "objects": 37,
+      "masks": 3,
+      "remainingListeners": 0,
+      "movingClouds": 1
+    },
+    {
+      "cycle": 2,
+      "objects": 37,
+      "masks": 3,
+      "remainingListeners": 0,
+      "movingClouds": 1
+    },
+    {
+      "cycle": 3,
+      "objects": 37,
+      "masks": 3,
+      "remainingListeners": 0,
+      "movingClouds": 1
+    }
+  ]
+}
