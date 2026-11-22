@@ -5,6 +5,8 @@ import { HubTimeOfDay, type DayPhase } from '../hub/HubTimeOfDay';
 import { getR01PhaseStyle, normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT, R01_RAIN_FRAME_MS } from '../hub/r01Environment';
 import { WORLD_PALETTE } from '../../theme/tokens';
 import { getR08StationLayout, R08_STATION_ENTRANCES, R08_STATION_SCALE } from './r08StationLayout';
+import { HubCharacterLayer, preloadHubCharacters } from '../hub/HubCharacterLayer';
+import { R08_CHARACTERS } from './r08StationCharacters';
 import {
   characterFrameAtTime, parseCharacterManifest,
   type WorldCharacterClip, type WorldCharacterDefinition,
@@ -37,6 +39,7 @@ export class R08PreviewScene extends Phaser.Scene {
   private manifest?: R08PreviewManifest;
   private observerDefinition?: WorldCharacterDefinition;
   private observer?: Phaser.GameObjects.Image;
+  private characters?: HubCharacterLayer;
   private images: Array<{ asset: R08PreviewAsset; image: Phaser.GameObjects.Image }> = [];
   private lightImages: Array<{ region: R08LightRegion; image: Phaser.GameObjects.Image }> = [];
   private failures: string[] = [];
@@ -90,7 +93,9 @@ export class R08PreviewScene extends Phaser.Scene {
         }
       } catch (error) { this.failures.push(error instanceof Error ? error.message : 'Не удалось прочитать персонажа.'); }
     };
-    const failed = (file: Phaser.Loader.File) => this.failures.push(`Не загрузился ресурс ${file.key}.`);
+    const failed = (file: Phaser.Loader.File) => {
+      if (file.key.startsWith('r08:')) this.failures.push(`Не загрузился ресурс ${file.key}.`);
+    };
     this.load.once(`filecomplete-json-${MANIFEST_KEY}`, enqueueScene);
     this.load.once(`filecomplete-json-${CHARACTER_KEY}`, enqueueObserver);
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, failed);
@@ -103,14 +108,15 @@ export class R08PreviewScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     if (this.cache.json.exists(MANIFEST_KEY)) enqueueScene(MANIFEST_KEY, 'json', this.cache.json.get(MANIFEST_KEY));
     else this.load.json(MANIFEST_KEY, R08_MANIFEST_URL);
-    if (this.cache.json.exists(CHARACTER_KEY)) enqueueObserver(CHARACTER_KEY, 'json', this.cache.json.get(CHARACTER_KEY));
+    if (this.options.station) preloadHubCharacters(this);
+    else if (this.cache.json.exists(CHARACTER_KEY)) enqueueObserver(CHARACTER_KEY, 'json', this.cache.json.get(CHARACTER_KEY));
     else this.load.json(CHARACTER_KEY, '/hub/characters/manifest.json');
   }
 
   create(): void {
     this.loaderCleanups.forEach((clean) => clean());
     this.loaderCleanups = [];
-    if (!this.manifest || !this.observerDefinition || this.failures.length) {
+    if (!this.manifest || (!this.options.station && !this.observerDefinition) || this.failures.length) {
       this.options.onStatus({ state: 'error', message: this.failures[0] ?? 'Комплект пилота ещё не собран.' });
       return;
     }
@@ -142,11 +148,14 @@ export class R08PreviewScene extends Phaser.Scene {
         .setBlendMode(Phaser.BlendModes.ADD).setDepth(region.maskRole === 'ground-light-mask' ? 2 : facadeDepth + 2);
       this.lightImages.push({ region, image });
     }
-    const definition = this.observerDefinition;
-    const idle = definition.clips.idle;
-    for (const clip of [idle, definition.clips.walk!]) this.textures.get(clipKey(clip)).setFilter(Phaser.Textures.FilterMode.NEAREST);
-    this.observer = this.add.image(0, 0, clipKey(idle), 0)
-      .setOrigin(definition.pivot[0], definition.pivot[1]).setScale(48 / idle.frameHeight);
+    if (this.options.station) this.characters = new HubCharacterLayer(this, R08_CHARACTERS);
+    else if (this.observerDefinition) {
+      const definition = this.observerDefinition;
+      const idle = definition.clips.idle;
+      for (const clip of [idle, definition.clips.walk!]) this.textures.get(clipKey(clip)).setFilter(Phaser.Textures.FilterMode.NEAREST);
+      this.observer = this.add.image(0, 0, clipKey(idle), 0)
+        .setOrigin(definition.pivot[0], definition.pivot[1]).setScale(48 / idle.frameHeight);
+    }
     this.twilightAvailable = this.game.renderer.type === Phaser.WEBGL;
     this.ready = true;
     this.scale.on(Phaser.Scale.Events.RESIZE, this.resize, this);
@@ -236,6 +245,7 @@ export class R08PreviewScene extends Phaser.Scene {
     }
     for (const { region, image } of this.lightImages) image.setAlpha(region.suggestedAlpha * (style?.lightAlpha ?? Number(this.preferences.phase !== 'day')));
     this.observer?.setTint(style?.sceneryTint ?? (this.preferences.phase === 'day' ? 0xffffff : 0x9eafb5));
+    this.characters?.applyLighting(style?.sceneryTint ?? 0xffffff);
     this.paintObserver();
     this.resize();
     this.publishDiagnostics();
@@ -244,6 +254,7 @@ export class R08PreviewScene extends Phaser.Scene {
   update(_time: number, delta: number): void {
     if (!this.ready) return;
     this.stationClock?.update(delta, this.applyStationPreferences);
+    this.characters?.update(delta);
     if (this.rain && normalizeR01Weather(this.registry.get('ui.weather')).animate) {
       this.rainTimeMs += Math.max(0, Math.min(delta, 100));
       if (this.rainTimeMs >= this.nextRainPaint) {
@@ -251,7 +262,7 @@ export class R08PreviewScene extends Phaser.Scene {
         this.paintRain();
       }
     }
-    if (this.preferences.reducedMotion || this.preferences.lowPower || this.preferences.pose !== 'walk') return;
+    if (!this.observer || this.preferences.reducedMotion || this.preferences.lowPower || this.preferences.pose !== 'walk') return;
     this.walkTimeMs += Math.max(0, Math.min(delta, 100));
     this.paintObserver();
   }
@@ -331,6 +342,8 @@ export class R08PreviewScene extends Phaser.Scene {
     this.unsubscribeFocus?.();
     this.unsubscribeVisibility?.();
     this.unsubscribeWeather?.();
+    this.characters?.destroy();
+    this.characters = undefined;
     this.focusMarker = undefined;
     this.rain = undefined;
     this.rainTimeMs = 0;
