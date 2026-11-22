@@ -275,6 +275,7 @@ export class ThreeHubRenderer {
       console.info('[synopsis/world-engine] H3D-037 unapproved collision review layout enabled');
     }
     const pixelSettings = resolvePixelPostSettings(query);
+    this.canvas.dataset.hubPixelSettings = JSON.stringify(pixelSettings);
     this.pipeline = new PixelPostPipeline({
       width: this.internalResolution.width,
       height: this.internalResolution.height,
@@ -998,8 +999,10 @@ export class ThreeHubRenderer {
     );
     this.canvas.style.left = `${fit.viewportX}px`;
     this.canvas.style.top = `${fit.viewportY}px`;
-    this.canvas.style.width = `${fit.viewportWidth}px`;
-    this.canvas.style.height = `${fit.viewportHeight}px`;
+    // The station's full-bleed Phaser rule uses !important. This independent
+    // canvas must retain the same integer viewport used by its raycasting.
+    this.canvas.style.setProperty('width', `${fit.viewportWidth}px`, 'important');
+    this.canvas.style.setProperty('height', `${fit.viewportHeight}px`, 'important');
   }
 
   destroy(): void {

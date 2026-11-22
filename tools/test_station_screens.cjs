@@ -199,6 +199,9 @@ async function waitForCampus(page) {
   report.browser = browser.version();
   const createContext = browser.newContext.bind(browser);
   browser.newContext = async options => { const context = await createContext(options); context.setDefaultTimeout(20_000); return context; };
+  // Independent fresh accounts let the new earning flow fail early without
+  // depending on the long legacy portrait/game fixtures that follow.
+  if (phases.has('rewards')) await require('./test_rewards_browser.cjs').runRewardChecks({ base, browser, report, capture });
   if (phases.has('library')) await require('./test_library_scene.cjs').runLibrarySceneChecks({ base, browser, report, capture, output });
   for (const viewport of (phases.has('station') ? [{ width: 1366, height: 768 }, { width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }] : [])) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
@@ -300,7 +303,6 @@ async function waitForCampus(page) {
   if (phases.has('portraits')) await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
   if (phases.has('game')) await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
   if (phases.has('level-one')) await require('./test_level_one_browser.cjs').runLevelOneChecks({ base, browser, report, capture, fixture });
-  if (phases.has('rewards')) await require('./test_rewards_browser.cjs').runRewardChecks({ base, browser, report, capture });
   if (phases.has('admin')) await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
   // Firefox exercises the same production screens, input and portrait flows above.
   // Native CDP visibility/audio observation is available only in Chromium.

@@ -66,52 +66,14 @@ jobs:
           echo "binary=$CHROME" >> "$GITHUB_OUTPUT"
           "$CHROME" --version
 
-      - name: Снять матрицу состояний Hub
+      - name: Снять матрицу готовых состояний Hub
         env:
           CHROME: ${{ steps.chrome.outputs.binary }}
+          HUB_SMOKE_BASE_URL: http://127.0.0.1:4173
+          HUB_SMOKE_DIR: hub-visual-smoke
         run: |
-          mkdir -p hub-visual-smoke
-
-          capture() {
-            name="$1"
-            url="$2"
-            echo "Capturing $name -> $url"
-            "$CHROME" \
-              --headless=new \
-              --no-sandbox \
-              --disable-dev-shm-usage \
-              --enable-webgl \
-              --use-angle=swiftshader \
-              --window-size=1280,720 \
-              --hide-scrollbars \
-              --virtual-time-budget=3500 \
-              --screenshot="hub-visual-smoke/${name}.png" \
-              "$url" \
-              >"hub-visual-smoke/${name}.chrome.log" 2>&1
-            test -s "hub-visual-smoke/${name}.png"
-          }
-
-          base='http://127.0.0.1:4173/'
-          capture legacy-day-clear "${base}?hubRenderer=legacy2d&hubPhase=day&hubSeason=summer&hubWeather=clear"
-          capture three-day-clear "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear"
-          # G1/G3: same orthographic camera + world, three internal framebuffer profiles.
-          capture three-res-320 "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubRenderWidth=320"
-          capture three-res-480 "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubRenderWidth=480"
-          capture three-res-640 "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubRenderWidth=640"
-          capture three-collision-review "${base}?hubRenderer=three2d&hubLayout=collisionReview&hubPhase=day&hubSeason=summer&hubWeather=clear"
-          capture three-night-clear "${base}?hubRenderer=three2d&hubPhase=night&hubSeason=summer&hubWeather=clear"
-          capture three-day-rain "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=rain"
-          capture three-winter-snow "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=winter&hubWeather=snow"
-          capture three-day-fog "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=autumn&hubWeather=fog"
-          capture three-palette-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelPalette=0"
-          capture three-dither-on "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1"
-          capture three-edges-off "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelEdges=0"
-          capture three-outline-soft "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelOutlineStrength=0.15"
-          capture three-outline-strong "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelOutlineStrength=0.75"
-          capture three-dither-strong "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1&pixelDitherStrength=0.05"
-          capture three-dither-sky "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&pixelDither=1&pixelDitherSky=1"
-          capture three-perf-probe "${base}?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubPerf=1"
-
+          node --check tools/hub/browser-interaction-smoke.mjs
+          node tools/hub/browser-interaction-smoke.mjs --capture-matrix
           sha256sum hub-visual-smoke/*.png | tee hub-visual-smoke/SHA256SUMS.txt
 
       - name: Сохранить пересечения дорожек с процедурной геометрией (H3D-037)
@@ -133,43 +95,14 @@ jobs:
           # does not change Geometry Lock or cause an unrelated visual failure.
           PY
 
-      - name: Проверить performance probe в реальном браузерном runtime
-        env:
-          CHROME: ${{ steps.chrome.outputs.binary }}
+      - name: Проверить performance probe в готовом браузерном runtime
         run: |
-          "$CHROME" \
-            --headless=new \
-            --no-sandbox \
-            --disable-dev-shm-usage \
-            --enable-webgl \
-            --use-angle=swiftshader \
-            --window-size=1280,720 \
-            --virtual-time-budget=3500 \
-            --dump-dom \
-            'http://127.0.0.1:4173/?hubRenderer=three2d&hubPhase=day&hubSeason=summer&hubWeather=clear&hubPerf=1' \
-            > hub-visual-smoke/three-perf-probe.dom.html \
-            2> hub-visual-smoke/three-perf-probe.dom.log
-
           grep -q 'data-hub-perf="true"' hub-visual-smoke/three-perf-probe.dom.html
           grep -q 'render p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
           grep -q 'draws  p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
           grep -q 'GL buffers/textures/programs:' hub-visual-smoke/three-perf-probe.dom.html
-
-          # Verify a nondefault render profile in actual Chrome, not only in unit tests.
-          "$CHROME" \
-            --headless=new \
-            --no-sandbox \
-            --disable-dev-shm-usage \
-            --enable-webgl \
-            --use-angle=swiftshader \
-            --window-size=1280,720 \
-            --virtual-time-budget=3500 \
-            --dump-dom \
-            'http://127.0.0.1:4173/?hubRenderer=three2d&hubRenderWidth=480&hubPerf=1' \
-            > hub-visual-smoke/three-res-480.dom.html \
-            2> hub-visual-smoke/three-res-480.dom.log
-          grep -q 'data-hub-internal-resolution="480x270"' hub-visual-smoke/three-res-480.dom.html
-          grep -q 'internal: 480x270' hub-visual-smoke/three-res-480.dom.html
+          grep -q 'data-hub-internal-resolution="480x270"' hub-visual-smoke/three-res-480-perf.dom.html
+          grep -q 'internal: 480x270' hub-visual-smoke/three-res-480-perf.dom.html
 
       - name: Проверить реальные клики по 3D-зданиям, маршруты, Escape и повторный выбор
         env:
@@ -184,6 +117,7 @@ jobs:
         run: |
           python - <<'PY'
           import hashlib
+          import json
           from pathlib import Path
 
           root = Path('hub-visual-smoke')
@@ -206,13 +140,23 @@ jobs:
               'three-dither-strong',
               'three-dither-sky',
               'three-perf-probe',
+              'three-res-480-perf',
+              'three-day-clear-repeat',
           ]
+          report = json.loads((root / 'capture-matrix-report.json').read_text())
+          assert report['status'] == 'PASS', 'Matrix must prove real scene readiness and draw calls.'
+          assert len(report['steps']) == len(required)
           hashes = {}
           for name in required:
               path = root / f'{name}.png'
               if not path.exists() or path.stat().st_size < 4096:
                   raise SystemExit(f'Missing or suspiciously small screenshot: {path}')
-              hashes[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+              # Compare only the renderer canvas; clocks and other HUD changes
+              # cannot manufacture a false difference between shader settings.
+              world = root / f'{name}.world.png'
+              if not world.exists() or world.stat().st_size < 4096:
+                  raise SystemExit(f'Missing or suspiciously small world capture: {world}')
+              hashes[name] = hashlib.sha256(world.read_bytes()).hexdigest()
 
           comparisons = [
               ('legacy-day-clear', 'three-day-clear'),
@@ -229,12 +173,20 @@ jobs:
               ('three-outline-soft', 'three-outline-strong'),
               ('three-dither-on', 'three-dither-strong'),
               ('three-dither-on', 'three-dither-sky'),
-              ('three-day-clear', 'three-perf-probe'),
           ]
           identical = [f'{a} == {b}' for a, b in comparisons if hashes[a] == hashes[b]]
           if identical:
               raise SystemExit('Visual smoke states produced identical PNGs: ' + ', '.join(identical))
-          print('Visual state hashes differ as expected.')
+          identical_expected = [
+              ('three-day-clear', 'three-res-320'),
+              ('three-day-clear', 'three-day-clear-repeat'),
+              ('three-day-clear', 'three-perf-probe'),
+              ('three-res-480', 'three-res-480-perf'),
+          ]
+          unstable = [f'{a} != {b}' for a, b in identical_expected if hashes[a] != hashes[b]]
+          if unstable:
+              raise SystemExit('Unstable world capture or intrusive performance probe: ' + ', '.join(unstable))
+          print('Ready world states differ as expected; repeat captures and performance instrumentation preserve identical pixels.')
           PY
 
       - name: Сохранить визуальные доказательства
