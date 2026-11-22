@@ -13,7 +13,7 @@ import { HelpScreen } from './features/help/HelpScreen';
 import { ReadingRoomScreen } from './features/library/ReadingRoomScreen';
 import { Settings } from './features/settings/Settings';
 import { AtmosphereProvider } from './features/atmosphere/AtmosphereProvider';
-import { SCREEN_TITLES, archiveReturnPath, characterReturnPath, safeReturnPath, screenSurface } from './appNavigation';
+import { R08_STATION_PATH, SCREEN_TITLES, archiveReturnPath, characterReturnPath, safeReturnPath, screenSurface } from './appNavigation';
 
 const HubScreen = lazy(() => import('./features/hub/HubScreen').then((module) => ({ default: module.HubScreen })));
 const AvatarEditor = lazy(() => import('./features/avatar/AvatarEditor').then((module) => ({ default: module.AvatarEditor })));
@@ -202,7 +202,10 @@ export function App() {
     user={user} onLoginClick={() => setLoginModalOpen(true)} onLogout={requestExit}
     onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift} onStartBlitz={startBlitz} onStartLevelOne={startLevelOne}
     onOpenAvatar={() => navigate('/profile/avatar')} onOpenRewards={() => navigate('/rewards')} onOpenAdmin={() => navigate('/admin')}
-    onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
+    onOpenLibrary={() => navigate('/library')} onVisitArchive={() => {
+      const useR08 = new URLSearchParams(location.split('?')[1]).get('stationArt') === 'r08';
+      navigate(useR08 ? `/archive?returnTo=${encodeURIComponent(R08_STATION_PATH)}` : '/archive');
+    }}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
     externalModalOpen={loginModalOpen || setCodeModalOpen || exitDialogOpen}
     sessionPending={booting} sessionNotice={sessionNotice} stationPresence={stationPresence}

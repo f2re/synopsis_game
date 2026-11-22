@@ -1,0 +1,27 @@
+{
+  "origin": "Project-owned R02 clothing and torso cels. The two legs and boot contacts are redrawn for R08.",
+  "sourceManifest": "assets/manifests/characters.r01.json",
+  "frameSize": [32, 48],
+  "artPixelSize": 2,
+  "pivot": [16, 46],
+  "durationMs": 100,
+  "cycleDistancePx": 16,
+  "stationaryActors": ["observer", "vera", "field-worker", "map-worker", "shift-worker"],
+  "stationaryActions": ["idle", "talk"],
+  "steps": [
+    [[4, 45], [-4, 45]],
+    [[2, 45], [-3, 43]],
+    [[0, 45], [0, 42]],
+    [[-2, 45], [3, 43]],
+    [[-4, 45], [4, 45]],
+    [[-3, 43], [2, 45]],
+    [[0, 42], [0, 45]],
+    [[3, 43], [-2, 45]]
+  ],
+  "actors": [
+    {"name": "observer", "waistY": 30, "hips": [16, 15], "ink": "#07070e", "trousers": ["#191c28", "#2c313c"], "boots": ["#3c2b28", "#533e37"]},
+    {"name": "field-worker", "waistY": 31, "hips": [17, 16], "ink": "#0a080a", "trousers": ["#23262e", "#353a41"], "boots": ["#3c261f", "#60463b"]},
+    {"name": "map-worker", "waistY": 29, "hips": [16, 15], "ink": "#09080a", "trousers": ["#2d2c30", "#424146"], "boots": ["#3c2b29", "#5d443b"]},
+    {"name": "shift-worker", "waistY": 30, "hips": [17, 16], "ink": "#0c0c0f", "trousers": ["#232226", "#38363a"], "boots": ["#362b29", "#604f4e"]}
+  ]
+}

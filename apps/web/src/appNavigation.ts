@@ -25,9 +25,12 @@ export function safeReturnPath(value: unknown): string {
   return ['/', '/campus', '/archive', '/library', '/help', '/settings', '/codebook', '/art/r08'].includes(path) ? value : '/';
 }
 
-/** Preview return is explicit; a normal visit to the archive keeps its existing exit. */
-export function archiveReturnPath(search: string): '/' | '/art/r08' {
-  return new URLSearchParams(search).get('returnTo') === '/art/r08' ? '/art/r08' : '/';
+export const R08_STATION_PATH = '/?stationArt=r08';
+
+/** Both explicitly selected R08 views have an exact return destination. */
+export function archiveReturnPath(search: string): '/' | '/art/r08' | typeof R08_STATION_PATH {
+  const target = new URLSearchParams(search).get('returnTo');
+  return target === '/art/r08' || target === R08_STATION_PATH ? target : '/';
 }
 
 /** The character editor has one explicitly supported game return, never an arbitrary URL. */

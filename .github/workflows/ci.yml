@@ -32,6 +32,8 @@ jobs:
           python tools/assets/check_asset_contract.py
           python tools/assets/check_asset_manifests.py
           python tools/assets/build_hub_r01.py --check
+          python tools/assets/build_hub_r08.py --check
+          python tools/assets/build_r08_walk_actors.py --check
           python tools/assets/build_hub_lighting_r07.py --check
           python tools/assets/build_station_room_r01.py --check --require-approved
           python tools/assets/build_workrooms_r01.py --check --require-approved
@@ -86,6 +88,7 @@ jobs:
           # (native TypeScript type stripping), без внешнего test runner.
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/HubTimeOfDay.test.ts
           node --experimental-strip-types --test packages/world-engine/src/scenes/hub/r01Environment.test.ts
+          node --experimental-strip-types --test packages/world-engine/src/scenes/art/r08PreviewModel.test.ts packages/world-engine/src/scenes/art/r08Gait.test.ts apps/web/src/appNavigation.test.ts
           node --experimental-strip-types --test packages/world-engine/src/runtime/hubCoverGeometry.test.ts
           pnpm build
           node tools/test_avatar_inventory.cjs --api
