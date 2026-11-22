@@ -7,7 +7,7 @@ export const R08_OBSERVER_ID = 'character.r01.observer';
 
 const ROLES = [
   'master', 'archive-local-ground', 'archive-facade', 'archive-porch-steps', 'archive-entry-lamp',
-  'foreground-occluder', 'window-light-mask', 'lamp-light-mask', 'ground-light-mask',
+  'foreground-occluder', 'window-light-mask', 'lamp-light-mask', 'ground-light-mask', 'material-refinement',
 ] as const;
 export type R08AssetRole = typeof ROLES[number];
 export interface R08PreviewAsset {

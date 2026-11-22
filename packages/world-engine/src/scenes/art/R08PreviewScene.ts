@@ -135,6 +135,7 @@ export class R08PreviewScene extends Phaser.Scene {
         .setOrigin(0, 0).setScale(this.sourceScale);
       const depth = asset.role === 'archive-local-ground' ? 0
         : asset.role === 'archive-porch-steps' ? 1
+          : asset.role === 'material-refinement' ? facadeDepth + 1.5
           : asset.role === 'foreground-occluder'
               ? (asset.depthSourceY ?? asset.anchorScenePx?.[1] ?? asset.originalSceneXY[1] + (asset.pivotLocalPx?.[1] ?? asset.height)) * this.sourceScale
               : facadeDepth + (asset.role === 'archive-facade' ? 0 : asset.role === 'archive-entry-lamp' ? 1 : 2);

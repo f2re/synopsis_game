@@ -51,7 +51,8 @@
     "lamp-light-mask": "candidate",
     "ground-light-mask": "candidate",
     "contact-shadow-mask": "not-available",
-    "shadow-mask": "not-available"
+    "shadow-mask": "not-available",
+    "material-refinement": "candidate"
   },
   "assets": [
     {
@@ -87,8 +88,8 @@
         0,
         0
       ],
-      "sha256": "db1c5597abe6f15358b7b0813014a8fe8ca1841e2a8bfa0809b9d184e14f36fb",
-      "bytes": 330074,
+      "sha256": "c0e62c0bc67d347a378d5430e9446a699bc456dbadaceb60ead02e5aacb5ffc4",
+      "bytes": 329998,
       "alphaPolicy": "opaque",
       "usage": "Master with donor pixels under the owned archive-facade mask only; all external pixels retained exactly."
     },
@@ -242,15 +243,34 @@
         0,
         0
       ],
-      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
-      "bytes": 724,
+      "sha256": "27975d8e5b9cc5737dd502d157eaffbdb30c481c612c275db43aae16afd36a9f",
+      "bytes": 768,
       "alphaPolicy": "binary",
       "blendMode": "receiver-mask",
       "usage": "Narrow connected stone receivers at the existing porch and nearby paving. This binary domain is not a ready-made glow; use restrained local intensity without illuminating the adjacent wall."
+    },
+    {
+      "id": "hub.r08.pilot.material-refinement",
+      "role": "material-refinement",
+      "url": "/hub/r08-preview/material-refinement.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "pivotLocalPx": [
+        0,
+        0
+      ],
+      "sha256": "3a0b7ea54a7117082e11788d3d2fd7ef57301ae8d7d1ab9f66b54babb0a42f3e",
+      "bytes": 903,
+      "alphaPolicy": "binary",
+      "usage": "Delineated stone refinish and dark lens over the existing composition."
     }
   ],
   "sourceManifest": "assets/manifests/hub.r08-preview.json",
-  "sourceManifestCanonicalSha256": "daef18e89b99be9c50906b5ba11cf1daa17bb078f36ae81195e915c23a22d9c7",
+  "sourceManifestCanonicalSha256": "8658b8c03d12d2f7bfe635aa0a98749772d2b85c5052f75562a88027bf6486a5",
   "lightRegions": [
     {
       "id": "hub.r08.light.central-entry",
@@ -262,8 +282,8 @@
         24,
         14
       ],
-      "tint": "#FFD890",
-      "suggestedAlpha": 0.34,
+      "tint": "#FFC174",
+      "suggestedAlpha": 0.45,
       "status": "candidate-starting-values",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
@@ -292,8 +312,8 @@
         32,
         31
       ],
-      "tint": "#FFD890",
-      "suggestedAlpha": 0.29,
+      "tint": "#FFD18B",
+      "suggestedAlpha": 0.32,
       "status": "candidate-starting-values",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
@@ -353,7 +373,7 @@
         12
       ],
       "tint": "#FFD890",
-      "suggestedAlpha": 0.34,
+      "suggestedAlpha": 0.24,
       "status": "candidate-starting-values",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
@@ -371,6 +391,21 @@
       "suggestedAlpha": 0.13,
       "status": "candidate-starting-values",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.central-stone",
+      "role": "central-stone",
+      "maskRole": "ground-light-mask",
+      "sourceBounds": [
+        214,
+        169,
+        31,
+        7
+      ],
+      "tint": "#FFC17A",
+      "suggestedAlpha": 0.15,
+      "status": "candidate",
+      "usage": "Paving reflection restricted to stone risers at the central entrance."
     }
   ],
   "validation": {

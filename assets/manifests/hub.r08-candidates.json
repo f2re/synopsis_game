@@ -807,6 +807,30 @@
       "art_review": "selected_for_local_trial_by_art_director",
       "logical_scale_status": "unapproved",
       "pivot_status": "unapproved"
+    },
+    {
+      "id": "hub.r08.cluster-redraw-01",
+      "asset_id": "dcbbc28f-ed91-4484-8176-1d48822ee82a",
+      "label": "26063 · R08 · материал камня · этюд 01",
+      "source": "assets/source/environment/hub/r08/candidates/provider/cluster-redraw-01.png",
+      "format": "PNG",
+      "pixelSize": [
+        512,
+        288
+      ],
+      "mode": "RGBA",
+      "bytes": 318191,
+      "sha256": "a27a7db654447442fa10fec7767bc5bbc78eba8103449671bae92c94c97a37ac",
+      "sha12": "a27a7db65444",
+      "operation_id": "d60e9dc5-ff45-423c-a27e-7d708392cc6c",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "request_changes",
+      "approved_usage": "local-color-swatches-only",
+      "art_review": "Paving seams shift and the lamp remains lit. Use sampled colors only in separately authored masks."
     }
   ],
   "review_artifact": "docs/art/reviews/2026-11-21-hub-r08-candidates-review.md",

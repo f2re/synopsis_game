@@ -137,6 +137,16 @@ def render_pilot_sources(manifest: dict) -> dict[str, Image.Image]:
             image.paste(master, (0, 0), mask)
         elif layer["kind"] == "binary-receiver-mask":
             image.paste((255, 255, 255, 255), (0, 0, *CANVAS), mask)
+        elif layer["kind"] == "material-refinement":
+            donor = rgba(pinned_bytes(layer["donor"]), layer["id"])
+            if donor.size != CANVAS:
+                raise ValueError("Material swatches must use the canonical scene grid")
+            paint = ImageDraw.Draw(image)
+            for swatch in layer["paint"]:
+                color = (*swatch["rgb"], 255) if "rgb" in swatch else donor.getpixel(tuple(swatch["sampleXY"]))
+                paint.polygon([tuple(point) for point in swatch["polygon"]], fill=color)
+            if ImageChops.multiply(image.getchannel("A"), ImageChops.invert(mask)).getbbox():
+                raise ValueError("A material swatch exceeds its authored receiver domain")
         else:
             raise ValueError(f"Unknown pilot layer kind: {layer['kind']}")
         box = layer.get("cropRectXYWH")

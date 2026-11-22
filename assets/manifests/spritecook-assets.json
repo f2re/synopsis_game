@@ -1062,6 +1062,12 @@
       "sha12": "492b983cf4e2",
       "label": "26063 · R08 · земля, камни и листья · проба стыка",
       "id": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/cluster-redraw-01.png",
+      "asset_id": "dcbbc28f-ed91-4484-8176-1d48822ee82a",
+      "sha12": "a27a7db65444",
+      "label": "26063 · R08 · материал камня · этюд 01"
     }
   ]
 }
