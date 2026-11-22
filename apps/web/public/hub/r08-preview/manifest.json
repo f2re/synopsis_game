@@ -52,7 +52,9 @@
     "ground-light-mask": "candidate",
     "contact-shadow-mask": "not-available",
     "shadow-mask": "not-available",
-    "material-refinement": "candidate"
+    "material-refinement": "candidate",
+    "plaza-pot-occluder": "candidate",
+    "plaza-west-occluder": "candidate"
   },
   "assets": [
     {
@@ -88,8 +90,8 @@
         0,
         0
       ],
-      "sha256": "c0e62c0bc67d347a378d5430e9446a699bc456dbadaceb60ead02e5aacb5ffc4",
-      "bytes": 329998,
+      "sha256": "db1c5597abe6f15358b7b0813014a8fe8ca1841e2a8bfa0809b9d184e14f36fb",
+      "bytes": 330074,
       "alphaPolicy": "opaque",
       "usage": "Master with donor pixels under the owned archive-facade mask only; all external pixels retained exactly."
     },
@@ -267,10 +269,48 @@
       "bytes": 903,
       "alphaPolicy": "binary",
       "usage": "Delineated stone refinish and dark lens over the existing composition."
+    },
+    {
+      "id": "hub.r08.pilot.plaza-pot-occluder",
+      "role": "plaza-pot-occluder",
+      "url": "/hub/r08-preview/plaza-pot-occluder.png",
+      "width": 17,
+      "height": 24,
+      "originalSceneXY": [
+        217,
+        231
+      ],
+      "pivotLocalPx": [
+        8,
+        24
+      ],
+      "sha256": "e236c895f869df2917c2598d05d726de8608096c8981a7dccc3ab358138053e6",
+      "bytes": 1111,
+      "alphaPolicy": "binary",
+      "depthSourceY": 255
+    },
+    {
+      "id": "hub.r08.pilot.plaza-west-occluder",
+      "role": "plaza-west-occluder",
+      "url": "/hub/r08-preview/plaza-west-occluder.png",
+      "width": 19,
+      "height": 20,
+      "originalSceneXY": [
+        121,
+        220
+      ],
+      "pivotLocalPx": [
+        9,
+        21
+      ],
+      "sha256": "50d6042e2ff6b9554ebd42ee6704c6ee01be2e6143d056576487efcf1d79524c",
+      "bytes": 994,
+      "alphaPolicy": "binary",
+      "depthSourceY": 241
     }
   ],
   "sourceManifest": "assets/manifests/hub.r08-preview.json",
-  "sourceManifestCanonicalSha256": "8658b8c03d12d2f7bfe635aa0a98749772d2b85c5052f75562a88027bf6486a5",
+  "sourceManifestCanonicalSha256": "89575ea824a223af22fe6ae8859ac0890a6b134f3a8f9ef1eaf27364254401eb",
   "lightRegions": [
     {
       "id": "hub.r08.light.central-entry",

@@ -112,6 +112,13 @@ async function checkR08Station({ base, browser, report, capture, waitForCampus }
       if (viewport.width === 1366) await checkR08ContextRecovery(page, render, report);
       const buttons = page.locator('[data-building-id]');
       assert.equal(await buttons.count(), 6);
+      for (const id of ['codepost', 'archive']) {
+        const entrance = page.locator(`[data-building-id="${id}"]`);
+        const icon = await entrance.locator('.r08-entrance-icon').boundingBox();
+        assert.equal(icon?.width, 24);
+        assert.equal(icon?.height, 24);
+        assert.ok(await entrance.locator('.r08-entrance-label').isVisible(), 'Open entrances have a permanent name');
+      }
       const scrollbar = page.getByRole('scrollbar', { name: /Панорама станции/ });
       if (viewport.width === 390) {
         await scrollbar.waitFor();

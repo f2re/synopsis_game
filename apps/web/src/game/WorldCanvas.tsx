@@ -261,6 +261,7 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
           aria-label={`${target.label}. ${target.state === 'locked' ? 'Модуль готовится' : 'Открыть'}`}
           title={target.label}
           data-building-id={target.id}
+          data-entrance-state={showR08 ? target.state : undefined}
           onFocus={publishBuildingFocus}
           onBlur={publishBuildingFocus}
           onPointerEnter={() => { hoveredBuilding.current = target.id; publishBuildingFocus(); }}
@@ -269,10 +270,13 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
           style={{
             position: 'absolute', left: target.x, top: target.y,
             width: target.width, height: target.height,
-            padding: 0, margin: 0, border: 0, outline: 'none',
-            background: 'transparent', color: 'transparent', cursor: 'pointer', zIndex: 2,
+            padding: 0, margin: 0, border: 0, outline: showR08 ? undefined : 'none',
+            background: 'transparent', cursor: 'pointer', zIndex: 2,
           }}
-        />
+        >{showR08 && <>
+          <span className="r08-entrance-icon" aria-hidden="true" />
+          <span className="r08-entrance-label" aria-hidden="true">{target.label}</span>
+        </>}</button>
       ))}
     </>
   );

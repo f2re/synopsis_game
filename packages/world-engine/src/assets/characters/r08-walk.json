@@ -1,0 +1,180 @@
+{
+  "cycleDistancePx": 16,
+  "clips": {
+    "character.r01.observer.idle": {
+      "assetId": "character.r08.observer.idle",
+      "url": "/hub/characters/r08/observer-idle.png?v=ab61e1586fa1",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "npc.r01.vera.idle": {
+      "assetId": "character.r08.vera.idle",
+      "url": "/hub/characters/r08/vera-idle.png?v=f18e363761f0",
+      "frameWidth": 40,
+      "frameHeight": 48,
+      "frameCount": 9,
+      "durationsMs": [
+        1400,
+        100,
+        1300,
+        240,
+        320,
+        320,
+        240,
+        240,
+        400
+      ]
+    },
+    "npc.r01.vera.talk": {
+      "assetId": "character.r08.vera.talk",
+      "url": "/hub/characters/r08/vera-talk.png?v=1192138f1b81",
+      "frameWidth": 40,
+      "frameHeight": 48,
+      "frameCount": 6,
+      "durationsMs": [
+        240,
+        320,
+        320,
+        240,
+        240,
+        400
+      ]
+    },
+    "npc.r01.field-worker.idle": {
+      "assetId": "character.r08.field-worker.idle",
+      "url": "/hub/characters/r08/field-worker-idle.png?v=89af96ee2c5f",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "npc.r01.field-worker.talk": {
+      "assetId": "character.r08.field-worker.talk",
+      "url": "/hub/characters/r08/field-worker-talk.png?v=89af96ee2c5f",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "npc.r01.map-worker.idle": {
+      "assetId": "character.r08.map-worker.idle",
+      "url": "/hub/characters/r08/map-worker-idle.png?v=a12321574e04",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "npc.r01.map-worker.talk": {
+      "assetId": "character.r08.map-worker.talk",
+      "url": "/hub/characters/r08/map-worker-talk.png?v=a12321574e04",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "npc.r01.shift-worker.idle": {
+      "assetId": "character.r08.shift-worker.idle",
+      "url": "/hub/characters/r08/shift-worker-idle.png?v=99a5b64ca2a1",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "npc.r01.shift-worker.talk": {
+      "assetId": "character.r08.shift-worker.talk",
+      "url": "/hub/characters/r08/shift-worker-talk.png?v=99a5b64ca2a1",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 1,
+      "durationsMs": [
+        1000
+      ]
+    },
+    "character.r01.observer.walk": {
+      "assetId": "character.r08.observer.walk",
+      "url": "/hub/characters/r08/observer-walk.png?v=8172354b8500",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 8,
+      "durationsMs": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "facing": "right"
+    },
+    "npc.r01.field-worker.walk": {
+      "assetId": "character.r08.field-worker.walk",
+      "url": "/hub/characters/r08/field-worker-walk.png?v=5b4159b23af1",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 8,
+      "durationsMs": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "facing": "right"
+    },
+    "npc.r01.map-worker.walk": {
+      "assetId": "character.r08.map-worker.walk",
+      "url": "/hub/characters/r08/map-worker-walk.png?v=23fe4a14a1c3",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 8,
+      "durationsMs": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "facing": "right"
+    },
+    "npc.r01.shift-worker.walk": {
+      "assetId": "character.r08.shift-worker.walk",
+      "url": "/hub/characters/r08/shift-worker-walk.png?v=f4762d07a40a",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frameCount": 8,
+      "durationsMs": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "facing": "right"
+    }
+  }
+}

@@ -1120,6 +1120,162 @@
         }
       ],
       "usage": "Controlled source-grid stone materials and authored neutral lens at the Archive. Each edit is bounded, preserving silhouette and ground geometry."
+    },
+    {
+      "id": "hub.r08.pilot.plaza-pot-occluder",
+      "source": "assets/source/environment/hub/r08/pilot/plaza-pot-occluder.png",
+      "kind": "source-cutout",
+      "polygons": [
+        [
+          [
+            219,
+            238
+          ],
+          [
+            221,
+            235
+          ],
+          [
+            222,
+            232
+          ],
+          [
+            225,
+            231
+          ],
+          [
+            229,
+            233
+          ],
+          [
+            231,
+            236
+          ],
+          [
+            233,
+            238
+          ],
+          [
+            233,
+            243
+          ],
+          [
+            231,
+            245
+          ],
+          [
+            231,
+            248
+          ],
+          [
+            229,
+            253
+          ],
+          [
+            227,
+            254
+          ],
+          [
+            222,
+            254
+          ],
+          [
+            220,
+            251
+          ],
+          [
+            219,
+            247
+          ],
+          [
+            220,
+            245
+          ],
+          [
+            217,
+            243
+          ]
+        ]
+      ],
+      "cropRectXYWH": [
+        217,
+        231,
+        17,
+        24
+      ],
+      "usage": "Exact foreground foliage and planter, sorted by its ground pivot."
+    },
+    {
+      "id": "hub.r08.pilot.plaza-west-occluder",
+      "source": "assets/source/environment/hub/r08/pilot/plaza-west-occluder.png",
+      "kind": "source-cutout",
+      "polygons": [
+        [
+          [
+            121,
+            231
+          ],
+          [
+            124,
+            228
+          ],
+          [
+            125,
+            225
+          ],
+          [
+            128,
+            223
+          ],
+          [
+            130,
+            220
+          ],
+          [
+            133,
+            222
+          ],
+          [
+            135,
+            226
+          ],
+          [
+            138,
+            228
+          ],
+          [
+            139,
+            232
+          ],
+          [
+            138,
+            235
+          ],
+          [
+            135,
+            237
+          ],
+          [
+            132,
+            239
+          ],
+          [
+            126,
+            239
+          ],
+          [
+            123,
+            236
+          ]
+        ]
+      ],
+      "cropRectXYWH": [
+        121,
+        220,
+        19,
+        20
+      ],
+      "usage": "Exact foreground foliage and planter, sorted by its ground pivot."
     }
   ],
   "review": {

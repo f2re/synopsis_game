@@ -56,11 +56,13 @@
     "ground-light-mask": "candidate",
     "contact-shadow-mask": "not-available",
     "shadow-mask": "not-available",
-    "material-refinement": "candidate"
+    "material-refinement": "candidate",
+    "plaza-pot-occluder": "candidate",
+    "plaza-west-occluder": "candidate"
   },
   "pilotSpec": {
     "source": "assets/source/environment/hub/r08/pilot/mask-spec.json",
-    "sourceSha256": "e86aa900e732f3bd8eb6500bdd619e3927efd4059f729feb759f4a3707855936"
+    "sourceSha256": "2377596727ca0f852a316762d628edf1b5aabf4e0d7ae699c86a18c834d45ef7"
   },
   "provenance": {
     "sourceRegistry": "assets/manifests/hub.r08-candidates.json",
@@ -323,6 +325,54 @@
       "alphaPolicy": "binary",
       "status": "candidate",
       "usage": "Delineated stone refinish and dark lens over the existing composition."
+    },
+    {
+      "id": "hub.r08.pilot.plaza-pot-occluder",
+      "role": "plaza-pot-occluder",
+      "file": "plaza-pot-occluder.png",
+      "operation": "copy",
+      "source": "assets/source/environment/hub/r08/pilot/plaza-pot-occluder.png",
+      "sourceSha256": "e236c895f869df2917c2598d05d726de8608096c8981a7dccc3ab358138053e6",
+      "size": [
+        17,
+        24
+      ],
+      "originalSceneXY": [
+        217,
+        231
+      ],
+      "pivotLocalPx": [
+        8,
+        24
+      ],
+      "depthSourceY": 255,
+      "alphaPolicy": "binary",
+      "sourcePixelsExact": true,
+      "status": "candidate"
+    },
+    {
+      "id": "hub.r08.pilot.plaza-west-occluder",
+      "role": "plaza-west-occluder",
+      "file": "plaza-west-occluder.png",
+      "operation": "copy",
+      "source": "assets/source/environment/hub/r08/pilot/plaza-west-occluder.png",
+      "sourceSha256": "50d6042e2ff6b9554ebd42ee6704c6ee01be2e6143d056576487efcf1d79524c",
+      "size": [
+        19,
+        20
+      ],
+      "originalSceneXY": [
+        121,
+        220
+      ],
+      "pivotLocalPx": [
+        9,
+        21
+      ],
+      "depthSourceY": 241,
+      "alphaPolicy": "binary",
+      "sourcePixelsExact": true,
+      "status": "candidate"
     }
   ],
   "lightRegions": [

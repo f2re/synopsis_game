@@ -4,11 +4,12 @@ import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
 import { HubTimeOfDay, type DayPhase } from '../hub/HubTimeOfDay';
 import { getR01PhaseStyle, normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT, R01_RAIN_FRAME_MS } from '../hub/r01Environment';
 import { WORLD_PALETTE } from '../../theme/tokens';
-import { getR08StationLayout, R08_STATION_ENTRANCES, R08_STATION_SCALE } from './r08StationLayout';
+import { getR08StationLayout, R08_STATION_SCALE } from './r08StationLayout';
 import { HubCharacterLayer, preloadHubCharacters } from '../hub/HubCharacterLayer';
 import { R08_CHARACTERS } from './r08StationCharacters';
+import { r08ActorClip, r08WalkFrame } from './r08Gait';
 import {
-  characterFrameAtTime, parseCharacterManifest,
+  parseCharacterManifest,
   type WorldCharacterClip, type WorldCharacterDefinition,
 } from '../../runtime/characterAssets';
 import {
@@ -49,11 +50,8 @@ export class R08PreviewScene extends Phaser.Scene {
   private lastFrame = -1;
   private lastClip = '';
   private loaderCleanups: Array<() => void> = [];
-  private focusMarker?: Phaser.GameObjects.Graphics;
-  private focusedEntrance: string | null = null;
   private readonly sourceScale: number;
   private readonly stationClock?: HubTimeOfDay;
-  private unsubscribeFocus?: () => void;
   private unsubscribeVisibility?: () => void;
   private unsubscribeWeather?: () => void;
   private rain?: Phaser.GameObjects.Graphics;
@@ -86,6 +84,8 @@ export class R08PreviewScene extends Phaser.Scene {
         this.observerDefinition = parseCharacterManifest(value).actors.find((actor) => actor.id === R08_OBSERVER_ID);
         const definition = this.observerDefinition;
         if (!definition?.clips.walk || definition.displayHeight !== 48) throw new Error('Отсутствует принятый наблюдатель высотой 48 пикселей.');
+        definition.clips.idle = r08ActorClip(definition.clips.idle);
+        definition.clips.walk = r08ActorClip(definition.clips.walk);
         for (const clip of [definition.clips.idle, definition.clips.walk]) {
           if (!this.textures.exists(clipKey(clip))) this.load.spritesheet(clipKey(clip), clip.url, {
             frameWidth: clip.frameWidth, frameHeight: clip.frameHeight, startFrame: 0, endFrame: clip.frameCount - 1,
@@ -108,7 +108,7 @@ export class R08PreviewScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     if (this.cache.json.exists(MANIFEST_KEY)) enqueueScene(MANIFEST_KEY, 'json', this.cache.json.get(MANIFEST_KEY));
     else this.load.json(MANIFEST_KEY, R08_MANIFEST_URL);
-    if (this.options.station) preloadHubCharacters(this);
+    if (this.options.station) preloadHubCharacters(this, r08ActorClip);
     else if (this.cache.json.exists(CHARACTER_KEY)) enqueueObserver(CHARACTER_KEY, 'json', this.cache.json.get(CHARACTER_KEY));
     else this.load.json(CHARACTER_KEY, '/hub/characters/manifest.json');
   }
@@ -136,7 +136,7 @@ export class R08PreviewScene extends Phaser.Scene {
       const depth = asset.role === 'archive-local-ground' ? 0
         : asset.role === 'archive-porch-steps' ? 1
           : asset.role === 'material-refinement' ? facadeDepth + 1.5
-          : asset.role === 'foreground-occluder'
+          : asset.role.endsWith('-occluder')
               ? (asset.depthSourceY ?? asset.anchorScenePx?.[1] ?? asset.originalSceneXY[1] + (asset.pivotLocalPx?.[1] ?? asset.height)) * this.sourceScale
               : facadeDepth + (asset.role === 'archive-facade' ? 0 : asset.role === 'archive-entry-lamp' ? 1 : 2);
       image.setDepth(depth);
@@ -162,12 +162,7 @@ export class R08PreviewScene extends Phaser.Scene {
     this.scale.on(Phaser.Scale.Events.RESIZE, this.resize, this);
     this.game.events.on('r08:visit-archive', this.visitArchive, this);
     if (this.options.station) {
-      this.focusMarker = this.add.graphics().setDepth(this.sourceScale * 288 + 1);
       this.rain = this.add.graphics().setDepth(this.sourceScale * 288);
-      this.unsubscribeFocus = worldBridge.on<{ buildingId: string | null }>('ui:focus_building', ({ buildingId }) => {
-        this.focusedEntrance = buildingId;
-        this.drawEntrances();
-      });
       this.events.on('ui:preferences', this.applyStationPreferences, this);
       this.unsubscribeVisibility = worldBridge.on<boolean>('ui:world_visible', (visible) => {
         if (visible) this.stationClock?.refresh(new Date(), this.applyStationPreferences);
@@ -193,28 +188,6 @@ export class R08PreviewScene extends Phaser.Scene {
     worldBridge.emit('world:environment_mode', { lightingMode: 'solar', phase: renderedPhase,
       weather: weather.mode, rainDrops: weather.animate ? R01_RAIN_DROP_LIMIT : 0, rainAnimated: weather.animate });
   };
-
-  private drawEntrances(): void {
-    const graphics = this.focusMarker;
-    if (!graphics) return;
-    graphics.clear();
-    for (const entrance of R08_STATION_ENTRANCES) {
-      const x = Math.round(entrance.x * this.sourceScale);
-      const y = Math.round(entrance.y * this.sourceScale);
-      const selected = entrance.id === this.focusedEntrance;
-      const ratio = Number(this.registry.get('world.pixelRatio')) || 1;
-      const unit = Math.max(1, Math.round(ratio / this.cameras.main.zoom));
-      const color = selected ? 0xffdc9c : entrance.state === 'locked' ? 0x9baeb9 : 0xffbe6d;
-      const edge = unit * 7;
-      const glyph = unit * 3;
-      graphics.fillStyle(0x08152f).fillRect(x - edge, y - edge, edge * 2, edge * 2);
-      graphics.lineStyle(selected ? 2 * unit : unit, color).strokeRect(x - edge, y - edge, edge * 2, edge * 2);
-      graphics.lineStyle(unit, color);
-      if (entrance.state !== 'locked') graphics.lineBetween(x - glyph, y, x + glyph, y)
-        .lineBetween(x, y - glyph, x + glyph, y).lineBetween(x, y + glyph, x + glyph, y);
-      else graphics.strokeRect(x - 2 * unit, y - glyph, 4 * unit, 4 * unit).fillStyle(color).fillRect(x - glyph, y, 6 * unit, 4 * unit);
-    }
-  }
 
   applyPreferences(preferences: R08PreviewPreferences): void {
     this.preferences = { ...preferences };
@@ -271,15 +244,15 @@ export class R08PreviewScene extends Phaser.Scene {
   private paintObserver(): void {
     const definition = this.observerDefinition;
     if (!this.observer || !definition) return;
-    const moving = !this.preferences.reducedMotion && !this.preferences.lowPower && this.preferences.pose === 'walk';
+    const pose = r08ObserverPose(this.preferences.pose, this.walkTimeMs, this.sourceScale);
+    const moving = !this.preferences.reducedMotion && !this.preferences.lowPower && pose.moving;
     const clip = moving ? definition.clips.walk! : definition.clips.idle;
-    const frame = moving ? characterFrameAtTime(clip, this.walkTimeMs) : 0;
+    const frame = moving ? r08WalkFrame(pose.travel) : 0;
     if (this.lastClip !== clip.assetId || this.lastFrame !== frame) {
       this.observer.setTexture(clipKey(clip), frame);
       this.lastClip = clip.assetId;
       this.lastFrame = frame;
     }
-    const pose = r08ObserverPose(this.preferences.pose, this.walkTimeMs, this.sourceScale);
     this.observer.setPosition(pose.x, pose.y).setDepth(pose.y).setFlipX(pose.facing === 'left');
   }
 
@@ -291,7 +264,6 @@ export class R08PreviewScene extends Phaser.Scene {
       const ratio = Number(this.registry.get('world.pixelRatio')) || 1;
       const viewport = getR08StationLayout(width, height, ratio);
       this.cameras.main.setViewport(0, 0, width, height).setZoom(viewport.zoom).centerOn(viewport.centerX, viewport.centerY);
-      this.drawEntrances();
       this.paintRain();
       worldBridge.emit('world:interaction_layout', viewport.targets);
       return;
@@ -340,16 +312,13 @@ export class R08PreviewScene extends Phaser.Scene {
     this.scale.off(Phaser.Scale.Events.RESIZE, this.resize, this);
     this.game.events.off('r08:visit-archive', this.visitArchive, this);
     this.events.off('ui:preferences', this.applyStationPreferences, this);
-    this.unsubscribeFocus?.();
     this.unsubscribeVisibility?.();
     this.unsubscribeWeather?.();
     this.characters?.destroy();
     this.characters = undefined;
-    this.focusMarker = undefined;
     this.rain = undefined;
     this.rainTimeMs = 0;
     this.nextRainPaint = 0;
-    this.focusedEntrance = null;
     this.events.off(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
     this.events.off(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
     this.images = [];

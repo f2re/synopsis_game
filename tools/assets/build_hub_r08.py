@@ -17,6 +17,7 @@ from pathlib import Path
 
 import PIL
 from PIL import Image, ImageChops, ImageDraw
+from build_characters_r01 import canonical_png
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "assets/manifests/hub.r08-preview.json"
@@ -251,7 +252,7 @@ def build_outputs(manifest: dict) -> dict[str, bytes]:
     if ground.size != tuple(ground_entry["size"]) or ground_entry["originalSceneXY"] != [0, 0]:
         raise ValueError("Local ground must remain a full scene plate")
     images["archive-local-ground"] = ground
-    data_by_role["archive-local-ground"] = png_bytes(ground)
+    data_by_role["archive-local-ground"] = canonical_png(ground)
     outputs = {}
     runtime_assets = []
     for entry in entries:

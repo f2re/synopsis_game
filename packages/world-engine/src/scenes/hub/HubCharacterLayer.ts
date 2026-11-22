@@ -29,7 +29,7 @@ const MAX_ANIMATED_CROWD = 4;
 const CROWD_SAMPLE_MS = 64;
 
 /** Dynamically enqueue accepted sheets after their semantic manifest arrives. */
-export function preloadHubCharacters(scene: Phaser.Scene): void {
+export function preloadHubCharacters(scene: Phaser.Scene, adaptClip?: (clip: WorldCharacterClip) => WorldCharacterClip): void {
   const errors: string[] = [];
   scene.registry.set(ERROR_REGISTRY, errors);
   scene.registry.remove(PACK_REGISTRY);
@@ -37,6 +37,13 @@ export function preloadHubCharacters(scene: Phaser.Scene): void {
     try {
       const original = parseCharacterManifest(raw);
       const pack = parseCharacterManifest({ ...original, actors: [...original.actors, ...stationFauna.station] });
+      if (adaptClip) for (const actor of pack.actors) {
+        const clips = actor.clips;
+        for (const action of Object.keys(clips) as WorldCharacterAction[]) {
+          const clip = clips[action];
+          if (clip) clips[action] = adaptClip(clip);
+        }
+      }
       scene.registry.set(PACK_REGISTRY, pack);
       for (const actor of pack.actors.filter((entry) => entry.role === 'npc' || entry.role === 'crowd')) {
         for (const clip of Object.values(actor.clips)) {
@@ -89,6 +96,8 @@ type CrowdActor = { actor: Actor; plan: ReturnType<typeof stationCrowdPlan>[numb
 export interface StationCharacterPlacement {
   placeActor: (definition: WorldCharacterDefinition) => WorldCharacterDefinition | undefined;
   crowd: ReturnType<typeof stationCrowdPlan>;
+  patrol?: ReturnType<typeof stationCrowdPlan>[number];
+  walkFrame?: (distance: number) => number;
 }
 
 /** Authored frames only. No breathing scale/tween, texture redraw or React frame events. */
@@ -272,7 +281,7 @@ export class HubCharacterLayer {
       if (image.visible !== visible) image.setVisible(visible);
       if (actor.shadow && actor.shadow.visible !== visible) actor.shadow.setVisible(visible);
       if (!visible) continue;
-      const still = this.preferences.reducedMotion || (this.preferences.lowPower && plan.visitors > 0);
+      const still = this.preferences.reducedMotion || (this.preferences.lowPower && (this.placement !== undefined || plan.visitors > 0));
       const pose = stationCrowdPose(plan, this.crowdTimeMs, still, online);
       this.setClip(actor, pose.action);
       const x = Math.round(pose.x), y = Math.round(pose.y);
@@ -283,7 +292,7 @@ export class HubCharacterLayer {
         const depth = (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
         if (image.depth !== depth) image.setDepth(depth);
       }
-      const frame = characterFrameAtTime(actor.clip, pose.elapsed);
+      const frame = this.plannedFrame(actor, plan, pose);
       if (frame !== actor.frame) { image.setFrame(frame); actor.frame = frame; }
     }
   }
@@ -308,6 +317,10 @@ export class HubCharacterLayer {
     for (const actor of this.actors) {
       if (!actor.image.visible) continue;
       if (isMovingFauna(actor.definition.id)) continue;
+      if (this.placement?.patrol && actor.definition.motion) {
+        if (sample) this.paintPatrol(actor, this.placement.patrol);
+        continue;
+      }
       // Extra background actors stay in their authored first frame if a future
       // content pack contains more than this scene's three-actor budget (plus the existing fountain loop).
       if (actor.clip.frameCount === 1 && actor.state === 'idle') continue;
@@ -339,6 +352,23 @@ export class HubCharacterLayer {
       if (frame !== actor.frame) { actor.image.setFrame(frame); actor.frame = frame; }
     }
     if (sample) this.sampleTimeMs = 0;
+  }
+
+  private plannedFrame(actor: Actor, plan: CrowdActor['plan'], pose: ReturnType<typeof stationCrowdPose>): number {
+    if (this.placement?.walkFrame && pose.action === 'walk' && plan.action === 'walk') {
+      const length = Math.hypot(plan.to[0] - plan.from[0], plan.to[1] - plan.from[1]);
+      return Math.min(actor.clip.frameCount - 1, this.placement.walkFrame(length * pose.elapsed / plan.travelMs));
+    }
+    return characterFrameAtTime(actor.clip, pose.elapsed);
+  }
+
+  private paintPatrol(actor: Actor, plan: CrowdActor['plan']): void {
+    const pose = stationCrowdPose(plan, this.crowdTimeMs, this.preferences.lowPower, 0);
+    this.setClip(actor, pose.action);
+    actor.image.setPosition(Math.round(pose.x), Math.round(pose.y)).setFlipX(pose.facesLeft);
+    this.placeDepth(actor);
+    const frame = this.plannedFrame(actor, plan, pose);
+    if (actor.frame !== frame) { actor.image.setFrame(frame); actor.frame = frame; }
   }
 
   private placeDepth({ image, shadow }: Actor): void {

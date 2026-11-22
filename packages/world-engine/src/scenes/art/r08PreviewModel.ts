@@ -1,4 +1,4 @@
-/** Bounded, explicitly provisional art-preview contract. Never used by the home scene. */
+/** Bounded R08 asset contract shared by the inspector and opt-in station. */
 export const R08_WORLD_SIZE = [960, 540] as const;
 export const R08_SOURCE_SIZE = [512, 288] as const;
 export const R08_SOURCE_SCALE = R08_WORLD_SIZE[0] / R08_SOURCE_SIZE[0];
@@ -7,7 +7,8 @@ export const R08_OBSERVER_ID = 'character.r01.observer';
 
 const ROLES = [
   'master', 'archive-local-ground', 'archive-facade', 'archive-porch-steps', 'archive-entry-lamp',
-  'foreground-occluder', 'window-light-mask', 'lamp-light-mask', 'ground-light-mask', 'material-refinement',
+  'foreground-occluder', 'plaza-pot-occluder', 'plaza-west-occluder',
+  'window-light-mask', 'lamp-light-mask', 'ground-light-mask', 'material-refinement',
 ] as const;
 export type R08AssetRole = typeof ROLES[number];
 export interface R08PreviewAsset {
@@ -181,13 +182,15 @@ export function r08AmbientTint(sourceY: number): number {
 
 /** Deterministic inspection positions and a bounded walking route, in source coordinates. */
 export function r08ObserverPose(mode: R08PreviewPreferences['pose'], elapsedMs: number, sourceScale = R08_SOURCE_SCALE) {
-  if (mode === 'archive') return { x: 305 * sourceScale, y: 224 * sourceScale, facing: 'right' as const };
-  if (mode === 'foreground') return { x: 331 * sourceScale, y: 231 * sourceScale, facing: 'right' as const };
-  const left = 277 * sourceScale;
-  const right = 355 * sourceScale;
-  const travel = Math.max(0, elapsedMs) / 1000 * 22;
-  const distance = right - left;
-  const cycle = travel % (2 * distance);
-  const offset = cycle <= distance ? cycle : 2 * distance - cycle;
-  return { x: left + offset, y: 231 * sourceScale, facing: cycle <= distance ? 'right' as const : 'left' as const };
+  if (mode === 'archive') return { x: 305 * sourceScale, y: 224 * sourceScale, facing: 'right' as const, travel: 0, moving: false };
+  if (mode === 'foreground') return { x: 331 * sourceScale, y: 231 * sourceScale, facing: 'right' as const, travel: 0, moving: false };
+  const distance = 32 * sourceScale;
+  const walkMs = distance / 22 * 1000;
+  const legMs = walkMs + 1100;
+  const cycle = Math.max(0, elapsedMs) % (2 * legMs);
+  const returning = cycle >= legMs;
+  const elapsed = cycle % legMs;
+  const travel = distance * Math.min(1, elapsed / walkMs);
+  const x = 315 * sourceScale + (returning ? distance - travel : travel);
+  return { x, y: 216 * sourceScale, facing: returning ? 'left' as const : 'right' as const, travel, moving: elapsed < walkMs };
 }
