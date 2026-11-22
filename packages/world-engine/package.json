@@ -7,15 +7,20 @@
   "exports": {
     ".": "./src/index.ts",
     "./avatar": "./src/avatar.ts",
-    "./audio": "./src/audio/WorldAudioManager.ts"
+    "./audio": "./src/audio/WorldAudioManager.ts",
+    "./renderer-mode": "./src/runtime/hubRendererMode.ts",
+    "./experimental": "./src/runtime/createExperimentalHubGame.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "sync:audio": "node scripts/syncAudioManifest.mjs",
-    "check:audio": "node scripts/syncAudioManifest.mjs --check"
+    "check:audio": "node scripts/syncAudioManifest.mjs --check",
+    "test": "node --experimental-strip-types --test src/world/hub/*.test.ts src/runtime/*.test.ts src/renderer/three/post/*.test.ts"
   },
   "dependencies": {
-    "phaser": "4.2.1"
+    "phaser": "4.2.1",
+    "@types/three": "0.187.0",
+    "three": "0.187.0"
   },
   "devDependencies": {
     "typescript": "5.9.3"

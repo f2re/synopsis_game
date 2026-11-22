@@ -1,0 +1,204 @@
+name: Hub 2.5D visual smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'packages/world-engine/**'
+      - 'tools/hub/**'
+      - 'apps/web/src/**'
+      - 'apps/web/vite.config.ts'
+      - 'apps/web/package.json'
+      - 'apps/web/pnpm-lock.yaml'
+      - '.github/workflows/hub-visual-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Получить исходный код
+        uses: actions/checkout@v4
+
+      - name: Подготовить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+
+      - name: Подготовить pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.8'
+
+      - name: Установить зависимости
+        run: pnpm -C apps/web install --ignore-workspace --frozen-lockfile
+
+      - name: Проверить типы и собрать web-клиент
+        run: |
+          pnpm -C apps/web typecheck
+          pnpm -C apps/web build
+          node tools/test_experimental_hub_lifecycle.cjs
+          node tools/test_hub_subscription_order.cjs
+
+      - name: Запустить production preview
+        run: |
+          nohup pnpm -C apps/web exec vite preview --host 127.0.0.1 --port 4173 > /tmp/hub-vite-preview.log 2>&1 &
+          echo $! > /tmp/hub-vite-preview.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/hub-vite-preview.log
+          exit 1
+
+      - name: Найти headless Chrome
+        id: chrome
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo 'Chrome/Chromium is not available on the runner.' >&2
+            exit 1
+          fi
+          echo "binary=$CHROME" >> "$GITHUB_OUTPUT"
+          "$CHROME" --version
+
+      - name: Снять матрицу готовых состояний Hub
+        env:
+          CHROME: ${{ steps.chrome.outputs.binary }}
+          HUB_SMOKE_BASE_URL: http://127.0.0.1:4173
+          HUB_SMOKE_DIR: hub-visual-smoke
+        run: |
+          node --check tools/hub/browser-interaction-smoke.mjs
+          node tools/hub/browser-interaction-smoke.mjs --capture-matrix
+          sha256sum hub-visual-smoke/*.png | tee hub-visual-smoke/SHA256SUMS.txt
+
+      - name: Сохранить пересечения дорожек с процедурной геометрией (H3D-037)
+        run: |
+          node --experimental-strip-types packages/world-engine/src/world/hub/spatialAuditCli.ts > hub-visual-smoke/spatial-audit.json
+          node --experimental-strip-types packages/world-engine/src/world/hub/spatialAuditSvgCli.ts > hub-visual-smoke/spatial-audit.svg
+          node --experimental-strip-types packages/world-engine/src/world/hub/collisionReviewCli.ts > hub-visual-smoke/collision-review.json
+          node --experimental-strip-types packages/world-engine/src/world/hub/collisionReviewSvgCli.ts > hub-visual-smoke/collision-review.svg
+          python -m json.tool hub-visual-smoke/collision-review.json > /dev/null
+          grep -q 'UNAPPROVED' hub-visual-smoke/collision-review.svg || grep -q 'NOT APPROVED' hub-visual-smoke/collision-review.svg
+          test -s hub-visual-smoke/spatial-audit.svg
+          python -m json.tool hub-visual-smoke/spatial-audit.json >/dev/null
+          python - <<'PY'
+          import json
+          with open('hub-visual-smoke/spatial-audit.json', encoding='utf-8') as source:
+              data = json.load(source)
+          print(f"Ground-footprint review: {data['structureCount']} structures, {data['conflictCount']} path conflicts")
+          # Review evidence only. Until art approval, nonzero conflict count
+          # does not change Geometry Lock or cause an unrelated visual failure.
+          PY
+
+      - name: Проверить performance probe в готовом браузерном runtime
+        run: |
+          grep -q 'data-hub-perf="true"' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'render p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'draws  p50/p95/max:' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'GL buffers/textures/programs:' hub-visual-smoke/three-perf-probe.dom.html
+          grep -q 'data-hub-internal-resolution="480x270"' hub-visual-smoke/three-res-480-perf.dom.html
+          grep -q 'internal: 480x270' hub-visual-smoke/three-res-480-perf.dom.html
+
+      - name: Проверить реальные клики по 3D-зданиям, маршруты, Escape и повторный выбор
+        env:
+          CHROME: ${{ steps.chrome.outputs.binary }}
+          HUB_SMOKE_BASE_URL: http://127.0.0.1:4173
+          HUB_SMOKE_DIR: hub-visual-smoke
+        run: |
+          node --check tools/hub/browser-interaction-smoke.mjs
+          node tools/hub/browser-interaction-smoke.mjs
+
+      - name: Проверить, что диагностические состояния дают разные кадры
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path('hub-visual-smoke')
+          required = [
+              'legacy-day-clear',
+              'three-day-clear',
+              'three-res-320',
+              'three-res-480',
+              'three-res-640',
+              'three-collision-review',
+              'three-night-clear',
+              'three-day-rain',
+              'three-winter-snow',
+              'three-day-fog',
+              'three-palette-off',
+              'three-dither-on',
+              'three-edges-off',
+              'three-outline-soft',
+              'three-outline-strong',
+              'three-dither-strong',
+              'three-dither-sky',
+              'three-perf-probe',
+              'three-res-480-perf',
+              'three-day-clear-repeat',
+          ]
+          report = json.loads((root / 'capture-matrix-report.json').read_text())
+          assert report['status'] == 'PASS', 'Matrix must prove real scene readiness and draw calls.'
+          assert len(report['steps']) == len(required)
+          hashes = {}
+          for name in required:
+              path = root / f'{name}.png'
+              if not path.exists() or path.stat().st_size < 4096:
+                  raise SystemExit(f'Missing or suspiciously small screenshot: {path}')
+              # Compare only the renderer canvas; clocks and other HUD changes
+              # cannot manufacture a false difference between shader settings.
+              world = root / f'{name}.world.png'
+              if not world.exists() or world.stat().st_size < 4096:
+                  raise SystemExit(f'Missing or suspiciously small world capture: {world}')
+              hashes[name] = hashlib.sha256(world.read_bytes()).hexdigest()
+
+          comparisons = [
+              ('legacy-day-clear', 'three-day-clear'),
+              ('three-res-320', 'three-res-480'),
+              ('three-res-480', 'three-res-640'),
+              ('three-day-clear', 'three-collision-review'),
+              ('three-day-clear', 'three-night-clear'),
+              ('three-day-clear', 'three-day-rain'),
+              ('three-day-clear', 'three-winter-snow'),
+              ('three-day-clear', 'three-day-fog'),
+              ('three-day-clear', 'three-palette-off'),
+              ('three-day-clear', 'three-dither-on'),
+              ('three-day-clear', 'three-edges-off'),
+              ('three-outline-soft', 'three-outline-strong'),
+              ('three-dither-on', 'three-dither-strong'),
+              ('three-dither-on', 'three-dither-sky'),
+          ]
+          identical = [f'{a} == {b}' for a, b in comparisons if hashes[a] == hashes[b]]
+          if identical:
+              raise SystemExit('Visual smoke states produced identical PNGs: ' + ', '.join(identical))
+          identical_expected = [
+              ('three-day-clear', 'three-res-320'),
+              ('three-day-clear', 'three-day-clear-repeat'),
+              ('three-day-clear', 'three-perf-probe'),
+              ('three-res-480', 'three-res-480-perf'),
+          ]
+          unstable = [f'{a} != {b}' for a, b in identical_expected if hashes[a] != hashes[b]]
+          if unstable:
+              raise SystemExit('Unstable world capture or intrusive performance probe: ' + ', '.join(unstable))
+          print('Ready world states differ as expected; repeat captures and performance instrumentation preserve identical pixels.')
+          PY
+
+      - name: Сохранить визуальные доказательства
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hub-2_5d-visual-smoke-${{ github.sha }}
+          path: hub-visual-smoke/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Показать лог preview при ошибке
+        if: failure()
+        run: cat /tmp/hub-vite-preview.log || true

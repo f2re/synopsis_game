@@ -1,6 +1,7 @@
 import type { BlitzState } from '../shift/blitzRules.js';
 import type { LevelOneState } from '../shift/levelOneRules.js';
 import type { AvatarPortrait, AvatarProfile } from '../identity/model.js';
+import type { RewardGrant } from './rewardCatalog.js';
 
 export interface EffectCharges { reference: number; retry: number }
 
@@ -49,6 +50,7 @@ export interface ReferenceView {
 
 export interface TrainingReward {
   newBadges: BadgeView[];
+  newRewards?: RewardGrant[];
   completedShifts: number;
   unassistedCorrect: number;
   practiceDays: number;
@@ -74,6 +76,8 @@ export interface TrainingShift {
   pendingRetry?: { instanceId: string; firstAnswer: unknown };
   responses: Record<string, { fingerprint: string; response: unknown }>;
   reward?: TrainingReward;
+  /** Receipts of automatic grants; no claim endpoint and no client-written progress. */
+  awardedRewardIds?: string[];
   /** Server-owned clock, outfit and accepted answers for the timed practice mode. */
   blitz?: BlitzState;
   /** Separate first-level completion and review; never awards ordinary-shift progress. */

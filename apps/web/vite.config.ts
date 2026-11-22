@@ -9,10 +9,13 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      '@synopsis/world-engine/renderer-mode': path.resolve(__dirname, '../../packages/world-engine/src/runtime/hubRendererMode.ts'),
+      '@synopsis/world-engine/experimental': path.resolve(__dirname, '../../packages/world-engine/src/runtime/createExperimentalHubGame.ts'),
       '@synopsis/world-engine/avatar': path.resolve(__dirname, '../../packages/world-engine/src/avatar.ts'),
       '@synopsis/world-engine/audio': path.resolve(__dirname, '../../packages/world-engine/src/audio/WorldAudioManager.ts'),
       '@synopsis/world-engine': path.resolve(__dirname, '../../packages/world-engine/src/index.ts'),
       'phaser': path.resolve(__dirname, 'node_modules/.pnpm/phaser@4.2.1/node_modules/phaser'),
+      'three': path.resolve(__dirname, 'node_modules/.pnpm/three@0.187.0/node_modules/three'),
     },
   },
   optimizeDeps: {

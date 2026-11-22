@@ -4,13 +4,14 @@ export const SCREEN_TITLES: Record<string, string> = {
   '/help': 'Помощь', '/settings': 'Настройки', '/codebook': 'Справочник КН-01',
   '/shift': 'Учебная смена', '/blitz': 'Блиц-практика', '/profile/avatar': 'Персонаж и инвентарь',
   '/level-one': 'Первый уровень',
+  '/rewards': 'Награды',
   '/exit': 'Выход из игры', '/admin': 'Управление группами', '/arena-tv': 'Большой экран',
   '/art/r08': 'Художественный пилот R08',
 };
 
 export function screenSurface(path: string): 'home' | 'campus' | 'library' | 'help' | 'settings' | 'study' | 'silent' {
   if (path === '/' || path === '/campus') return 'campus';
-  if (path === '/library' || path === '/codebook' || path === '/archive') return 'library';
+  if (path === '/library' || path === '/codebook' || path === '/archive' || path === '/rewards') return 'library';
   if (path === '/help') return 'help';
   if (path === '/settings') return 'settings';
   if (path === '/shift' || path === '/blitz' || path === '/level-one') return 'study';

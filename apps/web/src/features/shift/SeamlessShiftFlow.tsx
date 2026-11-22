@@ -6,6 +6,7 @@ import { PixelScrollArea } from '../ui/PixelScrollArea';
 import { keepTabInDialog } from '../ui/modalFocus';
 import { AwardBadgeAnimation } from './AwardBadgeAnimation';
 import { WorkroomBackdrop } from './WorkroomBackdrop';
+import { RewardGrants } from '../rewards/RewardGrants';
 import {
   ShiftWorkspace,
   type ShiftAnswerEvent,
@@ -24,7 +25,7 @@ type MentorReaction = {
   text: string;
 };
 
-export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void; onEquipment?: () => void }) {
+export function SeamlessShiftFlow({ onExit, onEquipment, onOpenRewards }: { onExit: () => void; onEquipment?: () => void; onOpenRewards?: () => void }) {
   const [mentorOpen, setMentorOpen] = useState(false);
   const [mentorTopicId, setMentorTopicId] = useState<string>(MENTOR_TOPICS[0].id);
   const [journal, setJournal] = useState<ShiftAnswerEvent[]>([]);
@@ -241,7 +242,8 @@ export function SeamlessShiftFlow({ onExit, onEquipment }: { onExit: () => void;
               <span>Ответов: {serverProgress?.answered ?? 0} · верно с первой попытки: {serverProgress?.correct ?? 0}</span>
               <span>Заданий с помощью: {assistedTasks}</span>
             </div>
-            {completed && reward && <section className="shift-earned" aria-labelledby="shift-earned-title"><h2 id="shift-earned-title">{reward.newBadges.length > 0 ? 'Новые знаки в вашей коллекции' : 'Учебный журнал обновлён'}</h2>{reward.newBadges.length > 0 && <div className="shift-earned__badges">{reward.newBadges.map((badge) => <article key={badge.id}><AwardBadgeAnimation badgeId={badge.id} image={badge.image} size={88} /><div><strong>{badge.name}</strong><span>{badge.effectDescription}</span></div></article>)}</div>}<p>Завершено смен: {reward.completedShifts} · верно самостоятельно: {reward.unassistedCorrect} · учебных дней: {reward.practiceDays}.</p><p>Выберите учебный знак перед новой сменой. Снаряжение не влияет на рейтинговые результаты.</p></section>}
+            {completed && reward && <RewardGrants rewards={reward.newRewards} onOpenRewards={onOpenRewards} />}
+            {completed && reward && <section className="shift-earned" aria-labelledby="shift-earned-title"><h2 id="shift-earned-title">{!reward.newRewards?.length && reward.newBadges.length > 0 ? 'Новые знаки в вашей коллекции' : 'Учебный журнал обновлён'}</h2>{!reward.newRewards?.length && reward.newBadges.length > 0 && <div className="shift-earned__badges">{reward.newBadges.map((badge) => <article key={badge.id}><AwardBadgeAnimation badgeId={badge.id} image={badge.image} size={88} /><div><strong>{badge.name}</strong><span>{badge.effectDescription}</span></div></article>)}</div>}<p>Завершено смен: {reward.completedShifts} · верно самостоятельно: {reward.unassistedCorrect} · учебных дней: {reward.practiceDays}.</p><p>Выберите учебный знак перед новой сменой. Снаряжение не влияет на рейтинговые результаты.</p></section>}
             <div className="shift-lore-actions">
               <button type="button" className="shift-primary" onClick={onExit}>На станцию</button>
               {completed && onEquipment && <button type="button" className="secondary-button" onClick={onEquipment}>{reward?.newBadges.length ? 'Выбрать полученный знак' : 'Открыть снаряжение'}</button>}

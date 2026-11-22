@@ -19,7 +19,7 @@
     {
       "id": "reward_intern_pencil",
       "name": "Карандаш стажёра",
-      "unlockCondition": "Первая успешно завершённая смена С1",
+      "unlockCondition": "Завершить первый уровень или одну полную учебную смену (held.pencil; docs/gameplay/REWARDS.md)",
       "placement": ["инвентарь", "в руке персонажа за столом в посту"],
       "icon": { "size": { "width": 32, "height": 32 }, "asset": "icon_pencil_32.png" },
       "propM2": { "size": { "width": 12, "height": 3 }, "color": "#2563EB" },
@@ -52,7 +52,7 @@
     {
       "id": "reward_duty_lamp",
       "name": "Лампа дежурного",
-      "unlockCondition": "Серия из 10 безошибочных ответов (х10 streak)",
+      "unlockCondition": "Завершить полную учебную смену с 10 верными самостоятельными ответами подряд с первой попытки",
       "placement": ["рабочий стол Кодового поста", "инвентарь уюта"],
       "icon": { "size": { "width": 32, "height": 32 }, "asset": "icon_lamp_32.png" },
       "propM2": { "size": { "width": 24, "height": 40 }, "asset": "prop_lamp_banker_m2.png" },
@@ -79,7 +79,7 @@
     {
       "id": "reward_companion_tit",
       "name": "Спутник «Большая синица»",
-      "unlockCondition": "Находка птицы на метеоплощадке хаба",
+      "unlockCondition": "Завершить 3 полные учебные смены (companion.tit; docs/gameplay/REWARDS.md)",
       "placement": ["анимированный спутник рядом с персонажем"],
       "icon": { "size": { "width": 32, "height": 32 }, "asset": "icon_tit_32.png" },
       "lore": "Пернатый завсегдатай метеоплощадки, доверчиво порхающий у плеча"

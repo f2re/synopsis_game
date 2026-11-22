@@ -77,7 +77,8 @@ function submit(runner) {
   let service;
   try {
     service = await createService();
-    const identity = new IdentityService({ storePath: path.join(directory, 'identity.json'), securityProfile: 'trusted' });
+    const identity = new IdentityService({ storePath: path.join(directory, 'identity.json'), securityProfile: 'trusted',
+      ownsReward: (userId, rewardId) => service.equipment.ownsReward(userId, rewardId) });
     await identity.init();
     await identity.bootstrapAdmin('Проверка первого уровня', '2088');
     const admin = await identity.adminLogin('2088', '127.0.0.1');
@@ -96,6 +97,7 @@ function submit(runner) {
           const token = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
           const user = identity.me(token);
           if (pathname === '/api/equipment') result = service.equipment.getEquipment(user.id, user.avatar);
+          else if (pathname === '/api/rewards') result = service.equipment.getRewards(user.id);
           else if (pathname === '/api/identity/avatar') result = { user: await identity.updateAvatar(token, body.avatar) };
           else if (pathname === '/api/level-one' && method === 'GET') {
             if (hangLobby) {
@@ -131,6 +133,7 @@ function submit(runner) {
     const options = load('apps/web/src/features/avatar/avatarOptions.ts');
     const portrait = load('apps/web/src/features/avatar/SavedAvatarPortrait.tsx', { './saved-avatar-portrait.css': {} });
     const drafts = load('apps/web/src/features/avatar/avatarDraft.ts', { './avatarOptions': options }, { window });
+    const rewards = load('apps/web/src/features/rewards/useRewards.ts', { '../../api': apiModule }, { window, AbortController });
     const { AvatarEditor } = load('apps/web/src/features/avatar/AvatarEditor.tsx', {
       '../../api': apiModule, '@synopsis/world-engine': { worldAudio: { play() {} } },
       './AvatarPreview': { AvatarPreview: 'StaticFitting' }, './SavedAvatarPortrait': portrait,
@@ -139,6 +142,7 @@ function submit(runner) {
       '../hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false }) },
       '../ui/modalFocus': { keepTabInDialog() {} }, '../ui/PixelScrollArea': { PixelScrollArea: 'PixelScrollArea' },
       './EquipmentBadges': { EquipmentBadges: 'EquipmentBadges', EquipmentSummary: 'EquipmentSummary' },
+      '../rewards/useRewards': rewards,
     }, { window, AbortController });
     const model = load('apps/web/src/features/levelOne/levelOneModel.ts');
     const lore = load('apps/web/src/features/shift/shiftLore.ts');
@@ -148,6 +152,7 @@ function submit(runner) {
       '../avatar/SavedAvatarPortrait': portrait, '../ui': { PixelIcon: 'PixelIcon', PixelProgressBar: 'PixelProgressBar' },
       '../ui/radioGroupKeys': { handleRadioGroupKeyDown() {} }, '../shift/WorkroomBackdrop': { WorkroomBackdrop: 'WorkroomBackdrop' },
       '../shift/shiftLore': lore, './levelOneModel': model, '../shift/ShiftWorkspace.css': {}, './levelOne.css': {},
+      '../rewards/RewardGrants': { RewardGrants: 'RewardGrants' },
     }, { window, AbortController, crypto: { randomUUID } });
     const navigation = [];
     const level = () => new Runner(LevelOneScreen, { user, onExit: () => navigation.push('station'), onOpenCharacter: () => navigation.push('character'), onStartPractice: () => navigation.push('practice') });
