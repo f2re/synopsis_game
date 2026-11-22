@@ -8,8 +8,9 @@ The explicit `/art/r08` route creates its own disposable `R08PreviewScene` with
 `createR08PreviewGame`. `/?stationArt=r08` runs the same authored layers inside
 the normal station shell for acceptance. That mode maps the six doorways to
 existing station actions, uses 2× source coordinates (1024×576 logical), and
-pans the composition inside a horizontal `PixelScrollArea` in portrait. The
-responsive projection may still use fractional display zoom. The default Hub
+pans the composition inside a horizontal `PixelScrollArea` in portrait. Its
+backing store is capped at 589,824 pixels to bound fill cost in the wide panorama.
+The responsive projection may still use fractional display zoom. The default Hub
 continues to use the accepted station scene.
 The pipeline owns `/hub/r08-preview/manifest.json`; runtime validates the candidate
 status, local URLs, source bounds, unique semantic roles, light regions and a

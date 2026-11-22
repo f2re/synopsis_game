@@ -57,7 +57,7 @@ async function measureR08(page, viewport, report) {
   assert.equal(result.fpsLimit, 60);
   assert.ok(result.rainDrops > 0 && result.rainDrops <= 72, 'Animated rain stays within its scene budget');
   assert.ok(result.artRequests > 0 && result.artTransferBytes > 0, 'Measure the loaded R08 art package');
-  assert.ok(result.backingStore[0] * result.backingStore[1] <= 2_000_000, 'Limit physical backing pixels');
+  assert.ok(result.backingStore[0] * result.backingStore[1] <= 1024 * 576, 'Cap the scene backing store at one 2× source frame');
   if (process.env.STATION_R08_REQUIRE_WEBGL === '1') assert.equal(result.renderer, 'webgl');
   return result;
 }

@@ -187,8 +187,8 @@ export class HubCharacterLayer {
       actor.elapsedMs = 0;
       actor.frame = 0;
       actor.image.setFrame(0);
-      actor.image.setDepth(actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
-      this.placeDepth(actor);
+      if (this.placement) this.placeDepth(actor);
+      else actor.image.setDepth(actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
     }
     if (this.crowd.length > 0) {
       const plans = this.placement?.crowd ?? stationCrowdPlan(this.layout.portrait);
@@ -278,9 +278,11 @@ export class HubCharacterLayer {
       const x = Math.round(pose.x), y = Math.round(pose.y);
       if (image.x !== x || image.y !== y) image.setPosition(x, y);
       if (image.flipX !== pose.facesLeft) image.setFlipX(pose.facesLeft);
-      const depth = (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
-      if (image.depth !== depth) image.setDepth(depth);
-      this.placeDepth(actor);
+      if (this.placement) this.placeDepth(actor);
+      else {
+        const depth = (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
+        if (image.depth !== depth) image.setDepth(depth);
+      }
       const frame = characterFrameAtTime(actor.clip, pose.elapsed);
       if (frame !== actor.frame) { image.setFrame(frame); actor.frame = frame; }
     }
