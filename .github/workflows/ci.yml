@@ -53,7 +53,9 @@ jobs:
           python scripts/build_character_generation_queue.py --check-only
           python scripts/validate_props_lora_manifest.py
           python scripts/build_props_generation_queue.py --check-only
-          python -m py_compile scripts/validate_*_lora_manifest.py scripts/build_*_generation_queue.py
+          python scripts/init_lora_execution_ledger.py --check-only
+          python scripts/test_lora_execution_ledger.py
+          python -m py_compile scripts/validate_*_lora_manifest.py scripts/build_*_generation_queue.py scripts/init_lora_execution_ledger.py scripts/validate_lora_execution_ledger.py scripts/test_lora_execution_ledger.py
       - name: Проверить скрипты развёртывания
         run: |
           bash -n deploy/scripts/*.sh scripts/release/*.sh
@@ -63,6 +65,7 @@ jobs:
           pnpm bootstrap
           pnpm typecheck
           node tools/test_digit_anatomy.cjs
+          pnpm world:test
           pnpm test:server
           node packages/world-engine/scripts/syncAudioManifest.mjs --check
           node tools/test_world_audio_controls.cjs
@@ -75,9 +78,13 @@ jobs:
           node tools/test_station_r09_layer.cjs
           node --experimental-strip-types tools/test_station_r09_wind_contract.mjs
           node tools/test_modular_avatar.cjs
+          node tools/test_character_setup_lifecycle.cjs
+          node tools/test_level_one_lifecycle.cjs
           node tools/test_avatar_preview_lifecycle.cjs
           node tools/test_avatar_world_boundary.cjs
           node tools/test_hub_scene_lifecycle.cjs
+          node tools/test_experimental_hub_lifecycle.cjs
+          node tools/test_hub_subscription_order.cjs
           node tools/test_blitz_lifecycle.cjs
           node tools/test_station_plot_hit_fallback.cjs
           # Проверка астрономии выполняется на закреплённом Node 22

@@ -9,6 +9,7 @@ import { readHubPreferences } from '../hub/hubPreferences';
 import { keepTabInDialog } from '../ui/modalFocus';
 import { PixelScrollArea } from '../ui/PixelScrollArea';
 import { EquipmentBadges, EquipmentSummary } from './EquipmentBadges';
+import { useRewards } from '../rewards/useRewards';
 import { avatarDraftConflicts, avatarDraftStorage, clearAvatarDraft, mergeAvatarDraft, readAvatarDraft, sameAvatar, writeAvatarDraft, type AvatarDraft } from './avatarDraft';
 import './inventory.css';
 
@@ -16,6 +17,7 @@ interface AvatarEditorProps {
   user: SessionUser;
   onSaved: (user: SessionUser) => void;
   onBack: () => void;
+  onOpenRewards?: () => void;
   onContinueToLevel?: () => void;
   continueLabel?: string;
   backLabel?: string;
@@ -28,7 +30,8 @@ const DIRECTIONS: AvatarDirection[] = ['down', 'left', 'up', 'right'];
 const DIRECTION_LABELS: Record<AvatarDirection, string> = { down: 'Спереди', left: 'Слева', up: 'Сзади', right: 'Справа' };
 const SECTIONS = ['inventory', 'badges', 'appearance'] as const;
 
-export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continueLabel = 'К первому уровню', backLabel = 'На станцию', initialSection }: AvatarEditorProps) {
+export function AvatarEditor({ user, onSaved, onBack, onOpenRewards, onContinueToLevel, continueLabel = 'К первому уровню', backLabel = 'На станцию', initialSection }: AvatarEditorProps) {
+  const rewards = useRewards(user.id);
   const [avatar, setAvatar] = useState<AvatarProfile>({ ...user.avatar });
   const [savedAvatar, setSavedAvatar] = useState<AvatarProfile>({ ...user.avatar });
   const [savedPortrait, setSavedPortrait] = useState<AvatarPortrait | undefined>(user.avatarPortrait);
@@ -58,12 +61,14 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
   const accountId = useRef(user.id);
   accountId.current = user.id;
   const exitDialog = useRef<HTMLDialogElement>(null);
+  const leaveDestination = useRef<'back' | 'rewards'>('back');
   const saveFooter = useRef<HTMLElement>(null);
   const dirty = !sameAvatar(avatar, savedAvatar);
   const portraitSaved = isSavedAvatarPortrait(savedPortrait);
   const portraitOutdated = portraitSaved && Boolean(rigRevision && !savedPortrait.sourceRevision.startsWith(`portrait-v1:${rigRevision}:`));
   const visibleEquipment = equipmentOwner === user.id ? equipment : null;
   const busy = saving || selectingBadge;
+  const draftNeedsRewards = Boolean(pendingDraft && EQUIPMENT_SLOTS.some(slot => OPTIONS[slot.id].some(item => item.rewardId && item.id === mergeAvatarDraft(pendingDraft, savedAvatar)[slot.id])));
   const saveRequired = dirty || !portraitSaved || portraitOutdated;
 
   useEffect(() => {
@@ -197,6 +202,8 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
   }
 
   function updateOption(slot: keyof AvatarProfile, value: string) {
+    const option = OPTIONS[slot].find(item => item.id === value);
+    if (option?.rewardId && rewards.data?.catalog.find(reward => reward.id === option.rewardId)?.status !== 'earned') return;
     setAvatar((current) => ({ ...current, [slot]: value }));
     if (slot === 'skinTone' || slot === 'hairColor' || slot === 'hair') {
       setShowFace(true);
@@ -239,7 +246,32 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
     if (destination === 'stay') return;
     setConfirmExit(false);
     if (destination === 'level') onContinueToLevel?.();
+    else leaveEditor();
+  }
+
+  function leaveEditor() {
+    if (leaveDestination.current === 'rewards' && onOpenRewards) onOpenRewards();
     else onBack();
+  }
+
+  function requestLeave(destination: 'back' | 'rewards') {
+    leaveDestination.current = destination;
+    if (dirty) setConfirmExit(true);
+    else leaveEditor();
+  }
+
+  function restoreDraft() {
+    if (!pendingDraft) return;
+    const restored = mergeAvatarDraft(pendingDraft, savedAvatar);
+    let removed = false;
+    for (const slot of EQUIPMENT_SLOTS) {
+      const item = OPTIONS[slot.id].find(option => option.id === restored[slot.id]);
+      if (item?.rewardId && rewards.data?.catalog.find(reward => reward.id === item.rewardId)?.status !== 'earned') {
+        restored[slot.id] = slot.empty ?? savedAvatar[slot.id]; removed = true;
+      }
+    }
+    setAvatar(restored); setPendingDraft(null);
+    setNotice({ kind: 'info', text: removed ? 'Примерка восстановлена. Неполученные награды оставлены в коллекции.' : 'Примерка восстановлена. Сохраните образ, чтобы применить её в профиле.' });
   }
 
   async function save(destination: SaveDestination = 'stay') {
@@ -293,7 +325,7 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
       <div className="inventory-shell">
         <header className="inventory-header">
           <div className="inventory-heading"><SavedAvatarPortrait portrait={savedPortrait} size={40} label={`Сохранённый портрет: ${user.displayName}`} /><div><span className="inventory-eyebrow">26063 · {user.displayName}</span><h1 id="inventory-title">Персонаж и инвентарь</h1></div></div>
-          <button type="button" className="inventory-button" disabled={busy} onClick={() => dirty ? setConfirmExit(true) : onBack()}>← {backLabel}</button>
+          <div className="inventory-header-actions">{onOpenRewards && <button type="button" className="inventory-button inventory-rewards-link" disabled={busy} onClick={() => requestLeave('rewards')}>Награды {rewards.data && <span>{rewards.data.earnedCount} / {rewards.data.total}</span>}</button>}<button type="button" className="inventory-button" disabled={busy} onClick={() => requestLeave('back')}>← {backLabel}</button></div>
         </header>
 
         {onContinueToLevel && <p className="inventory-entry-context">Выберите готовый комплект или настройте внешность. Сохраните образ и продолжайте к уровню. Уже начатый уровень сохранит прежний портрет.</p>}
@@ -302,8 +334,9 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
           <div><h2 id="inventory-draft-title">Осталась незавершённая примерка</h2><p>Она сохранена в этой вкладке. Восстановите её или оставьте образ из профиля.</p>
             {avatarDraftConflicts(pendingDraft, savedAvatar).length > 0 && <p>Некоторые вещи в профиле уже изменились. При восстановлении в этих слотах будет выбран ваш черновик; остальные сохранённые вещи останутся.</p>}
           </div>
+          {draftNeedsRewards && !rewards.data && <div role="status"><p>{rewards.loading ? 'Проверяем награды из сохранённой примерки…' : 'Чтобы восстановить наградные вещи, нужно проверить коллекцию.'}</p>{rewards.error && <button type="button" className="inventory-button" disabled={rewards.loading} onClick={rewards.reload}>Повторить проверку наград</button>}</div>}
           <div className="inventory-draft-recovery__actions">
-            <button type="button" className="inventory-button inventory-button--primary" disabled={busy} onClick={() => { setAvatar(mergeAvatarDraft(pendingDraft, savedAvatar)); setPendingDraft(null); setNotice({ kind: 'info', text: 'Примерка восстановлена. Сохраните образ, чтобы применить её в профиле.' }); }}>Восстановить примерку</button>
+            <button type="button" className="inventory-button inventory-button--primary" disabled={busy || (draftNeedsRewards && !rewards.data)} onClick={restoreDraft}>Восстановить примерку</button>
             <button type="button" className="inventory-button" disabled={busy} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setPendingDraft(null); setNotice({ kind: 'info', text: 'Черновик удалён. Оставлен сохранённый образ.' }); }}>Удалить черновик</button>
           </div>
         </section>}
@@ -341,7 +374,7 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
                   const item = OPTIONS[slot.id].find((entry) => entry.id === avatar[slot.id]);
                   return <button key={slot.id} type="button" className={`inventory-slot ${item && item.id !== slot.empty ? 'has-item' : ''}`} aria-label={`${slot.label}: ${item?.name ?? 'Пусто'}. Выбрать предмет`} onClick={() => focusSlot(slot.id)}><span className="inventory-slot__art">{item?.image ? <img src={item.image} alt="" width={48} height={48} /> : item?.iconLabel ? <span className="inventory-art-token" aria-hidden="true">{item.iconLabel}</span> : <span aria-hidden="true">—</span>}</span><span>{slot.label}</span></button>;
                 })}</div>
-                <AvatarOptionGrid avatar={avatar} selectedId={selectedId} category={category} query={query} equippedOnly={equippedOnly} tools={visibleEquipment?.tools} onSelect={selectItem} onCategoryChange={setCategory} onQueryChange={setQuery} onEquippedOnlyChange={setEquippedOnly} onEquip={updateOption} />
+                <AvatarOptionGrid avatar={avatar} selectedId={selectedId} category={category} query={query} equippedOnly={equippedOnly} tools={visibleEquipment?.tools} rewards={rewards.data} rewardsLoading={rewards.loading} rewardsError={rewards.error} onReloadRewards={rewards.reload} onOpenRewards={onOpenRewards ? () => requestLeave('rewards') : undefined} onSelect={selectItem} onCategoryChange={setCategory} onQueryChange={setQuery} onEquippedOnlyChange={setEquippedOnly} onEquip={updateOption} />
               </>}
             </div>
             <div role="tabpanel" id="appearance-panel" aria-labelledby="appearance-tab" hidden={section !== 'appearance'}>
@@ -380,7 +413,7 @@ export function AvatarEditor({ user, onSaved, onBack, onContinueToLevel, continu
       <dialog ref={exitDialog} className="inventory-exit-dialog" tabIndex={-1} onKeyDown={keepTabInDialog} onCancel={(event) => { event.preventDefault(); if (!saving) setConfirmExit(false); }} aria-labelledby="inventory-exit-title">
         <PixelScrollArea label="Несохранённая примерка" className="inventory-exit-scroll">
         <h2 id="inventory-exit-title">Сохранить изменения?</h2><p>Вы изменили образ персонажа. Перед выходом из примерочной его можно сохранить.</p>
-        <div className="inventory-exit-actions"><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save('back')}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); onBack(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
+        <div className="inventory-exit-actions"><button type="button" className="inventory-button inventory-button--primary" disabled={saving} onClick={() => void save('back')}>{saving ? 'Сохранение…' : 'Сохранить и выйти'}</button><button type="button" className="inventory-button" disabled={saving} onClick={() => { clearAvatarDraft(avatarDraftStorage(), user.id); setConfirmExit(false); leaveEditor(); }}>Выйти без сохранения</button><button type="button" className="inventory-button" disabled={saving} onClick={() => setConfirmExit(false)}>Продолжить примерку</button></div>
         </PixelScrollArea>
       </dialog>
     </main>

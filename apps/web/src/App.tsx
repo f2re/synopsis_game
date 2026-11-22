@@ -23,6 +23,7 @@ const Codebook = lazy(() => import('./features/codebook/Codebook').then((module)
 const BlitzWorkspace = lazy(() => import('./features/shift/BlitzWorkspace').then((module) => ({ default: module.BlitzWorkspace })));
 const SeamlessShiftFlow = lazy(() => import('./features/shift/SeamlessShiftFlow').then((module) => ({ default: module.SeamlessShiftFlow })));
 const LevelOneScreen = lazy(() => import('./features/levelOne/LevelOneScreen').then((module) => ({ default: module.LevelOneScreen })));
+const RewardsScreen = lazy(() => import('./features/rewards/RewardsScreen').then((module) => ({ default: module.RewardsScreen })));
 
 function currentLocation(): string { return window.location.pathname + window.location.search; }
 function navigate(path: string, replace = false): void {
@@ -178,26 +179,29 @@ export function App() {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : user?.roles.includes('admin')
       ? <AdminScreen currentUser={user} onBack={() => navigate('/')} />
       : <AdminLoginScreen currentUser={user} onLogin={(adminUser) => { setUser(adminUser); navigate('/admin', true); }} onBack={() => navigate('/')} />;
-  } else if (path === '/profile/avatar' || path === '/shift' || path === '/blitz' || path === '/level-one') {
+  } else if (path === '/profile/avatar' || path === '/shift' || path === '/blitz' || path === '/level-one' || path === '/rewards') {
     screen = booting ? <LoadingScreen text="Проверяем сессию…" /> : !user
       ? <LoginScreen onLogin={(profile) => { setUser(profile); setSessionNotice(''); }} onClose={() => navigate('/')} sessionNotice={sessionNotice} />
       : path === '/profile/avatar'
         ? <AvatarEditor key={user.id} user={user} onSaved={acceptUpdatedProfile}
             onBack={() => navigate(characterReturnPath(location.split('?')[1] ?? ''))}
+            onOpenRewards={() => navigate('/rewards')}
             backLabel={characterReturnPath(location.split('?')[1] ?? '') === '/level-one' ? 'К уровню' : 'На станцию'}
             onContinueToLevel={startLevelOne}
             initialSection={new URLSearchParams(location.split('?')[1] ?? '').get('section') === 'badges' ? 'badges' : new URLSearchParams(location.split('?')[1] ?? '').get('section') === 'appearance' ? 'appearance' : undefined} />
+        : path === '/rewards'
+          ? <RewardsScreen key={user.id} user={user} onBack={() => navigate('/')} onNavigate={navigate} />
         : path === '/level-one'
           ? user.roles.includes('display')
             ? <main className="station-page"><PixelCard variant="dialog"><h1>Профиль большого экрана</h1><p>Для первого уровня нужен учебный профиль. Этот сеанс предназначен для трансляции.</p><button type="button" className="station-back" onClick={() => navigate('/arena-tv')}>Открыть большой экран</button><button type="button" className="station-back" onClick={requestExit}>Выйти из профиля</button></PixelCard></main>
-            : <LevelOneScreen key={user.id} user={user} onExit={() => navigate('/')} onOpenCharacter={openLevelCharacter} onStartPractice={startShift} />
+            : <LevelOneScreen key={user.id} user={user} onExit={() => navigate('/')} onOpenCharacter={openLevelCharacter} onStartPractice={startShift} onOpenRewards={() => navigate('/rewards')} />
         : path === '/blitz'
           ? <BlitzWorkspace key={user.id} user={user} onExit={() => navigate('/')} onStartPractice={() => navigate('/shift')} />
-          : <SeamlessShiftFlow key={user.id} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} />;
+          : <SeamlessShiftFlow key={user.id} onExit={() => navigate('/')} onEquipment={() => navigate('/profile/avatar?section=badges')} onOpenRewards={() => navigate('/rewards')} />;
   } else if (path === '/' || path === '/campus') screen = <HubScreen
     user={user} onLoginClick={() => setLoginModalOpen(true)} onLogout={requestExit}
     onOpenSetCode={() => setSetCodeModalOpen(true)} onStartShift={startShift} onStartBlitz={startBlitz} onStartLevelOne={startLevelOne}
-    onOpenAvatar={() => navigate('/profile/avatar')} onOpenAdmin={() => navigate('/admin')}
+    onOpenAvatar={() => navigate('/profile/avatar')} onOpenRewards={() => navigate('/rewards')} onOpenAdmin={() => navigate('/admin')}
     onOpenLibrary={() => navigate('/library')} onVisitArchive={() => navigate('/archive')}
     onOpenHelp={() => navigate('/help')} onOpenSettings={() => navigate('/settings')} onExit={requestExit}
     externalModalOpen={loginModalOpen || setCodeModalOpen || exitDialogOpen}
@@ -205,7 +209,7 @@ export function App() {
   />;
   else screen = <main className="station-page station-exit"><section className="station-exit__card"><h1>Такой страницы пока нет</h1><p>Вернитесь на станцию: там доступны занятия, библиотека и помощь.</p><button type="button" className="station-back" onClick={() => navigate('/', true)}>На станцию</button></section></main>;
 
-  const focusKey = ['/shift', '/blitz', '/level-one', '/profile/avatar', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
+  const focusKey = ['/shift', '/blitz', '/level-one', '/profile/avatar', '/rewards', '/admin'].includes(path) ? `${path}:${booting}:${user?.id ?? 'guest'}` : path;
   const stationWorld = path === '/' || path === '/campus';
   const routeContent = <><RouteHeadingFocus key={focusKey} />{screen}</>;
   return <AtmosphereProvider surface={exiting ? 'silent' : screenSurface(path)}>

@@ -383,3 +383,20 @@
 .inventory-screen :is(.inventory-segment, .inventory-slot, .inventory-tab, .inventory-category, .inventory-item, .inventory-appearance-option, .inventory-preset):active:not(:disabled) { box-shadow: var(--ui-control-pressed); }
 .inventory-screen :is(.inventory-segment, .inventory-slot, .inventory-tab, .inventory-category, .inventory-item, .inventory-appearance-option, .inventory-preset):disabled { cursor: default; opacity: .65; }
 .inventory-tabs { flex-wrap: wrap; }
+
+/* Rewards are inspectable before they can be worn. Their silhouettes preserve the object shape. */
+.inventory-header-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.inventory-rewards-link { color: var(--inventory-gold-light); }
+.inventory-rewards-link span { margin-left: 8px; }
+.inventory-item.is-reward-locked .inventory-item__art img,
+.inventory-detail.is-reward-locked .inventory-detail__art img { filter: brightness(0); opacity: .8; }
+.inventory-item.is-reward-locked .inventory-item__art,
+.inventory-detail.is-reward-locked .inventory-detail__art { background: #36515b; }
+.inventory-item.is-reward-locked .inventory-item__state { color: #c6d3d0; }
+.inventory-reward-condition { border: 2px solid #54716b; padding: 12px; background: #17333c; margin-bottom: 16px; }
+.inventory-reward-condition strong { color: #e6c07a; }
+.inventory-reward-condition p { margin: 8px 0 0 !important; color: #e0e6dc; }
+.equipment-badge.is-locked .equipment-badge__art img { filter: brightness(0); opacity: .8; }
+.equipment-badge.is-locked .equipment-badge__art { background: #36515b; }
+.equipment-badge.is-unlocked:not(.is-equipped) .equipment-badge__art { box-shadow: 0 0 16px #f2c75c26; }
+@media (max-width: 760px) { .inventory-header-actions { width: 100%; justify-content: space-between; } .inventory-header-actions > button { flex: 1; } }

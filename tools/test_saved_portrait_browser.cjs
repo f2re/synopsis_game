@@ -15,12 +15,12 @@ const DEFAULT = {
 const FIELD = {
   ...DEFAULT, skinTone: 'skin.deep', hair: 'hair.curl', hairColor: 'haircolor.auburn',
   headwear: 'headwear.cap', top: 'top.field-jacket', bottom: 'bottom.field-trousers',
-  footwear: 'footwear.boots', backpack: 'backpack.field', heldItem: 'held.pencil', badge: 'badge.meteo',
+  footwear: 'footwear.boots', backpack: 'backpack.field', heldItem: 'held.tablet', badge: 'badge.meteo',
 };
 const REST = {
   ...FIELD, headwear: 'headwear.beanie', top: 'top.sweater', bottom: 'bottom.jeans',
   footwear: 'footwear.sneakers', backpack: 'backpack.city', heldItem: 'held.none',
-  companion: 'companion.tit', badge: 'badge.none',
+  companion: 'companion.none', badge: 'badge.none',
 };
 function checkSaved(user, expected) {
   assert.deepEqual(user.avatar, expected, 'All eleven appearance values survive the real save');

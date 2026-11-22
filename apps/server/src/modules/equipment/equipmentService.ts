@@ -5,6 +5,8 @@ import {
   type TrainingReward, type TrainingShift, type TrainingState,
 } from './model.js';
 import { TrainingStore, type TrainingStoreOptions } from './trainingStore.js';
+import { authorizedAvatar, completedActivities, grantCompletionRewards, ownsReward, rewardCollection, rewardGrants } from './rewardCatalog.js';
+import { LEVEL_ONE_MODE } from '../shift/levelOneRules.js';
 
 export const TRAINING_BADGE_IDS = ['badge.training_starter', 'badge.first_shift', 'badge.accuracy', 'badge.regular'] as const;
 const BADGES = [
@@ -24,7 +26,37 @@ export class EquipmentService {
   readonly store: TrainingStore;
 
   constructor(options: TrainingStoreOptions = {}) { this.store = new TrainingStore(options); }
-  async init(): Promise<void> { await this.store.init(); }
+  async init(): Promise<void> {
+    await this.store.init();
+    // Backfill only from durable server activities. Appearance choices and the
+    // discontinued client-reported progression store are never earning evidence.
+    await this.store.transaction((state) => {
+      for (const userId of Object.keys(state.users)) {
+        let practiceCount = 0;
+        for (const shift of completedActivities(state, userId)) {
+          if (effectsAllowed(shift.mode)) practiceCount++;
+          grantCompletionRewards(state, shift, practiceCount);
+        }
+      }
+    });
+  }
+
+  getRewards(userId: string) { return rewardCollection(this.store.read(), userId); }
+
+  ownsReward(userId: string, id: string): boolean { return ownsReward(this.store.read().users[userId], id); }
+
+  authorizedAvatar(userId: string, avatar: AvatarProfile): AvatarProfile {
+    const user = this.store.read().users[userId];
+    return authorizedAvatar(avatar, (id) => ownsReward(user, id));
+  }
+
+  completeFirstLevel(state: TrainingState, shift: TrainingShift, completedAt: string): void {
+    if (shift.mode !== LEVEL_ONE_MODE || !shift.levelOne || shift.currentIndex !== shift.taskIds.length) {
+      throw new EquipmentError(409, 'Первый уровень ещё не завершён', 'unverified_completion');
+    }
+    shift.completedAt = completedAt;
+    grantCompletionRewards(state, shift);
+  }
 
   getEquipment(userId: string, avatar: AvatarProfile) {
     return this.view(this.store.read().users[userId] ?? initialEquipmentUser(), avatar);
@@ -50,15 +82,17 @@ export class EquipmentService {
 
   snapshot(user: EquipmentUser, avatar: AvatarProfile, mode: string, avatarPortrait?: AvatarPortrait): EquipmentSnapshot {
     const enabled = effectsAllowed(mode);
+    const safeAvatar = authorizedAvatar(avatar, (id) => ownsReward(user, id));
     const allowedHeld = AVATAR_OPTIONS.heldItem as readonly string[];
-    const heldItem = allowedHeld.includes(avatar.heldItem) ? avatar.heldItem : 'held.none';
+    const heldItem = allowedHeld.includes(safeAvatar.heldItem) ? safeAvatar.heldItem : 'held.none';
     const badge = BADGES.find((candidate) => candidate.id === user.badgeId && (candidate.id === TRAINING_BADGE_IDS[0] || user.earned[candidate.id]));
     const charges: EffectCharges = {
       reference: enabled ? Math.min(2, (badge?.effects.reference ?? 0) + (heldItem === 'held.tablet' || heldItem === 'held.map-folder' ? 1 : 0)) : 0,
       retry: enabled ? Math.min(2, (badge?.effects.retry ?? 0) + (heldItem === 'held.pencil' ? 1 : 0)) : 0,
     };
     return { badgeId: badge?.id ?? null, badgeName: badge?.name ?? null, heldItem, enabled, charges, remaining: { ...charges }, assistedTasks: 0,
-      ...(avatarPortrait ? { avatarSnapshot: validateAvatar(avatar), avatarPortrait: { ...avatarPortrait } } : {}) };
+      ...(avatarPortrait && JSON.stringify(safeAvatar) === JSON.stringify(avatar)
+        ? { avatarSnapshot: validateAvatar(safeAvatar), avatarPortrait: { ...avatarPortrait } } : {}) };
   }
 
   complete(state: TrainingState, shift: TrainingShift, completedAt: string): TrainingReward {
@@ -85,8 +119,12 @@ export class EquipmentService {
     grant(TRAINING_BADGE_IDS[2], shift.unassistedCorrect / shift.taskIds.length >= 0.8);
     grant(TRAINING_BADGE_IDS[3], user.practiceDates.length >= 3);
     shift.completedAt = completedAt;
+    const newItems = grantCompletionRewards(state, shift);
+    const newRewards = [...rewardGrants(earnedIds), ...newItems];
+    if (newRewards.length) shift.awardedRewardIds = [...new Set([...(shift.awardedRewardIds ?? []), ...earnedIds])];
     shift.reward = {
       newBadges: this.catalog(user).filter((badge) => earnedIds.includes(badge.id)),
+      newRewards,
       completedShifts: user.completedShifts,
       unassistedCorrect: user.unassistedCorrect,
       practiceDays: user.practiceDates.length,

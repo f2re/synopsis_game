@@ -1,0 +1,299 @@
+{
+  "task": "station-r09-main-integration",
+  "reviewer": "station_runtime_acceptance",
+  "roles": [
+    "web-performance-engineer",
+    "integration-release-engineer"
+  ],
+  "status": "PASS_LOCAL_INTEGRATION_BROWSER_PENDING",
+  "createdAt": "2026-11-22T09:52:14.839Z",
+  "basis": {
+    "localHeadBeforeMerge": "10ad854e5734bef3a7448c3a6589c28f9da307c4",
+    "remoteR09HeadBeforeMerge": "ceefbefa85aaa1297910c4a4fd914c762e98fa4e",
+    "upstreamCommit": "aa1148bdc74612ba87f2965c1d0de5e752618deb",
+    "upstreamTree": "651723bf0e89b40d0eb89d6fce9565db9c49a9e5",
+    "localUpstreamImport": "e649763d0fe7fdc2552d14caf31aa3ff080568be",
+    "scope": "Exact file hashes of merged worktree before its merge commit"
+  },
+  "findings": [
+    "HubScreen matches upstream: bridge subscriptions are installed before selected renderer mount, including warm scene creation and StrictMode cleanup.",
+    "Explicit stationArt=r09 continues through the default legacy2d renderer; experimental Three.js remains separate and opt-in. No second WebGL probe is run on the default path.",
+    "CSS union retains R09 desktop topbar height 60px, upstream reward action widths 144px, station panorama controls and separate experimental keyboard-location styles.",
+    "station-r09 and rewards both remain in browser phase default/allowlist, with their independent hooks. Existing phases and upstream CI lifecycle tests are retained.",
+    "R09 manifests, WorldCanvas disposal and native context browser scenario keep their accepted source hashes; no product source was changed by this reviewer.",
+    "Updated first-level, avatar and reward services pass in-process integration after compiling current server sources."
+  ],
+  "files": [
+    {
+      "path": "apps/web/src/features/hub/HubScreen.tsx",
+      "sha256": "ca2a19375642c6e4be69e143736f3cc4cd9b7223fef773fce0be5d7357e348fc"
+    },
+    {
+      "path": "apps/web/src/hub-ui.css",
+      "sha256": "fe804f0d25841b21357f8b7e83d82cc8dcee5734fbc0b88d0f71e34225760eab"
+    },
+    {
+      "path": "apps/web/src/game/WorldCanvas.tsx",
+      "sha256": "2beccf72e4e84597fdb708bc6ea8fd5bd0b6a7e234b59f85c0ad47c39d992a32"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/HubR09Layer.ts",
+      "sha256": "8d881743e8591ce6dc349357ca637c1d57cc458f81e6d7bf1a4fece321cfb2e9"
+    },
+    {
+      "path": "packages/world-engine/src/assets/hub/r09-manifest.json",
+      "sha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420"
+    },
+    {
+      "path": "packages/world-engine/src/runtime/hubRendererMode.ts",
+      "sha256": "8ef4ad8c8556e0b0536c2bb32b641eb5548f9c38699b45a76b2a711285c6371b"
+    },
+    {
+      "path": "packages/world-engine/src/runtime/fitLogicalViewport.ts",
+      "sha256": "59f003fd06dcf5d319d4e89749f8c6eba24e1a9759d0fb15ddfaffb6be0d8c54"
+    },
+    {
+      "path": "tools/test_station_screens.cjs",
+      "sha256": "43d918ff708f57003962dba47ad2268212b1cfc2f00b9ed8e7d7740afb3aeb40"
+    },
+    {
+      "path": "tools/test_station_r09_browser.cjs",
+      "sha256": "d18afeed1e7ed27d9bd2ff0b2a285d7f1faf4115eec42edcd0466bed6c4b5fa4"
+    },
+    {
+      "path": "tools/test_hub_subscription_order.cjs",
+      "sha256": "8ced8e31d9fb0b4aa7f6379c9aea7d106731fae1f663fce5be35db23cda6f2d5"
+    },
+    {
+      "path": "tools/test_hub_scene_lifecycle.cjs",
+      "sha256": "7b1825991263e38f91781974cc7e15528231e1d9c041942331262d0b99ffeb7f"
+    },
+    {
+      "path": "tools/test_experimental_hub_lifecycle.cjs",
+      "sha256": "6026aba33e2cd1b732c4bbcf4692a9995f214f188f924a1c74accf3379def156"
+    },
+    {
+      "path": "tools/test_avatar_world_boundary.cjs",
+      "sha256": "6f57ab3a4f5187ed3ccd1a16d9b14839b9eebf38718d844bfa79a8e72dafeac8"
+    },
+    {
+      "path": "tools/test_station_r09_layer.cjs",
+      "sha256": "a65f61f9c0a8ba65d16373c0f06c1568729dfa14db7a38b1e515395c9e09ad0a"
+    },
+    {
+      "path": "tools/test_character_setup_lifecycle.cjs",
+      "sha256": "52e33bd978e9cbb733fdb54b3ab3589e0291ed5e89439cc97d8c2f5ac969f953"
+    },
+    {
+      "path": "tools/test_level_one_lifecycle.cjs",
+      "sha256": "a3950dc5ae86bb3ba1f90d0ccc91567cfe12a16db2275486b5c2450b84cc895b"
+    },
+    {
+      "path": "apps/server/src/modules/equipment/rewards.test.ts",
+      "sha256": "30a0aa7fef544ba13cb9194e3184bff6bfbfa59921d303f5f550ead14b10649a"
+    },
+    {
+      "path": "apps/server/src/modules/equipment/equipmentService.ts",
+      "sha256": "d96412d55ee7d58bb79996336b21cc1008176101d1d465e3f8ca3f9f4032e375"
+    },
+    {
+      "path": "apps/server/src/modules/shift/shiftService.ts",
+      "sha256": "66a0db23197b8525db811c1e68f8a5a09bb34289f3f7704fcbe30aa1182f75eb"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "140d2e9ad7a07d6fcbc8624c1965a1058b9a521e04c4ba18fcbeacb0f8a73e3d"
+    },
+    {
+      "path": ".github/workflows/station-screens.yml",
+      "sha256": "cd7e4db420e12c47abb17e7890978bf8d1fee0568e5b057ce053d674f487c2e0"
+    }
+  ],
+  "tests": [
+    {
+      "command": "node tools/test_hub_subscription_order.cjs",
+      "exitCode": 0,
+      "output": "{\"status\":\"PASS\",\"checks\":[\"both renderers wait for bridge subscriptions\",\"immediate scene create is observed\",\"no stale readiness replay\",\"unmount before async import\",\"strict effect remount\",\"subscriptions and timers cleaned up\"],\"limits\":\"Actual HubScreen/WorldBridge with hook doubles; CI checks real browser readiness.\"}\n"
+    },
+    {
+      "command": "node tools/test_hub_scene_lifecycle.cjs",
+      "exitCode": 0,
+      "output": "{\"status\":\"PASS\",\"checks\":[\"DESTROY without SHUTDOWN\",\"retired weather/focus listeners removed\",\"repeated mount and weather update\",\"idempotent shutdown/destroy\",\"unrelated bridge listeners retained\"],\"limits\":\"Real HubScene and bridge with render doubles; not browser or GPU acceptance.\"}\n"
+    },
+    {
+      "command": "node tools/test_experimental_hub_lifecycle.cjs",
+      "exitCode": 0,
+      "output": "{\"status\":\"PASS\",\"checks\":[\"saved presentation at creation\",\"shared modal blocks world input\",\"one semantic arrival\",\"modal cancels pending arrival\",\"runtime preference update\",\"DESTROY without SHUTDOWN\",\"retired bridge listeners removed\",\"idempotent teardown\"],\"limits\":\"Actual scene and bridge with renderer doubles; browser/GPU acceptance is separate.\"}\n"
+    },
+    {
+      "command": "node tools/test_avatar_world_boundary.cjs",
+      "exitCode": 0,
+      "output": "{\"status\":\"PASS\",\"boundary\":\"real WorldCanvas code with deterministic event doubles\",\"checks\":[\"no personal player controls or profile channel\",\"native building actions retained\",\"shared audio gesture and master volume gates\",\"weather selection without game recreation\",\"weather snapshot for delayed scene creation\",\"context-loss and hidden restore silence\",\"late hidden scene-ready and weather changes keep rain stopped\",\"modal input pause\",\"independent reduced-motion and low-power weather limits\",\"all listeners and game disposed\",\"owned native context released only after delayed Phaser DESTROY and renderer disposal\",\"release remains safe without a WebGL context\"],\"limits\":\"Not a browser layout, measured GPU or art acceptance result.\"}\n"
+    },
+    {
+      "command": "node --check tools/test_station_screens.cjs",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": "node --experimental-strip-types --test packages/world-engine/src/runtime/hubRendererMode.test.ts packages/world-engine/src/runtime/logicalViewportMath.test.ts packages/world-engine/src/runtime/HubRenderResolution.test.ts",
+      "exitCode": 0,
+      "output": "✔ default remains 320×180 without a user opt-in (1.579102ms)\n✔ explicit bounded 16:9 resolutions do not change 640×360 world coordinates (0.298813ms)\n✔ invalid, repeated or adversarial values always fall back to bounded default (0.393985ms)\n✔ other query flags and URLSearchParams do not affect resolution (0.246976ms)\n✔ legacy renderer remains the safe opt-out default (1.054084ms)\n✔ explicit three2d flag and renderer alias select the experimental renderer (0.214579ms)\n✔ capability gate falls back before 3D scene selection (0.185125ms)\n✔ headless runtime without DOM never probes WebGL2 (0.151235ms)\n✔ canonical 2.5D Hub uses 640×360, legacy scenes retain 480×270 (1.659462ms)\n✔ full HD Hub (0.277191ms)\n✔ 800×600 Hub passepartout (0.156893ms)\n✔ mobile landscape Hub (0.157974ms)\n✔ 1024×768 projector Hub (0.137074ms)\n✔ legacy viewport (0.096714ms)\n✔ small display crops symmetrically (0.109442ms)\n✔ invalid logical dimensions and nonfinite screen sizes are rejected (0.501514ms)\nℹ tests 16\nℹ suites 0\nℹ pass 16\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 221.081773\n"
+    },
+    {
+      "command": "node ../web/node_modules/typescript/lib/tsc.js -p tsconfig.json (cwd apps/server)",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": "node tools/test_character_setup_lifecycle.cjs",
+      "exitCode": 0,
+      "output": "{\"status\":\"PASS\",\"checks\":[\"clean continuation without redundant write\",\"save acknowledged before navigation\",\"double-submit guarded\",\"route tab change preserves fitting\",\"network failure preserves draft and supports retry\",\"wrong account/outfit/old portrait/malformed revision rejected\",\"timeout preserves fitting\",\"account change ignores late response\",\"optional continuation preserves normal save behavior\"],\"limits\":\"Real component handlers with deterministic hook/service doubles. No browser layout, keyboard or visual acceptance.\"}\n"
+    },
+    {
+      "command": "node tools/test_level_one_lifecycle.cjs",
+      "exitCode": 0,
+      "output": "{\"status\":\"PASS\",\"kind\":\"real-handlers-and-services-in-process\",\"checks\":[\"real character save acknowledges matching PNG before level navigation\",\"lost start response retries same request key without a second run\",\"wrong answer is durable; help preserves choice and is recorded separately; native note has no state handler\",\"service restart and component reload resume the same run with durable review and immutable saved portrait\",\"comma input draft survives reload; exact payload replay recovers a persisted answer without duplicate grading\",\"numeric fields expose Celsius in their associated labels; sign-button handler and typographic minus reach server numbers; failed unsaved answer recovers without erasing input; complete summary is accurate\",\"completed reload performs only GET; explicit replay captures new character exactly once and does not grant ordinary-shift rewards\",\"StrictMode cleanup/setup rejects stale request writes without replacing the current task\",\"finite startup timeout has a working read-only retry and releases request timers\",\"another account cannot read or answer the run\"],\"runCount\":2,\"completedRuns\":1,\"reviewedAnswers\":6,\"correct\":5,\"unassistedCorrect\":4,\"assistedTasks\":1,\"realModules\":[\"Web api.ts request serialization\",\"AvatarEditor handlers\",\"LevelOneScreen handlers\",\"IdentityService\",\"ShiftService\",\"EquipmentService\",\"TrainingStore\",\"content-engine\",\"kn01-codec\"],\"limits\":[\"No browser, HTTP listener, native DOM, layout, pointer/keyboard execution or screenshot.\",\"Hook doubles model lifecycle contracts; useLayoutEffect is an effect alias, not a paint/focus measurement.\",\"In-process request routing mirrors the endpoint mapping; production HTTP dispatch and deployment are not exercised.\"],\"sha256\":{\"apps/web/src/features/levelOne/LevelOneScreen.tsx\":\"5cf29131574a98d12c0c1c410cd5483e5ec7c24745aae33222c354a761825c83\",\"apps/web/src/features/levelOne/levelOneModel.ts\":\"c05bf9eeb229851d8bd1c2522bcf3af796c89ca79d7d6c0491202a5b2b1a250a\",\"apps/web/src/api.ts\":\"aa8001e465ed3fba951c4e1e7fa60d36d7f1880b7ca632a3499fc5e90a21a46e\",\"apps/web/src/features/avatar/AvatarEditor.tsx\":\"57b885459c8f49e7f91debfb25f60429ebd403f7a258dcf8eb96564110eaea8b\",\"apps/web/src/features/avatar/SavedAvatarPortrait.tsx\":\"28517d16993de6468879d77eada5c9399509b5130aa6a8ed028c3c8a87034f57\",\"apps/server/src/modules/shift/shiftService.ts\":\"66a0db23197b8525db811c1e68f8a5a09bb34289f3f7704fcbe30aa1182f75eb\",\"apps/server/src/modules/shift/levelOneRules.ts\":\"734145fe24e6fb2c2353475b7029f158988930ca66d50be67467b71a2822c8a9\",\"apps/server/src/modules/equipment/trainingStore.ts\":\"fe95f88470b1d2692e6efccd481d77f22eb5fd122ff75a10324aeb6d55d0ed3d\"}}\n"
+    },
+    {
+      "command": "TMPDIR=/workspace/scratch/5cf4b859cf71/delivery node --test dist/modules/equipment/rewards.test.js (cwd apps/server)",
+      "exitCode": 0,
+      "output": "✔ новый профиль видит все 13 наград закрытыми; выданное снаряжение не считается наградой (2.842198ms)\n✔ первый бланк автоматически выдаёт карандаш один раз вместе с сохранённым завершением (98.827358ms)\n✔ спутники выдаются за 3 и 5 полных смен, а первый уровень не увеличивает счётчик (699.53726ms)\n✔ миграция восстанавливает награды из сохранённых ответов и не меняет счётчики или даты (229.125542ms)\n✔ запись внешности проверяет владение на сервере; другая учётная запись и planned-награды закрыты (161.783063ms)\n✔ старые свободно выбранные награды снимаются вместе с портретом; заработанный карандаш сохраняется (172.326922ms)\n✔ отсутствие проверки владения закрывает награды; новая смена исправляет старый допустимый PNG (116.631354ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1584.175642\n"
+    },
+    {
+      "command": "node tools/test_station_r09_layer.cjs",
+      "exitCode": 0,
+      "result": {
+        "status": "PASS",
+        "manifestSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+        "sources": [
+          {
+            "path": "packages/world-engine/src/scenes/hub/r09WindModel.ts",
+            "sha256": "f817d78595555ac785c41aac222242e0e452ff418617d2a363d98c55c89df72d"
+          },
+          {
+            "path": "packages/world-engine/src/scenes/hub/HubVegetationWindLayer.ts",
+            "sha256": "4c2f7797e3d6fbb4b4d0e1f1b5956ad654642376cddaa3fbecc778b646d8c8aa"
+          },
+          {
+            "path": "packages/world-engine/src/scenes/hub/r09SceneModel.ts",
+            "sha256": "96241398fb0659c47f66a19ea37f0084c170477ca8608a7cf68634dcdb9611a4"
+          },
+          {
+            "path": "packages/world-engine/src/runtime/uiPreferences.ts",
+            "sha256": "24b3cc3625ee0a2e9eaf31add9acfe0e2f65acdd85e84d447f8ba16f1c04ed2b"
+          },
+          {
+            "path": "packages/world-engine/src/scenes/hub/r01Environment.ts",
+            "sha256": "b13fc354fe4dc4131fc0abe0d98dc709d8dffc6948fddee99fd0d43d33e985dc"
+          },
+          {
+            "path": "packages/world-engine/src/scenes/hub/HubR09Layer.ts",
+            "sha256": "8d881743e8591ce6dc349357ca637c1d57cc458f81e6d7bf1a4fece321cfb2e9"
+          }
+        ],
+        "cycles": [
+          {
+            "cycle": 1,
+            "objects": 46,
+            "masks": 3,
+            "remainingListeners": 0,
+            "movingClouds": 1,
+            "stepReceiver": {
+              "id": "hub.r09.light.central-steps",
+              "weather": "rain",
+              "rows": 9,
+              "sourceBounds": [
+                214,
+                172,
+                31,
+                9
+              ],
+              "checkedPhases": [
+                "day",
+                "dawn",
+                "golden_hour",
+                "twilight",
+                "night",
+                "white_nights"
+              ]
+            }
+          },
+          {
+            "cycle": 2,
+            "objects": 46,
+            "masks": 3,
+            "remainingListeners": 0,
+            "movingClouds": 1,
+            "stepReceiver": {
+              "id": "hub.r09.light.central-steps",
+              "weather": "rain",
+              "rows": 9,
+              "sourceBounds": [
+                214,
+                172,
+                31,
+                9
+              ],
+              "checkedPhases": [
+                "day",
+                "dawn",
+                "golden_hour",
+                "twilight",
+                "night",
+                "white_nights"
+              ]
+            }
+          },
+          {
+            "cycle": 3,
+            "objects": 46,
+            "masks": 3,
+            "remainingListeners": 0,
+            "movingClouds": 1,
+            "stepReceiver": {
+              "id": "hub.r09.light.central-steps",
+              "weather": "rain",
+              "rows": 9,
+              "sourceBounds": [
+                214,
+                172,
+                31,
+                9
+              ],
+              "checkedPhases": [
+                "day",
+                "dawn",
+                "golden_hour",
+                "twilight",
+                "night",
+                "white_nights"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "environmentAdjustment": {
+    "firstRewardsRun": {
+      "exitCode": 1,
+      "passed": 1,
+      "failed": 6,
+      "cause": "ENOENT: mkdtemp /tmp/synopsis-rewards-*; /tmp is unavailable in this workspace"
+    },
+    "rerun": "Used the standard TMPDIR configuration pointing inside the writable workspace; the seven original assertions/tests were not modified."
+  },
+  "restrictions": {
+    "localBrowserStarted": false,
+    "localHttpServerStarted": false,
+    "dependencyInstall": false,
+    "manualCiRun": false
+  },
+  "pending": [
+    "Automatic Chromium and Firefox CI on the merged head",
+    "Production web build with the upstream lockfile and Three.js dependencies",
+    "Native context restoration PNG/controls proof",
+    "Final independent art and real browser performance acceptance"
+  ]
+}

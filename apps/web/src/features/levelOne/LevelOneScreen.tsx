@@ -6,6 +6,7 @@ import { SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { PixelIcon, PixelProgressBar } from '../ui';
 import { handleRadioGroupKeyDown } from '../ui/radioGroupKeys';
 import { WorkroomBackdrop } from '../shift/WorkroomBackdrop';
+import { RewardGrants } from '../rewards/RewardGrants';
 import { SHIFT_HANDOVER_NOTE } from '../shift/shiftLore';
 import { clearLevelOneDraft, clearLevelOneStartKey, levelOneAnswer, levelOneCorrectAnswer, levelOneStartKey, readLevelOneDraft, reviewedLevelOneAnswer, saveLevelOneDraft, toggleLevelOneSign, type LevelOneDraft } from './levelOneModel';
 import '../shift/ShiftWorkspace.css';
@@ -16,6 +17,7 @@ interface Props {
   onExit: () => void;
   onOpenCharacter: () => void;
   onStartPractice: () => void;
+  onOpenRewards?: () => void;
 }
 interface CheckedTask { task: ShiftTask; review: LevelOneReview }
 type PendingAnswer = { sessionId: string; task: ShiftTask; answer: { value: number } | { choiceIndex: number } };
@@ -30,7 +32,7 @@ function Sources({ sources }: { sources: LevelOneReview['sources'] }) {
   return <details className="level-one-sources"><summary>Источник и правило</summary>{sources.map(source => <div className="shift-source" key={`${source.sourceId}:${source.locator}`}><strong>{source.title}</strong><span>{source.locator}</span></div>)}</details>;
 }
 
-export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice }: Props) {
+export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice, onOpenRewards }: Props) {
   const [lobby, setLobby] = useState<LevelOneLobby | null>(null);
   const [session, setSession] = useState<LevelOneSession | null>(null);
   const [draft, setDraft] = useState<LevelOneDraft>({ numeric: '', choiceIndex: null });
@@ -260,6 +262,7 @@ export function LevelOneScreen({ user, onExit, onOpenCharacter, onStartPractice 
             <h1 ref={heading} tabIndex={-1}>Первый уровень завершён</h1>
             <p>Все {session.progress.total} заданий разобраны. К объяснениям можно вернуться ниже.</p>
             <dl className="level-one-stats"><div><dt>Верно</dt><dd>{session.progress.correct} / {session.progress.total}</dd></div><div><dt>Самостоятельно</dt><dd>{session.unassistedCorrect}</dd></div><div><dt>С объяснением</dt><dd>{session.assistedTasks}</dd></div></dl>
+            <RewardGrants rewards={session.rewardsGranted} onOpenRewards={onOpenRewards} />
             <p>{firstIssue ? `Начните повторение с вопроса: «${firstIssue.question}»` : session.assistedTasks > 0 ? 'Попробуйте пройти бланк ещё раз самостоятельно.' : 'Все ответы верны и даны самостоятельно. Можно перейти к учебной смене.'}</p>
             <div className="level-one-actions"><button type="button" className="shift-primary" onClick={() => void start()} disabled={Boolean(busy)}>{busy === 'starting' ? 'Получаем бланк…' : 'Пройти уровень ещё раз'}</button><button type="button" className="secondary-button" onClick={onExit} disabled={Boolean(busy)}>На станцию</button><button type="button" className="level-one-text-button" onClick={onStartPractice} disabled={Boolean(busy)}>Открыть учебную смену</button><button type="button" className="level-one-text-button" onClick={onOpenCharacter} disabled={Boolean(busy)}>Настроить персонажа</button></div>
           </section>}
