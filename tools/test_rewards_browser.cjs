@@ -171,6 +171,7 @@ async function runRewardChecks({ base, browser, report, capture }) {
       await page.route('**/api/rewards', offline);
       await page.goto(base + '/rewards');
       await page.getByRole('heading', { name: 'Не удалось обновить коллекцию', exact: true }).waitFor();
+      await page.getByText('Не удалось открыть награды. Проверьте соединение.', { exact: true }).waitFor();
       assert.equal(await page.locator('.reward-card').count(), 0, 'A failed request is not a fabricated zero-progress collection');
       await capture(page, `rewards-connection-error-${tag}`);
       await page.unroute('**/api/rewards', offline);

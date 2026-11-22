@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type RewardsResponse } from '../../api';
+import { api, ApiError, type RewardsResponse } from '../../api';
 
 /** A collection always belongs to the current account; old responses cannot unlock a new one. */
 export function useRewards(owner: string | undefined, enabled = true) {
@@ -19,7 +19,7 @@ export function useRewards(owner: string | undefined, enabled = true) {
     }).catch(reason => {
       if (active) setError(abort.signal.aborted
         ? 'Сервер не ответил вовремя. Повторите загрузку коллекции.'
-        : reason instanceof Error ? reason.message : 'Не удалось открыть награды. Проверьте соединение.');
+        : reason instanceof ApiError ? reason.message : 'Не удалось открыть награды. Проверьте соединение.');
     }).finally(() => { window.clearTimeout(timer); if (active) setLoading(false); });
     return () => { active = false; abort.abort(); window.clearTimeout(timer); };
   }, [owner, enabled, request]);
