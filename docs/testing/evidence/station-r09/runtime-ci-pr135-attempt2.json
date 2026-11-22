@@ -1,0 +1,716 @@
+{
+  "task": "station-r09-browser-acceptance",
+  "reviewer": "station_runtime_acceptance",
+  "createdAt": "2026-11-22T10:06:26.985420+00:00",
+  "status": "FAIL_PARTIAL_BROWSER_ACCEPTANCE",
+  "runId": 45009703486,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/45009703486",
+  "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+  "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+  "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+  "manifestSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+  "browserHelperSha256": "d18afeed1e7ed27d9bd2ff0b2a285d7f1faf4115eec42edcd0466bed6c4b5fa4",
+  "reports": [
+    {
+      "name": "environment-firefox",
+      "status": "PASS",
+      "browser": "153.0",
+      "reportSha256": "4a6565801a178ecde58e8d1f5e30d0f026ca7b2291fdb5e14064077e93294839",
+      "artifactProvenanceSha256": "8e8590ab8bfc9400292b29dc8fd4b8c2b19d18668ce8377cd3d122844d3e1ce7",
+      "cases": 61,
+      "errors": [],
+      "skipped": [
+        {
+          "name": "native-hidden-resume",
+          "reason": "Native visibility is accepted in Chromium without CDP focus emulation; Firefox is not represented as passing this check."
+        }
+      ]
+    },
+    {
+      "name": "environment-chromium",
+      "status": "FAIL",
+      "browser": "151.0.7922.34",
+      "reportSha256": "670799ee7d476da380445f632dad35069ced31a37389426d0077a6589994bb23",
+      "artifactProvenanceSha256": "20886b915952150f09c9d9a97d03f85051cd6050b7cbdecd293318607f8b2031",
+      "cases": 64,
+      "errors": [],
+      "skipped": []
+    },
+    {
+      "name": "firefox",
+      "status": "PASS",
+      "browser": "153.0",
+      "reportSha256": "7542b90942db145db2b7bb1c467d6e27ecce90546aab858d84629c35497b2f32",
+      "artifactProvenanceSha256": "7b37c4463f7bf73cab098d47115ed22d551fcaffb03124c3e550859090f88004",
+      "cases": 1100,
+      "errors": [],
+      "skipped": []
+    }
+  ],
+  "chromiumScreens": "PENDING-at-this-evidence-snapshot",
+  "firefoxAcceptance": {
+    "phaseCases": 18,
+    "phaseViewports": [
+      [
+        1366,
+        768
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "entrances": [
+      {
+        "case": "entrances-resize-1366-dpr2",
+        "exercisedEntranceIds": [
+          "codepost",
+          "archive",
+          "cartography",
+          "radar",
+          "lab",
+          "hall"
+        ],
+        "pointerSamplesPerEntrance": 5,
+        "keyboard": [
+          "Tab",
+          "Shift+Tab",
+          "Enter",
+          "Space",
+          "Escape"
+        ],
+        "panoramaViews": 2,
+        "minimumTargetSize": [
+          48,
+          48
+        ]
+      },
+      {
+        "case": "entrances-resize-390-dpr2",
+        "exercisedEntranceIds": [
+          "cartography",
+          "radar",
+          "codepost",
+          "archive",
+          "lab",
+          "hall"
+        ],
+        "pointerSamplesPerEntrance": 5,
+        "keyboard": [
+          "Tab",
+          "Shift+Tab",
+          "Enter",
+          "Space",
+          "Escape"
+        ],
+        "panoramaViews": 6,
+        "minimumTargetSize": [
+          44,
+          44
+        ]
+      },
+      {
+        "case": "entrances-resize-844-dpr2",
+        "exercisedEntranceIds": [
+          "codepost",
+          "archive",
+          "cartography",
+          "radar",
+          "lab",
+          "hall"
+        ],
+        "pointerSamplesPerEntrance": 5,
+        "keyboard": [
+          "Tab",
+          "Shift+Tab",
+          "Enter",
+          "Space",
+          "Escape"
+        ],
+        "panoramaViews": 2,
+        "minimumTargetSize": [
+          44,
+          44
+        ]
+      }
+    ],
+    "motion": [
+      {
+        "name": "station-r09-real-motion-1366",
+        "maxima": {
+          "foliage": 378,
+          "clouds": 624,
+          "water": 177,
+          "fixed": 0
+        },
+        "clockManipulated": false
+      },
+      {
+        "name": "station-r09-real-motion-390",
+        "maxima": {
+          "foliage": 378,
+          "clouds": 0,
+          "water": 0,
+          "fixed": 0
+        },
+        "clockManipulated": false
+      },
+      {
+        "name": "station-r09-real-motion-844",
+        "maxima": {
+          "foliage": 12,
+          "clouds": 0,
+          "water": 0,
+          "fixed": 0
+        },
+        "clockManipulated": false
+      }
+    ],
+    "performance": [
+      {
+        "name": "station-r09-performance-1366",
+        "raf": {
+          "samples": 236,
+          "p50Ms": 17.079999999999927,
+          "p95Ms": 17.100000000000364
+        },
+        "defaultFramebufferClearIntervals": {
+          "samples": 236,
+          "p50Ms": 17,
+          "p95Ms": 18
+        },
+        "graphics": [
+          {
+            "connected": true,
+            "collected": false,
+            "contextLost": false,
+            "canvas": [
+              1366,
+              768
+            ],
+            "activeTextures": 40,
+            "peakTextures": 40,
+            "textureUploadRgbaEstimate": 3181776,
+            "defaultFramebufferClears": 913,
+            "draws": 6370
+          }
+        ],
+        "scope": "Software browser CI, clear-pass cadence and observed texture lifetime; not physical mobile/GPU certification"
+      },
+      {
+        "name": "station-r09-performance-390",
+        "raf": {
+          "samples": 237,
+          "p50Ms": 17.079999999999927,
+          "p95Ms": 17.100000000002183
+        },
+        "defaultFramebufferClearIntervals": {
+          "samples": 237,
+          "p50Ms": 17,
+          "p95Ms": 18
+        },
+        "graphics": [
+          {
+            "connected": true,
+            "collected": false,
+            "contextLost": false,
+            "canvas": [
+              390,
+              844
+            ],
+            "activeTextures": 40,
+            "peakTextures": 40,
+            "textureUploadRgbaEstimate": 3181776,
+            "defaultFramebufferClears": 961,
+            "draws": 6699
+          }
+        ],
+        "scope": "Software browser CI, clear-pass cadence and observed texture lifetime; not physical mobile/GPU certification"
+      },
+      {
+        "name": "station-r09-performance-844",
+        "raf": {
+          "samples": 236,
+          "p50Ms": 17.079999999999927,
+          "p95Ms": 17.100000000000364
+        },
+        "defaultFramebufferClearIntervals": {
+          "samples": 237,
+          "p50Ms": 17,
+          "p95Ms": 18
+        },
+        "graphics": [
+          {
+            "connected": true,
+            "collected": false,
+            "contextLost": false,
+            "canvas": [
+              844,
+              390
+            ],
+            "activeTextures": 40,
+            "peakTextures": 40,
+            "textureUploadRgbaEstimate": 3181776,
+            "defaultFramebufferClears": 355,
+            "draws": 2457
+          }
+        ],
+        "scope": "Software browser CI, clear-pass cadence and observed texture lifetime; not physical mobile/GPU certification"
+      }
+    ],
+    "repeatMounts": {
+      "status": "PASS",
+      "cycles": [
+        {
+          "cycle": 1,
+          "unmounted": [
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 917,
+              "draws": 6398
+            }
+          ],
+          "remounted": [
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 917,
+              "draws": 6398
+            },
+            {
+              "connected": true,
+              "collected": false,
+              "contextLost": false,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 40,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 3181776,
+              "defaultFramebufferClears": 9,
+              "draws": 28
+            }
+          ]
+        },
+        {
+          "cycle": 2,
+          "unmounted": [
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 917,
+              "draws": 6398
+            },
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 12,
+              "draws": 49
+            }
+          ],
+          "remounted": [
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 917,
+              "draws": 6398
+            },
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 12,
+              "draws": 49
+            },
+            {
+              "connected": true,
+              "collected": false,
+              "contextLost": false,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 40,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 3181776,
+              "defaultFramebufferClears": 8,
+              "draws": 28
+            }
+          ]
+        },
+        {
+          "cycle": 3,
+          "unmounted": [
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 917,
+              "draws": 6398
+            },
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 12,
+              "draws": 49
+            },
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 11,
+              "draws": 49
+            }
+          ],
+          "remounted": [
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 917,
+              "draws": 6398
+            },
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 12,
+              "draws": 49
+            },
+            {
+              "connected": false,
+              "collected": false,
+              "contextLost": true,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 0,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 0,
+              "defaultFramebufferClears": 11,
+              "draws": 49
+            },
+            {
+              "connected": true,
+              "collected": false,
+              "contextLost": false,
+              "canvas": [
+                1366,
+                768
+              ],
+              "activeTextures": 40,
+              "peakTextures": 40,
+              "textureUploadRgbaEstimate": 3181776,
+              "defaultFramebufferClears": 9,
+              "draws": 28
+            }
+          ]
+        }
+      ]
+    },
+    "nativeContextRestore": {
+      "name": "station-r09-native-context-restore",
+      "status": "PASS",
+      "nativeExtension": true,
+      "heldClockMs": 0,
+      "identicalCanvasPixels": true,
+      "restoredEntranceAndFocus": true,
+      "graphics": [
+        {
+          "connected": false,
+          "collected": false,
+          "contextLost": true,
+          "canvas": [
+            1366,
+            768
+          ],
+          "activeTextures": 0,
+          "peakTextures": 40,
+          "textureUploadRgbaEstimate": 0,
+          "defaultFramebufferClears": 917,
+          "draws": 6398
+        },
+        {
+          "connected": false,
+          "collected": false,
+          "contextLost": true,
+          "canvas": [
+            1366,
+            768
+          ],
+          "activeTextures": 0,
+          "peakTextures": 40,
+          "textureUploadRgbaEstimate": 0,
+          "defaultFramebufferClears": 12,
+          "draws": 49
+        },
+        {
+          "connected": false,
+          "collected": false,
+          "contextLost": true,
+          "canvas": [
+            1366,
+            768
+          ],
+          "activeTextures": 0,
+          "peakTextures": 40,
+          "textureUploadRgbaEstimate": 0,
+          "defaultFramebufferClears": 11,
+          "draws": 49
+        },
+        {
+          "connected": false,
+          "collected": false,
+          "contextLost": true,
+          "canvas": [
+            1366,
+            768
+          ],
+          "activeTextures": 0,
+          "peakTextures": 40,
+          "textureUploadRgbaEstimate": 0,
+          "defaultFramebufferClears": 14,
+          "draws": 63
+        },
+        {
+          "connected": true,
+          "collected": false,
+          "contextLost": false,
+          "canvas": [
+            1366,
+            768
+          ],
+          "activeTextures": 40,
+          "peakTextures": 40,
+          "textureUploadRgbaEstimate": 3181776,
+          "defaultFramebufferClears": 140,
+          "draws": 959
+        }
+      ],
+      "beforePngSha256": "c91b2a4572815ad805edd522f040725a90ce567063e2d2ddea3ee2e435f66901",
+      "restoredPngSha256": "c91b2a4572815ad805edd522f040725a90ce567063e2d2ddea3ee2e435f66901",
+      "byteIdentical": true
+    }
+  },
+  "chromiumNativeVisibilityFailure": {
+    "failure": "AssertionError [ERR_ASSERTION]: Vegetation resumes painting after real foregrounding\n    at nativeVisibility (/home/runner/work/synopsis_game/synopsis_game/candidate/tools/test_station_environment_browser.cjs:546:12)\n    at async /home/runner/work/synopsis_game/synopsis_game/candidate/tools/test_station_environment_browser.cjs:588:48",
+    "hiddenDurationMs": 1500,
+    "hiddenClockUnchanged": true,
+    "hiddenPaintsUnchanged": true,
+    "hiddenClockMs": 562.0900000005038,
+    "reportedResumedClockMs": 587.5233333338603,
+    "reportedClockAdvanceMs": 25.433333333356472,
+    "windCadenceMs": 100,
+    "hiddenPaintedFrames": 5,
+    "reportedResumedPaintedFrames": 5,
+    "reportedPaused": false,
+    "reportedAnimated": true,
+    "phaseRefreshMs": 12.103842000011355,
+    "finding": "The test waited for any resumed clock tick, then required a completed wind paint. The actual reported tick advanced 25.433 ms, below the 100 ms wind cadence; the immediate published state still had 5 paints. This attempt does not prove a successful subsequent repaint.",
+    "correction": {
+      "path": "tools/test_station_environment_browser.cjs",
+      "sha256": "53d9fd004c9a4a08cc08a052c36d212613c7c0c66bee0306ac9d9239a43267cb",
+      "condition": "not paused AND clockMs advances AND paintedFrames advances",
+      "pollingMs": 100,
+      "timeoutMs": 3000,
+      "preserved": "All hidden clock/pose/cloud/water assertions and clockAdvance <= visibleElapsed + 150 ms bound",
+      "syntaxCheck": "PASS",
+      "actualBrowserResult": "PENDING-next-automatic-push"
+    }
+  },
+  "sourceGridCrossCheck": {
+    "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+    "sourceSha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+    "method": "Independent Pillow RGB comparison of unobscured architecture in actual Firefox day screenshots using recorded camera zoom/offset, every displayed pixel of each source block",
+    "results": [
+      {
+        "viewportWidth": 1366,
+        "sourceRoi": [
+          201,
+          108,
+          52,
+          9
+        ],
+        "zoom": 3,
+        "offset": [
+          -85,
+          -48
+        ],
+        "checkedRgbPixels": 4212,
+        "differentPixels": 0
+      },
+      {
+        "viewportWidth": 1366,
+        "sourceRoi": [
+          300,
+          147,
+          35,
+          7
+        ],
+        "zoom": 3,
+        "offset": [
+          -85,
+          -48
+        ],
+        "checkedRgbPixels": 2205,
+        "differentPixels": 0
+      },
+      {
+        "viewportWidth": 390,
+        "sourceRoi": [
+          201,
+          108,
+          52,
+          9
+        ],
+        "zoom": 3,
+        "offset": [
+          -489,
+          -88
+        ],
+        "checkedRgbPixels": 4212,
+        "differentPixels": 0
+      },
+      {
+        "viewportWidth": 844,
+        "sourceRoi": [
+          300,
+          147,
+          35,
+          7
+        ],
+        "zoom": 2,
+        "offset": [
+          -90,
+          -185
+        ],
+        "checkedRgbPixels": 980,
+        "differentPixels": 0
+      }
+    ],
+    "totalCheckedRgbPixels": 11609,
+    "differentPixels": 0,
+    "pngs": [
+      {
+        "path": "environment-firefox/solar-day-1366.png",
+        "sha256": "7930dc2afa46d915368aa75aac13b49cad7ae8162d2eca9702469cc8923e809c"
+      },
+      {
+        "path": "environment-firefox/solar-day-390.png",
+        "sha256": "98ad763fb4902afbacbc4b48e4abaca386d4769f4920f56a144ef57901589fe4"
+      },
+      {
+        "path": "environment-firefox/solar-day-844.png",
+        "sha256": "eb6cd65648b143fbbafb2875ecc22896ca08728edcc6bc46314c33a084573c0e"
+      }
+    ]
+  },
+  "astra17": {
+    "status": "FAIL_EXTERNAL_IMAGE_DOWNLOAD",
+    "runId": 45009703471,
+    "jobId": 137169082901,
+    "image": "registry.astralinux.ru/library/astra/ubi17:1.7.5",
+    "exactError": "docker: failed to copy: read tcp 10.0.128.81:53058->185.48.238.30:443: read: connection timed out",
+    "exitCode": 125,
+    "applicationStartedInsideAstra": false,
+    "precedingChecks": "Build, integration, production server, manifest hashes (5276) and release archive check passed",
+    "manualRerun": false
+  },
+  "limits": [
+    "Software CI graphics: WebGL clear-pass intervals and observed upload footprint are not physical GPU memory or phone FPS measurements.",
+    "Firefox native background-tab visibility remains explicitly skipped.",
+    "Chromium resume correction must pass a later real automatic CI run.",
+    "Art acceptance belongs to the independent Art Director.",
+    "No local browser, local HTTP listener, manual CI run or fake visibility was used."
+  ]
+}

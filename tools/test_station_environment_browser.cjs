@@ -538,8 +538,11 @@ async function nativeVisibility(base) {
   if (hiddenStation) {
     await page.waitForFunction(previous => {
       const station = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station);
-      return !station.motion.paused && station.motion.clockMs > previous;
-    }, hiddenStation.motion.clockMs, { polling: 100 });
+      // Foregrounding may publish the first resumed tick before the next
+      // 100 ms wind frame; regular diagnostics are published at most at 1 Hz.
+      return !station.motion.paused && station.motion.clockMs > previous.clockMs
+        && station.motion.foliage.paintedFrames > previous.paintedFrames;
+    }, { clockMs: hiddenStation.motion.clockMs, paintedFrames: hiddenStation.motion.foliage.paintedFrames }, { polling: 100, timeout: 3_000 });
     const after = await stationState(page), visibleElapsedMs = performance.now() - resumedAt;
     const clockAdvanceMs = after.motion.clockMs - hiddenStation.motion.clockMs;
     assert.ok(clockAdvanceMs <= visibleElapsedMs + 150, 'Resume does not apply the elapsed hidden interval to station animation');
