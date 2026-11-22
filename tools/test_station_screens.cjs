@@ -24,8 +24,8 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const phases = new Set((process.env.STATION_SCREEN_PHASES || 'library,station,public,portraits,game,level-one,admin,audio').split(','));
-for (const phase of phases) assert.ok(['library','station','public','portraits','game','level-one','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
+const phases = new Set((process.env.STATION_SCREEN_PHASES || 'library,station,public,portraits,game,level-one,rewards,admin,audio').split(','));
+for (const phase of phases) assert.ok(['library','station','public','portraits','game','level-one','rewards','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
 const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
 let apiProcess, webServer, browser, nativeChrome;
@@ -300,6 +300,7 @@ async function waitForCampus(page) {
   if (phases.has('portraits')) await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
   if (phases.has('game')) await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });
   if (phases.has('level-one')) await require('./test_level_one_browser.cjs').runLevelOneChecks({ base, browser, report, capture, fixture });
+  if (phases.has('rewards')) await require('./test_rewards_browser.cjs').runRewardChecks({ base, browser, report, capture });
   if (phases.has('admin')) await require('./test_admin_screens_browser.cjs').runAdminScreenChecks({ base, browser, report, capture, adminCode: '26063review' });
   // Firefox exercises the same production screens, input and portrait flows above.
   // Native CDP visibility/audio observation is available only in Chromium.

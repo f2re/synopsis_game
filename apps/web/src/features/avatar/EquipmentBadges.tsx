@@ -33,10 +33,11 @@ export function EquipmentBadges({ equipment, loading, error, selecting, onReload
     </section>;
   }
   const active = equipment.catalog.find((badge) => badge.id === equipment.loadout.badgeId);
-  const count = equipment.catalog.filter((badge) => badge.unlocked).length;
+  const awarded = equipment.catalog.filter((badge) => badge.id !== 'badge.training_starter');
+  const count = awarded.filter((badge) => badge.unlocked).length;
   return <section className="equipment-badges" aria-labelledby="equipment-badges-title" aria-busy={selecting || loading}>
     <header className="equipment-badges__header">
-      <div><span className="inventory-eyebrow">Коллекция станции · {count} из {equipment.catalog.length}</span><h2 id="equipment-badges-title">Знаки отличия</h2><p>Выберите один знак для следующей учебной смены. Он добавит заряды к вашему инструменту.</p></div>
+      <div><span className="inventory-eyebrow">Заработано знаков · {count} из {awarded.length}</span><h2 id="equipment-badges-title">Знаки отличия</h2><p>Выберите один знак для следующей учебной смены. Он добавит заряды к вашему инструменту. «На связи» — базовый учебный знак, выданный при входе.</p></div>
       <div className="equipment-active-badge">
         {active && <img src={badgeIcon(active)} alt="" width={64} height={64} />}
         <div><span>Выбран для смены</span><strong>{active?.name ?? 'Без значка'}</strong>{active && <button type="button" disabled={selecting || loading} onClick={() => select(null)}>Снять учебный знак</button>}</div>
@@ -45,7 +46,7 @@ export function EquipmentBadges({ equipment, loading, error, selecting, onReload
     {error && <div className="equipment-inline-error" role="alert"><span>{error}</span><button type="button" className="inventory-button" disabled={loading || selecting} onClick={reload}>Обновить</button></div>}
     <div className="equipment-badge-grid">
       {equipment.catalog.map((badge) => <article key={badge.id} className={`equipment-badge ${badge.equipped ? 'is-equipped' : ''} ${badge.unlocked ? 'is-unlocked' : 'is-locked'}`} aria-labelledby={`title-${badge.id}`}>
-        <div className="equipment-badge__top"><div className="equipment-badge__art"><img src={badgeIcon(badge)} alt="" width={64} height={64} loading="lazy" decoding="async" /></div><span className="equipment-badge__status">{badge.equipped ? '✓ Активен' : badge.unlocked ? 'Получен' : 'Ещё не получен'}</span></div>
+        <div className="equipment-badge__top"><div className="equipment-badge__art"><img src={badgeIcon(badge)} alt="" width={64} height={64} loading="lazy" decoding="async" /></div><span className="equipment-badge__status">{badge.equipped ? '✓ Активен' : badge.id === 'badge.training_starter' ? 'Базовый знак' : badge.unlocked ? 'Получен' : 'Ещё не получен'}</span></div>
         <h3 id={`title-${badge.id}`}>{badge.name}</h3>
         <p className="equipment-badge__description">{badge.description}</p>
         <p className="equipment-badge__effect">{badge.effectDescription}</p>

@@ -5,7 +5,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const { load, Runner, Events, deferred, flush, nodes, text } = require('./ui_test_harness.cjs');
 const { examples } = JSON.parse(fs.readFileSync('apps/web/tools/review/saved-portrait-fixtures.json', 'utf8'));
-const [original, , field] = examples;
+const [original] = examples;
+let field;
 const options = load('apps/web/src/features/avatar/avatarOptions.ts');
 const portraitModule = load('apps/web/src/features/avatar/SavedAvatarPortrait.tsx', { './saved-avatar-portrait.css': {} });
 const stored = new Map(), timers = new Map(), saves = [];
@@ -37,6 +38,7 @@ const { AvatarEditor } = load('apps/web/src/features/avatar/AvatarEditor.tsx', {
   '../hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false }) },
   '../ui/modalFocus': { keepTabInDialog() {} }, '../ui/PixelScrollArea': { PixelScrollArea: 'PixelScrollArea' },
   './EquipmentBadges': { EquipmentBadges: 'EquipmentBadges', EquipmentSummary: 'EquipmentSummary' },
+  '../rewards/useRewards': { useRewards: () => ({ data: { catalog: [], earnedCount: 0, total: 13 }, loading: false, error: '', reload() {} }) },
 }, { window, AbortController });
 const user = (id, example = original) => ({ id, displayName: id, groupId: 'Review', roles: ['student'], status: 'active',
   createdAt: '2026-11-21T00:00:00Z', avatar: { ...example.avatar }, avatarPortrait: { ...example.avatarPortrait } });
@@ -59,6 +61,11 @@ function editor(id, extra = {}) {
 }
 
 (async () => {
+  // The starter field preset now carries a free tablet. Compose its real PNG
+  // instead of pretending the historical pencil portrait matches this outfit.
+  const { composeAvatarPortrait } = await import('../apps/server/dist/modules/identity/avatarPortrait.js');
+  const avatar = { ...original.avatar, ...options.STYLE_PRESETS.find(preset => preset.id === 'preset.field').avatar };
+  field = { avatar, avatarPortrait: await composeAvatarPortrait(avatar) };
   const clean = editor('clean', { continueLabel: 'Продолжить уровень', backLabel: 'К уровню' });
   await flush(clean.runner);
   assert(button(clean.runner, '← К уровню'));

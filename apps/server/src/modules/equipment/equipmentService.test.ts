@@ -18,7 +18,13 @@ async function fixture(now?: () => Date) {
   const equipment = new EquipmentService({ storePath });
   const shifts = new ShiftService({ contentRoot, attemptLogPath, equipment, now });
   await shifts.init();
-  return { directory, storePath, attemptLogPath, equipment, shifts, cleanup: () => rm(directory, { recursive: true, force: true }) };
+  // These retry-mechanics tests require an already-owned tool. Earning it from
+  // real server answers is covered separately in rewards.test.ts.
+  const ownPencil = () => equipment.store.transaction((state) => {
+    const user = equipment.requireUser(state, 'u1');
+    user.earned['held.pencil'] = { earnedAt: '2026-11-10T00:00:00.000Z', sourceShiftId: 'unit-fixture', contentPack: 'unit-fixture' };
+  });
+  return { directory, storePath, attemptLogPath, equipment, shifts, ownPencil, cleanup: () => rm(directory, { recursive: true, force: true }) };
 }
 
 /** Existing first-shift fixture answers; no educational rules are changed here. */
@@ -94,6 +100,7 @@ test('ownership is server-only; locked badges and unknown IDs fail; all non-prac
 test('concurrent starts resume one active shift and keep the saved starting loadout snapshot', async () => {
   const f = await fixture();
   try {
+    await f.ownPencil();
     const [one, two] = await Promise.all([f.shifts.startShift('u1', pencil), f.shifts.startShift('u1', pencil)]);
     assert.equal(one.shiftId, two.shiftId);
     assert.deepEqual(one.equipment.charges, { reference: 1, retry: 1 });
@@ -138,6 +145,7 @@ test('reference consumes once under race, persists on restart and excludes the t
 test('retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score', async () => {
   const f = await fixture();
   try {
+    await f.ownPencil();
     const started = await f.shifts.startShift('u1', pencil);
     const offer = await f.shifts.submitAnswer('u1', started.shiftId, started.task.instanceId, { value: -99 });
     assert.equal(offer.status, 'retry-offered');
@@ -170,6 +178,7 @@ test('retry offer leaks no solution; explicit second attempt is once-only and ne
 test('reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback', async () => {
   const f = await fixture();
   try {
+    await f.ownPencil();
     const started = await f.shifts.startShift('u1', pencil);
     let task = started.task;
     while (task.type !== 'choice') task = (await f.shifts.submitAnswer('u1', started.shiftId, task.instanceId, correctAnswer(task))).nextTask!;
@@ -200,6 +209,8 @@ test('completion and earned badges commit together; result/answer replay and res
     const finished = await complete(f.shifts, 'u1');
     assert.equal(finished.result.reward?.completedShifts, 1);
     assert.deepEqual(finished.result.reward?.newBadges.map((badge) => badge.id), ['badge.first_shift', 'badge.accuracy']);
+    assert.deepEqual(finished.result.reward?.newRewards?.map((reward) => reward.id), ['badge.first_shift', 'badge.accuracy', 'held.pencil', 'reward_duty_lamp']);
+    assert.equal(f.equipment.getRewards('u1').catalog.find((reward) => reward.id === 'reward_duty_lamp')?.status, 'earned');
     for (let i = 0; i < 3; i += 1) {
       assert.equal(f.shifts.getResult('u1', finished.started.shiftId).reward?.completedShifts, 1);
       assert.deepEqual(await f.shifts.submitAnswer('u1', finished.started.shiftId, finished.lastTask.instanceId, finished.lastAnswer), finished.result);
@@ -235,6 +246,26 @@ test('regularity counts distinct server UTC dates and does not require consecuti
     const last = await complete(f.shifts, 'u1');
     assert.deepEqual(last.result.reward?.newBadges.map((badge) => badge.id), ['badge.regular']);
     assert.equal(last.result.reward?.practiceDays, 3);
+  } finally { await f.cleanup(); }
+});
+
+test('lamp requires ten consecutive independent first answers; a reference breaks the series', async () => {
+  const f = await fixture();
+  try {
+    const started = await f.shifts.startShift('u1');
+    await f.shifts.openReference('u1', started.shiftId, started.task.instanceId);
+    let task = started.task;
+    while (true) {
+      const response = await f.shifts.submitAnswer('u1', started.shiftId, task.instanceId, correctAnswer(task));
+      if (!response.nextTask) break;
+      task = response.nextTask;
+    }
+    const lamp = f.equipment.getRewards('u1').catalog.find((reward) => reward.id === 'reward_duty_lamp')!;
+    assert.equal(lamp.status, 'locked');
+    assert.equal(lamp.progress.current, 9);
+    assert.equal(f.equipment.ownsReward('u1', 'badge.accuracy'), true);
+    await complete(f.shifts, 'u1');
+    assert.equal(f.equipment.ownsReward('u1', 'reward_duty_lamp'), true);
   } finally { await f.cleanup(); }
 });
 
@@ -310,6 +341,7 @@ test('audit-file outage does not lose a committed answer; restart reconstructs i
 test('corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file', async () => {
   const f = await fixture();
   try {
+    await f.ownPencil();
     const started = await f.shifts.startShift('u1', pencil);
     await f.shifts.openReference('u1', started.shiftId, started.task.instanceId);
     await f.shifts.submitAnswer('u1', started.shiftId, started.task.instanceId, { value: -99 });

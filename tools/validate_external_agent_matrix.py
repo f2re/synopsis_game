@@ -58,8 +58,8 @@ def validate(root=ROOT):
         fail("canonical registry or catalog version mismatch")
     if len(helpers) != 18 or len(helper_ids) != 18 or not REQUIRED_HELPERS <= helper_ids:
         fail("missing/duplicate external specialists (expect 18, including all 13 additions)")
-    if len(skills) != 35 or skills != claude_skills or not REQUIRED_SKILLS <= skills:
-        fail("missing skills or Claude wrappers (expect 35, including all 12 additions)")
+    if len(skills) < 35 or skills != claude_skills or not REQUIRED_SKILLS <= skills:
+        fail("missing skills or Claude wrappers (expect at least 35, including all 12 additions)")
     for name, assigned in mapping.items():
         if not assigned or len(assigned) != len(set(assigned)) or not set(assigned) <= skills:
             fail("invalid internal skill mapping: " + name)

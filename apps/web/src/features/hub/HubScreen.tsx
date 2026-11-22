@@ -1,5 +1,6 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import type { WorldBridge } from '@synopsis/world-engine';
+import { resolveHubRendererMode, supportsWebGL2 } from '@synopsis/world-engine/renderer-mode';
 import { api, type LevelOneLobby, type SessionUser } from '../../api';
 import { GAME_CALLSIGN, GAME_MARK, GAME_TITLE } from '../../brand';
 import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
@@ -12,6 +13,7 @@ import { HubIcon } from './HubIcon';
 import { usePresentationPreferences } from '../settings/settingsStore';
 
 const WorldCanvas = lazy(() => import('../../game/WorldCanvas').then((module) => ({ default: module.WorldCanvas })));
+const ExperimentalWorldCanvas = lazy(() => import('../../game/ExperimentalWorldCanvas').then((module) => ({ default: module.ExperimentalWorldCanvas })));
 
 interface HubScreenProps {
   user: SessionUser | null;
@@ -22,6 +24,7 @@ interface HubScreenProps {
   onStartBlitz: () => void;
   onStartLevelOne: () => void;
   onOpenAvatar: () => void;
+  onOpenRewards?: () => void;
   onOpenAdmin: () => void;
   onOpenLibrary: () => void;
   onVisitArchive: () => void;
@@ -41,6 +44,8 @@ const plannedLocations = [
 ];
 
 const facilities: Record<string, { title: string; icon: string; description: string; action?: 'shift' | 'archive' }> = {
+  'meteo-site': { title: 'Метеоплощадка', icon: 'weather', description: 'Площадка для знакомства с метеорологическими приборами. Учебный модуль наблюдений находится в разработке.' },
+  canteen: { title: 'Дежурная столовая', icon: 'observer', description: 'Место отдыха между занятиями.' },
   codepost: { title: 'Кодовый пост', icon: 'kn01', description: 'Рабочее место дежурного. Примите смену, выполните задания КН-01 и разберите ответы с наставником.', action: 'shift' },
   archive: { title: 'Архив наблюдений', icon: 'archive', description: 'Читальный зал, понятия и определения, проверенные источники и памятки. Посетите комнату или откройте библиотеку.', action: 'archive' },
   cartography: { title: 'Картографический класс', icon: 'cartography', description: 'Самостоятельный модуль анализа карт находится в разработке. Доступные учебные задания входят в смену КН-01.' },
@@ -49,7 +54,10 @@ const facilities: Record<string, { title: string; icon: string; description: str
   hall: { title: 'Турнирный зал', icon: 'trophy', description: 'Дуэли, турниры и рейтинговые матчи пока не доступны в этой версии.' },
 };
 
-export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onStartBlitz, onStartLevelOne, onOpenAvatar, onOpenAdmin, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false, sessionPending = false, sessionNotice = '', stationPresence }: HubScreenProps) {
+export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStartShift, onStartBlitz, onStartLevelOne, onOpenAvatar, onOpenRewards, onOpenAdmin, onOpenLibrary, onVisitArchive, onOpenHelp, onOpenSettings, onExit, externalModalOpen = false, sessionPending = false, sessionNotice = '', stationPresence }: HubScreenProps) {
+  const requestedRenderer = resolveHubRendererMode();
+  const rendererMode = useMemo(() => requestedRenderer === 'three2d' && supportsWebGL2() ? 'three2d' : 'legacy2d', [requestedRenderer]);
+  const SelectedWorldCanvas = rendererMode === 'three2d' ? ExperimentalWorldCanvas : WorldCanvas;
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
   const preferences = usePresentationPreferences();
   const [currentScene, setCurrentScene] = useState('hub');
@@ -157,7 +165,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
 
   return (
     <main className="game-viewport hub-screen" aria-label={GAME_TITLE} data-world-state={sceneError ? 'error' : sceneReady ? 'ready' : 'loading'}>
-      <WorldLoadBoundary onError={() => { setSceneError(true); setSceneReady(false); }}><Suspense fallback={null}><WorldCanvas stationPresence={stationPresence} /></Suspense></WorldLoadBoundary>
+      <WorldLoadBoundary onError={() => { setSceneError(true); setSceneReady(false); }}><Suspense fallback={null}><SelectedWorldCanvas key={rendererMode} stationPresence={stationPresence} /></Suspense></WorldLoadBoundary>
       {!sceneReady && <section className={`hub-world-status${sceneError ? ' hub-world-status--error' : slowScene ? ' hub-world-status--slow' : ''}`} role="status" aria-live="polite" aria-busy={!sceneError}>
         <PixelIcon name="kn01" size={40} alt="" />
         <h2>{sceneError ? 'Не удалось открыть вид станции' : slowScene ? 'Загрузка занимает больше времени' : 'Открываем станцию…'}</h2>
@@ -178,6 +186,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         <div className="hub-learning-status"><PixelIcon name="kn01" size={32} alt="" /><span><strong>Первый бланк</strong><small>Уровень 1 · КН-01</small></span></div>
         <button type="button" className="hub-clock" disabled={sessionPending} onClick={() => setActiveModal('journal')} aria-label={`Журнал занятий, ${utcTime} UTC`} aria-haspopup="dialog"><strong>{utcTime} <span>UTC</span></strong><small>{utcDate}</small></button>
         <div className="hub-topbar__actions">
+          {onOpenRewards && <button type="button" className="hub-icon-button hub-rewards-button" aria-label="Награды" title="Награды" disabled={sessionPending} onClick={onOpenRewards}><PixelIcon name="trophy-star" size={32} alt="" /></button>}
           <button type="button" className="hub-icon-button" aria-label="Журнал занятий" aria-haspopup="dialog" title="Журнал занятий" disabled={sessionPending} onClick={() => setActiveModal('journal')}><PixelIcon name="telegram" size={32} alt="" /></button>
           <button type="button" className="hub-icon-button" aria-label="Настройки" title="Настройки" onClick={onOpenSettings}><HubIcon name="settings" size={36} /></button>
         </div>
@@ -243,6 +252,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
           {user ? <div className="hub-profile-actions">
             <div className="hub-profile-identity"><SavedAvatarPortrait portrait={user.avatarPortrait} size={80} label={`Сохранённый портрет: ${user.displayName}`} /><p>{isSavedAvatarPortrait(user.avatarPortrait) ? 'Ваш портрет для станции, смен и блица.' : 'Выберите внешность и одежду в гардеробе, затем сохраните персонажа.'}</p></div>
             <button type="button" className="hub-action hub-action--primary" onClick={() => closeThen(onOpenAvatar)}>Персонаж и инвентарь</button>
+            {onOpenRewards && <button type="button" className="hub-action" onClick={() => closeThen(onOpenRewards)}>Награды и условия получения</button>}
             <button type="button" className="hub-action" onClick={() => closeThen(onOpenSetCode)}>{user.codeSet ? 'Сменить код входа' : 'Задать код входа'}</button>
             {user.roles.includes('admin') && <button type="button" className="hub-action" onClick={() => closeThen(onOpenAdmin)}>Управление группами</button>}
             <button type="button" className="hub-action" onClick={() => closeThen(onLogout)}>Выйти из игры</button>

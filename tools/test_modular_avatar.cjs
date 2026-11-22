@@ -45,6 +45,7 @@ const editor = load('apps/web/src/features/avatar/AvatarEditor.tsx', {
   './AvatarOptionGrid': { AvatarAppearance: 'AvatarAppearance', AvatarOptionGrid: 'AvatarOptionGrid' }, './avatarOptions': options,
   '../hub/hubPreferences': { readHubPreferences: () => ({ soundEnabled: false }) },
   './EquipmentBadges': { EquipmentBadges: 'EquipmentBadges', EquipmentSummary: 'EquipmentSummary' },
+  '../rewards/useRewards': { useRewards: () => ({ data: { catalog: [], earnedCount: 0, total: 13 }, loading: false, error: '', reload() {} }) },
   './avatarDraft': drafts, './inventory.css': {},
   '../ui/modalFocus': { keepTabInDialog() {} }, '../ui/PixelScrollArea': { PixelScrollArea: 'PixelScrollArea' },
 }, { window, AbortController });
@@ -124,6 +125,7 @@ async function screenChecks() {
 
   // The hub's real markup consumes the same confirmed PNG without loading its effects or Phaser.
   const hub = load('apps/web/src/features/hub/HubScreen.tsx', {
+    '@synopsis/world-engine/renderer-mode': load('packages/world-engine/src/runtime/hubRendererMode.ts'),
     '../../api': { api: { levelOneLobby: async () => ({ levelId: 'first-codepost', title: 'Первый бланк: температура и точка росы', total: 6, help: { reference: 'free', retry: false, timer: false }, completedRuns: 0, bestCorrect: 0, session: null }) } },
     '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик', GAME_TITLE: '26063' }, '../avatar/SavedAvatarPortrait': portraitModule,
     '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' },

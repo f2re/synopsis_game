@@ -96,7 +96,7 @@ try {
   assert.equal((await request('/api/identity/avatar', 'PATCH', { avatar: original.avatar })).status, 401);
   const outfit = { ...original.avatar, skinTone: 'skin.deep', hair: 'hair.curl', hairColor: 'haircolor.auburn',
     headwear: 'headwear.beanie', top: 'top.field-jacket', bottom: 'bottom.field-trousers', footwear: 'footwear.boots',
-    backpack: 'backpack.field', heldItem: 'held.map-folder', companion: 'companion.tit', badge: 'badge.meteo' };
+    backpack: 'backpack.field', heldItem: 'held.map-folder', companion: 'companion.none', badge: 'badge.meteo' };
   const saved = (await ok('/api/identity/avatar', 'PATCH', { avatar: outfit,
     avatarPortrait: { ...original.avatarPortrait, pngDataUrl: 'data:image/svg+xml,<svg onload="alert(1)"/>' },
     portraitUrl: 'https://invalid.example/portrait.png' }, token)).user;
