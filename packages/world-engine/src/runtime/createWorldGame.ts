@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { ArchiveScene } from '../scenes/archive/ArchiveScene';
 import { HubScene } from '../scenes/hub/HubScene';
+import { R08PreviewScene } from '../scenes/art/R08PreviewScene';
+import { worldBridge } from '../bridge/WorldBridge';
 import { WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './fitLogicalViewport';
 import { getWorldPixelSurface } from './worldPixelSurface';
 
@@ -9,6 +11,7 @@ export { WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './fitLogicalViewport'
 export interface CreateWorldGameOptions {
   parent: string | HTMLElement;
   transparent?: boolean;
+  stationArt?: 'r08';
 }
 
 export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
@@ -16,6 +19,16 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
   const measure = () => getWorldPixelSurface(parent?.clientWidth ?? WORLD_LOGICAL_WIDTH,
     parent?.clientHeight ?? WORLD_LOGICAL_HEIGHT, window.devicePixelRatio);
   const initial = measure();
+  const hub = options.stationArt === 'r08' ? new R08PreviewScene({
+    station: true,
+    preferences: { phase: 'day', pose: 'walk', framing: 'station', reducedMotion: false, lowPower: false },
+    onStatus: ({ state, message }) => {
+      if (state === 'ready') worldBridge.notifySceneReady('hub');
+      if (state === 'error') worldBridge.emit('world:load_error', { scene: 'hub', message });
+    },
+    onTarget: () => {},
+    onVisitArchive: () => {},
+  }) : HubScene;
 
   const game = new Phaser.Game({
     type: Phaser.AUTO,
@@ -37,7 +50,7 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
       mode: Phaser.Scale.NONE,
       autoCenter: Phaser.Scale.NO_CENTER,
     },
-    scene: [HubScene, ArchiveScene],
+    scene: [hub, ArchiveScene],
   });
   const resize = () => {
     if (!game.canvas) return;

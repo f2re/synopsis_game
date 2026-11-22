@@ -225,3 +225,11 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
 }
 html[data-reduced-motion='true'] .hub-screen *, html[data-low-power='true'] .hub-screen * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 @media (prefers-reduced-motion: reduce) { .hub-screen * { animation: none !important; transition: none !important; } }
+
+.world-canvas-r08-scroll { position: absolute; inset: 0; }
+.world-canvas-r08-plane { position: relative; width: 100%; height: 100dvh; }
+@media (max-width: 760px) and (orientation: portrait) {
+  .world-canvas-r08-scroll { bottom: 154px; }
+  .world-canvas-r08-plane { width: max(100%, calc((100dvh - 230px) * 1.7778)); }
+  .hub-screen:has(.world-canvas-r08-scroll) .hub-scene-caption { bottom: 184px; pointer-events: none; }
+}

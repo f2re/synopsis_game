@@ -11,10 +11,13 @@ import { readHubPreferences, HUB_PREFERENCES_EVENT } from '../features/hub/hubPr
 import { getSettings } from '../features/settings/settingsStore';
 import { useAmbientWeather } from '../features/atmosphere/AtmosphereProvider';
 import { AUDIO_UNLOCK_EVENT, isAudioUnlocked } from '../features/atmosphere/audioGate';
+import { PixelScrollArea } from '../features/ui/PixelScrollArea';
 
 /** The world receives aggregate presence; the account portrait belongs to React. */
 export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   const hostRef = useRef<HTMLDivElement>(null);
+  const stationViewport = useRef<HTMLDivElement>(null);
+  const [showR08] = useState(() => new URLSearchParams(window.location.search).get('stationArt') === 'r08');
   const hoveredBuilding = useRef<string | null>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
   const weather = useAmbientWeather();
@@ -53,7 +56,7 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
     let activeScene = 'hub';
     let disposed = false;
     worldAudio.setMuted(!preferences.soundEnabled || !isAudioUnlocked() || document.hidden);
-    const game = createWorldGame({ parent: host });
+    const game = createWorldGame({ parent: host, stationArt: showR08 ? 'r08' : undefined });
     publishPresenceRef.current = (online) => {
       game.registry.set('server:station_presence', online);
       worldBridge.emit('server:station_presence', online);
@@ -145,6 +148,8 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
         applyInput();
         applyAudio();
         host.dataset.scene = scene;
+        const viewport = stationViewport.current;
+        if (viewport && scene === 'hub') viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
         if (scene !== 'hub') setTargets([]);
       }),
       worldBridge.on<Record<string, unknown>>('world:characters_ready', (diagnostic) => {
@@ -238,15 +243,16 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
       worldAudio.stopHubAtmosphereSchedule();
       worldAudio.stopAmbient(0);
       game.destroy(true);
+      if (game.isRunning && !game.loop.running) game.loop.wake();
     };
-  }, []);
+  }, [showR08]);
 
   useEffect(() => {
     publishPresenceRef.current?.(stationPresence);
   }, [stationPresence]);
 
-  return (
-    <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание." onPointerLeave={clearBuildingHover}>
+  const view = (
+    <>
       <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
       {targets.map((target) => (
         <button
@@ -268,6 +274,13 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
           }}
         />
       ))}
+    </>
+  );
+  return (
+    <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание." onPointerLeave={clearBuildingHover}>
+      {showR08 ? <PixelScrollArea orientation="horizontal" label="Панорама станции" className="world-canvas-r08-scroll" viewportRef={stationViewport}>
+        <div className="world-canvas-r08-plane">{view}</div>
+      </PixelScrollArea> : view}
     </div>
   );
 }

@@ -24,8 +24,9 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const phases = new Set((process.env.STATION_SCREEN_PHASES || 'library,station,public,portraits,game,level-one,admin,audio').split(','));
-for (const phase of phases) assert.ok(['library','station','public','portraits','game','level-one','admin','audio'].includes(phase), `Unknown test phase ${phase}`);
+const supportedPhases = ['library', 'station', 'r08', 'public', 'portraits', 'game', 'level-one', 'admin', 'audio'];
+const phases = new Set((process.env.STATION_SCREEN_PHASES || supportedPhases.join(',')).split(','));
+for (const phase of phases) assert.ok(supportedPhases.includes(phase), `Unknown test phase ${phase}`);
 const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
 fs.mkdirSync(output, { recursive: true });
 let apiProcess, webServer, browser, nativeChrome;
@@ -296,6 +297,7 @@ async function waitForCampus(page) {
     await context.close();
   }
   if (phases.has('station')) await require('./test_station_ui_browser.cjs').checkWorldLoading({ base, browser, report, capture, waitForCampus });
+  if (phases.has('r08')) await require('./test_r08_station_browser.cjs').checkR08Station({ base, browser, report, capture, waitForCampus });
   if (phases.has('public')) await require('./test_all_screens_browser.cjs').runAdditionalScreenChecks({ base, browser, report, capture, waitForCampus });
   if (phases.has('portraits')) await require('./test_saved_portrait_browser.cjs').runSavedPortraitChecks({ base, browser, report, capture, waitForCampus, fixture });
   if (phases.has('game')) await require('./test_game_controls_browser.cjs').runGameControlChecks({ base, browser, report, capture, fixture });

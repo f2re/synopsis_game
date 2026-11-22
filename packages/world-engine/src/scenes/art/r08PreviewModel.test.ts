@@ -5,8 +5,29 @@ import {
   parseR08PreviewManifest, r08ArchiveTarget, r08ObserverPose, r08Viewport,
   R08_SOURCE_SCALE,
 } from './r08PreviewModel.ts';
+import { getR08StationLayout } from './r08StationLayout.ts';
 
 const actualManifest = () => JSON.parse(readFileSync(new URL('../../../../../apps/web/public/hub/r08-preview/manifest.json', import.meta.url), 'utf8'));
+
+test('in-game R08 entrance targets are separated and clear the HUD in all supported orientations', () => {
+  for (const [width, height, header, dock] of [[1366, 768, 84, 92], [390, 844, 72, 152], [844, 390, 68, 68]]) {
+    const normal = getR08StationLayout(width, height, 1).targets;
+    const retina = getR08StationLayout(width * 2, height * 2, 2).targets;
+    assert.deepEqual(normal.map(({ id }) => id), ['radar', 'lab', 'codepost', 'cartography', 'archive', 'hall']);
+    for (const [index, target] of normal.entries()) {
+      assert.equal(target.width, 44);
+      assert.equal(target.height, 44);
+      assert.ok(target.x >= 0 && target.x + target.width <= width);
+      assert.ok(target.y >= header && target.y + target.height <= height - dock);
+      assert.ok(Math.abs(target.x - retina[index].x) <= .5);
+      assert.ok(Math.abs(target.y - retina[index].y) <= .5);
+      for (const other of normal.slice(0, index)) {
+        assert.ok(target.x >= other.x + other.width || other.x >= target.x + target.width ||
+          target.y >= other.y + other.height || other.y >= target.y + target.height);
+      }
+    }
+  }
+});
 
 test('published candidate keeps original layer coordinates and honest acceptance status', () => {
   const manifest = parseR08PreviewManifest(actualManifest());

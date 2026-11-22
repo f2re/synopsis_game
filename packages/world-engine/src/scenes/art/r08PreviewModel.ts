@@ -180,14 +180,14 @@ export function r08AmbientTint(sourceY: number): number {
 }
 
 /** Deterministic inspection positions and a bounded walking route, in source coordinates. */
-export function r08ObserverPose(mode: R08PreviewPreferences['pose'], elapsedMs: number) {
-  if (mode === 'archive') return { x: 305 * R08_SOURCE_SCALE, y: 224 * R08_SOURCE_SCALE, facing: 'right' as const };
-  if (mode === 'foreground') return { x: 331 * R08_SOURCE_SCALE, y: 231 * R08_SOURCE_SCALE, facing: 'right' as const };
-  const left = 277 * R08_SOURCE_SCALE;
-  const right = 355 * R08_SOURCE_SCALE;
+export function r08ObserverPose(mode: R08PreviewPreferences['pose'], elapsedMs: number, sourceScale = R08_SOURCE_SCALE) {
+  if (mode === 'archive') return { x: 305 * sourceScale, y: 224 * sourceScale, facing: 'right' as const };
+  if (mode === 'foreground') return { x: 331 * sourceScale, y: 231 * sourceScale, facing: 'right' as const };
+  const left = 277 * sourceScale;
+  const right = 355 * sourceScale;
   const travel = Math.max(0, elapsedMs) / 1000 * 22;
   const distance = right - left;
   const cycle = travel % (2 * distance);
   const offset = cycle <= distance ? cycle : 2 * distance - cycle;
-  return { x: left + offset, y: 231 * R08_SOURCE_SCALE, facing: cycle <= distance ? 'right' as const : 'left' as const };
+  return { x: left + offset, y: 231 * sourceScale, facing: cycle <= distance ? 'right' as const : 'left' as const };
 }
