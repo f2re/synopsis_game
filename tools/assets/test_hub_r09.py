@@ -140,6 +140,75 @@ class StationExportContract(unittest.TestCase):
             spec["receivers"][0].update(copy.deepcopy(spec["sources"]["master"]))
         self.reject(replace_receiver, "white selected pixels")
 
+    def test_receiver_edits_preserve_all_pixels_outside_explicit_ownership(self):
+        files, _ = exporter.build_outputs(copy.deepcopy(self.source))
+        for receiver in self.source["receivers"]:
+            if not receiver.get("edits"):
+                continue
+            permitted = Image.new("L", (512, 288))
+            draw = ImageDraw.Draw(permitted)
+            for edit in receiver["edits"]:
+                if "clearBounds" in edit:
+                    x, y, width, height = edit["clearBounds"]
+                    draw.rectangle((x, y, x + width - 1, y + height - 1), fill=255)
+                for y, segments in edit["selection"]["rowSegments"]:
+                    for left, right in segments:
+                        draw.line((left, y, right, y), fill=255)
+            with Image.open(exporter.ROOT / receiver["source"]) as original, Image.open(io.BytesIO(files[receiver["file"]])) as actual:
+                before, after, allowed = original.tobytes(), actual.tobytes(), permitted.tobytes()
+                outside_changed = sum(before[i * 4:i * 4 + 4] != after[i * 4:i * 4 + 4]
+                                      for i, owned in enumerate(allowed) if not owned)
+                self.assertEqual(outside_changed, 0, receiver["id"])
+
+    def test_entry_receiver_selects_glass_and_excludes_pier_and_frames(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        with Image.open(io.BytesIO(files["window-light-mask.png"])) as actual:
+            alpha = actual.getchannel("A")
+            self.assertEqual(alpha.crop((227, 155, 240, 170)).histogram()[255], 150)
+            for point in ((229, 155), (237, 169)):
+                self.assertEqual(alpha.getpixel(point), 255)
+            for point in ((218, 160), (220, 160), (233, 162), (234, 162), (229, 154), (229, 170)):
+                self.assertEqual(alpha.getpixel(point), 0, f"A pier or frame entered entry emission: {point}")
+        region = next(region for region in manifest["lightRegions"] if region["role"] == "central-entry")
+        self.assertEqual(region["sourceBounds"], [227, 155, 13, 15])
+
+    def test_step_receiver_excludes_glass_instrument_and_lower_fountain(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        with Image.open(io.BytesIO(files["ground-light-mask.png"])) as actual:
+            alpha = actual.getchannel("A")
+            self.assertEqual(alpha.crop((214, 172, 245, 181)).histogram()[255], 119)
+            for point in ((223, 172), (241, 176), (222, 179)):
+                self.assertEqual(alpha.getpixel(point), 255)
+            for point in ((227, 173), (228, 176), (236, 179), (239, 180), (225, 170), (225, 181)):
+                self.assertEqual(alpha.getpixel(point), 0, f"Non-stone material entered the step reflection: {point}")
+        region = next(region for region in manifest["lightRegions"] if region["role"] == "central-steps")
+        self.assertEqual(region["sourceBounds"], [214, 172, 31, 9])
+        self.assertLessEqual(region["suggestedAlpha"], 0.12)
+
+    def test_archive_receiver_preserves_wood_posts_shelves_and_door_front(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        with Image.open(io.BytesIO(files["window-light-mask.png"])) as actual:
+            alpha = actual.getchannel("A")
+            self.assertEqual(alpha.crop((300, 172, 314, 188)).histogram()[255], 99)
+            for point in ((302, 174), (311, 180), (312, 186)):
+                self.assertEqual(alpha.getpixel(point), 255)
+            for point in ((306, 174), (307, 180), (316, 185), (317, 185), (302, 177), (311, 183), (328, 198)):
+                self.assertEqual(alpha.getpixel(point), 0, f"Wood entered archive interior emission: {point}")
+        region = next(region for region in manifest["lightRegions"] if region["role"] == "archive-interior")
+        self.assertEqual(region["sourceBounds"], [300, 172, 14, 16])
+
+    def test_reflected_light_cannot_strengthen_toward_the_fountain(self):
+        def reverse_falloff(spec):
+            region = next(region for region in spec["lightRegions"] if region["role"] == "central-steps")
+            region["verticalFalloff"] = [0.25, 1]
+        self.reject(reverse_falloff, "bounded descending source-row factors")
+
+    def test_receiver_replacement_cannot_overwrite_unrelated_source_selection(self):
+        def move_clear(spec):
+            receiver = next(entry for entry in spec["receivers"] if entry["role"] == "window-light-mask")
+            receiver["edits"][0]["clearBounds"] = [0, 0, 1, 1]
+        self.reject(move_clear, "unrelated source-mask pixels")
+
     def test_light_region_cannot_point_to_unknown_mask(self):
         self.reject(lambda s: s["lightRegions"][0].update(maskRole="missing"), "missing receiver")
 

@@ -1,0 +1,193 @@
+{
+  "task": "ART-LIGHT-01-ASSET-PIPELINE",
+  "author": "/root/station_asset_pipeline",
+  "date": "2026-11-22",
+  "status": "SOURCE-READY-FOR-ACTUAL-CI",
+  "checks": {
+    "export": "PASS",
+    "byteCheck": "PASS",
+    "sourceBoundaryTests": {
+      "passed": 26,
+      "failed": 0
+    },
+    "gitDiffCheck": "PASS",
+    "mandatoryValidators": {
+      "repo": "PASS",
+      "architecture": "PASS",
+      "brand": "PASS",
+      "asset-contract": "PASS",
+      "asset-manifests": "PASS",
+      "fonts": "PASS"
+    },
+    "manifestCount": 55,
+    "preexistingMissingCandidateWarnings": [
+      "brand.mark.v3",
+      "effects.level1",
+      "ui.kit.v3"
+    ]
+  },
+  "sourceAcceptance": {
+    "status": "PASS",
+    "reviewer": "/root/station_pixel_review",
+    "report": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
+    "contract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json",
+    "scope": "Exact exported source receiver masks, preservation of unrelated assets and source geometry",
+    "artDirection": "ART-LIGHT-01 remains open pending actual twilight/night frames",
+    "productionReady": false
+  },
+  "changedAssets": {
+    "changedPng": [
+      {
+        "id": "hub.r09.window-light-mask",
+        "file": "/hub/r09/window-light-mask.png",
+        "oldSha": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+        "newSha": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
+        "sourceMaskEdits": [
+          {
+            "id": "hub.r09.receiver.central-entry-glass",
+            "lightRegionId": "hub.r09.light.central-entry",
+            "selectedPixels": 150,
+            "clearedSourceMaskPixels": 204,
+            "clearBounds": [
+              217,
+              153,
+              24,
+              14
+            ],
+            "sourceBounds": [
+              227,
+              155,
+              13,
+              15
+            ]
+          },
+          {
+            "id": "hub.r09.receiver.archive-interior",
+            "lightRegionId": "hub.r09.light.archive-interior",
+            "selectedPixels": 99,
+            "clearedSourceMaskPixels": 45,
+            "clearBounds": [
+              300,
+              170,
+              32,
+              31
+            ],
+            "sourceBounds": [
+              300,
+              172,
+              14,
+              16
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hub.r09.ground-light-mask",
+        "file": "/hub/r09/ground-light-mask.png",
+        "oldSha": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+        "newSha": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
+        "sourceMaskEdits": [
+          {
+            "id": "hub.r09.receiver.central-steps",
+            "lightRegionId": "hub.r09.light.central-steps",
+            "selectedPixels": 119,
+            "clearedSourceMaskPixels": 0,
+            "clearBounds": null,
+            "sourceBounds": [
+              214,
+              172,
+              31,
+              9
+            ]
+          }
+        ]
+      }
+    ],
+    "unchangedPng": 11,
+    "lightRegions": 9
+  },
+  "validation": {
+    "sourceHashesVerified": true,
+    "restRoundtripRgbaExact": true,
+    "outsideMovingMaskChangedPixels": 0,
+    "hiddenPlateUsedPixels": 2255,
+    "hiddenPlateChangedPixels": 2255,
+    "cloudPixels": 61,
+    "vegetationPieces": 5,
+    "cloudIslands": 1,
+    "cloudSilhouetteClearanceVerified": true,
+    "cloudClipPixels": 2352,
+    "cloudClipDomain": "cloudClip",
+    "skyPatchMode": "native-sky-region-copy",
+    "masterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "exportResampling": "none",
+    "paletteQuantization": false,
+    "artAcceptanceImplied": false,
+    "pngBytes": 345506,
+    "decodedRgbaBytes": 2714248
+  },
+  "sourceFiles": {
+    "tools/assets/build_hub_r09.py": "95052e5c872ac64ccac3b1746297409fef8f9c77c3f52da60e44e56f326cf581",
+    "tools/assets/test_hub_r09.py": "e7a7dbc157297f945854ce0299fda9f476e41e61a3c78c5a11a4d91ca7c1d061",
+    "assets/source/environment/hub/r09/source-spec.json": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec",
+    "assets/manifests/hub.r09-station.json": "e9984c02ab1e6d4cafabf43bb5abe405397b9d01d11f93f3c2dfedbd59e1a4b9",
+    "packages/world-engine/src/assets/hub/r09-manifest.json": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+    "docs/art/reviews/2026-11-22-station-r09-light-pipeline.md": "b223315cb5fc4979c27745d7a0e70544098be1ac461d7ff33fa4fa60c020f1c5"
+  },
+  "commandLogs": [
+    {
+      "name": "repo",
+      "command": "python3 tools/validate_repo.py",
+      "exitCode": 0,
+      "output": "Проверка репозитория успешно завершена.\n"
+    },
+    {
+      "name": "architecture",
+      "command": "python3 tools/validate_architecture.py",
+      "exitCode": 0,
+      "output": "Проверка архитектуры успешно завершена.\nApps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.\n"
+    },
+    {
+      "name": "brand",
+      "command": "python3 tools/validate_brand.py",
+      "exitCode": 0,
+      "output": "Проверка бренда успешно завершена: 26063: Позывной «Синоптик»\n"
+    },
+    {
+      "name": "asset-contract",
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "exitCode": 0,
+      "output": "WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png\nWARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nWARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nТехнический контракт assets: PASS (24 simple manifests, 30 иных manifests пропущено).\nХудожественное качество этим checker не оценивается.\n"
+    },
+    {
+      "name": "asset-manifests",
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "exitCode": 0,
+      "output": "✓ Проверено манифестов ассетов: 55. Все структуры корректны.\n"
+    },
+    {
+      "name": "fonts",
+      "command": "python3 tools/validate_fonts.py",
+      "exitCode": 0,
+      "output": "Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.\n"
+    },
+    {
+      "name": "byteCheck",
+      "command": "python3 tools/assets/build_hub_r09.py --check",
+      "exitCode": 0,
+      "output": "{\"result\": \"CHECK\", \"assets\": 13, \"sourceHashesVerified\": true, \"restRoundtripRgbaExact\": true, \"outsideMovingMaskChangedPixels\": 0, \"hiddenPlateUsedPixels\": 2255, \"hiddenPlateChangedPixels\": 2255, \"cloudPixels\": 61, \"vegetationPieces\": 5, \"cloudIslands\": 1, \"cloudSilhouetteClearanceVerified\": true, \"cloudClipPixels\": 2352, \"cloudClipDomain\": \"cloudClip\", \"skyPatchMode\": \"native-sky-region-copy\", \"masterRgbaSha256\": \"376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7\", \"exportResampling\": \"none\", \"paletteQuantization\": false, \"artAcceptanceImplied\": false, \"pngBytes\": 345506, \"decodedRgbaBytes\": 2714248}\n"
+    },
+    {
+      "name": "gitDiffCheck",
+      "command": "git diff --check",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "sourceBoundaryTests",
+      "command": "python3 tools/assets/test_hub_r09.py",
+      "exitCode": 0,
+      "output": "test_archive_receiver_preserves_wood_posts_shelves_and_door_front (__main__.StationExportContract.test_archive_receiver_preserves_wood_posts_shelves_and_door_front) ... ok\ntest_changed_provider_source_requires_new_pin (__main__.StationExportContract.test_changed_provider_source_requires_new_pin) ... ok\ntest_cloud_clip_excludes_forest_tree_tips_and_mast (__main__.StationExportContract.test_cloud_clip_excludes_forest_tree_tips_and_mast) ... ok\ntest_cloud_drift_cannot_change_y_or_wrap_onscreen (__main__.StationExportContract.test_cloud_drift_cannot_change_y_or_wrap_onscreen) ... ok\ntest_cloud_selector_is_versioned (__main__.StationExportContract.test_cloud_selector_is_versioned) ... ok\ntest_cloud_source_cannot_include_a_foreground_silhouette (__main__.StationExportContract.test_cloud_source_cannot_include_a_foreground_silhouette) ... ok\ntest_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop (__main__.StationExportContract.test_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop) ... ok\ntest_entry_receiver_selects_glass_and_excludes_pier_and_frames (__main__.StationExportContract.test_entry_receiver_selects_glass_and_excludes_pier_and_frames) ... ok\ntest_export_filename_is_not_a_path (__main__.StationExportContract.test_export_filename_is_not_a_path) ... ok\ntest_image_cannot_be_used_as_white_receiver_mask (__main__.StationExportContract.test_image_cannot_be_used_as_white_receiver_mask) ... ok\ntest_leaf_selection_outside_source_fails (__main__.StationExportContract.test_leaf_selection_outside_source_fails) ... ok\ntest_light_region_cannot_point_to_unknown_mask (__main__.StationExportContract.test_light_region_cannot_point_to_unknown_mask) ... ok\ntest_native_sky_patch_preserves_the_vertical_colour_ramp (__main__.StationExportContract.test_native_sky_patch_preserves_the_vertical_colour_ramp) ... ok\ntest_native_source_roundtrip_and_deterministic_bytes (__main__.StationExportContract.test_native_source_roundtrip_and_deterministic_bytes) ... ok\ntest_provider_path_cannot_escape_selected_project_source (__main__.StationExportContract.test_provider_path_cannot_escape_selected_project_source) ... ok\ntest_receiver_edits_preserve_all_pixels_outside_explicit_ownership (__main__.StationExportContract.test_receiver_edits_preserve_all_pixels_outside_explicit_ownership) ... ok\ntest_receiver_replacement_cannot_overwrite_unrelated_source_selection (__main__.StationExportContract.test_receiver_replacement_cannot_overwrite_unrelated_source_selection) ... ok\ntest_reflected_light_cannot_strengthen_toward_the_fountain (__main__.StationExportContract.test_reflected_light_cannot_strengthen_toward_the_fountain) ... ok\ntest_scene_transform_cannot_silently_change_grid (__main__.StationExportContract.test_scene_transform_cannot_silently_change_grid) ... ok\ntest_sky_water_partition_cannot_overlap (__main__.StationExportContract.test_sky_water_partition_cannot_overlap) ... ok\ntest_step_receiver_excludes_glass_instrument_and_lower_fountain (__main__.StationExportContract.test_step_receiver_excludes_glass_instrument_and_lower_fountain) ... ok\ntest_two_moving_layers_cannot_own_same_pixel (__main__.StationExportContract.test_two_moving_layers_cannot_own_same_pixel) ... ok\ntest_unbounded_gain_fails (__main__.StationExportContract.test_unbounded_gain_fails) ... ok\ntest_unreviewed_displacement_cap_fails (__main__.StationExportContract.test_unreviewed_displacement_cap_fails) ... ok\ntest_water_scanlines_match_png_and_exclude_fir_and_shore (__main__.StationExportContract.test_water_scanlines_match_png_and_exclude_fir_and_shore) ... ok\ntest_wrong_provider_size_does_not_get_rescaled (__main__.StationExportContract.test_wrong_provider_size_does_not_get_rescaled) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 6.016s\n\nOK\n"
+    }
+  ]
+}

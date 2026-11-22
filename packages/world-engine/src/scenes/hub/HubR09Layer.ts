@@ -16,7 +16,7 @@ interface Domain { polygons?: number[][][]; rowSpans?: number[][] }
 interface StationManifest {
   review: { productionReady: boolean }; assets: StationAsset[];
   domains: { sky: Domain; water: Domain; cloudClip?: Domain };
-  lightRegions: { maskRole: string; sourceBounds: number[]; tint: string; suggestedAlpha: number }[];
+  lightRegions: { maskRole: string; sourceBounds: number[]; tint: string; suggestedAlpha: number; verticalFalloff?: [number, number] }[];
 }
 export const R09_STATION_MANIFEST = manifestJson as unknown as StationManifest;
 
@@ -74,9 +74,17 @@ export class HubR09Layer {
       const asset = R09_STATION_MANIFEST.assets.find((entry) => entry.role === region.maskRole);
       if (!asset) continue;
       const [x, y, width, height] = region.sourceBounds;
-      const image = scene.add.image(0, 0, asset.key).setOrigin(0, 0).setCrop(x, y, width, height)
-        .setDepth(32).setTint(Number.parseInt(region.tint.slice(1), 16)).setBlendMode(Phaser.BlendModes.ADD);
-      this.receivers.push({ image, alpha: region.suggestedAlpha });
+      const rows = region.verticalFalloff ? height : 1;
+      for (let row = 0; row < rows; row++) {
+        const falloff = region.verticalFalloff;
+        const weight = falloff ? falloff[0] + (falloff[1] - falloff[0]) * row / Math.max(1, rows - 1) : 1;
+        // A receiver fade follows native rows. Vertex-alpha interpolation
+        // would introduce a smooth gradient within each enlarged pixel.
+        const image = scene.add.image(0, 0, asset.key).setOrigin(0, 0)
+          .setCrop(x, y + (falloff ? row : 0), width, falloff ? 1 : height)
+          .setDepth(32).setTint(Number.parseInt(region.tint.slice(1), 16)).setBlendMode(Phaser.BlendModes.ADD);
+        this.receivers.push({ image, alpha: region.suggestedAlpha * weight });
+      }
     }
     this.wind = new HubVegetationWindLayer(scene);
     this.wind.setPlacements(R09_STATION_MANIFEST.assets.filter((asset) => asset.role === 'vegetation').map((asset) => ({
@@ -274,6 +282,8 @@ export class HubR09Layer {
     this.receivers.forEach(({ image }) => image.destroy());
     [this.waterGlints, this.fountain, this.stars, this.rain, this.focus].forEach((graphic) => { graphic.clearMask(); graphic.destroy(); });
     this.masks.forEach((mask) => mask.destroy()); this.maskGraphics.forEach((graphic) => graphic.destroy());
-    worldBridge.emit('world:station_view', null);
+    // React clears its own panorama on route/scene changes. An old Game can
+    // finish its deferred destruction after a replacement has mounted; it
+    // must not publish a global clear that erases the new scene's controls.
   }
 }

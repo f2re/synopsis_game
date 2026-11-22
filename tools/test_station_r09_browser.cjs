@@ -55,6 +55,22 @@ async function panOnce(page, direction) {
   assert.ok(direction === 'left' ? next.camera.centerX < before.camera.centerX : next.camera.centerX > before.camera.centerX, 'The camera moves in the requested direction');
   return true;
 }
+async function showStationEntrance(page, id) {
+  assert.ok(ENTRANCES[id], 'A known station entrance is required');
+  const target = page.locator(`[data-building-id="${id}"]`), trace = [];
+  const initial = await stationState(page);
+  const preferred = ENTRANCES[id][0] < initial.camera.centerX ? 'left' : 'right';
+  for (const direction of [preferred, preferred === 'left' ? 'right' : 'left']) {
+    for (let step = 0; step < 16; step++) {
+      if (await target.isVisible()) return trace;
+      if (!await panOnce(page, direction)) break;
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      trace.push((await stationState(page)).camera);
+    }
+  }
+  assert.equal(await target.isVisible(), true, `${id}: the actual entrance must be reachable through panorama controls`);
+  return trace;
+}
 async function forEachStationView(page, visit) {
   for (let step = 0; step < 12; step++) {
     if (!await panOnce(page, 'left')) break;
@@ -167,6 +183,11 @@ function installMetrics() {
     // prevent production garbage collection after a real route unmount.
     if (!states.has(gl)) { const item = { ref: new WeakRef(gl), textureIds: new WeakMap(), nextTextureId: 0,
       textures: new Set(), activeUnit: gl.TEXTURE0, bound: new Map(), sizes: new Map(), framebuffer: false, clearTimes: [], draws: 0, peakTextures: 0 };
+      // A genuine context loss invalidates every native handle. This observer
+      // does not prevent the event or alter Phaser's restoration policy.
+      gl.canvas.addEventListener('webglcontextlost', () => {
+        item.textures.clear(); item.sizes.clear(); item.bound.clear(); item.framebuffer = false;
+      });
       states.set(gl, item); observed.push(item); }
     return states.get(gl);
   };
@@ -198,6 +219,7 @@ function installMetrics() {
     return { connected: Boolean(gl?.canvas.isConnected), collected: !gl, contextLost,
       canvas: gl ? [gl.canvas.width, gl.canvas.height] : null,
       activeTextures: !gl || contextLost ? 0 : s.textures.size, peakTextures: s.peakTextures,
+      liveTextureRgbaSizes: !gl || contextLost ? [] : [...s.textures].map(id => ({ id, rgbaEstimate: s.sizes.get(id) ?? null })),
       textureUploadRgbaEstimate: !gl || contextLost ? 0 : [...s.sizes.values()].reduce((sum, value) => sum + value, 0),
       defaultFramebufferClears: s.clearTimes.length, clearTimes: [...s.clearTimes], draws: s.draws };
   }) });
@@ -213,6 +235,50 @@ async function saveCanvas(page, output, name, report) {
   fs.writeFileSync(path.join(output, name + '.png'), bytes);
   report.screenshots.push({ name: name + '.png', sha256: crypto.createHash('sha256').update(bytes).digest('hex') });
   return { bytes, image: decodePng(bytes) };
+}
+
+async function nativeContextRestore(page, output, report, beforeImage) {
+  const available = await page.evaluate(() => {
+    const canvas = document.querySelector('canvas');
+    const gl = canvas?.getContext('webgl2') || canvas?.getContext('webgl');
+    const extension = gl?.getExtension('WEBGL_lose_context');
+    if (!extension) return false;
+    globalThis.__stationR09RestoreContext = () => extension.restoreContext();
+    extension.loseContext();
+    return true;
+  });
+  if (!available) {
+    report.cases.push({ name: 'station-r09-native-context-restore', status: 'SKIP', reason: 'Native WEBGL_lose_context is unavailable; no restoration PASS claimed' });
+    return;
+  }
+  try {
+    await page.waitForFunction(() => {
+      const host = document.querySelector('.world-canvas-host > div[data-station]');
+      return host?.dataset.context === 'lost' && JSON.parse(host.dataset.station).motion.paused;
+    }, undefined, { timeout: 10_000 });
+    const lost = await stationState(page);
+    await page.waitForTimeout(350);
+    assert.equal((await stationState(page)).motion.clockMs, lost.motion.clockMs, 'A genuinely lost graphics context holds the world clock');
+    await page.evaluate(() => { globalThis.__stationR09RestoreContext(); delete globalThis.__stationR09RestoreContext; });
+    await page.waitForFunction(() => {
+      const host = document.querySelector('.world-canvas-host > div[data-station]');
+      return host?.dataset.context === 'ready' && !JSON.parse(host.dataset.station).motion.paused;
+    }, undefined, { timeout: 15_000 });
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const restored = await saveCanvas(page, output, 'station-r09-context-restored-1366', report);
+    const difference = pixelDifference(beforeImage, restored.image, { x: 0, y: 0, width: beforeImage.width, height: beforeImage.height });
+    assert.equal(difference.changed, 0, 'Context restoration preserves the actual still canvas, including masks, lighting and foliage');
+    const entrance = page.locator('[data-building-id="codepost"]');
+    await entrance.focus(); await entrance.press('Enter');
+    await page.getByRole('dialog', { name: 'Кодовый пост', exact: true }).waitFor();
+    await page.keyboard.press('Escape');
+    assert.ok(await entrance.evaluate(node => node === document.activeElement), 'Real entrance interaction and focus survive native restoration');
+    report.cases.push({ name: 'station-r09-native-context-restore', status: 'PASS', nativeExtension: true,
+      heldClockMs: lost.motion.clockMs, identicalCanvasPixels: true, restoredEntranceAndFocus: true,
+      graphics: (await page.evaluate(() => globalThis.__stationR09Observed())).map(({ clearTimes, ...value }) => value) });
+  } finally {
+    await page.evaluate(() => { delete globalThis.__stationR09RestoreContext; });
+  }
 }
 async function setPreferences(page, base, changes) {
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
@@ -230,11 +296,23 @@ async function repeatedMounts(page, report) {
   const summarize = values => values.map(({ clearTimes, ...value }) => value);
   const before = await page.evaluate(() => globalThis.__stationR09Observed());
   const initial = before.find(value => value.connected), trace = [];
+  const result = { name: 'station-r09-repeat-mount-lifetime', status: 'RUNNING', cycles: 3, before: summarize(before), trace,
+    scope: 'Real help-route exits and history returns; observed GL texture handles and default-framebuffer activity, not a heap/GPU driver census' };
+  report.cases.push(result);
   assert.ok(initial && initial.activeTextures > 0);
   for (let cycle = 0; cycle < 3; cycle++) {
     await page.locator('.hub-dock__guide').click();
     await page.getByRole('heading', { name: 'Помощь и управление', exact: true }).waitFor();
-    await page.waitForFunction(() => !document.querySelector('canvas') && globalThis.__stationR09Observed().every(value => !value.connected && value.activeTextures === 0));
+    const entry = { cycle: cycle + 1, afterExit: summarize(await page.evaluate(() => globalThis.__stationR09Observed())) };
+    trace.push(entry);
+    try {
+      await page.waitForFunction(() => !document.querySelector('canvas') && globalThis.__stationR09Observed().every(value => !value.connected && value.activeTextures === 0));
+    } catch (error) {
+      result.status = 'FAIL';
+      entry.failure = await page.evaluate(() => ({ url: location.href, canvasCount: document.querySelectorAll('canvas').length,
+        graphics: globalThis.__stationR09Observed().map(({ clearTimes, ...value }) => value) }));
+      throw error;
+    }
     const unmounted = await page.evaluate(() => globalThis.__stationR09Observed());
     await page.waitForTimeout(350);
     const idle = await page.evaluate(() => globalThis.__stationR09Observed());
@@ -247,10 +325,9 @@ async function repeatedMounts(page, report) {
     assert.equal(connected[0].activeTextures, initial.activeTextures, 'Repeated entry does not accumulate live texture handles');
     assert.equal(connected[0].textureUploadRgbaEstimate, initial.textureUploadRgbaEstimate, 'The same scene has the same observed texture upload footprint');
     assert.ok(after.filter(value => !value.connected).every(value => value.activeTextures === 0), 'Prior worlds release textures or their destroyed context');
-    trace.push({ cycle: cycle + 1, unmounted: summarize(unmounted), remounted: summarize(after) });
+    entry.unmounted = summarize(unmounted); entry.remounted = summarize(after);
   }
-  report.cases.push({ name: 'station-r09-repeat-mount-lifetime', cycles: 3, before: summarize(before), trace,
-    scope: 'Real help-route exits and history returns; observed GL texture handles and default-framebuffer activity, not a heap/GPU driver census' });
+  result.status = 'PASS';
 }
 
 async function runStationR09Checks({ base, browser, report, capture, output }) {
@@ -386,11 +463,12 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
     const stillB = decodePng(await page.locator('canvas').screenshot());
     assert.equal(pixelDifference(stillA.image, stillB, { x: 0, y: 0, width: stillB.width, height: stillB.height }).changed, 0, 'Reduced motion freezes the actual canvas');
     report.cases.push({ name: `station-r09-reduced-motion-${viewport.width}`, state: await stationState(page), identicalCanvasPixels: true });
+    if (viewport.width === 1366) await nativeContextRestore(page, output, report, stillA.image);
     await setPreferences(page, base, { reducedMotion: false, lowPower: true });
     const low = await stationState(page);
     assert.equal(low.motion.lowPower, true); assert.equal(low.motion.foliage.cadenceMs, BUDGET.lowCadenceMs);
     assert.equal(low.motion.foliage.animated, true, 'Low power retains bounded wind instead of silently removing it');
-    assert.equal(await page.locator('.world-canvas-host > div').getAttribute('data-fps-limit'), '30');
+    assert.equal(await page.locator(HOST).getAttribute('data-fps-limit'), '30');
     const lowStart = await page.evaluate(() => performance.now());
     await page.waitForFunction(previous => {
       const value = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station);
@@ -413,4 +491,4 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
 }
 
 module.exports = { runStationR09Checks, stationState, stationReady, visibleEntranceGeometry,
-  forEachStationView, panOnce, candidateUrl, decodePng, pixelDifference, projectRegion, BUDGET };
+  forEachStationView, panOnce, showStationEntrance, candidateUrl, decodePng, pixelDifference, projectRegion, BUDGET };

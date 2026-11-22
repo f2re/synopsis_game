@@ -16,8 +16,19 @@ class Events {
   count() { return [...this.listeners.values()].reduce((sum, entries) => sum + entries.length, 0); }
 }
 
-const effects = [], hooks = [], updates = [], commands = [], weatherEvents = [];
+const effects = [], hooks = [], updates = [], commands = [], weatherEvents = [], microtasks = [];
 let sleeps = 0, wakes = 0, destroyed = false, creations = 0;
+let nativeContextLost = false, nativeLossRequests = 0, rendererDestroyed = false;
+const ownedContext = {
+  isContextLost: () => nativeContextLost,
+  getExtension(name) {
+    assert.equal(name, 'WEBGL_lose_context');
+    return { loseContext() {
+      assert.equal(rendererDestroyed, true, 'Owned native context is released after Phaser renderer cleanup');
+      nativeLossRequests++; nativeContextLost = true;
+    } };
+  },
+};
 const host = { dataset: {}, getBoundingClientRect: () => ({ left: 100, top: 50 }) };
 const bridge = new Events();
 bridge.notifyBuildingClicked = (id) => commands.push({ buildingId: id });
@@ -35,7 +46,7 @@ const game = {
   registry: { get: (key) => registry.get(key), set: (key, value) => registry.set(key, value) },
   input: { enabled: true }, scene: { getScenes: () => [scene], isActive: () => true },
   loop: { fpsLimit: 60, setFPSLimit(value) { this.fpsLimit = value; }, sleep() { sleeps++; }, wake() { wakes++; } },
-  renderer: new Events(), events: new Events(), destroy(value) { destroyed = value; },
+  renderer: Object.assign(new Events(), { gl: ownedContext }), events: new Events(), destroy(value) { destroyed = value; },
 };
 let muted = true, unlocked = false, hookIndex = 0, weather = 'rain';
 const settings = { masterVolume: 1, ambientVolume: 1 };
@@ -64,7 +75,7 @@ const code = ts.transpileModule(fs.readFileSync('apps/web/src/game/WorldCanvas.t
 }).outputText;
 const exportsObject = {};
 vm.runInNewContext(code, { exports: exportsObject, require: (id) => { assert(id in dependencies, id); return dependencies[id]; }, document, window,
-  performance: { now: () => 0 }, HTMLCanvasElement: Canvas, URLSearchParams, CustomEvent: class {} });
+  performance: { now: () => 0 }, HTMLCanvasElement: Canvas, URLSearchParams, CustomEvent: class {}, queueMicrotask: fn => microtasks.push(fn) });
 
 function render() {
   hookIndex = 0; effects.length = 0;
@@ -111,12 +122,12 @@ settings.masterVolume = 0; window.emit('preferences', { detail: { soundEnabled: 
 assert.equal(muted, true, 'Zero master volume keeps the campus muted');
 settings.masterVolume = 1; window.emit('preferences', { detail: { soundEnabled: true } });
 assert.equal(muted, false);
-game.renderer.emit('losewebgl');
+nativeContextLost = true; game.renderer.emit('losewebgl');
 assertWeather('rain', false, 'Context loss stops motion without forgetting the weather choice');
 assert.equal(host.dataset.context, 'lost'); assert.equal(registry.get('ui.world_visible'), false);
 assert.equal(muted, true, 'A lost renderer silences campus audio');
 assert.equal(game.input.enabled, false); assert.equal(scene.input.keyboard.enabled, false); assert.equal(sleeps, 1);
-document.hidden = true; game.renderer.emit('restorewebgl');
+document.hidden = true; nativeContextLost = false; game.renderer.emit('restorewebgl');
 assert.equal(wakes, 0, 'Restoring a hidden renderer must not wake it');
 assert.equal(registry.get('ui.world_visible'), false);
 assert.equal(muted, true, 'A hidden restored renderer remains silent');
@@ -143,9 +154,32 @@ assertWeather('rain', true, 'Turning off the motion limits restores the current 
 document.hidden = true; document.emit('visibilitychange');
 weather = 'clear'; render(); weather = 'rain'; render();
 assertWeather('rain', false, 'Weather changes while hidden cannot wake decorative motion');
+assert.equal(nativeLossRequests, 0, 'A live canvas keeps its genuine context loss/restoration lifecycle');
 
 for (const hook of hooks) hook?.cleanup?.();
 assert.equal(destroyed, true);
 assert.equal(document.count(), 0); assert.equal(window.count(), 0); assert.equal(bridge.count(), 0);
+assert.equal(game.renderer.count(), 0);
+assert.equal(nativeLossRequests, 0, 'Destroy request alone must not force loss before Phaser disposes the game');
+assert.equal(microtasks.length, 0, 'Destruction may be delayed until a later frame');
+// Phaser 4.2.1 runDestroy: scene.destroy -> DESTROY event -> renderer.destroy
+// -> canvas removal -> loop.destroy. Native release must occur after that stack.
+game.events.emit('destroy');
+assert.equal(nativeLossRequests, 0, 'The DESTROY listener does not interrupt synchronous renderer disposal');
+assert.equal(microtasks.length, 1, 'Exactly one native release is scheduled for this owned context');
+rendererDestroyed = true; game.renderer.gl = null;
+while (microtasks.length) microtasks.shift()();
+assert.equal(nativeLossRequests, 1, 'The captured owned context is released even after renderer.gl is cleared');
+assert.equal(nativeContextLost, true);
+game.events.emit('destroy');
+assert.equal(microtasks.length, 0, 'Repeated destruction does not schedule another context loss');
 assert.equal(game.renderer.count(), 0); assert.equal(game.events.count(), 0);
-console.log(JSON.stringify({ status: 'PASS', boundary: 'real WorldCanvas code with deterministic event doubles', checks: ['no personal player controls or profile channel', 'native building actions retained', 'shared audio gesture and master volume gates', 'weather selection without game recreation', 'weather snapshot for delayed scene creation', 'context-loss and hidden restore silence', 'late hidden scene-ready and weather changes keep rain stopped', 'modal input pause', 'independent reduced-motion and low-power weather limits', 'all listeners and game disposed'], limits: 'Not a browser layout, measured GPU or art acceptance result.' }));
+
+// The same boundary remains valid for a renderer without a WebGL context.
+hooks.length = 0; render();
+for (const hook of hooks) hook?.cleanup?.();
+game.events.emit('destroy');
+assert.equal(microtasks.length, 0); assert.equal(nativeLossRequests, 1);
+assert.equal(document.count(), 0); assert.equal(window.count(), 0); assert.equal(bridge.count(), 0);
+assert.equal(game.renderer.count(), 0); assert.equal(game.events.count(), 0);
+console.log(JSON.stringify({ status: 'PASS', boundary: 'real WorldCanvas code with deterministic event doubles', checks: ['no personal player controls or profile channel', 'native building actions retained', 'shared audio gesture and master volume gates', 'weather selection without game recreation', 'weather snapshot for delayed scene creation', 'context-loss and hidden restore silence', 'late hidden scene-ready and weather changes keep rain stopped', 'modal input pause', 'independent reduced-motion and low-power weather limits', 'all listeners and game disposed', 'owned native context released only after delayed Phaser DESTROY and renderer disposal', 'release remains safe without a WebGL context'], limits: 'Not a browser layout, measured GPU or art acceptance result.' }));

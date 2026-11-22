@@ -14,7 +14,7 @@ const crypto = require('node:crypto');
 const { spawn, execFileSync } = require('node:child_process');
 const { once } = require('node:events');
 const { chromium, firefox } = require(require.resolve('playwright', { paths: [process.env.STATION_PLAYWRIGHT_MODULES || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES || process.cwd()] }));
-const { candidateUrl, stationState, forEachStationView } = require('./test_station_r09_browser.cjs');
+const { candidateUrl, stationState, forEachStationView, showStationEntrance } = require('./test_station_r09_browser.cjs');
 
 const repo = process.cwd(), dist = path.join(repo, 'apps/web/dist');
 const browserName = process.env.STATION_BROWSER || 'chromium';
@@ -224,7 +224,9 @@ async function visitSettings(page, changes) {
   await page.getByRole('button', { name: 'Готово', exact: true }).click(); await ready(page);
 }
 async function solarCases(base) {
-  for (const viewport of viewports) {
+  // Candidate art acceptance also needs the short landscape composition. The
+  // separate baseline performance workload below retains its original sizes.
+  for (const viewport of [...viewports, { width: 844, height: 390 }]) {
     const hashes = {};
     for (const { phase, iso } of dates) {
       const { context, page } = await createPage(viewport, { reducedMotion: 'reduce' });
@@ -252,6 +254,10 @@ async function weatherCases(base) {
     const after = await page.locator('canvas').screenshot({ path: path.join(output, `weather-rain-pair-b-${viewport.width}.png`) });
     report.screenshots.push({ name: `weather-rain-pair-a-${viewport.width}.png`, sha256: sha256(before) }, { name: `weather-rain-pair-b-${viewport.width}.png`, sha256: sha256(after) });
     record(`rain-visual-pair-${viewport.width}`, { separationMs: 550, canvasChanged: sha256(before) !== sha256(after), interpretation: 'Visual comparison; NPC/fountain changes may also contribute.' });
+    if ((await state(page)).stationDiagnostics?.stationArt === 'r09') {
+      const panorama = await showStationEntrance(page, 'archive');
+      record(`rain-archive-panorama-${viewport.width}`, { entranceId: 'archive', panorama });
+    }
     await page.locator('[data-building-id="archive"]').click();
     await page.getByRole('button', { name: 'Посетить читальный зал', exact: true }).click();
     await page.getByRole('heading', { name: 'Читальный зал архива', exact: true }).waitFor();

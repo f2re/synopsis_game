@@ -1697,6 +1697,378 @@
       "size": [
         512,
         288
+      ],
+      "edits": [
+        {
+          "id": "hub.r09.receiver.central-entry-glass",
+          "lightRegionId": "hub.r09.light.central-entry",
+          "clearBounds": [
+            217,
+            153,
+            24,
+            14
+          ],
+          "selection": {
+            "rowSegments": [
+              [
+                155,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                156,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                157,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                158,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                159,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                160,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                161,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                162,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                163,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                164,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                165,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                166,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                167,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                168,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ],
+              [
+                169,
+                [
+                  [
+                    227,
+                    231
+                  ],
+                  [
+                    235,
+                    239
+                  ]
+                ]
+              ]
+            ]
+          },
+          "selectionNote": "Independent ART-LIGHT-01 source trace: two glass panes only; excludes stone pier, dark top/bottom and central frames. Original R08 source remains unchanged.",
+          "sourceReviewer": "/root/station_pixel_review"
+        },
+        {
+          "id": "hub.r09.receiver.archive-interior",
+          "lightRegionId": "hub.r09.light.archive-interior",
+          "clearBounds": [
+            300,
+            170,
+            32,
+            31
+          ],
+          "selection": {
+            "rowSegments": [
+              [
+                172,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                173,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                174,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                175,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                179,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                180,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                181,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                184,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                185,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                186,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ],
+              [
+                187,
+                [
+                  [
+                    300,
+                    304
+                  ],
+                  [
+                    310,
+                    313
+                  ]
+                ]
+              ]
+            ]
+          },
+          "selectionNote": "Independent ART-LIGHT-01 source trace: two interior book bays only; wooden posts, shelf bars and lower door front remain unlit. Original R08 source remains unchanged.",
+          "sourceReviewer": "/root/station_pixel_review"
+        }
       ]
     },
     {
@@ -1719,6 +2091,139 @@
       "size": [
         512,
         288
+      ],
+      "edits": [
+        {
+          "id": "hub.r09.receiver.central-steps",
+          "lightRegionId": "hub.r09.light.central-steps",
+          "selection": {
+            "rowSegments": [
+              [
+                172,
+                [
+                  [
+                    221,
+                    225
+                  ],
+                  [
+                    231,
+                    240
+                  ]
+                ]
+              ],
+              [
+                173,
+                [
+                  [
+                    220,
+                    225
+                  ],
+                  [
+                    231,
+                    241
+                  ]
+                ]
+              ],
+              [
+                174,
+                [
+                  [
+                    217,
+                    220
+                  ],
+                  [
+                    231,
+                    242
+                  ]
+                ]
+              ],
+              [
+                175,
+                [
+                  [
+                    215,
+                    217
+                  ],
+                  [
+                    231,
+                    242
+                  ]
+                ]
+              ],
+              [
+                176,
+                [
+                  [
+                    214,
+                    216
+                  ],
+                  [
+                    231,
+                    242
+                  ]
+                ]
+              ],
+              [
+                177,
+                [
+                  [
+                    214,
+                    215
+                  ],
+                  [
+                    224,
+                    226
+                  ],
+                  [
+                    237,
+                    244
+                  ]
+                ]
+              ],
+              [
+                178,
+                [
+                  [
+                    222,
+                    226
+                  ],
+                  [
+                    239,
+                    244
+                  ]
+                ]
+              ],
+              [
+                179,
+                [
+                  [
+                    220,
+                    224
+                  ],
+                  [
+                    240,
+                    244
+                  ]
+                ]
+              ],
+              [
+                180,
+                [
+                  [
+                    219,
+                    221
+                  ],
+                  [
+                    241,
+                    244
+                  ]
+                ]
+              ]
+            ]
+          },
+          "selectionNote": "Independent ART-LIGHT-01 source trace: upper stone steps only, with exact gaps around the armillary sphere and fixed foliage; rows169-171 and181+ excluded.",
+          "sourceReviewer": "/root/station_pixel_review"
+        }
       ]
     }
   ],
@@ -1728,14 +2233,14 @@
       "role": "central-entry",
       "maskRole": "window-light-mask",
       "sourceBounds": [
-        217,
-        153,
-        24,
-        14
+        227,
+        155,
+        13,
+        15
       ],
-      "tint": "#FFD890",
-      "suggestedAlpha": 0.34,
-      "status": "candidate-starting-values",
+      "tint": "#FFB95A",
+      "suggestedAlpha": 0.46,
+      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -1759,13 +2264,13 @@
       "maskRole": "window-light-mask",
       "sourceBounds": [
         300,
-        170,
-        32,
-        31
+        172,
+        14,
+        16
       ],
-      "tint": "#FFD890",
-      "suggestedAlpha": 0.29,
-      "status": "candidate-starting-values",
+      "tint": "#FFB24C",
+      "suggestedAlpha": 0.38,
+      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -1842,19 +2347,42 @@
       "suggestedAlpha": 0.13,
       "status": "candidate-starting-values",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.central-steps",
+      "role": "central-steps",
+      "maskRole": "ground-light-mask",
+      "sourceBounds": [
+        214,
+        172,
+        31,
+        9
+      ],
+      "tint": "#D79D58",
+      "suggestedAlpha": 0.11,
+      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "usage": "Weak reflected warmth on source-reviewed upper stone strips only; gaps exclude the armillary instrument and plants. No full-scene illumination.",
+      "verticalFalloff": [
+        1,
+        0.25
+      ]
     }
   ],
   "review": {
     "status": "candidate",
     "pixelArt": "PASS-source-geometry; actual-game-frames-pending",
-    "artDirection": "pending-independent-review",
+    "artDirection": "ART-LIGHT-01-request-changes; revised-local-light-candidate-awaits-actual-game-frames",
     "runtime": "pending-browser-review",
     "productionReady": false,
     "cloudMotionReady": true,
     "cloudMotion": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
     "sourceReviewer": "/root/station_pixel_review",
     "sourceReviewReport": "docs/testing/evidence/station-r09/pixel-review.md",
-    "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json"
+    "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json",
+    "localLighting": "SOURCE-PASS; ART-LIGHT-01-actual-game-frames-pending",
+    "lightSourceReview": "PASS",
+    "lightSourceReviewReport": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
+    "lightSourceContract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json"
   },
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
@@ -1890,6 +2418,13 @@
       ],
       "asset_id": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
       "usage": "comparison-only; rejected as a production sky underlay because its exposed lower sky is about20R/15G darker than the master near the selected cloud"
+    },
+    "localLightReceiverReview": {
+      "request": "ART-LIGHT-01",
+      "sourceReviewer": "/root/station_pixel_review",
+      "contract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json",
+      "report": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
+      "method": "R09-only binary white receiver edits on pinned original masks; source-scene RGB and R08 files unchanged."
     }
   },
   "selectionPolicy": {
@@ -1899,7 +2434,8 @@
     "hiddenPlate": "Never used as a whole-scene replacement. Compare exposed donor at motion limits separately from the exact rest roundtrip.",
     "npcOcclusion": "Foreground plane is static and excludes moving foliage pixels through the local hidden plate. Runtime depth and paths require independent scene review.",
     "windAmplitude": "Runtime rounds source-pixel offsets then hard-clamps to ±1. Gains 1.2–1.5 keep small crowns visibly active; the earlier <=0.3 proposal was rejected because it quantized all motion to zero.",
-    "water": "Exact selected source-water mask excludes the fir and green shoreline. Runtime rowSpans use end-exclusive bounds and are generated from the same alpha used by the water image."
+    "water": "Exact selected source-water mask excludes the fir and green shoreline. Runtime rowSpans use end-exclusive bounds and are generated from the same alpha used by the water image.",
+    "localLightReceivers": "R09-only explicit edits of pinned R08 binary white receiver masks. clearBounds removes an obsolete selected receiver only in the exported copy; reviewed rowSegments select actual glass or stone. No scene RGB is altered."
   },
   "skyPatch": {
     "kind": "native-sky-region-copy",

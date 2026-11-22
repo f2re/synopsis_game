@@ -53,8 +53,8 @@ function makeScene() {
   const image = (x = 0, y = 0, key) => {
     const value = { x, y, key, destroyed: 0, width: 0, rectangles: [],
       setOrigin(x, y) { this.origin = [x, y]; return this; },
-      setDepth(v) { this.depth = v; return this; }, setTint(v) { this.tint = v; return this; },
-      setAlpha(v) { this.alpha = v; return this; }, setBlendMode(v) { this.blend = v; return this; },
+      setDepth(v) { this.depth = v; return this; }, setTint(...values) { this.tint = values[0]; this.tintArguments = values; return this; },
+      setAlpha(...values) { this.alpha = values[0]; this.alphaArguments = values; return this; }, setBlendMode(v) { this.blend = v; return this; },
       setScale(x, y) { this.scale = [x, y]; return this; },
       setDisplayOrigin(x, y) { this.displayOrigin = [x, y]; return this; },
       setCrop(x, y, width, height) { this.crop = [x, y, width, height]; return this; },
@@ -84,6 +84,33 @@ function makeScene() {
     } },
   };
   return scene;
+}
+function inspectStepReceiver(scene, layer) {
+  const regions = manifest.lightRegions.filter(region => region.verticalFalloff);
+  assert.equal(regions.length, 1, 'The reviewed source has one bounded receiver with a vertical falloff');
+  const region = regions[0], [x, y, width, height] = region.sourceBounds;
+  assert.deepEqual(region.verticalFalloff, [1, .25]); assert.equal(height, 9);
+  const asset = manifest.assets.find(asset => asset.role === region.maskRole);
+  const strips = scene.objects.filter(value => value.key === asset.key && value.depth === 32 && value.crop
+    && value.crop[0] === x && value.crop[1] >= y && value.crop[1] < y + height && value.crop[2] === width).sort((a, b) => a.crop[1] - b.crop[1]);
+  assert.equal(strips.length, 9, 'The fade uses nine authored one-pixel source strips');
+  for (const [index, strip] of strips.entries()) {
+    assert.deepEqual(strip.crop, [x, y + index, width, 1], 'Each consecutive receiver strip occupies exactly one native row');
+    assert.ok(strip.crop.every(Number.isInteger)); assert.deepEqual([strip.x, strip.y], [0, 0]);
+    assert.deepEqual(strip.origin, [0, 0]); assert.ok(!strip.scale || strip.scale.every(value => value === 1));
+  }
+  const phaseAlphas = [];
+  for (const phase of ['day', 'dawn', 'golden_hour', 'twilight', 'night', 'white_nights']) {
+    layer.applyDayPhase(phase);
+    const alphas = strips.map(strip => strip.alpha);
+    assert.ok(alphas.every(value => Number.isFinite(value) && value > 0 && value <= .65));
+    assert.ok(alphas.slice(1).every((value, index) => value < alphas[index]), 'Reflected light decreases toward the lower edge');
+    assert.ok(Math.abs(alphas.at(-1) / alphas[0] - .25) < 1e-12, 'The lower edge has one quarter of the upper-row receiver strength');
+    assert.ok(strips.every(strip => strip.alphaArguments.length === 1 && strip.tintArguments.length === 1),
+      'Every native strip has uniform alpha/tint, without per-vertex interpolation');
+    phaseAlphas.push({ phase, alphas });
+  }
+  return { id: region.id, weather: layer.getEnvironment().weather, rows: strips.length, sourceBounds: region.sourceBounds, phaseAlphas };
 }
 const rows = [];
 for (let cycle = 0; cycle < 3; cycle++) {
@@ -151,12 +178,13 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.equal(layer.getEnvironment().rainDrops, 0);
   assert.equal(snapshot().motion.foliage.cadenceMs, 200);
   layer.applyDayPhase('night'); assert.equal(snapshot().phase, 'night');
+  const stepReceiver = inspectStepReceiver(scene, layer);
 
   layer.destroy(); layer.destroy();
   assert.ok(scene.objects.every(value => value.destroyed === 1), 'Every image and graphics object is released exactly once');
   assert.ok(scene.masks.every(value => value.destroyed === 1), 'Every geometry mask is released exactly once');
   assert.equal(scene.events.count(), 0); assert.equal(scene.scale.count(), 0); assert.equal(bridgeEvents.count(), 0);
-  rows.push({ cycle: cycle + 1, objects: created, masks: scene.masks.length, remainingListeners: bridgeEvents.count(), movingClouds });
+  rows.push({ cycle: cycle + 1, objects: created, masks: scene.masks.length, remainingListeners: bridgeEvents.count(), movingClouds, stepReceiver });
 }
 console.log(JSON.stringify({ status: 'PASS', scope: 'Real R09 integration handlers with Phaser scene doubles; no browser or rendered-pixel acceptance',
   manifestSha256: crypto.createHash('sha256').update(fs.readFileSync(manifestFile)).digest('hex'), sources, cycles: rows }, null, 2));

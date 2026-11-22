@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "boundary": "real WorldCanvas code with deterministic event doubles",
+  "checks": [
+    "no personal player controls or profile channel",
+    "native building actions retained",
+    "shared audio gesture and master volume gates",
+    "weather selection without game recreation",
+    "weather snapshot for delayed scene creation",
+    "context-loss and hidden restore silence",
+    "late hidden scene-ready and weather changes keep rain stopped",
+    "modal input pause",
+    "independent reduced-motion and low-power weather limits",
+    "all listeners and game disposed",
+    "owned native context released only after delayed Phaser DESTROY and renderer disposal",
+    "release remains safe without a WebGL context"
+  ],
+  "limits": "Not a browser layout, measured GPU or art acceptance result.",
+  "worldCanvasSha256": "2beccf72e4e84597fdb708bc6ea8fd5bd0b6a7e234b59f85c0ad47c39d992a32",
+  "runnerSha256": "6f57ab3a4f5187ed3ccd1a16d9b14839b9eebf38718d844bfa79a8e72dafeac8"
+}

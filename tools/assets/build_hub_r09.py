@@ -364,7 +364,46 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
         pixels = image.tobytes()
         if any(pixels[i + 3] and pixels[i:i + 3] != bytes((255, 255, 255)) for i in range(0, len(pixels), 4)):
             raise ValueError("Light receiver masks must be white selected pixels")
-        emit(entry["id"], entry["role"], entry["file"], image, 280, {"blendMode": "receiver-mask"}, crop=False)
+        edits = []
+        for edit in entry.get("edits", []):
+            if entry["role"] not in {"ground-light-mask", "window-light-mask"}:
+                raise ValueError("Editable R09 receiver changes are restricted to ground or window masks")
+            region = next((region for region in spec["lightRegions"]
+                           if region["id"] == edit["lightRegionId"]), None)
+            if region is None or region["maskRole"] != entry["role"]:
+                raise ValueError("Receiver edit references a missing receiver or mismatched light region")
+            cleared_pixels = 0
+            if "clearBounds" in edit:
+                clear = edit["clearBounds"]
+                if (entry["role"] != "window-light-mask" or len(clear) != 4
+                        or not all(integer(v) for v in clear)):
+                    raise ValueError("Only window receiver edits may clear integer source bounds")
+                cx, cy, cw, ch = clear
+                if min(cx, cy) < 0 or min(cw, ch) <= 0 or cx + cw > CANVAS[0] or cy + ch > CANVAS[1]:
+                    raise ValueError("Receiver clear bounds exceed the source canvas")
+                cleared_pixels = count(image.getchannel("A").crop((cx, cy, cx + cw, cy + ch)))
+                image.paste((0, 0, 0, 0), (cx, cy, cx + cw, cy + ch))
+            selection = polygon_mask(edit["selection"])
+            if ImageChops.multiply(selection, image.getchannel("A")).getbbox():
+                raise ValueError("A receiver edit must not overwrite unrelated source-mask pixels")
+            if ImageChops.multiply(selection, moving_mask).getbbox():
+                raise ValueError("Receiver edits must not illuminate moving foliage or clouds")
+            x, y, width, height = region["sourceBounds"]
+            bounds = Image.new("L", CANVAS)
+            ImageDraw.Draw(bounds).rectangle((x, y, x + width - 1, y + height - 1), fill=255)
+            if ImageChops.subtract(selection, bounds).getbbox():
+                raise ValueError("Receiver edit extends outside its light region")
+            image.paste((255, 255, 255, 255), (0, 0, *CANVAS), selection)
+            left, top, right, bottom = selection.getbbox()
+            edits.append({"id": edit["id"], "lightRegionId": edit["lightRegionId"],
+                          "selectedPixels": count(selection), "clearedSourceMaskPixels": cleared_pixels,
+                          "clearBounds": edit.get("clearBounds"),
+                          "sourceBounds": [left, top, right - left, bottom - top]})
+        emit(entry["id"], entry["role"], entry["file"], image, 280, {
+            "blendMode": "receiver-mask",
+            **({"maskRecipe": "pinned-source-mask-with-reviewed-source-pixel-edits",
+                "sourceMaskEdits": edits} if edits else {}),
+        }, crop=False)
     receiver_roles = {entry["role"] for entry in spec["receivers"]}
     for region in spec["lightRegions"]:
         if region["maskRole"] not in receiver_roles:
@@ -374,6 +413,12 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
             raise ValueError("Light region bounds must use positive integer source pixels")
         if x + width > CANVAS[0] or y + height > CANVAS[1]:
             raise ValueError("Light region outside source canvas")
+        if "verticalFalloff" in region:
+            falloff = region["verticalFalloff"]
+            if (not isinstance(falloff, list) or len(falloff) != 2
+                    or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in falloff)
+                    or not 0 <= falloff[1] <= falloff[0] <= 1):
+                raise ValueError("Light falloff must be two bounded descending source-row factors")
 
     runtime_domains = json.loads(json.dumps(spec["domains"]))
     runtime_domains["water"]["rowSpans"] = mask_row_spans(water_domain)

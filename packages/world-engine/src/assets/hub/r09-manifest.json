@@ -6,14 +6,18 @@
   "review": {
     "status": "candidate",
     "pixelArt": "PASS-source-geometry; actual-game-frames-pending",
-    "artDirection": "pending-independent-review",
+    "artDirection": "ART-LIGHT-01-request-changes; revised-local-light-candidate-awaits-actual-game-frames",
     "runtime": "pending-browser-review",
     "productionReady": false,
     "cloudMotionReady": true,
     "cloudMotion": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
     "sourceReviewer": "/root/station_pixel_review",
     "sourceReviewReport": "docs/testing/evidence/station-r09/pixel-review.md",
-    "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json"
+    "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json",
+    "localLighting": "SOURCE-PASS; ART-LIGHT-01-actual-game-frames-pending",
+    "lightSourceReview": "PASS",
+    "lightSourceReviewReport": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
+    "lightSourceContract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json"
   },
   "sourceCanvas": [
     512,
@@ -402,9 +406,48 @@
       ],
       "depthSourceY": 280,
       "alphaPolicy": "binary",
-      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
-      "bytes": 900,
-      "blendMode": "receiver-mask"
+      "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
+      "bytes": 905,
+      "blendMode": "receiver-mask",
+      "maskRecipe": "pinned-source-mask-with-reviewed-source-pixel-edits",
+      "sourceMaskEdits": [
+        {
+          "id": "hub.r09.receiver.central-entry-glass",
+          "lightRegionId": "hub.r09.light.central-entry",
+          "selectedPixels": 150,
+          "clearedSourceMaskPixels": 204,
+          "clearBounds": [
+            217,
+            153,
+            24,
+            14
+          ],
+          "sourceBounds": [
+            227,
+            155,
+            13,
+            15
+          ]
+        },
+        {
+          "id": "hub.r09.receiver.archive-interior",
+          "lightRegionId": "hub.r09.light.archive-interior",
+          "selectedPixels": 99,
+          "clearedSourceMaskPixels": 45,
+          "clearBounds": [
+            300,
+            170,
+            32,
+            31
+          ],
+          "sourceBounds": [
+            300,
+            172,
+            14,
+            16
+          ]
+        }
+      ]
     },
     {
       "id": "hub.r09.lamp-light-mask",
@@ -464,9 +507,25 @@
       ],
       "depthSourceY": 280,
       "alphaPolicy": "binary",
-      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
-      "bytes": 724,
-      "blendMode": "receiver-mask"
+      "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
+      "bytes": 827,
+      "blendMode": "receiver-mask",
+      "maskRecipe": "pinned-source-mask-with-reviewed-source-pixel-edits",
+      "sourceMaskEdits": [
+        {
+          "id": "hub.r09.receiver.central-steps",
+          "lightRegionId": "hub.r09.light.central-steps",
+          "selectedPixels": 119,
+          "clearedSourceMaskPixels": 0,
+          "clearBounds": null,
+          "sourceBounds": [
+            214,
+            172,
+            31,
+            9
+          ]
+        }
+      ]
     }
   ],
   "lightRegions": [
@@ -475,14 +534,14 @@
       "role": "central-entry",
       "maskRole": "window-light-mask",
       "sourceBounds": [
-        217,
-        153,
-        24,
-        14
+        227,
+        155,
+        13,
+        15
       ],
-      "tint": "#FFD890",
-      "suggestedAlpha": 0.34,
-      "status": "candidate-starting-values",
+      "tint": "#FFB95A",
+      "suggestedAlpha": 0.46,
+      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -506,13 +565,13 @@
       "maskRole": "window-light-mask",
       "sourceBounds": [
         300,
-        170,
-        32,
-        31
+        172,
+        14,
+        16
       ],
-      "tint": "#FFD890",
-      "suggestedAlpha": 0.29,
-      "status": "candidate-starting-values",
+      "tint": "#FFB24C",
+      "suggestedAlpha": 0.38,
+      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -589,6 +648,25 @@
       "suggestedAlpha": 0.13,
       "status": "candidate-starting-values",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r09.light.central-steps",
+      "role": "central-steps",
+      "maskRole": "ground-light-mask",
+      "sourceBounds": [
+        214,
+        172,
+        31,
+        9
+      ],
+      "tint": "#D79D58",
+      "suggestedAlpha": 0.11,
+      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "usage": "Weak reflected warmth on source-reviewed upper stone strips only; gaps exclude the armillary instrument and plants. No full-scene illumination.",
+      "verticalFalloff": [
+        1,
+        0.25
+      ]
     }
   ],
   "domains": {
@@ -2956,7 +3034,7 @@
     }
   },
   "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
-  "sourceSpecCanonicalSha256": "19baa8da7ce4afb99ef2c0423916159247d531b78ed8f722eb1f948342193366",
+  "sourceSpecCanonicalSha256": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec",
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
     "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
@@ -2991,6 +3069,13 @@
       ],
       "asset_id": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
       "usage": "comparison-only; rejected as a production sky underlay because its exposed lower sky is about20R/15G darker than the master near the selected cloud"
+    },
+    "localLightReceiverReview": {
+      "request": "ART-LIGHT-01",
+      "sourceReviewer": "/root/station_pixel_review",
+      "contract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json",
+      "report": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
+      "method": "R09-only binary white receiver edits on pinned original masks; source-scene RGB and R08 files unchanged."
     }
   },
   "validation": {
@@ -3010,7 +3095,7 @@
     "exportResampling": "none",
     "paletteQuantization": false,
     "artAcceptanceImplied": false,
-    "pngBytes": 345398,
+    "pngBytes": 345506,
     "decodedRgbaBytes": 2714248
   }
 }

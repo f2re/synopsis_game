@@ -138,7 +138,7 @@ async function checkWorldLoading({ base, browser, report, capture, waitForCampus
   const requested = new Set();
   page.on('request', request => requested.add(new URL(request.url()).pathname));
   await page.goto(base); await waitForCampus(page);
-  const profile = await page.locator('.world-canvas-host > div').evaluate(node => node.dataset.station ? JSON.parse(node.dataset.station).stationArt : 'r01');
+  const profile = await page.locator('.world-canvas-host > div[data-scene="hub"]').evaluate(node => node.dataset.station ? JSON.parse(node.dataset.station).stationArt : 'r01');
   assert.ok(profile === 'r01' || profile === 'r09', 'Known selected station asset profile');
   const manifestPath = profile === 'r09' ? 'packages/world-engine/src/assets/hub/r09-manifest.json' : 'packages/world-engine/src/assets/hub/r01-approval.json';
   const { assets } = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));

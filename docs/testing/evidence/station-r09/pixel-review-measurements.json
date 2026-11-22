@@ -2,8 +2,8 @@
   "schema": "independent-pixel-source-review/v1",
   "reviewer": "/root/station_pixel_review",
   "scope": "Actual source PNG/masks only. No browser or runtime appearance assertion.",
-  "manifestFileSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
-  "sourceSpecFileSha256": "19baa8da7ce4afb99ef2c0423916159247d531b78ed8f722eb1f948342193366",
+  "manifestFileSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+  "sourceSpecFileSha256": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec",
   "sourceCanvas": [
     512,
     288
@@ -229,7 +229,7 @@
     {
       "id": "hub.r09.window-light-mask",
       "file": "assets/generated/hub/r09/window-light-mask.png",
-      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+      "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
       "dimensions": [
         512,
         288
@@ -269,7 +269,7 @@
     {
       "id": "hub.r09.ground-light-mask",
       "file": "assets/generated/hub/r09/ground-light-mask.png",
-      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+      "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
       "dimensions": [
         512,
         288
@@ -279,7 +279,7 @@
         0,
         255
       ],
-      "opaquePixels": 248,
+      "opaquePixels": 367,
       "transparentRgbNonzeroPixels": 0,
       "shaMatchesManifest": true,
       "publicCopyByteIdentical": true,

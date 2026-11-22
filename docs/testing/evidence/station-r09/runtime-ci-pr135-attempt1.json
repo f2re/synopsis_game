@@ -1,0 +1,841 @@
+{
+  "status": "FAIL-partial-evidence-only",
+  "reviewer": "independent-web-performance-and-integration",
+  "pullRequest": "https://github.com/f2re/synopsis_game/pull/135",
+  "headSha": "bc0273f00f90fd22c69647b5300c511de09033b5",
+  "checkoutSha": "dd68819f5c83706fa41a5b5f473a648de4518290",
+  "treeSha": "dd60fa94dca5b7637fad2d7b48f28838b179f5bc",
+  "workflowRun": "https://github.com/f2re/synopsis_game/actions/runs/45006418395",
+  "results": [
+    {
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "reportSha256": "97edef2850a999624308f3a6e11c1e4b4afdae4032f90f8888d5c84326c7d5e1",
+      "status": "FAIL",
+      "failure": "locator.getAttribute: Error: strict mode violation: locator('.world-canvas-host > div') resolved to 2 elements:\n    1) <div data-phase=\"day\" data-scene=\"hub\" data-fps-limit=\"30\" data-rain-drops=\"0\" data-weather=\"clear\" data-context=\"ready\" data-low-power=\"true\" data-sound-muted=\"true\" data-lighting-mode=\"solar\" data-rain-animated=\"false\" data-reduced-motion=\"false\" data-weather-animated=\"false\" data-rendered-weather=\"clear\" data-characters=\"{\"artAccepted\":true,\"characterClass\":\"r02-station-actor\",\"placementProfile\":\"r09\",\"logicalSpace\":{\"width\":512,\"height\":288},\"playerPresent\":false,\"personalizationScope\":\"saved-p…>…</div> aka locator('div').nth(2)\n    2) <div role=\"group\" class=\"station-pan-controls\" aria-label=\"Панорама станции\">…</div> aka getByRole('group', { name: 'Панорама станции' })\n\nCall log:\n  - waiting for locator('.world-canvas-host > div')\n\n    at Object.runStationR09Checks (/home/runner/work/synopsis_game/synopsis_game/tools/test_station_r09_browser.cjs:393:65)\n    at async /home/runner/work/synopsis_game/synopsis_game/tools/test_station_screens.cjs:299:34",
+      "manifestSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+      "runnerSha256": "b2cadabec74c9df1cbc394e63a9f5ca494d4b3bdd4a8fce641ede41e7c71bf80",
+      "realMotion": {
+        "maxima": {
+          "foliage": 378,
+          "clouds": 624,
+          "water": 234,
+          "fixed": 0
+        },
+        "regions": [
+          {
+            "id": "hub.r09.foliage.central-topiary",
+            "group": "foliage",
+            "bounds": [
+              220,
+              232,
+              16,
+              15
+            ],
+            "rect": {
+              "x": 575,
+              "y": 648,
+              "width": 48,
+              "height": 28
+            }
+          },
+          {
+            "id": "hub.r09.foliage.left-front-shrub",
+            "group": "foliage",
+            "bounds": [
+              125,
+              222,
+              15,
+              14
+            ],
+            "rect": {
+              "x": 290,
+              "y": 618,
+              "width": 45,
+              "height": 42
+            }
+          },
+          {
+            "id": "hub.r09.foliage.left-planter-topiary",
+            "group": "foliage",
+            "bounds": [
+              263,
+              230,
+              15,
+              15
+            ],
+            "rect": {
+              "x": 704,
+              "y": 642,
+              "width": 45,
+              "height": 34
+            }
+          },
+          {
+            "id": "hub.r09.foliage.right-planter-topiary",
+            "group": "foliage",
+            "bounds": [
+              295,
+              228,
+              15,
+              15
+            ],
+            "rect": {
+              "x": 800,
+              "y": 636,
+              "width": 45,
+              "height": 40
+            }
+          },
+          {
+            "id": "hub.r09.foliage.foreground-right",
+            "group": "foliage",
+            "bounds": [
+              430,
+              260,
+              67,
+              28
+            ],
+            "rect": {
+              "x": 1205,
+              "y": 752,
+              "width": 161,
+              "height": 16
+            }
+          },
+          {
+            "id": "hub.r09.clouds.east-wisp",
+            "group": "clouds",
+            "bounds": [
+              354,
+              39,
+              31,
+              6
+            ],
+            "rect": {
+              "x": 977,
+              "y": 72,
+              "width": 93,
+              "height": 15
+            }
+          },
+          {
+            "id": "hub.r09.water",
+            "group": "water",
+            "bounds": [
+              306,
+              76,
+              206,
+              56
+            ],
+            "rect": {
+              "x": 833,
+              "y": 180,
+              "width": 533,
+              "height": 168
+            }
+          },
+          {
+            "id": "codepost-stone",
+            "group": "fixed",
+            "bounds": [
+              201,
+              108,
+              52,
+              9
+            ],
+            "rect": {
+              "x": 518,
+              "y": 276,
+              "width": 156,
+              "height": 27
+            }
+          },
+          {
+            "id": "archive-timber",
+            "group": "fixed",
+            "bounds": [
+              300,
+              147,
+              35,
+              7
+            ],
+            "rect": {
+              "x": 815,
+              "y": 393,
+              "width": 105,
+              "height": 21
+            }
+          }
+        ],
+        "clockManipulated": false,
+        "assertionScope": "Visible source regions; camera, stone and timber samples remain fixed"
+      },
+      "performance": {
+        "name": "station-r09-performance-1366",
+        "raf": {
+          "samples": 117,
+          "p50Ms": 33.30000000000291,
+          "p95Ms": 49.900000000001455
+        },
+        "defaultFramebufferClearIntervals": {
+          "samples": 118,
+          "p50Ms": 33.90000000002328,
+          "p95Ms": 37.40000000002328
+        },
+        "graphics": [
+          {
+            "connected": true,
+            "collected": false,
+            "contextLost": false,
+            "canvas": [
+              1366,
+              768
+            ],
+            "activeTextures": 40,
+            "peakTextures": 40,
+            "textureUploadRgbaEstimate": 3181776,
+            "defaultFramebufferClears": 561,
+            "draws": 3892
+          }
+        ],
+        "scope": "Software browser CI, clear-pass cadence and observed texture lifetime; not physical mobile/GPU certification",
+        "budget": {
+          "pngBytes": 2097152,
+          "rgbaBytes": 8388608,
+          "plants": 5,
+          "foliageBands": 40,
+          "normalCadenceMs": 100,
+          "lowCadenceMs": 200,
+          "softwareClearP95Ms": 100
+        }
+      },
+      "repeatMount": {
+        "name": "station-r09-repeat-mount-lifetime",
+        "cycles": 3,
+        "before": [
+          {
+            "connected": true,
+            "collected": false,
+            "contextLost": false,
+            "canvas": [
+              1366,
+              768
+            ],
+            "activeTextures": 40,
+            "peakTextures": 40,
+            "textureUploadRgbaEstimate": 3181776,
+            "defaultFramebufferClears": 562,
+            "draws": 3899
+          }
+        ],
+        "trace": [
+          {
+            "cycle": 1,
+            "unmounted": [
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 571,
+                "draws": 3962
+              }
+            ],
+            "remounted": [
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 571,
+                "draws": 3962
+              },
+              {
+                "connected": true,
+                "collected": false,
+                "contextLost": false,
+                "canvas": [
+                  1366,
+                  768
+                ],
+                "activeTextures": 40,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 3181776,
+                "defaultFramebufferClears": 10,
+                "draws": 28
+              }
+            ]
+          },
+          {
+            "cycle": 2,
+            "unmounted": [
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 571,
+                "draws": 3962
+              },
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 18,
+                "draws": 84
+              }
+            ],
+            "remounted": [
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 571,
+                "draws": 3962
+              },
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 18,
+                "draws": 84
+              },
+              {
+                "connected": true,
+                "collected": false,
+                "contextLost": false,
+                "canvas": [
+                  1366,
+                  768
+                ],
+                "activeTextures": 40,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 3181776,
+                "defaultFramebufferClears": 9,
+                "draws": 7
+              }
+            ]
+          },
+          {
+            "cycle": 3,
+            "unmounted": [
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 571,
+                "draws": 3962
+              },
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 18,
+                "draws": 84
+              },
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 14,
+                "draws": 42
+              }
+            ],
+            "remounted": [
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 571,
+                "draws": 3962
+              },
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 18,
+                "draws": 84
+              },
+              {
+                "connected": false,
+                "collected": true,
+                "contextLost": null,
+                "canvas": null,
+                "activeTextures": 0,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 0,
+                "defaultFramebufferClears": 14,
+                "draws": 42
+              },
+              {
+                "connected": true,
+                "collected": false,
+                "contextLost": false,
+                "canvas": [
+                  1366,
+                  768
+                ],
+                "activeTextures": 40,
+                "peakTextures": 40,
+                "textureUploadRgbaEstimate": 3181776,
+                "defaultFramebufferClears": 9,
+                "draws": 28
+              }
+            ]
+          }
+        ],
+        "scope": "Real help-route exits and history returns; observed GL texture handles and default-framebuffer activity, not a heap/GPU driver census"
+      },
+      "reducedMotion": {
+        "name": "station-r09-reduced-motion-1366",
+        "state": {
+          "stationArt": "r09",
+          "sourceCanvas": [
+            512,
+            288
+          ],
+          "camera": {
+            "zoom": 3,
+            "offsetX": -85,
+            "offsetY": -48,
+            "pixelRatio": 1,
+            "centerX": 256,
+            "centerY": 144,
+            "visibleSourceBounds": [
+              28.333333333333332,
+              16,
+              455.3333333333333,
+              256
+            ],
+            "canPanLeft": true,
+            "canPanRight": true
+          },
+          "assets": {
+            "count": 13,
+            "estimatedRgbaBytes": 2714248
+          },
+          "motion": {
+            "clockMs": 0,
+            "paused": false,
+            "reducedMotion": true,
+            "lowPower": false,
+            "foliage": {
+              "weather": "clear",
+              "reducedMotion": true,
+              "lowPower": false,
+              "paused": false,
+              "animated": false,
+              "elapsedMs": 0,
+              "paintedFrames": 0,
+              "cadenceMs": 100,
+              "placements": 5,
+              "bands": 16,
+              "generatedTextureBytes": 0,
+              "rootDisplacement": 0,
+              "poses": [
+                {
+                  "id": "hub.r09.foliage.central-topiary",
+                  "offsets": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                },
+                {
+                  "id": "hub.r09.foliage.left-front-shrub",
+                  "offsets": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                },
+                {
+                  "id": "hub.r09.foliage.left-planter-topiary",
+                  "offsets": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                },
+                {
+                  "id": "hub.r09.foliage.right-planter-topiary",
+                  "offsets": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                },
+                {
+                  "id": "hub.r09.foliage.foreground-right",
+                  "offsets": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                }
+              ],
+              "disposed": false
+            },
+            "cloudOffsets": [
+              0
+            ],
+            "waterFrame": 0
+          },
+          "phase": "day",
+          "weather": "clear",
+          "staticGeometrySignature": "r09:512x288:sourceScale1:source-registered",
+          "visiblePoiIds": [
+            "codepost",
+            "archive",
+            "cartography",
+            "radar",
+            "lab",
+            "hall"
+          ]
+        },
+        "identicalCanvasPixels": true
+      }
+    },
+    {
+      "engine": "firefox",
+      "browser": "153.0",
+      "reportSha256": "ad7d3136061d2bced5cad6feea7f6284c1228fd097eab2eb4f12d3e22aee8731",
+      "status": "FAIL",
+      "failure": "page.waitForFunction: Timeout 20000ms exceeded.\n    at repeatedMounts (/home/runner/work/synopsis_game/synopsis_game/tools/test_station_r09_browser.cjs:237:16)\n    at async Object.runStationR09Checks (/home/runner/work/synopsis_game/synopsis_game/tools/test_station_r09_browser.cjs:377:34)\n    at async /home/runner/work/synopsis_game/synopsis_game/tools/test_station_screens.cjs:299:34",
+      "manifestSha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+      "runnerSha256": "b2cadabec74c9df1cbc394e63a9f5ca494d4b3bdd4a8fce641ede41e7c71bf80",
+      "realMotion": {
+        "maxima": {
+          "foliage": 369,
+          "clouds": 522,
+          "water": 195,
+          "fixed": 0
+        },
+        "regions": [
+          {
+            "id": "hub.r09.foliage.central-topiary",
+            "group": "foliage",
+            "bounds": [
+              220,
+              232,
+              16,
+              15
+            ],
+            "rect": {
+              "x": 575,
+              "y": 648,
+              "width": 48,
+              "height": 28
+            }
+          },
+          {
+            "id": "hub.r09.foliage.left-front-shrub",
+            "group": "foliage",
+            "bounds": [
+              125,
+              222,
+              15,
+              14
+            ],
+            "rect": {
+              "x": 290,
+              "y": 618,
+              "width": 45,
+              "height": 42
+            }
+          },
+          {
+            "id": "hub.r09.foliage.left-planter-topiary",
+            "group": "foliage",
+            "bounds": [
+              263,
+              230,
+              15,
+              15
+            ],
+            "rect": {
+              "x": 704,
+              "y": 642,
+              "width": 45,
+              "height": 34
+            }
+          },
+          {
+            "id": "hub.r09.foliage.right-planter-topiary",
+            "group": "foliage",
+            "bounds": [
+              295,
+              228,
+              15,
+              15
+            ],
+            "rect": {
+              "x": 800,
+              "y": 636,
+              "width": 45,
+              "height": 40
+            }
+          },
+          {
+            "id": "hub.r09.foliage.foreground-right",
+            "group": "foliage",
+            "bounds": [
+              430,
+              260,
+              67,
+              28
+            ],
+            "rect": {
+              "x": 1205,
+              "y": 752,
+              "width": 161,
+              "height": 16
+            }
+          },
+          {
+            "id": "hub.r09.clouds.east-wisp",
+            "group": "clouds",
+            "bounds": [
+              354,
+              39,
+              31,
+              6
+            ],
+            "rect": {
+              "x": 977,
+              "y": 72,
+              "width": 93,
+              "height": 15
+            }
+          },
+          {
+            "id": "hub.r09.water",
+            "group": "water",
+            "bounds": [
+              306,
+              76,
+              206,
+              56
+            ],
+            "rect": {
+              "x": 833,
+              "y": 180,
+              "width": 533,
+              "height": 168
+            }
+          },
+          {
+            "id": "codepost-stone",
+            "group": "fixed",
+            "bounds": [
+              201,
+              108,
+              52,
+              9
+            ],
+            "rect": {
+              "x": 518,
+              "y": 276,
+              "width": 156,
+              "height": 27
+            }
+          },
+          {
+            "id": "archive-timber",
+            "group": "fixed",
+            "bounds": [
+              300,
+              147,
+              35,
+              7
+            ],
+            "rect": {
+              "x": 815,
+              "y": 393,
+              "width": 105,
+              "height": 21
+            }
+          }
+        ],
+        "clockManipulated": false,
+        "assertionScope": "Visible source regions; camera, stone and timber samples remain fixed"
+      },
+      "performance": {
+        "name": "station-r09-performance-1366",
+        "raf": {
+          "samples": 235,
+          "p50Ms": 17.079999999999927,
+          "p95Ms": 17.100000000000364
+        },
+        "defaultFramebufferClearIntervals": {
+          "samples": 235,
+          "p50Ms": 17,
+          "p95Ms": 18
+        },
+        "graphics": [
+          {
+            "connected": true,
+            "collected": false,
+            "contextLost": false,
+            "canvas": [
+              1366,
+              768
+            ],
+            "activeTextures": 40,
+            "peakTextures": 40,
+            "textureUploadRgbaEstimate": 3181776,
+            "defaultFramebufferClears": 658,
+            "draws": 4585
+          }
+        ],
+        "scope": "Software browser CI, clear-pass cadence and observed texture lifetime; not physical mobile/GPU certification",
+        "budget": {
+          "pngBytes": 2097152,
+          "rgbaBytes": 8388608,
+          "plants": 5,
+          "foliageBands": 40,
+          "normalCadenceMs": 100,
+          "lowCadenceMs": 200,
+          "softwareClearP95Ms": 100
+        }
+      },
+      "repeatMount": null,
+      "reducedMotion": null
+    }
+  ],
+  "nativeRegistrationCheck": {
+    "engine": "firefox",
+    "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+    "sourceSha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+    "frame": "solar-day-1366.png",
+    "frameSha256": "a9668c8aa79ab9b99bec00da7194c32993a620427858ad66741691ffebc5a823",
+    "sourceRegions": [
+      [
+        201,
+        108,
+        52,
+        9
+      ],
+      [
+        300,
+        147,
+        35,
+        7
+      ]
+    ],
+    "zoom": 3,
+    "offset": [
+      -85,
+      -48
+    ],
+    "comparedRgbPixels": 6417,
+    "differentPixels": 0,
+    "nonUniform3x3Blocks": 0,
+    "method": "Independently sampled real CI PNG with Pillow against source master, exact RGB native replication"
+  },
+  "remainingGates": [
+    "All three viewport motion/performance/reduced/low scenarios",
+    "All six real entrances through pan and existing reading-room rain path",
+    "Firefox actual texture retirement after explicit owned-context release",
+    "Native hidden-tab hold and resume",
+    "Complete existing screen/level/avatar suite",
+    "Separate ordinary-default promotion with repeated full automatic CI"
+  ],
+  "notes": [
+    "Both environment engines stopped on an outdated direct archive click on portrait. Real source door was outside initial view. Tests now use actual pan controls.",
+    "Chromium screen runner passed desktop current PNG bytes, motion, frame budget, repeated mounts and reduced motion, then encountered a strict locator matching the added pan wrapper. Locator corrected.",
+    "Firefox passed desktop actual motion/frame budget but timed out waiting for texture retirement. The first probe lacked a failure snapshot, so exact leftover bytes are not asserted. Phaser has an unwrapped 1x1 placeholder; root added explicit owned-context release after renderer cleanup.",
+    "No browser or HTTP server was started locally; no CI run was manually triggered."
+  ]
+}

@@ -245,6 +245,16 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
       if (diagnosticsTimer !== undefined) window.clearInterval(diagnosticsTimer);
       worldAudio.stopHubAtmosphereSchedule();
       worldAudio.stopAmbient(0);
+      const ownedContext = game.renderer && 'gl' in game.renderer ? game.renderer.gl : null;
+      if (ownedContext) {
+        // Phaser emits DESTROY before it synchronously releases its renderer.
+        // Release this detached canvas's native context afterwards as well:
+        // Phaser 4's raw 1×1 texture-unit placeholder otherwise waits for GC.
+        // A live canvas's context-loss/restoration path is unaffected.
+        game.events.once('destroy', () => queueMicrotask(() => {
+          if (!ownedContext.isContextLost()) ownedContext.getExtension('WEBGL_lose_context')?.loseContext();
+        }));
+      }
       game.destroy(true);
     };
   }, []);
@@ -256,18 +266,6 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   return (
     <div className="world-canvas-host" role="group" aria-label="Территория станции. Tab — выбор здания; Enter или пробел — открыть описание." onPointerLeave={clearBuildingHover}>
       <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
-      {stationView && (stationView.canPanLeft || stationView.canPanRight) && (
-        <div className="station-pan-controls" role="group" aria-label="Панорама станции">
-          <button type="button" data-station-pan="left" aria-label="Посмотреть влево"
-            disabled={!stationView.canPanLeft} onClick={() => worldBridge.emit('ui:station_pan', 'left')}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3H8v3H5v6h3v3h3v-3H8V6h3z" fill="currentColor" /></svg>
-          </button>
-          <button type="button" data-station-pan="right" aria-label="Посмотреть вправо"
-            disabled={!stationView.canPanRight} onClick={() => worldBridge.emit('ui:station_pan', 'right')}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3h3v3h3v6h-3v3H7v-3h3V6H7z" fill="currentColor" /></svg>
-          </button>
-        </div>
-      )}
       {targets.map((target) => (
         <button
           key={target.id}
@@ -288,6 +286,18 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
           }}
         />
       ))}
+      {stationView && (stationView.canPanLeft || stationView.canPanRight) && (
+        <div className="station-pan-controls" role="group" aria-label="Панорама станции">
+          <button type="button" data-station-pan="left" aria-label="Посмотреть влево"
+            disabled={!stationView.canPanLeft} onClick={() => worldBridge.emit('ui:station_pan', 'left')}>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3H8v3H5v6h3v3h3v-3H8V6h3z" fill="currentColor" /></svg>
+          </button>
+          <button type="button" data-station-pan="right" aria-label="Посмотреть вправо"
+            disabled={!stationView.canPanRight} onClick={() => worldBridge.emit('ui:station_pan', 'right')}>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3h3v3h3v6h-3v3H7v-3h3V6H7z" fill="currentColor" /></svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
