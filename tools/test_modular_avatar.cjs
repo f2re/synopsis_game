@@ -124,6 +124,7 @@ async function screenChecks() {
 
   // The hub's real markup consumes the same confirmed PNG without loading its effects or Phaser.
   const hub = load('apps/web/src/features/hub/HubScreen.tsx', {
+    '../../api': { api: { levelOneLobby: async () => ({ levelId: 'first-codepost', title: 'Первый бланк: температура и точка росы', total: 6, help: { reference: 'free', retry: false, timer: false }, completedRuns: 0, bestCorrect: 0, session: null }) } },
     '../../brand': { GAME_MARK: '26063', GAME_CALLSIGN: 'Синоптик', GAME_TITLE: '26063' }, '../avatar/SavedAvatarPortrait': portraitModule,
     '../ui/PixelIcon': { PixelIcon: 'PixelIcon' }, '../ui/PixelSwitch': { PixelSwitch: 'PixelSwitch' }, '../ui/StationNavDock': { StationNavDock: 'StationNavDock' },
     './StudyJournal': { StudyJournal: 'StudyJournal' }, './WorldLoadBoundary': { WorldLoadBoundary: 'WorldLoadBoundary' },
@@ -144,6 +145,7 @@ async function screenChecks() {
     './feedback/DigitAnatomy': { DigitAnatomy: 'DigitAnatomy' }, '../../game/worldBridge': { createCodePostBridge: () => ({}) }, '@synopsis/world-engine': { worldAudio: {} },
     '../avatar/avatarOptions': options, '../avatar/SavedAvatarPortrait': portraitModule, './ShiftWorkspace.css': {},
     './WorkroomBackdrop': require('./workroom_test_fixture.cjs'),
+    './shiftLore': load('apps/web/src/features/shift/shiftLore.ts'),
   }, { window: { setTimeout, clearTimeout }, AbortController });
   const task = JSON.parse(fs.readFileSync('apps/web/tools/review/blitz-practice-fixture.json', 'utf8')).active[0].task;
   for (const legacy of [false, true]) {
@@ -177,6 +179,11 @@ async function screenChecks() {
   assert.equal(draft(runner).top, 'top.hoodie');
   assert.equal(portraitNode(runner).props.portrait.sha256, first.avatarPortrait.sha256);
   assert.equal(savedUsers.length, 0);
+  // The accepted response must describe the fitting actually submitted. A server
+  // fixture cannot silently replace unrelated hair, headwear or footwear choices.
+  for (const [slot, value] of Object.entries(second.avatar)) {
+    if (draft(runner)[slot] !== value) equip(runner, slot, value);
+  }
   const success = save(runner), accepted = user('save-A', second);
   success.resolve(accepted); await flush(runner);
   assert.equal(savedUsers.length, 1); assert.equal(savedUsers[0], accepted);

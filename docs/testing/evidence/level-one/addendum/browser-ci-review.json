@@ -1,0 +1,228 @@
+{
+  "task": "LEVEL-ONE-PLAYABLE",
+  "reviewer": "/root/playability_review",
+  "updatedAt": "2026-11-21T18:44:54.507196+00:00",
+  "scope": "Дополнение после первого автоматически выполненного CI; предыдущие результаты сохранены.",
+  "pullRequest": 133,
+  "prUrl": "https://github.com/f2re/synopsis_game/pull/133",
+  "firstRunVersion": {
+    "head": "43f6a0cb88c20736671472ba904d21234e8de3dd",
+    "checkout": "b71b10660d7099da9355bf38375032ef08d37a18",
+    "tree": "6a755563b7d2243fec7ca8a7f5a82762aa9d2116",
+    "event": "pull_request",
+    "attempt": 1
+  },
+  "firstBrowserRun": {
+    "id": 44935762345,
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/f2re/synopsis_game/actions/runs/44935762345"
+  },
+  "stationJobs": [
+    {
+      "id": 136941904414,
+      "engine": "firefox",
+      "browser": "153.0",
+      "conclusion": "failure",
+      "reportStatus": "FAIL",
+      "cases": 948,
+      "screenshots": 273,
+      "pageErrors": [],
+      "artifactId": 14719103785,
+      "artifactBytes": 71566275,
+      "artifactSha256": "75d261daf2be517cc638120bbd2db4864e8c693c7f9bdcd0e7dc9255af479a12",
+      "reportRead": true,
+      "newLevelScreenshots": [
+        "level-one-start-1366.png"
+      ]
+    },
+    {
+      "id": 136941904486,
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "conclusion": "failure",
+      "reportStatus": "FAIL",
+      "cases": 949,
+      "screenshots": 274,
+      "pageErrors": [],
+      "artifactId": 14719684213,
+      "artifactBytes": 64944808,
+      "artifactSha256": "b8f210908f4bcc05a1f0b66cd7417e2ced519bba56e05f4ecb913b275495cc38",
+      "downloadedArchiveChecksumVerified": true,
+      "reportRead": true,
+      "newLevelScreenshots": [
+        "level-one-start-1366.png"
+      ],
+      "failurePngFiles": []
+    }
+  ],
+  "firstFailure": {
+    "kind": "missing-unit-in-associated-input-label",
+    "selector": "getByRole('textbox', { name: 'Числовой ответ, °C', exact: true })",
+    "timeoutMs": 20000,
+    "locationInFirstTree": "tools/test_level_one_browser.cjs:111",
+    "actualTaskUnit": "°C",
+    "actualOldLabel": "Числовой ответ",
+    "expectedLabel": "Числовой ответ, °C",
+    "sameFailureInBothEngines": true
+  },
+  "firstRunReached": {
+    "completedPhasesBeforeFailure": [
+      "library",
+      "station",
+      "public",
+      "portraits",
+      "game"
+    ],
+    "levelOne": [
+      "confirmed character save and navigation",
+      "start at 1366x768",
+      "three choice answers and help before first numeric field"
+    ],
+    "notCompleted": [
+      "first numeric input",
+      "level-one result",
+      "level-one 390x844",
+      "level-one 844x390"
+    ],
+    "laterPhasesNotReached": [
+      "admin",
+      "audio"
+    ],
+    "levelProgressInference": "Первые три ответа следуют из точки остановки и действительного порядка цикла сценария, а не из отдельного итогового случая level-one."
+  },
+  "environmentJobs": [
+    {
+      "id": 136941904285,
+      "engine": "firefox",
+      "conclusion": "success",
+      "candidateCases": 53,
+      "candidateScreenshots": 72,
+      "measurements": 8,
+      "skippedWorkflowSteps": [
+        "baseline checkout",
+        "baseline build",
+        "baseline measurement"
+      ]
+    },
+    {
+      "id": 136941904402,
+      "engine": "chromium",
+      "conclusion": "success",
+      "candidateCases": 56,
+      "candidateScreenshots": 74,
+      "measurements": 8,
+      "baselineCases": 8,
+      "baselineScreenshots": 8,
+      "baselineMeasurements": 4
+    }
+  ],
+  "buildRun": {
+    "id": 44935762383,
+    "conclusion": "success",
+    "jobId": 136941904446,
+    "serverTests": 80,
+    "serverTestsFailed": 0,
+    "productionReadyAndHealth": true,
+    "linuxArchiveChecked": true,
+    "manifestHashesChecked": 5254,
+    "astra17CompatibilityPassed": true,
+    "newStandaloneHandlerScriptsNotCalled": [
+      "tools/test_level_one_lifecycle.cjs",
+      "tools/test_character_setup_lifecycle.cjs",
+      "tools/test_session_recovery.cjs"
+    ]
+  },
+  "fix": {
+    "sourceKind": "frozen-working-tree-before-followup-commit",
+    "baseLocalCommit": "bb6d4ce5d272e8ff0eaee3f6e480ce895b01542d",
+    "changes": [
+      "numericUnit keeps actual °C and normalizes legacy degC",
+      "associated label and visible suffix use the same unit",
+      "suffix aria-hidden only avoids duplicate unit",
+      "redundant initial notice removed",
+      "desktop desk margin reduced from 52px to 24px"
+    ],
+    "scientificDefinitionsChanged": false,
+    "strictBrowserSelectorChanged": false,
+    "browserResultAfterFix": "PENDING_AUTOMATIC_CI",
+    "geometryResultAfterFix": "PENDING_AUTOMATIC_CI"
+  },
+  "localFixVerification": {
+    "status": "PASS",
+    "command": "SYNOPSIS_LEVEL_ONE_EVIDENCE=docs/testing/evidence/level-one/addendum/browser-ci-lifecycle.json node tools/test_level_one_lifecycle.cjs",
+    "assertionGroups": 10,
+    "newAssertion": "Each real numeric field has an associated label whose adjacent text nodes equal Числовой ответ, °C.",
+    "initialAssertionDiagnostic": "General harness text extraction inserted a space before the comma; only label extraction was corrected to concatenate adjacent text nodes.",
+    "browserSyntaxCommand": "node --check tools/test_level_one_browser.cjs",
+    "browserSyntaxStatus": "PASS",
+    "localBrowserExecuted": false,
+    "httpListenerStarted": false
+  },
+  "newGeometryAssertion": {
+    "script": "tools/test_level_one_browser.cjs",
+    "viewport": [
+      1366,
+      768
+    ],
+    "timing": "first task before selection/focus/scroll",
+    "checks": [
+      "entire submit rectangle within viewport",
+      "elementFromPoint at center belongs to submit control"
+    ],
+    "disabledAllowed": true,
+    "executedLocally": false
+  },
+  "methodologyVerification": {
+    "reviewer": "/root/meteo_verifier",
+    "status": "VERIFIED",
+    "scope": "°C in three original definitions; no scientific answer change; aria-hidden only on duplicate suffix",
+    "reportedBy": "/root"
+  },
+  "artDirectionNote": {
+    "reviewer": "/root/level_visual_review",
+    "scope": "Two minimal spacing changes supported; approximately 78px predicted from old screenshot, not a new measured result.",
+    "newVisualPass": false
+  },
+  "localImages": [
+    {
+      "path": "/workspace/scratch/5cf4b859cf71/delivery/ci-133-first-pass/level-one-start-1366.png",
+      "sha256": "e87fc94d439f43709e4e27d779a68ff26d0284fa41d75135bf11e956c54ee424",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "firstRunOnly": true
+    },
+    {
+      "path": "/workspace/scratch/5cf4b859cf71/delivery/ci-133-first-pass/chromium/level-one-start-1366.png",
+      "sha256": "3a5b2eb3e0c3bad7239dd4f7b003e50bca29ded5f32d138f4ec599b82f420358",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "firstRunOnly": true
+    }
+  ],
+  "oldEvidenceUnchanged": {
+    "docs/testing/evidence/level-one/integration-review.md": "08bae100c094c49ff9e90417fe051adc910578f1c8c0dcb609f4d487ef0f4148",
+    "docs/testing/evidence/level-one/integration-review.json": "2e0c69c8fffffa9ddff596a2667c494fa88a3a37e0c9b45c8bf14f36d7141795",
+    "docs/testing/evidence/level-one/integration-lifecycle.json": "87137a754d10e33bb66f2419ae20ac9c8fa35332298d84518f480db71910ce59"
+  },
+  "sha256": {
+    "apps/web/src/features/levelOne/LevelOneScreen.tsx": "90b8543d567313ae90579d90b120c44dd61054d05eed9fc0610870d0e3065fbf",
+    "apps/web/src/features/levelOne/levelOne.css": "ef6e0428208a96732e94303f472e4c21434e400f51ead0e521e5625f6d7b9b5e",
+    "apps/web/src/features/levelOne/levelOneModel.ts": "c05bf9eeb229851d8bd1c2522bcf3af796c89ca79d7d6c0491202a5b2b1a250a",
+    "tools/test_level_one_browser.cjs": "76b66792f8039f69ec0f2093a16cd91dbe60442ad8aba7e1f55529b4cae998e3",
+    "tools/test_level_one_lifecycle.cjs": "0ef05ad3979bb56ed15f858c740afd6a3aeea70adb80b0dddcdbe156a4e0513c",
+    "tools/ui_test_harness.cjs": "59e952993c478d823c2ab43f1fabd06b9e0bdb43d82ea2ece2e45640dd372d7a",
+    "docs/testing/evidence/level-one/addendum/browser-ci-lifecycle.json": "266d6a5c2e94b4924a2f3f2ce55e23d2873f2d8591a353b215205f33724e168a",
+    "docs/testing/evidence/level-one/addendum/browser-ci-review.md": "f76f5965d7ac68bfabacceb051609fb2443a0cd4b7680853927df49dde83ac54"
+  },
+  "limits": [
+    "No local browser or manual CI run/rerun.",
+    "Remote CI started automatically by the existing pull_request workflow.",
+    "Only the first-level initial desktop screen exists in the first-run artifacts.",
+    "No full visual, art or release acceptance is declared."
+  ]
+}

@@ -1,0 +1,338 @@
+{
+  "engine": "chromium",
+  "artifact_id": 14720900491,
+  "job_id": 136946751218,
+  "run_id": 44937341253,
+  "head_sha": "a4aeb89d257fddbb1ef0be4361c4b46c61d62c85",
+  "checkout_sha": "8a7e4f2c873ede97ac6b4d3249f5e73ab25f469a",
+  "tree": "932ab85786d6a1a9f12198d606fd12f8d98bc03d",
+  "artifact_digest": "sha256:fff59092a2d571840206954d16a3d553cdfab76e9c971c4515fcb7eea3fcb3b3",
+  "artifact_size_in_bytes": 68019489,
+  "artifact_url": "https://github.com/f2re/synopsis_game/actions/runs/44937341253/artifacts/14720900491",
+  "extracted_at": "2026-11-21T18:58:48.205956+00:00",
+  "zip_sha256_verified": true,
+  "report_metadata": {
+    "phases": [
+      "library",
+      "station",
+      "public",
+      "portraits",
+      "game",
+      "level-one",
+      "admin",
+      "audio"
+    ],
+    "status": "FAIL",
+    "engine": "chromium",
+    "browser": "151.0.7922.34",
+    "productionAssets": true,
+    "realServer": true,
+    "errors": [],
+    "failure": "locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'Код администратора', exact: true }).getByRole('alert').filter({ hasText: 'Неверный текущий код' }) to be visible\n\n    at checkAdminViewport (/home/runner/work/synopsis_game/synopsis_game/tools/test_admin_screens_browser.cjs:406:85)\n    at async Object.runAdminScreenChecks (/home/runner/work/synopsis_game/synopsis_game/tools/test_admin_screens_browser.cjs:443:5)\n    at async /home/runner/work/synopsis_game/synopsis_game/tools/test_station_screens.cjs:303:28"
+  },
+  "report_case_count": 980,
+  "report_screenshot_count": 292,
+  "selected_case_count": 13,
+  "selected_cases": [
+    {
+      "name": "level-one-start-1366",
+      "viewport": [
+        1366,
+        768
+      ],
+      "scrollWidth": 1366,
+      "documentHeight": 768,
+      "brokenImages": [],
+      "heading": "Что обозначает опознаватель AAXX в начале метеорологической телеграммы?",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-first-submit-visible-1366",
+      "left": 644,
+      "top": 682.484375,
+      "right": 1288,
+      "bottom": 730.484375,
+      "width": 644,
+      "height": 48,
+      "viewport": [
+        1366,
+        768
+      ],
+      "disabled": true,
+      "fullyInsideViewport": true,
+      "centerReachesControl": true
+    },
+    {
+      "name": "level-one-numeric-1366",
+      "viewport": [
+        1366,
+        768
+      ],
+      "scrollWidth": 1366,
+      "documentHeight": 768,
+      "brokenImages": [],
+      "heading": "Дешифрируйте значение температуры воздуха из группы 10234:",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-complete-1366",
+      "viewport": [
+        1366,
+        768
+      ],
+      "scrollWidth": 1366,
+      "documentHeight": 768,
+      "brokenImages": [],
+      "heading": "Первый уровень завершён",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-playable-1366",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "confirmedSaveBeforeNavigation": true,
+      "nativeNotePreservedSelection": true,
+      "completedAnswers": 6,
+      "correct": 5,
+      "unassistedCorrect": 4,
+      "assistedTasks": 1,
+      "numericGeometry": {
+        "controls": [
+          {
+            "width": 48,
+            "height": 54,
+            "hit": true
+          },
+          {
+            "width": 553.390625,
+            "height": 54,
+            "hit": true
+          }
+        ],
+        "noHorizontalPageOverflow": true
+      },
+      "resumedActive": true,
+      "resumedResult": true,
+      "starts": 1
+    },
+    {
+      "name": "level-one-start-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "documentHeight": 844,
+      "brokenImages": [],
+      "heading": "Что обозначает опознаватель AAXX в начале метеорологической телеграммы?",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-numeric-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "documentHeight": 844,
+      "brokenImages": [],
+      "heading": "Дешифрируйте значение температуры воздуха из группы 10234:",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-complete-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "documentHeight": 844,
+      "brokenImages": [],
+      "heading": "Первый уровень завершён",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-playable-390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "confirmedSaveBeforeNavigation": true,
+      "nativeNotePreservedSelection": true,
+      "completedAnswers": 6,
+      "correct": 5,
+      "unassistedCorrect": 4,
+      "assistedTasks": 1,
+      "numericGeometry": {
+        "controls": [
+          {
+            "width": 48,
+            "height": 54,
+            "hit": true
+          },
+          {
+            "width": 216.15625,
+            "height": 54,
+            "hit": true
+          }
+        ],
+        "noHorizontalPageOverflow": true
+      },
+      "resumedActive": true,
+      "resumedResult": true,
+      "starts": 1
+    },
+    {
+      "name": "level-one-start-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 844,
+      "documentHeight": 390,
+      "brokenImages": [],
+      "heading": "Что обозначает опознаватель AAXX в начале метеорологической телеграммы?",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-numeric-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 844,
+      "documentHeight": 390,
+      "brokenImages": [],
+      "heading": "Дешифрируйте значение температуры воздуха из группы 10234:",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-complete-844",
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollWidth": 844,
+      "documentHeight": 390,
+      "brokenImages": [],
+      "heading": "Первый уровень завершён",
+      "canvasCount": 0,
+      "pageOverflow": [],
+      "unframedOverflow": []
+    },
+    {
+      "name": "level-one-playable-844",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "confirmedSaveBeforeNavigation": true,
+      "nativeNotePreservedSelection": true,
+      "completedAnswers": 6,
+      "correct": 5,
+      "unassistedCorrect": 4,
+      "assistedTasks": 1,
+      "numericGeometry": {
+        "controls": [
+          {
+            "width": 48,
+            "height": 54,
+            "hit": true
+          },
+          {
+            "width": 493.640625,
+            "height": 54,
+            "hit": true
+          }
+        ],
+        "noHorizontalPageOverflow": true
+      },
+      "resumedActive": true,
+      "resumedResult": true,
+      "starts": 2
+    }
+  ],
+  "images": [
+    {
+      "name": "level-one-start-1366.png",
+      "width": 1366,
+      "height": 768,
+      "bytes": 365177,
+      "sha256": "25b1373ccb6c479afffcba1fe4fc5b75af4414917b7fff59b36392d4c59f79a5"
+    },
+    {
+      "name": "level-one-numeric-1366.png",
+      "width": 1366,
+      "height": 768,
+      "bytes": 371211,
+      "sha256": "0f731c6300709f77ee213a1726e909c0d00195930c647ef0514082cebc9ef647"
+    },
+    {
+      "name": "level-one-complete-1366.png",
+      "width": 1366,
+      "height": 768,
+      "bytes": 370351,
+      "sha256": "bd7159d8b5b46dfc4e88c1406fb140680a06ee019c4d5e7e56b509d64cd2aa16"
+    },
+    {
+      "name": "level-one-start-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 82017,
+      "sha256": "c60e48d203bf74672c4ff29a855c73505b9b5fc3d860b2b0a563a41ae62acb84"
+    },
+    {
+      "name": "level-one-numeric-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 84465,
+      "sha256": "feb2423be445327df3c46c1cf2202d18922da909f6ec8f62dbb7b5457c1ab062"
+    },
+    {
+      "name": "level-one-complete-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 84922,
+      "sha256": "2876ab8031f57c83bb838aee3df32d88240699b868d417583a5cd86ea092beac"
+    },
+    {
+      "name": "level-one-start-844.png",
+      "width": 844,
+      "height": 390,
+      "bytes": 110158,
+      "sha256": "ed78b168174bb8b0f525ebce4526f2ad1228f8b0d4544e7e6ce33393403ebefd"
+    },
+    {
+      "name": "level-one-numeric-844.png",
+      "width": 844,
+      "height": 390,
+      "bytes": 96188,
+      "sha256": "178b70fe5be9c2634747a27694e86b6cd8d1415afb515f096bd08fa8c82e197d"
+    },
+    {
+      "name": "level-one-complete-844.png",
+      "width": 844,
+      "height": 390,
+      "bytes": 142130,
+      "sha256": "27d02d331eb5e5165847a4d080428b7b3f3b5f05ecc05002b68605482f78dad5"
+    }
+  ]
+}

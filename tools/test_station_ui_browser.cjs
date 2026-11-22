@@ -96,8 +96,11 @@ async function checkStationUI({ page, base, viewport, report, capture, waitForCa
   if (await clock.isVisible()) { await clock.click(); await page.getByRole('dialog', { name: 'Журнал занятий' }).waitFor(); await page.keyboard.press('Escape'); }
 
   await page.locator('.hub-dock__profile').click();
-  await page.getByRole('dialog', { name: 'Наблюдатель' }).waitFor();
-  await page.keyboard.press('Escape');
+  await page.waitForURL(url => url.pathname === '/profile/avatar');
+  assert.equal(new URL(page.url()).pathname, '/profile/avatar', 'The character action preserves its destination through login');
+  await page.getByLabel('Группа', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Продолжить как наблюдатель', exact: true }).click();
+  await waitForCampus(page);
   await page.locator('.hub-dock__guide').click();
   await page.getByRole('heading', { name: 'Помощь и управление' }).waitFor();
   await page.goBack(); await waitForCampus(page);

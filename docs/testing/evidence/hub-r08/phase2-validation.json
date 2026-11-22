@@ -1,0 +1,429 @@
+{
+  "schema": "synopsis-r08-phase2-validation/v1",
+  "date": "2026-11-21",
+  "task_id": "R08-HUB-PILOT",
+  "base_revision": "9875c93141eb376e883efbf888403fdea21e6050",
+  "default_hub_replaced": false,
+  "productionReady": false,
+  "credits": {
+    "starting": 561,
+    "spent": 60,
+    "remaining": 501,
+    "generated_jobs": 5,
+    "new_spritecook_assets": 15,
+    "active_jobs": 0
+  },
+  "checks": [
+    {
+      "name": "repo",
+      "cmd": "python3 tools/validate_repo.py",
+      "result": {
+        "exit_code": 0,
+        "output": "Проверка репозитория успешно завершена.\n",
+        "status": "PASS"
+      }
+    },
+    {
+      "name": "architecture",
+      "cmd": "python3 tools/validate_architecture.py",
+      "result": {
+        "chunk_id": "ec39e4",
+        "wall_time_seconds": 0.003671801,
+        "exit_code": 0,
+        "original_token_count": 43,
+        "output": "Проверка архитектуры успешно завершена.\nApps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.\n"
+      }
+    },
+    {
+      "name": "brand",
+      "cmd": "python3 tools/validate_brand.py",
+      "result": {
+        "chunk_id": "fe35b9",
+        "wall_time_seconds": 0.581748898,
+        "exit_code": 0,
+        "original_token_count": 28,
+        "output": "Проверка бренда успешно завершена: 26063: Позывной «Синоптик»\n"
+      }
+    },
+    {
+      "name": "asset-contract",
+      "cmd": "python3 tools/assets/check_asset_contract.py",
+      "result": {
+        "chunk_id": "f130ac",
+        "wall_time_seconds": 3.1753e-05,
+        "exit_code": 0,
+        "original_token_count": 157,
+        "output": "WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png\nWARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nWARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nТехнический контракт assets: PASS (24 simple manifests, 29 иных manifests пропущено).\nХудожественное качество этим checker не оценивается.\n"
+      }
+    },
+    {
+      "name": "asset-manifests",
+      "cmd": "python3 tools/assets/check_asset_manifests.py",
+      "result": {
+        "chunk_id": "ccf812",
+        "wall_time_seconds": 0.005875663,
+        "exit_code": 0,
+        "original_token_count": 28,
+        "output": "✓ Проверено манифестов ассетов: 54. Все структуры корректны.\n"
+      }
+    },
+    {
+      "name": "fonts",
+      "cmd": "python3 tools/validate_fonts.py",
+      "result": {
+        "chunk_id": "80b9f8",
+        "wall_time_seconds": 0.090670408,
+        "exit_code": 0,
+        "original_token_count": 55,
+        "output": "Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.\n"
+      }
+    },
+    {
+      "name": "model-and-routes",
+      "cmd": "node --experimental-strip-types --test packages/world-engine/src/scenes/art/r08PreviewModel.test.ts apps/web/src/appNavigation.test.ts",
+      "result": {
+        "chunk_id": "c0773f",
+        "wall_time_seconds": 0.382312542,
+        "exit_code": 0,
+        "original_token_count": 179,
+        "output": "✔ R08 is an explicit silent preview and normal station routes retain their atmosphere (1.275933ms)\n✔ only the exact preview return is accepted by the existing reading room (0.352144ms)\n✔ published candidate keeps original layer coordinates and honest acceptance status (4.332854ms)\n✔ unsafe paths, independent-fit bases and duplicate additive light regions cannot enter the loader (3.238285ms)\n✔ one camera projects the archive into the same CSS target at DPR1 and DPR2 (1.259842ms)\n✔ observer route stays in front of the facade and behind the authored foreground depth line (1.262785ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 280.014289\n"
+      }
+    },
+    {
+      "name": "whitespace",
+      "cmd": "git diff --check",
+      "result": {
+        "chunk_id": "dca288",
+        "wall_time_seconds": 4.9911e-05,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ],
+  "typescript": {
+    "command": "node apps/web/node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+    "status": "PASS",
+    "exit_code": 0,
+    "note": "Executed after the Canvas capability guard; installed file: package snapshot refreshed from repository source."
+  },
+  "production_build": {
+    "command": "node node_modules/vite/bin/vite.js build",
+    "cwd": "apps/web",
+    "chunk_id": "4b0087",
+    "wall_time_seconds": 1.8993e-05,
+    "exit_code": 0,
+    "original_token_count": 594,
+    "output": "rendering chunks...\ncomputing gzip size...\ndist/index.html                                   0.89 kB │ gzip:   0.47 kB\ndist/assets/SavedAvatarPortrait-CtFpBOV7.css      0.58 kB │ gzip:   0.29 kB\ndist/assets/R08PreviewScreen-CRQ8xpt5.css         4.03 kB │ gzip:   1.25 kB\ndist/assets/Codebook-9Nv8Cugp.css                 4.30 kB │ gzip:   1.36 kB\ndist/assets/BlitzWorkspace-Cfl9qRZA.css           6.66 kB │ gzip:   1.72 kB\ndist/assets/LibraryScreen-DByScFlz.css            8.82 kB │ gzip:   2.22 kB\ndist/assets/SeamlessShiftFlow-KcGpO-Bm.css       15.66 kB │ gzip:   3.87 kB\ndist/assets/ShiftWorkspace-DzdNVFoA.css          22.39 kB │ gzip:   5.16 kB\ndist/assets/AvatarEditor-DO-8Ltyk.css            28.70 kB │ gzip:   5.14 kB\ndist/assets/index-CHor4b_i.css                   90.08 kB │ gzip:  18.00 kB\ndist/assets/hubPreferences-CPihbRA3.js            0.10 kB │ gzip:   0.11 kB\ndist/assets/SavedAvatarPortrait-vDaZEMoU.js       1.47 kB │ gzip:   0.85 kB\ndist/assets/WorldCanvas-CrW5J-22.js               5.15 kB │ gzip:   2.24 kB\ndist/assets/R08PreviewScreen-Ufh_JrV_.js          6.82 kB │ gzip:   2.60 kB\ndist/assets/ShiftWorkspace-CxLRC9no.js            7.05 kB │ gzip:   2.98 kB\ndist/assets/avatarOptions-Da9zymsp.js             7.46 kB │ gzip:   2.34 kB\ndist/assets/jsx-runtime-Wy9s6hX0.js               8.91 kB │ gzip:   3.39 kB\ndist/assets/BlitzWorkspace-nB101Ma_.js           14.69 kB │ gzip:   4.92 kB\ndist/assets/HubScreen-Bo90jj92.js                17.67 kB │ gzip:   5.23 kB\ndist/assets/Codebook-GeM_eU9S.js                 23.43 kB │ gzip:   7.72 kB\ndist/assets/AvatarEditor-BJY_blx1.js             46.62 kB │ gzip:  14.35 kB\ndist/assets/LibraryScreen-Vz2AA4x9.js            47.51 kB │ gzip:  13.59 kB\ndist/assets/SeamlessShiftFlow-nSR47Eee.js        48.93 kB │ gzip:  14.85 kB\ndist/assets/index-Dq_TwaqO.js                   336.97 kB │ gzip:  99.03 kB\ndist/assets/src-7ZuSaCa7.js                   1,472.17 kB │ gzip: 389.79 kB\n\n✓ built in 1.71s\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+  },
+  "browser": {
+    "status": "BLOCKED",
+    "screenshots": [],
+    "local": "Chromium socket() Operation not permitted before page load.",
+    "cloud": "Local Vite port returned ERR_CONNECTION_REFUSED; observing the error tab was then blocked by browser URL policy. No workaround attempted.",
+    "unverified": [
+      "actual rendered appearance",
+      "pointer and keyboard archive roundtrip",
+      "mobile layout",
+      "context recovery",
+      "device frame time and GPU memory"
+    ]
+  },
+  "independent_reviews": [
+    "docs/art/reviews/2026-11-21-hub-r08-pilot-review.md",
+    "docs/testing/evidence/hub-r08/phase2-independent-code-review.md",
+    "docs/testing/evidence/hub-r08/phase2-sheet-validation.json"
+  ],
+  "limits": [
+    "Production pixel grid is not approved; shared candidate scale is1.875.",
+    "New sheet objects remain selective candidates; no blanket art approval.",
+    "Twilight is gated to WebGL; Canvas remains daytime.",
+    "Separate authored shadow planes are not present."
+  ],
+  "source_integrity": {
+    "status": "PASS",
+    "assets": 20,
+    "files": [
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+        "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+        "bytes": 331901,
+        "format": "PNG",
+        "pixelSize": [
+          512,
+          288
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/master-01.source.jpg",
+        "sha256": "a8a1ab1fcbebfb8758c98f6031b3828aea0eba9c71f22cf77d710c0a1641ad4d",
+        "bytes": 867023,
+        "format": "JPEG",
+        "pixelSize": [
+          1376,
+          768
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.png",
+        "sha256": "a9fdffa28cad118da8347133b5527f0c3eea2666dbb8b0bfcfdb056d89a2c035",
+        "bytes": 334814,
+        "format": "PNG",
+        "pixelSize": [
+          512,
+          288
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.source.png",
+        "sha256": "c93e04198666ef50396b7abc2f867241ab969c7cb49a03fe5501ae00e8b8565e",
+        "bytes": 3652432,
+        "format": "PNG",
+        "pixelSize": [
+          2048,
+          1152
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/layers/archive-facade.png",
+        "sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa",
+        "bytes": 10032,
+        "format": "PNG",
+        "pixelSize": [
+          72,
+          65
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/layers/archive-porch-steps.png",
+        "sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51",
+        "bytes": 1572,
+        "format": "PNG",
+        "pixelSize": [
+          69,
+          10
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/layers/archive-entry-lamp.png",
+        "sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e",
+        "bytes": 330,
+        "format": "PNG",
+        "pixelSize": [
+          7,
+          12
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/day-material-02.png",
+        "sha256": "a65bb3c9c25fb8519d2989c7a84f2c7afea4fce2659ab97c13ad46f9f0180d95",
+        "bytes": 326614,
+        "format": "PNG",
+        "pixelSize": [
+          512,
+          288
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/day-material-02.source.jpg",
+        "sha256": "f2b0bbb1a95046d9a18412b63e878a63b59f77c84fb31fa13c51ea70948acfa7",
+        "bytes": 811938,
+        "format": "JPEG",
+        "pixelSize": [
+          1376,
+          768
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.png",
+        "sha256": "df8396871adbea38ed7db482c23453db0875a444a03402f86511c86d5e621da8",
+        "bytes": 315620,
+        "format": "PNG",
+        "pixelSize": [
+          512,
+          288
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.source.jpg",
+        "sha256": "1bc0bca56250033243375f36cfdabf90760b4fa10df13a6cc30345f5d978f6c7",
+        "bytes": 807453,
+        "format": "JPEG",
+        "pixelSize": [
+          1376,
+          768
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.png",
+        "sha256": "fc94f1e3c5370c571c85bb5a02ddcb92e5cdb569b6d0591e5dde630ffc29016b",
+        "bytes": 72394,
+        "format": "PNG",
+        "pixelSize": [
+          203,
+          200
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.source.jpg",
+        "sha256": "0f9ad34397f07afc5abeffcb905afe7f58210ea59079d1f66c776566e69fc67e",
+        "bytes": 448546,
+        "format": "JPEG",
+        "pixelSize": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.png",
+        "sha256": "364b99c27723651d26d034c8049a5e7991c126069edbf3c7128c3091d00cfb22",
+        "bytes": 98097,
+        "format": "PNG",
+        "pixelSize": [
+          240,
+          240
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.source.jpg",
+        "sha256": "0e9ce0402be09adfa9964959f7813a211e392314f4f3e7c7230ff6b4f2475940",
+        "bytes": 446339,
+        "format": "JPEG",
+        "pixelSize": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.png",
+        "sha256": "3afc2a12b898de3a86fda6ddb4bb9d3985ea807411c1cf10b4ff1fe6ec88bb32",
+        "bytes": 52925,
+        "format": "PNG",
+        "pixelSize": [
+          200,
+          200
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.source.jpg",
+        "sha256": "a83741b89fd6c63d09fb1c8db6e63ac7473d27152314001234f8679976e6e66b",
+        "bytes": 339252,
+        "format": "JPEG",
+        "pixelSize": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/young-pine.png",
+        "sha256": "a76eb1e6a78e7eeabf6176790c6971734a4de968163ab403fa8e630068820048",
+        "bytes": 4975,
+        "format": "PNG",
+        "pixelSize": [
+          32,
+          62
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/upright-shrub.png",
+        "sha256": "389bac38067d8685ac0df920c1ee51ebc88c01873bd25211ed66e848a3b5fc2b",
+        "bytes": 5885,
+        "format": "PNG",
+        "pixelSize": [
+          45,
+          48
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/low-shrub.png",
+        "sha256": "62a8a46dc3f2a6a37adf17a648d25431cdd8e58ddb550d0d3029b25def166719",
+        "bytes": 6301,
+        "format": "PNG",
+        "pixelSize": [
+          60,
+          39
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/birch-sapling.png",
+        "sha256": "9e80683c6db8f10768cecac15f40bb6290627a7337dbe402ca1f6313d1a1d3ef",
+        "bytes": 5703,
+        "format": "PNG",
+        "pixelSize": [
+          35,
+          60
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/wall-ivy.png",
+        "sha256": "605bd271c67a312357758ba851396caff7a6ab90fef98f76343d3001c7acfb67",
+        "bytes": 5713,
+        "format": "PNG",
+        "pixelSize": [
+          46,
+          49
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/fern-clump.png",
+        "sha256": "7273a3b62901b83adc9e3ddbdd6218f9b54fa91f1ad57f5a692c01628c68cd7c",
+        "bytes": 6917,
+        "format": "PNG",
+        "pixelSize": [
+          52,
+          49
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/sedge-stone-edge.png",
+        "sha256": "565b33cdb24d1ab7ded82fee34b5f910ab26afe3a4ce0949b1fcdbf7e9588c5f",
+        "bytes": 5522,
+        "format": "PNG",
+        "pixelSize": [
+          43,
+          48
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/mossy-stone-corner.png",
+        "sha256": "85683e89d20538d6fa07abacf5bff9e7f37ef9eb8c524415f7d322f6e8da32f9",
+        "bytes": 5547,
+        "format": "PNG",
+        "pixelSize": [
+          49,
+          42
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/flower-bed.png",
+        "sha256": "1b45cd8250209938fe2c85071bcd5748b5a7af8c1426c972b9026926f4c74b5e",
+        "bytes": 6322,
+        "format": "PNG",
+        "pixelSize": [
+          56,
+          37
+        ]
+      },
+      {
+        "source": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png",
+        "sha256": "492b983cf4e22e2653f61b996fab09e0d8e58f3aded84f0e494ce61ba8fe0f67",
+        "bytes": 2851,
+        "format": "PNG",
+        "pixelSize": [
+          53,
+          29
+        ]
+      }
+    ],
+    "global_registry_records": 177,
+    "temporary_credentials_saved": false
+  },
+  "code_hashes": {
+    "apps/web/src/features/art/R08PreviewScreen.tsx": "e1e72247c9655be418a1942982fe43bc23c83eacbe8c2549db4a648ef687698b",
+    "packages/world-engine/src/scenes/art/R08PreviewScene.ts": "96f52b0b3b9a8926dfa3ba8c941b209e2b6c3d11621a718fdaacdd1930e74742",
+    "packages/world-engine/src/scenes/art/r08PreviewModel.ts": "e5a351471123ed4a91701484294a683bed13ca197cd9476f7e8723999aeb7934",
+    "packages/world-engine/src/runtime/createR08PreviewGame.ts": "21d3d7fc4eaa9476bec8a8ac8595a4e2c024e13e5956d346c59258e1ba2719b8",
+    "tools/assets/build_hub_r08.py": "bc015d79289415a99b58fb9fda4cf165ed552175bc828f01b1eba51206d2ea61"
+  },
+  "status": "CODE_AND_SOURCE_CHECKS_PASS_BROWSER_BLOCKED"
+}

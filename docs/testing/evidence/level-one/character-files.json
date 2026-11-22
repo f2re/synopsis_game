@@ -1,0 +1,14 @@
+{
+  "kind": "implementation-handoff",
+  "date": "2026-11-21",
+  "base": "fac9275af6d6d0f53e4ca6d62035dc7fcf80120d",
+  "browserExecuted": false,
+  "independentAcceptance": "PENDING",
+  "sha256": {
+    "apps/web/src/features/avatar/AvatarEditor.tsx": "9cc3bb96f2481931895aabea08c2a0d1eee59891bbd5730126775ca03a7e9a50",
+    "apps/web/src/features/avatar/SavedAvatarPortrait.tsx": "28517d16993de6468879d77eada5c9399509b5130aa6a8ed028c3c8a87034f57",
+    "apps/web/src/features/avatar/inventory.css": "90c23401afce82efb03bd8c9b20fa6ee07acace04a0baa68bd7f33e26980193d",
+    "tools/test_character_setup_lifecycle.cjs": "4ad8f44337cc0b1fa32a7b77adf570f1b5c7943e7b8fc8495d54ce88da8ef5b7",
+    "tools/test_modular_avatar.cjs": "225734736e7c3b8564813fe19e2df19a8de84f509e37d9172bf4d42d145c81ec"
+  }
+}

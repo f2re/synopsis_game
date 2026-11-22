@@ -1,4 +1,6 @@
 export { createWorldGame, WORLD_LOGICAL_HEIGHT, WORLD_LOGICAL_WIDTH } from './runtime/createWorldGame';
+export { createR08PreviewGame, type R08PreviewHandle } from './runtime/createR08PreviewGame';
+export type { R08PreviewPreferences, R08PreviewStatus, R08PreviewTarget } from './scenes/art/r08PreviewModel';
 export { normalizeWorldPreferences, DEFAULT_WORLD_PREFERENCES } from './runtime/uiPreferences';
 export type { WorldUiPreferences, WorldInteractionTarget } from './runtime/uiPreferences';
 export {

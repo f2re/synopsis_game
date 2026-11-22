@@ -1,0 +1,36 @@
+{
+  "baseRevision": "9ea0921ba476d9a2d4e19e81f60e35aca83cd13e",
+  "branch": "agent/gameplay-entry/first-session",
+  "kind": "static-typescript-contracts",
+  "status": "PASS",
+  "checks": [
+    {
+      "label": "one stable workspace is rendered immediately, without the handover gate or a changing key",
+      "status": "PASS"
+    },
+    {
+      "label": "the optional note is a closed native disclosure outside the answer card",
+      "status": "PASS"
+    },
+    {
+      "label": "startup effects, local input state and API calls are unchanged from the baseline",
+      "status": "PASS"
+    },
+    {
+      "label": "answer, retry, help, advance and feedback handlers are byte-equivalent source expressions",
+      "status": "PASS"
+    },
+    {
+      "label": "identity, routing, server selection, grading and the ten-task pack were not changed",
+      "status": "PASS"
+    },
+    {
+      "label": "the note contains no unsourced weather report and keeps a 44px native target",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "No browser execution or screenshots.",
+    "Preservation of mounted DOM input, keyboard, scrolling and responsive appearance still requires the adapted browser scenarios."
+  ]
+}

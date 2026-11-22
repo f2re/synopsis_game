@@ -1,0 +1,491 @@
+TAP version 13
+# Subtest: ownership is server-only; locked badges and unknown IDs fail; all non-practice modes have zero effects
+ok 1 - ownership is server-only; locked badges and unknown IDs fail; all non-practice modes have zero effects
+  ---
+  duration_ms: 6.651106
+  type: 'test'
+  ...
+# Subtest: concurrent starts resume one active shift and keep the saved starting loadout snapshot
+ok 2 - concurrent starts resume one active shift and keep the saved starting loadout snapshot
+  ---
+  duration_ms: 178.596415
+  type: 'test'
+  ...
+# Subtest: reference consumes once under race, persists on restart and excludes the task from independent achievement
+ok 3 - reference consumes once under race, persists on restart and excludes the task from independent achievement
+  ---
+  duration_ms: 79.151595
+  type: 'test'
+  ...
+# Subtest: retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score
+ok 4 - retry offer leaks no solution; explicit second attempt is once-only and never repairs first-answer score
+  ---
+  duration_ms: 48.393404
+  type: 'test'
+  ...
+# Subtest: reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback
+ok 5 - reveal finalizes a wrong choice without consuming retry; dependency retry preserves submitted order for feedback
+  ---
+  duration_ms: 131.276782
+  type: 'test'
+  ...
+# Subtest: completion and earned badges commit together; result/answer replay and restart never grant twice
+ok 6 - completion and earned badges commit together; result/answer replay and restart never grant twice
+  ---
+  duration_ms: 159.603501
+  type: 'test'
+  ...
+# Subtest: regularity counts distinct server UTC dates and does not require consecutive days
+ok 7 - regularity counts distinct server UTC dates and does not require consecutive days
+  ---
+  duration_ms: 300.553432
+  type: 'test'
+  ...
+# Subtest: a failed completion write preserves the current task and rewards; next write and replay recover safely
+ok 8 - a failed completion write preserves the current task and rewards; next write and replay recover safely
+  ---
+  duration_ms: 27.492761
+  type: 'test'
+  ...
+# Subtest: real atomic rename failure rolls back memory; malformed existing store fails closed
+ok 9 - real atomic rename failure rolls back memory; malformed existing store fails closed
+  ---
+  duration_ms: 7.094953
+  type: 'test'
+  ...
+# Копия журнала попыток временно недоступна; запись сохранена в хранилище смен.
+# Subtest: audit-file outage does not lose a committed answer; restart reconstructs its audit projection once
+ok 10 - audit-file outage does not lose a committed answer; restart reconstructs its audit projection once
+  ---
+  duration_ms: 31.270293
+  type: 'test'
+  ...
+# Subtest: corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file
+ok 11 - corrupt replay containers, pending retry or audit IDs fail closed without replacing the saved file
+  ---
+  duration_ms: 35.618312
+  type: 'test'
+  ...
+# Subtest: saved portrait is deterministic dressed RGBA8, 160 square, with exact nearest-neighbour pixels
+ok 12 - saved portrait is deterministic dressed RGBA8, 160 square, with exact nearest-neighbour pixels
+  ---
+  duration_ms: 151.405154
+  type: 'test'
+  ...
+# Subtest: PNG codec rejects broken CRC, truncation and unsupported dimensions and round-trips RGBA pixels
+ok 13 - PNG codec rejects broken CRC, truncation and unsupported dimensions and round-trips RGBA pixels
+  ---
+  duration_ms: 1.684665
+  type: 'test'
+  ...
+# Subtest: a stored portrait cannot supply SVG, a remote URL, another outfit, corrupt bytes or oversized data
+ok 14 - a stored portrait cannot supply SVG, a remote URL, another outfit, corrupt bytes or oversized data
+  ---
+  duration_ms: 5.18368
+  type: 'test'
+  ...
+# Subtest: renderer refuses unaccepted, missing or out-of-bounds parts and never follows atlas URLs
+ok 15 - renderer refuses unaccepted, missing or out-of-bounds parts and never follows atlas URLs
+  ---
+  duration_ms: 250.259636
+  type: 'test'
+  ...
+# Subtest: bootstrap admin, create user and persist avatar without exposing verifier
+ok 16 - bootstrap admin, create user and persist avatar without exposing verifier
+  ---
+  duration_ms: 579.872452
+  type: 'test'
+  ...
+# Subtest: repeated wrong code produces temporary lockout
+ok 17 - repeated wrong code produces temporary lockout
+  ---
+  duration_ms: 140.636648
+  type: 'test'
+  ...
+# Subtest: station presence counts distinct other accounts until logout, disable, or lease expiry
+ok 18 - station presence counts distinct other accounts until logout, disable, or lease expiry
+  ---
+  duration_ms: 197.188468
+  type: 'test'
+  ...
+# Subtest: batch create users from list with auto-generated and custom codes
+ok 19 - batch create users from list with auto-generated and custom codes
+  ---
+  duration_ms: 283.698536
+  type: 'test'
+  ...
+# Subtest: failed avatar save keeps committed equipment visible and later writes recover after a real rename failure
+ok 20 - failed avatar save keeps committed equipment visible and later writes recover after a real rename failure
+  ---
+  duration_ms: 135.419917
+  type: 'test'
+  ...
+# Subtest: concurrent avatar saves return their own committed loadouts and a later admin snapshot preserves the latest one
+ok 21 - concurrent avatar saves return their own committed loadouts and a later admin snapshot preserves the latest one
+  ---
+  duration_ms: 170.136656
+  type: 'test'
+  ...
+# Subtest: a saved portrait is copied on reads, survives restart without art assets, and unchanged Save does not write
+ok 22 - a saved portrait is copied on reads, survives restart without art assets, and unchanged Save does not write
+  ---
+  duration_ms: 119.872894
+  type: 'test'
+  ...
+# Subtest: same outfit can refresh a portrait from an older art revision
+ok 23 - same outfit can refresh a portrait from an older art revision
+  ---
+  duration_ms: 93.019583
+  type: 'test'
+  ...
+# Subtest: legacy profiles migrate once; missing assets or corrupted stored PNG never replace the identity file
+ok 24 - legacy profiles migrate once; missing assets or corrupted stored PNG never replace the identity file
+  ---
+  duration_ms: 98.552231
+  type: 'test'
+  ...
+# Subtest: testRoster: in public profile, seeding is strictly rejected
+ok 25 - testRoster: in public profile, seeding is strictly rejected
+  ---
+  duration_ms: 39.619873
+  type: 'test'
+  ...
+# Subtest: testRoster: without explicit enabled flag, seeding is rejected
+ok 26 - testRoster: without explicit enabled flag, seeding is rejected
+  ---
+  duration_ms: 9.322699
+  type: 'test'
+  ...
+# Subtest: testRoster: in trusted profile with enabled flag, seeds correctly and allows e2e login + shift workflow
+ok 27 - testRoster: in trusted profile with enabled flag, seeds correctly and allows e2e login + shift workflow
+  ---
+  duration_ms: 408.315095
+  type: 'test'
+  ...
+# Subtest: принимает известную станцию и сохраняет неизменяемый raw и provenance
+ok 28 - принимает известную станцию и сохраняет неизменяемый raw и provenance
+  ---
+  duration_ms: 26.824741
+  type: 'test'
+  ...
+# Subtest: канонически одинаковая телеграмма не создаёт второй raw-record
+ok 29 - канонически одинаковая телеграмма не создаёт второй raw-record
+  ---
+  duration_ms: 8.896561
+  type: 'test'
+  ...
+# Subtest: дедупликация восстанавливается после перезапуска сервиса
+ok 30 - дедупликация восстанавливается после перезапуска сервиса
+  ---
+  duration_ms: 16.102443
+  type: 'test'
+  ...
+# Subtest: неизвестная станция отклоняется без выдумывания координат
+ok 31 - неизвестная станция отклоняется без выдумывания координат
+  ---
+  duration_ms: 9.045038
+  type: 'test'
+  ...
+# Subtest: повреждённый заголовок сохраняется в rejected с диагностикой
+ok 32 - повреждённый заголовок сохраняется в rejected с диагностикой
+  ---
+  duration_ms: 7.122825
+  type: 'test'
+  ...
+# Subtest: file inbox перемещает принятые и отклонённые сообщения в разные корзины
+ok 33 - file inbox перемещает принятые и отклонённые сообщения в разные корзины
+  ---
+  duration_ms: 10.225167
+  type: 'test'
+  ...
+# Subtest: локальная входящая очередь не следует символическим ссылкам
+ok 34 - локальная входящая очередь не следует символическим ссылкам
+  ---
+  duration_ms: 5.084302
+  type: 'test'
+  ...
+# Subtest: SEC-01: небезопасная запись смены и экзамена отвергается до изменения прогрессии
+ok 35 - SEC-01: небезопасная запись смены и экзамена отвергается до изменения прогрессии
+  ---
+  duration_ms: 1.125728
+  type: 'test'
+  ...
+# Subtest: 1. Математические формулы прироста, штрафа и затухания освоения
+ok 36 - 1. Математические формулы прироста, штрафа и затухания освоения
+  ---
+  duration_ms: 1.878325
+  type: 'test'
+  ...
+# Subtest: 2. Начальное состояние и блокировка неразрешённых смен
+ok 37 - 2. Начальное состояние и блокировка неразрешённых смен
+  ---
+  duration_ms: 2.607247
+  type: 'test'
+  ...
+# Subtest: 3. Последовательная разблокировка смен С1 -> С2 -> С3 -> С4 -> С5 и выдача наград
+ok 38 - 3. Последовательная разблокировка смен С1 -> С2 -> С3 -> С4 -> С5 и выдача наград
+  ---
+  duration_ms: 3.04711
+  type: 'test'
+  ...
+# Subtest: 4. Журнал ошибок: повторы, фиксация кода причины и авторазрешение
+ok 39 - 4. Журнал ошибок: повторы, фиксация кода причины и авторазрешение
+  ---
+  duration_ms: 0.619989
+  type: 'test'
+  ...
+# Subtest: 5. Серия правильных ответов (streak) и награда «Лампа дежурного»
+ok 40 - 5. Серия правильных ответов (streak) и награда «Лампа дежурного»
+  ---
+  duration_ms: 0.918038
+  type: 'test'
+  ...
+# Subtest: 6. Расчёт допуска к экзамену: критерии 10 элементов >= 80% и общий >= 85%
+ok 41 - 6. Расчёт допуска к экзамену: критерии 10 элементов >= 80% и общий >= 85%
+  ---
+  duration_ms: 1.528681
+  type: 'test'
+  ...
+# Subtest: 7. Квалификационный экзамен: сдача, несдача, кулдаун и разблокировка локаций
+ok 42 - 7. Квалификационный экзамен: сдача, несдача, кулдаун и разблокировка локаций
+  ---
+  duration_ms: 3.605776
+  type: 'test'
+  ...
+# Subtest: 8. Персистентность состояния прогрессии (saveState / loadState)
+ok 43 - 8. Персистентность состояния прогрессии (saveState / loadState)
+  ---
+  duration_ms: 25.316144
+  type: 'test'
+  ...
+# Subtest: 9. Вызов applyDecay и мягкое затухание по прошествии времени
+ok 44 - 9. Вызов applyDecay и мягкое затухание по прошествии времени
+  ---
+  duration_ms: 1.12391
+  type: 'test'
+  ...
+# Subtest: блиц открывается по завершению настоящей учебной смены; черновой пакет и правила обозначены
+ok 45 - блиц открывается по завершению настоящей учебной смены; черновой пакет и правила обозначены
+  ---
+  duration_ms: 307.976506
+  type: 'test'
+  ...
+# Subtest: параллельные старты дают один раунд, один срок и неизменный полный комплект
+ok 46 - параллельные старты дают один раунд, один срок и неизменный полный комплект
+  ---
+  duration_ms: 179.645131
+  type: 'test'
+  ...
+# Subtest: повтор и конкурирующая отправка ответа фиксируются ровно один раз; другой ответ и чужой аккаунт отклонены
+ok 47 - повтор и конкурирующая отправка ответа фиксируются ровно один раз; другой ответ и чужой аккаунт отклонены
+  ---
+  duration_ms: 113.95599
+  type: 'test'
+  ...
+# Subtest: граница 90 секунд принадлежит серверу; поздний ответ не учитывается, повтор принятого ответа не меняет итог
+ok 48 - граница 90 секунд принадлежит серверу; поздний ответ не учитывается, повтор принятого ответа не меняет итог
+  ---
+  duration_ms: 82.961991
+  type: 'test'
+  ...
+# Subtest: перезапуск восстанавливает ответы и снимок одежды без добавления времени; закрытая вкладка не ставит паузу
+ok 49 - перезапуск восстанавливает ответы и снимок одежды без добавления времени; закрытая вкладка не ставит паузу
+  ---
+  duration_ms: 153.049727
+  type: 'test'
+  ...
+# Subtest: обычная смена и блиц принимают тот же сохранённый PNG; новые вещи не меняют начатые раунды и не требуют atlas
+ok 50 - обычная смена и блиц принимают тот же сохранённый PNG; новые вещи не меняют начатые раунды и не требуют atlas
+  ---
+  duration_ms: 107.177451
+  type: 'test'
+  ...
+# Subtest: legacy-блиц мигрирует по историческому полному профилю; обычная старая смена не получает выдуманный портрет
+ok 51 - legacy-блиц мигрирует по историческому полному профилю; обычная старая смена не получает выдуманный портрет
+  ---
+  duration_ms: 67.402379
+  type: 'test'
+  ...
+# Subtest: restart rejects a corrupted or substituted cached answer portrait; absent legacy copies reuse the historical PNG
+ok 52 - restart rejects a corrupted or substituted cached answer portrait; absent legacy copies reuse the historical PNG
+  ---
+  duration_ms: 66.903674
+  type: 'test'
+  ...
+# Subtest: шесть исходных заданий завершают блиц без наград, справки, повторов и обхода через API смены
+ok 53 - шесть исходных заданий завершают блиц без наград, справки, повторов и обхода через API смены
+  ---
+  duration_ms: 132.242702
+  type: 'test'
+  ...
+# Subtest: ошибка записи не создаёт фантомный раунд и не принимает недолговечный ответ
+ok 54 - ошибка записи не создаёт фантомный раунд и не принимает недолговечный ответ
+  ---
+  duration_ms: 35.078892
+  type: 'test'
+  ...
+# Subtest: повреждённый сохранённый таймер не восстанавливается молча
+ok 55 - повреждённый сохранённый таймер не восстанавливается молча
+  ---
+  duration_ms: 50.27878
+  type: 'test'
+  ...
+# Subtest: лобби первого уровня ничего не создаёт; выдача содержит только текущую задачу без эталонов
+ok 56 - лобби первого уровня ничего не создаёт; выдача содержит только текущую задачу без эталонов
+  ---
+  duration_ms: 106.483077
+  type: 'test'
+  ...
+# Subtest: конкурентный старт и возвращение сохраняют одну попытку и первоначальный портрет
+ok 57 - конкурентный старт и возвращение сохраняют одну попытку и первоначальный портрет
+  ---
+  duration_ms: 43.520271
+  type: 'test'
+  ...
+# Subtest: справка бесплатна для каждого задания, сохраняется и честно отмечает помощь
+ok 58 - справка бесплатна для каждого задания, сохраняется и честно отмечает помощь
+  ---
+  duration_ms: 116.186558
+  type: 'test'
+  ...
+# Subtest: завершение сохраняет разбор, но не даёт награды обычной смены и не открывает блиц
+ok 59 - завершение сохраняет разбор, но не даёт награды обычной смены и не открывает блиц
+  ---
+  duration_ms: 60.1767
+  type: 'test'
+  ...
+# Subtest: неверный ответ имеет сохранённый разбор; повтор доставки не пишет попытку дважды
+ok 60 - неверный ответ имеет сохранённый разбор; повтор доставки не пишет попытку дважды
+  ---
+  duration_ms: 13.234197
+  type: 'test'
+  ...
+# Subtest: перезапуск сервиса восстанавливает уровень, текущую справку и ответ после потери связи
+ok 61 - перезапуск сервиса восстанавливает уровень, текущую справку и ответ после потери связи
+  ---
+  duration_ms: 27.181508
+  type: 'test'
+  ...
+# Subtest: пользователь и режим изолированы; некорректный ввод не расходует задание
+ok 62 - пользователь и режим изолированы; некорректный ввод не расходует задание
+  ---
+  duration_ms: 25.377577
+  type: 'test'
+  ...
+# Subtest: повреждённый разбор или случайная награда первого уровня не принимаются при восстановлении
+ok 63 - повреждённый разбор или случайная награда первого уровня не принимаются при восстановлении
+  ---
+  duration_ms: 24.516665
+  type: 'test'
+  ...
+# Subtest: пакет без методического допуска не запускает первый уровень
+ok 64 - пакет без методического допуска не запускает первый уровень
+  ---
+  duration_ms: 33.430694
+  type: 'test'
+  ...
+# Subtest: пустое или нечисловое значение не превращается в проверенный ноль
+ok 65 - пустое или нечисловое значение не превращается в проверенный ноль
+  ---
+  duration_ms: 31.17187
+  type: 'test'
+  ...
+# Subtest: сбой сохранения не создаёт прохождение и не принимает последний ответ; повтор восстанавливает запись
+ok 66 - сбой сохранения не создаёт прохождение и не принимает последний ответ; повтор восстанавливает запись
+  ---
+  duration_ms: 24.712185
+  type: 'test'
+  ...
+# Subtest: сессия экрана не получает доступ к данным и операциям первого уровня
+ok 67 - сессия экрана не получает доступ к данным и операциям первого уровня
+  ---
+  duration_ms: 2.4479
+  type: 'test'
+  ...
+# Subtest: разрешённые игровые роли сохраняют собственную идентичность для проверки владения
+ok 68 - разрешённые игровые роли сохраняют собственную идентичность для проверки владения
+  ---
+  duration_ms: 0.523719
+  type: 'test'
+  ...
+# Subtest: 1. Проверка доступности режимов смены по пройденным этапам
+ok 69 - 1. Проверка доступности режимов смены по пройденным этапам
+  ---
+  duration_ms: 2.035663
+  type: 'test'
+  ...
+# Subtest: 2. Серверный таймер в режиме «Блиц 90 с»
+ok 70 - 2. Серверный таймер в режиме «Блиц 90 с»
+  ---
+  duration_ms: 0.903459
+  type: 'test'
+  ...
+# Subtest: 3. Запрет открытия справочника в режиме «Блиц»
+ok 71 - 3. Запрет открытия справочника в режиме «Блиц»
+  ---
+  duration_ms: 0.306047
+  type: 'test'
+  ...
+# Subtest: 4. Учёт справочника в режиме «Самостоятельно»: штраф только на текущее задание
+ok 72 - 4. Учёт справочника в режиме «Самостоятельно»: штраф только на текущее задание
+  ---
+  duration_ms: 0.48106
+  type: 'test'
+  ...
+# Subtest: 5. Режим «С наставником»: справочник открыт постоянно с множителем 0.6
+ok 73 - 5. Режим «С наставником»: справочник открыт постоянно с множителем 0.6
+  ---
+  duration_ms: 1.614659
+  type: 'test'
+  ...
+# Subtest: первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал
+ok 74 - первая смена не раскрывает ответ и сохраняет попытку в неизменяемый журнал
+  ---
+  duration_ms: 93.405868
+  type: 'test'
+  ...
+# Subtest: задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте
+ok 75 - задания с выбором и последовательностью проходят серверное формирование без эталона в клиенте
+  ---
+  duration_ms: 22.991474
+  type: 'test'
+  ...
+# Subtest: stationPlot переводит к планшону на три станции
+ok 76 - stationPlot переводит к планшону на три станции
+  ---
+  duration_ms: 28.297094
+  type: 'test'
+  ...
+# Subtest: трёхстанционный планшон переводит к плотному планшону
+ok 77 - трёхстанционный планшон переводит к плотному планшону
+  ---
+  duration_ms: 21.204262
+  type: 'test'
+  ...
+# Subtest: плотный планшон ведёт к физическому контролю
+ok 78 - плотный планшон ведёт к физическому контролю
+  ---
+  duration_ms: 20.857521
+  type: 'test'
+  ...
+# Subtest: findError не раскрывает station_id и после ответа ведёт к конструктору анализа
+ok 79 - findError не раскрывает station_id и после ответа ведёт к конструктору анализа
+  ---
+  duration_ms: 24.03481
+  type: 'test'
+  ...
+# Subtest: dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок
+ok 80 - dependencySequence формируется из методического профиля, скрывает DAG и принимает допустимый порядок
+  ---
+  duration_ms: 29.462625
+  type: 'test'
+  ...
+1..80
+# tests 80
+# suites 0
+# pass 80
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2048.339142

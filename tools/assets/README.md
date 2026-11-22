@@ -49,3 +49,44 @@ samples are style references, not factual progress indicators. The 28 UI parts,
 six facades, six props, coastal sky and ground plate are independently reviewed
 as native raster components in the pixel style of R01, not a full-screen copy of
 the reference or a strict shared 480-pixel sprite grid.
+
+## R08 isolated scene preview
+
+`build_hub_r08.py` reads `assets/manifests/hub.r08-preview.json` and exports only
+`assets/generated/hub/r08-preview` and `apps/web/public/hub/r08-preview`. It does
+not change the R01 export or provider registry. The runtime contract is available
+at `/hub/r08-preview/manifest.json` for the isolated `/art/r08` review route.
+
+```bash
+python tools/assets/build_hub_r08.py
+python tools/assets/build_hub_r08.py --check
+```
+
+All scene slices share the canonical 512×288 source coordinates. Their common
+preview transform is 1.875 to 960×540 with nearest sampling; this noninteger
+preview scale is explicitly not a production-grid approval. Existing NPCs remain
+48 world pixels high, with their path anchors transformed from source coordinates.
+Never fit individual buildings to separate boxes.
+
+The archive ground is rebuilt from the master and donor through the owned facade
+alpha only. Source hashes, binary alpha, original coordinates, source-exact RGB,
+mask separation and the complete source roundtrip are checked before any output
+is written. `--check` compares every generated and public byte without writing.
+The pipeline manifest is authored input and is never silently updated by export.
+
+`assets/source/environment/hub/r08/pilot/mask-spec.json` is the editable polygon
+source for the foreground scene slice and local light receiver masks. Reproduce
+these source PNGs explicitly after an authoring change:
+
+```bash
+python tools/assets/build_hub_r08.py --prepare-pilot-sources
+```
+
+Then review the resulting source pixels, update the pinned hashes in the pipeline
+manifest, and rebuild. Normal export also reproduces the polygons in memory and
+rejects mismatching source PNGs. The masks retain the original scene geometry;
+day/dusk color studies do not replace the baseline image. `lightRegions` gives
+local source bounds and suggested tint/opacity independently for the entrance,
+windows, Archive, laboratories, hall, lamp and nearby stone. These binary domains
+are not physical illumination passes. Missing vegetation/contact/shadow layers
+remain explicitly unavailable, and technical export success does not approve art.

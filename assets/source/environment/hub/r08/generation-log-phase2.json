@@ -1,0 +1,443 @@
+{
+  "schema": "synopsis-art-generation-log/v1",
+  "date": "2026-11-21",
+  "phase": "R08 pilot atmosphere and environment kit",
+  "baseline_commit": "9875c93141eb376e883efbf888403fdea21e6050",
+  "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "collection_id": "e5f39008-fe78-41f6-b1a9-7a756d57cb45",
+  "starting_credits": 561,
+  "operations": [
+    {
+      "key": "day",
+      "request": {
+        "model": "gemini-nano-banana-2.1",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 512,
+        "height": 288,
+        "aspect_ratio": "16:9",
+        "bg_mode": "include",
+        "smart_crop": false,
+        "variations": 1,
+        "edit_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+        "style_asset_ids": [
+          "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+        ],
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "prompt": "MATERIAL AND DAYLIGHT COLOR STUDY of this exact meteorological station master. Preserve the EXACT geometry, camera, framing, building positions, blank fascia shapes, roofs, every door, stairs, paths, fountain, visible furniture, vegetation silhouettes, mountains and waterline of the edit image. Do not add, remove, enlarge, move or redesign any object. ONLY improve the material color relationships and believable neutral DAYLIGHT to achieve the richness and depth of the separate R01 style reference without copying its HUD or sunset. The current scene is too beige/olive and flat: separate cream limestone from warm brown timber and oxidized teal metal; make foliage lush deep emerald with jade illuminated clusters and cooler blue-green recesses, still natural; replace flat grey shadows under eaves and between buildings with clear cool blue/violet reflected skylight; show real glass transparency and restrained sky reflections, warm timber bookshelves behind the archive glass, distinct plant masses. Give the central entrance a stronger local warm cream/wood accent within normal daylight. Keep paving neutral warm-grey and readable, with cool cracks and soft contact occlusion at the exact existing building bases. The distant mountains and water stay quieter, cooler and lighter than the foreground. Controlled light-to-shadow separation, fine rich pixel-art material clusters, clean coherent edges, no smoothing, no global neon saturation, no bloom, no haze veil, no dramatic sunset, no orange light pools painted on the ground. All lights that are off stay off; do not make every window glow. No text, labels, UI, weather data, people, animals or new signs. Keep a 16:9 complete frame. This is a controlled art-direction candidate, not a new layout.",
+        "wait_seconds": 0
+      },
+      "job_id": "8153d39d-eed9-4fb9-8f28-b8806192b436",
+      "credits_used": 12,
+      "status": "succeeded",
+      "asset_id": "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665",
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "include",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 512,
+        "requested_height": 288,
+        "pixel_perfect": true,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 512,
+            "height": 288,
+            "asset_id": "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665"
+          }
+        ]
+      },
+      "measured_output": {
+        "width": 512,
+        "height": 288,
+        "asset_kind": "image",
+        "pixel_flag": true,
+        "alpha_cutoff": 130
+      }
+    },
+    {
+      "key": "dusk",
+      "request": {
+        "model": "gemini-nano-banana-2.1",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 512,
+        "height": 288,
+        "aspect_ratio": "16:9",
+        "bg_mode": "include",
+        "smart_crop": false,
+        "variations": 1,
+        "edit_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+        "style_asset_ids": [
+          "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+        ],
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "prompt": "CONTROLLED EARLY-EVENING LIGHTING STUDY of this exact meteorological station composition. Preserve the edit image's EXACT camera, crop, positions, building silhouettes, doors, windows, stairs, vegetation silhouettes, terrace levels, fountain, pathways, shore and distant mountain shapes. This is a relighting art-direction study for future SEPARATE light masks, NOT permission to redesign geometry. Match the compelling cool-warm atmosphere of the supplied R01 style reference. Early blue hour: clear deep indigo and blue-violet air and shadows, gentle peach-gold light at the open central horizon, layered cool clouds, readable emerald vegetation with warmer upper leaf clusters. The station remains detailed and readable, not dark. The central synoptic entrance is the warm focal point; a limited selection of windows reveal warm amber interiors, especially archive bookshelves and a few science work surfaces. Lamps illuminate only nearby steps, stone, plant edges and existing paths with restrained physically plausible soft warm reflections. Water has narrow calm amber and blue reflections. Stronger foreground depth, clear terraced architecture, rich material color separation and crisp fine pixel-art detail. No general orange fog or bloom; no neon glow around every object; no uniform floodlighting; no invented light sources. Keep all objects in place. Do not add people, animals, balloons, UI, text, logos, letters, signs, weather symbols or new objects. Keep all blank signs blank. Full 16:9 frame. The resulting illustration is a lighting guide only; preserve enough shadow detail to guide a layered runtime implementation.",
+        "wait_seconds": 0
+      },
+      "job_id": "365d9a91-7ae9-40a8-9918-fc521dcc378d",
+      "credits_used": 12,
+      "status": "succeeded",
+      "asset_id": "126639d1-a367-4399-b2ad-527b6895f2bd",
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "include",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 512,
+        "requested_height": 288,
+        "pixel_perfect": true,
+        "aspect_ratio": "16:9",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 512,
+            "height": 288,
+            "asset_id": "126639d1-a367-4399-b2ad-527b6895f2bd"
+          }
+        ]
+      },
+      "measured_output": {
+        "width": 512,
+        "height": 288,
+        "asset_kind": "image",
+        "pixel_flag": true,
+        "alpha_cutoff": 130
+      }
+    },
+    {
+      "key": "vegetation",
+      "request": {
+        "model": "gemini-nano-banana-2.1",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 64,
+        "height": 64,
+        "aspect_ratio": "1:1",
+        "bg_mode": "transparent",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "outline_repair": true,
+        "variations": 1,
+        "style_asset_ids": [
+          "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665",
+          "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+        ],
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "theme": "26063 meteorological station, north-European pine/birch gardens, cream limestone terraces, lush emerald and jade foliage, coherent fine pixel art",
+        "prompt": "Nine separate reusable vegetation and planted-edge sprites for the reference meteorological station, arranged in a regular 3x3 grid with one complete object per cell and wide empty transparent gutters. Aim for each individual sprite to read clearly at approximately 48–64 pixels, with coherent crisp pixel clusters and the reference's rich materials, not flat icon silhouettes. Row1 left-to-right: compact asymmetric leafy shrub with a small natural dark-soil root base; spreading low shrub with several distinct leafy clumps and a small earth edge; young pine with full visible trunk and root soil. Row2: small birch sapling with white marked trunk, varied green leaf clumps and full root base; hanging ivy on a short narrow cream-stone wall fragment with natural foliage edge; a fern-and-grass clump with three distinct fronds and dark root soil. Row3: low irregular flower bed in a modest cream-grey stone border with restrained white/yellow/lilac flowers; mossy stone edging corner meeting tufts of grass and soil; tall sedge-like grass clump at a damp stone edge. One consistent shallow elevated three-quarter camera matching the station, one common scale, neutral soft upper-left daylight, darker blue-green recesses and jade leaf highlights, readable warm stone and soil. Full visible silhouettes and bases with clear irregular natural transitions. Tiny local contact shading only; no large detached oval shadows or black outline stickers. No characters, animals, buildings, labels, text, numbers, grid lines, cell dividers, gradients in the empty background, floor sheet, or overlaps between cells. Keep every object fully inside its own cell and preserve generous transparent margins. These are related scene props, not a finished background image.",
+        "wait_seconds": 0
+      },
+      "job_id": "2e4f66f3-8344-40d2-8a3b-0c5a3d535ba5",
+      "credits_used": 12,
+      "status": "succeeded",
+      "asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "transparent",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 64,
+        "requested_height": 64,
+        "pixel_perfect": true,
+        "aspect_ratio": "1:1",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 203,
+            "height": 200,
+            "asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db"
+          }
+        ]
+      },
+      "measured_output": {
+        "width": 203,
+        "height": 200,
+        "asset_kind": "image",
+        "pixel_flag": true,
+        "alpha_cutoff": 130
+      }
+    },
+    {
+      "key": "connections",
+      "request": {
+        "model": "gemini-nano-banana-2.1",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 64,
+        "height": 64,
+        "aspect_ratio": "1:1",
+        "bg_mode": "transparent",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "outline_repair": true,
+        "variations": 1,
+        "style_asset_ids": [
+          "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665",
+          "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+        ],
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "theme": "26063 scientific station, warm-grey limestone and cream stone, teal-green plants, unified shallow elevated three-quarter camera, neutral daylight",
+        "prompt": "A coherent modular ground-connection kit for the reference meteorological research station: nine complete separate pieces in a regular 3x3 grid, one piece per cell, generous empty transparent gutters, no grid lines or labels. Each piece should be readable at about48–64 pixels; crisp rich material clusters with consistent scale, not generic grey icons. Row1: a short straight cream-grey stone curb with small grass tufts on its soil side; a matching outside curb corner; a matching inside curb corner. Row2: a short low retaining-wall segment with a proper stone cap and earth behind its upper edge; a matching retaining-wall corner with a visible capped top; a compact four-step stone staircase with a small upper landing and clear lower contact edge, matching the station's step rise and camera. Row3: an irregular transition from a few warm-grey paving slabs into moist soil and short grass, no rectangular island; a compact tree-root soil ring with a little moss and grass but no tree trunk extending out of frame; a modest building threshold and shallow stone apron with a natural paving edge and a few small plants at its sides, no facade. Keep the same projected ground axes, camera, material palette, edge thickness, human scale and soft upper-left daylight across all nine objects. Include enough attached foundation/soil contact to fit an actual terrain; no floating steps, no separate ellipse shadow, no broad decorative scene around each object. No deep perspective camera changes, no buildings, trees, people, animals, markings, text, numbers, scientific symbols, UI, grid dividers or overlapping objects. Neutral reusable materials, no night lighting, no amber glow, no fixed sunset shadows. Entire objects and bases visible within cells.",
+        "wait_seconds": 0
+      },
+      "job_id": "eeeb5726-4dcf-41f5-876d-54e2513b8a5a",
+      "credits_used": 12,
+      "status": "succeeded",
+      "asset_id": "64c75a38-e8ca-4880-8172-b4f2bc25e8a8",
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "transparent",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 64,
+        "requested_height": 64,
+        "pixel_perfect": true,
+        "aspect_ratio": "1:1",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 240,
+            "height": 240,
+            "asset_id": "64c75a38-e8ca-4880-8172-b4f2bc25e8a8"
+          }
+        ]
+      },
+      "measured_output": {
+        "width": 240,
+        "height": 240,
+        "asset_kind": "image",
+        "pixel_flag": true,
+        "alpha_cutoff": 130
+      }
+    },
+    {
+      "key": "decals",
+      "request": {
+        "model": "gemini-nano-banana-2.1",
+        "pixel": true,
+        "mode": "assets",
+        "resolution": "1K",
+        "width": 64,
+        "height": 64,
+        "aspect_ratio": "1:1",
+        "bg_mode": "transparent",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "outline_repair": true,
+        "variations": 1,
+        "reference_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+        "style_asset_ids": [
+          "ad6697b5-1cf4-425c-9f41-6f09c1526012"
+        ],
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "prompt": "Create a production-direction candidate sheet of NINE ORGANIC GROUND SEAM OVERLAYS for the exact meteorological station in the first reference. Rich fine painted pixel clusters matching the scene, shallow elevated FRONT three-quarter view, calm warm-grey stone, moss and natural emerald plants, upper-left neutral daylight. Arrange 3 rows by 3 columns on a truly transparent background, one complete separate fragment centered in each cell, WIDE EMPTY GUTTERS. These are thin pieces laid flush on the station's existing ground, not tiles or isolated platforms. The camera and materials must match the master station, not a standard isometric tile game. Row1: irregular grass-to-paving seam with 3 small mossy flat stones; narrow worn limestone curb almost flush with ground and a little grass behind; an irregular gently bending curb-and-grass seam. Row2: shallow broken paving-to-soil transition, patches taper organically; a flat moist soil and exposed fine-root patch for planting, no trunk; a horizontal low stone threshold apron with a worn near edge, only one shallow step. Row3: tiny moss and fern clusters growing out of paving joints; scattered natural leaves and two little stones on a trace of irregular soil; low trailing ivy and grass over one shallow narrow stone ledge, roots visibly meet the ground. Keep transitions organic with small overlapping grass blades, uneven boundaries and attached local contact darkening. ZERO thick black outlines; colored material edges only. No visible soil cross section, no deep block side walls, no diamond bases, no cubes, no rectangular islands, no display pedestals, no detached oval shadows, no glow, no blurred edges. Do not include a background floor, scene, sky, buildings, tall trees, people, objects in multiple cells, grid lines, text, labels or numbers. All nine pieces share the same restrained relief, projected ground axes, material scale and lighting; about 48–64 pixel native individual detail. The entire silhouette of every fragment stays inside its own cell with generous transparent padding. Quality goal: believable seam details that visually join architecture to terrain without looking like cut-and-pasted blocks.",
+        "wait_seconds": 0
+      },
+      "job_id": "3a96cf1c-b71f-48ed-a484-06ea5507e940",
+      "credits_used": 12,
+      "status": "succeeded",
+      "asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "resolved_parameters": {
+        "model": "gemini-nano-banana-2.1",
+        "mode": "assets",
+        "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+        "pixel": true,
+        "variations": 1,
+        "background_mode": "transparent",
+        "resolution": "1K",
+        "provider_image_size": "1K",
+        "quality": "medium",
+        "requested_width": 64,
+        "requested_height": 64,
+        "pixel_perfect": true,
+        "aspect_ratio": "1:1",
+        "smart_crop": false,
+        "smart_crop_mode": "tightest",
+        "size_behavior": "hint",
+        "output_dimensions": [
+          {
+            "width": 200,
+            "height": 200,
+            "asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa"
+          }
+        ]
+      },
+      "measured_output": {
+        "width": 200,
+        "height": 200,
+        "asset_kind": "image",
+        "pixel_flag": true,
+        "alpha_cutoff": 130
+      }
+    }
+  ],
+  "credits_spent": 60,
+  "expected_remaining_credits": 501,
+  "free_operations": [
+    {
+      "operation": "auto_slice_asset",
+      "source_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "credits_used": 0,
+      "count": 9,
+      "output_asset_ids": [
+        "9c69323d-c321-4384-96d1-71faf78c1b33",
+        "065ac3c8-74ee-4ebb-b9eb-c4422a6be956",
+        "e00770b8-8887-471c-a2b4-bbbb68a8380d",
+        "2556bd3e-2d9b-4ca4-81b6-2c1c4bb1aefe",
+        "181fc6ae-ae04-490f-9c1a-c7aa3ba24ce2",
+        "f8f36544-721c-4927-a5e8-faf849f795c6",
+        "c6979f61-0fee-45ef-9708-b553a7febd36",
+        "276e368b-080e-4894-b391-a5e5fcee8f0d",
+        "0e4977ee-c752-4a13-a9e5-0f74f461d4d0"
+      ],
+      "detection": {
+        "method": "connected_alpha",
+        "source_variant": "pixel",
+        "mode": "flat_image",
+        "alpha_threshold": 1,
+        "min_area": 24,
+        "padding": 0,
+        "merge_distance": 1,
+        "smart_alpha": false,
+        "rectangles": [
+          {
+            "x": 153,
+            "y": 3,
+            "width": 32,
+            "height": 62,
+            "name": "Slice 1"
+          },
+          {
+            "x": 11,
+            "y": 11,
+            "width": 45,
+            "height": 48,
+            "name": "Slice 2"
+          },
+          {
+            "x": 71,
+            "y": 19,
+            "width": 60,
+            "height": 39,
+            "name": "Slice 3"
+          },
+          {
+            "x": 16,
+            "y": 70,
+            "width": 35,
+            "height": 60,
+            "name": "Slice 4"
+          },
+          {
+            "x": 78,
+            "y": 75,
+            "width": 46,
+            "height": 49,
+            "name": "Slice 5"
+          },
+          {
+            "x": 142,
+            "y": 77,
+            "width": 52,
+            "height": 49,
+            "name": "Slice 6"
+          },
+          {
+            "x": 148,
+            "y": 141,
+            "width": 43,
+            "height": 48,
+            "name": "Slice 7"
+          },
+          {
+            "x": 77,
+            "y": 143,
+            "width": 49,
+            "height": 42,
+            "name": "Slice 8"
+          },
+          {
+            "x": 6,
+            "y": 147,
+            "width": 56,
+            "height": 37,
+            "name": "Slice 9"
+          }
+        ]
+      }
+    },
+    {
+      "operation": "manual-exact-crop-and-import",
+      "source_asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "asset_id": "9f045602-903c-4601-85ab-0b6e26575996",
+      "cropRectXYWH": [
+        74,
+        146,
+        53,
+        29
+      ],
+      "opaque_pixels": 840,
+      "credits_used": 0,
+      "source": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png"
+    }
+  ],
+  "verified_remaining_credits": 501,
+  "collection": {
+    "asset_ids": [
+      "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665",
+      "126639d1-a367-4399-b2ad-527b6895f2bd",
+      "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "64c75a38-e8ca-4880-8172-b4f2bc25e8a8",
+      "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "9c69323d-c321-4384-96d1-71faf78c1b33",
+      "065ac3c8-74ee-4ebb-b9eb-c4422a6be956",
+      "e00770b8-8887-471c-a2b4-bbbb68a8380d",
+      "2556bd3e-2d9b-4ca4-81b6-2c1c4bb1aefe",
+      "181fc6ae-ae04-490f-9c1a-c7aa3ba24ce2",
+      "f8f36544-721c-4927-a5e8-faf849f795c6",
+      "c6979f61-0fee-45ef-9708-b553a7febd36",
+      "276e368b-080e-4894-b391-a5e5fcee8f0d",
+      "0e4977ee-c752-4a13-a9e5-0f74f461d4d0",
+      "9f045602-903c-4601-85ab-0b6e26575996"
+    ],
+    "collection_id": "e5f39008-fe78-41f6-b1a9-7a756d57cb45",
+    "updated_count": 15,
+    "message": "Assets moved successfully."
+  },
+  "active_jobs": 0
+}

@@ -1,0 +1,20 @@
+{
+  "asset_id": "9f045602-903c-4601-85ab-0b6e26575996",
+  "source": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png",
+  "source_sha256": "492b983cf4e22e2653f61b996fab09e0d8e58f3aded84f0e494ce61ba8fe0f67",
+  "download_sha256": "9230ea9a2ca6a33dc564b7c2c2b28a95c16ede344afd9919112374f3e146089e",
+  "size": [
+    53,
+    29
+  ],
+  "download_bytes": 2883,
+  "rgba_exact": true,
+  "opaque_pixels": 840,
+  "cropRectXYWH": [
+    74,
+    146,
+    53,
+    29
+  ],
+  "method": "Source-exact crop; transparent RGB zeroed before import; canonical downloaded and compared byte-for-byte as decoded RGBA."
+}

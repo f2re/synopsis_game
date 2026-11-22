@@ -1,0 +1,211 @@
+{
+  "schema": "synopsis-sprite-slice-provenance/v1",
+  "phase": "R08-2",
+  "date": "2026-11-21",
+  "sourceSheets": [
+    {
+      "asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "source": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.png",
+      "measuredSize": [
+        203,
+        200
+      ],
+      "visiblePixels": 10871,
+      "verification": "All visible RGB and alpha retained across all nine saved slices.",
+      "detection": {
+        "method": "connected_alpha",
+        "source_variant": "pixel",
+        "mode": "flat_image",
+        "alpha_threshold": 1,
+        "min_area": 24,
+        "padding": 0,
+        "merge_distance": 1,
+        "smart_alpha": false,
+        "rectangles": [
+          {
+            "x": 153,
+            "y": 3,
+            "width": 32,
+            "height": 62,
+            "name": "Slice 1"
+          },
+          {
+            "x": 11,
+            "y": 11,
+            "width": 45,
+            "height": 48,
+            "name": "Slice 2"
+          },
+          {
+            "x": 71,
+            "y": 19,
+            "width": 60,
+            "height": 39,
+            "name": "Slice 3"
+          },
+          {
+            "x": 16,
+            "y": 70,
+            "width": 35,
+            "height": 60,
+            "name": "Slice 4"
+          },
+          {
+            "x": 78,
+            "y": 75,
+            "width": 46,
+            "height": 49,
+            "name": "Slice 5"
+          },
+          {
+            "x": 142,
+            "y": 77,
+            "width": 52,
+            "height": 49,
+            "name": "Slice 6"
+          },
+          {
+            "x": 148,
+            "y": 141,
+            "width": 43,
+            "height": 48,
+            "name": "Slice 7"
+          },
+          {
+            "x": 77,
+            "y": 143,
+            "width": 49,
+            "height": 42,
+            "name": "Slice 8"
+          },
+          {
+            "x": 6,
+            "y": 147,
+            "width": 56,
+            "height": 37,
+            "name": "Slice 9"
+          }
+        ]
+      },
+      "slices": [
+        {
+          "asset_id": "9c69323d-c321-4384-96d1-71faf78c1b33",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/young-pine.png",
+          "cropRectXYWH": [
+            153,
+            3,
+            32,
+            62
+          ]
+        },
+        {
+          "asset_id": "065ac3c8-74ee-4ebb-b9eb-c4422a6be956",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/upright-shrub.png",
+          "cropRectXYWH": [
+            11,
+            11,
+            45,
+            48
+          ]
+        },
+        {
+          "asset_id": "e00770b8-8887-471c-a2b4-bbbb68a8380d",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/low-shrub.png",
+          "cropRectXYWH": [
+            71,
+            19,
+            60,
+            39
+          ]
+        },
+        {
+          "asset_id": "2556bd3e-2d9b-4ca4-81b6-2c1c4bb1aefe",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/birch-sapling.png",
+          "cropRectXYWH": [
+            16,
+            70,
+            35,
+            60
+          ]
+        },
+        {
+          "asset_id": "181fc6ae-ae04-490f-9c1a-c7aa3ba24ce2",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/wall-ivy.png",
+          "cropRectXYWH": [
+            78,
+            75,
+            46,
+            49
+          ]
+        },
+        {
+          "asset_id": "f8f36544-721c-4927-a5e8-faf849f795c6",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/fern-clump.png",
+          "cropRectXYWH": [
+            142,
+            77,
+            52,
+            49
+          ]
+        },
+        {
+          "asset_id": "c6979f61-0fee-45ef-9708-b553a7febd36",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/sedge-stone-edge.png",
+          "cropRectXYWH": [
+            148,
+            141,
+            43,
+            48
+          ]
+        },
+        {
+          "asset_id": "276e368b-080e-4894-b391-a5e5fcee8f0d",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/mossy-stone-corner.png",
+          "cropRectXYWH": [
+            77,
+            143,
+            49,
+            42
+          ]
+        },
+        {
+          "asset_id": "0e4977ee-c752-4a13-a9e5-0f74f461d4d0",
+          "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/flower-bed.png",
+          "cropRectXYWH": [
+            6,
+            147,
+            56,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "source": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.png",
+      "measuredSize": [
+        200,
+        200
+      ],
+      "selection": "Only cell 8 selected for a local ground-seam trial by independent art direction.",
+      "slices": [
+        {
+          "asset_id": "9f045602-903c-4601-85ab-0b6e26575996",
+          "source": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png",
+          "cropRectXYWH": [
+            74,
+            146,
+            53,
+            29
+          ],
+          "visiblePixels": 840,
+          "components": 3,
+          "operation": "Exact source crop. RGB at alpha=0 reset to zero. No visible RGB, alpha or scale change.",
+          "serverImportDecodedRGBAExact": true
+        }
+      ]
+    }
+  ],
+  "productionReady": false,
+  "logicalScaleAndPivotsApproved": false
+}

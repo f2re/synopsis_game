@@ -1,0 +1,387 @@
+{
+  "version": 1,
+  "status": "candidate",
+  "sourceCanvas": [
+    512,
+    288
+  ],
+  "worldCanvas": [
+    960,
+    540
+  ],
+  "sharedTransform": {
+    "scale": 1.875,
+    "offset": [
+      0,
+      0
+    ],
+    "sampling": "nearest",
+    "productionGridApproved": false
+  },
+  "npc": {
+    "displayHeightWorldPx": 48,
+    "anchorSpace": "sourceCanvas",
+    "textureScalePolicy": "Keep the current actor 48 world pixels high; convert its path anchors through the common scene transform."
+  },
+  "archive": {
+    "sourceBounds": [
+      290,
+      141,
+      72,
+      75
+    ],
+    "entranceSource": [
+      322,
+      215
+    ]
+  },
+  "review": {
+    "geometry": "reviewed",
+    "art": "pending",
+    "productionReady": false,
+    "pilotMaskArt": "source-contours-reviewed; rendered-lighting-pending",
+    "pilotMaskReviewer": "/root/render_audit",
+    "pilotMaskReview": "docs/art/reviews/2026-11-21-hub-r08-pilot-review.md",
+    "pilotMaskLimits": "Source contours/locality only; final lighting, depth and production acceptance remain pending."
+  },
+  "optionalRoles": {
+    "foreground-occluder": "candidate",
+    "vegetation-mask": "not-available",
+    "window-light-mask": "candidate",
+    "lamp-light-mask": "candidate",
+    "ground-light-mask": "candidate",
+    "contact-shadow-mask": "not-available",
+    "shadow-mask": "not-available"
+  },
+  "assets": [
+    {
+      "id": "hub.r08.master-01",
+      "role": "master",
+      "url": "/hub/r08-preview/master.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "pivotLocalPx": [
+        0,
+        0
+      ],
+      "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+      "bytes": 331901,
+      "alphaPolicy": "opaque",
+      "usage": "Canonical original source; reference comparison only."
+    },
+    {
+      "id": "hub.r08.preview.archive-local-ground",
+      "role": "archive-local-ground",
+      "url": "/hub/r08-preview/archive-local-ground.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "pivotLocalPx": [
+        0,
+        0
+      ],
+      "sha256": "db1c5597abe6f15358b7b0813014a8fe8ca1841e2a8bfa0809b9d184e14f36fb",
+      "bytes": 330074,
+      "alphaPolicy": "opaque",
+      "usage": "Master with donor pixels under the owned archive-facade mask only; all external pixels retained exactly."
+    },
+    {
+      "id": "hub.r08.candidate.archive.facade-visible",
+      "role": "archive-facade",
+      "url": "/hub/r08-preview/archive-facade.png",
+      "width": 72,
+      "height": 65,
+      "originalSceneXY": [
+        290,
+        141
+      ],
+      "pivotLocalPx": [
+        32,
+        64
+      ],
+      "sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa",
+      "bytes": 10032,
+      "alphaPolicy": "binary",
+      "anchorScenePx": [
+        322,
+        205
+      ],
+      "depthSourceY": 205,
+      "usage": "Source-positioned visible scene slice; shared transform only."
+    },
+    {
+      "id": "hub.r08.candidate.archive.porch-steps-visible",
+      "role": "archive-porch-steps",
+      "url": "/hub/r08-preview/archive-porch-steps.png",
+      "width": 69,
+      "height": 10,
+      "originalSceneXY": [
+        292,
+        206
+      ],
+      "pivotLocalPx": [
+        30,
+        9
+      ],
+      "sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51",
+      "bytes": 1572,
+      "alphaPolicy": "binary",
+      "anchorScenePx": [
+        322,
+        215
+      ],
+      "depthSourceY": 215,
+      "usage": "Source-positioned visible scene slice; shared transform only."
+    },
+    {
+      "id": "hub.r08.candidate.archive.entry-lamp",
+      "role": "archive-entry-lamp",
+      "url": "/hub/r08-preview/archive-entry-lamp.png",
+      "width": 7,
+      "height": 12,
+      "originalSceneXY": [
+        290,
+        182
+      ],
+      "pivotLocalPx": [
+        3,
+        11
+      ],
+      "sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e",
+      "bytes": 330,
+      "alphaPolicy": "binary",
+      "anchorScenePx": [
+        293,
+        193
+      ],
+      "depthSourceY": 205,
+      "usage": "Source-positioned visible scene slice; shared transform only."
+    },
+    {
+      "id": "hub.r08.pilot.foreground-occluder",
+      "role": "foreground-occluder",
+      "url": "/hub/r08-preview/foreground-occluder.png",
+      "width": 47,
+      "height": 45,
+      "originalSceneXY": [
+        314,
+        223
+      ],
+      "pivotLocalPx": [
+        20,
+        22
+      ],
+      "sha256": "8d8e063766a681dccaf5d6852a92916509c75816c00b66e52f33ad0d65dea4bd",
+      "bytes": 4862,
+      "alphaPolicy": "binary",
+      "anchorScenePx": [
+        334,
+        245
+      ],
+      "depthSourceY": 245,
+      "usage": "Visible low shrub and adjacent front railing/wall slice; source-positioned only. The support line is the front garden/fence edge, not the bottom of the image."
+    },
+    {
+      "id": "hub.r08.pilot.window-light-mask",
+      "role": "window-light-mask",
+      "url": "/hub/r08-preview/window-light-mask.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "pivotLocalPx": [
+        0,
+        0
+      ],
+      "sha256": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+      "bytes": 900,
+      "alphaPolicy": "binary",
+      "blendMode": "receiver-mask",
+      "usage": "Small glass panes and separately identified archive paper receivers. Excludes the large facade, globe and neighboring notice wall. Local tint/opacity receiver; not a physical emission pass."
+    },
+    {
+      "id": "hub.r08.pilot.lamp-light-mask",
+      "role": "lamp-light-mask",
+      "url": "/hub/r08-preview/lamp-light-mask.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "pivotLocalPx": [
+        0,
+        0
+      ],
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+      "bytes": 708,
+      "alphaPolicy": "binary",
+      "blendMode": "receiver-mask",
+      "usage": "Existing lamp pixels only. The source already contains painted light; this mask does not provide an off-state."
+    },
+    {
+      "id": "hub.r08.pilot.ground-light-mask",
+      "role": "ground-light-mask",
+      "url": "/hub/r08-preview/ground-light-mask.png",
+      "width": 512,
+      "height": 288,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "pivotLocalPx": [
+        0,
+        0
+      ],
+      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+      "bytes": 724,
+      "alphaPolicy": "binary",
+      "blendMode": "receiver-mask",
+      "usage": "Narrow connected stone receivers at the existing porch and nearby paving. This binary domain is not a ready-made glow; use restrained local intensity without illuminating the adjacent wall."
+    }
+  ],
+  "sourceManifest": "assets/manifests/hub.r08-preview.json",
+  "sourceManifestCanonicalSha256": "daef18e89b99be9c50906b5ba11cf1daa17bb078f36ae81195e915c23a22d9c7",
+  "lightRegions": [
+    {
+      "id": "hub.r08.light.central-entry",
+      "role": "central-entry",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        217,
+        153,
+        24,
+        14
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.34,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.central-windows",
+      "role": "central-windows",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        204,
+        121,
+        59,
+        13
+      ],
+      "tint": "#EAA85E",
+      "suggestedAlpha": 0.23,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.archive-interior",
+      "role": "archive-interior",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        300,
+        170,
+        32,
+        31
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.29,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.cool-left-lab",
+      "role": "cool-left-lab",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        0,
+        128,
+        160,
+        47
+      ],
+      "tint": "#9FBEB3",
+      "suggestedAlpha": 0.12,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.cool-upper-lab",
+      "role": "cool-upper-lab",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        333,
+        103,
+        67,
+        31
+      ],
+      "tint": "#9FBEB3",
+      "suggestedAlpha": 0.1,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.hall",
+      "role": "hall",
+      "maskRole": "window-light-mask",
+      "sourceBounds": [
+        410,
+        176,
+        60,
+        16
+      ],
+      "tint": "#EAA85E",
+      "suggestedAlpha": 0.15,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.archive-lamp",
+      "role": "archive-lamp",
+      "maskRole": "lamp-light-mask",
+      "sourceBounds": [
+        290,
+        182,
+        7,
+        12
+      ],
+      "tint": "#FFD890",
+      "suggestedAlpha": 0.34,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    },
+    {
+      "id": "hub.r08.light.archive-stone",
+      "role": "archive-stone",
+      "maskRole": "ground-light-mask",
+      "sourceBounds": [
+        312,
+        207,
+        29,
+        13
+      ],
+      "tint": "#B98255",
+      "suggestedAlpha": 0.13,
+      "status": "candidate-starting-values",
+      "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
+    }
+  ],
+  "validation": {
+    "sourceHashesVerified": true,
+    "archiveSourcePixelsExact": true,
+    "archiveMaskPixels": 4021,
+    "archiveUnionPixels": 4664,
+    "outsideArchiveMaskChangedPixels": 0,
+    "archiveRoundtripRgbaExact": true,
+    "masterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "exportResampling": "none",
+    "artAcceptanceImplied": false
+  }
+}

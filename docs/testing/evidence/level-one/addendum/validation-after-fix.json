@@ -1,0 +1,78 @@
+{
+  "taskId": "LEVEL-ONE-PLAYABLE-01",
+  "phase": "browser-fix-followup",
+  "date": "2026-11-21",
+  "beforeLocalCommit": "bb6d4ce5d272e8ff0eaee3f6e480ce895b01542d",
+  "remoteParent": "43f6a0cb88c20736671472ba904d21234e8de3dd",
+  "changes": [
+    "Preserve actual Celsius in numeric field accessible label",
+    "Remove redundant start notice",
+    "Reduce desktop desk top margin from 52 to 24 px"
+  ],
+  "checks": [
+    {
+      "name": "repository",
+      "command": "python3 tools/validate_repo.py",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "architecture",
+      "command": "python3 tools/validate_architecture.py",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "brand",
+      "command": "python3 tools/validate_brand.py",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "asset-contract",
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "asset-manifests",
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "fonts",
+      "command": "python3 tools/validate_fonts.py",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "web-typescript",
+      "command": "node apps/web/node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0
+    }
+  ],
+  "independentLifecycle": {
+    "status": "PASS",
+    "evidence": "browser-ci-lifecycle.json"
+  },
+  "reviewedHashes": {
+    "status": "PASS",
+    "count": 11,
+    "mismatches": [],
+    "evidence": "browser-ci-review.json"
+  },
+  "scientificDefinitionsChanged": false,
+  "firstBrowserResult": "FAIL_BOTH_ENGINES_ON_MISSING_UNIT_IN_INPUT_LABEL",
+  "browserAfterFix": "PENDING_AUTOMATIC_CI",
+  "firstDesktopSubmitGeometry": "PENDING_AUTOMATIC_CI",
+  "knownWarnings": [
+    "Three pre-existing candidate-source references remain missing in the asset contract."
+  ],
+  "intermediateRepositoryCheck": {
+    "status": "FAILED_THEN_RESOLVED",
+    "reason": "Reviewer was still writing browser-ci-review.json referenced by the new Markdown report; final validator passed after the report was complete."
+  },
+  "previousEvidencePreserved": true
+}

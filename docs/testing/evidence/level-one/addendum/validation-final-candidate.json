@@ -1,0 +1,93 @@
+{
+  "taskId": "LEVEL-ONE-PLAYABLE-01",
+  "phase": "session-and-presentation-followup",
+  "date": "2026-11-21",
+  "localBase": "c16b8c3c3a4478bb1b77832a6f5be6046072eb5a",
+  "remoteParent": "a4aeb89d257fddbb1ef0be4361c4b46c61d62c85",
+  "checks": [
+    {
+      "name": "repository",
+      "command": "python3 tools/validate_repo.py",
+      "status": "PASS"
+    },
+    {
+      "name": "architecture",
+      "command": "python3 tools/validate_architecture.py",
+      "status": "PASS"
+    },
+    {
+      "name": "brand",
+      "command": "python3 tools/validate_brand.py",
+      "status": "PASS"
+    },
+    {
+      "name": "asset-contract",
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "status": "PASS",
+      "warnings": "Three pre-existing candidate source references remain missing."
+    },
+    {
+      "name": "asset-manifests",
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "status": "PASS"
+    },
+    {
+      "name": "fonts",
+      "command": "python3 tools/validate_fonts.py",
+      "status": "PASS"
+    },
+    {
+      "name": "web-typescript",
+      "command": "node apps/web/node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "status": "PASS"
+    },
+    {
+      "name": "independent-session-code-contract",
+      "status": "PASS",
+      "checks": 10,
+      "evidence": "session-code-review.json"
+    },
+    {
+      "name": "session-recovery",
+      "status": "PASS",
+      "checks": 9,
+      "evidence": "session-code-review.json"
+    },
+    {
+      "name": "independent-level-lifecycle",
+      "status": "PASS",
+      "groups": 10,
+      "evidence": "ui-polish-lifecycle.json"
+    },
+    {
+      "name": "prepared-browser-script-syntax",
+      "status": "PASS",
+      "command": "node --check tools/test_level_one_browser.cjs",
+      "evidence": "ui-polish-review.json"
+    },
+    {
+      "name": "review-source-hashes",
+      "status": "PASS",
+      "checked": 12,
+      "mismatches": [],
+      "evidence": [
+        "session-code-review.json",
+        "ui-polish-review.json"
+      ]
+    }
+  ],
+  "previousRemoteLevel": {
+    "head": "a4aeb89d257fddbb1ef0be4361c4b46c61d62c85",
+    "levelOne": "PASS_BOTH_BROWSERS_ALL_THREE_VIEWPORTS",
+    "wholeBrowserRun": "FAIL_IN_LATER_ADMIN_CURRENT_CODE_SCENARIO",
+    "evidence": "second-pass-review.json"
+  },
+  "changes": [
+    "Exact session error codes distinguish invalid current code from expired or missing session",
+    "Celsius suffix stays on one line",
+    "Question heading may receive native focus scroll; completed result scrolls to its heading"
+  ],
+  "browserForNewChanges": "PENDING_AUTOMATIC_CI",
+  "mainMerged": false,
+  "deployed": false
+}

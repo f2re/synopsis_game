@@ -1,0 +1,72 @@
+{
+  "task": "LEVEL-ONE-PLAYABLE",
+  "reviewer": "/root/level_security_review",
+  "status": "PASS",
+  "checkedAt": "2026-11-21T19:02:25.277Z",
+  "localHead": "c16b8c3c3a4478bb1b77832a6f5be6046072eb5a",
+  "scope": "Narrow follow-up: session expiry codes versus invalid current code; no change to the original security report.",
+  "checks": [
+    {
+      "name": "Actual invalid current code returns invalid_code and keeps both client and server session valid",
+      "status": "PASS"
+    },
+    {
+      "name": "A correct retry after invalid_code uses the same valid session",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual revoked fixture session returns invalid_session and clears the matching client session",
+      "status": "PASS"
+    },
+    {
+      "name": "Both server session error codes expire a matching authenticated request",
+      "status": "PASS"
+    },
+    {
+      "name": "Neither session code on a delayed old request can close the replacement session",
+      "status": "PASS"
+    },
+    {
+      "name": "Replacement during asynchronous JSON decoding is also protected from a stale 401",
+      "status": "PASS"
+    },
+    {
+      "name": "An unknown or missing 401 error code remains an operation error",
+      "status": "PASS"
+    },
+    {
+      "name": "A 403 does not expire the client even if its payload contains a session error code",
+      "status": "PASS"
+    },
+    {
+      "name": "Rejected user and admin logins preserve an already active client session",
+      "status": "PASS"
+    },
+    {
+      "name": "No token fails before transport and does not invent a session-expired event",
+      "status": "PASS"
+    }
+  ],
+  "sha256": {
+    "apps/web/src/api.ts": "38e62759f9d0ac3a8e930fb172b0aa9d1bd6be52646769b6640b030dccd2586d",
+    "apps/server/src/modules/identity/identityService.ts": "9e4c254e40695d6216a571148097a852861dfdc667bdaa43e1acb352aeb0d121",
+    "apps/server/dist/modules/identity/identityService.js": "3f088f45a5ee4d84126e6c5272c6445de496b0dcff7e1244a06645e652abea9b",
+    "apps/server/src/index.ts": "e1ccea748ef0bb9f5c1034148dde0398f6b4acee6487500792858a1f98a0f164",
+    "tools/test_session_recovery.cjs": "fd0f5b3a11d9b7ae89eb3b499bca472faafd751b5ea9179d04e5db623c6804a9",
+    "tools/ui_test_harness.cjs": "59e952993c478d823c2ab43f1fabd06b9e0bdb43d82ea2ece2e45640dd372d7a",
+    "docs/testing/evidence/level-one/addendum/session-code-check.cjs": "e72a04e6c8e1161dd0fec5b7171082bf62c2e5e04f6642419f41230c00489637"
+  },
+  "fixture": {
+    "freshStore": true,
+    "actualIdentityService": true,
+    "actualApiClient": true,
+    "removedAfterRun": true,
+    "existingAccountsRead": false,
+    "credentialsRecorded": false
+  },
+  "limitations": [
+    "No browser, DOM, HTTP listener, or real network.",
+    "Service responses are adapted in process; this is not execution of the HTTP router.",
+    "Remote CI conclusions are reviewed separately by playability_review."
+  ]
+}

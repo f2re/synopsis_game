@@ -1,0 +1,220 @@
+{
+  "taskId": "LEVEL-ONE-PLAYABLE-01",
+  "date": "2026-11-21",
+  "agent": "/root",
+  "branch": "agent/playable-level/level-one-character",
+  "baseCommit": "fac9275af6d6d0f53e4ca6d62035dc7fcf80120d",
+  "sourceVersion": "working-tree; reviewed source hashes are recorded in integration-review.json and security-check.json",
+  "result": "FUNCTIONAL_CHECKS_PASS_BROWSER_ACCEPTANCE_BLOCKED",
+  "checks": [
+    {
+      "name": "architecture",
+      "command": "python3 tools/validate_architecture.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка архитектуры успешно завершена.\nApps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.\n"
+    },
+    {
+      "name": "brand",
+      "command": "python3 tools/validate_brand.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка бренда успешно завершена: 26063: Позывной «Синоптик»\n"
+    },
+    {
+      "name": "asset-contract",
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png\nWARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nWARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nТехнический контракт assets: PASS (24 simple manifests, 29 иных manifests пропущено).\nХудожественное качество этим checker не оценивается.\n"
+    },
+    {
+      "name": "asset-manifests",
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "✓ Проверено манифестов ассетов: 54. Все структуры корректны.\n"
+    },
+    {
+      "name": "fonts",
+      "command": "python3 tools/validate_fonts.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.\n"
+    },
+    {
+      "name": "web-typescript",
+      "command": "node apps/web/node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "web-build",
+      "command": "node node_modules/vite/bin/vite.js build",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "vite v8.3.5 building client environment for production...\ntransforming...\n✓ 148 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                                   0.89 kB │ gzip:   0.47 kB\ndist/assets/SavedAvatarPortrait-CtFpBOV7.css      0.58 kB │ gzip:   0.29 kB\ndist/assets/StationPlotTask-Dc0pBZC7.css          3.96 kB │ gzip:   1.29 kB\ndist/assets/R08PreviewScreen-CRQ8xpt5.css         4.03 kB │ gzip:   1.25 kB\ndist/assets/Codebook-9Nv8Cugp.css                 4.30 kB │ gzip:   1.36 kB\ndist/assets/LevelOneScreen-B_xpw8fh.css           5.88 kB │ gzip:   1.68 kB\ndist/assets/BlitzWorkspace-Cfl9qRZA.css           6.66 kB │ gzip:   1.72 kB\ndist/assets/LibraryScreen-DByScFlz.css            8.82 kB │ gzip:   2.22 kB\ndist/assets/SeamlessShiftFlow-KcGpO-Bm.css       15.66 kB │ gzip:   3.87 kB\ndist/assets/ShiftWorkspace-CNlmtlJj.css          19.37 kB │ gzip:   4.44 kB\ndist/assets/AvatarEditor-SgE145ta.css            28.93 kB │ gzip:   5.18 kB\ndist/assets/index-CHor4b_i.css                   90.08 kB │ gzip:  18.00 kB\ndist/assets/hubPreferences-BxUK70QG.js            0.10 kB │ gzip:   0.11 kB\ndist/assets/ShiftWorkspace-BmlZjptA.js            1.12 kB │ gzip:   0.63 kB\ndist/assets/SavedAvatarPortrait-CQicsDbN.js       1.64 kB │ gzip:   0.88 kB\ndist/assets/shiftLore-bhvtpihq.js                 3.78 kB │ gzip:   1.76 kB\ndist/assets/WorldCanvas-qSbPduEi.js               5.15 kB │ gzip:   2.24 kB\ndist/assets/StationPlotTask-DhDyUQDs.js           5.99 kB │ gzip:   2.55 kB\ndist/assets/R08PreviewScreen-BmjZboB9.js          6.82 kB │ gzip:   2.60 kB\ndist/assets/avatarOptions-Da9zymsp.js             7.46 kB │ gzip:   2.34 kB\ndist/assets/jsx-runtime-Wy9s6hX0.js               8.91 kB │ gzip:   3.39 kB\ndist/assets/BlitzWorkspace-ClhNI_a_.js           14.73 kB │ gzip:   4.93 kB\ndist/assets/LevelOneScreen-ClZwc3ep.js           18.81 kB │ gzip:   5.78 kB\ndist/assets/HubScreen-C8uEfswV.js                18.86 kB │ gzip:   5.48 kB\ndist/assets/Codebook-D8ORVHIO.js                 23.43 kB │ gzip:   7.72 kB\ndist/assets/SeamlessShiftFlow-BpKj6jMU.js        43.54 kB │ gzip:  13.21 kB\ndist/assets/LibraryScreen-C641em3Z.js            47.51 kB │ gzip:  13.59 kB\ndist/assets/AvatarEditor-CvuqCheK.js             47.62 kB │ gzip:  14.63 kB\ndist/assets/index-aI7RF_Cu.js                   339.68 kB │ gzip:  99.71 kB\ndist/assets/src-C1qBSheZ.js                   1,472.17 kB │ gzip: 389.79 kB\n\n✓ built in 1.95s\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+    },
+    {
+      "name": "identity-lifecycle",
+      "command": "node tools/test_identity_ui_lifecycle.cjs",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "PASS: real identity handlers; out-of-order roster results; abort on group change; retry after offline; duplicate login/admin/code/status/reset suppression; confirmed code updates only its owning session; closed forms cannot dismiss new dialogs; admin error remains in modal.\n"
+    },
+    {
+      "name": "session-navigation",
+      "command": "node tools/test_session_navigation.cjs",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "PASS: stale user/admin login cancellation and revocation; immediate local exit; delayed logout vs new login; offline exit; blocked sessionStorage; safe return routes; study/exit audio surfaces.\n"
+    },
+    {
+      "name": "avatar-layout-contract",
+      "command": "node tools/test_modular_avatar_layout.cjs",
+      "status": "FAILED_BEFORE_CHROMIUM",
+      "exitCode": null,
+      "output": "browserType.launch: ENOENT: no such file or directory, mkdtemp '/tmp/playwright-artifacts-aZOWIT'\n    at /workspace/scratch/5cf4b859cf71/synopsis_game/tools/test_modular_avatar_layout.cjs:35:34\n    at Object.<anonymous> (/workspace/scratch/5cf4b859cf71/synopsis_game/tools/test_modular_avatar_layout.cjs:95:3) {\n  log: [],\n  name: 'Error'\n}\n"
+    },
+    {
+      "name": "repository",
+      "command": "python3 tools/validate_repo.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка репозитория успешно завершена.\n"
+    },
+    {
+      "name": "staged-whitespace",
+      "command": "git diff --cached --check",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "additionalExecutedChecks": [
+    {
+      "name": "server-typescript",
+      "status": "PASS",
+      "evidence": "backend-review.md"
+    },
+    {
+      "name": "server-all-modules",
+      "status": "PASS",
+      "passed": 80,
+      "failed": 0,
+      "evidence": "full-server-tests.tap",
+      "temporaryDirectory": "/workspace/scratch/5cf4b859cf71/test-tmp"
+    },
+    {
+      "name": "frontend-level-model-and-navigation",
+      "status": "PASS",
+      "passed": 11,
+      "failed": 0,
+      "sourceFiles": [
+        "apps/web/src/features/levelOne/levelOneModel.test.ts",
+        "apps/web/src/appNavigation.test.ts"
+      ]
+    },
+    {
+      "name": "level-one-in-process-lifecycle",
+      "status": "PASS",
+      "assertionGroups": 10,
+      "evidence": "integration-review.json"
+    },
+    {
+      "name": "character-setup-handlers",
+      "status": "PASS",
+      "assertionGroups": 9,
+      "evidence": "integration-review.json"
+    },
+    {
+      "name": "modular-avatar-and-saved-portrait",
+      "status": "PASS",
+      "assertionGroups": 11,
+      "evidence": "integration-review.json"
+    },
+    {
+      "name": "session-recovery",
+      "status": "PASS",
+      "scenarios": 5,
+      "evidence": "security-review.md"
+    },
+    {
+      "name": "independent-security-negative-scenarios",
+      "status": "PASS",
+      "scenarios": 9,
+      "evidence": "security-check.json"
+    },
+    {
+      "name": "independent-security-targeted-tests",
+      "status": "PASS",
+      "passed": 13,
+      "failed": 0,
+      "evidence": "security-targeted-tests.tap"
+    },
+    {
+      "name": "methodology-primary",
+      "status": "ACCEPT_SELECTED_SIX",
+      "evidence": "methodology-review.md"
+    },
+    {
+      "name": "methodology-independent",
+      "status": "VERIFIED_SELECTED_SIX",
+      "evidence": "methodology-independent-review.md"
+    },
+    {
+      "name": "reviewed-source-and-executed-build-integrity",
+      "status": "PASS",
+      "files": 33,
+      "mismatches": [],
+      "evidence": "integration-review.json"
+    }
+  ],
+  "pendingChecks": [],
+  "environmentAttempts": [
+    {
+      "name": "server-initial-default-temp",
+      "status": "FAILED_ENVIRONMENT",
+      "passed": 51,
+      "failed": 29,
+      "total": 80,
+      "error": "ENOENT /tmp during temporary-directory creation",
+      "resolvedBy": "Reran the same compiled server tests with a writable TMPDIR; 80/80 passed. No product code changed."
+    },
+    {
+      "name": "accidental-old-avatar-layout-runner",
+      "command": "node tools/test_modular_avatar_layout.cjs",
+      "status": "FAILED_BEFORE_CHROMIUM",
+      "error": "ENOENT /tmp/playwright-artifacts-aZOWIT",
+      "browserStarted": false,
+      "countedAsPass": false,
+      "retried": false,
+      "workaroundAttempted": false,
+      "sessionClosed": true
+    }
+  ],
+  "acceptance": {
+    "handlersAndServices": "PASS",
+    "scientificSelection": "PASS_DUAL_INDEPENDENT_REVIEW",
+    "securityForNewEndpoints": "PASS",
+    "browser": "BLOCKED",
+    "screenshotsTaken": 0,
+    "visualArt": "NOT_ACCEPTED",
+    "performance": "NOT_MEASURED",
+    "release": "NOT_APPROVED"
+  },
+  "warnings": [
+    "Asset contract reports three pre-existing missing candidate-source references, in brand.mark.v3, effects.level1 and ui.kit.v3.",
+    "Vite reports chunks larger than 500 kB; no browser performance measurement was made.",
+    "The in-process lifecycle uses the real client and server services but substitutes fetch routing, hook lifecycle, DOM references and audio sinks."
+  ],
+  "publication": {
+    "remoteMainObserved": "cb34087a7a2181faaca8c0f090a0a9b791c5c531",
+    "pushed": false,
+    "pullRequestCreated": false,
+    "merged": false,
+    "deployed": false,
+    "asOf": "Validation completed before publishing a branch or draft pull request; later delivery is recorded separately."
+  }
+}

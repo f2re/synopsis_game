@@ -1,0 +1,119 @@
+[
+  {
+    "name": "young-pine",
+    "cropRectXYWH": [
+      153,
+      3,
+      32,
+      62
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 857
+  },
+  {
+    "name": "upright-shrub",
+    "cropRectXYWH": [
+      11,
+      11,
+      45,
+      48
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1232
+  },
+  {
+    "name": "low-shrub",
+    "cropRectXYWH": [
+      71,
+      19,
+      60,
+      39
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1270
+  },
+  {
+    "name": "birch-sapling",
+    "cropRectXYWH": [
+      16,
+      70,
+      35,
+      60
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 951
+  },
+  {
+    "name": "wall-ivy",
+    "cropRectXYWH": [
+      78,
+      75,
+      46,
+      49
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1060
+  },
+  {
+    "name": "fern-clump",
+    "cropRectXYWH": [
+      142,
+      77,
+      52,
+      49
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1346
+  },
+  {
+    "name": "sedge-stone-edge",
+    "cropRectXYWH": [
+      148,
+      141,
+      43,
+      48
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1422
+  },
+  {
+    "name": "mossy-stone-corner",
+    "cropRectXYWH": [
+      77,
+      143,
+      49,
+      42
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1183
+  },
+  {
+    "name": "flower-bed",
+    "cropRectXYWH": [
+      6,
+      147,
+      56,
+      37
+    ],
+    "alpha_exact": true,
+    "visible_rgb_exact": true,
+    "rgba_exact": true,
+    "opaque_pixels": 1550
+  }
+]

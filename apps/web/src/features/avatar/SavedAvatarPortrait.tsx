@@ -12,6 +12,8 @@ interface SavedAvatarPortraitProps {
 /** No generation, profile conversion, asset loading or animation belongs here. */
 export function isSavedAvatarPortrait(portrait: AvatarPortrait | null | undefined): portrait is AvatarPortrait {
   return Boolean(portrait && portrait.version === 1 && portrait.width === 160 && portrait.height === 160 &&
+    typeof portrait.sourceRevision === 'string' && portrait.sourceRevision.length > 0 && portrait.sourceRevision.length <= 256 &&
+    typeof portrait.appearanceKey === 'string' && /^[a-f0-9]{64}$/.test(portrait.appearanceKey) &&
     typeof portrait.sha256 === 'string' && /^[a-f0-9]{64}$/.test(portrait.sha256) &&
     typeof portrait.pngDataUrl === 'string' && portrait.pngDataUrl.length <= 175_000 &&
     /^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/.test(portrait.pngDataUrl));

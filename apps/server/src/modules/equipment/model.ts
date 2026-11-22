@@ -1,4 +1,5 @@
 import type { BlitzState } from '../shift/blitzRules.js';
+import type { LevelOneState } from '../shift/levelOneRules.js';
 import type { AvatarPortrait, AvatarProfile } from '../identity/model.js';
 
 export interface EffectCharges { reference: number; retry: number }
@@ -75,6 +76,8 @@ export interface TrainingShift {
   reward?: TrainingReward;
   /** Server-owned clock, outfit and accepted answers for the timed practice mode. */
   blitz?: BlitzState;
+  /** Separate first-level completion and review; never awards ordinary-shift progress. */
+  levelOne?: LevelOneState;
 }
 
 export interface TrainingState {

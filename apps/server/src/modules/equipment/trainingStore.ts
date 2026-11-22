@@ -5,6 +5,7 @@ import type { TrainingState } from './model.js';
 import { validateAvatar } from '../identity/model.js';
 import { avatarAppearanceKey, validateAvatarPortrait } from '../identity/avatarPortrait.js';
 import { BLITZ_DURATION_MS, BLITZ_MAX_START_KEYS, BLITZ_MODE, BLITZ_REQUEST_ID, BLITZ_RULES_VERSION, BLITZ_TASK_IDS } from '../shift/blitzRules.js';
+import { LEVEL_ONE_MAX_START_KEYS, LEVEL_ONE_MODE, LEVEL_ONE_PACK, LEVEL_ONE_REQUEST_ID, LEVEL_ONE_RULES_VERSION, LEVEL_ONE_TASK_IDS } from '../shift/levelOneRules.js';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -55,6 +56,8 @@ export class TrainingStore {
     }
     const blitzStartKeys = new Set<string>();
     const activeBlitzUsers = new Set<string>();
+    const levelStartKeys = new Set<string>();
+    const activeLevelUsers = new Set<string>();
     for (const [id, shift] of Object.entries(state.shifts)) {
       if (!isRecord(shift) || shift.id !== id || !isNonemptyString(shift.userId) || !Object.hasOwn(state.users, shift.userId)
         || !Array.isArray(shift.taskIds) || shift.taskIds.length < 1 || !shift.taskIds.every(isNonemptyString)
@@ -112,6 +115,44 @@ export class TrainingStore {
           activeBlitzUsers.add(shift.userId);
         }
       } else if (shift.blitz !== undefined) throw new Error('Блиц сохранён с некорректным режимом');
+      if (shift.mode === LEVEL_ONE_MODE) {
+        const level = shift.levelOne;
+        if (!isRecord(level) || level.rulesVersion !== LEVEL_ONE_RULES_VERSION
+          || shift.contentPack !== LEVEL_ONE_PACK || shift.contentStatus !== 'approved'
+          || JSON.stringify(shift.taskIds) !== JSON.stringify(LEVEL_ONE_TASK_IDS)
+          || !Array.isArray(level.requestIds) || level.requestIds.length < 1 || level.requestIds.length > LEVEL_ONE_MAX_START_KEYS
+          || new Set(level.requestIds).size !== level.requestIds.length
+          || !level.requestIds.every((requestId) => typeof requestId === 'string' && LEVEL_ONE_REQUEST_ID.test(requestId))
+          || !Array.isArray(level.review) || level.review.length !== shift.currentIndex
+          || level.review.filter((entry) => entry?.correct === true).length !== shift.correct
+          || level.review.filter((entry) => entry?.correct === true && entry?.assisted === false).length !== shift.unassistedCorrect
+          || !level.review.every((entry, index) => isRecord(entry) && entry.instanceId === `${id}:${index + 1}`
+            && entry.definitionId === shift.taskIds[index] && typeof entry.question === 'string' && typeof entry.correct === 'boolean'
+            && typeof entry.assisted === 'boolean' && entry.assisted === shift.assistedTaskIds.includes(entry.instanceId)
+            && typeof entry.answer === 'number' && Number.isFinite(entry.answer)
+            && (typeof entry.correctAnswer === 'string' || typeof entry.correctAnswer === 'number' && Number.isFinite(entry.correctAnswer))
+            && typeof entry.explanation === 'string' && Array.isArray(entry.sources)
+            && entry.sources.every((source: unknown) => isRecord(source) && typeof source.sourceId === 'string' && typeof source.title === 'string' && typeof source.locator === 'string'))
+          || shift.equipment.enabled || shift.equipment.charges.reference !== 0 || shift.equipment.charges.retry !== 0
+          || shift.equipment.remaining.reference !== 0 || shift.equipment.remaining.retry !== 0
+          || shift.pendingRetry !== undefined || shift.reward !== undefined
+          || shift.assistedTaskIds.some((instanceId) => !Object.hasOwn(shift.references, instanceId))
+          || Object.keys(shift.references).some((instanceId) => !shift.assistedTaskIds.includes(instanceId))
+          || shift.assistedTaskIds.some((instanceId) => !shift.taskIds.slice(0, Math.min(shift.currentIndex + 1, shift.taskIds.length)).some((_, index) => instanceId === `${id}:${index + 1}`))
+          || (shift.completedAt === undefined ? shift.currentIndex === shift.taskIds.length
+            : !isTimestamp(shift.completedAt) || Date.parse(shift.completedAt) < Date.parse(shift.createdAt) || shift.currentIndex !== shift.taskIds.length)) {
+          throw new Error('Повреждено сохранённое прохождение первого уровня; сброс и начисление наград запрещены');
+        }
+        for (const requestId of level.requestIds) {
+          const key = `${shift.userId}:${requestId}`;
+          if (levelStartKeys.has(key)) throw new Error('Один запрос начала уровня привязан к разным прохождениям');
+          levelStartKeys.add(key);
+        }
+        if (!shift.completedAt) {
+          if (activeLevelUsers.has(shift.userId)) throw new Error('У пользователя сохранено несколько активных первых уровней');
+          activeLevelUsers.add(shift.userId);
+        }
+      } else if (shift.levelOne !== undefined) throw new Error('Первый уровень сохранён с некорректным режимом');
       const historicalAvatar = shift.equipment.avatarSnapshot ?? shift.blitz?.avatarSnapshot;
       for (const entry of Object.values(shift.responses)) {
         const cached = (entry.response as Record<string, unknown>).equipment;

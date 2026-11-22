@@ -1,0 +1,187 @@
+{
+  "taskId": "GAMEPLAY-ENTRY-01",
+  "date": "2026-11-21",
+  "baseRevision": "9ea0921ba476d9a2d4e19e81f60e35aca83cd13e",
+  "branch": "agent/gameplay-entry/first-session",
+  "scope": "Прямой вход в обычную смену; необязательная записка; проект первой сессии и атмосферы; подготовка существующих браузерных сценариев.",
+  "status": "STATIC_VALIDATION_PASS_BROWSER_ACCEPTANCE_BLOCKED",
+  "checks": [
+    {
+      "name": "repository",
+      "command": "python3 tools/validate_repo.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка репозитория успешно завершена.\n"
+    },
+    {
+      "name": "architecture",
+      "command": "python3 tools/validate_architecture.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка архитектуры успешно завершена.\nApps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.\n"
+    },
+    {
+      "name": "brand",
+      "command": "python3 tools/validate_brand.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка бренда успешно завершена: 26063: Позывной «Синоптик»\n"
+    },
+    {
+      "name": "asset-contract",
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png\nWARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nWARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nТехнический контракт assets: PASS (24 simple manifests, 29 иных manifests пропущено).\nХудожественное качество этим checker не оценивается.\n"
+    },
+    {
+      "name": "asset-manifests",
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "✓ Проверено манифестов ассетов: 54. Все структуры корректны.\n"
+    },
+    {
+      "name": "fonts",
+      "command": "python3 tools/validate_fonts.py",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.\n"
+    },
+    {
+      "name": "entry-invariants",
+      "command": "node docs/testing/evidence/first-session/entry_flow_invariants.cjs",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "{\n  \"baseRevision\": \"9ea0921ba476d9a2d4e19e81f60e35aca83cd13e\",\n  \"branch\": \"agent/gameplay-entry/first-session\",\n  \"kind\": \"static-typescript-contracts\",\n  \"status\": \"PASS\",\n  \"checks\": [\n    {\n      \"label\": \"one stable workspace is rendered immediately, without the handover gate or a changing key\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"label\": \"the optional note is a closed native disclosure outside the answer card\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"label\": \"startup effects, local input state and API calls are unchanged from the baseline\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"label\": \"answer, retry, help, advance and feedback handlers are byte-equivalent source expressions\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"label\": \"identity, routing, server selection, grading and the ten-task pack were not changed\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"label\": \"the note contains no unsourced weather report and keeps a 44px native target\",\n      \"status\": \"PASS\"\n    }\n  ],\n  \"limitations\": [\n    \"No browser execution or screenshots.\",\n    \"Preservation of mounted DOM input, keyboard, scrolling and responsive appearance still requires the adapted browser scenarios.\"\n  ]\n}\n"
+    },
+    {
+      "name": "web-typescript",
+      "command": "node apps/web/node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "web-build",
+      "command": "node node_modules/vite/bin/vite.js build",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": "vite v8.3.5 building client environment for production...\ntransforming...\n✓ 145 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                                   0.89 kB │ gzip:   0.47 kB\ndist/assets/SavedAvatarPortrait-CtFpBOV7.css      0.58 kB │ gzip:   0.29 kB\ndist/assets/R08PreviewScreen-CRQ8xpt5.css         4.03 kB │ gzip:   1.25 kB\ndist/assets/Codebook-9Nv8Cugp.css                 4.30 kB │ gzip:   1.36 kB\ndist/assets/BlitzWorkspace-Cfl9qRZA.css           6.66 kB │ gzip:   1.72 kB\ndist/assets/LibraryScreen-DByScFlz.css            8.82 kB │ gzip:   2.22 kB\ndist/assets/SeamlessShiftFlow-KcGpO-Bm.css       15.66 kB │ gzip:   3.87 kB\ndist/assets/ShiftWorkspace-CwyvCF-n.css          23.34 kB │ gzip:   5.35 kB\ndist/assets/AvatarEditor-DO-8Ltyk.css            28.70 kB │ gzip:   5.14 kB\ndist/assets/index-CHor4b_i.css                   90.08 kB │ gzip:  18.00 kB\ndist/assets/hubPreferences-gIBp_w9V.js            0.10 kB │ gzip:   0.11 kB\ndist/assets/SavedAvatarPortrait-vDaZEMoU.js       1.47 kB │ gzip:   0.85 kB\ndist/assets/WorldCanvas-NdvxJO5M.js               5.15 kB │ gzip:   2.24 kB\ndist/assets/R08PreviewScreen-O2Bgvu2W.js          6.82 kB │ gzip:   2.60 kB\ndist/assets/ShiftWorkspace-C_YOqSA7.js            7.05 kB │ gzip:   2.97 kB\ndist/assets/avatarOptions-Da9zymsp.js             7.46 kB │ gzip:   2.34 kB\ndist/assets/jsx-runtime-Wy9s6hX0.js               8.91 kB │ gzip:   3.39 kB\ndist/assets/BlitzWorkspace-BwR-cpZ5.js           14.69 kB │ gzip:   4.92 kB\ndist/assets/HubScreen-CHNVRK8Y.js                17.67 kB │ gzip:   5.23 kB\ndist/assets/Codebook-DE_tdX2-.js                 23.43 kB │ gzip:   7.72 kB\ndist/assets/AvatarEditor-BKkzwIyZ.js             46.62 kB │ gzip:  14.35 kB\ndist/assets/SeamlessShiftFlow-W5qZjyFP.js        47.18 kB │ gzip:  14.50 kB\ndist/assets/LibraryScreen-DaU0B6o_.js            47.51 kB │ gzip:  13.59 kB\ndist/assets/index-K_RaiNaq.js                   336.97 kB │ gzip:  99.04 kB\ndist/assets/src-By1VnWGL.js                   1,472.17 kB │ gzip: 389.79 kB\n\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n✓ built in 1.89s\n"
+    },
+    {
+      "name": "controls-runner-syntax",
+      "command": "node --check tools/test_game_controls_browser.cjs",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "portrait-runner-syntax",
+      "command": "node --check tools/test_saved_portrait_browser.cjs",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "screens-runner-syntax",
+      "command": "node --check tools/test_station_screens.cjs",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "whitespace",
+      "command": "git diff --cached --check",
+      "status": "PASS",
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "previousRuns": [
+    {
+      "command": "python3 tools/validate_repo.py",
+      "exitCode": 1,
+      "output": "Проверка репозитория завершилась с ошибками:\n - broken local link: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md -> ../testing/evidence/first-session/independent-review.md\n - broken local link: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md -> ../testing/evidence/first-session/validation.json\n - documentation language: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md:4: 'GAMEPLAY'; используйте «игровая механика» или «игровой процесс»\n - documentation language: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md:35: 'контент'; используйте «учебное содержание» или «материал»\n - documentation language: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md:221: 'Gameplay'; используйте «игровая механика» или «игровой процесс»\n - documentation language: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md:223: 'контент'; используйте «учебное содержание» или «материал»\n - documentation language: docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md:224: 'Контент'; используйте «учебное содержание» или «материал»\n - documentation language: docs/testing/evidence/first-session/gameplay-core-review.md:5: 'контента'; используйте «учебное содержание» или «материал»\n - documentation language: docs/testing/evidence/first-session/gameplay-core-review.md:81: 'контента'; используйте «учебное содержание» или «материал»\n - documentation language: docs/testing/evidence/first-session/gameplay-core-review.md:111: 'геймплею'; используйте «игровая механика» или «игровой процесс»\n - documentation language: docs/testing/evidence/first-session/gameplay-core-review.md:134: 'лидерборд'; используйте «таблица лидеров»\n - documentation language: docs/testing/evidence/first-session/gameplay-design-review.md:1: 'GAMEPLAY'; используйте «игровая механика» или «игровой процесс»\n - documentation language: docs/testing/evidence/first-session/gameplay-design-review.md:48: 'ревью'; используйте «проверка» или «приёмка»\n",
+      "resolution": "Исправлены русские термины; отчёты и итоговый JSON создавались одновременно. Проверка повторяется после завершения набора файлов."
+    },
+    {
+      "command": "git diff --cached --check",
+      "exitCode": 2,
+      "output": "Выявлены завершающие пробелы Markdown и дополнительные пустые строки в новых отчётах.",
+      "resolution": "Жёсткие переносы заменены пустыми строками; завершающие пробелы и пустые строки удалены. Повторная проверка охватывает весь индекс."
+    }
+  ],
+  "independentReviews": [
+    {
+      "file": "independent-review.md",
+      "scope": "Четыре продуктовых файла, запуск/возобновление и снимок экипировки",
+      "status": "STATIC_PASS_BROWSER_BLOCKED"
+    },
+    {
+      "file": "gameplay-design-review.md",
+      "scope": "Разделение реализованного и проектируемого игрового цикла",
+      "status": "DESIGN_SCOPE_ACCEPTED_WITH_MINOR_NOTES"
+    },
+    {
+      "file": "atmosphere-design-review.md",
+      "scope": "Атмосферные связи, приоритет существующих ресурсов и сохранённый портрет",
+      "status": "DESIGN_SCOPE_ACCEPTED_WITH_MINOR_NOTES"
+    }
+  ],
+  "browser": {
+    "status": "BLOCKED",
+    "executedThisTurn": false,
+    "reason": "Ранее выявленное ограничение доступа к браузерному предпросмотру; обход не выполнялся.",
+    "stillRequired": [
+      "Реальное сохранение DOM-ввода при открытии/закрытии записки",
+      "Клавиатура и указатель",
+      "1366×768, 390×844, 844×390",
+      "Фокус, прокрутка, перекрытия и переносы",
+      "Сетевая ошибка и возобновление в настоящем браузере"
+    ]
+  },
+  "unchanged": [
+    "API и авторизация",
+    "Серверные правила смены и оценивания",
+    "Состав 10 заданий обычной смены",
+    "Награды и снимок экипировки",
+    "Явный запуск таймера блица"
+  ],
+  "notImplemented": [
+    "Отдельная вводная смена на 6–8 минут",
+    "Связанный сценарий с единым снимком наблюдений",
+    "Предметные реакции в React-комнате",
+    "Адресное повторение и серверная рекомендация следующего шага",
+    "Исправление отдельно выявленных вопросов авторизации/восстановления"
+  ],
+  "spritecook": {
+    "newGenerations": 0,
+    "newCreditsSpent": 0
+  },
+  "publication": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false
+  },
+  "reviewNotesResolved": [
+    "Явно уточнены отсутствие наград и зачёта обычной смены в блице.",
+    "Последовательность учебных действий обозначена примером композиции, требующим методической приёмки.",
+    "Уточнена защита от повторного воспроизведения предметных событий.",
+    "Уточнены отсутствие выбора ночного фона по солнечной фазе и необходимость сохранить ночной дождь.",
+    "Генерация тетради обусловлена недостаточностью существующего оформления после подключения события."
+  ],
+  "sha256": {
+    "apps/web/src/features/shift/SeamlessShiftFlow.tsx": "e19af8beb48cf5c83d140e33719a1bedb5befc2a309a8acbc19cfb76665edd7a",
+    "apps/web/src/features/shift/ShiftWorkspace.tsx": "47ee1d0039ad62b2cae15ca5a90d9687fa39f4e6892f940f4b7a6f64f5e5c5c1",
+    "apps/web/src/features/shift/shiftLore.ts": "f900451117918c0c0d7df44910bdddb01024b97db210883410915a4c685cc892",
+    "apps/web/src/features/shift/ShiftWorkspace.css": "3bf9e50269521242a2ed6281ec725ea3873800f3b15b381de5ad2d4adc124709",
+    "tools/test_game_controls_browser.cjs": "150f70ddd66212458c1dbd6e165f87f349b5af02242f07cace09aab2329e5688",
+    "tools/test_saved_portrait_browser.cjs": "49d4dcabf08d84100f159fd2dab077d07e68be2a3a368bbee10fbe130395b5fb",
+    "tools/test_station_screens.cjs": "b7053b226732207c163c66871657cf4e936d5f57d1706a55bac55920dc52968c",
+    "docs/gameplay/FIRST_SESSION_AND_STATION_LOOP.md": "4200da3fbff0caf9438934a9c0168c7f146169dba7a4788b2dcbbf92ee09bd09",
+    "docs/testing/evidence/first-session/independent-review.md": "88d3400d7e7d47158b88c42551f63ba5a167c64b5a2b8d4cc54077dcceba13f8",
+    "docs/testing/evidence/first-session/gameplay-design-review.md": "82f517dd35b30813cd2cf21f3b19c65b1cb06530e3ce22695a4d072bd014831a",
+    "docs/testing/evidence/first-session/atmosphere-design-review.md": "ed34a415fc238d5be17ccf6a1728b7022455c862d211bcc740761f926938ff88"
+  }
+}

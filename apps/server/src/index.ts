@@ -11,6 +11,7 @@ import {
 } from './modules/identity/identityService.js';
 import type { UserStatus } from './modules/identity/model.js';
 import { ShiftError, ShiftService } from './modules/shift/shiftService.js';
+import { requireLevelOnePlayer } from './modules/shift/levelOneAccess.js';
 import { EquipmentService } from './modules/equipment/equipmentService.js';
 import { EquipmentError } from './modules/equipment/model.js';
 import { rejectUnverifiedClientProgressionWrite } from './modules/progression/progressionMutationPolicy.js';
@@ -194,6 +195,32 @@ const server = createServer(async (request, response) => {
       const user = identity.me(bearer(request));
       const body = await readJson(request);
       sendJson(response, 200, await equipment.setLoadout(user.id, body.badgeId, user.avatar));
+      return;
+    }
+
+    if (request.method === 'GET' && path === '/api/level-one') {
+      const user = requireLevelOnePlayer(identity.me(bearer(request)));
+      sendJson(response, 200, shifts.levelOneLobby(user.id));
+      return;
+    }
+    if (request.method === 'POST' && path === '/api/level-one') {
+      const user = requireLevelOnePlayer(identity.me(bearer(request)));
+      const body = await readJson(request);
+      sendJson(response, 201, await shifts.startLevelOne(user.id, user.avatar, body.requestId, user.avatarPortrait));
+      return;
+    }
+    const levelOneMatch = path.match(/^\/api\/level-one\/([^/]+)(?:\/(answer|reference))?$/);
+    if (levelOneMatch && (request.method === 'GET' && !levelOneMatch[2] || request.method === 'POST' && levelOneMatch[2])) {
+      const user = requireLevelOnePlayer(identity.me(bearer(request)));
+      const runId = decodeURIComponent(levelOneMatch[1]);
+      if (request.method === 'GET') sendJson(response, 200, shifts.getLevelOne(user.id, runId));
+      else {
+        const body = await readJson(request);
+        const instanceId = typeof body.instanceId === 'string' ? body.instanceId : '';
+        sendJson(response, 200, levelOneMatch[2] === 'reference'
+          ? await shifts.openLevelOneReference(user.id, runId, instanceId)
+          : await shifts.submitLevelOneAnswer(user.id, runId, instanceId, body.answer));
+      }
       return;
     }
 

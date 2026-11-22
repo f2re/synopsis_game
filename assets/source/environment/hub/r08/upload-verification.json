@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-21",
+  "imports": [
+    {
+      "asset_id": "263903e3-72cd-46b8-9ebd-3d9b859c5901",
+      "file": "archive-facade.png",
+      "same_rgba": true,
+      "same_bytes": false,
+      "local_sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa",
+      "spritecook_sha256": "9f0a4d0ff40ab34b5762a400e5b82270e55eb9d87554a5decbf3b1c81b45933c",
+      "remote_pixel_size": [
+        72,
+        65
+      ]
+    },
+    {
+      "asset_id": "95c5f156-18d1-46ca-af6f-ce13914b0d37",
+      "file": "archive-porch-steps.png",
+      "same_rgba": true,
+      "same_bytes": false,
+      "local_sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51",
+      "spritecook_sha256": "4ebc9c42b22925219af97f805e9428e9b8dce0ab6df7c63d42c0a14b068153b0",
+      "remote_pixel_size": [
+        69,
+        10
+      ]
+    },
+    {
+      "asset_id": "43aa4334-7cae-4b3c-a255-cd92586dd88e",
+      "file": "archive-entry-lamp.png",
+      "same_rgba": true,
+      "same_bytes": false,
+      "local_sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e",
+      "spritecook_sha256": "ded46341135df21b54afcc66852a73504196114dab0906702ffdd27c97514e17",
+      "remote_pixel_size": [
+        7,
+        12
+      ]
+    }
+  ]
+}

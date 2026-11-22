@@ -1,0 +1,732 @@
+{
+  "schema": "synopsis-r08-pilot-masks/v1",
+  "status": "candidate-local-contours-reviewed-runtime-review-pending",
+  "author": "/root/asset_inventory",
+  "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+  "sourceSha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+  "sourceCanvas": [
+    512,
+    288
+  ],
+  "maskRasterizer": "Pillow ImageDraw.polygon; inclusive integer source-pixel vertices",
+  "pixelPolicy": {
+    "resampling": "none",
+    "foregroundRgb": "source exact",
+    "maskRgb": "white at alpha 255; zero at alpha 0",
+    "alpha": "binary",
+    "hiddenGeometry": "not reconstructed"
+  },
+  "rebuildCommand": "python tools/assets/build_hub_r08.py --prepare-pilot-sources",
+  "lightDirectionReferences": [
+    {
+      "source": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.png",
+      "sha256": "df8396871adbea38ed7db482c23453db0875a444a03402f86511c86d5e621da8",
+      "usage": "color and hierarchy reference only; geometry follows original master"
+    }
+  ],
+  "layers": [
+    {
+      "id": "hub.r08.pilot.foreground-occluder",
+      "source": "assets/source/environment/hub/r08/pilot/foreground-occluder.png",
+      "kind": "source-cutout",
+      "polygons": [
+        [
+          [
+            330,
+            223
+          ],
+          [
+            332,
+            223
+          ],
+          [
+            332,
+            224
+          ],
+          [
+            334,
+            224
+          ],
+          [
+            334,
+            226
+          ],
+          [
+            336,
+            226
+          ],
+          [
+            336,
+            227
+          ],
+          [
+            337,
+            226
+          ],
+          [
+            338,
+            226
+          ],
+          [
+            338,
+            229
+          ],
+          [
+            340,
+            230
+          ],
+          [
+            340,
+            234
+          ],
+          [
+            342,
+            234
+          ],
+          [
+            342,
+            236
+          ],
+          [
+            354,
+            236
+          ],
+          [
+            354,
+            228
+          ],
+          [
+            358,
+            227
+          ],
+          [
+            360,
+            227
+          ],
+          [
+            360,
+            264
+          ],
+          [
+            354,
+            264
+          ],
+          [
+            354,
+            267
+          ],
+          [
+            335,
+            267
+          ],
+          [
+            335,
+            264
+          ],
+          [
+            316,
+            264
+          ],
+          [
+            314,
+            262
+          ],
+          [
+            314,
+            247
+          ],
+          [
+            314,
+            244
+          ],
+          [
+            316,
+            244
+          ],
+          [
+            316,
+            239
+          ],
+          [
+            317,
+            237
+          ],
+          [
+            317,
+            233
+          ],
+          [
+            319,
+            233
+          ],
+          [
+            319,
+            231
+          ],
+          [
+            321,
+            231
+          ],
+          [
+            321,
+            233
+          ],
+          [
+            322,
+            233
+          ],
+          [
+            322,
+            229
+          ],
+          [
+            324,
+            229
+          ],
+          [
+            324,
+            227
+          ],
+          [
+            327,
+            227
+          ],
+          [
+            327,
+            225
+          ],
+          [
+            329,
+            225
+          ],
+          [
+            329,
+            224
+          ],
+          [
+            330,
+            224
+          ]
+        ]
+      ],
+      "cropRectXYWH": [
+        314,
+        223,
+        47,
+        45
+      ],
+      "originalSceneXY": [
+        314,
+        223
+      ],
+      "anchorScenePx": [
+        334,
+        245
+      ],
+      "pivotLocalPx": [
+        20,
+        22
+      ],
+      "depthSourceY": 245,
+      "usage": "Visible low shrub and adjacent front railing/wall slice; source-positioned only. The support line is the front garden/fence edge, not the bottom of the image.",
+      "limitations": [
+        "Partial visible geometry; no hidden plant base or free placement.",
+        "No wind displacement or layer parallax is authorised by this extraction."
+      ]
+    },
+    {
+      "id": "hub.r08.pilot.window-light-mask",
+      "source": "assets/source/environment/hub/r08/pilot/window-light-mask.png",
+      "kind": "binary-receiver-mask",
+      "polygons": [
+        [
+          [
+            205,
+            122
+          ],
+          [
+            210,
+            122
+          ],
+          [
+            210,
+            132
+          ],
+          [
+            205,
+            132
+          ]
+        ],
+        [
+          [
+            213,
+            122
+          ],
+          [
+            219,
+            122
+          ],
+          [
+            219,
+            132
+          ],
+          [
+            213,
+            132
+          ]
+        ],
+        [
+          [
+            229,
+            122
+          ],
+          [
+            233,
+            122
+          ],
+          [
+            233,
+            132
+          ],
+          [
+            229,
+            132
+          ]
+        ],
+        [
+          [
+            236,
+            122
+          ],
+          [
+            241,
+            122
+          ],
+          [
+            241,
+            132
+          ],
+          [
+            236,
+            132
+          ]
+        ],
+        [
+          [
+            250,
+            122
+          ],
+          [
+            254,
+            122
+          ],
+          [
+            254,
+            132
+          ],
+          [
+            250,
+            132
+          ]
+        ],
+        [
+          [
+            257,
+            122
+          ],
+          [
+            261,
+            122
+          ],
+          [
+            261,
+            132
+          ],
+          [
+            257,
+            132
+          ]
+        ],
+        [
+          [
+            218,
+            154
+          ],
+          [
+            226,
+            154
+          ],
+          [
+            226,
+            165
+          ],
+          [
+            218,
+            165
+          ]
+        ],
+        [
+          [
+            232,
+            154
+          ],
+          [
+            239,
+            154
+          ],
+          [
+            239,
+            165
+          ],
+          [
+            232,
+            165
+          ]
+        ],
+        [
+          [
+            303,
+            172
+          ],
+          [
+            307,
+            172
+          ],
+          [
+            307,
+            174
+          ],
+          [
+            303,
+            174
+          ]
+        ],
+        [
+          [
+            314,
+            184
+          ],
+          [
+            319,
+            184
+          ],
+          [
+            319,
+            186
+          ],
+          [
+            314,
+            186
+          ]
+        ],
+        [
+          [
+            326,
+            197
+          ],
+          [
+            329,
+            197
+          ],
+          [
+            329,
+            199
+          ],
+          [
+            326,
+            199
+          ]
+        ],
+        [
+          [
+            412,
+            178
+          ],
+          [
+            417,
+            178
+          ],
+          [
+            417,
+            188
+          ],
+          [
+            412,
+            188
+          ]
+        ],
+        [
+          [
+            463,
+            178
+          ],
+          [
+            467,
+            178
+          ],
+          [
+            467,
+            188
+          ],
+          [
+            463,
+            188
+          ]
+        ],
+        [
+          [
+            26,
+            135
+          ],
+          [
+            39,
+            135
+          ],
+          [
+            39,
+            150
+          ],
+          [
+            26,
+            150
+          ]
+        ],
+        [
+          [
+            56,
+            136
+          ],
+          [
+            69,
+            136
+          ],
+          [
+            69,
+            150
+          ],
+          [
+            56,
+            150
+          ]
+        ],
+        [
+          [
+            340,
+            115
+          ],
+          [
+            343,
+            115
+          ],
+          [
+            343,
+            125
+          ],
+          [
+            340,
+            125
+          ]
+        ],
+        [
+          [
+            376,
+            112
+          ],
+          [
+            382,
+            112
+          ],
+          [
+            382,
+            128
+          ],
+          [
+            376,
+            128
+          ]
+        ]
+      ],
+      "regionNames": [
+        "main-upper-left-glass",
+        "main-upper-left-right-glass",
+        "main-upper-middle-left-glass",
+        "main-upper-middle-right-glass",
+        "main-upper-right-left-glass",
+        "main-upper-right-right-glass",
+        "main-entry-left-glass",
+        "main-entry-right-glass",
+        "archive-upper-paper-left",
+        "archive-middle-paper",
+        "archive-lower-paper",
+        "hall-left-glass",
+        "hall-right-glass",
+        "left-lab-inner-glass-2",
+        "left-lab-inner-glass-3",
+        "upper-lab-inner-glass-1",
+        "upper-lab-inner-glass-3"
+      ],
+      "usage": "Small glass panes and separately identified archive paper receivers. Excludes the large facade, globe and neighboring notice wall. Local tint/opacity receiver; not a physical emission pass."
+    },
+    {
+      "id": "hub.r08.pilot.lamp-light-mask",
+      "source": "assets/source/environment/hub/r08/pilot/lamp-light-mask.png",
+      "kind": "binary-receiver-mask",
+      "polygons": [
+        [
+          [
+            292,
+            182
+          ],
+          [
+            294,
+            182
+          ],
+          [
+            294,
+            183
+          ],
+          [
+            295,
+            183
+          ],
+          [
+            295,
+            185
+          ],
+          [
+            296,
+            186
+          ],
+          [
+            296,
+            189
+          ],
+          [
+            295,
+            190
+          ],
+          [
+            294,
+            191
+          ],
+          [
+            294,
+            193
+          ],
+          [
+            292,
+            193
+          ],
+          [
+            292,
+            191
+          ],
+          [
+            291,
+            190
+          ],
+          [
+            290,
+            190
+          ],
+          [
+            290,
+            187
+          ],
+          [
+            291,
+            185
+          ],
+          [
+            291,
+            183
+          ],
+          [
+            292,
+            183
+          ]
+        ]
+      ],
+      "regionNames": [
+        "archive-existing-entry-lamp"
+      ],
+      "usage": "Existing lamp pixels only. The source already contains painted light; this mask does not provide an off-state."
+    },
+    {
+      "id": "hub.r08.pilot.ground-light-mask",
+      "source": "assets/source/environment/hub/r08/pilot/ground-light-mask.png",
+      "kind": "binary-receiver-mask",
+      "polygons": [
+        [
+          [
+            312,
+            207
+          ],
+          [
+            331,
+            207
+          ],
+          [
+            340,
+            216
+          ],
+          [
+            334,
+            219
+          ],
+          [
+            320,
+            216
+          ],
+          [
+            312,
+            212
+          ]
+        ]
+      ],
+      "regionNames": [
+        "archive-threshold-to-paving"
+      ],
+      "usage": "Narrow stone receiver connected to the original archive threshold. The separate lamp-to-stone patch was removed after independent review because it touched vegetation. Binary domain only; not a ready-made glow."
+    }
+  ],
+  "review": {
+    "technical": "source-contract-checks-passed",
+    "art": "local-contours-accepted-for-pilot",
+    "independentReviewer": "/root/render_audit",
+    "reviewArtifact": "docs/art/reviews/2026-11-21-hub-r08-pilot-review.md",
+    "decisions": [
+      "SOURCE_POSITIONED_FOREGROUND_ACCEPTED_FOR_PILOT",
+      "LOCAL_RECEIVER_DOMAINS_ACCEPTED_FOR_PILOT"
+    ],
+    "productionReady": false,
+    "limitations": [
+      "Approval covers source contours and receiver locality only.",
+      "Final lighting, character occlusion/depth, browser performance and production integration remain unapproved."
+    ]
+  },
+  "lightRuntimeContract": {
+    "masks": "White binary local receiver domains; source geometry remains original.",
+    "colors": "Start with Art Director suggested ramps, tune against unchanged materials.",
+    "intensityOrder": [
+      "central-entry",
+      "central-windows",
+      "archive-interior",
+      "hall"
+    ],
+    "coolLabs": "Muted gray-green; separate from warm architectural light.",
+    "artAcceptance": "pending independent source-mask and assembled-preview review"
+  },
+  "reviewChanges": [
+    {
+      "reviewer": "/root/render_audit",
+      "status": "applied-and-independently-reviewed",
+      "changes": [
+        "Removed left-lab-inner-glass-1 and upper-lab-inner-glass-2 because the masks touched foliage.",
+        "Tightened the two remaining upper-lab panes to unoccluded glass, avoiding mullions.",
+        "Removed archive-lamp-local-stone and narrowed the threshold receiver to the independently proposed polygon.",
+        "Final upper-lab pane restricted to x340..343, y115..125 after the independent reviewer identified the dark mullion at x339."
+      ]
+    }
+  ]
+}

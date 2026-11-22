@@ -24,6 +24,7 @@ import { worldAudio } from '@synopsis/world-engine';
 import { OPTIONS } from '../avatar/avatarOptions';
 import { isSavedAvatarPortrait, SavedAvatarPortrait } from '../avatar/SavedAvatarPortrait';
 import { WorkroomBackdrop, taskWorkroom } from './WorkroomBackdrop';
+import { SHIFT_HANDOVER_NOTE } from './shiftLore';
 import './ShiftWorkspace.css';
 
 function normalizedNumber(value: string): number { return Number(value.trim().replace(',', '.')); }
@@ -354,6 +355,7 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
             </span>
           </div>
           <h1>{task.question}</h1>
+          {progress.current === 1 && !feedback && !retryOffered && <p className="shift-entry-cue">Дайте ответ и нажмите «Проверить». Затем разберите объяснение.</p>}
 
           {task.payload?.encoded && <div className="kn01-code" aria-label={`Кодовая группа ${task.payload.encoded}`}>{task.payload.encoded}</div>}
           {task.payload?.group && <div className="kn01-group">Структура: <code>{task.payload.group}</code></div>}
@@ -426,6 +428,13 @@ export function ShiftWorkspace({ onExit, onAnswerEvaluated, onProgressChanged }:
             </section>
           ) : !retryOffered && <button className="shift-primary" type="button" onClick={() => void submit()} disabled={!canSubmit}>{submitting ? 'Проверяем…' : attempt === 2 ? 'Проверить повторную попытку' : 'Проверить'}</button>}
         </article>
+        <details className="shift-desk-note">
+          <summary>Записка Полины</summary>
+          <blockquote>
+            <p>{SHIFT_HANDOVER_NOTE.text}</p>
+            <cite>{SHIFT_HANDOVER_NOTE.author}</cite>
+          </blockquote>
+        </details>
       </section>
     </main>
   );

@@ -1,0 +1,835 @@
+{
+  "id": "hub.r08-candidates",
+  "schema": "synopsis-spritecook-candidates/v1",
+  "date": "2026-11-21",
+  "status": "candidate",
+  "art_status": "pending",
+  "runtime_enabled": false,
+  "source_revision": "cb34087a7a2181faaca8c0f090a0a9b791c5c531",
+  "project_id": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "collection_id": "e5f39008-fe78-41f6-b1a9-7a756d57cb45",
+  "coordinate_system": {
+    "candidate": [
+      512,
+      288
+    ],
+    "current_game_landscape": [
+      960,
+      540
+    ],
+    "current_game_portrait": [
+      480,
+      780
+    ],
+    "production_grid_approved": false
+  },
+  "assets": [
+    {
+      "id": "hub.r08.master-01",
+      "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "label": "26063 · R08 · цельная площадь · мастер 01",
+      "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+      "format": "PNG",
+      "pixelSize": [
+        512,
+        288
+      ],
+      "mode": "RGBA",
+      "bytes": 331901,
+      "sha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+      "sha12": "d8510e537afd",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/master-01.source.jpg",
+        "format": "JPEG",
+        "pixelSize": [
+          1376,
+          768
+        ],
+        "mode": "RGB",
+        "bytes": 867023,
+        "sha256": "a8a1ab1fcbebfb8758c98f6031b3828aea0eba9c71f22cf77d710c0a1641ad4d",
+        "sha12": "a8a1ab1fcbeb"
+      },
+      "operation_id": "6cc8ccfd-b609-40cf-b3c7-dfef01e8771f",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "provider_image_size": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "request_changes",
+      "approved_usage": "composition-reference-only",
+      "art_review": "geometry_accepted_for_pilot; final_atmosphere_pending"
+    },
+    {
+      "id": "hub.r08.archive-ground-01",
+      "asset_id": "6a1fc7d5-3644-421a-8fe8-566fc4e240f7",
+      "label": "26063 · R08 · подложка под архив · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.png",
+      "format": "PNG",
+      "pixelSize": [
+        512,
+        288
+      ],
+      "mode": "RGBA",
+      "bytes": 334814,
+      "sha256": "a9fdffa28cad118da8347133b5527f0c3eea2666dbb8b0bfcfdb056d89a2c035",
+      "sha12": "a9fdffa28cad",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/archive-ground-01.source.png",
+        "format": "PNG",
+        "pixelSize": [
+          2048,
+          1152
+        ],
+        "mode": "RGB",
+        "bytes": 3652432,
+        "sha256": "c93e04198666ef50396b7abc2f867241ab969c7cb49a03fe5501ae00e8b8565e",
+        "sha12": "c93e04198666"
+      },
+      "operation_id": "62d13560-c3b2-421d-98ee-1dbb174113fa",
+      "model": "gpt-image-2",
+      "requested_resolution": "1K",
+      "provider_image_size": "2K",
+      "credits_used": 9,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "request_changes",
+      "approved_usage": "local-background-plate-candidate-only",
+      "art_review": "accepted_as_local_underlay_for_scene_locked_pilot",
+      "pixel_exact_preservation_outside_edit": false
+    },
+    {
+      "id": "hub.r08.candidate.archive.facade-visible",
+      "asset_id": "263903e3-72cd-46b8-9ebd-3d9b859c5901",
+      "label": "26063 · R08 · архив — фасад · слой сцены",
+      "source": "assets/source/environment/hub/r08/candidates/layers/archive-facade.png",
+      "format": "PNG",
+      "pixelSize": [
+        72,
+        65
+      ],
+      "mode": "RGBA",
+      "bytes": 10032,
+      "sha256": "b355d6bf9ab566dfe6594e092720018d6bf0554c4ff1a4bf96d6f85bcc48c3aa",
+      "sha12": "b355d6bf9ab5",
+      "model": "uploaded-file",
+      "credits_used": 0,
+      "derived_from_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "source_extraction_spec": "assets/source/environment/hub/r08/candidates/extraction-spec.json",
+      "scene_anchor": [
+        322,
+        205
+      ],
+      "anchor_role": "visible lower facade support, meeting porch layer; not a complete building footprint",
+      "limitations": [
+        "Only visible architecture is extracted; hidden rear and side geometry are not reconstructed.",
+        "Front facade includes existing books and globe; they remain baked into this candidate.",
+        "Original painted light and foliage overlaps remain part of the source appearance.",
+        "Polygon follows the visible architectural edge; neighboring ivy and other occluders are retained in the original scene rather than reconstructed."
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "scene-positioned-candidate-cutout-only",
+      "originalSceneXY": [
+        290,
+        141
+      ],
+      "cropRectXYWH": [
+        290,
+        141,
+        72,
+        65
+      ],
+      "pivotLocalPx": [
+        32,
+        64
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "technical_review": "exact_source_extraction_verified",
+      "art_review": "accepted_for_scene_positioned_pilot"
+    },
+    {
+      "id": "hub.r08.candidate.archive.porch-steps-visible",
+      "asset_id": "95c5f156-18d1-46ca-af6f-ce13914b0d37",
+      "label": "26063 · R08 · архив — порог и ступени · слой сцены",
+      "source": "assets/source/environment/hub/r08/candidates/layers/archive-porch-steps.png",
+      "format": "PNG",
+      "pixelSize": [
+        69,
+        10
+      ],
+      "mode": "RGBA",
+      "bytes": 1572,
+      "sha256": "c2779d193a73b52fab057d8ba4dcc8b28d18320e291c825d3f83374a6dfdab51",
+      "sha12": "c2779d193a73",
+      "model": "uploaded-file",
+      "credits_used": 0,
+      "derived_from_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "source_extraction_spec": "assets/source/environment/hub/r08/candidates/extraction-spec.json",
+      "scene_anchor": [
+        322,
+        215
+      ],
+      "anchor_role": "lower visible step edge; archive threshold remains at scene [322,205]",
+      "limitations": [
+        "Steps are visible scene surface, not a free-standing staircase sprite.",
+        "The adjacent paving continues outside this mask and is intentionally not invented."
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "scene-positioned-candidate-cutout-only",
+      "originalSceneXY": [
+        292,
+        206
+      ],
+      "cropRectXYWH": [
+        292,
+        206,
+        69,
+        10
+      ],
+      "pivotLocalPx": [
+        30,
+        9
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "technical_review": "exact_source_extraction_verified",
+      "art_review": "accepted_for_scene_positioned_pilot"
+    },
+    {
+      "id": "hub.r08.candidate.archive.entry-lamp",
+      "asset_id": "43aa4334-7cae-4b3c-a255-cd92586dd88e",
+      "label": "26063 · R08 · архив — входной фонарь · слой сцены",
+      "source": "assets/source/environment/hub/r08/candidates/layers/archive-entry-lamp.png",
+      "format": "PNG",
+      "pixelSize": [
+        7,
+        12
+      ],
+      "mode": "RGBA",
+      "bytes": 330,
+      "sha256": "bb785af4fc0fd202de1e53c34f5e26caa396cfc8587cdced45752faf1612172e",
+      "sha12": "bb785af4fc0f",
+      "model": "uploaded-file",
+      "credits_used": 0,
+      "derived_from_asset_id": "323d3288-8cdf-41f7-af52-812d51dea517",
+      "source_extraction_spec": "assets/source/environment/hub/r08/candidates/extraction-spec.json",
+      "scene_anchor": [
+        293,
+        193
+      ],
+      "anchor_role": "wall-mounted local detail anchor; not a ground pivot",
+      "limitations": [
+        "Small context cutout: existing warm lamp pixels and nearby painted illumination are inseparable at this source size.",
+        "This is not an additive emission mask, an off-state or a separately relightable lamp."
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "scene-positioned-candidate-cutout-only",
+      "originalSceneXY": [
+        290,
+        182
+      ],
+      "cropRectXYWH": [
+        290,
+        182,
+        7,
+        12
+      ],
+      "pivotLocalPx": [
+        3,
+        11
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "technical_review": "exact_source_extraction_verified",
+      "art_review": "accepted_for_scene_positioned_pilot"
+    },
+    {
+      "id": "hub.r08.day-material-02",
+      "asset_id": "c1f7ff3b-f86b-4bd8-b713-a1f71d27c665",
+      "label": "26063 · R08 · дневные материалы · этюд 02",
+      "source": "assets/source/environment/hub/r08/candidates/provider/day-material-02.png",
+      "operation_id": "8153d39d-eed9-4fb9-8f28-b8806192b436",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "provider_image_size": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "comparison-study-only",
+      "art_review": "comparison_study_only",
+      "alpha_cutoff": 130,
+      "format": "PNG",
+      "pixelSize": [
+        512,
+        288
+      ],
+      "mode": "RGBA",
+      "bytes": 326614,
+      "sha256": "a65bb3c9c25fb8519d2989c7a84f2c7afea4fce2659ab97c13ad46f9f0180d95",
+      "sha12": "a65bb3c9c25f",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/day-material-02.source.jpg",
+        "format": "JPEG",
+        "pixelSize": [
+          1376,
+          768
+        ],
+        "mode": "RGB",
+        "bytes": 811938,
+        "sha256": "f2b0bbb1a95046d9a18412b63e878a63b59f77c84fb31fa13c51ea70948acfa7",
+        "sha12": "f2b0bbb1a950"
+      }
+    },
+    {
+      "id": "hub.r08.dusk-lighting-study-01",
+      "asset_id": "126639d1-a367-4399-b2ad-527b6895f2bd",
+      "label": "26063 · R08 · вечерний свет · этюд 01",
+      "source": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.png",
+      "operation_id": "365d9a91-7ae9-40a8-9918-fc521dcc378d",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "provider_image_size": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "lighting-direction-reference-only",
+      "art_review": "lighting_direction_accepted_for_pilot",
+      "alpha_cutoff": 130,
+      "format": "PNG",
+      "pixelSize": [
+        512,
+        288
+      ],
+      "mode": "RGBA",
+      "bytes": 315620,
+      "sha256": "df8396871adbea38ed7db482c23453db0875a444a03402f86511c86d5e621da8",
+      "sha12": "df8396871adb",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/dusk-lighting-study-01.source.jpg",
+        "format": "JPEG",
+        "pixelSize": [
+          1376,
+          768
+        ],
+        "mode": "RGB",
+        "bytes": 807453,
+        "sha256": "1bc0bca56250033243375f36cfdabf90760b4fa10df13a6cc30345f5d978f6c7",
+        "sha12": "1bc0bca56250"
+      }
+    },
+    {
+      "id": "hub.r08.vegetation-sheet-01",
+      "asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "label": "26063 · R08 · растительность и посадка · лист 01",
+      "source": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.png",
+      "operation_id": "2e4f66f3-8344-40d2-8a3b-0c5a3d535ba5",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "provider_image_size": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "request_changes",
+      "approved_usage": "five-plant-trials-plus-four-composite-context-pieces",
+      "art_review": "selected_vegetation_trials_only_scale_and_pixel_quality_pending",
+      "alpha_cutoff": 130,
+      "format": "PNG",
+      "pixelSize": [
+        203,
+        200
+      ],
+      "mode": "RGBA",
+      "bytes": 72394,
+      "sha256": "fc94f1e3c5370c571c85bb5a02ddcb92e5cdb569b6d0591e5dde630ffc29016b",
+      "sha12": "fc94f1e3c537",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/vegetation-sheet-01.source.jpg",
+        "format": "JPEG",
+        "pixelSize": [
+          1024,
+          1024
+        ],
+        "mode": "RGB",
+        "bytes": 448546,
+        "sha256": "0f9ad34397f07afc5abeffcb905afe7f58210ea59079d1f66c776566e69fc67e",
+        "sha12": "0f9ad34397f0"
+      }
+    },
+    {
+      "id": "hub.r08.terrain-connections-sheet-01",
+      "asset_id": "64c75a38-e8ca-4880-8172-b4f2bc25e8a8",
+      "label": "26063 · R08 · стыки земли и основания · лист 01",
+      "source": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.png",
+      "operation_id": "eeeb5726-4dcf-41f5-876d-54e2513b8a5a",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "provider_image_size": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "rejected_for_scene_placement",
+      "approved_usage": "rejected-for-scene-comparison-only",
+      "art_review": "request_changes_camera_scale_block_bases",
+      "alpha_cutoff": 130,
+      "superseded_for_direction_by": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "format": "PNG",
+      "pixelSize": [
+        240,
+        240
+      ],
+      "mode": "RGBA",
+      "bytes": 98097,
+      "sha256": "364b99c27723651d26d034c8049a5e7991c126069edbf3c7128c3091d00cfb22",
+      "sha12": "364b99c27723",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/terrain-connections-sheet-01.source.jpg",
+        "format": "JPEG",
+        "pixelSize": [
+          1024,
+          1024
+        ],
+        "mode": "RGB",
+        "bytes": 446339,
+        "sha256": "0e9ce0402be09adfa9964959f7813a211e392314f4f3e7c7230ff6b4f2475940",
+        "sha12": "0e9ce0402be0"
+      }
+    },
+    {
+      "id": "hub.r08.organic-ground-seams-02",
+      "asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "label": "26063 · R08 · органичные стыки земли · лист 02",
+      "source": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.png",
+      "operation_id": "3a96cf1c-b71f-48ed-a484-06ea5507e940",
+      "model": "gemini-nano-banana-2.1",
+      "requested_resolution": "1K",
+      "provider_image_size": "1K",
+      "credits_used": 12,
+      "pixel_flag": true,
+      "runtime_enabled": false,
+      "production_review": "request_changes",
+      "approved_usage": "cell-8-trial-source; cell-9-foliage-reference-only; other-cells-not-universal-ground-decals",
+      "art_review": "only_cell_8_selected_for_local_trial",
+      "alpha_cutoff": 130,
+      "format": "PNG",
+      "pixelSize": [
+        200,
+        200
+      ],
+      "mode": "RGBA",
+      "bytes": 52925,
+      "sha256": "3afc2a12b898de3a86fda6ddb4bb9d3985ea807411c1cf10b4ff1fe6ec88bb32",
+      "sha12": "3afc2a12b898",
+      "raw_source": {
+        "source": "assets/source/environment/hub/r08/candidates/provider/organic-ground-seams-02.source.jpg",
+        "format": "JPEG",
+        "pixelSize": [
+          1024,
+          1024
+        ],
+        "mode": "RGB",
+        "bytes": 339252,
+        "sha256": "a83741b89fd6c63d09fb1c8db6e63ac7473d27152314001234f8679976e6e66b",
+        "sha12": "a83741b89fd6"
+      }
+    },
+    {
+      "id": "hub.r08.vegetation.young-pine",
+      "asset_id": "9c69323d-c321-4384-96d1-71faf78c1b33",
+      "label": "26063 · R08 · Молодая сосна · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/young-pine.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        153,
+        3,
+        32,
+        62
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "candidate-plant-awaiting-scale-and-material-review",
+      "art_review": "plant_trial_scale_pending",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        32,
+        62
+      ],
+      "mode": "RGBA",
+      "bytes": 4975,
+      "sha256": "a76eb1e6a78e7eeabf6176790c6971734a4de968163ab403fa8e630068820048",
+      "sha12": "a76eb1e6a78e",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.upright-shrub",
+      "asset_id": "065ac3c8-74ee-4ebb-b9eb-c4422a6be956",
+      "label": "26063 · R08 · Вертикальный куст · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/upright-shrub.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        11,
+        11,
+        45,
+        48
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "candidate-plant-awaiting-scale-and-material-review",
+      "art_review": "plant_trial_scale_pending",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        45,
+        48
+      ],
+      "mode": "RGBA",
+      "bytes": 5885,
+      "sha256": "389bac38067d8685ac0df920c1ee51ebc88c01873bd25211ed66e848a3b5fc2b",
+      "sha12": "389bac38067d",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.low-shrub",
+      "asset_id": "e00770b8-8887-471c-a2b4-bbbb68a8380d",
+      "label": "26063 · R08 · Низкий куст · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/low-shrub.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        71,
+        19,
+        60,
+        39
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "candidate-plant-awaiting-scale-and-material-review",
+      "art_review": "plant_trial_scale_pending",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        60,
+        39
+      ],
+      "mode": "RGBA",
+      "bytes": 6301,
+      "sha256": "62a8a46dc3f2a6a37adf17a648d25431cdd8e58ddb550d0d3029b25def166719",
+      "sha12": "62a8a46dc3f2",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.birch-sapling",
+      "asset_id": "2556bd3e-2d9b-4ca4-81b6-2c1c4bb1aefe",
+      "label": "26063 · R08 · Берёза · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/birch-sapling.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        16,
+        70,
+        35,
+        60
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "candidate-plant-awaiting-scale-and-material-review",
+      "art_review": "plant_trial_scale_pending",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        35,
+        60
+      ],
+      "mode": "RGBA",
+      "bytes": 5703,
+      "sha256": "9e80683c6db8f10768cecac15f40bb6290627a7337dbe402ca1f6313d1a1d3ef",
+      "sha12": "9e80683c6db8",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.wall-ivy",
+      "asset_id": "181fc6ae-ae04-490f-9c1a-c7aa3ba24ce2",
+      "label": "26063 · R08 · Плющ на стенке · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/wall-ivy.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        78,
+        75,
+        46,
+        49
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "composite-context-candidate-only",
+      "art_review": "composite_context_piece_not_standalone_plant",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        46,
+        49
+      ],
+      "mode": "RGBA",
+      "bytes": 5713,
+      "sha256": "605bd271c67a312357758ba851396caff7a6ab90fef98f76343d3001c7acfb67",
+      "sha12": "605bd271c67a",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.fern-clump",
+      "asset_id": "f8f36544-721c-4927-a5e8-faf849f795c6",
+      "label": "26063 · R08 · Папоротник · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/fern-clump.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        142,
+        77,
+        52,
+        49
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "candidate-plant-awaiting-scale-and-material-review",
+      "art_review": "plant_trial_scale_pending",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        52,
+        49
+      ],
+      "mode": "RGBA",
+      "bytes": 6917,
+      "sha256": "7273a3b62901b83adc9e3ddbdd6218f9b54fa91f1ad57f5a692c01628c68cd7c",
+      "sha12": "7273a3b62901",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.sedge-stone-edge",
+      "asset_id": "c6979f61-0fee-45ef-9708-b553a7febd36",
+      "label": "26063 · R08 · Осока у камня · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/sedge-stone-edge.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        148,
+        141,
+        43,
+        48
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "composite-context-candidate-only",
+      "art_review": "composite_context_piece_not_standalone_plant",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        43,
+        48
+      ],
+      "mode": "RGBA",
+      "bytes": 5522,
+      "sha256": "565b33cdb24d1ab7ded82fee34b5f910ab26afe3a4ce0949b1fcdbf7e9588c5f",
+      "sha12": "565b33cdb24d",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.mossy-stone-corner",
+      "asset_id": "276e368b-080e-4894-b391-a5e5fcee8f0d",
+      "label": "26063 · R08 · Каменный угол с мхом · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/mossy-stone-corner.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        77,
+        143,
+        49,
+        42
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "composite-context-candidate-only",
+      "art_review": "composite_context_piece_not_standalone_plant",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        49,
+        42
+      ],
+      "mode": "RGBA",
+      "bytes": 5547,
+      "sha256": "85683e89d20538d6fa07abacf5bff9e7f37ef9eb8c524415f7d322f6e8da32f9",
+      "sha12": "85683e89d205",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.vegetation.flower-bed",
+      "asset_id": "0e4977ee-c752-4a13-a9e5-0f74f461d4d0",
+      "label": "26063 · R08 · Цветник · кандидат 01",
+      "source": "assets/source/environment/hub/r08/candidates/slices/vegetation/flower-bed.png",
+      "model": "spritecook-auto-slice",
+      "credits_used": 0,
+      "derived_from_asset_id": "542f1858-3528-45b9-8036-fd80e4ef96db",
+      "cropRectXYWH": [
+        6,
+        147,
+        56,
+        37
+      ],
+      "sourcePixelsExact": true,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "composite-context-candidate-only",
+      "art_review": "composite_context_piece_not_standalone_plant",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved",
+      "format": "PNG",
+      "pixelSize": [
+        56,
+        37
+      ],
+      "mode": "RGBA",
+      "bytes": 6322,
+      "sha256": "1b45cd8250209938fe2c85071bcd5748b5a7af8c1426c972b9026926f4c74b5e",
+      "sha12": "1b45cd825020",
+      "technical_review": "alpha_and_visible_rgb_exact; final_pixel_grid_and_material_quality_pending"
+    },
+    {
+      "id": "hub.r08.ground.loose-leaves-and-pebbles",
+      "asset_id": "9f045602-903c-4601-85ab-0b6e26575996",
+      "label": "26063 · R08 · земля, камни и листья · проба стыка",
+      "source": "assets/source/environment/hub/r08/candidates/slices/ground/loose-leaves-and-pebbles.png",
+      "format": "PNG",
+      "pixelSize": [
+        53,
+        29
+      ],
+      "mode": "RGBA",
+      "bytes": 2851,
+      "sha256": "492b983cf4e22e2653f61b996fab09e0d8e58f3aded84f0e494ce61ba8fe0f67",
+      "sha12": "492b983cf4e2",
+      "model": "uploaded-file",
+      "credits_used": 0,
+      "derived_from_asset_id": "c9878572-1edc-47f6-8b5a-e49ea89916fa",
+      "cropRectXYWH": [
+        74,
+        146,
+        53,
+        29
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sourcePixelsExact": true,
+      "extraction": "All 840 visible pixels preserved. Transparent RGB zeroed; no rescaling.",
+      "runtime_enabled": false,
+      "production_review": "pending",
+      "approved_usage": "local-ground-seam-trial-only",
+      "art_review": "selected_for_local_trial_by_art_director",
+      "logical_scale_status": "unapproved",
+      "pivot_status": "unapproved"
+    }
+  ],
+  "review_artifact": "docs/art/reviews/2026-11-21-hub-r08-candidates-review.md",
+  "technical_review": "assets/source/environment/hub/r08/review-technical.json",
+  "generation_log": "assets/source/environment/hub/r08/generation-log.json",
+  "remaining_work": [
+    "Prepare accepted production grid and scale with existing 48px NPC",
+    "Improve local material colors and controllable lighting to R01 richness",
+    "Verify archive layer contours and local plate compositing",
+    "Add neutral ground, front occluders, window/emission and contact masks",
+    "Integrate a separately reviewed Archive pilot before remaining facade production"
+  ],
+  "spritecook_saved_asset_count": 5,
+  "budget": {
+    "initial_credits": 22,
+    "generation_credits_spent": 21,
+    "final_credits": 1,
+    "paid_generations": 2,
+    "imported_derived_assets": 3
+  },
+  "upload_verification": "assets/source/environment/hub/r08/upload-verification.json",
+  "candidate_preview_route": "/art/r08",
+  "candidate_preview_manifest": "assets/manifests/hub.r08-preview.json",
+  "runtime_enabled_note": "Default station remains unchanged; the isolated candidate preview uses only explicitly exported source layers.",
+  "phase2_review": "docs/art/reviews/2026-11-21-hub-r08-pilot-review.md"
+}
