@@ -1,0 +1,937 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "/root/station_runtime_acceptance",
+  "role": "Independent web-performance and integration reviewer; production authored by root and other agents",
+  "status": "CANDIDATE_RUNTIME_PASS",
+  "date": "2026-11-22",
+  "candidate": {
+    "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+    "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+    "localEquivalent": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+    "githubMergeCheckout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+    "branch": "agent/station-art/r09-living-terrain",
+    "pullRequest": "https://github.com/f2re/synopsis_game/pull/135",
+    "selection": "Explicit ?stationArt=r09; canonical productionReady remained false in this measured tree",
+    "canonicalManifestSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd",
+    "sourceSpecSha256": "f21754e0d3a2f69b167f8837a22ebf9d2ffa62c182feb8c8db2dff3b7ff21f4c"
+  },
+  "ci": {
+    "trigger": "Existing automatic pull_request workflow; no manual dispatch or rerun",
+    "browserRunId": 45014358726,
+    "browserRunUrl": "https://github.com/f2re/synopsis_game/actions/runs/45014358726",
+    "browserJobs": "All four completed SUCCESS",
+    "buildRunId": 45014358733,
+    "buildJobId": 137183360672,
+    "buildAndAstra": "SUCCESS",
+    "assetRunId": 45014358716,
+    "documentationRunId": 45014358719,
+    "visualSmokeRunId": 45014358729,
+    "otherRequiredRuns": "SUCCESS"
+  },
+  "reportProvenance": [
+    {
+      "artifactId": 14751309900,
+      "runId": 45014358726,
+      "jobId": 137183360706,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "artifactBytes": 86200246,
+      "artifactSha256": "c5aaf92488207a0d12ad2b56028442814d4847e6f6a78f46b9ff36f12a5534fc",
+      "extractedScreenshotHashesChecked": 10,
+      "report": "delivery/ci-135-frame-clock/chromium/browser-report.json",
+      "reportSha256": "6b44bbfdab88528b78c7d6c2842e8f592f8137b6590a32163a37efad65fa0c92",
+      "cases": 1124,
+      "screenshotsInReport": 362,
+      "browser": "151.0.7922.34",
+      "errors": [],
+      "status": "PASS"
+    },
+    {
+      "artifactId": 14751810118,
+      "runId": 45014358726,
+      "jobId": 137183360876,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "artifactBytes": 93689118,
+      "artifactSha256": "8f57b72d7402b02bd3a1c2a48498df4635b4522e7ade0570b009594952db9609",
+      "extractedScreenshotHashesChecked": 10,
+      "report": "delivery/ci-135-frame-clock/firefox/browser-report.json",
+      "reportSha256": "e8aeb458d60f85d10dd3522e0585e21c2544d1789327eeb3d105689fa4087ec0",
+      "cases": 1113,
+      "screenshotsInReport": 359,
+      "browser": "153.0",
+      "errors": [],
+      "status": "PASS"
+    },
+    {
+      "artifactId": 14751358123,
+      "runId": 45014358726,
+      "jobId": 137183360915,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "artifactBytes": 29366061,
+      "artifactSha256": "3bf8f0cffdb7e601bd46fc572b33fd4290e6b24a05582b23b9e56e26fd24842d",
+      "extractedScreenshotHashesChecked": 86,
+      "report": "delivery/ci-135-frame-clock/environment-chromium/browser-report.json",
+      "reportSha256": "90f6f38c71ea2bf5447f7980fa52a1705a2fcbc47e2a812ac1e78d7b18d628f5",
+      "cases": 66,
+      "screenshotsInReport": 86,
+      "browser": "151.0.7922.34",
+      "errors": [],
+      "status": "PASS"
+    },
+    {
+      "artifactId": 14751406611,
+      "runId": 45014358726,
+      "jobId": 137183360912,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "artifactBytes": 23149375,
+      "artifactSha256": "289f0e839de3da75c3cf990b50b8d52a2f1a9a706c6353118d760d34bf655522",
+      "extractedScreenshotHashesChecked": 84,
+      "report": "delivery/ci-135-frame-clock/environment-firefox/browser-report.json",
+      "reportSha256": "2c1380a9f941dae4e7ac5a328e3a2ad39850cf7f2e939c215685f9323f62c767",
+      "cases": 61,
+      "screenshotsInReport": 84,
+      "browser": "153.0",
+      "errors": [],
+      "status": "PASS"
+    }
+  ],
+  "sourceResources": {
+    "sourceCanvas": [
+      512,
+      288
+    ],
+    "pngCount": 13,
+    "pngBytes": 345506,
+    "sourceRgbaEstimateBytes": 2714248,
+    "pngBudgetBytes": 2097152,
+    "sourceRgbaBudgetBytes": 8388608,
+    "movingFoliagePlacements": 5,
+    "foliageBands": 16,
+    "maxFoliageBands": 40,
+    "maxSourcePixelDisplacement": 1,
+    "rootDisplacement": 0,
+    "movingCloudIslands": 1,
+    "geometryMasks": 3,
+    "displayObjectsInRealLayerHandler": 46,
+    "verticalLightReceiverNativeRows": 9,
+    "sourceAcceptanceReference": "docs/testing/evidence/station-r09/runtime-main136-integration.json"
+  },
+  "browserRuntime": [
+    {
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "phases": [
+        "library",
+        "station",
+        "station-r09",
+        "r08",
+        "public",
+        "portraits",
+        "game",
+        "level-one",
+        "rewards",
+        "admin",
+        "audio"
+      ],
+      "viewports": [
+        {
+          "width": 1366,
+          "motionMaximaChangedPixels": {
+            "foliage": 369,
+            "clouds": 495,
+            "water": 144,
+            "fixed": 0
+          },
+          "sampleCount": 3,
+          "clockManipulated": false,
+          "clearIntervals": {
+            "samples": 94,
+            "p50Ms": 43.09999999997672,
+            "p95Ms": 45.899999999965075
+          },
+          "rafIntervals": {
+            "samples": 93,
+            "p50Ms": 49.899999999999636,
+            "p95Ms": 50.100000000000364
+          },
+          "activeTextureHandles": 40,
+          "observedTextureUploadRgbaEstimateBytes": 3181776,
+          "reducedMotionCanvasIdentical": true,
+          "lowPower": {
+            "frameLimit": 30,
+            "clockElapsedMs": 3033.2000000000007,
+            "paintedFrames": 15,
+            "lowElapsedMs": 2898.2999999999884,
+            "defaultFramebufferClears": 58
+          }
+        },
+        {
+          "width": 390,
+          "motionMaximaChangedPixels": {
+            "foliage": 378,
+            "clouds": 0,
+            "water": 0,
+            "fixed": 0
+          },
+          "sampleCount": 12,
+          "clockManipulated": false,
+          "clearIntervals": {
+            "samples": 235,
+            "p50Ms": 16.600000000034925,
+            "p95Ms": 17.5
+          },
+          "rafIntervals": {
+            "samples": 241,
+            "p50Ms": 16.69999999999709,
+            "p95Ms": 16.700000000000728
+          },
+          "activeTextureHandles": 40,
+          "observedTextureUploadRgbaEstimateBytes": 3181776,
+          "reducedMotionCanvasIdentical": true,
+          "lowPower": {
+            "frameLimit": 30,
+            "clockElapsedMs": 3033.2999999999993,
+            "paintedFrames": 15,
+            "lowElapsedMs": 2965.3000000000466,
+            "defaultFramebufferClears": 89
+          }
+        },
+        {
+          "width": 844,
+          "motionMaximaChangedPixels": {
+            "foliage": 12,
+            "clouds": 0,
+            "water": 0,
+            "fixed": 0
+          },
+          "sampleCount": 2,
+          "clockManipulated": false,
+          "clearIntervals": {
+            "samples": 242,
+            "p50Ms": 16.600000000034925,
+            "p95Ms": 17.5
+          },
+          "rafIntervals": {
+            "samples": 241,
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 16.700000000000728
+          },
+          "activeTextureHandles": 40,
+          "observedTextureUploadRgbaEstimateBytes": 3181776,
+          "reducedMotionCanvasIdentical": true,
+          "lowPower": {
+            "frameLimit": 30,
+            "clockElapsedMs": 3016.5,
+            "paintedFrames": 15,
+            "lowElapsedMs": 2906.7000000000116,
+            "defaultFramebufferClears": 87
+          }
+        }
+      ],
+      "repeatedMountCycles": 3,
+      "retiredTextureHandlesAfterEachUnmount": [
+        0,
+        0,
+        0
+      ],
+      "nativeContextRestore": {
+        "status": "PASS",
+        "nativeExtension": true,
+        "heldClockMs": 0,
+        "identicalCanvasPixels": true,
+        "restoredEntranceAndFocus": true
+      },
+      "r08CoexistenceCases": [
+        "r08-webgl-recovery",
+        "r08-station-1366",
+        "r08-station-390",
+        "r08-station-844"
+      ],
+      "runtimeRunnerSha256": "d18afeed1e7ed27d9bd2ff0b2a285d7f1faf4115eec42edcd0466bed6c4b5fa4"
+    },
+    {
+      "engine": "firefox",
+      "browser": "153.0",
+      "phases": [
+        "library",
+        "station",
+        "station-r09",
+        "r08",
+        "public",
+        "portraits",
+        "game",
+        "level-one",
+        "rewards",
+        "admin",
+        "audio"
+      ],
+      "viewports": [
+        {
+          "width": 1366,
+          "motionMaximaChangedPixels": {
+            "foliage": 369,
+            "clouds": 522,
+            "water": 99,
+            "fixed": 0
+          },
+          "sampleCount": 7,
+          "clockManipulated": false,
+          "clearIntervals": {
+            "samples": 232,
+            "p50Ms": 17,
+            "p95Ms": 25
+          },
+          "rafIntervals": {
+            "samples": 232,
+            "p50Ms": 17.079999999999927,
+            "p95Ms": 17.73999999999978
+          },
+          "activeTextureHandles": 40,
+          "observedTextureUploadRgbaEstimateBytes": 3181776,
+          "reducedMotionCanvasIdentical": true,
+          "lowPower": {
+            "frameLimit": 30,
+            "clockElapsedMs": 3033.4399999999987,
+            "paintedFrames": 15,
+            "lowElapsedMs": 2952,
+            "defaultFramebufferClears": 88
+          }
+        },
+        {
+          "width": 390,
+          "motionMaximaChangedPixels": {
+            "foliage": 378,
+            "clouds": 0,
+            "water": 0,
+            "fixed": 0
+          },
+          "sampleCount": 13,
+          "clockManipulated": false,
+          "clearIntervals": {
+            "samples": 236,
+            "p50Ms": 17,
+            "p95Ms": 18
+          },
+          "rafIntervals": {
+            "samples": 236,
+            "p50Ms": 17.080000000001746,
+            "p95Ms": 17.100000000002183
+          },
+          "activeTextureHandles": 40,
+          "observedTextureUploadRgbaEstimateBytes": 3181776,
+          "reducedMotionCanvasIdentical": true,
+          "lowPower": {
+            "frameLimit": 30,
+            "clockElapsedMs": 3000.019999999997,
+            "paintedFrames": 15,
+            "lowElapsedMs": 2938,
+            "defaultFramebufferClears": 87
+          }
+        },
+        {
+          "width": 844,
+          "motionMaximaChangedPixels": {
+            "foliage": 12,
+            "clouds": 0,
+            "water": 0,
+            "fixed": 0
+          },
+          "sampleCount": 2,
+          "clockManipulated": false,
+          "clearIntervals": {
+            "samples": 236,
+            "p50Ms": 17,
+            "p95Ms": 18
+          },
+          "rafIntervals": {
+            "samples": 236,
+            "p50Ms": 17.079999999999927,
+            "p95Ms": 17.100000000000364
+          },
+          "activeTextureHandles": 40,
+          "observedTextureUploadRgbaEstimateBytes": 3181776,
+          "reducedMotionCanvasIdentical": true,
+          "lowPower": {
+            "frameLimit": 30,
+            "clockElapsedMs": 3017.42,
+            "paintedFrames": 15,
+            "lowElapsedMs": 2952,
+            "defaultFramebufferClears": 88
+          }
+        }
+      ],
+      "repeatedMountCycles": 3,
+      "retiredTextureHandlesAfterEachUnmount": [
+        0,
+        0,
+        0
+      ],
+      "nativeContextRestore": {
+        "status": "PASS",
+        "nativeExtension": true,
+        "heldClockMs": 0,
+        "identicalCanvasPixels": true,
+        "restoredEntranceAndFocus": true
+      },
+      "r08CoexistenceCases": [
+        "r08-webgl-recovery",
+        "r08-station-1366",
+        "r08-station-390",
+        "r08-station-844"
+      ],
+      "runtimeRunnerSha256": "d18afeed1e7ed27d9bd2ff0b2a285d7f1faf4115eec42edcd0466bed6c4b5fa4"
+    }
+  ],
+  "environment": [
+    {
+      "engine": "chromium",
+      "runnerSha256": "832ba3798afd5c11ca67680f966365bea25bbfde6bf819017fb4094691cb60f0",
+      "solarPhaseCases": [
+        "solar-day-1366",
+        "solar-twilight-1366",
+        "solar-night-1366",
+        "solar-white_nights-1366",
+        "solar-golden_hour-1366",
+        "solar-dawn-1366",
+        "solar-day-390",
+        "solar-twilight-390",
+        "solar-night-390",
+        "solar-white_nights-390",
+        "solar-golden_hour-390",
+        "solar-dawn-390",
+        "solar-day-844",
+        "solar-twilight-844",
+        "solar-night-844",
+        "solar-white_nights-844",
+        "solar-golden_hour-844",
+        "solar-dawn-844"
+      ],
+      "entrances": [
+        {
+          "name": "entrances-resize-1366-dpr2",
+          "ids": [
+            "codepost",
+            "archive",
+            "cartography",
+            "radar",
+            "lab",
+            "hall"
+          ],
+          "pointerSamplesPerEntrance": 5,
+          "keyboard": [
+            "Tab",
+            "Shift+Tab",
+            "Enter",
+            "Space",
+            "Escape"
+          ]
+        },
+        {
+          "name": "entrances-resize-390-dpr2",
+          "ids": [
+            "cartography",
+            "radar",
+            "codepost",
+            "archive",
+            "lab",
+            "hall"
+          ],
+          "pointerSamplesPerEntrance": 5,
+          "keyboard": [
+            "Tab",
+            "Shift+Tab",
+            "Enter",
+            "Space",
+            "Escape"
+          ]
+        },
+        {
+          "name": "entrances-resize-844-dpr2",
+          "ids": [
+            "codepost",
+            "archive",
+            "cartography",
+            "radar",
+            "lab",
+            "hall"
+          ],
+          "pointerSamplesPerEntrance": 5,
+          "keyboard": [
+            "Tab",
+            "Shift+Tab",
+            "Enter",
+            "Space",
+            "Escape"
+          ]
+        }
+      ],
+      "measurements": [
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "rafP95Ms": [
+            33.399999999999636,
+            33.399999999999636,
+            33.400000000001455
+          ],
+          "sceneClockMs": 19015.9,
+          "windPaintedFrames": 190,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "rafP95Ms": [
+            16.700000000000728,
+            16.700000000000728,
+            33.29999999999927
+          ],
+          "sceneClockMs": 18015.8,
+          "windPaintedFrames": 90,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "rafP95Ms": [
+            33.400000000000546,
+            33.400000000001455,
+            33.400000000001455
+          ],
+          "sceneClockMs": 18032.6,
+          "windPaintedFrames": 180,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "rafP95Ms": [
+            33.29999999999927,
+            33.29999999999927,
+            16.799999999999272
+          ],
+          "sceneClockMs": 18015.9,
+          "windPaintedFrames": 90,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "rafP95Ms": [
+            50,
+            50,
+            49.89999999999782
+          ],
+          "sceneClockMs": 19015.800000000003,
+          "windPaintedFrames": 190,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "rafP95Ms": [
+            50,
+            50,
+            50
+          ],
+          "sceneClockMs": 18016.000000000004,
+          "windPaintedFrames": 90,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "rafP95Ms": [
+            50,
+            50,
+            49.900000000001455
+          ],
+          "sceneClockMs": 19015.9,
+          "windPaintedFrames": 190,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "rafP95Ms": [
+            50,
+            50,
+            50
+          ],
+          "sceneClockMs": 18015.899999999998,
+          "windPaintedFrames": 90,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        }
+      ],
+      "skipped": []
+    },
+    {
+      "engine": "firefox",
+      "runnerSha256": "832ba3798afd5c11ca67680f966365bea25bbfde6bf819017fb4094691cb60f0",
+      "solarPhaseCases": [
+        "solar-day-1366",
+        "solar-twilight-1366",
+        "solar-night-1366",
+        "solar-white_nights-1366",
+        "solar-golden_hour-1366",
+        "solar-dawn-1366",
+        "solar-day-390",
+        "solar-twilight-390",
+        "solar-night-390",
+        "solar-white_nights-390",
+        "solar-golden_hour-390",
+        "solar-dawn-390",
+        "solar-day-844",
+        "solar-twilight-844",
+        "solar-night-844",
+        "solar-white_nights-844",
+        "solar-golden_hour-844",
+        "solar-dawn-844"
+      ],
+      "entrances": [
+        {
+          "name": "entrances-resize-1366-dpr2",
+          "ids": [
+            "codepost",
+            "archive",
+            "cartography",
+            "radar",
+            "lab",
+            "hall"
+          ],
+          "pointerSamplesPerEntrance": 5,
+          "keyboard": [
+            "Tab",
+            "Shift+Tab",
+            "Enter",
+            "Space",
+            "Escape"
+          ]
+        },
+        {
+          "name": "entrances-resize-390-dpr2",
+          "ids": [
+            "cartography",
+            "radar",
+            "codepost",
+            "archive",
+            "lab",
+            "hall"
+          ],
+          "pointerSamplesPerEntrance": 5,
+          "keyboard": [
+            "Tab",
+            "Shift+Tab",
+            "Enter",
+            "Space",
+            "Escape"
+          ]
+        },
+        {
+          "name": "entrances-resize-844-dpr2",
+          "ids": [
+            "codepost",
+            "archive",
+            "cartography",
+            "radar",
+            "lab",
+            "hall"
+          ],
+          "pointerSamplesPerEntrance": 5,
+          "keyboard": [
+            "Tab",
+            "Shift+Tab",
+            "Enter",
+            "Space",
+            "Escape"
+          ]
+        }
+      ],
+      "measurements": [
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "rafP95Ms": [
+            17.1200000000008,
+            17.3799999999992,
+            17.159999999999854
+          ],
+          "sceneClockMs": 18017.039999999997,
+          "windPaintedFrames": 180,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "rafP95Ms": [
+            17.1200000000008,
+            17.1200000000008,
+            17.1200000000008
+          ],
+          "sceneClockMs": 18016.46,
+          "windPaintedFrames": 90,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "rafP95Ms": [
+            17.1200000000008,
+            17.100000000000364,
+            17.100000000002183
+          ],
+          "sceneClockMs": 18000.86,
+          "windPaintedFrames": 180,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "rafP95Ms": [
+            17.100000000000364,
+            17.11999999999898,
+            17.100000000002183
+          ],
+          "sceneClockMs": 18017.42,
+          "windPaintedFrames": 90,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": false,
+          "rafP95Ms": [
+            34.18000000000029,
+            34.02000000000044,
+            33.900000000001455
+          ],
+          "sceneClockMs": 18034.339999999997,
+          "windPaintedFrames": 180,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "clear",
+          "lowPower": true,
+          "rafP95Ms": [
+            17.140000000000327,
+            17.1200000000008,
+            17.12000000000262
+          ],
+          "sceneClockMs": 18017.260000000002,
+          "windPaintedFrames": 90,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": false,
+          "rafP95Ms": [
+            17.780000000000655,
+            33.68000000000029,
+            33.19999999999891
+          ],
+          "sceneClockMs": 18016.86,
+          "windPaintedFrames": 180,
+          "renderer": "llvmpipe, or similar"
+        },
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "weather": "rain",
+          "lowPower": true,
+          "rafP95Ms": [
+            17.100000000000364,
+            17.100000000000364,
+            17.18000000000029
+          ],
+          "sceneClockMs": 18016.62,
+          "windPaintedFrames": 90,
+          "renderer": "llvmpipe, or similar"
+        }
+      ],
+      "skipped": [
+        {
+          "name": "native-hidden-resume",
+          "reason": "Native visibility is accepted in Chromium without CDP focus emulation; Firefox is not represented as passing this check."
+        }
+      ]
+    }
+  ],
+  "nativeVisibility": {
+    "status": "PASS",
+    "engine": "chromium",
+    "visibilityMocked": false,
+    "originalResumeGateMs": 3000,
+    "pollIntervalMs": 100,
+    "hiddenHoldMs": 1500,
+    "hiddenClockBeforeMs": 499.9000000000001,
+    "hiddenClockAfterMs": 499.9000000000001,
+    "hiddenPaintedFramesBefore": 4,
+    "hiddenPaintedFramesAfter": 4,
+    "hiddenFullDiagnosticsIdentical": true,
+    "clockAfterResumeMs": 1014.3999999999651,
+    "paintedFramesAfterResume": 9,
+    "clockAdvanceMs": 514.499999999965,
+    "visibleElapsedMs": 797.4540470000356,
+    "allowedClockAdvanceMs": 947.4540470000356,
+    "nightRefreshMs": 81.29576900001848,
+    "nightRefreshThresholdMs": 2500,
+    "nativeTimingIdentitiesPreserved": true,
+    "observerStates": [
+      {
+        "case": "r09-native-hidden-clock-hold",
+        "field": "frameProbeBeforeHidden",
+        "active": false,
+        "frames": 0,
+        "visibility": "visible",
+        "focused": true
+      },
+      {
+        "case": "r09-native-hidden-clock-hold",
+        "field": "frameProbeAfterHidden",
+        "active": false,
+        "frames": 0,
+        "visibility": "hidden",
+        "focused": false
+      },
+      {
+        "case": "native-hidden-date-change",
+        "field": "nativeFrameProbe",
+        "active": false,
+        "frames": 0,
+        "visibility": "hidden",
+        "focused": false
+      },
+      {
+        "case": "native-resume-refresh",
+        "field": "nativeFrameProbe",
+        "active": false,
+        "frames": 0,
+        "visibility": "visible",
+        "focused": true
+      },
+      {
+        "case": "r09-native-clock-resume",
+        "field": "nativeFrameProbe",
+        "active": false,
+        "frames": 0,
+        "visibility": "visible",
+        "focused": true
+      },
+      {
+        "case": "native-night-after-resume",
+        "field": "nativeFrameProbe",
+        "active": false,
+        "frames": 0,
+        "visibility": "visible",
+        "focused": true
+      }
+    ],
+    "diagnosticFailureCasesPresent": false,
+    "observerRequestedAnyRaf": false,
+    "nativeLogSha256": "9527e71a6108e7d55cf2ffa815811823c4f27a1c69eb59a877082b57830414b6",
+    "historicalFailureDisposition": "Earlier exact-head failures remain failures. This run passes the unchanged native gate; it does not by itself establish the sole cause of the earlier browser starvation."
+  },
+  "sourceHashesAtMeasuredTree": {
+    "packages/world-engine/src/scenes/hub/HubScene.ts": "653e0fbe5cfbc153aa9e1f6f5feb173780014ef2455544ba1349d396e24b8d80",
+    "packages/world-engine/src/scenes/hub/HubR09Layer.ts": "dccfa1d203baf01525f64e9c59c982ac297abe2ff13b8e02614e8a6d571f2b57",
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": "2f966333d8bc669a6f59250a9115568c21384d02422e49e386586b79806613ac",
+    "packages/world-engine/src/scenes/hub/r09SceneModel.ts": "96241398fb0659c47f66a19ea37f0084c170477ca8608a7cf68634dcdb9611a4",
+    "packages/world-engine/src/scenes/hub/r09WindModel.ts": "f817d78595555ac785c41aac222242e0e452ff418617d2a363d98c55c89df72d",
+    "packages/world-engine/src/scenes/hub/HubVegetationWindLayer.ts": "4c2f7797e3d6fbb4b4d0e1f1b5956ad654642376cddaa3fbecc778b646d8c8aa",
+    "packages/world-engine/src/runtime/createWorldGame.ts": "52e68d0ba604afe3e5d730d840ad5b9d54c7f28fe0465dc1d8b2b2c5bd873450",
+    "apps/web/src/game/WorldCanvas.tsx": "d46ed717fdd25f229b5280f535484f17b3956573ada15f81d35edb32c8ec2dbc",
+    "packages/world-engine/src/assets/hub/r09-manifest.json": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+  },
+  "futureDefaultSelectionGuard": {
+    "file": "tools/test_station_ui_browser.cjs",
+    "sha256": "1fe68c5f33f254cd9e85f12d19e2f8ab9aea14517ae8efd43c94ca0c9c205f93",
+    "status": "FROZEN_SYNTAX_PASS_BROWSER_PENDING",
+    "checks": "Ordinary station and loading scenarios require actual profile == canonical productionReady selection and no stationArt override; existing load/abort/retry and pointer/keyboard assertions remain",
+    "includedInMeasuredCandidate": false
+  },
+  "defaultActivation": {
+    "status": "PENDING",
+    "measuredOrdinaryDefault": "r01",
+    "mustUseCanonicalSourceSpecAndRebuildManifests": true,
+    "requiredFollowUp": "After independent art approval and canonical promotion, run the existing complete automatic suite on ordinary default URLs with the new selection guard; environment opt-in must be removed by workflow owner",
+    "dedicatedR08AndR09Coverage": "Preserve both explicit phases and all existing HUD/library/portraits/game/level-one/rewards/admin/audio coverage"
+  },
+  "limits": [
+    "This is software-browser CI acceptance using Chromium SwiftShader and Firefox llvmpipe; no physical-GPU/mobile-device FPS claim.",
+    "Default-framebuffer clear intervals measure actual renderer activity; RAF callback cadence is a separate metric, not guaranteed displayed FPS.",
+    "Texture bytes estimate source and observed RGBA uploads only, excluding driver allocation, framebuffer storage, renderer overhead, and total process memory.",
+    "Fixed geometry pixel equality covers the reviewed stone/timber regions; moving actors, markers, UI and light cycles are excluded.",
+    "Cloud/water visible pixel motion is required on desktop; narrow views retain their real crop and require visible foliage motion.",
+    "Firefox native hidden-tab recovery is explicitly SKIP; native WebGL loss/restore passes in both engines.",
+    "No local browser, HTTP server or Playwright launch was used by this reviewer.",
+    "Art Director acceptance is a separate independent gate and is not implied by this report."
+  ]
+}

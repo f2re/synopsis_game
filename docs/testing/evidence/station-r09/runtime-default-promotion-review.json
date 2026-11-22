@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "/root/station_runtime_acceptance",
+  "role": "Independent integration review of the promotion prepared by root and asset-pipeline agent",
+  "date": "2026-11-22",
+  "status": "PASS_FOR_AUTOMATIC_DEFAULT_VERIFICATION",
+  "scope": "Source, asset identity, ordinary scene selection and preserved CI contracts; no claim that the unpublished default build has passed browser CI",
+  "acceptedCandidate": {
+    "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+    "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+    "localEquivalent": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+    "browserRunId": 45014358726,
+    "runtimeEvidence": "docs/testing/evidence/station-r09/runtime-ci-pr135-candidate-acceptance.json",
+    "runtimeEvidenceSha256": "c41501a667be8e7eb8540b32bc6b41773701b1211254c479bb3f9c7d251c60f5",
+    "artEvidence": "docs/art/reviews/2026-11-22-station-r09-frame-clock-art-review.evidence.json",
+    "artEvidenceSha256": "0daf415bbf4d4956cefa57a91dfe52380c4c5b864a35da5fa75cc7e2c099bf50"
+  },
+  "promotion": {
+    "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
+    "sourceSpecSha256": "e7c12f56c50faccf610ed77c091552d15badd29a8a7ef0ea51fa086719eea6cc",
+    "runtimeManifest": "packages/world-engine/src/assets/hub/r09-manifest.json",
+    "runtimeManifestSha256": "1d0e962be2dc5cc4b296399d9aec3c4691012160dae9f432058b5b468b3f344c",
+    "allThreeManifestCopiesByteIdentical": true,
+    "pipelineProof": "docs/testing/evidence/station-r09/pipeline-default-promotion.json",
+    "pipelineProofSha256": "eb061c50e294c47b3778241f19d50155f62ed377bb799802e8f8ed46962f7b4a",
+    "productionReady": true,
+    "reviewedOnlySourceDifferences": [
+      "review acceptance fields",
+      "provenance.candidateAcceptance",
+      "provenance.defaultReleaseVerification",
+      "nine lightRegions[].status labels"
+    ],
+    "additionalDerivedManifestDifferences": [
+      "sourceSpecCanonicalSha256",
+      "status = review.status",
+      "assets[4].motionReview = review.cloudMotion"
+    ],
+    "unexpectedSourceOrManifestDifferences": [],
+    "lightGeometryAlphaFalloffUnchanged": true,
+    "allMotionGeometryDomainsAnchorsUnchanged": true,
+    "cloudMotionReadyUnchangedTrue": true,
+    "pngsComparedInEachCopy": 13,
+    "copiesCompared": [
+      "apps/web/public/hub/r09",
+      "assets/generated/hub/r09"
+    ],
+    "all26PngFilesByteIdenticalToAcceptedCandidate": true,
+    "uniquePngBytes": 345506,
+    "productRendererAndModelCodeUnchanged": true
+  },
+  "ordinarySelectionReview": {
+    "sceneFile": "packages/world-engine/src/scenes/hub/HubScene.ts",
+    "selection": "With no stationArt override, canonical review.productionReady selects HubR09Layer and profile:r09 characters. All 13 required R09 images must exist before ready.",
+    "explicitR08": "WorldCanvas forwards stationArt:r08 only for its explicit URL; createWorldGame keeps the separate R08PreviewScene and panorama.",
+    "explicitR09": "The dedicated station-r09 browser phase remains unchanged.",
+    "preExistingLifecycleAndGameplayCoverage": "The full phase allowlist still contains library, station, station-r09, r08, public, portraits, game, level-one, rewards, admin, audio."
+  },
+  "ciReview": {
+    "workflow": ".github/workflows/station-screens.yml",
+    "sha256": "8687a090c954a49bc06ed01ad485095d1bdabf6ef924222597f7e2ef50a37195",
+    "exactChange": "Only the STATION_ENV_R09:1 environment entry was removed; candidate environment/native checks now use the ordinary server base URL.",
+    "allTimeoutsAssertionsAndAutomaticTriggersUnchanged": true,
+    "baselineComparisonRetained": true,
+    "nativeVisibilityOriginalGateMs": 3000,
+    "nativeClockAndPaintRequired": true,
+    "diagnosticRafDormantUnlessOriginalGateFails": true,
+    "defaultSelectionGuard": "tools/test_station_ui_browser.cjs",
+    "defaultSelectionGuardSha256": "1fe68c5f33f254cd9e85f12d19e2f8ab9aea14517ae8efd43c94ca0c9c205f93",
+    "defaultSelectionGuardBehavior": "Ordinary station UI and loading scenario assert a boolean canonical flag, no stationArt query, and the actual selected profile matching the flag; all load/abort/retry/pointer/keyboard checks remain.",
+    "guardActualBrowserStatusAtReview": "PENDING"
+  },
+  "verificationPerformed": [
+    "Read-only recursive JSON difference allowlist against the exact accepted local tree",
+    "Byte-for-byte comparison of all 13 assets in both served/generated copies against the accepted tree",
+    "Byte-for-byte comparison of renderer, characters, viewport, wind, WorldCanvas, createWorldGame and the unchanged main/environment/R09/R08 browser runners",
+    "Exact one-line workflow comparison and review of both ordinary helper call sites",
+    "Canonical source and three manifests checked against final pipeline freeze hashes"
+  ],
+  "publicationDecision": "PASS: publish the prepared activation and let the existing automatic complete CI verify the ordinary route. This review does not replace that run.",
+  "defaultReleaseVerification": {
+    "statusAtReview": "PENDING",
+    "historical": true,
+    "latestVerificationUrl": "https://github.com/f2re/synopsis_game/pull/135/checks",
+    "required": "Full ordinary-default suite including native Chromium pause/resume, canonical profile guard, real loading failure/retry, and all preserved character/first-level/navigation coverage"
+  },
+  "constraints": {
+    "localBrowserOrHttpStarted": false,
+    "manualCiDispatchOrRerun": false,
+    "sourceOrAssetMutatedByReviewer": false,
+    "historicalCandidateEvidenceModified": false
+  }
+}

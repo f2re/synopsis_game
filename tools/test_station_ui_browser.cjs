@@ -3,6 +3,17 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 
+async function assertDefaultStationProfile(page) {
+  const canonicalManifestPath = 'packages/world-engine/src/assets/hub/r09-manifest.json';
+  const { review } = JSON.parse(fs.readFileSync(canonicalManifestPath, 'utf8'));
+  assert.equal(typeof review.productionReady, 'boolean', 'Canonical station promotion is an explicit boolean');
+  assert.equal(new URL(page.url()).searchParams.has('stationArt'), false, 'Default station checks use an ordinary route without an artwork override');
+  const expectedStationArt = review.productionReady ? 'r09' : 'r01';
+  const stationArt = await page.locator('.world-canvas-host > div[data-scene="hub"]').evaluate(node => node.dataset.station ? JSON.parse(node.dataset.station).stationArt : 'r01');
+  assert.equal(stationArt, expectedStationArt, 'The ordinary route loads the profile selected by canonical productionReady');
+  return { stationArt, expectedStationArt, canonicalManifestPath, productionReady: review.productionReady };
+}
+
 async function controlGeometry(page, selector) {
   return page.locator(selector).evaluateAll(nodes => nodes.flatMap(node => {
     const b = node.getBoundingClientRect(), s = getComputedStyle(node);
@@ -44,6 +55,7 @@ async function checkDialog(page, viewport, report, capture, name) {
 }
 
 async function checkStationUI({ page, base, viewport, report, capture, waitForCampus }) {
+  const stationSelection = await assertDefaultStationProfile(page);
   const controls = await controlGeometry(page, '.hub-topbar button, .hub-dock button');
   assert.ok(controls.length >= 7, 'Inspect all visible main controls');
   for (const c of controls) {
@@ -125,7 +137,7 @@ async function checkStationUI({ page, base, viewport, report, capture, waitForCa
   assert.equal(await page.locator('dialog[open]').count(), 0, 'No invisible modal remains after closing');
   assert.equal(await page.locator('canvas').count(), 1, 'One world after repeated actions');
   assert.equal(new URL(page.url()).pathname, '/', 'Navigation returns to the main station');
-  report.cases.push({ name: `ui-real-input-${viewport.width}`, controls, pointerForced: false, keyboardActivation: true });
+  report.cases.push({ name: `ui-real-input-${viewport.width}`, ...stationSelection, controls, pointerForced: false, keyboardActivation: true });
 }
 
 async function checkWorldLoading({ base, browser, report, capture, waitForCampus }) {
@@ -138,8 +150,8 @@ async function checkWorldLoading({ base, browser, report, capture, waitForCampus
   const requested = new Set();
   page.on('request', request => requested.add(new URL(request.url()).pathname));
   await page.goto(base); await waitForCampus(page);
-  const profile = await page.locator('.world-canvas-host > div[data-scene="hub"]').evaluate(node => node.dataset.station ? JSON.parse(node.dataset.station).stationArt : 'r01');
-  assert.ok(profile === 'r01' || profile === 'r09', 'Known selected station asset profile');
+  const stationSelection = await assertDefaultStationProfile(page);
+  const profile = stationSelection.stationArt;
   const manifestPath = profile === 'r09' ? 'packages/world-engine/src/assets/hub/r09-manifest.json' : 'packages/world-engine/src/assets/hub/r01-approval.json';
   const { assets } = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   const texture = (assets.find(asset => asset.role === 'architecture-ground') || assets[0]).url;
@@ -171,7 +183,7 @@ async function checkWorldLoading({ base, browser, report, capture, waitForCampus
   await page.getByRole('button', { name: 'Перезагрузить страницу', exact: true }).click();
   await waitForCampus(page);
   await capture(page, 'ui-world-load-recovered');
-  report.cases.push({ name: 'world-load-recovery', stationArt: profile, manifestPath, heldRealTexture: texture, failedRequest: 'abort', navigationWhileLoading: true, navigationAfterFailure: true, retryRealAsset: true });
+  report.cases.push({ name: 'world-load-recovery', ...stationSelection, manifestPath, heldRealTexture: texture, failedRequest: 'abort', navigationWhileLoading: true, navigationAfterFailure: true, retryRealAsset: true });
   await context.close();
 
   const retina = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });

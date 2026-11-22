@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 1,
+  "task": "STATION-R09-LIVING-TERRAIN",
+  "subtask": "CANONICAL-DEFAULT-PROMOTION",
+  "agent": "/root/station_pipeline_merge",
+  "role": "pixel-asset-pipeline-engineer",
+  "date": "2026-11-22",
+  "status": "PASS_PIPELINE_PROMOTION_TO_DEFAULT_VALIDATION",
+  "selfApproval": false,
+  "acceptedCandidate": {
+    "publishedHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+    "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+    "localEquivalentCommit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+    "automaticBrowserRunId": 45014358726,
+    "selection": "?stationArt=r09"
+  },
+  "independentAcceptanceReadBeforeMutation": [
+    {
+      "path": "docs/art/reviews/2026-11-22-station-r09-frame-clock-art-review.evidence.json",
+      "sha256": "0daf415bbf4d4956cefa57a91dfe52380c4c5b864a35da5fa75cc7e2c099bf50",
+      "reviewer": "/root/station_art_final",
+      "status": "PASS_ART_FOLLOWUP",
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "readBeforePromotion": true
+    },
+    {
+      "path": "docs/testing/evidence/station-r09/runtime-ci-pr135-candidate-acceptance.json",
+      "sha256": "c41501a667be8e7eb8540b32bc6b41773701b1211254c479bb3f9c7d251c60f5",
+      "reviewer": "/root/station_runtime_acceptance",
+      "status": "CANDIDATE_RUNTIME_PASS",
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "readBeforePromotion": true
+    }
+  ],
+  "defaultReleaseVerification": {
+    "candidateAcceptanceComplete": true,
+    "reason": "The productionReady selection flag is promoted after candidate acceptance; the next automatic suite must verify the ordinary station URL without a stationArt override.",
+    "requiredFollowUp": "Existing complete automatic CI, canonical default-selection assertion, environment suite without R09 opt-in, and independent integration acceptance.",
+    "statusAtPromotion": "PENDING",
+    "scope": "Historical state when this source promotion was authored; the latest ordinary-route run is recorded in PR #135 Checks.",
+    "latestVerificationUrl": "https://github.com/f2re/synopsis_game/pull/135/checks"
+  },
+  "sourceSpec": {
+    "path": "assets/source/environment/hub/r09/source-spec.json",
+    "beforeSha256": "f21754e0d3a2f69b167f8837a22ebf9d2ffa62c182feb8c8db2dff3b7ff21f4c",
+    "afterSha256": "e7c12f56c50faccf610ed77c091552d15badd29a8a7ef0ea51fa086719eea6cc",
+    "changedJsonPaths": [
+      "$.lightRegions[0].status",
+      "$.lightRegions[1].status",
+      "$.lightRegions[2].status",
+      "$.lightRegions[3].status",
+      "$.lightRegions[4].status",
+      "$.lightRegions[5].status",
+      "$.lightRegions[6].status",
+      "$.lightRegions[7].status",
+      "$.lightRegions[8].status",
+      "$.provenance.candidateAcceptance",
+      "$.provenance.defaultReleaseVerification",
+      "$.review.acceptedCandidateHead",
+      "$.review.acceptedCandidateRunId",
+      "$.review.acceptedCandidateTree",
+      "$.review.artDirection",
+      "$.review.artDirectionReviewEvidence",
+      "$.review.artDirectionReviewReport",
+      "$.review.cloudMotion",
+      "$.review.localLighting",
+      "$.review.pixelArt",
+      "$.review.productionReady",
+      "$.review.runtime",
+      "$.review.runtimeReviewReport",
+      "$.review.status"
+    ],
+    "allowedMetadataPrefixes": [
+      "$.review",
+      "$.provenance"
+    ],
+    "allowedLightStatusPaths": [
+      "$.lightRegions[0].status",
+      "$.lightRegions[1].status",
+      "$.lightRegions[2].status",
+      "$.lightRegions[3].status",
+      "$.lightRegions[4].status",
+      "$.lightRegions[5].status",
+      "$.lightRegions[6].status",
+      "$.lightRegions[7].status",
+      "$.lightRegions[8].status"
+    ],
+    "allOtherValuesEqual": true,
+    "allOtherCanonicalBytesEqual": true,
+    "normalizedBeforeSha256": "8d6b884ad3d5f6e59ae3f5585536a3f2010a95a07907be3d2a230bbaad0ea721",
+    "normalizedAfterSha256": "8d6b884ad3d5f6e59ae3f5585536a3f2010a95a07907be3d2a230bbaad0ea721"
+  },
+  "manifest": {
+    "paths": [
+      "assets/generated/hub/r09/manifest.json",
+      "apps/web/public/hub/r09/manifest.json",
+      "packages/world-engine/src/assets/hub/r09-manifest.json"
+    ],
+    "beforeSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd",
+    "afterSha256": "1d0e962be2dc5cc4b296399d9aec3c4691012160dae9f432058b5b468b3f344c",
+    "threeCopiesByteIdentical": true,
+    "changedJsonPaths": [
+      "$.assets[4].motionReview",
+      "$.lightRegions[0].status",
+      "$.lightRegions[1].status",
+      "$.lightRegions[2].status",
+      "$.lightRegions[3].status",
+      "$.lightRegions[4].status",
+      "$.lightRegions[5].status",
+      "$.lightRegions[6].status",
+      "$.lightRegions[7].status",
+      "$.lightRegions[8].status",
+      "$.provenance.candidateAcceptance",
+      "$.provenance.defaultReleaseVerification",
+      "$.review.acceptedCandidateHead",
+      "$.review.acceptedCandidateRunId",
+      "$.review.acceptedCandidateTree",
+      "$.review.artDirection",
+      "$.review.artDirectionReviewEvidence",
+      "$.review.artDirectionReviewReport",
+      "$.review.cloudMotion",
+      "$.review.localLighting",
+      "$.review.pixelArt",
+      "$.review.productionReady",
+      "$.review.runtime",
+      "$.review.runtimeReviewReport",
+      "$.review.status",
+      "$.sourceSpecCanonicalSha256",
+      "$.status"
+    ],
+    "allowedMetadataPrefixes": [
+      "$.review",
+      "$.provenance"
+    ],
+    "allowedScalarMetadataPaths": [
+      "$.sourceSpecCanonicalSha256",
+      "$.status",
+      "$.assets[4].motionReview"
+    ],
+    "derivedMetadataProof": [
+      {
+        "jsonPath": "$.status",
+        "derivedFrom": "$.review.status",
+        "before": "candidate",
+        "after": "accepted",
+        "equalToSourceInBothVersions": true
+      },
+      {
+        "jsonPath": "$.assets[4].motionReview",
+        "semanticId": "hub.r09.clouds.east-wisp",
+        "derivedFrom": "$.review.cloudMotion",
+        "before": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
+        "after": "PASS-source-geometry-and-actual-browser-motion",
+        "equalToSourceInBothVersions": true
+      }
+    ],
+    "allowedLightStatusPaths": [
+      "$.lightRegions[0].status",
+      "$.lightRegions[1].status",
+      "$.lightRegions[2].status",
+      "$.lightRegions[3].status",
+      "$.lightRegions[4].status",
+      "$.lightRegions[5].status",
+      "$.lightRegions[6].status",
+      "$.lightRegions[7].status",
+      "$.lightRegions[8].status"
+    ],
+    "allOtherValuesEqual": true,
+    "allOtherCanonicalBytesEqual": true,
+    "normalizedBeforeSha256": "62a3ce66f2a9651b190e2309f8bef4587390373cb9068f3b6beae08502cb2a3e",
+    "normalizedAfterSha256": "62a3ce66f2a9651b190e2309f8bef4587390373cb9068f3b6beae08502cb2a3e"
+  },
+  "lightStatusChanges": [
+    {
+      "id": "hub.r09.light.central-entry",
+      "before": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.central-windows",
+      "before": "candidate-starting-values",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.archive-interior",
+      "before": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.cool-left-lab",
+      "before": "candidate-starting-values",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.cool-upper-lab",
+      "before": "candidate-starting-values",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.hall",
+      "before": "candidate-starting-values",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.archive-lamp",
+      "before": "candidate-starting-values",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.archive-stone",
+      "before": "candidate-starting-values",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    },
+    {
+      "id": "hub.r09.light.central-steps",
+      "before": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "after": "PASS_ART_FOLLOWUP",
+      "allOtherFieldsEqual": true
+    }
+  ],
+  "productionReady": {
+    "before": false,
+    "after": true,
+    "basis": "Independent candidate art and runtime PASS; ordinary default-route release verification had not yet run when this promotion was authored. Latest result is recorded in PR #135 Checks."
+  },
+  "pngCount": 13,
+  "pngBytes": 345506,
+  "decodedRgbaBytes": 2714248,
+  "pngs": [
+    {
+      "id": "hub.r09.sky",
+      "paths": [
+        "assets/generated/hub/r09/sky.png",
+        "apps/web/public/hub/r09/sky.png"
+      ],
+      "bytes": 35625,
+      "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.water",
+      "paths": [
+        "assets/generated/hub/r09/water.png",
+        "apps/web/public/hub/r09/water.png"
+      ],
+      "bytes": 2070,
+      "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.architecture-ground",
+      "paths": [
+        "assets/generated/hub/r09/architecture-ground.png",
+        "apps/web/public/hub/r09/architecture-ground.png"
+      ],
+      "bytes": 251757,
+      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.foreground",
+      "paths": [
+        "assets/generated/hub/r09/foreground.png",
+        "apps/web/public/hub/r09/foreground.png"
+      ],
+      "bytes": 46463,
+      "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.clouds.east-wisp",
+      "paths": [
+        "assets/generated/hub/r09/clouds-east-wisp.png",
+        "apps/web/public/hub/r09/clouds-east-wisp.png"
+      ],
+      "bytes": 290,
+      "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "paths": [
+        "assets/generated/hub/r09/foliage-central-topiary.png",
+        "apps/web/public/hub/r09/foliage-central-topiary.png"
+      ],
+      "bytes": 736,
+      "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "paths": [
+        "assets/generated/hub/r09/foliage-left-front-shrub.png",
+        "apps/web/public/hub/r09/foliage-left-front-shrub.png"
+      ],
+      "bytes": 660,
+      "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "paths": [
+        "assets/generated/hub/r09/foliage-left-planter-topiary.png",
+        "apps/web/public/hub/r09/foliage-left-planter-topiary.png"
+      ],
+      "bytes": 720,
+      "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "paths": [
+        "assets/generated/hub/r09/foliage-right-planter-topiary.png",
+        "apps/web/public/hub/r09/foliage-right-planter-topiary.png"
+      ],
+      "bytes": 684,
+      "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "paths": [
+        "assets/generated/hub/r09/foliage-foreground-right.png",
+        "apps/web/public/hub/r09/foliage-foreground-right.png"
+      ],
+      "bytes": 4061,
+      "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.window-light-mask",
+      "paths": [
+        "assets/generated/hub/r09/window-light-mask.png",
+        "apps/web/public/hub/r09/window-light-mask.png"
+      ],
+      "bytes": 905,
+      "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.lamp-light-mask",
+      "paths": [
+        "assets/generated/hub/r09/lamp-light-mask.png",
+        "apps/web/public/hub/r09/lamp-light-mask.png"
+      ],
+      "bytes": 708,
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+      "byteIdenticalToAcceptedCandidate": true
+    },
+    {
+      "id": "hub.r09.ground-light-mask",
+      "paths": [
+        "assets/generated/hub/r09/ground-light-mask.png",
+        "apps/web/public/hub/r09/ground-light-mask.png"
+      ],
+      "bytes": 827,
+      "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
+      "byteIdenticalToAcceptedCandidate": true
+    }
+  ],
+  "commands": [
+    {
+      "command": "python3 tools/assets/test_hub_r09.py",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "test_archive_receiver_preserves_wood_posts_shelves_and_door_front (__main__.StationExportContract.test_archive_receiver_preserves_wood_posts_shelves_and_door_front) ... ok\ntest_changed_provider_source_requires_new_pin (__main__.StationExportContract.test_changed_provider_source_requires_new_pin) ... ok\ntest_cloud_clip_excludes_forest_tree_tips_and_mast (__main__.StationExportContract.test_cloud_clip_excludes_forest_tree_tips_and_mast) ... ok\ntest_cloud_drift_cannot_change_y_or_wrap_onscreen (__main__.StationExportContract.test_cloud_drift_cannot_change_y_or_wrap_onscreen) ... ok\ntest_cloud_selector_is_versioned (__main__.StationExportContract.test_cloud_selector_is_versioned) ... ok\ntest_cloud_source_cannot_include_a_foreground_silhouette (__main__.StationExportContract.test_cloud_source_cannot_include_a_foreground_silhouette) ... ok\ntest_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop (__main__.StationExportContract.test_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop) ... ok\ntest_entry_receiver_selects_glass_and_excludes_pier_and_frames (__main__.StationExportContract.test_entry_receiver_selects_glass_and_excludes_pier_and_frames) ... ok\ntest_export_filename_is_not_a_path (__main__.StationExportContract.test_export_filename_is_not_a_path) ... ok\ntest_image_cannot_be_used_as_white_receiver_mask (__main__.StationExportContract.test_image_cannot_be_used_as_white_receiver_mask) ... ok\ntest_leaf_selection_outside_source_fails (__main__.StationExportContract.test_leaf_selection_outside_source_fails) ... ok\ntest_light_region_cannot_point_to_unknown_mask (__main__.StationExportContract.test_light_region_cannot_point_to_unknown_mask) ... ok\ntest_native_sky_patch_preserves_the_vertical_colour_ramp (__main__.StationExportContract.test_native_sky_patch_preserves_the_vertical_colour_ramp) ... ok\ntest_native_source_roundtrip_and_deterministic_bytes (__main__.StationExportContract.test_native_source_roundtrip_and_deterministic_bytes) ... ok\ntest_provider_path_cannot_escape_selected_project_source (__main__.StationExportContract.test_provider_path_cannot_escape_selected_project_source) ... ok\ntest_receiver_edits_preserve_all_pixels_outside_explicit_ownership (__main__.StationExportContract.test_receiver_edits_preserve_all_pixels_outside_explicit_ownership) ... ok\ntest_receiver_replacement_cannot_overwrite_unrelated_source_selection (__main__.StationExportContract.test_receiver_replacement_cannot_overwrite_unrelated_source_selection) ... ok\ntest_reflected_light_cannot_strengthen_toward_the_fountain (__main__.StationExportContract.test_reflected_light_cannot_strengthen_toward_the_fountain) ... ok\ntest_scene_transform_cannot_silently_change_grid (__main__.StationExportContract.test_scene_transform_cannot_silently_change_grid) ... ok\ntest_sky_water_partition_cannot_overlap (__main__.StationExportContract.test_sky_water_partition_cannot_overlap) ... ok\ntest_step_receiver_excludes_glass_instrument_and_lower_fountain (__main__.StationExportContract.test_step_receiver_excludes_glass_instrument_and_lower_fountain) ... ok\ntest_two_moving_layers_cannot_own_same_pixel (__main__.StationExportContract.test_two_moving_layers_cannot_own_same_pixel) ... ok\ntest_unbounded_gain_fails (__main__.StationExportContract.test_unbounded_gain_fails) ... ok\ntest_unreviewed_displacement_cap_fails (__main__.StationExportContract.test_unreviewed_displacement_cap_fails) ... ok\ntest_water_scanlines_match_png_and_exclude_fir_and_shore (__main__.StationExportContract.test_water_scanlines_match_png_and_exclude_fir_and_shore) ... ok\ntest_wrong_provider_size_does_not_get_rescaled (__main__.StationExportContract.test_wrong_provider_size_does_not_get_rescaled) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 5.560s\n\nOK\n"
+    },
+    {
+      "command": "python3 tools/assets/build_hub_r09.py --check",
+      "exitCode": 0,
+      "stdout": "{\"result\": \"CHECK\", \"assets\": 13, \"sourceHashesVerified\": true, \"restRoundtripRgbaExact\": true, \"outsideMovingMaskChangedPixels\": 0, \"hiddenPlateUsedPixels\": 2255, \"hiddenPlateChangedPixels\": 2255, \"cloudPixels\": 61, \"vegetationPieces\": 5, \"cloudIslands\": 1, \"cloudSilhouetteClearanceVerified\": true, \"cloudClipPixels\": 2352, \"cloudClipDomain\": \"cloudClip\", \"skyPatchMode\": \"native-sky-region-copy\", \"masterRgbaSha256\": \"376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7\", \"exportResampling\": \"none\", \"paletteQuantization\": false, \"artAcceptanceImplied\": false, \"pngBytes\": 345506, \"decodedRgbaBytes\": 2714248}\n",
+      "stderr": ""
+    },
+    {
+      "command": "python3 tools/assets/build_hub_r09.py --check",
+      "purpose": "Historical provenance wording follow-up",
+      "exitCode": 0,
+      "stdout": "{\"result\": \"CHECK\", \"assets\": 13, \"sourceHashesVerified\": true, \"restRoundtripRgbaExact\": true, \"outsideMovingMaskChangedPixels\": 0, \"hiddenPlateUsedPixels\": 2255, \"hiddenPlateChangedPixels\": 2255, \"cloudPixels\": 61, \"vegetationPieces\": 5, \"cloudIslands\": 1, \"cloudSilhouetteClearanceVerified\": true, \"cloudClipPixels\": 2352, \"cloudClipDomain\": \"cloudClip\", \"skyPatchMode\": \"native-sky-region-copy\", \"masterRgbaSha256\": \"376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7\", \"exportResampling\": \"none\", \"paletteQuantization\": false, \"artAcceptanceImplied\": false, \"pngBytes\": 345506, \"decodedRgbaBytes\": 2714248}\n",
+      "stderr": ""
+    }
+  ],
+  "scopeLimits": [
+    "Source acceptance metadata and nine light status labels only",
+    "No numerical geometry, light or motion values changed",
+    "No runtime code, browser tests, UI, registry or CI workflow changed by this agent",
+    "No new SpriteCook generation or credits",
+    "No local browser, server, dependency installation, manual CI, git commit or publication",
+    "At authoring, independent integration review of this promotion and the next ordinary-route automatic CI were still required; this historical record is not a live release verdict."
+  ],
+  "provenanceOnlyFollowUp": {
+    "purpose": "Distinguish historical status at promotion from the latest default-route release verdict",
+    "prior26TestsSourceSpecSha256": "8c16e99a6ead251fc519b00b6b08a63d3e67bc9d6fcf7e84c43aca9bc1cf6f49",
+    "priorManifestSha256": "500913679eb0fca5480fd34af0da507c0a08a1b1d419b24ba848f692b3b58780",
+    "allowedFollowUp": "provenance.defaultReleaseVerification only; generated provenance and canonical source hash follow automatically",
+    "testsRepeated": false,
+    "reason": "Geometry, light, animation and exported PNG bytes are unchanged; repeat --check and identity proof only."
+  }
+}

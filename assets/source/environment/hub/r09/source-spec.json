@@ -2240,7 +2240,7 @@
       ],
       "tint": "#FFB95A",
       "suggestedAlpha": 0.46,
-      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2255,7 +2255,7 @@
       ],
       "tint": "#EAA85E",
       "suggestedAlpha": 0.23,
-      "status": "candidate-starting-values",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2270,7 +2270,7 @@
       ],
       "tint": "#FFB24C",
       "suggestedAlpha": 0.38,
-      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2285,7 +2285,7 @@
       ],
       "tint": "#9FBEB3",
       "suggestedAlpha": 0.12,
-      "status": "candidate-starting-values",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2300,7 +2300,7 @@
       ],
       "tint": "#9FBEB3",
       "suggestedAlpha": 0.1,
-      "status": "candidate-starting-values",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2315,7 +2315,7 @@
       ],
       "tint": "#EAA85E",
       "suggestedAlpha": 0.15,
-      "status": "candidate-starting-values",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2330,7 +2330,7 @@
       ],
       "tint": "#FFD890",
       "suggestedAlpha": 0.34,
-      "status": "candidate-starting-values",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2345,7 +2345,7 @@
       ],
       "tint": "#B98255",
       "suggestedAlpha": 0.13,
-      "status": "candidate-starting-values",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
     {
@@ -2360,7 +2360,7 @@
       ],
       "tint": "#D79D58",
       "suggestedAlpha": 0.11,
-      "status": "ART-LIGHT-01-candidate-pending-actual-game-frames",
+      "status": "PASS_ART_FOLLOWUP",
       "usage": "Weak reflected warmth on source-reviewed upper stone strips only; gaps exclude the armillary instrument and plants. No full-scene illumination.",
       "verticalFalloff": [
         1,
@@ -2369,20 +2369,26 @@
     }
   ],
   "review": {
-    "status": "candidate",
-    "pixelArt": "PASS-source-geometry; actual-game-frames-pending",
-    "artDirection": "ART-LIGHT-01-request-changes; revised-local-light-candidate-awaits-actual-game-frames",
-    "runtime": "pending-browser-review",
-    "productionReady": false,
+    "status": "accepted",
+    "pixelArt": "PASS-source-geometry; source-continuity-confirmed-by-independent-art-followup",
+    "artDirection": "PASS_ART_FOLLOWUP",
+    "runtime": "CANDIDATE_RUNTIME_PASS",
+    "productionReady": true,
     "cloudMotionReady": true,
-    "cloudMotion": "SOURCE-PASS-with-fixed-cloudClip; runtime-acceptance-pending",
+    "cloudMotion": "PASS-source-geometry-and-actual-browser-motion",
     "sourceReviewer": "/root/station_pixel_review",
     "sourceReviewReport": "docs/testing/evidence/station-r09/pixel-review.md",
     "cloudDriftSourceContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json",
-    "localLighting": "SOURCE-PASS; ART-LIGHT-01-actual-game-frames-pending",
+    "localLighting": "PASS_ART_FOLLOWUP; ART-LIGHT-01-CLOSED",
     "lightSourceReview": "PASS",
     "lightSourceReviewReport": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
-    "lightSourceContract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json"
+    "lightSourceContract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json",
+    "artDirectionReviewReport": "docs/art/reviews/2026-11-22-station-r09-frame-clock-art-review.md",
+    "artDirectionReviewEvidence": "docs/art/reviews/2026-11-22-station-r09-frame-clock-art-review.evidence.json",
+    "runtimeReviewReport": "docs/testing/evidence/station-r09/runtime-ci-pr135-candidate-acceptance.json",
+    "acceptedCandidateHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+    "acceptedCandidateTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+    "acceptedCandidateRunId": 45014358726
   },
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
@@ -2438,6 +2444,39 @@
         "localCommit": "fc522885611f2abbe2685244feb9321d43196c9f",
         "path": "assets/source/environment/hub/r08/pilot/ground-light-mask.png"
       }
+    },
+    "candidateAcceptance": {
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "localEquivalent": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+      "automaticBrowserRunId": 45014358726,
+      "automaticBrowserRunUrl": "https://github.com/f2re/synopsis_game/actions/runs/45014358726",
+      "sceneSelection": "?stationArt=r09",
+      "art": {
+        "status": "PASS_ART_FOLLOWUP",
+        "reviewer": "/root/station_art_final",
+        "report": "docs/art/reviews/2026-11-22-station-r09-frame-clock-art-review.md",
+        "evidence": "docs/art/reviews/2026-11-22-station-r09-frame-clock-art-review.evidence.json",
+        "evidenceSha256": "0daf415bbf4d4956cefa57a91dfe52380c4c5b864a35da5fa75cc7e2c099bf50",
+        "openBlockers": 0
+      },
+      "runtime": {
+        "status": "CANDIDATE_RUNTIME_PASS",
+        "reviewer": "/root/station_runtime_acceptance",
+        "report": "docs/testing/evidence/station-r09/runtime-ci-pr135-candidate-acceptance.json",
+        "reportSha256": "c41501a667be8e7eb8540b32bc6b41773701b1211254c479bb3f9c7d251c60f5",
+        "nativeHiddenResume": "PASS",
+        "diagnosticObserverActivated": false
+      },
+      "sourceContinuity": "All 13 PNGs and all numerical geometry, light and motion values remain identical to this independently accepted candidate."
+    },
+    "defaultReleaseVerification": {
+      "candidateAcceptanceComplete": true,
+      "reason": "The productionReady selection flag is promoted after candidate acceptance; the next automatic suite must verify the ordinary station URL without a stationArt override.",
+      "requiredFollowUp": "Existing complete automatic CI, canonical default-selection assertion, environment suite without R09 opt-in, and independent integration acceptance.",
+      "statusAtPromotion": "PENDING",
+      "scope": "Historical state when this source promotion was authored; the latest ordinary-route run is recorded in PR #135 Checks.",
+      "latestVerificationUrl": "https://github.com/f2re/synopsis_game/pull/135/checks"
     }
   },
   "selectionPolicy": {
