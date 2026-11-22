@@ -58,6 +58,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
   const requestedRenderer = resolveHubRendererMode();
   const rendererMode = useMemo(() => requestedRenderer === 'three2d' && supportsWebGL2() ? 'three2d' : 'legacy2d', [requestedRenderer]);
   const SelectedWorldCanvas = rendererMode === 'three2d' ? ExperimentalWorldCanvas : WorldCanvas;
+  const [bridgeReady, setBridgeReady] = useState(false);
   const [activeModal, setActiveModal] = useState<StationDockModalId>(null);
   const preferences = usePresentationPreferences();
   const [currentScene, setCurrentScene] = useState('hub');
@@ -107,6 +108,9 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
         setSelectedFacility(buildingId);
       }));
       applyPreferences();
+      // A warm renderer can announce readiness during its first mount. Install
+      // these listeners before mounting it, so that event cannot be lost.
+      setBridgeReady(true);
     }).catch(() => { if (!disposed) setSceneError(true); });
     return () => {
       disposed = true;
@@ -165,7 +169,7 @@ export function HubScreen({ user, onLoginClick, onLogout, onOpenSetCode, onStart
 
   return (
     <main className="game-viewport hub-screen" aria-label={GAME_TITLE} data-world-state={sceneError ? 'error' : sceneReady ? 'ready' : 'loading'}>
-      <WorldLoadBoundary onError={() => { setSceneError(true); setSceneReady(false); }}><Suspense fallback={null}><SelectedWorldCanvas key={rendererMode} stationPresence={stationPresence} /></Suspense></WorldLoadBoundary>
+      <WorldLoadBoundary onError={() => { setSceneError(true); setSceneReady(false); }}><Suspense fallback={null}>{bridgeReady && <SelectedWorldCanvas key={rendererMode} stationPresence={stationPresence} />}</Suspense></WorldLoadBoundary>
       {!sceneReady && <section className={`hub-world-status${sceneError ? ' hub-world-status--error' : slowScene ? ' hub-world-status--slow' : ''}`} role="status" aria-live="polite" aria-busy={!sceneError}>
         <PixelIcon name="kn01" size={40} alt="" />
         <h2>{sceneError ? 'Не удалось открыть вид станции' : slowScene ? 'Загрузка занимает больше времени' : 'Открываем станцию…'}</h2>

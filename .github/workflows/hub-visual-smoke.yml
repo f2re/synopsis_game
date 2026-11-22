@@ -41,6 +41,7 @@ jobs:
           pnpm -C apps/web typecheck
           pnpm -C apps/web build
           node tools/test_experimental_hub_lifecycle.cjs
+          node tools/test_hub_subscription_order.cjs
 
       - name: Запустить production preview
         run: |

@@ -79,6 +79,7 @@ jobs:
           node tools/test_avatar_world_boundary.cjs
           node tools/test_hub_scene_lifecycle.cjs
           node tools/test_experimental_hub_lifecycle.cjs
+          node tools/test_hub_subscription_order.cjs
           node tools/test_blitz_lifecycle.cjs
           node tools/test_station_plot_hit_fallback.cjs
           # Проверка астрономии выполняется на закреплённом Node 22
