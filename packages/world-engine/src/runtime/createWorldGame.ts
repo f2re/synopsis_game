@@ -38,6 +38,8 @@ export function createWorldGame(options: CreateWorldGameOptions): Phaser.Game {
     callbacks: { preBoot: (instance) => instance.registry.set('world.pixelRatio', initial.ratio) },
     transparent: options.transparent ?? false,
     backgroundColor: '#08152f',
+    // R08 entrances use DOM controls, while the panorama owns wheel and swipe gestures.
+    input: options.stationArt === 'r08' ? { mouse: { preventDefaultWheel: false }, touch: { capture: false } } : undefined,
     // worldAudio owns the shared context; these scenes do not use Phaser sound.
     audio: { noAudio: true },
     fps: { target: 60, limit: 60 },
