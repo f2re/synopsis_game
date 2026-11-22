@@ -42,6 +42,7 @@ export class HubR09Layer {
   private preferences = normalizeWorldPreferences(undefined);
   private paused = false;
   private clockMs = 0;
+  private previousFrameTime?: number;
   private paintMs = 0;
   private diagnosticMs = 0;
   private waterFrame = 0;
@@ -107,6 +108,7 @@ export class HubR09Layer {
         this.requestedCenterX = r09Pan(this.viewport, direction).centerX; this.resize();
       }),
       worldBridge.on<boolean>('ui:world_visible', (visible) => {
+        if (this.paused !== !visible) this.previousFrameTime = undefined;
         this.paused = !visible; this.syncMotion(); this.publishDiagnostics();
       }),
     );
@@ -151,7 +153,9 @@ export class HubR09Layer {
   }
 
   private onPreferences(value: unknown): void {
-    this.preferences = normalizeWorldPreferences(value);
+    const next = normalizeWorldPreferences(value);
+    if (this.preferences.reducedMotion !== next.reducedMotion) this.previousFrameTime = undefined;
+    this.preferences = next;
     this.syncMotion();
     // A still preference restores all environmental motion, not only foliage.
     if (this.preferences.reducedMotion) this.drawAmbient(true);
@@ -262,14 +266,27 @@ export class HubR09Layer {
     worldBridge.emit('world:station_diagnostics', diagnostic);
   }
 
-  update(deltaMs: number): void {
-    if (this.disposed || this.paused || this.preferences.reducedMotion) return;
-    const delta = Math.min(100, Math.max(0, Number.isFinite(deltaMs) ? deltaMs : 0));
+  update(deltaMs: number, frameTimeMs?: number): number {
+    if (this.disposed || this.paused || this.preferences.reducedMotion) {
+      this.previousFrameTime = undefined;
+      return 0;
+    }
+    // Phaser's FPS-limited delta includes its accumulator remainder. Reusing
+    // that value can advance scenery faster than wall time. Native frame
+    // timestamps give one shared elapsed interval for the territory and NPCs.
+    let elapsed = deltaMs;
+    if (frameTimeMs !== undefined) {
+      if (!Number.isFinite(frameTimeMs) || (this.previousFrameTime !== undefined && frameTimeMs < this.previousFrameTime)) return 0;
+      elapsed = this.previousFrameTime === undefined ? 0 : frameTimeMs - this.previousFrameTime;
+      this.previousFrameTime = frameTimeMs;
+    } else this.previousFrameTime = undefined;
+    const delta = Math.min(100, Math.max(0, Number.isFinite(elapsed) ? elapsed : 0));
     this.clockMs += delta; this.paintMs += delta; this.diagnosticMs += delta;
     this.wind.update(delta);
     const cadence = this.preferences.lowPower ? 200 : 100;
     if (this.paintMs >= cadence) { this.paintMs %= cadence; this.drawAmbient(); this.drawRain(); }
     if (this.diagnosticMs >= 1000) { this.diagnosticMs %= 1000; this.publishDiagnostics(); }
+    return delta;
   }
 
   destroy(): void {

@@ -1,0 +1,243 @@
+{
+  "task": "STATION-R09-LIVING-TERRAIN",
+  "subtask": "MAIN136-RECEIVER-DONOR-PRESERVATION",
+  "agent": "/root/station_pipeline_merge",
+  "role": "pixel-asset-pipeline-engineer",
+  "date": "2026-11-22",
+  "status": "PASS_REPRODUCIBLE_DONOR_PRESERVATION",
+  "acceptanceScope": "Pipeline byte preservation only; independent integration review required. Native browser acceptance remains separate.",
+  "reviewedBaselineLocalCommit": "fc522885611f2abbe2685244feb9321d43196c9f",
+  "incomingMainCommit": "030aeb3349f1e9b6d53c62f01f3acf049c31ca82",
+  "incomingMainProxy": "aaa15a25dd5cf686c48d80ffa41649716a38ef84",
+  "donor": {
+    "source": "assets/source/environment/hub/r09/donors/ground-light-mask-r08-reviewed.png",
+    "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+    "method": "Byte-for-byte preservation of the reviewed R09 ground-light donor before the independent R08 PR136 mask update; no resampling, edits or re-encoding.",
+    "integrationReason": "Keep the independently reviewed R09 central-step selection unchanged while retaining main PR136 ground-light mask at its existing R08 path.",
+    "upstreamMainCommit": "030aeb3349f1e9b6d53c62f01f3acf049c31ca82",
+    "publishedSourceCommit": "64e9b425fd2eac67cf31364ec43f8e1021b3866a",
+    "publishedSourceTree": "46957eff6742b8adafda38d2252830cbbbd2164f",
+    "extractionSource": {
+      "localCommit": "fc522885611f2abbe2685244feb9321d43196c9f",
+      "path": "assets/source/environment/hub/r08/pilot/ground-light-mask.png"
+    }
+  },
+  "upstreamR08Preserved": {
+    "path": "assets/source/environment/hub/r08/pilot/ground-light-mask.png",
+    "sha256": "27975d8e5b9cc5737dd502d157eaffbdb30c481c612c275db43aae16afd36a9f",
+    "equalsIncomingMainBytes": true
+  },
+  "sourceSpec": {
+    "path": "assets/source/environment/hub/r09/source-spec.json",
+    "beforeSha256": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec",
+    "afterSha256": "f21754e0d3a2f69b167f8837a22ebf9d2ffa62c182feb8c8db2dff3b7ff21f4c",
+    "onlyChanges": [
+      "receivers[ground-light-mask].source",
+      "provenance.groundLightDonor"
+    ],
+    "identicalAfterUndoingTheseTwoMetadataChanges": true
+  },
+  "renderManifest": {
+    "excludedMetadataKeys": [
+      "sourceSpecCanonicalSha256",
+      "provenance"
+    ],
+    "beforeCanonicalSha256": "1a399abf06a60e80d227b80a3ef17a7387c3087afe02523d2a211862d2085d6d",
+    "afterCanonicalSha256": "1a399abf06a60e80d227b80a3ef17a7387c3087afe02523d2a211862d2085d6d",
+    "allOtherFieldsEqual": true,
+    "geometryAndLightingUnchanged": true,
+    "reviewUnchanged": true,
+    "productionReady": false
+  },
+  "generatedManifests": [
+    {
+      "path": "assets/generated/hub/r09/manifest.json",
+      "beforeSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+      "afterSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+    },
+    {
+      "path": "apps/web/public/hub/r09/manifest.json",
+      "beforeSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+      "afterSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+    },
+    {
+      "path": "packages/world-engine/src/assets/hub/r09-manifest.json",
+      "beforeSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+      "afterSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+    }
+  ],
+  "pngs": [
+    {
+      "id": "hub.r09.sky",
+      "paths": [
+        "assets/generated/hub/r09/sky.png",
+        "apps/web/public/hub/r09/sky.png"
+      ],
+      "bytes": 35625,
+      "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.water",
+      "paths": [
+        "assets/generated/hub/r09/water.png",
+        "apps/web/public/hub/r09/water.png"
+      ],
+      "bytes": 2070,
+      "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.architecture-ground",
+      "paths": [
+        "assets/generated/hub/r09/architecture-ground.png",
+        "apps/web/public/hub/r09/architecture-ground.png"
+      ],
+      "bytes": 251757,
+      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.foreground",
+      "paths": [
+        "assets/generated/hub/r09/foreground.png",
+        "apps/web/public/hub/r09/foreground.png"
+      ],
+      "bytes": 46463,
+      "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.clouds.east-wisp",
+      "paths": [
+        "assets/generated/hub/r09/clouds-east-wisp.png",
+        "apps/web/public/hub/r09/clouds-east-wisp.png"
+      ],
+      "bytes": 290,
+      "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "paths": [
+        "assets/generated/hub/r09/foliage-central-topiary.png",
+        "apps/web/public/hub/r09/foliage-central-topiary.png"
+      ],
+      "bytes": 736,
+      "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "paths": [
+        "assets/generated/hub/r09/foliage-left-front-shrub.png",
+        "apps/web/public/hub/r09/foliage-left-front-shrub.png"
+      ],
+      "bytes": 660,
+      "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "paths": [
+        "assets/generated/hub/r09/foliage-left-planter-topiary.png",
+        "apps/web/public/hub/r09/foliage-left-planter-topiary.png"
+      ],
+      "bytes": 720,
+      "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "paths": [
+        "assets/generated/hub/r09/foliage-right-planter-topiary.png",
+        "apps/web/public/hub/r09/foliage-right-planter-topiary.png"
+      ],
+      "bytes": 684,
+      "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "paths": [
+        "assets/generated/hub/r09/foliage-foreground-right.png",
+        "apps/web/public/hub/r09/foliage-foreground-right.png"
+      ],
+      "bytes": 4061,
+      "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.window-light-mask",
+      "paths": [
+        "assets/generated/hub/r09/window-light-mask.png",
+        "apps/web/public/hub/r09/window-light-mask.png"
+      ],
+      "bytes": 905,
+      "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.lamp-light-mask",
+      "paths": [
+        "assets/generated/hub/r09/lamp-light-mask.png",
+        "apps/web/public/hub/r09/lamp-light-mask.png"
+      ],
+      "bytes": 708,
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+      "byteIdenticalToReviewedCommit": true
+    },
+    {
+      "id": "hub.r09.ground-light-mask",
+      "paths": [
+        "assets/generated/hub/r09/ground-light-mask.png",
+        "apps/web/public/hub/r09/ground-light-mask.png"
+      ],
+      "bytes": 827,
+      "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
+      "byteIdenticalToReviewedCommit": true
+    }
+  ],
+  "pngCount": 13,
+  "pngBytes": 345506,
+  "decodedRgbaBytes": 2714248,
+  "commands": [
+    {
+      "command": "python3 tools/assets/test_hub_r09.py",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "test_archive_receiver_preserves_wood_posts_shelves_and_door_front (__main__.StationExportContract.test_archive_receiver_preserves_wood_posts_shelves_and_door_front) ... ok\ntest_changed_provider_source_requires_new_pin (__main__.StationExportContract.test_changed_provider_source_requires_new_pin) ... ok\ntest_cloud_clip_excludes_forest_tree_tips_and_mast (__main__.StationExportContract.test_cloud_clip_excludes_forest_tree_tips_and_mast) ... ok\ntest_cloud_drift_cannot_change_y_or_wrap_onscreen (__main__.StationExportContract.test_cloud_drift_cannot_change_y_or_wrap_onscreen) ... ok\ntest_cloud_selector_is_versioned (__main__.StationExportContract.test_cloud_selector_is_versioned) ... ok\ntest_cloud_source_cannot_include_a_foreground_silhouette (__main__.StationExportContract.test_cloud_source_cannot_include_a_foreground_silhouette) ... ok\ntest_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop (__main__.StationExportContract.test_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop) ... ok\ntest_entry_receiver_selects_glass_and_excludes_pier_and_frames (__main__.StationExportContract.test_entry_receiver_selects_glass_and_excludes_pier_and_frames) ... ok\ntest_export_filename_is_not_a_path (__main__.StationExportContract.test_export_filename_is_not_a_path) ... ok\ntest_image_cannot_be_used_as_white_receiver_mask (__main__.StationExportContract.test_image_cannot_be_used_as_white_receiver_mask) ... ok\ntest_leaf_selection_outside_source_fails (__main__.StationExportContract.test_leaf_selection_outside_source_fails) ... ok\ntest_light_region_cannot_point_to_unknown_mask (__main__.StationExportContract.test_light_region_cannot_point_to_unknown_mask) ... ok\ntest_native_sky_patch_preserves_the_vertical_colour_ramp (__main__.StationExportContract.test_native_sky_patch_preserves_the_vertical_colour_ramp) ... ok\ntest_native_source_roundtrip_and_deterministic_bytes (__main__.StationExportContract.test_native_source_roundtrip_and_deterministic_bytes) ... ok\ntest_provider_path_cannot_escape_selected_project_source (__main__.StationExportContract.test_provider_path_cannot_escape_selected_project_source) ... ok\ntest_receiver_edits_preserve_all_pixels_outside_explicit_ownership (__main__.StationExportContract.test_receiver_edits_preserve_all_pixels_outside_explicit_ownership) ... ok\ntest_receiver_replacement_cannot_overwrite_unrelated_source_selection (__main__.StationExportContract.test_receiver_replacement_cannot_overwrite_unrelated_source_selection) ... ok\ntest_reflected_light_cannot_strengthen_toward_the_fountain (__main__.StationExportContract.test_reflected_light_cannot_strengthen_toward_the_fountain) ... ok\ntest_scene_transform_cannot_silently_change_grid (__main__.StationExportContract.test_scene_transform_cannot_silently_change_grid) ... ok\ntest_sky_water_partition_cannot_overlap (__main__.StationExportContract.test_sky_water_partition_cannot_overlap) ... ok\ntest_step_receiver_excludes_glass_instrument_and_lower_fountain (__main__.StationExportContract.test_step_receiver_excludes_glass_instrument_and_lower_fountain) ... ok\ntest_two_moving_layers_cannot_own_same_pixel (__main__.StationExportContract.test_two_moving_layers_cannot_own_same_pixel) ... ok\ntest_unbounded_gain_fails (__main__.StationExportContract.test_unbounded_gain_fails) ... ok\ntest_unreviewed_displacement_cap_fails (__main__.StationExportContract.test_unreviewed_displacement_cap_fails) ... ok\ntest_water_scanlines_match_png_and_exclude_fir_and_shore (__main__.StationExportContract.test_water_scanlines_match_png_and_exclude_fir_and_shore) ... ok\ntest_wrong_provider_size_does_not_get_rescaled (__main__.StationExportContract.test_wrong_provider_size_does_not_get_rescaled) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 5.835s\n\nOK\n"
+    },
+    {
+      "command": "python3 tools/assets/build_hub_r09.py --check",
+      "exitCode": 0,
+      "stdout": "{\"result\": \"CHECK\", \"assets\": 13, \"sourceHashesVerified\": true, \"restRoundtripRgbaExact\": true, \"outsideMovingMaskChangedPixels\": 0, \"hiddenPlateUsedPixels\": 2255, \"hiddenPlateChangedPixels\": 2255, \"cloudPixels\": 61, \"vegetationPieces\": 5, \"cloudIslands\": 1, \"cloudSilhouetteClearanceVerified\": true, \"cloudClipPixels\": 2352, \"cloudClipDomain\": \"cloudClip\", \"skyPatchMode\": \"native-sky-region-copy\", \"masterRgbaSha256\": \"376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7\", \"exportResampling\": \"none\", \"paletteQuantization\": false, \"artAcceptanceImplied\": false, \"pngBytes\": 345506, \"decodedRgbaBytes\": 2714248}\n",
+      "stderr": ""
+    },
+    {
+      "command": "python3 tools/assets/build_hub_r09.py --check",
+      "purpose": "Published-source provenance follow-up",
+      "exitCode": 0,
+      "stdout": "{\"result\": \"CHECK\", \"assets\": 13, \"sourceHashesVerified\": true, \"restRoundtripRgbaExact\": true, \"outsideMovingMaskChangedPixels\": 0, \"hiddenPlateUsedPixels\": 2255, \"hiddenPlateChangedPixels\": 2255, \"cloudPixels\": 61, \"vegetationPieces\": 5, \"cloudIslands\": 1, \"cloudSilhouetteClearanceVerified\": true, \"cloudClipPixels\": 2352, \"cloudClipDomain\": \"cloudClip\", \"skyPatchMode\": \"native-sky-region-copy\", \"masterRgbaSha256\": \"376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7\", \"exportResampling\": \"none\", \"paletteQuantization\": false, \"artAcceptanceImplied\": false, \"pngBytes\": 345506, \"decodedRgbaBytes\": 2714248}\n",
+      "stderr": ""
+    }
+  ],
+  "restrictionsObserved": [
+    "No generated PNG was hand-edited",
+    "No runtime code changed",
+    "No new SpriteCook generation or credit usage",
+    "No local browser or server",
+    "No dependency installation",
+    "No CI trigger",
+    "No git commit merge or publication"
+  ],
+  "publishedSourceVerification": {
+    "publishedCommit": "64e9b425fd2eac67cf31364ec43f8e1021b3866a",
+    "publishedTree": "46957eff6742b8adafda38d2252830cbbbd2164f",
+    "localEquivalentCommit": "6118cc498e7d970d8564dc231d2359b6cb00014b",
+    "localEquivalentTreeVerified": true,
+    "donorEqualsLocalEquivalentGitBlobBytes": true,
+    "prior26TestsSourceSpecSha256": "5431f32a339a054769ca51b4c433e73909b89204a8077aa92b0988db7439c73c",
+    "changeAfterTests": "Only published-source provenance added; source geometry and all renderer content unchanged."
+  }
+}

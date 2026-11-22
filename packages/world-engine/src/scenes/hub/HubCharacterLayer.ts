@@ -30,7 +30,7 @@ const MAX_ANIMATED_CROWD = 4;
 const CROWD_SAMPLE_MS = 64;
 
 /** Dynamically enqueue accepted sheets after their semantic manifest arrives. */
-export function preloadHubCharacters(scene: Phaser.Scene): void {
+export function preloadHubCharacters(scene: Phaser.Scene, adaptClip?: (clip: WorldCharacterClip) => WorldCharacterClip): void {
   const errors: string[] = [];
   scene.registry.set(ERROR_REGISTRY, errors);
   scene.registry.remove(PACK_REGISTRY);
@@ -38,6 +38,13 @@ export function preloadHubCharacters(scene: Phaser.Scene): void {
     try {
       const original = parseCharacterManifest(raw);
       const pack = parseCharacterManifest({ ...original, actors: [...original.actors, ...stationFauna.station] });
+      if (adaptClip) for (const actor of pack.actors) {
+        const clips = actor.clips;
+        for (const action of Object.keys(clips) as WorldCharacterAction[]) {
+          const clip = clips[action];
+          if (clip) clips[action] = adaptClip(clip);
+        }
+      }
       scene.registry.set(PACK_REGISTRY, pack);
       for (const actor of pack.actors.filter((entry) => entry.role === 'npc' || entry.role === 'crowd')) {
         for (const clip of Object.values(actor.clips)) {
@@ -82,10 +89,18 @@ interface Actor {
   frame: number;
   state: WorldCharacterAction;
   faunaReady: boolean;
+  shadow?: Phaser.GameObjects.Ellipse;
 }
 
 type CrowdActor = { actor: Actor; plan: ReturnType<typeof stationCrowdPlan>[number] };
 export interface HubCharacterLayerOptions { profile?: 'r01' | 'r09' }
+
+export interface StationCharacterPlacement {
+  placeActor: (definition: WorldCharacterDefinition) => WorldCharacterDefinition | undefined;
+  crowd: ReturnType<typeof stationCrowdPlan>;
+  patrol?: ReturnType<typeof stationCrowdPlan>[number];
+  walkFrame?: (distance: number) => number;
+}
 
 /** Authored frames only. No breathing scale/tween, texture redraw or React frame events. */
 export class HubCharacterLayer {
@@ -104,12 +119,14 @@ export class HubCharacterLayer {
   private visitors = 0;
   private destroyed = false;
   private readonly profile: 'r01' | 'r09';
+  private readonly placement?: StationCharacterPlacement;
   private r09Placed = false;
   private readonly contactShadows?: Phaser.GameObjects.Graphics;
   private shadowsDirty = true;
 
-  constructor(private readonly scene: Phaser.Scene, options: HubCharacterLayerOptions = {}) {
-    this.profile = options.profile ?? 'r01';
+  constructor(private readonly scene: Phaser.Scene, options: HubCharacterLayerOptions | StationCharacterPlacement = {}) {
+    this.profile = 'profile' in options ? options.profile ?? 'r01' : 'r01';
+    this.placement = 'placeActor' in options ? options : undefined;
     this.layout = getR01Layout(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
     if (this.profile === 'r09') {
       this.layout = { ...this.layout, ...R09_ACTOR_SPACE, portrait: false, zoom: 1 };
@@ -120,7 +137,9 @@ export class HubCharacterLayer {
     this.pack = scene.registry.get(PACK_REGISTRY) as WorldCharacterManifest | undefined;
     this.crowdWardrobe = STATION_CROWD_TEXTURES.flatMap((id) => {
       const original = this.pack?.actors.find((entry) => entry.id === id && entry.role === 'crowd');
-      const definition = original && this.definitionForScene(original);
+      // Custom R08 placement filters fixed NPCs; its crowd uses the authored
+      // wardrobe and explicit crowd routes. R09 also rescales crowd artwork.
+      const definition = original && (this.profile === 'r09' ? r09CharacterDefinition(original) : original);
       return definition && Object.values(definition.clips).every((clip) => this.validTexture(clip)) ? [definition] : [];
     });
     const crowdEnabled = this.crowdWardrobe.length > 0;
@@ -158,11 +177,11 @@ export class HubCharacterLayer {
   }
 
   private definitionForScene(source: WorldCharacterDefinition): WorldCharacterDefinition | undefined {
-    return this.profile === 'r09' ? r09CharacterDefinition(source) : source;
+    return this.profile === 'r09' ? r09CharacterDefinition(source) : this.placement ? this.placement.placeActor(source) : source;
   }
 
   private getCrowdPlan() {
-    return this.profile === 'r09' ? r09CrowdPlan() : stationCrowdPlan(this.layout.portrait);
+    return this.profile === 'r09' ? r09CrowdPlan() : this.placement?.crowd ?? stationCrowdPlan(this.layout.portrait);
   }
 
   private place(image: Phaser.GameObjects.Image, x: number, y: number): void {
@@ -188,7 +207,10 @@ export class HubCharacterLayer {
     const image = this.scene.add.image(0, 0, characterTextureKey(clip.assetId), 0)
       .setOrigin(definition.pivot[0], definition.pivot[1])
       .setScale(definition.displayHeight / clip.frameHeight);
-    return { definition, image, clip, elapsedMs: 0, frame: 0, state: 'idle', faunaReady };
+    const shadow = this.placement && definition.id !== 'bird_tit'
+      ? this.scene.add.ellipse(0, 0, definition.displayHeight * .24, 4, 0x233339, .52)
+      : undefined;
+    return { definition, image, clip, elapsedMs: 0, frame: 0, state: 'idle', faunaReady, shadow };
   }
 
   private validTexture(clip: WorldCharacterClip): boolean {
@@ -218,7 +240,8 @@ export class HubCharacterLayer {
       actor.elapsedMs = 0;
       actor.frame = 0;
       actor.image.setFrame(0);
-      actor.image.setDepth(this.profile === 'r09' ? r09ActorDepth(point[1]) : actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
+      if (this.placement) this.placeDepth(actor);
+      else actor.image.setDepth(this.profile === 'r09' ? r09ActorDepth(point[1]) : actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
     }
     if (this.crowd.length > 0) {
       const plans = this.getCrowdPlan();
@@ -243,6 +266,7 @@ export class HubCharacterLayer {
         if (actor.definition.motion) {
           const position = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
           this.place(actor.image, position[0], position[1]);
+          this.placeDepth(actor);
           actor.image.setFlipX(false);
         }
         this.setClip(actor, 'idle');
@@ -281,6 +305,7 @@ export class HubCharacterLayer {
       const offset = this.profile === 'r09' ? r09FaunaOffset(pose.x, pose.y) : [pose.x, pose.y];
       const x = Math.round(point[0] + offset[0]), y = Math.round(point[1] + offset[1]);
       this.place(actor.image, x, y);
+      this.placeDepth(actor);
       if (actor.image.flipX !== pose.facingRight) actor.image.setFlipX(pose.facingRight);
       if (pose.action === 'idle') continue;
       const total = actor.clip.durationsMs.reduce((sum, duration) => sum + duration, 0);
@@ -302,16 +327,20 @@ export class HubCharacterLayer {
       const visible = plan.visitors <= online;
       const image = actor.image;
       if (image.visible !== visible) { image.setVisible(visible); this.shadowsDirty = true; }
+      if (actor.shadow && actor.shadow.visible !== visible) actor.shadow.setVisible(visible);
       if (!visible) continue;
-      const still = this.preferences.reducedMotion || (this.preferences.lowPower && plan.visitors > 0);
+      const still = this.preferences.reducedMotion || (this.preferences.lowPower && (this.placement !== undefined || plan.visitors > 0));
       const pose = stationCrowdPose(plan, this.crowdTimeMs, still, online);
       this.setClip(actor, pose.action);
       const x = Math.round(pose.x), y = Math.round(pose.y);
       this.place(image, x, y);
       if (image.flipX !== pose.facesLeft) image.setFlipX(pose.facesLeft);
-      const depth = this.profile === 'r09' ? r09ActorDepth(y) : (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
-      if (image.depth !== depth) image.setDepth(depth);
-      const frame = characterFrameAtTime(actor.clip, pose.elapsed);
+      if (this.placement) this.placeDepth(actor);
+      else {
+        const depth = this.profile === 'r09' ? r09ActorDepth(y) : (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
+        if (image.depth !== depth) image.setDepth(depth);
+      }
+      const frame = this.plannedFrame(actor, plan, pose);
       if (frame !== actor.frame) { image.setFrame(frame); actor.frame = frame; }
     }
     this.paintContactShadows();
@@ -337,6 +366,10 @@ export class HubCharacterLayer {
     for (const actor of this.actors) {
       if (!actor.image.visible) continue;
       if (isMovingFauna(actor.definition.id)) continue;
+      if (this.placement?.patrol && actor.definition.motion) {
+        if (sample) this.paintPatrol(actor, this.placement.patrol);
+        continue;
+      }
       // Extra background actors stay in their authored first frame if a future
       // content pack contains more than this scene's three-actor budget (plus the existing fountain loop).
       if (actor.clip.frameCount === 1 && actor.state === 'idle') continue;
@@ -349,6 +382,7 @@ export class HubCharacterLayer {
         const patrol = characterPatrolPose(actor.definition, actor.elapsedMs, this.layout.portrait);
         if (patrol) {
           this.place(actor.image, patrol.x, patrol.y);
+          this.placeDepth(actor);
           if (actor.image.flipX !== patrol.flipX) actor.image.setFlipX(patrol.flipX);
         } else {
           const direction = actor.definition.motion.direction === 'right' ? 1 : -1;
@@ -370,14 +404,39 @@ export class HubCharacterLayer {
     this.paintContactShadows();
   }
 
+  private plannedFrame(actor: Actor, plan: CrowdActor['plan'], pose: ReturnType<typeof stationCrowdPose>): number {
+    if (this.placement?.walkFrame && pose.action === 'walk' && plan.action === 'walk') {
+      const length = Math.hypot(plan.to[0] - plan.from[0], plan.to[1] - plan.from[1]);
+      return Math.min(actor.clip.frameCount - 1, this.placement.walkFrame(length * pose.elapsed / plan.travelMs));
+    }
+    return characterFrameAtTime(actor.clip, pose.elapsed);
+  }
+
+  private paintPatrol(actor: Actor, plan: CrowdActor['plan']): void {
+    const pose = stationCrowdPose(plan, this.crowdTimeMs, this.preferences.lowPower, 0);
+    this.setClip(actor, pose.action);
+    actor.image.setPosition(Math.round(pose.x), Math.round(pose.y)).setFlipX(pose.facesLeft);
+    this.placeDepth(actor);
+    const frame = this.plannedFrame(actor, plan, pose);
+    if (actor.frame !== frame) { actor.image.setFrame(frame); actor.frame = frame; }
+  }
+
+  private placeDepth({ image, shadow }: Actor): void {
+    if (!this.placement) return;
+    if (image.depth !== image.y) image.setDepth(image.y);
+    if (shadow && (shadow.x !== image.x || shadow.y !== image.y)) {
+      shadow.setPosition(image.x, image.y).setDepth(image.y - .25);
+    }
+  }
+
   private publishDiagnostics(): void {
     const visible = this.actors.filter((actor) => actor.image.visible);
     const crowd = this.crowd.filter(({ actor }) => actor.image.visible);
     const animated = visible.filter((actor) => !isMovingFauna(actor.definition.id) && actor.clip.frameCount > 1).length;
     const diagnostics = {
       artAccepted: this.pack?.artAcceptance === 'PASS',
-      characterClass: 'r02-station-actor',
-      placementProfile: this.profile,
+      characterClass: this.placement ? 'r08-station-actor' : 'r02-station-actor',
+      placementProfile: this.placement ? 'r08' : this.profile,
       ...(this.profile === 'r09' ? { logicalSpace: R09_ACTOR_SPACE } : {}),
       playerPresent: false,
       personalizationScope: 'saved-portrait',
@@ -404,8 +463,10 @@ export class HubCharacterLayer {
     this.unsubscribePresence();
     this.scene.events.off('ui:preferences', this.applyPreferences, this);
     this.scene.scale.off(Phaser.Scale.Events.RESIZE, this.resize, this);
-    this.actors.forEach((actor) => actor.image.destroy());
-    this.crowd.forEach(({ actor }) => actor.image.destroy());
+    for (const actor of this.actors.concat(this.crowd.map(({ actor }) => actor))) {
+      actor.shadow?.destroy();
+      actor.image.destroy();
+    }
     this.contactShadows?.destroy();
   }
 }

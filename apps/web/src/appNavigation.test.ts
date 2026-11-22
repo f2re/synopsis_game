@@ -18,9 +18,10 @@ test('the first level is a study surface and character return is limited to its 
   assert.equal(safeReturnPath('/level-one'), '/', 'The generic reading return does not begin accepting active game routes.');
 });
 
-test('only the exact preview return is accepted by the existing reading room', () => {
+test('only exact R08 preview destinations are accepted by the existing reading room', () => {
   assert.equal(archiveReturnPath('returnTo=/art/r08'), '/art/r08');
   assert.equal(archiveReturnPath('returnTo=%2Fart%2Fr08'), '/art/r08');
+  assert.equal(archiveReturnPath('returnTo=%2F%3FstationArt%3Dr08'), '/?stationArt=r08');
   for (const search of ['', 'returnTo=/admin', 'returnTo=https://example.com', 'returnTo=//example.com', 'returnTo=/art/r08/../admin']) {
     assert.equal(archiveReturnPath(search), '/');
   }

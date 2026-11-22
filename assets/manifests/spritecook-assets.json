@@ -1074,6 +1074,12 @@
       "asset_id": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
       "sha12": "f12179a3e3a7",
       "label": "assets/source/environment/hub/r09/provider/clean-sky-01.png"
+    },
+    {
+      "id": "assets/source/environment/hub/r08/candidates/provider/cluster-redraw-01.png",
+      "asset_id": "dcbbc28f-ed91-4484-8176-1d48822ee82a",
+      "sha12": "a27a7db65444",
+      "label": "26063 · R08 · материал камня · этюд 01"
     }
   ]
 }

@@ -186,5 +186,73 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.equal(scene.events.count(), 0); assert.equal(scene.scale.count(), 0); assert.equal(bridgeEvents.count(), 0);
   rows.push({ cycle: cycle + 1, objects: created, masks: scene.masks.length, remainingListeners: bridgeEvents.count(), movingClouds, stepReceiver });
 }
+
+// The shipping Scene supplies native frame timestamps. Deliberately inflated
+// Phaser deltas must not make scenery or the returned actor interval run fast.
+const clockScene = makeScene(), clockLayer = new HubR09Layer(clockScene);
+const clockSnapshot = () => { clockLayer.applyDayPhase('day'); return clockScene.registry.get('world.station'); };
+let frameTime = 1000, returnedElapsed = 0;
+assert.equal(clockLayer.update(80, frameTime), 0, 'The first native frame seeds time without inventing elapsed time');
+for (let frame = 1; frame <= 60; frame++) {
+  frameTime = 1000 + frame * 1000 / 60;
+  const elapsed = clockLayer.update(frame % 2 ? 31 : 42, frameTime);
+  assert.ok(Math.abs(elapsed - 1000 / 60) < 1e-9, 'Actors receive the actual frame interval despite the inflated Phaser delta');
+  returnedElapsed += elapsed;
+}
+const oneSecond = clockSnapshot().motion;
+assert.ok(Math.abs(returnedElapsed - 1000) < 1e-9);
+assert.ok(Math.abs(oneSecond.clockMs - 1000) < 1e-9);
+assert.ok(Math.abs(oneSecond.foliage.elapsedMs - 1000) < 1e-9);
+assert.equal(oneSecond.foliage.paintedFrames, 10, 'Ten normal vegetation paints occupy one actual second');
+
+for (const stamp of [frameTime, frameTime - 1000, NaN, Infinity, -Infinity]) {
+  assert.equal(clockLayer.update(80, stamp), 0, 'Repeated, backwards and invalid timestamps do not advance motion');
+}
+frameTime += 20;
+assert.equal(clockLayer.update(80, frameTime), 20, 'Invalid timestamps cannot replace the last valid timestamp');
+frameTime += 5000;
+assert.equal(clockLayer.update(5000, frameTime), 100, 'An actual oversized frame remains capped at 100ms');
+
+bridge.emit('ui:world_visible', false);
+const hiddenClock = JSON.stringify(clockScene.registry.get('world.station').motion);
+frameTime += 15000;
+assert.equal(clockLayer.update(5000, frameTime), 0);
+assert.equal(JSON.stringify(clockScene.registry.get('world.station').motion), hiddenClock, 'A hidden native interval preserves clock, water, clouds and vegetation pose');
+bridge.emit('ui:world_visible', true);
+frameTime += 15000;
+assert.equal(clockLayer.update(5000, frameTime), 0, 'The first resumed frame excludes the entire hidden interval');
+frameTime += 20; assert.equal(clockLayer.update(80, frameTime), 20);
+bridge.emit('ui:world_visible', true);
+frameTime += 20;
+assert.equal(clockLayer.update(80, frameTime), 20, 'An unchanged visibility notification does not discard a live interval');
+
+clockScene.events.emit('ui:preferences', { reducedMotion: true });
+const reducedClock = JSON.stringify(clockScene.registry.get('world.station').motion);
+frameTime += 20000; assert.equal(clockLayer.update(5000, frameTime), 0);
+assert.equal(JSON.stringify(clockScene.registry.get('world.station').motion), reducedClock, 'Reduced motion holds its native clock and still pose');
+clockScene.events.emit('ui:preferences', { reducedMotion: false });
+frameTime += 20000;
+assert.equal(clockLayer.update(5000, frameTime), 0, 'Leaving reduced motion resets the native time origin');
+frameTime += 20; assert.equal(clockLayer.update(80, frameTime), 20);
+
+clockScene.events.emit('ui:preferences', { lowPower: true });
+const lowBefore = clockSnapshot().motion;
+for (let frame = 0; frame < 20; frame++) { frameTime += 50; assert.equal(clockLayer.update(100, frameTime), 50); }
+const lowAfter = clockSnapshot().motion;
+assert.equal(lowAfter.clockMs - lowBefore.clockMs, 1000);
+assert.equal(lowAfter.foliage.paintedFrames - lowBefore.foliage.paintedFrames, 5, 'Low power keeps five vegetation paints per actual second');
+assert.equal(clockLayer.update(35), 35, 'Existing manual-delta handler callers keep their explicit contract');
+frameTime += 40; assert.equal(clockLayer.update(80, frameTime), 0, 'Switching from the manual contract reseeds native timestamps');
+frameTime += 10; assert.equal(clockLayer.update(80, frameTime), 10);
+clockLayer.destroy();
+assert.equal(clockLayer.update(5000, frameTime + 5000), 0);
+assert.ok(clockScene.objects.every(value => value.destroyed === 1));
+assert.ok(clockScene.masks.every(value => value.destroyed === 1));
+assert.equal(bridgeEvents.count(), 0); assert.equal(clockScene.events.count(), 0); assert.equal(clockScene.scale.count(), 0);
+const nativeFrameClock = { status: 'PASS', nativeElapsedMs: 1000, returnedActorElapsedMs: returnedElapsed,
+  sceneryElapsedMs: oneSecond.clockMs, foliageElapsedMs: oneSecond.foliage.elapsedMs, normalPaintedFrames: oneSecond.foliage.paintedFrames,
+  lowPowerElapsedMs: lowAfter.clockMs - lowBefore.clockMs, lowPowerPaintedFrames: lowAfter.foliage.paintedFrames - lowBefore.foliage.paintedFrames,
+  covered: ['inflated Phaser delta', 'duplicate/backwards/invalid timestamps', '100ms frame cap', 'native hidden/resume origin',
+    'unchanged visibility notification', 'reduced-motion origin', 'low-power cadence', 'manual fallback reseeding', 'disposed layer'] };
 console.log(JSON.stringify({ status: 'PASS', scope: 'Real R09 integration handlers with Phaser scene doubles; no browser or rendered-pixel acceptance',
-  manifestSha256: crypto.createHash('sha256').update(fs.readFileSync(manifestFile)).digest('hex'), sources, cycles: rows }, null, 2));
+  manifestSha256: crypto.createHash('sha256').update(fs.readFileSync(manifestFile)).digest('hex'), sources, cycles: rows, nativeFrameClock }, null, 2));

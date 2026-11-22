@@ -3034,7 +3034,7 @@
     }
   },
   "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
-  "sourceSpecCanonicalSha256": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec",
+  "sourceSpecCanonicalSha256": "f21754e0d3a2f69b167f8837a22ebf9d2ffa62c182feb8c8db2dff3b7ff21f4c",
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
     "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
@@ -3076,6 +3076,19 @@
       "contract": "docs/testing/evidence/station-r09/pixel-review-light-01-contract.json",
       "report": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
       "method": "R09-only binary white receiver edits on pinned original masks; source-scene RGB and R08 files unchanged."
+    },
+    "groundLightDonor": {
+      "source": "assets/source/environment/hub/r09/donors/ground-light-mask-r08-reviewed.png",
+      "sha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+      "method": "Byte-for-byte preservation of the reviewed R09 ground-light donor before the independent R08 PR136 mask update; no resampling, edits or re-encoding.",
+      "integrationReason": "Keep the independently reviewed R09 central-step selection unchanged while retaining main PR136 ground-light mask at its existing R08 path.",
+      "upstreamMainCommit": "030aeb3349f1e9b6d53c62f01f3acf049c31ca82",
+      "publishedSourceCommit": "64e9b425fd2eac67cf31364ec43f8e1021b3866a",
+      "publishedSourceTree": "46957eff6742b8adafda38d2252830cbbbd2164f",
+      "extractionSource": {
+        "localCommit": "fc522885611f2abbe2685244feb9321d43196c9f",
+        "path": "assets/source/environment/hub/r08/pilot/ground-light-mask.png"
+      }
     }
   },
   "validation": {

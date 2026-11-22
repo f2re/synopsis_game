@@ -55,7 +55,11 @@ class Canvas {}
 const dependencies = {
   react: {
     useRef(value) { const index = hookIndex++; return hooks[index] ??= { current: index === 0 ? host : value }; },
-    useState() { hookIndex++; return [[{ id: 'codepost', label: 'Кодовый пост', state: 'available', x: 20, y: 30, width: 100, height: 80 }], (value) => updates.push(value)]; },
+    useState(initial) {
+      hookIndex++;
+      const value = typeof initial === 'function' ? initial() : [{ id: 'codepost', label: 'Кодовый пост', state: 'available', x: 20, y: 30, width: 100, height: 80 }];
+      return [value, (next) => updates.push(next)];
+    },
     useEffect(fn, deps) {
       const hook = hooks[hookIndex++] ??= {};
       if (!hook.deps || deps.some((value, index) => !Object.is(value, hook.deps[index]))) {
@@ -69,6 +73,7 @@ const dependencies = {
   '../features/settings/settingsStore': { getSettings: () => settings },
   '../features/atmosphere/AtmosphereProvider': { useAmbientWeather: () => weather },
   '../features/atmosphere/audioGate': { AUDIO_UNLOCK_EVENT: 'audio-unlock', isAudioUnlocked: () => unlocked },
+  '../features/ui/PixelScrollArea': { PixelScrollArea: 'PixelScrollArea' },
 };
 const code = ts.transpileModule(fs.readFileSync('apps/web/src/game/WorldCanvas.tsx', 'utf8').replaceAll('import.meta.env.DEV', 'false'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
@@ -100,13 +105,14 @@ assertWeather('rain', true, 'The automatic cycle can restore rain without replac
 assert.equal(creations, 1, 'Weather changes never create a second game');
 const unchangedCount = weatherEvents.length;
 render(); assert.equal(weatherEvents.length, unchangedCount, 'Unchanged React renders do not republish weather');
-const panel = output.props.children.find((child) => child && child.type === 'aside');
+const sceneChildren = output.props.children.props.children;
+const panel = sceneChildren.find((child) => child && child.type === 'aside');
 assert.equal(panel, undefined, 'The campus must not expose a personal-player control panel');
 assert.equal(output.props.onPointerDown, undefined, 'Canvas clicks do not move a personal avatar');
 assert.equal(output.props.onKeyDown, undefined, 'Native keyboard interaction stays with the building buttons');
 assert.equal(window.listeners.get('keydown')?.length ?? 0, 0, 'No global movement key handler');
 assert(![...bridge.listeners.keys()].some((key) => /avatar/.test(key)), 'The world never subscribes to a player profile or navigation');
-const building = output.props.children[1][0];
+const building = sceneChildren[1][0];
 assert.equal(building.props['data-building-id'], 'codepost');
 building.props.onClick();
 assert.equal(commands.length, 1); assert.equal(commands[0].buildingId, 'codepost');

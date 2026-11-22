@@ -335,8 +335,8 @@ export class HubScene extends Phaser.Scene {
     }
     const preferences = normalizeWorldPreferences(this.registry.get('ui.preferences'));
     if (this.r09Layer) {
-      this.r09Layer.update(deltaMs);
-      if (!preferences.reducedMotion) this.characterLayer?.update(deltaMs);
+      const elapsed = this.r09Layer.update(deltaMs, _time);
+      if (!preferences.reducedMotion) this.characterLayer?.update(elapsed);
       return;
     }
     if (preferences.reducedMotion) return;

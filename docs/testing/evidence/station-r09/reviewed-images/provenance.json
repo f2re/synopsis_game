@@ -1,0 +1,48 @@
+{
+  "kind": "unaltered-browser-screenshot-excerpts",
+  "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+  "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+  "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+  "workflowRun": 45009703486,
+  "artifactId": 14749089315,
+  "engine": "firefox",
+  "sourceReportStatus": "PASS",
+  "scope": "Actual phase images; final browser/release acceptance is recorded separately.",
+  "images": [
+    {
+      "file": "solar-day-1366.png",
+      "bytes": 398397,
+      "sha256": "7930dc2afa46d915368aa75aac13b49cad7ae8162d2eca9702469cc8923e809c",
+      "sourceArtifact": "station-environment-firefox",
+      "altered": false
+    },
+    {
+      "file": "solar-twilight-1366.png",
+      "bytes": 380507,
+      "sha256": "2aea4b9c718655d43f9aa972d912695b76df6807a31ecac189b85be4a0e1968f",
+      "sourceArtifact": "station-environment-firefox",
+      "altered": false
+    },
+    {
+      "file": "solar-night-1366.png",
+      "bytes": 362616,
+      "sha256": "9c955d4540d7a2f4992f0ac94d6282670f6975fbf85b3e8f308b6fa4d0fb7b4e",
+      "sourceArtifact": "station-environment-firefox",
+      "altered": false
+    },
+    {
+      "file": "solar-night-390.png",
+      "bytes": 122816,
+      "sha256": "a7fda613700fb8f945a2b98f7ba5d66d95d479492b234dac8acc27508d91d079",
+      "sourceArtifact": "station-environment-firefox",
+      "altered": false
+    },
+    {
+      "file": "solar-day-844.png",
+      "bytes": 233186,
+      "sha256": "eb6cd65648b143fbbafb2875ecc22896ca08728edcc6bc46314c33a084573c0e",
+      "sourceArtifact": "station-environment-firefox",
+      "altered": false
+    }
+  ]
+}

@@ -150,6 +150,45 @@ function assertNativeTiming(value) {
   assert.equal(value.clock?.dateOnly, true, 'Only Date is replaced for the solar scenario');
   assert.equal(Object.values(value.clock.nativeTiming).every(Boolean), true, 'RAF, performance and timers retain their original identities');
 }
+function installNativeVisibilityProbe() {
+  // Event tracing never requests frames during acceptance. The independent
+  // native RAF probe is armed only AFTER the unchanged gate has already failed.
+  let frames = 0, lastRafAt = null, requestId = null, active = false, stopped = false;
+  const events = [];
+  const snapshot = () => {
+    const host = document.querySelector('.world-canvas-host > div[data-station]');
+    const station = host?.dataset.station ? JSON.parse(host.dataset.station) : null;
+    // Phaser may publish its own debug reference; absence is reported rather
+    // than adding a product hook or changing the game loop to obtain it.
+    const game = globalThis.PHASER_GAME, loop = game?.loop;
+    const gameLoop = loop ? { running: loop.running, started: loop.started, frame: loop.frame,
+      time: loop.time, lastTime: loop.lastTime, rawDelta: loop.rawDelta, delta: loop.delta,
+      fpsLimit: loop.fpsLimit, rafRunning: loop.raf?.isRunning ?? null,
+      gamePaused: game.isPaused, pendingDestroy: game.pendingDestroy } : null;
+    return { at: performance.now(), active, frames, lastRafAt, visibility: document.visibilityState, focused: document.hasFocus(),
+      stationClockMs: station?.motion.clockMs ?? null, paintedFrames: station?.motion.foliage.paintedFrames ?? null,
+      paused: station?.motion.paused ?? null, context: host?.dataset.context ?? null, gameLoop };
+  };
+  const observe = event => { events.push({ type: event.type, ...snapshot() }); if (events.length > 32) events.shift(); };
+  const listeners = [[document, 'visibilitychange'], [document, 'freeze'], [document, 'resume'],
+    [window, 'focus'], [window, 'blur'], [window, 'pageshow'], [window, 'pagehide']];
+  for (const [target, type] of listeners) target.addEventListener(type, observe);
+  const frame = now => { if (!active || stopped) return; frames++; lastRafAt = now; requestId = requestAnimationFrame(frame); };
+  globalThis.__stationNativeVisibilityProbe = {
+    snapshot: () => ({ ...snapshot(), events: [...events] }),
+    startAfterFailure() {
+      if (active || stopped) return;
+      active = true; requestId = requestAnimationFrame(frame);
+    },
+    stop() {
+      active = false; stopped = true;
+      if (requestId !== null) cancelAnimationFrame(requestId);
+      requestId = null;
+      for (const [target, type] of listeners) target.removeEventListener(type, observe);
+    },
+  };
+  observe({ type: 'installed' });
+}
 async function state(page) {
   return page.evaluate(() => {
     const host = document.querySelector('.world-canvas-host > div');
@@ -172,7 +211,8 @@ async function state(page) {
     return { ...host?.dataset, stationDiagnostics: host?.dataset.station ? JSON.parse(host.dataset.station) : null,
       clock: globalThis.__stationFixedDate?.snapshot(), ambientWeather: document.documentElement.dataset.ambientWeather,
       storedWeather: JSON.parse(localStorage.getItem('synopsis_26063_settings') || '{}').weather,
-      visibility: document.visibilityState, date: new Date().toISOString(), viewport: [innerWidth, innerHeight], dpr: devicePixelRatio,
+      visibility: document.visibilityState, focused: document.hasFocus(), nativeFrameProbe: globalThis.__stationNativeVisibilityProbe?.snapshot() ?? null,
+      date: new Date().toISOString(), viewport: [innerWidth, innerHeight], dpr: devicePixelRatio,
       canvasCount: document.querySelectorAll('canvas').length, canvasSize: canvas ? [canvas.width, canvas.height] : null, renderer,
       documentSize: [document.documentElement.scrollWidth, document.documentElement.scrollHeight] };
   });
@@ -510,8 +550,10 @@ async function nativeVisibility(base) {
   const context = browser.contexts()[0]; context.setDefaultTimeout(15_000);
   await context.addInitScript(key => localStorage.setItem(key, JSON.stringify({ soundEnabled: false, weather: 'rain' })), settingsKey);
   const page = await context.newPage(); observePage(page, 'native-visibility');
+  await page.addInitScript(installNativeVisibilityProbe);
   await page.setViewportSize(viewports[0]); await setDate(page, dates[0].iso); await page.goto(base); await ready(page);
   await phaseIs(page, 'day'); await weatherIs(page, 'rain', true);
+  const frameProbeBeforeHidden = await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.snapshot());
   const background = await context.newPage(); await background.goto('about:blank'); await background.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'hidden', undefined, { polling: 100 });
   await weatherIs(page, 'rain', false);
@@ -526,7 +568,8 @@ async function nativeVisibility(base) {
     assert.deepEqual(hiddenStation.motion.foliage.poses, before.motion.foliage.poses, 'Hidden vegetation holds its actual pose');
     assert.deepEqual(hiddenStation.motion.cloudOffsets, before.motion.cloudOffsets, 'Hidden clouds hold position');
     assert.equal(hiddenStation.motion.waterFrame, before.motion.waterFrame, 'Hidden water holds its frame');
-    record('r09-native-hidden-clock-hold', { before, after: hiddenStation, hiddenDurationMs: 1_500, visibilityMocked: false });
+    record('r09-native-hidden-clock-hold', { before, after: hiddenStation, hiddenDurationMs: 1_500, visibilityMocked: false,
+      frameProbeBeforeHidden, frameProbeAfterHidden: await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.snapshot()) });
   }
   await setDate(page, dates[2].iso);
   record('native-hidden-date-change', { ...await state(page), visibilityMocked: false });
@@ -536,18 +579,38 @@ async function nativeVisibility(base) {
   await weatherIs(page, 'rain', true);
   record('native-resume-refresh', { ...await state(page), refreshMs, visibilityMocked: false, expectedPhase: 'night', thresholdMs: 2_500 });
   if (hiddenStation) {
-    await page.waitForFunction(previous => {
-      const station = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station);
-      // Foregrounding may publish the first resumed tick before the next
-      // 100 ms wind frame; regular diagnostics are published at most at 1 Hz.
-      return !station.motion.paused && station.motion.clockMs > previous.clockMs
-        && station.motion.foliage.paintedFrames > previous.paintedFrames;
-    }, { clockMs: hiddenStation.motion.clockMs, paintedFrames: hiddenStation.motion.foliage.paintedFrames }, { polling: 100, timeout: 3_000 });
+    try {
+      await page.waitForFunction(previous => {
+        const station = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station);
+        // Foregrounding may publish the first resumed tick before the next
+        // 100 ms wind frame; regular diagnostics are published at most at 1 Hz.
+        return !station.motion.paused && station.motion.clockMs > previous.clockMs
+          && station.motion.foliage.paintedFrames > previous.paintedFrames;
+      }, { clockMs: hiddenStation.motion.clockMs, paintedFrames: hiddenStation.motion.foliage.paintedFrames }, { polling: 100, timeout: 3_000 });
+    } catch (error) {
+      // Capture the original timeout before screenshots OR the diagnostic RAF
+      // can request a compositor frame. Diagnostics can never turn it into PASS.
+      try {
+        record('r09-native-resume-timeout', { status: 'FAIL', ...await state(page), visibleElapsedMs: performance.now() - resumedAt });
+        await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.startAfterFailure());
+        // Allow the ordinary <=1Hz station diagnostics to publish after native
+        // frames resume; this interval is exclusively after the original FAIL.
+        await page.waitForTimeout(1_550);
+        record('r09-native-resume-post-failure-probe', { ...await state(page), diagnosticOnly: true, observerDurationMs: 1_550, originalGateStatus: 'FAIL' });
+      } catch (diagnosticError) {
+        record('r09-native-resume-diagnostic-error', { error: String(diagnosticError), originalGateStatus: 'FAIL' });
+      } finally {
+        await page.evaluate(() => globalThis.__stationNativeVisibilityProbe?.stop()).catch(() => {});
+      }
+      throw error;
+    }
     const after = await stationState(page), visibleElapsedMs = performance.now() - resumedAt;
     const clockAdvanceMs = after.motion.clockMs - hiddenStation.motion.clockMs;
     assert.ok(clockAdvanceMs <= visibleElapsedMs + 150, 'Resume does not apply the elapsed hidden interval to station animation');
     assert.ok(after.motion.foliage.paintedFrames > hiddenStation.motion.foliage.paintedFrames, 'Vegetation resumes painting after real foregrounding');
-    record('r09-native-clock-resume', { after, visibleElapsedMs, clockAdvanceMs, visibilityMocked: false, maximumFirstDeltaMs: 100 });
+    const nativeFrameProbe = await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.snapshot());
+    assert.equal(nativeFrameProbe.active, false); assert.equal(nativeFrameProbe.frames, 0, 'Passing acceptance must never activate the independent diagnostic RAF');
+    record('r09-native-clock-resume', { after, visibleElapsedMs, clockAdvanceMs, visibilityMocked: false, maximumFirstDeltaMs: 100, nativeFrameProbe });
   }
   await capture(page, 'native-night-after-resume'); await background.close();
 }
@@ -606,6 +669,7 @@ function compareBaseline() {
         targetBoxes: [...document.querySelectorAll('[data-building-id]')].map(node => ({ buildingId: node.dataset.buildingId, ...rect(node) })),
         worldState: document.querySelector('.hub-screen')?.dataset.worldState ?? null,
         clock: globalThis.__stationFixedDate?.snapshot(),
+        visibility: document.visibilityState, focused: document.hasFocus(), nativeFrameProbe: globalThis.__stationNativeVisibilityProbe?.snapshot() ?? null,
       };
     }).catch(error => ({ url: page.url(), snapshotError: String(error) }));
     report.failureSnapshots.push({ ...snapshot, lastInteraction: report.lastInteraction ?? null, errors: [...report.errors] });
@@ -613,7 +677,10 @@ function compareBaseline() {
   }
 }).finally(async () => {
   fs.writeFileSync(path.join(output, 'browser-report.json'), JSON.stringify(report, null, 2) + '\n');
-  if (browser) await browser.close().catch(() => {});
+  if (browser) {
+    for (const context of browser.contexts()) for (const page of context.pages()) await page.evaluate(() => globalThis.__stationNativeVisibilityProbe?.stop()).catch(() => {});
+    await browser.close().catch(() => {});
+  }
   if (nativeChrome?.exitCode === null) { const done = once(nativeChrome, 'exit'); nativeChrome.kill('SIGTERM'); await done; }
   if (webServer) { webServer.closeAllConnections(); await new Promise(resolve => webServer.close(resolve)); }
   if (apiProcess?.exitCode === null) { const done = once(apiProcess, 'exit'); apiProcess.kill('SIGTERM'); await done; }

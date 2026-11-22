@@ -17,6 +17,7 @@ from pathlib import Path
 
 import PIL
 from PIL import Image, ImageChops, ImageDraw
+from build_characters_r01 import canonical_png
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "assets/manifests/hub.r08-preview.json"
@@ -137,6 +138,16 @@ def render_pilot_sources(manifest: dict) -> dict[str, Image.Image]:
             image.paste(master, (0, 0), mask)
         elif layer["kind"] == "binary-receiver-mask":
             image.paste((255, 255, 255, 255), (0, 0, *CANVAS), mask)
+        elif layer["kind"] == "material-refinement":
+            donor = rgba(pinned_bytes(layer["donor"]), layer["id"])
+            if donor.size != CANVAS:
+                raise ValueError("Material swatches must use the canonical scene grid")
+            paint = ImageDraw.Draw(image)
+            for swatch in layer["paint"]:
+                color = (*swatch["rgb"], 255) if "rgb" in swatch else donor.getpixel(tuple(swatch["sampleXY"]))
+                paint.polygon([tuple(point) for point in swatch["polygon"]], fill=color)
+            if ImageChops.multiply(image.getchannel("A"), ImageChops.invert(mask)).getbbox():
+                raise ValueError("A material swatch exceeds its authored receiver domain")
         else:
             raise ValueError(f"Unknown pilot layer kind: {layer['kind']}")
         box = layer.get("cropRectXYWH")
@@ -241,7 +252,7 @@ def build_outputs(manifest: dict) -> dict[str, bytes]:
     if ground.size != tuple(ground_entry["size"]) or ground_entry["originalSceneXY"] != [0, 0]:
         raise ValueError("Local ground must remain a full scene plate")
     images["archive-local-ground"] = ground
-    data_by_role["archive-local-ground"] = png_bytes(ground)
+    data_by_role["archive-local-ground"] = canonical_png(ground)
     outputs = {}
     runtime_assets = []
     for entry in entries:
