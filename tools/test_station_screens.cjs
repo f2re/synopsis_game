@@ -24,7 +24,7 @@ assert.ok(worldChunks.length > 0, 'Identify the actual Phaser chunk from built r
 const output = path.resolve(process.env.STATION_SCREEN_EVIDENCE || 'artifacts/cozy-screens-r01');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-screen-test-'));
 const fixture = JSON.parse(fs.readFileSync('config/test-roster.example.json', 'utf8')).groups[0];
-const supportedPhases = ['library', 'station', 'r08', 'public', 'portraits', 'game', 'level-one', 'admin', 'audio'];
+const supportedPhases = ['library', 'station', 'r08', 'public', 'portraits', 'game', 'level-one', 'rewards', 'admin', 'audio'];
 const phases = new Set((process.env.STATION_SCREEN_PHASES || supportedPhases.join(',')).split(','));
 for (const phase of phases) assert.ok(supportedPhases.includes(phase), `Unknown test phase ${phase}`);
 const report = { phases: [...phases], status: 'RUNNING', engine: browserName, browser: '', productionAssets: true, realServer: true, cases: [], errors: [], screenshots: [] };
@@ -200,6 +200,9 @@ async function waitForCampus(page) {
   report.browser = browser.version();
   const createContext = browser.newContext.bind(browser);
   browser.newContext = async options => { const context = await createContext(options); context.setDefaultTimeout(20_000); return context; };
+  // Independent fresh accounts let the new earning flow fail early without
+  // depending on the long legacy portrait/game fixtures that follow.
+  if (phases.has('rewards')) await require('./test_rewards_browser.cjs').runRewardChecks({ base, browser, report, capture });
   if (phases.has('library')) await require('./test_library_scene.cjs').runLibrarySceneChecks({ base, browser, report, capture, output });
   for (const viewport of (phases.has('station') ? [{ width: 1366, height: 768 }, { width: 1440, height: 1000 }, { width: 390, height: 844 }, { width: 844, height: 390 }] : [])) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });

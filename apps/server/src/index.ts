@@ -44,11 +44,13 @@ const version = process.env.SYNOPSIS_VERSION ?? (() => {
   }
 })();
 
-const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE, avatarAssetsRoot: AVATAR_ASSETS_ROOT });
-await identity.init();
 const equipment = new EquipmentService({ storePath: EQUIPMENT_STORE });
 const shifts = new ShiftService({ contentRoot: CONTENT_ROOT, attemptLogPath: ATTEMPT_LOG_PATH, equipment, avatarAssetsRoot: AVATAR_ASSETS_ROOT });
 await shifts.init();
+// Load earning evidence before migrating old avatar choices.
+const identity = new IdentityService({ storePath: STORE_PATH, securityProfile: SECURITY_PROFILE, avatarAssetsRoot: AVATAR_ASSETS_ROOT,
+  ownsReward: (userId, rewardId) => equipment.ownsReward(userId, rewardId) });
+await identity.init();
 const progression = new ProgressionService({ storePath: PROGRESSION_STORE });
 await progression.loadState();
 
@@ -189,6 +191,11 @@ const server = createServer(async (request, response) => {
     if (request.method === 'GET' && path === '/api/equipment') {
       const user = identity.me(bearer(request));
       sendJson(response, 200, equipment.getEquipment(user.id, user.avatar));
+      return;
+    }
+    if (request.method === 'GET' && path === '/api/rewards') {
+      const user = identity.me(bearer(request));
+      sendJson(response, 200, equipment.getRewards(user.id));
       return;
     }
     if (request.method === 'PATCH' && path === '/api/equipment/loadout') {

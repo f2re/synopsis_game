@@ -42,6 +42,55 @@ async function afterClick(page, control, path, method = 'POST') {
   assert.ok(response.ok(), `${method} ${path}: ${response.status()} ${await response.text()}`);
   return response.json();
 }
+async function ensureEarnedPencil({ page, base, token, viewport, report }) {
+  const request = async (route, method = 'GET', data, status = 200) => {
+    const response = await page.request.fetch(base + route, {
+      method, ...(data ? { data } : {}), headers: { authorization: `Bearer ${token}` },
+    });
+    assert.equal(response.status(), status, `${method} ${route}: real earning fixture`);
+    return response.json();
+  };
+  const before = await request('/api/rewards');
+  const earnedBefore = before.catalog.some(reward => reward.id === 'held.pencil' && reward.status === 'earned');
+  let earningShiftId;
+  if (!earnedBefore) {
+    // The full suite usually earned this in the portrait phase. A standalone
+    // game run earns it through ordinary practice, leaving level-one untouched.
+    const started = await request('/api/shifts', 'POST', undefined, 201);
+    earningShiftId = started.shiftId;
+    const visited = new Set();
+    let task = started.task;
+    while (task) {
+      assert.ok(!visited.has(task.instanceId), 'The earning practice advances after each accepted answer');
+      visited.add(task.instanceId);
+      assert.ok(visited.size <= started.progress.total, 'The earning practice cannot exceed its real task count');
+      let result;
+      if (started.retryAvailable && task.instanceId === started.task.instanceId) {
+        result = await request(`/api/shifts/${earningShiftId}/reveal`, 'POST', { instanceId: task.instanceId });
+      } else {
+        const payload = task.payload, kind = task.response.kind;
+        // Valid inputs test real completion; this setup does not assert correctness.
+        const answer = kind === 'numeric' ? { value: 0 }
+          : kind === 'choice' ? { choiceIndex: payload.options[0].id }
+            : ['sequence', 'dependencySequence'].includes(kind) ? { order: payload.steps.map(step => step.id) }
+              : kind === 'findError' ? { stationId: payload.stations[0].id }
+                : { placements: Object.fromEntries(payload.observations.map((item, index) => [item.id, payload.slots[index % payload.slots.length].id])) };
+        result = await request(`/api/tasks/${encodeURIComponent(task.instanceId)}/answer`, 'POST',
+          { shiftId: earningShiftId, answer, attempt: 1 });
+        if (result.status === 'retry-offered') {
+          result = await request(`/api/shifts/${earningShiftId}/reveal`, 'POST', { instanceId: task.instanceId });
+        }
+      }
+      task = result.nextTask;
+    }
+    assert.equal((await request(`/api/shifts/${earningShiftId}/result`)).completed, true);
+  }
+  const confirmed = (await request('/api/rewards')).catalog.find(reward => reward.id === 'held.pencil');
+  assert.equal(confirmed?.status, 'earned', 'The real server must confirm pencil ownership before UI selection');
+  assert.ok(confirmed.earnedAt);
+  report.cases.push({ name: `game-earned-pencil-${viewport.width}`, earnedBefore,
+    ...(earningShiftId ? { earningShiftId } : {}), confirmedByServer: true, mockedGrant: false });
+}
 async function pressWithoutPageScroll(page, control) {
   await control.scrollIntoViewIfNeeded();
   if (!await control.evaluate(node => node === document.activeElement)) await control.focus();
@@ -623,8 +672,13 @@ async function checkInventory({page, base, viewport, report, capture, token}) {
   assert.ok(await back.evaluate(node => node === document.activeElement));
   await back.click(); await dialog.getByRole('button', { name: 'Продолжить примерку', exact: true }).click();
   await page.getByRole('button', { name: 'Отменить изменения', exact: true }).click();
-  // The real pencil and starter badge guarantee one retry and one reference.
+  // A base outfit carries the tablet. Select the genuinely earned pencil
+  // explicitly so the following shift still exercises both assistance controls.
   await page.getByRole('button', { name: 'На площадке', exact: true }).click();
+  await page.getByLabel('Найти предмет', { exact: true }).fill('Карандаш');
+  await page.getByRole('button', { name: /Карандаш синоптика.*Открыть описание/ }).click();
+  await page.getByRole('button', { name: 'Взять в руки', exact: true }).click();
+  await page.getByLabel('Найти предмет', { exact: true }).fill('');
   await page.getByRole('tab', { name: 'Внешность', exact: true }).click();
   await page.locator('.inventory-appearance-option[aria-pressed="false"]').first().click();
   await back.click();
@@ -651,6 +705,7 @@ async function checkInventory({page, base, viewport, report, capture, token}) {
     assert.ok(response.ok()); return (await response.json()).user;
   };
   const saved = await readProfile();
+  assert.equal(saved.avatar.heldItem, 'held.pencil', 'The earned pencil was selected and saved through the real inventory');
   let discardedWrites = 0;
   const countWrites = req => { if (req.method() === 'PATCH' && new URL(req.url()).pathname === '/api/identity/avatar') discardedWrites++; };
   page.on('request', countWrites);
@@ -840,6 +895,7 @@ async function runGameControlChecks({base,browser,report,capture,fixture}) {
     const page = await context.newPage(); page.on('pageerror', error => report.errors.push({ scenario:`game-${viewport.width}`,message:error.message }));
     const session = await login(page,base,fixture,fixture.users[1]);
     const args = {page,base,viewport,report,capture,token:session.token};
+    await ensureEarnedPencil(args);
     await checkInventory(args); await checkShift(args); await checkBlitz(args);
     await context.close();
   }

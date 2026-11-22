@@ -70,6 +70,7 @@ export class TrainingStore {
         || typeof shift.equipment.enabled !== 'boolean' || shift.equipment.assistedTasks !== shift.assistedTaskIds.length
         || new Set(shift.assistedTaskIds).size !== shift.assistedTaskIds.length
         || !Object.values(shift.responses).every((entry) => isRecord(entry) && isNonemptyString(entry.fingerprint) && isRecord(entry.response))
+        || (shift.awardedRewardIds !== undefined && (!Array.isArray(shift.awardedRewardIds) || !shift.awardedRewardIds.every(isNonemptyString) || new Set(shift.awardedRewardIds).size !== shift.awardedRewardIds.length))
         || !Object.entries(shift.references).every(([instanceId, reference]) => isRecord(reference) && reference.instanceId === instanceId && reference.assisted === true && typeof reference.explanation === 'string' && Array.isArray(reference.sources))
         || (shift.pendingRetry !== undefined && (!isRecord(shift.pendingRetry) || shift.pendingRetry.instanceId !== `${id}:${shift.currentIndex + 1}` || shift.currentIndex >= shift.taskIds.length || shift.equipment.remaining.retry < 1))) {
         throw new Error('Повреждена сохранённая учебная смена');

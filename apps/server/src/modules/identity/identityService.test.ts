@@ -78,10 +78,10 @@ test('bootstrap admin, create user and persist avatar without exposing verifier'
       ...studentLogin.user.avatar,
       hair: 'hair.wave',
       top: 'top.field-jacket',
-      companion: 'companion.tit',
+      backpack: 'backpack.field',
     });
     assert.equal(updated.avatar.hair, 'hair.wave');
-    assert.equal(updated.avatar.companion, 'companion.tit');
+    assert.equal(updated.avatar.backpack, 'backpack.field');
 
     await service.setUserStatus(adminLogin.token, student.id, 'disabled');
     await assert.rejects(
@@ -201,7 +201,7 @@ test('failed avatar save keeps committed equipment visible and later writes reco
     // when tests run with filesystem privileges that bypass permission bits.
     await rename(storePath, `${storePath}.saved`);
     await mkdir(storePath);
-    const failed = service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.pencil' });
+    const failed = service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.map-folder' });
     assert.deepEqual(service.me(login.token).avatar, login.user.avatar);
     assert.deepEqual(service.me(login.token).avatarPortrait, login.user.avatarPortrait);
     await assert.rejects(() => failed);
@@ -233,11 +233,11 @@ test('concurrent avatar saves return their own committed loadouts and a later ad
     const login = await service.adminLogin('1234', '127.0.0.1');
     const student = await service.createUser(login.token, { displayName: 'Тестовый учащийся', groupId: 'ТЕСТ' });
     const [first, second] = await Promise.all([
-      service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.pencil' }),
+      service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.tablet' }),
       service.updateAvatar(login.token, { ...login.user.avatar, heldItem: 'held.map-folder' }),
       service.setUserStatus(login.token, student.id, 'disabled'),
     ]);
-    assert.equal(first.avatar.heldItem, 'held.pencil');
+    assert.equal(first.avatar.heldItem, 'held.tablet');
     assert.equal(second.avatar.heldItem, 'held.map-folder');
     assert.equal(first.avatarPortrait?.appearanceKey, avatarAppearanceKey(first.avatar));
     assert.equal(second.avatarPortrait?.appearanceKey, avatarAppearanceKey(second.avatar));

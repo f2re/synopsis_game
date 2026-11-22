@@ -310,9 +310,12 @@ test('сбой сохранения не создаёт прохождение �
     assert.equal(service.getLevelOne('student', session.id).progress.answered, 5);
     assert.equal(service.getLevelOne('student', session.id).status, 'active');
     assert.equal(equipment.store.read().attempts.length, 5);
+    assert.equal(equipment.ownsReward('student', 'held.pencil'), false, 'Failed completion cannot grant an item');
     rejectWrites = false;
     const result = await service.submitLevelOneAnswer('student', session.id, lastTask.instanceId, answer);
     assert.equal(result.session.status, 'completed');
+    assert.deepEqual(result.session.rewardsGranted.map((reward) => reward.id), ['held.pencil']);
+    assert.equal(equipment.ownsReward('student', 'held.pencil'), true);
     assert.equal(equipment.store.read().attempts.length, 6);
     rejectWrites = true;
     const committedWrites = writes;

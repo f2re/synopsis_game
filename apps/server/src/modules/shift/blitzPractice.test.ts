@@ -67,6 +67,8 @@ test('параллельные старты дают один раунд, оди
   const f = await fixture();
   try {
     await f.qualify();
+    await f.qualify();
+    await f.qualify(); // The companion is earned before it is part of the outfit.
     const avatar = { ...DEFAULT_AVATAR, footwear: 'footwear.boots', top: 'top.field-jacket', heldItem: 'held.pencil', companion: 'companion.tit' };
     const sessions = await Promise.all(Array.from({ length: 8 }, (_, index) => f.service.startBlitz('student-one', avatar, requestId(String(index)))));
     assert.equal(new Set(sessions.map((session) => session.id)).size, 1);

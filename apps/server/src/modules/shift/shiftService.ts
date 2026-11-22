@@ -10,8 +10,9 @@ import {
 } from '@synopsis/content-engine';
 import { decodeGroup, KN01_RULESET_ID, type SupportedKn01Group } from '@synopsis/kn01-codec';
 import { DEFAULT_AVATAR, validateAvatar, type AvatarPortrait, type AvatarProfile } from '../identity/model.js';
-import { composeAvatarPortrait, validateAvatarPortrait } from '../identity/avatarPortrait.js';
+import { avatarAppearanceKey, composeAvatarPortrait, validateAvatarPortrait } from '../identity/avatarPortrait.js';
 import { EquipmentService, effectsAllowed } from '../equipment/equipmentService.js';
+import { rewardGrants } from '../equipment/rewardCatalog.js';
 import type { EquipmentSnapshot, ReferenceView, TrainingReward, TrainingShift, TrainingState } from '../equipment/model.js';
 import { BLITZ_DURATION_MS, BLITZ_MAX_START_KEYS, BLITZ_MODE, BLITZ_REQUEST_ID, BLITZ_RULES_VERSION, BLITZ_TASK_IDS, type BlitzSessionView } from './blitzRules.js';
 import {
@@ -148,7 +149,7 @@ export class ShiftService {
         if (active.contentPack !== this.contentPackId(pack)) throw new ShiftError(409, 'Учебный пакет изменился. Незавершённая смена требует восстановления прежней версии пакета.', 'content_version_changed');
         return this.startResponse(active);
       }
-      const appearance = await this.activityAppearance(avatar, avatarPortrait);
+      const appearance = await this.authorizedActivityAppearance(userId, avatar, avatarPortrait);
       const mode = pack.status === 'published' ? 'practice' : 'practice-draft';
       const state: ShiftState = {
         id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...pack.tasks],
@@ -287,7 +288,7 @@ export class ShiftService {
         return this.levelOneView(active);
       }
       const pack = this.requireLevelOnePack();
-      const appearance = await this.activityAppearance(avatar, avatarPortrait);
+      const appearance = await this.authorizedActivityAppearance(userId, avatar, avatarPortrait);
       const state: ShiftState = {
         id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...LEVEL_ONE_TASK_IDS],
         currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: this.now(),
@@ -387,7 +388,7 @@ export class ShiftService {
       if (!BLITZ_TASK_IDS.every((id) => pack.tasks.includes(id))) {
         throw new ShiftError(503, 'Для этой версии блица недоступен полный набор заданий', 'blitz_content_unavailable');
       }
-      const appearance = await this.activityAppearance(avatar, avatarPortrait);
+      const appearance = await this.authorizedActivityAppearance(userId, avatar, avatarPortrait);
       const state: ShiftState = {
         id: randomUUID(), userId, seed: randomInt(1, 0x7fffffff), taskIds: [...BLITZ_TASK_IDS],
         currentIndex: 0, correct: 0, unassistedCorrect: 0, createdAt: now,
@@ -448,6 +449,18 @@ export class ShiftService {
       state.completedAt = state.blitz.deadlineAt;
       state.blitz.finishReason = 'timeout';
     }
+  }
+
+  private async authorizedActivityAppearance(userId: string, avatar: AvatarProfile, portrait?: AvatarPortrait) {
+    const original = validateAvatar(avatar);
+    const eligible = this.equipment.authorizedAvatar(userId, original);
+    if (avatarAppearanceKey(original) !== avatarAppearanceKey(eligible)) {
+      // A legacy caller may hold a valid portrait of an outfit it no longer
+      // owns. Verify those bytes first, then compose the eligible new outfit.
+      if (portrait) validateAvatarPortrait(portrait, original);
+      return this.activityAppearance(eligible);
+    }
+    return this.activityAppearance(eligible, portrait);
   }
 
   private async activityAppearance(avatar: AvatarProfile, portrait?: AvatarPortrait) {
@@ -539,7 +552,7 @@ export class ShiftService {
       startedAt: state.createdAt, ...(state.completedAt ? { completedAt: state.completedAt } : {}),
       contentPack: state.contentPack, contentStatus: state.contentStatus, progress: this.progress(state),
       unassistedCorrect: state.unassistedCorrect, assistedTasks: state.assistedTaskIds.length,
-      task, equipment: state.equipment, review: level.review,
+      task, equipment: state.equipment, review: level.review, rewardsGranted: rewardGrants(state.awardedRewardIds ?? []),
       ...(task && state.references[task.instanceId] ? { reference: state.references[task.instanceId] } : {}) };
   }
 
@@ -557,7 +570,7 @@ export class ShiftService {
         state.completedAt = completedAt;
         state.blitz.finishReason = 'answered';
       } else if (state.mode === LEVEL_ONE_MODE && state.levelOne) {
-        state.completedAt = completedAt;
+        this.equipment.completeFirstLevel(draft, state, completedAt);
       } else this.equipment.complete(draft, state, completedAt);
     }
     return { status: 'answered', retryAvailable: false,

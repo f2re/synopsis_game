@@ -93,7 +93,7 @@ try {
   assert.equal(lobby.durationSeconds, 90); assert.equal(lobby.total, 6);
   checks.push('Authentication, malformed JSON, canonical completion gate, draft label and 90-second policy PASS');
 
-  const outfit = { ...first.user.avatar, top: 'top.field-jacket', footwear: 'footwear.boots', heldItem: 'held.map-folder', companion: 'companion.tit' };
+  const outfit = { ...first.user.avatar, top: 'top.field-jacket', footwear: 'footwear.boots', heldItem: 'held.map-folder', companion: 'companion.none' };
   await ok('/api/identity/avatar', 'PATCH', { avatar: outfit }, token);
   const before = await ok('/api/equipment', 'GET', undefined, token);
   const starts = await Promise.all(Array.from({ length: 5 }, (_, index) => ok('/api/blitz-practice', 'POST',

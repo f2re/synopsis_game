@@ -654,7 +654,8 @@
       "pixel-art-qa",
       "threejs-postprocessing",
       "shader-art-direction",
-      "audio-direction-qa"
+      "audio-direction-qa",
+      "hub-2-5d-scene-production"
     ],
     "pixel-asset-designer": [
       "pixel-art-direction",
@@ -674,7 +675,8 @@
       "pixel-art-qa",
       "gltf-3d-pipeline",
       "pixel-atlas-production",
-      "asset-provenance-review"
+      "asset-provenance-review",
+      "hub-2-5d-scene-production"
     ],
     "game-runtime-webgl-engineer": [
       "phaser-webgl-runtime",

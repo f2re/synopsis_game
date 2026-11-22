@@ -10,6 +10,7 @@ export interface OptionItem {
   iconLabel?: string;
   desc: string;
   color?: string;
+  rewardId?: string;
 }
 
 export interface StylePreset {
@@ -75,17 +76,17 @@ export const OPTIONS: Record<keyof AvatarProfile, OptionItem[]> = {
     { id: 'held.none', name: 'Свободные руки', desc: 'Убрать предмет' },
     { id: 'held.tablet', name: 'Планшет наблюдателя', image: wardrobeIcon('held.tablet'), desc: 'Планшет для записей во время обхода станции.' },
     { id: 'held.map-folder', name: 'Папка карт', image: wardrobeIcon('held.map-folder'), desc: 'Папка для рабочих карт и заметок синоптика.' },
-    { id: 'held.pencil', name: 'Карандаш синоптика', image: wardrobeIcon('held.pencil'), desc: 'Карандаш для работы с бумажными картами.' },
+    { id: 'held.pencil', rewardId: 'held.pencil', name: 'Карандаш синоптика', image: wardrobeIcon('held.pencil'), desc: 'Первая награда за завершённую работу с бланком.' },
   ],
   companion: [
     { id: 'companion.none', name: 'Без спутника', desc: 'Оставить спутника на станции' },
-    { id: 'companion.tit', name: 'Синичка', image: wardrobeIcon('companion.tit'), desc: 'Маленькая любопытная обитательница станционного сада.' },
-    { id: 'companion.squirrel', name: 'Белка', image: wardrobeIcon('companion.squirrel'), desc: 'Рыжая жительница сосен возле архива.' },
+    { id: 'companion.tit', rewardId: 'companion.tit', name: 'Синичка', image: wardrobeIcon('companion.tit'), desc: 'Маленькая любопытная обитательница станционного сада.' },
+    { id: 'companion.squirrel', rewardId: 'companion.squirrel', name: 'Белка', image: wardrobeIcon('companion.squirrel'), desc: 'Рыжая жительница сосен возле архива.' },
   ],
   badge: [
     { id: 'badge.none', name: 'Без значка', desc: 'Снять значок' },
     { id: 'badge.meteo', name: 'Значок метеоролога', image: wardrobeIcon('badge.meteo'), iconLabel: 'М', desc: 'Декоративный значок с эмблемой погоды.' },
-    { id: 'badge.aerology', name: 'Значок аэролога', image: wardrobeIcon('badge.aerology'), iconLabel: 'А', desc: 'Декоративный значок с аэрологическим мотивом.' },
+    { id: 'badge.aerology', rewardId: 'badge.aerology', name: 'Значок аэролога', image: wardrobeIcon('badge.aerology'), iconLabel: 'А', desc: 'Знак за прохождение аэрологического практикума.' },
   ],
 };
 
@@ -123,10 +124,10 @@ export const STYLE_PRESETS: StylePreset[] = [
   },
   {
     id: 'preset.field', name: 'На площадке', image: wardrobeIcon('top.field-jacket'),
-    avatar: { headwear: 'headwear.cap', top: 'top.field-jacket', bottom: 'bottom.field-trousers', footwear: 'footwear.boots', backpack: 'backpack.field', heldItem: 'held.pencil', badge: 'badge.meteo', companion: 'companion.none' },
+    avatar: { headwear: 'headwear.cap', top: 'top.field-jacket', bottom: 'bottom.field-trousers', footwear: 'footwear.boots', backpack: 'backpack.field', heldItem: 'held.tablet', badge: 'badge.meteo', companion: 'companion.none' },
   },
   {
     id: 'preset.rest', name: 'После смены', image: wardrobeIcon('top.sweater'),
-    avatar: { headwear: 'headwear.beanie', top: 'top.sweater', bottom: 'bottom.jeans', footwear: 'footwear.sneakers', backpack: 'backpack.city', heldItem: 'held.none', badge: 'badge.none', companion: 'companion.tit' },
+    avatar: { headwear: 'headwear.beanie', top: 'top.sweater', bottom: 'bottom.jeans', footwear: 'footwear.sneakers', backpack: 'backpack.city', heldItem: 'held.none', badge: 'badge.none', companion: 'companion.none' },
   },
 ];

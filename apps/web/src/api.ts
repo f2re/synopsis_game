@@ -156,6 +156,25 @@ export interface EquipmentResponse {
   tools: Array<{ id: string; effects: EquipmentEffects; effectDescription: string }>;
 }
 
+export interface RewardView {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  icon?: 'thermometer' | 'barometer' | 'weathervane' | 'lamp' | 'token' | 'certificate';
+  kind: 'tool' | 'badge' | 'companion' | 'decoration' | 'certificate';
+  status: 'earned' | 'locked' | 'unavailable';
+  condition: string;
+  progress: { current: number; target: number };
+  earnedAt?: string;
+  avatarSlot?: 'heldItem' | 'badge' | 'companion';
+  avatarItemId?: string;
+  trainingBadgeId?: string;
+  action?: { href: string; label: string };
+}
+export interface RewardsResponse { catalog: RewardView[]; earnedCount: number; total: number; }
+export type RewardGrant = Pick<RewardView, 'id' | 'title' | 'image' | 'icon'>;
+
 export interface ShiftReference {
   instanceId: string;
   explanation: string;
@@ -164,6 +183,7 @@ export interface ShiftReference {
 }
 export interface ShiftReward {
   newBadges: EquipmentBadge[];
+  newRewards?: RewardGrant[];
   completedShifts: number;
   unassistedCorrect: number;
   practiceDays: number;
@@ -270,6 +290,7 @@ export interface LevelOneSession {
   task: ShiftTask | null;
   equipment: EquipmentSnapshot;
   review: LevelOneReview[];
+  rewardsGranted: RewardGrant[];
   reference?: ShiftReference;
 }
 
@@ -378,6 +399,7 @@ export const api = {
   },
   async updateAvatar(avatar: AvatarProfile, signal?: AbortSignal): Promise<SessionUser> { return (await request<{ user: SessionUser }>('/api/identity/avatar', { method: 'PATCH', body: JSON.stringify({ avatar }), signal }, true)).user; },
   async equipment(signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment', { signal }, true); },
+  async rewards(signal?: AbortSignal): Promise<RewardsResponse> { return request('/api/rewards', { signal }, true); },
   async selectEquipmentBadge(badgeId: string | null, signal?: AbortSignal): Promise<EquipmentResponse> { return request('/api/equipment/loadout', { method: 'PATCH', body: JSON.stringify({ badgeId }), signal }, true); },
   async startShift(signal?: AbortSignal): Promise<ShiftStartResponse> { return request<ShiftStartResponse>('/api/shifts', { method: 'POST', signal }, true); },
   async currentShiftTask(shiftId: string): Promise<{ task: ShiftTask; progress: ShiftProgress; equipment: EquipmentSnapshot; retryAvailable: boolean; reference?: ShiftReference }> { return request(`/api/shifts/${encodeURIComponent(shiftId)}/task`, {}, true); },

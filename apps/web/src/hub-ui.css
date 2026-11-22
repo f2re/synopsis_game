@@ -19,7 +19,7 @@
   inset: max(12px, env(safe-area-inset-top)) 16px auto;
   height: 72px;
   display: grid;
-  grid-template-columns: minmax(190px, 1.1fr) minmax(180px, 1fr) minmax(160px, 1fr) 128px 108px;
+  grid-template-columns: minmax(190px, 1.1fr) minmax(180px, 1fr) minmax(160px, 1fr) 128px 144px;
   align-items: center;
   gap: 8px;
   padding: 4px 8px;
@@ -152,7 +152,7 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
 .hub-journal__status { margin: 0; min-height: 44px; }
 
 @media (max-width: 1200px) {
-  .hub-topbar { grid-template-columns: minmax(180px, 1.1fr) minmax(170px, 1fr) minmax(140px, 1fr) 116px 100px; gap: 4px; }
+  .hub-topbar { grid-template-columns: minmax(180px, 1.1fr) minmax(170px, 1fr) minmax(140px, 1fr) 116px 144px; gap: 4px; }
   .hub-learning-status { gap: 6px; padding: 0 4px; }
   .hub-dock { gap: 8px; grid-template-columns: minmax(115px, 1fr) minmax(115px, 1fr) minmax(264px, 1.8fr) minmax(115px, 1fr) minmax(115px, 1fr); }
   .hub-dock__button { padding: 10px 8px; gap: 8px; }
@@ -161,7 +161,7 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
   .hub-dock__primary strong { font-size: 26px; }
 }
 @media (max-width: 970px) {
-  .hub-topbar { grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) 116px 100px; }
+  .hub-topbar { grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) 116px 144px; }
   .hub-learning-status { display: none; }
   .hub-dock__button:not(.hub-dock__primary) { justify-content: center; flex-direction: column; gap: 2px; padding: 6px; text-align: center; }
   .hub-dock__button:not(.hub-dock__primary) small { display: none; }
@@ -173,7 +173,7 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
   .hub-scene-caption { bottom: 96px; }
 }
 @media (max-width: 760px) {
-  .hub-topbar { top: max(8px, env(safe-area-inset-top)); left: 8px; right: 8px; height: 64px; padding: 4px; grid-template-columns: minmax(0, 1fr) 96px 92px; gap: 4px; }
+  .hub-topbar { top: max(8px, env(safe-area-inset-top)); left: 8px; right: 8px; height: 64px; padding: 4px; grid-template-columns: minmax(0, 1fr) 96px 144px; gap: 4px; }
   .hub-station-title { display: none; }
   .hub-profile-button { gap: 8px; padding: 2px; }
   .hub-profile-button__copy strong { font-size: 14px; }
@@ -203,7 +203,7 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
   .hub-journal__summary > div { padding: 12px 8px; }
 }
 @media (max-width: 360px) {
-  .hub-topbar { grid-template-columns: minmax(0, 1fr) 84px 92px; gap: 2px; }
+  .hub-topbar { grid-template-columns: minmax(0, 1fr) 84px 144px; gap: 2px; }
   .hub-profile-button__copy { display: none; }
   .hub-clock strong { font-size: 14px; }
 }
@@ -232,4 +232,61 @@ html[data-reduced-motion='true'] .hub-screen *, html[data-low-power='true'] .hub
   .world-canvas-r08-scroll { bottom: 154px; }
   .world-canvas-r08-plane { width: max(100%, calc((100dvh - 230px) * 1.7778)); }
   .hub-screen:has(.world-canvas-r08-scroll) .hub-scene-caption { bottom: 184px; pointer-events: none; }
+}
+
+/* Experimental 2.5D keyboard navigation, mounted only on explicit opt-in. */
+.hub-keyboard-locations {
+  position: fixed;
+  top: max(96px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 50;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+}
+.hub-keyboard-locations:focus-within {
+  width: min(360px, calc(100vw - 24px));
+  height: auto;
+  max-height: calc(100dvh - 112px);
+  padding: 8px;
+  clip-path: none;
+  border: 2px solid var(--hub-border);
+  border-radius: 0;
+  background: var(--hub-panel-deep);
+  box-shadow: var(--ui-control-shadow);
+}
+.hub-keyboard-locations-title {
+  flex: none;
+  color: var(--hub-text);
+  font: 16px/1.4 var(--font-pixel-ui);
+  padding: 4px;
+}
+.hub-keyboard-locations__scroll { min-height: 0; max-height: calc(100dvh - 164px); }
+.hub-keyboard-locations__list { display: grid; gap: 4px; padding: 2px; }
+.hub-keyboard-location {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px;
+  border: 2px solid var(--hub-border);
+  border-radius: 0;
+  background: var(--hub-panel);
+  color: var(--hub-text);
+  text-align: left;
+  font: 16px/1.4 var(--font-pixel-ui);
+  cursor: pointer;
+}
+.hub-keyboard-location:hover { border-color: var(--hub-edge); }
+.hub-keyboard-location:active { border-color: var(--hub-gold); box-shadow: var(--ui-control-pressed); }
+.hub-keyboard-location:focus-visible { outline: 2px solid var(--hub-gold-light); outline-offset: 0; }
+@media (max-height: 540px) and (orientation: landscape) {
+  .hub-keyboard-locations { top: 76px; }
+  .hub-keyboard-locations:focus-within { max-height: calc(100dvh - 88px); }
+  .hub-keyboard-locations__scroll { max-height: calc(100dvh - 140px); }
 }

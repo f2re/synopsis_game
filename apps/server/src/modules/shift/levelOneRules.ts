@@ -1,5 +1,6 @@
 import type { PublicTaskInstance } from '@synopsis/content-engine';
 import type { EquipmentSnapshot, ReferenceView } from '../equipment/model.js';
+import type { RewardGrant } from '../equipment/rewardCatalog.js';
 
 /** A short first playable episode; independent from the planned C1–C5 qualification. */
 export const LEVEL_ONE_MODE = 'level-one';
@@ -57,6 +58,7 @@ export interface LevelOneSessionView {
   equipment: EquipmentSnapshot;
   review: LevelOneReview[];
   reference?: ReferenceView;
+  rewardsGranted: RewardGrant[];
 }
 
 export interface LevelOneLobbyView {

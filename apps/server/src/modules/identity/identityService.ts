@@ -2,6 +2,7 @@ import { randomBytes, randomUUID, scrypt, timingSafeEqual } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { avatarAppearanceKey, composeAvatarPortrait, currentAvatarPortraitRevision, validateAvatarPortrait } from './avatarPortrait.js';
+import { authorizedAvatar, AVATAR_REWARD_SLOTS, isRewardItem } from '../equipment/rewardCatalog.js';
 import {
   AVATAR_OPTIONS,
   DEFAULT_AVATAR,
@@ -49,6 +50,8 @@ export interface IdentityServiceOptions {
   maxAttempts?: number;
   lockMs?: number;
   sessionTtlMs?: number;
+  /** Reads the committed server reward ledger. Missing authority means no earned items. */
+  ownsReward?: (userId: string, rewardId: string) => boolean;
 }
 
 export interface CreateUserInput {
@@ -158,6 +161,14 @@ export class IdentityService {
       } else {
         // A damaged existing picture is not silently replaced with newer artwork.
         user.avatarPortrait = validateAvatarPortrait(user.avatarPortrait, user.avatar);
+      }
+      const eligibleAvatar = authorizedAvatar(user.avatar, (id) => this.options.ownsReward?.(user.id, id) === true);
+      if (avatarAppearanceKey(eligibleAvatar) !== avatarAppearanceKey(user.avatar)) {
+        // Old freely selected rewards are not achievements. Preserve the rest
+        // of the outfit and replace its matching portrait in one atomic write.
+        user.avatar = eligibleAvatar;
+        user.avatarPortrait = await composeAvatarPortrait(user.avatar, { assetsRoot: this.options.avatarAssetsRoot });
+        migrated = true;
       }
       if (user.roles.includes('admin') && user.codeSet === undefined) {
         user.codeSet = true;
@@ -400,6 +411,11 @@ export class IdentityService {
       // Recheck access after earlier queued writes, and keep the last committed
       // loadout visible to shift starts until this complete snapshot is saved.
       const user = this.requireSession(token);
+      for (const slot of AVATAR_REWARD_SLOTS) {
+        if (isRewardItem(avatar[slot]) && this.options.ownsReward?.(user.id, avatar[slot]) !== true) {
+          throw new IdentityError(403, 'Награда ещё не получена. Условия доступны в коллекции наград.', 'reward_locked');
+        }
+      }
       const portraitOptions = { assetsRoot: this.options.avatarAssetsRoot };
       if (user.avatarPortrait?.appearanceKey === avatarAppearanceKey(avatar)) {
         const revision = await currentAvatarPortraitRevision(portraitOptions);

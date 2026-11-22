@@ -145,7 +145,7 @@ async function apiPersistenceCheck() {
   async function start() {
     child = spawn(process.execPath, ['apps/server/dist/index.js'], {
       cwd: repo,
-      env: { ...process.env, API_BIND: '127.0.0.1', API_PORT: String(port), SYNOPSIS_BOOTSTRAP_ADMIN_CODE: '', SYNOPSIS_SECURITY_PROFILE: 'trusted', SYNOPSIS_ENABLE_TEST_ROSTER: 'true', SYNOPSIS_TEST_ROSTER_FILE: rosterPath, SYNOPSIS_IDENTITY_STORE: path.join(temp, 'identity.json'), SYNOPSIS_PROGRESSION_STORE: path.join(temp, 'progression.json'), SYNOPSIS_ATTEMPT_LOG: path.join(temp, 'attempts.jsonl'), SYNOPSIS_CONTENT_ROOT: path.join(repo, 'content') },
+      env: { ...process.env, API_BIND: '127.0.0.1', API_PORT: String(port), SYNOPSIS_BOOTSTRAP_ADMIN_CODE: '', SYNOPSIS_SECURITY_PROFILE: 'trusted', SYNOPSIS_ENABLE_TEST_ROSTER: 'true', SYNOPSIS_TEST_ROSTER_FILE: rosterPath, SYNOPSIS_IDENTITY_STORE: path.join(temp, 'identity.json'), SYNOPSIS_EQUIPMENT_STORE: path.join(temp, 'equipment.json'), SYNOPSIS_PROGRESSION_STORE: path.join(temp, 'progression.json'), SYNOPSIS_ATTEMPT_LOG: path.join(temp, 'attempts.jsonl'), SYNOPSIS_CONTENT_ROOT: path.join(repo, 'content') },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     await new Promise((resolve, reject) => {
@@ -179,7 +179,8 @@ async function apiPersistenceCheck() {
     assert(token, 'Normal test-roster login must return a session');
     for (const [slot, options] of Object.entries(ui.OPTIONS)) for (const item of options) {
       const saved = await request('/api/identity/avatar', 'PATCH', { avatar: { ...DEFAULT_AVATAR, [slot]: item.id } }, token);
-      assert.equal(saved.status, 200, `API rejected advertised choice: ${item.id}`);
+      assert.equal(saved.status, item.rewardId ? 403 : 200, `API enforces ownership of catalog choice: ${item.id}`);
+      if (item.rewardId) assert.equal(saved.body.code, 'reward_locked');
     }
     const outfit = { ...DEFAULT_AVATAR, ...ui.STYLE_PRESETS[1].avatar, skinTone: 'skin.deep' };
     assert.equal((await request('/api/identity/avatar', 'PATCH', { avatar: outfit }, token)).status, 200);
@@ -193,7 +194,7 @@ async function apiPersistenceCheck() {
     assert.deepEqual(freshLogin.body.user.avatar, outfit, 'Outfit must survive a real API process restart');
     const otherLogin = await request('/api/identity/login', 'POST', { userId: other.id, code: fixtureUsers[1].code });
     assert.deepEqual(otherLogin.body.user.avatar, DEFAULT_AVATAR, 'Another account must retain its own outfit');
-    return { allCatalogValuesAccepted: true, persistedAcrossServerRestart: true, anotherAccountUnchanged: true, invalidIdRejected: true, anonymousSaveRejected: true };
+    return { baseCatalogValuesAccepted: true, unearnedRewardsRejected: true, persistedAcrossServerRestart: true, anotherAccountUnchanged: true, invalidIdRejected: true, anonymousSaveRejected: true };
   } finally { await stop(); fs.rmSync(temp, { recursive: true, force: true }); }
 }
 

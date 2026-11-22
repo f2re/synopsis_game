@@ -90,6 +90,17 @@ try {
   assert.equal((await request('/api/equipment/loadout', 'PATCH', { badgeId: '__proto__' }, token)).status, 400);
   const initial = await ok('/api/equipment', 'GET', undefined, token);
   assert.equal(initial.stats.completedShifts, 0); assert.equal(initial.loadout.badgeId, 'badge.training_starter');
+  assert.equal((await request('/api/identity/avatar', 'PATCH', { avatar: { ...first.user.avatar, heldItem: 'held.pencil' } }, token)).status, 403);
+  // Earn the pencil through the real introductory level before testing its
+  // retry charge. This adds no ordinary-shift completion to the assertions below.
+  let introductory = await ok('/api/level-one', 'POST', { requestId: 'equipment-pencil-level-one' }, token, 201);
+  while (introductory.task) {
+    const task = introductory.task;
+    const answer = task.response.kind === 'choice' ? { choiceIndex: task.payload.options[0].id } : { value: 0 };
+    introductory = (await ok(`/api/level-one/${introductory.id}/answer`, 'POST', { instanceId: task.instanceId, answer }, token)).session;
+  }
+  assert.equal((await ok('/api/rewards', 'GET', undefined, token)).catalog.find(reward => reward.id === 'held.pencil').status, 'earned');
+  assert.equal((await ok('/api/equipment', 'GET', undefined, token)).stats.completedShifts, 0);
   await ok('/api/identity/avatar', 'PATCH', { avatar: { ...first.user.avatar, heldItem: 'held.pencil' } }, token);
   const started = await ok('/api/shifts', 'POST', { mode: 'ranked', equipment: { charges: { reference: 999, retry: 999 } } }, token, 201);
   assert.equal(started.mode, 'practice-draft'); assert.deepEqual(started.equipment.charges, { reference: 1, retry: 1 });
