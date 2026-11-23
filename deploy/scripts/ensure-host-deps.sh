@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+if [[ ${SYNOPSIS_UPDATER_PROTOCOL:-} != 2 ]]; then
+  echo "Для безопасного обновления запустите install.sh из распакованного нового релиза. Старый обновлятор не сохраняет владельцев файлов при откате." >&2
+  exit 3
+fi
 CONFIG_FILE=${CONFIG_FILE:-/etc/synopsis-game/app.env}
 getv() { sed -n "s/^$1=//p" "$CONFIG_FILE" | tail -n1; }
 WEB_SERVER=$(getv WEB_SERVER)

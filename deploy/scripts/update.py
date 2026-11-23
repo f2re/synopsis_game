@@ -47,16 +47,22 @@ def install_units(release):
     for name in ('synopsis-game.service','synopsis-game-update.service','synopsis-game-update.timer'):
         shutil.copy2(str(release/'deploy/systemd'/name),str(Path('/etc/systemd/system')/name))
     run('systemctl','daemon-reload',check=False)
+def install_merged_config(merged, app_env):
+    if app_env.exists():
+        original=app_env.stat()
+        os.chown(str(merged),original.st_uid,original.st_gid)
+    os.chmod(str(merged),0o640)
+    merged.replace(app_env)
 def restore_backup(backup_dir, app_env):
     if not backup_dir: return
-    if (backup_dir/'etc/app.env').exists(): shutil.copy2(str(backup_dir/'etc/app.env'),str(app_env))
+    if (backup_dir/'etc/app.env').exists(): run('cp','-a','--',str(backup_dir/'etc/app.env'),str(app_env))
     cfg=env_file(app_env); kind=cfg.get('DATABASE_KIND','sqlite')
     if kind=='sqlite':
         data=STATE/'data'; shutil.rmtree(str(data),ignore_errors=True)
-        if (backup_dir/'data').exists(): shutil.copytree(str(backup_dir/'data'),str(data))
+        if (backup_dir/'data').exists(): run('cp','-a','--',str(backup_dir/'data'),str(data))
         else: data.mkdir(parents=True,exist_ok=True)
     migrations=STATE/'migrations'; shutil.rmtree(str(migrations),ignore_errors=True)
-    if (backup_dir/'migrations').exists(): shutil.copytree(str(backup_dir/'migrations'),str(migrations))
+    if (backup_dir/'migrations').exists(): run('cp','-a','--',str(backup_dir/'migrations'),str(migrations))
     else: migrations.mkdir(parents=True,exist_ok=True)
 def acquire_lock():
     lock_dir=Path('/run/lock'); lock_dir.mkdir(parents=True,exist_ok=True)
@@ -95,7 +101,7 @@ def main():
         if dest.exists(): shutil.rmtree(str(dest))
         shutil.copytree(str(src),str(dest),symlinks=True)
     app_env=ETC/'app.env'; old_cfg=env_file(app_env)
-    dep_env=os.environ.copy(); dep_env['CONFIG_FILE']=str(app_env)
+    dep_env=os.environ.copy(); dep_env['CONFIG_FILE']=str(app_env); dep_env['SYNOPSIS_UPDATER_PROTOCOL']='2'
     run('/bin/bash',str(dest/'deploy/scripts/ensure-host-deps.sh'),env=dep_env)
     backup_env=os.environ.copy(); backup_env.update(old_cfg)
     run('systemctl','stop','synopsis-game.service',check=False)
@@ -109,7 +115,7 @@ def main():
     merged=ETC/'.app.env.new'
     try:
         run('/usr/bin/python3',str(dest/'deploy/scripts/config_merge.py'),'--defaults',str(dest/'deploy/config/defaults.env'),'--current',str(app_env),'--output',str(merged))
-        os.chmod(str(merged),0o640); merged.replace(app_env)
+        install_merged_config(merged,app_env)
         run('/usr/bin/python3',str(dest/'deploy/scripts/migrate.py'),'--release',str(dest),'--config',str(app_env))
         switch_current(dest)
         install_units(dest)
