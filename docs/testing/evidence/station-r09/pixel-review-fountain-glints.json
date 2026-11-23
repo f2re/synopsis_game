@@ -1,0 +1,185 @@
+{
+  "reviewer": "/root/station_pixel_review",
+  "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+  "sourceFileSha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+  "result": "PASS for bounded, horizontal 1-source-pixel highlights within these exact segments only",
+  "restrictions": [
+    "No vertical drift, glow radius or unmasked extension beyond these strips",
+    "Vary alpha or shorten each line within its reviewed bounds",
+    "Do not use x205..259,y212..215: this is mostly front stone/pedestal",
+    "Final appearance and motion still require actual runtime/Art Director review"
+  ],
+  "segments": [
+    {
+      "id": "inner-left",
+      "x": 220,
+      "y": 209,
+      "width": 4,
+      "height": 1,
+      "rgba": [
+        [
+          107,
+          141,
+          140,
+          255
+        ],
+        [
+          112,
+          143,
+          145,
+          255
+        ],
+        [
+          102,
+          134,
+          133,
+          255
+        ],
+        [
+          108,
+          142,
+          141,
+          255
+        ]
+      ]
+    },
+    {
+      "id": "inner-right",
+      "x": 237,
+      "y": 209,
+      "width": 4,
+      "height": 1,
+      "rgba": [
+        [
+          118,
+          144,
+          143,
+          255
+        ],
+        [
+          118,
+          144,
+          143,
+          255
+        ],
+        [
+          117,
+          143,
+          140,
+          255
+        ],
+        [
+          122,
+          148,
+          147,
+          255
+        ]
+      ]
+    },
+    {
+      "id": "outer-left",
+      "x": 194,
+      "y": 217,
+      "width": 4,
+      "height": 1,
+      "rgba": [
+        [
+          83,
+          109,
+          110,
+          255
+        ],
+        [
+          74,
+          104,
+          114,
+          255
+        ],
+        [
+          83,
+          111,
+          122,
+          255
+        ],
+        [
+          85,
+          114,
+          122,
+          255
+        ]
+      ]
+    },
+    {
+      "id": "outer-right",
+      "x": 254,
+      "y": 218,
+      "width": 4,
+      "height": 1,
+      "rgba": [
+        [
+          97,
+          127,
+          129,
+          255
+        ],
+        [
+          106,
+          135,
+          139,
+          255
+        ],
+        [
+          102,
+          131,
+          137,
+          255
+        ],
+        [
+          103,
+          130,
+          137,
+          255
+        ]
+      ]
+    },
+    {
+      "id": "outer-front",
+      "x": 214,
+      "y": 219,
+      "width": 5,
+      "height": 1,
+      "rgba": [
+        [
+          89,
+          110,
+          111,
+          255
+        ],
+        [
+          73,
+          97,
+          99,
+          255
+        ],
+        [
+          80,
+          106,
+          107,
+          255
+        ],
+        [
+          75,
+          101,
+          100,
+          255
+        ],
+        [
+          74,
+          100,
+          101,
+          255
+        ]
+      ]
+    }
+  ]
+}

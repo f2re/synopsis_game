@@ -1,0 +1,290 @@
+{
+  "task": "STATION-R09-MAIN136-INTEGRATION",
+  "reviewer": "station_runtime_acceptance",
+  "createdAt": "2026-11-22T10:48:19.498601+00:00",
+  "status": "LOCAL_INTEGRATION_PASS_NATIVE_VISIBILITY_HOLD",
+  "baselineLocalCommit": "fc522885611f2abbe2685244feb9321d43196c9f",
+  "incomingMainCommit": "030aeb3349f1e9b6d53c62f01f3acf049c31ca82",
+  "incomingMainProxy": "aaa15a25dd5cf686c48d80ffa41649716a38ef84",
+  "reviewedSourceHashes": {
+    "apps/web/src/game/WorldCanvas.tsx": "d46ed717fdd25f229b5280f535484f17b3956573ada15f81d35edb32c8ec2dbc",
+    "packages/world-engine/src/runtime/createWorldGame.ts": "52e68d0ba604afe3e5d730d840ad5b9d54c7f28fe0465dc1d8b2b2c5bd873450",
+    "packages/world-engine/src/scenes/hub/HubScene.ts": "653e0fbe5cfbc153aa9e1f6f5feb173780014ef2455544ba1349d396e24b8d80",
+    "packages/world-engine/src/scenes/hub/HubR09Layer.ts": "dccfa1d203baf01525f64e9c59c982ac297abe2ff13b8e02614e8a6d571f2b57",
+    "packages/world-engine/src/scenes/hub/HubCharacterLayer.ts": "2f966333d8bc669a6f59250a9115568c21384d02422e49e386586b79806613ac",
+    "packages/world-engine/src/scenes/art/r08StationCharacters.ts": "d8ee564b4424d0c8a3c1e560ade1bc02cb0fc9ef6f6e1f405cf582d9ce4a83e2",
+    "packages/world-engine/src/scenes/art/r08Gait.ts": "b4f7cb17f4ecbc0d8d07433035ba4d59452d659b28f9e1ee1ef847077cd02de7",
+    "tools/test_world_characters.cjs": "f8b519ccbf6221318d240166c7348cf5cf94e6e1cfa877a546dd098ee7e3880a",
+    "tools/test_avatar_world_boundary.cjs": "37a3997df4e729996355c875f53b36715bce26deb28075084abf097b64b3b8bf",
+    "tools/test_station_screens.cjs": "945abd65f9c2a94bcb93621fb44a5da87320cd0118e0b4e697c2d77cb3fbdad5",
+    "tools/test_station_environment_browser.cjs": "832ba3798afd5c11ca67680f966365bea25bbfde6bf819017fb4094691cb60f0",
+    "tools/test_station_r09_layer.cjs": "2bacd8a6ed15f0068a45f5edbf2fe6bb0e645da8b00e51079f01f05670f2d01b",
+    "assets/source/environment/hub/r09/source-spec.json": "f21754e0d3a2f69b167f8837a22ebf9d2ffa62c182feb8c8db2dff3b7ff21f4c",
+    "packages/world-engine/src/assets/hub/r09-manifest.json": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd",
+    ".github/workflows/ci.yml": "d324f6903f09a735c3c0c9b1b4aebf5524933362807be89053e374922f7aead4"
+  },
+  "assetIntegration": {
+    "status": "PASS",
+    "scope": "Independent byte-level and structured metadata integration comparison; no image edits",
+    "baseline": "fc522885611f2abbe2685244feb9321d43196c9f",
+    "incomingMainProxy": "aaa15a25dd5cf686c48d80ffa41649716a38ef84",
+    "r09RenderManifestEqualExceptSourceProvenance": true,
+    "reviewedR09PngCopiesCompared": 26,
+    "allR09PngBytesIdentical": true,
+    "donorSha256": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7",
+    "newManifestSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd",
+    "mainR08MaskBytesPreserved": true,
+    "registries": [
+      {
+        "path": "assets/manifests/spritecook-assets.json",
+        "lists": {
+          "assets": {
+            "old": 179,
+            "incoming": 178,
+            "merged": 180,
+            "allEntriesPreserved": true
+          }
+        }
+      },
+      {
+        "path": "assets/manifests/hub.r08-candidates.json",
+        "lists": {
+          "assets": {
+            "old": 20,
+            "incoming": 21,
+            "merged": 21,
+            "allEntriesPreserved": true
+          }
+        }
+      }
+    ],
+    "pngs": [
+      {
+        "path": "apps/web/public/hub/r09/sky.png",
+        "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2"
+      },
+      {
+        "path": "assets/generated/hub/r09/sky.png",
+        "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2"
+      },
+      {
+        "path": "apps/web/public/hub/r09/water.png",
+        "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781"
+      },
+      {
+        "path": "assets/generated/hub/r09/water.png",
+        "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781"
+      },
+      {
+        "path": "apps/web/public/hub/r09/architecture-ground.png",
+        "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7"
+      },
+      {
+        "path": "assets/generated/hub/r09/architecture-ground.png",
+        "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7"
+      },
+      {
+        "path": "apps/web/public/hub/r09/foreground.png",
+        "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc"
+      },
+      {
+        "path": "assets/generated/hub/r09/foreground.png",
+        "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc"
+      },
+      {
+        "path": "apps/web/public/hub/r09/clouds-east-wisp.png",
+        "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176"
+      },
+      {
+        "path": "assets/generated/hub/r09/clouds-east-wisp.png",
+        "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176"
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-central-topiary.png",
+        "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6"
+      },
+      {
+        "path": "assets/generated/hub/r09/foliage-central-topiary.png",
+        "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6"
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-left-front-shrub.png",
+        "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16"
+      },
+      {
+        "path": "assets/generated/hub/r09/foliage-left-front-shrub.png",
+        "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16"
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-left-planter-topiary.png",
+        "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65"
+      },
+      {
+        "path": "assets/generated/hub/r09/foliage-left-planter-topiary.png",
+        "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65"
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-right-planter-topiary.png",
+        "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94"
+      },
+      {
+        "path": "assets/generated/hub/r09/foliage-right-planter-topiary.png",
+        "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94"
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-foreground-right.png",
+        "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c"
+      },
+      {
+        "path": "assets/generated/hub/r09/foliage-foreground-right.png",
+        "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c"
+      },
+      {
+        "path": "apps/web/public/hub/r09/window-light-mask.png",
+        "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da"
+      },
+      {
+        "path": "assets/generated/hub/r09/window-light-mask.png",
+        "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da"
+      },
+      {
+        "path": "apps/web/public/hub/r09/lamp-light-mask.png",
+        "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602"
+      },
+      {
+        "path": "assets/generated/hub/r09/lamp-light-mask.png",
+        "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602"
+      },
+      {
+        "path": "apps/web/public/hub/r09/ground-light-mask.png",
+        "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179"
+      },
+      {
+        "path": "assets/generated/hub/r09/ground-light-mask.png",
+        "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179"
+      }
+    ]
+  },
+  "sourceReview": [
+    "R08 selection is explicit stationArt=r08 in WorldCanvas/createWorldGame. R09 remains on HubScene and keeps its direct host diagnostics and semantic panorama controls after entrance buttons.",
+    "R08 custom placement is distinguished by placeActor; R09 profile options do not activate R08 raw-depth, ellipse-shadow or adapted-clip branches.",
+    "R08 fixed NPC filtering does not apply to crowd wardrobe. R09 still transforms its own wardrobe to the native source scale.",
+    "Owned WebGL release remains after Phaser DESTROY; the incoming wake-after-destroy guard lets an already sleeping game execute its deferred destruction.",
+    "Default browser phase list and execution hooks retain station, station-r09, r08, library, portraits, level-one, rewards and all other existing phases.",
+    "Both asset registries preserve incoming main entries and the reviewed R09 entries. The old ground-mask donor is retained separately, while main R08 keeps its newer mask."
+  ],
+  "tests": [
+    {
+      "command": "node tools/test_world_characters.cjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "newCases": [
+        "R08 optional preloader adapter with real gait and placement modules",
+        "Source manifest remains unchanged",
+        "NPC filter cannot suppress crowd wardrobe",
+        "Five fixed actors plus three autonomous R08 colleagues",
+        "All eight adapted observer walk cels",
+        "R08 raw y depth and shadows attached below visible feet",
+        "Six normal and three low-power online visitors",
+        "Reduced/low-power motion and complete shadow/layer cleanup",
+        "R09 after R08 retains four original walk cels, native depth and one shared Graphics with zero ellipses"
+      ],
+      "existingCasesPreserved": true
+    },
+    {
+      "command": "node tools/test_avatar_world_boundary.cjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "scope": "Real WorldCanvas with deterministic event doubles, including owned context released after delayed Phaser DESTROY; not browser proof."
+    },
+    {
+      "command": "node tools/test_station_r09_layer.cjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "manifestSha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd",
+      "cycles": [
+        {
+          "cycle": 1,
+          "objects": 46,
+          "masks": 3,
+          "remainingListeners": 0,
+          "movingClouds": 1,
+          "receiverRows": 9
+        },
+        {
+          "cycle": 2,
+          "objects": 46,
+          "masks": 3,
+          "remainingListeners": 0,
+          "movingClouds": 1,
+          "receiverRows": 9
+        },
+        {
+          "cycle": 3,
+          "objects": 46,
+          "masks": 3,
+          "remainingListeners": 0,
+          "movingClouds": 1,
+          "receiverRows": 9
+        }
+      ],
+      "nativeFrameClock": {
+        "status": "PASS",
+        "nativeElapsedMs": 1000,
+        "returnedActorElapsedMs": 1000,
+        "sceneryElapsedMs": 1000,
+        "foliageElapsedMs": 1000,
+        "normalPaintedFrames": 10,
+        "lowPowerElapsedMs": 1000,
+        "lowPowerPaintedFrames": 5,
+        "covered": [
+          "inflated Phaser delta",
+          "duplicate/backwards/invalid timestamps",
+          "100ms frame cap",
+          "native hidden/resume origin",
+          "unchanged visibility notification",
+          "reduced-motion origin",
+          "low-power cadence",
+          "manual fallback reseeding",
+          "disposed layer"
+        ]
+      }
+    },
+    {
+      "command": "node --experimental-strip-types --test packages/world-engine/src/scenes/art/r08Gait.test.ts packages/world-engine/src/scenes/art/r08PreviewModel.test.ts apps/web/src/appNavigation.test.ts",
+      "exitCode": 0,
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "node --check tools/test_station_environment_browser.cjs; node --check tools/test_world_characters.cjs",
+      "exitCode": 0,
+      "status": "PASS"
+    }
+  ],
+  "nativeVisibilityProbe": {
+    "path": "tools/test_station_environment_browser.cjs",
+    "sha256": "832ba3798afd5c11ca67680f966365bea25bbfde6bf819017fb4094691cb60f0",
+    "originalGateTimeoutMs": 3000,
+    "originalGatePollingMs": 100,
+    "diagnosticRafActiveBeforeFailure": false,
+    "postFailureObservationMs": 1550,
+    "rationale": "Allow the normal at-most-1Hz diagnostics to publish after diagnostic RAF callbacks; the original timeout is captured first and always rethrown.",
+    "originalFailureCanBecomePass": false,
+    "successfulGateChecks": "Observer remains inactive and has delivered zero callbacks.",
+    "independentSourceReviewer": "station_visibility_repro",
+    "independentSourceReview": "PASS_READ_ONLY"
+  },
+  "pending": [
+    "Actual native Chromium hidden/resume remains HOLD until the next automatic CI run passes its unchanged gate.",
+    "Merged R08 and R09 browser journeys require the ordinary automatic PR suite.",
+    "ProductionReady promotion requires actual native PASS and a subsequent ordinary-default browser run."
+  ],
+  "restrictions": [
+    "No local browser or HTTP listener",
+    "No manual CI dispatch or rerun",
+    "No production code, source asset or generated asset edited by this reviewer"
+  ]
+}

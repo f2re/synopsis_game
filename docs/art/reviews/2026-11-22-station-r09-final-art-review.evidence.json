@@ -1,0 +1,542 @@
+{
+  "reviewer": "/root/station_art_direction",
+  "role": "art-director",
+  "date": "2026-11-22",
+  "task": "STATION-R09-LIVING-TERRAIN",
+  "verdict": "PASS_ART",
+  "scope": "Station R09 visual composition, lighting, sampled motion, reduced-motion appearance and HUD at three viewports in Chromium and Firefox.",
+  "releaseApproved": false,
+  "closedFindings": [
+    "ART-LIGHT-01"
+  ],
+  "openArtBlockers": [],
+  "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+  "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+  "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+  "runId": 45009703486,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/45009703486",
+  "evidenceRoot": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-light-fix",
+  "directlyViewedScreenshotCount": 38,
+  "artifacts": {
+    "environment-firefox": {
+      "artifactId": 14749089315,
+      "runId": 45009703486,
+      "jobId": 137169082482,
+      "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+      "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+      "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "artifactBytes": 23148629,
+      "artifactSha256": "a662af44313253b55587285b85a4e410d61510c00a55f1c859acdf8b4d74ec05",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 84
+    },
+    "environment-chromium": {
+      "artifactId": 14749547527,
+      "runId": 45009703486,
+      "jobId": 137169082212,
+      "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+      "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+      "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "artifactBytes": 29090896,
+      "artifactSha256": "39b42f30601f97b57cc0a932596cbdf398178ea5c1bbd08f5393d7e6565d8d1f",
+      "artifactHashVerified": true,
+      "reportStatus": "FAIL",
+      "failure": "AssertionError [ERR_ASSERTION]: Vegetation resumes painting after real foregrounding\n    at nativeVisibility (/home/runner/work/synopsis_game/synopsis_game/candidate/tools/test_station_environment_browser.cjs:546:12)\n    at async /home/runner/work/synopsis_game/synopsis_game/candidate/tools/test_station_environment_browser.cjs:588:48",
+      "extractedScreenshotHashesChecked": 84
+    },
+    "firefox": {
+      "artifactId": 14749468309,
+      "runId": 45009703486,
+      "jobId": 137169082515,
+      "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+      "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+      "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "artifactBytes": 92616601,
+      "artifactSha256": "edf693f884b58b17d405500ed50a759b8de4999b6b2eac39cd65e938759b3d11",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 10
+    },
+    "chromium": {
+      "artifactId": 14749668153,
+      "runId": 45009703486,
+      "jobId": 137169082551,
+      "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+      "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+      "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "artifactBytes": 85397069,
+      "artifactSha256": "8f2726bcb8f663312f348e2a4e10a86bc8743c7dad532691dfab1704351f3263",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 10
+    }
+  },
+  "sourceDocuments": [
+    {
+      "file": "assets/generated/hub/r09/manifest.json",
+      "sha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420"
+    },
+    {
+      "file": "packages/world-engine/src/assets/hub/r09-manifest.json",
+      "sha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420"
+    },
+    {
+      "file": "assets/source/environment/hub/r09/source-spec.json",
+      "sha256": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec"
+    },
+    {
+      "file": "docs/testing/evidence/station-r09/pixel-review.md",
+      "sha256": "9b08d591e295fef32336a1c3a1cca28d17d964724eef4220fe9efc1ce5d3c591"
+    },
+    {
+      "file": "docs/testing/evidence/station-r09/pixel-review-light-01.md",
+      "sha256": "7bbd417ea74f0ee5c06a36bab1c34108c6ee17761d627b05b943206f2a401fc5"
+    },
+    {
+      "file": "docs/testing/evidence/station-r09/pixel-review-light-01.json",
+      "sha256": "c8079168cadd727dc4ddefe4c95dee2945fe6793ecf450495497a3630b246b64"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "environment-firefox/solar-day-1366.png",
+      "sha256": "7930dc2afa46d915368aa75aac13b49cad7ae8162d2eca9702469cc8923e809c",
+      "bytes": 398397,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-twilight-1366.png",
+      "sha256": "2aea4b9c718655d43f9aa972d912695b76df6807a31ecac189b85be4a0e1968f",
+      "bytes": 380507,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-night-1366.png",
+      "sha256": "9c955d4540d7a2f4992f0ac94d6282670f6975fbf85b3e8f308b6fa4d0fb7b4e",
+      "bytes": 362616,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-day-390.png",
+      "sha256": "98ad763fb4902afbacbc4b48e4abaca386d4769f4920f56a144ef57901589fe4",
+      "bytes": 133485,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-twilight-390.png",
+      "sha256": "582215bc69ced2f504239d28170e6c9d1242830966cce48a193947df279bb023",
+      "bytes": 128120,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-night-390.png",
+      "sha256": "a7fda613700fb8f945a2b98f7ba5d66d95d479492b234dac8acc27508d91d079",
+      "bytes": 122816,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-day-844.png",
+      "sha256": "eb6cd65648b143fbbafb2875ecc22896ca08728edcc6bc46314c33a084573c0e",
+      "bytes": 233186,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-twilight-844.png",
+      "sha256": "c44d643807864ec2070ea28304b1aed2c04a94214cb0d262b60ecde9e72a050e",
+      "bytes": 221158,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/solar-night-844.png",
+      "sha256": "4f709eff01fa1c57246aba42a0fb33bbce1cda5f9924f2dbac7eb507ffa789ca",
+      "bytes": 209205,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-firefox/weather-rain-night-390.png",
+      "sha256": "06cf650bdb92b90e4b60d0cc9ce9a893d3f63e915383fe6414c5c33b84fb44e9",
+      "bytes": 120032,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-day-1366.png",
+      "sha256": "5db8c8cf8b229a25ec39ce399750ef3bbaa2291ddcb09ecb6d2efe4c5d1f3918",
+      "bytes": 340614,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-twilight-1366.png",
+      "sha256": "9bb70200414b3df0d648ab7c256cb17b5bfcfdcac9ab7e6f974b57872b9216c9",
+      "bytes": 316558,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-night-1366.png",
+      "sha256": "f95d3fc32aadb26daf134c4e50f065b11549f06dedde477f4b03cc2ebc3fdc62",
+      "bytes": 295380,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-day-390.png",
+      "sha256": "bdd89dac0e13c974aa7e6f144f7cd8826118126f6cec3c98db01fe43ae45ec18",
+      "bytes": 115384,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-twilight-390.png",
+      "sha256": "d91b4649b86213bf857a84b3e1c2ed0203a83ef73a1304de2f327a8ce6dade3f",
+      "bytes": 109724,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-night-390.png",
+      "sha256": "725a62706e4d6f2b21e46cb7b405610a75d5e913456303454a351e92618fdf8b",
+      "bytes": 104010,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-day-844.png",
+      "sha256": "ba8002a696bcb080ee44d377339eb9b6fd5d5371e0545aa1cda2b9d14a6988e5",
+      "bytes": 208696,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-twilight-844.png",
+      "sha256": "5932acf0c4aae82d76fd96a7342f76300e9987d1df6d3d71aa246e3ea625cc6d",
+      "bytes": 194275,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/solar-night-844.png",
+      "sha256": "a3833aab227f957489b7625671094c4124337a038b7cf6a991fa7451faedfa74",
+      "bytes": 182191,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-motion-a-1366.png",
+      "sha256": "e688cbce8e661e002c00d493940a31ff940efc2d30ebb69f6182c869308dc080",
+      "bytes": 398089,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-motion-b-1366.png",
+      "sha256": "0848aab50777927682fa1884b2404b9854b72599956d9f914fd6ae9cccf18c03",
+      "bytes": 398241,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-reduced-1366.png",
+      "sha256": "c91b2a4572815ad805edd522f040725a90ce567063e2d2ddea3ee2e435f66901",
+      "bytes": 398147,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-motion-a-390.png",
+      "sha256": "fb1fa339428f1895e64d345e2d5121292f217b3144a2acc8f5a82394260ea4c9",
+      "bytes": 133191,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-motion-b-390.png",
+      "sha256": "c9ce2a40aa9ed544b2dc0335dbd20eb7d72dd02e1852d8c27bb6377c6fc28a24",
+      "bytes": 133232,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-reduced-390.png",
+      "sha256": "d465e02aba3385e6efa1daf69bbf5ac3b67048fd112d3867463597ba86ac5c44",
+      "bytes": 133193,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-motion-a-844.png",
+      "sha256": "bdc09a4f37d73640ab000c910cd1e136c4b1a905da421902e7f9eff5af4016b9",
+      "bytes": 232919,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-motion-b-844.png",
+      "sha256": "605bbd037ad470e5626d5574aceb922654bdeb5de42d6bf046a4c3ddfbfd1dce",
+      "bytes": 232943,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "firefox/station-r09-reduced-844.png",
+      "sha256": "1cc6e0fe3cc7e4707c8fee5f9b1ec097b4674f374b77936bd1cae20585644016",
+      "bytes": 232907,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "environment-chromium/weather-rain-night-390.png",
+      "sha256": "bb95cd58d43ecf37535c61ac55634b18eaee92798f8a39ab4235ef557c29022c",
+      "bytes": 101081,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-motion-a-1366.png",
+      "sha256": "7037d99af641f6cc98f64acd59bda740eabe8296ce38dcfa7e122a9c4c697479",
+      "bytes": 340185,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-motion-b-1366.png",
+      "sha256": "0978edbcc7cd53855293ae7e22f5982b5f5c28d991728c51b1f4b56623fcdaf0",
+      "bytes": 340286,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-reduced-1366.png",
+      "sha256": "89c79535488ed0de7e8ad5acc770db763acf5e4f768436d1d4acc0c521251158",
+      "bytes": 340280,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-motion-a-390.png",
+      "sha256": "e7a1b19831e86cf2f417b93765466bcaed2d538bec7a1b9e86ca297f28c98c88",
+      "bytes": 115192,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-motion-b-390.png",
+      "sha256": "1072a7fe1fdec28d69ba6333384cf4f85c28a3b5cd0f4016a90eb472ddb930d0",
+      "bytes": 115192,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-reduced-390.png",
+      "sha256": "e7a1b19831e86cf2f417b93765466bcaed2d538bec7a1b9e86ca297f28c98c88",
+      "bytes": 115192,
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-motion-a-844.png",
+      "sha256": "d76558522486770e34b203624dfcc4105f93703a9e85fd8c33a90c18b812fc4e",
+      "bytes": 208393,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-motion-b-844.png",
+      "sha256": "da598d2d3f6ec01e34cf67de6e8f7f9e6f9f3cc0bed451fff1370fee73a218fa",
+      "bytes": 208511,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    },
+    {
+      "file": "chromium/station-r09-reduced-844.png",
+      "sha256": "7d660208b8e01fc7e191294aaab8bb732f474ade3b8429beb914ca4bc8481b94",
+      "bytes": 208476,
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "matchesArtifactProvenance": true
+    }
+  ],
+  "runtimeLimitation": "The environment-chromium report for this captured candidate failed later at Vegetation resumes painting after real foregrounding. Art acceptance does not override that runtime gate.",
+  "followupHeadReportedByIntegrator": {
+    "head": "64e9b425fd2eac67cf31364ec43f8e1021b3866a",
+    "tree": "46957eff6742b8adafda38d2252830cbbbd2164f",
+    "description": "Test wait and evidence only, according to integrator. No screenshots in this review are attributed to this later head.",
+    "newScreenshotsReviewed": false
+  },
+  "limits": [
+    "No local browser, local HTTP server, Playwright, CDP or CUA was started by this reviewer.",
+    "PNG pairs establish sampled visual states, not continuous frame pacing or all animation frames.",
+    "Physical mobile devices, GPU performance, accessibility, full six-POI navigation and release promotion are separate gates.",
+    "Only day, twilight and night phases are directly reviewed in the phase matrix; other available solar phases are not claimed as visually reviewed.",
+    "Five selected foliage regions are animated; this review does not claim animation of every visible tree."
+  ]
+}

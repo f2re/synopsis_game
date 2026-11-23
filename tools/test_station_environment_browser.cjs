@@ -1,6 +1,8 @@
-/** R07: built application + real isolated server + Chromium/Firefox.
+/** Station environment: built application + real server + Chromium/Firefox.
  * No API, artwork, visibility or renderer substitutions. Date alone is fixed.
  * Optional baseline mode uses this same runner from an earlier checkout.
+ * R09 opt-in adds real panorama/source-anchor and hidden clock checks; the
+ * historical R01 baseline still checks its original six simultaneous doors.
  */
 'use strict';
 const assert = require('node:assert/strict');
@@ -12,11 +14,13 @@ const crypto = require('node:crypto');
 const { spawn, execFileSync } = require('node:child_process');
 const { once } = require('node:events');
 const { chromium, firefox } = require(require.resolve('playwright', { paths: [process.env.STATION_PLAYWRIGHT_MODULES || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES || process.cwd()] }));
+const { candidateUrl, stationState, forEachStationView, showStationEntrance } = require('./test_station_r09_browser.cjs');
 
 const repo = process.cwd(), dist = path.join(repo, 'apps/web/dist');
 const browserName = process.env.STATION_BROWSER || 'chromium';
 assert.ok(['chromium', 'firefox'].includes(browserName), 'Supported browser');
 const baseline = process.env.STATION_ENV_BASELINE === '1';
+const r09OptIn = !baseline && process.env.STATION_ENV_R09 === '1';
 const output = path.resolve(process.env.STATION_ENV_EVIDENCE || 'artifacts/station-environment-r07');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'station-environment-'));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -35,7 +39,7 @@ const viewports = [{ width: 1366, height: 768 }, { width: 390, height: 844 }];
 const facilityNames = { codepost: 'Кодовый пост', radar: 'Радарный комплекс', lab: 'Аэрологический павильон', cartography: 'Картографический класс', archive: 'Архив наблюдений', hall: 'Турнирный зал' };
 function revision() { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim(); } catch { return 'unavailable'; } }
 const report = {
-  status: 'RUNNING', mode: baseline ? 'baseline' : 'candidate', engine: browserName, browser: '', revision: revision(),
+  status: 'RUNNING', mode: baseline ? 'baseline' : 'candidate', r09OptIn, engine: browserName, browser: '', revision: revision(),
   appVersion: JSON.parse(fs.readFileSync(path.join(repo, 'package.json'), 'utf8')).version,
   runnerSha256: sha256(fs.readFileSync(__filename)),
   ci: { runId: process.env.GITHUB_RUN_ID || null, attempt: process.env.GITHUB_RUN_ATTEMPT || null, job: process.env.GITHUB_JOB || null, runner: process.env.RUNNER_NAME || null },
@@ -90,8 +94,19 @@ async function startServers() {
 function record(name, values) { report.cases.push({ name, ...values }); console.log(`ENV ${name}`); }
 function observePage(page, scenario) { page.on('pageerror', error => report.errors.push({ scenario, message: error.message })); }
 async function ready(page) {
+  // Before promotion R09 has an explicit URL gate. Ordinary/default route
+  // persistence is still exercised by the unchanged default station suite.
+  if (r09OptIn && new URL(page.url()).searchParams.get('stationArt') !== 'r09') await page.goto(candidateUrl(page.url()));
   await page.locator('.hub-screen[data-world-state="ready"]').waitFor({ timeout: 30_000 });
-  await page.waitForFunction(() => document.querySelectorAll('canvas').length === 1 && document.querySelectorAll('[data-building-id]').length === 6);
+  await page.waitForFunction(() => {
+    if (document.querySelectorAll('canvas').length !== 1) return false;
+    const raw = document.querySelector('.world-canvas-host > div')?.dataset.station;
+    const station = raw ? JSON.parse(raw) : null;
+    const ids = [...document.querySelectorAll('[data-building-id]')].map(node => node.dataset.buildingId).sort();
+    return station?.stationArt === 'r09'
+      ? ids.length > 0 && JSON.stringify(ids) === JSON.stringify([...station.visiblePoiIds].sort())
+      : ids.length === 6;
+  });
   await page.evaluate(async () => { await document.fonts.ready; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
 }
 async function setDate(page, iso) {
@@ -135,6 +150,45 @@ function assertNativeTiming(value) {
   assert.equal(value.clock?.dateOnly, true, 'Only Date is replaced for the solar scenario');
   assert.equal(Object.values(value.clock.nativeTiming).every(Boolean), true, 'RAF, performance and timers retain their original identities');
 }
+function installNativeVisibilityProbe() {
+  // Event tracing never requests frames during acceptance. The independent
+  // native RAF probe is armed only AFTER the unchanged gate has already failed.
+  let frames = 0, lastRafAt = null, requestId = null, active = false, stopped = false;
+  const events = [];
+  const snapshot = () => {
+    const host = document.querySelector('.world-canvas-host > div[data-station]');
+    const station = host?.dataset.station ? JSON.parse(host.dataset.station) : null;
+    // Phaser may publish its own debug reference; absence is reported rather
+    // than adding a product hook or changing the game loop to obtain it.
+    const game = globalThis.PHASER_GAME, loop = game?.loop;
+    const gameLoop = loop ? { running: loop.running, started: loop.started, frame: loop.frame,
+      time: loop.time, lastTime: loop.lastTime, rawDelta: loop.rawDelta, delta: loop.delta,
+      fpsLimit: loop.fpsLimit, rafRunning: loop.raf?.isRunning ?? null,
+      gamePaused: game.isPaused, pendingDestroy: game.pendingDestroy } : null;
+    return { at: performance.now(), active, frames, lastRafAt, visibility: document.visibilityState, focused: document.hasFocus(),
+      stationClockMs: station?.motion.clockMs ?? null, paintedFrames: station?.motion.foliage.paintedFrames ?? null,
+      paused: station?.motion.paused ?? null, context: host?.dataset.context ?? null, gameLoop };
+  };
+  const observe = event => { events.push({ type: event.type, ...snapshot() }); if (events.length > 32) events.shift(); };
+  const listeners = [[document, 'visibilitychange'], [document, 'freeze'], [document, 'resume'],
+    [window, 'focus'], [window, 'blur'], [window, 'pageshow'], [window, 'pagehide']];
+  for (const [target, type] of listeners) target.addEventListener(type, observe);
+  const frame = now => { if (!active || stopped) return; frames++; lastRafAt = now; requestId = requestAnimationFrame(frame); };
+  globalThis.__stationNativeVisibilityProbe = {
+    snapshot: () => ({ ...snapshot(), events: [...events] }),
+    startAfterFailure() {
+      if (active || stopped) return;
+      active = true; requestId = requestAnimationFrame(frame);
+    },
+    stop() {
+      active = false; stopped = true;
+      if (requestId !== null) cancelAnimationFrame(requestId);
+      requestId = null;
+      for (const [target, type] of listeners) target.removeEventListener(type, observe);
+    },
+  };
+  observe({ type: 'installed' });
+}
 async function state(page) {
   return page.evaluate(() => {
     const host = document.querySelector('.world-canvas-host > div');
@@ -154,9 +208,11 @@ async function state(page) {
       }
       if (renderer.type === 'unknown' && canvas.getContext('2d')) renderer = { type: 'canvas2d' };
     }
-    return { ...host?.dataset, clock: globalThis.__stationFixedDate?.snapshot(), ambientWeather: document.documentElement.dataset.ambientWeather,
+    return { ...host?.dataset, stationDiagnostics: host?.dataset.station ? JSON.parse(host.dataset.station) : null,
+      clock: globalThis.__stationFixedDate?.snapshot(), ambientWeather: document.documentElement.dataset.ambientWeather,
       storedWeather: JSON.parse(localStorage.getItem('synopsis_26063_settings') || '{}').weather,
-      visibility: document.visibilityState, date: new Date().toISOString(), viewport: [innerWidth, innerHeight], dpr: devicePixelRatio,
+      visibility: document.visibilityState, focused: document.hasFocus(), nativeFrameProbe: globalThis.__stationNativeVisibilityProbe?.snapshot() ?? null,
+      date: new Date().toISOString(), viewport: [innerWidth, innerHeight], dpr: devicePixelRatio,
       canvasCount: document.querySelectorAll('canvas').length, canvasSize: canvas ? [canvas.width, canvas.height] : null, renderer,
       documentSize: [document.documentElement.scrollWidth, document.documentElement.scrollHeight] };
   });
@@ -208,7 +264,9 @@ async function visitSettings(page, changes) {
   await page.getByRole('button', { name: 'Готово', exact: true }).click(); await ready(page);
 }
 async function solarCases(base) {
-  for (const viewport of viewports) {
+  // Candidate art acceptance also needs the short landscape composition. The
+  // separate baseline performance workload below retains its original sizes.
+  for (const viewport of [...viewports, { width: 844, height: 390 }]) {
     const hashes = {};
     for (const { phase, iso } of dates) {
       const { context, page } = await createPage(viewport, { reducedMotion: 'reduce' });
@@ -236,6 +294,10 @@ async function weatherCases(base) {
     const after = await page.locator('canvas').screenshot({ path: path.join(output, `weather-rain-pair-b-${viewport.width}.png`) });
     report.screenshots.push({ name: `weather-rain-pair-a-${viewport.width}.png`, sha256: sha256(before) }, { name: `weather-rain-pair-b-${viewport.width}.png`, sha256: sha256(after) });
     record(`rain-visual-pair-${viewport.width}`, { separationMs: 550, canvasChanged: sha256(before) !== sha256(after), interpretation: 'Visual comparison; NPC/fountain changes may also contribute.' });
+    if ((await state(page)).stationDiagnostics?.stationArt === 'r09') {
+      const panorama = await showStationEntrance(page, 'archive');
+      record(`rain-archive-panorama-${viewport.width}`, { entranceId: 'archive', panorama });
+    }
     await page.locator('[data-building-id="archive"]').click();
     await page.getByRole('button', { name: 'Посетить читальный зал', exact: true }).click();
     await page.getByRole('heading', { name: 'Читальный зал архива', exact: true }).waitFor();
@@ -312,9 +374,13 @@ async function interactionCases(base) {
   for (const { viewport, backing } of resizeCases) {
     await page.setViewportSize(viewport); await ready(page);
     const boxes = await settledEntranceGeometry(page, viewport, backing, previousGeometry);
+    const panorama = (await state(page)).stationDiagnostics?.stationArt === 'r09';
     previousGeometry = JSON.stringify(boxes);
     report.interactionGeometry.push({ viewport, expectedBacking: backing, boxes });
+    const seen = new Set();
+    const exerciseBoxes = async boxes => {
     for (const box of boxes) {
+      if (seen.has(box.id)) continue;
       assert.ok(box.width >= 44 && box.height >= 44, `${box.id}: readable touch target after resize`);
       assert.ok(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width + 1 && box.y + box.height <= viewport.height + 1, `${box.id}: target inside viewport`);
       const points = [[box.width / 2, box.height / 2], [2, box.height / 2], [box.width - 3, box.height / 2], [box.width / 2, 2], [box.width / 2, box.height - 3]];
@@ -332,7 +398,13 @@ async function interactionCases(base) {
         await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/pointer-${dx}-${dy}`);
       }
       const target = page.locator(`[data-building-id="${box.id}"]`);
-      if (box === boxes[0]) {
+      if (panorama) {
+        // A narrow panorama may expose only one real door. Travel to the next
+        // document tab stop and back, without inventing off-camera entrances.
+        await target.focus();
+        await pressEntranceKey(page, 'Tab', `${viewport.width}/${box.id}/next`);
+        await pressEntranceKey(page, 'Shift+Tab', `${viewport.width}/${box.id}/return`);
+      } else if (box === boxes[0]) {
         // The first entrance has no preceding document tab stop. Start at its
         // next sibling so real keyboard traversal never visits browser chrome.
         const next = page.locator(`[data-building-id="${boxes[1].id}"]`);
@@ -354,8 +426,13 @@ async function interactionCases(base) {
         await closeEntranceDialog(page, box.id, `${viewport.width}/${box.id}/keyboard-${activationKey}`);
         assert.equal(await target.evaluate(node => document.activeElement === node), true, `${box.id}: Escape restores the entrance after ${activationKey}`);
       }
+      seen.add(box.id);
     }
-    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, expectedBacking: backing, boxes, pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
+    };
+    const panoramaViews = panorama ? await forEachStationView(page, exerciseBoxes) : (await exerciseBoxes(boxes), null);
+    assert.deepEqual([...seen].sort(), Object.keys(facilityNames).sort(), 'All six entrances receive actual pointer and keyboard activation');
+    record(`entrances-resize-${viewport.width}-dpr2`, { viewport, dpr: 2, expectedBacking: backing, boxes, panoramaViews,
+      exercisedEntranceIds: [...seen], pointerSamplesPerEntrance: 5, keyboard: ['Tab', 'Shift+Tab', 'Enter', 'Space', 'Escape'] });
     await capture(page, `entrances-${viewport.width}-dpr2`);
   }
   // The reverse transition must also restore the desktop surface and targets.
@@ -384,7 +461,12 @@ async function settledEntranceGeometry(page, viewport, backing, previousGeometry
         return { id: node.dataset.buildingId, x: box.x, y: box.y, width: box.width, height: box.height };
       });
       const signature = JSON.stringify(boxes);
-      stable = boxes.length === 6 && signature !== previous ? (signature === last ? stable + 1 : 1) : 0;
+      const raw = document.querySelector('.world-canvas-host > div')?.dataset.station;
+      const station = raw ? JSON.parse(raw) : null;
+      const entrancesReady = station?.stationArt === 'r09'
+        ? boxes.length > 0 && JSON.stringify(boxes.map(box => box.id).sort()) === JSON.stringify([...station.visiblePoiIds].sort())
+        : boxes.length === 6;
+      stable = entrancesReady && signature !== previous ? (signature === last ? stable + 1 : 1) : 0;
       if (stable >= 3) return boxes;
       last = signature;
     }
@@ -468,11 +550,27 @@ async function nativeVisibility(base) {
   const context = browser.contexts()[0]; context.setDefaultTimeout(15_000);
   await context.addInitScript(key => localStorage.setItem(key, JSON.stringify({ soundEnabled: false, weather: 'rain' })), settingsKey);
   const page = await context.newPage(); observePage(page, 'native-visibility');
+  await page.addInitScript(installNativeVisibilityProbe);
   await page.setViewportSize(viewports[0]); await setDate(page, dates[0].iso); await page.goto(base); await ready(page);
   await phaseIs(page, 'day'); await weatherIs(page, 'rain', true);
+  const frameProbeBeforeHidden = await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.snapshot());
   const background = await context.newPage(); await background.goto('about:blank'); await background.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'hidden', undefined, { polling: 100 });
   await weatherIs(page, 'rain', false);
+  let hiddenStation;
+  if ((await state(page)).stationDiagnostics?.stationArt === 'r09') {
+    await page.waitForFunction(() => JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station).motion.paused, undefined, { polling: 100 });
+    const before = await stationState(page);
+    await page.waitForTimeout(1_500);
+    hiddenStation = await stationState(page);
+    assert.equal(hiddenStation.motion.clockMs, before.motion.clockMs, 'The station clock stops in a genuinely hidden tab');
+    assert.equal(hiddenStation.motion.foliage.paintedFrames, before.motion.foliage.paintedFrames, 'Hidden vegetation does not repaint');
+    assert.deepEqual(hiddenStation.motion.foliage.poses, before.motion.foliage.poses, 'Hidden vegetation holds its actual pose');
+    assert.deepEqual(hiddenStation.motion.cloudOffsets, before.motion.cloudOffsets, 'Hidden clouds hold position');
+    assert.equal(hiddenStation.motion.waterFrame, before.motion.waterFrame, 'Hidden water holds its frame');
+    record('r09-native-hidden-clock-hold', { before, after: hiddenStation, hiddenDurationMs: 1_500, visibilityMocked: false,
+      frameProbeBeforeHidden, frameProbeAfterHidden: await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.snapshot()) });
+  }
   await setDate(page, dates[2].iso);
   record('native-hidden-date-change', { ...await state(page), visibilityMocked: false });
   const resumedAt = performance.now(); await page.bringToFront();
@@ -480,6 +578,40 @@ async function nativeVisibility(base) {
   const refreshMs = performance.now() - resumedAt;
   await weatherIs(page, 'rain', true);
   record('native-resume-refresh', { ...await state(page), refreshMs, visibilityMocked: false, expectedPhase: 'night', thresholdMs: 2_500 });
+  if (hiddenStation) {
+    try {
+      await page.waitForFunction(previous => {
+        const station = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]').dataset.station);
+        // Foregrounding may publish the first resumed tick before the next
+        // 100 ms wind frame; regular diagnostics are published at most at 1 Hz.
+        return !station.motion.paused && station.motion.clockMs > previous.clockMs
+          && station.motion.foliage.paintedFrames > previous.paintedFrames;
+      }, { clockMs: hiddenStation.motion.clockMs, paintedFrames: hiddenStation.motion.foliage.paintedFrames }, { polling: 100, timeout: 3_000 });
+    } catch (error) {
+      // Capture the original timeout before screenshots OR the diagnostic RAF
+      // can request a compositor frame. Diagnostics can never turn it into PASS.
+      try {
+        record('r09-native-resume-timeout', { status: 'FAIL', ...await state(page), visibleElapsedMs: performance.now() - resumedAt });
+        await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.startAfterFailure());
+        // Allow the ordinary <=1Hz station diagnostics to publish after native
+        // frames resume; this interval is exclusively after the original FAIL.
+        await page.waitForTimeout(1_550);
+        record('r09-native-resume-post-failure-probe', { ...await state(page), diagnosticOnly: true, observerDurationMs: 1_550, originalGateStatus: 'FAIL' });
+      } catch (diagnosticError) {
+        record('r09-native-resume-diagnostic-error', { error: String(diagnosticError), originalGateStatus: 'FAIL' });
+      } finally {
+        await page.evaluate(() => globalThis.__stationNativeVisibilityProbe?.stop()).catch(() => {});
+      }
+      throw error;
+    }
+    const after = await stationState(page), visibleElapsedMs = performance.now() - resumedAt;
+    const clockAdvanceMs = after.motion.clockMs - hiddenStation.motion.clockMs;
+    assert.ok(clockAdvanceMs <= visibleElapsedMs + 150, 'Resume does not apply the elapsed hidden interval to station animation');
+    assert.ok(after.motion.foliage.paintedFrames > hiddenStation.motion.foliage.paintedFrames, 'Vegetation resumes painting after real foregrounding');
+    const nativeFrameProbe = await page.evaluate(() => globalThis.__stationNativeVisibilityProbe.snapshot());
+    assert.equal(nativeFrameProbe.active, false); assert.equal(nativeFrameProbe.frames, 0, 'Passing acceptance must never activate the independent diagnostic RAF');
+    record('r09-native-clock-resume', { after, visibleElapsedMs, clockAdvanceMs, visibilityMocked: false, maximumFirstDeltaMs: 100, nativeFrameProbe });
+  }
   await capture(page, 'native-night-after-resume'); await background.close();
 }
 function compareBaseline() {
@@ -511,7 +643,7 @@ function compareBaseline() {
     }) };
 }
 (async () => {
-  const base = await startServers();
+  const serverBase = await startServers(), base = r09OptIn ? candidateUrl(serverBase) : serverBase;
   browser = await (browserName === 'firefox' ? firefox : chromium).launch({ headless: process.env.STATION_BROWSER_HEADED !== 'true',
     ...(browserName === 'chromium' ? { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] }
       : { firefoxUserPrefs: { 'webgl.force-enabled': true, 'gfx.webrender.all': true } }),
@@ -537,6 +669,7 @@ function compareBaseline() {
         targetBoxes: [...document.querySelectorAll('[data-building-id]')].map(node => ({ buildingId: node.dataset.buildingId, ...rect(node) })),
         worldState: document.querySelector('.hub-screen')?.dataset.worldState ?? null,
         clock: globalThis.__stationFixedDate?.snapshot(),
+        visibility: document.visibilityState, focused: document.hasFocus(), nativeFrameProbe: globalThis.__stationNativeVisibilityProbe?.snapshot() ?? null,
       };
     }).catch(error => ({ url: page.url(), snapshotError: String(error) }));
     report.failureSnapshots.push({ ...snapshot, lastInteraction: report.lastInteraction ?? null, errors: [...report.errors] });
@@ -544,7 +677,10 @@ function compareBaseline() {
   }
 }).finally(async () => {
   fs.writeFileSync(path.join(output, 'browser-report.json'), JSON.stringify(report, null, 2) + '\n');
-  if (browser) await browser.close().catch(() => {});
+  if (browser) {
+    for (const context of browser.contexts()) for (const page of context.pages()) await page.evaluate(() => globalThis.__stationNativeVisibilityProbe?.stop()).catch(() => {});
+    await browser.close().catch(() => {});
+  }
   if (nativeChrome?.exitCode === null) { const done = once(nativeChrome, 'exit'); nativeChrome.kill('SIGTERM'); await done; }
   if (webServer) { webServer.closeAllConnections(); await new Promise(resolve => webServer.close(resolve)); }
   if (apiProcess?.exitCode === null) { const done = once(apiProcess, 'exit'); apiProcess.kill('SIGTERM'); await done; }

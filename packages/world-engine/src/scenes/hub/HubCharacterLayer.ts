@@ -18,6 +18,7 @@ import {
   STATION_CROWD_TEXTURES, STATION_VISITOR_LIMIT, STATION_VISITOR_LOW_POWER_LIMIT,
 } from './stationCrowd';
 import { isMovingFauna, stationFaunaPose, STATION_FAUNA_CYCLE_MS } from './stationFaunaMotion';
+import { R09_ACTOR_SPACE, r09ActorDepth, r09CharacterDefinition, r09CrowdPlan, r09FaunaOffset, r09HasContactShadow } from './r09ActorLayout';
 
 const MANIFEST_KEY = 'hub.characters.manifest.v1';
 const MANIFEST_URL = '/hub/characters/manifest.json';
@@ -92,6 +93,7 @@ interface Actor {
 }
 
 type CrowdActor = { actor: Actor; plan: ReturnType<typeof stationCrowdPlan>[number] };
+export interface HubCharacterLayerOptions { profile?: 'r01' | 'r09' }
 
 export interface StationCharacterPlacement {
   placeActor: (definition: WorldCharacterDefinition) => WorldCharacterDefinition | undefined;
@@ -116,14 +118,28 @@ export class HubCharacterLayer {
   private crowdSampleMs = 0;
   private visitors = 0;
   private destroyed = false;
+  private readonly profile: 'r01' | 'r09';
+  private readonly placement?: StationCharacterPlacement;
+  private r09Placed = false;
+  private readonly contactShadows?: Phaser.GameObjects.Graphics;
+  private shadowsDirty = true;
 
-  constructor(private readonly scene: Phaser.Scene, private readonly placement?: StationCharacterPlacement) {
+  constructor(private readonly scene: Phaser.Scene, options: HubCharacterLayerOptions | StationCharacterPlacement = {}) {
+    this.profile = 'profile' in options ? options.profile ?? 'r01' : 'r01';
+    this.placement = 'placeActor' in options ? options : undefined;
     this.layout = getR01Layout(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
+    if (this.profile === 'r09') {
+      this.layout = { ...this.layout, ...R09_ACTOR_SPACE, portrait: false, zoom: 1 };
+      this.contactShadows = scene.add.graphics().setDepth(19.8);
+    }
     this.preferences = normalizeWorldPreferences(scene.registry.get('ui.preferences'));
     this.errors = [...(scene.registry.get(ERROR_REGISTRY) as string[] ?? [])];
     this.pack = scene.registry.get(PACK_REGISTRY) as WorldCharacterManifest | undefined;
     this.crowdWardrobe = STATION_CROWD_TEXTURES.flatMap((id) => {
-      const definition = this.pack?.actors.find((entry) => entry.id === id && entry.role === 'crowd');
+      const original = this.pack?.actors.find((entry) => entry.id === id && entry.role === 'crowd');
+      // Custom R08 placement filters fixed NPCs; its crowd uses the authored
+      // wardrobe and explicit crowd routes. R09 also rescales crowd artwork.
+      const definition = original && (this.profile === 'r09' ? r09CharacterDefinition(original) : original);
       return definition && Object.values(definition.clips).every((clip) => this.validTexture(clip)) ? [definition] : [];
     });
     const crowdEnabled = this.crowdWardrobe.length > 0;
@@ -138,7 +154,7 @@ export class HubCharacterLayer {
     for (const original of this.pack?.actors ?? []) {
       // Fixed employees and campus fauna never receive account clothing or tools.
       if (original.role !== 'npc') continue;
-      const definition = this.placement ? this.placement.placeActor(original) : original;
+      const definition = this.definitionForScene(original);
       if (!definition) continue;
       const clip = definition.clips.idle;
       if (!this.validTexture(clip)) continue;
@@ -150,7 +166,7 @@ export class HubCharacterLayer {
       this.actors.push(this.createActor(definition, faunaReady));
     }
     if (crowdEnabled) {
-      for (const plan of this.placement?.crowd ?? stationCrowdPlan(this.layout.portrait)) {
+      for (const plan of this.getCrowdPlan()) {
         const definition = this.crowdWardrobe[plan.costume % this.crowdWardrobe.length];
         this.crowd.push({ plan, actor: this.createActor(definition) });
       }
@@ -158,6 +174,32 @@ export class HubCharacterLayer {
     scene.events.on('ui:preferences', this.applyPreferences, this);
     scene.scale.on(Phaser.Scale.Events.RESIZE, this.resize, this);
     this.resize();
+  }
+
+  private definitionForScene(source: WorldCharacterDefinition): WorldCharacterDefinition | undefined {
+    return this.profile === 'r09' ? r09CharacterDefinition(source) : this.placement ? this.placement.placeActor(source) : source;
+  }
+
+  private getCrowdPlan() {
+    return this.profile === 'r09' ? r09CrowdPlan() : this.placement?.crowd ?? stationCrowdPlan(this.layout.portrait);
+  }
+
+  private place(image: Phaser.GameObjects.Image, x: number, y: number): void {
+    if (image.x === x && image.y === y) return;
+    image.setPosition(x, y);
+    this.shadowsDirty = true;
+  }
+
+  private paintContactShadows(): void {
+    if (!this.contactShadows || !this.shadowsDirty) return;
+    this.contactShadows.clear();
+    for (const actor of [...this.actors, ...this.crowd.map(({ actor }) => actor)]) {
+      if (!actor.image.visible || !r09HasContactShadow(actor.definition)) continue;
+      const x = Math.round(actor.image.x), y = Math.round(actor.image.y);
+      this.contactShadows.fillStyle(0x142b2c, .22).fillRect(x - 2, y, 5, 1);
+      this.contactShadows.fillStyle(0x142b2c, .14).fillRect(x - 1, y - 1, 3, 1);
+    }
+    this.shadowsDirty = false;
   }
 
   private createActor(definition: WorldCharacterDefinition, faunaReady = false): Actor {
@@ -187,24 +229,28 @@ export class HubCharacterLayer {
   }
 
   private resize(): void {
-    this.layout = getR01Layout(this.scene.scale.width, this.scene.scale.height, this.scene.registry.get('world.pixelRatio'));
+    // A crop/pan/resize changes the camera, not a worker's route or animation clock.
+    if (this.profile === 'r09' && this.r09Placed) return;
+    if (this.profile === 'r01') this.layout = getR01Layout(this.scene.scale.width, this.scene.scale.height, this.scene.registry.get('world.pixelRatio'));
     for (const actor of this.actors) {
       const point = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
-      actor.image.setPosition(point[0], point[1]);
+      this.place(actor.image, point[0], point[1]);
       if (actor.definition.motion) actor.image.setFlipX(false);
       this.setClip(actor, actor.definition.motion && !this.preferences.reducedMotion ? 'walk' : 'idle');
       actor.elapsedMs = 0;
       actor.frame = 0;
       actor.image.setFrame(0);
       if (this.placement) this.placeDepth(actor);
-      else actor.image.setDepth(actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
+      else actor.image.setDepth(this.profile === 'r09' ? r09ActorDepth(point[1]) : actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
     }
     if (this.crowd.length > 0) {
-      const plans = this.placement?.crowd ?? stationCrowdPlan(this.layout.portrait);
+      const plans = this.getCrowdPlan();
       this.crowd.forEach((entry, index) => { entry.plan = plans[index]; });
       this.paintCrowd();
     }
     this.updateFauna();
+    this.r09Placed = this.profile === 'r09';
+    this.paintContactShadows();
     this.publishDiagnostics();
   }
 
@@ -219,7 +265,7 @@ export class HubCharacterLayer {
       for (const actor of this.actors) {
         if (actor.definition.motion) {
           const position = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
-          actor.image.setPosition(position[0], position[1]);
+          this.place(actor.image, position[0], position[1]);
           this.placeDepth(actor);
           actor.image.setFlipX(false);
         }
@@ -232,6 +278,7 @@ export class HubCharacterLayer {
       for (const actor of this.actors) if (actor.definition.motion) this.setClip(actor, 'walk');
     }
     this.paintCrowd();
+    this.paintContactShadows();
     this.publishDiagnostics();
   }
 
@@ -255,8 +302,9 @@ export class HubCharacterLayer {
       const pose = stationFaunaPose(actor.definition.id, this.faunaTimeMs, this.layout.portrait);
       const point = this.layout.portrait ? actor.definition.positions.portrait : actor.definition.positions.landscape;
       this.setClip(actor, pose.action);
-      const x = Math.round(point[0] + pose.x), y = Math.round(point[1] + pose.y);
-      if (actor.image.x !== x || actor.image.y !== y) actor.image.setPosition(x, y);
+      const offset = this.profile === 'r09' ? r09FaunaOffset(pose.x, pose.y) : [pose.x, pose.y];
+      const x = Math.round(point[0] + offset[0]), y = Math.round(point[1] + offset[1]);
+      this.place(actor.image, x, y);
       this.placeDepth(actor);
       if (actor.image.flipX !== pose.facingRight) actor.image.setFlipX(pose.facingRight);
       if (pose.action === 'idle') continue;
@@ -278,23 +326,24 @@ export class HubCharacterLayer {
     for (const { plan, actor } of this.crowd) {
       const visible = plan.visitors <= online;
       const image = actor.image;
-      if (image.visible !== visible) image.setVisible(visible);
+      if (image.visible !== visible) { image.setVisible(visible); this.shadowsDirty = true; }
       if (actor.shadow && actor.shadow.visible !== visible) actor.shadow.setVisible(visible);
       if (!visible) continue;
       const still = this.preferences.reducedMotion || (this.preferences.lowPower && (this.placement !== undefined || plan.visitors > 0));
       const pose = stationCrowdPose(plan, this.crowdTimeMs, still, online);
       this.setClip(actor, pose.action);
       const x = Math.round(pose.x), y = Math.round(pose.y);
-      if (image.x !== x || image.y !== y) image.setPosition(x, y);
+      this.place(image, x, y);
       if (image.flipX !== pose.facesLeft) image.setFlipX(pose.facesLeft);
       if (this.placement) this.placeDepth(actor);
       else {
-        const depth = (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
+        const depth = this.profile === 'r09' ? r09ActorDepth(y) : (plan.action === 'sit' ? 30.2 : 24) + y / this.layout.height * 4;
         if (image.depth !== depth) image.setDepth(depth);
       }
       const frame = this.plannedFrame(actor, plan, pose);
       if (frame !== actor.frame) { image.setFrame(frame); actor.frame = frame; }
     }
+    this.paintContactShadows();
   }
 
   update(deltaMs: number): void {
@@ -332,7 +381,7 @@ export class HubCharacterLayer {
       if (actor.definition.motion && actor.state === 'walk') {
         const patrol = characterPatrolPose(actor.definition, actor.elapsedMs, this.layout.portrait);
         if (patrol) {
-          if (actor.image.x !== patrol.x || actor.image.y !== patrol.y) actor.image.setPosition(patrol.x, patrol.y);
+          this.place(actor.image, patrol.x, patrol.y);
           this.placeDepth(actor);
           if (actor.image.flipX !== patrol.flipX) actor.image.setFlipX(patrol.flipX);
         } else {
@@ -344,7 +393,7 @@ export class HubCharacterLayer {
           let x = actor.image.x + direction * actor.definition.motion.speed * delta / 1000;
           if (direction > 0 && x > right) x = left;
           else if (direction < 0 && x < left) x = right;
-          actor.image.setPosition(x, actor.image.y);
+          this.place(actor.image, x, actor.image.y);
         }
       }
       if (!sample) continue;
@@ -352,6 +401,7 @@ export class HubCharacterLayer {
       if (frame !== actor.frame) { actor.image.setFrame(frame); actor.frame = frame; }
     }
     if (sample) this.sampleTimeMs = 0;
+    this.paintContactShadows();
   }
 
   private plannedFrame(actor: Actor, plan: CrowdActor['plan'], pose: ReturnType<typeof stationCrowdPose>): number {
@@ -386,6 +436,8 @@ export class HubCharacterLayer {
     const diagnostics = {
       artAccepted: this.pack?.artAcceptance === 'PASS',
       characterClass: this.placement ? 'r08-station-actor' : 'r02-station-actor',
+      placementProfile: this.placement ? 'r08' : this.profile,
+      ...(this.profile === 'r09' ? { logicalSpace: R09_ACTOR_SPACE } : {}),
       playerPresent: false,
       personalizationScope: 'saved-portrait',
       visibleActors: visible.length + crowd.length,
@@ -415,5 +467,6 @@ export class HubCharacterLayer {
       actor.shadow?.destroy();
       actor.image.destroy();
     }
+    this.contactShadows?.destroy();
   }
 }

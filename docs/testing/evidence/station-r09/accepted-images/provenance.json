@@ -1,0 +1,66 @@
+{
+  "sourceHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+  "sourceTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+  "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+  "checkoutTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+  "runId": 45014358726,
+  "jobId": 137183360912,
+  "artifactId": 14751406611,
+  "artifactBytes": 23149375,
+  "artifactSha256": "289f0e839de3da75c3cf990b50b8d52a2f1a9a706c6353118d760d34bf655522",
+  "reportStatus": "PASS",
+  "purpose": "Unmodified actual Firefox screenshots from the independently accepted R09 candidate. These are not a mock-up or a claim about a later default-activation run.",
+  "files": [
+    {
+      "archiveMember": "candidate/artifacts/station-environment-r07/solar-day-1366.png",
+      "sha256": "7930dc2afa46d915368aa75aac13b49cad7ae8162d2eca9702469cc8923e809c",
+      "bytes": 398397,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "file": "solar-day-1366.png"
+    },
+    {
+      "archiveMember": "candidate/artifacts/station-environment-r07/solar-twilight-1366.png",
+      "sha256": "2aea4b9c718655d43f9aa972d912695b76df6807a31ecac189b85be4a0e1968f",
+      "bytes": 380507,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "file": "solar-twilight-1366.png"
+    },
+    {
+      "archiveMember": "candidate/artifacts/station-environment-r07/solar-night-1366.png",
+      "sha256": "9c955d4540d7a2f4992f0ac94d6282670f6975fbf85b3e8f308b6fa4d0fb7b4e",
+      "bytes": 362616,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "file": "solar-night-1366.png"
+    },
+    {
+      "archiveMember": "candidate/artifacts/station-environment-r07/solar-night-390.png",
+      "sha256": "a7fda613700fb8f945a2b98f7ba5d66d95d479492b234dac8acc27508d91d079",
+      "bytes": 122816,
+      "dimensions": [
+        390,
+        844
+      ],
+      "file": "solar-night-390.png"
+    },
+    {
+      "archiveMember": "candidate/artifacts/station-environment-r07/solar-day-844.png",
+      "sha256": "eb6cd65648b143fbbafb2875ecc22896ca08728edcc6bc46314c33a084573c0e",
+      "bytes": 233186,
+      "dimensions": [
+        844,
+        390
+      ],
+      "file": "solar-day-844.png"
+    }
+  ],
+  "signedUrlsStored": false
+}

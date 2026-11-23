@@ -1,0 +1,960 @@
+{
+  "reviewer": "/root/station_art_final",
+  "role": "art-director",
+  "date": "2026-11-22",
+  "task": "STATION-R09-LIVING-TERRAIN",
+  "verdict": "PASS_ART_FOLLOWUP",
+  "scope": "Independent new-image art review after frame-clock correction and main PR136 integration: source continuity, ground/building coherence, local light, selected foliage states, actors, reduced-motion appearance and HUD at three viewports.",
+  "releaseApproved": false,
+  "closedFindings": [
+    {
+      "id": "ART-LIGHT-01",
+      "status": "CLOSED",
+      "note": "Prior closure retained and visually reconfirmed on the new desktop twilight/night frames plus 390 night; source masks are byte-identical."
+    }
+  ],
+  "openArtBlockers": [],
+  "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+  "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+  "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+  "equivalentLocalCommit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+  "runId": 45014358726,
+  "runUrl": "https://github.com/f2re/synopsis_game/actions/runs/45014358726",
+  "prUrl": "https://github.com/f2re/synopsis_game/pull/135",
+  "stationSelection": "?stationArt=r09",
+  "evidenceRoot": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock",
+  "directlyViewedScreenshotCount": 30,
+  "artifacts": [
+    {
+      "artifactId": 14751406611,
+      "runId": 45014358726,
+      "jobId": 137183360912,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "archiveFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/station-frame-clock-environment-firefox-14751406611.zip",
+      "artifactBytes": 23149375,
+      "artifactSha256": "289f0e839de3da75c3cf990b50b8d52a2f1a9a706c6353118d760d34bf655522",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 84,
+      "signedUrlsStored": false,
+      "sourceHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "sourceTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "githubArtifactName": "station-environment-firefox-ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "githubArtifactDigest": "sha256:289f0e839de3da75c3cf990b50b8d52a2f1a9a706c6353118d760d34bf655522",
+      "reportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/browser-report.json",
+      "sourceTreeVerifiedWithGitHub": true,
+      "name": "environment-firefox",
+      "provenanceFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/artifact-provenance.json",
+      "provenanceSha256": "cf836b18609de583423f37aa2d4eb996d192b2ca52dfc5cf1e95c405c17b7255",
+      "browserReportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/browser-report.json",
+      "browserReportSha256": "2c1380a9f941dae4e7ac5a328e3a2ad39850cf7f2e939c215685f9323f62c767",
+      "browserVersion": "153.0",
+      "browserReportCaseCount": 61,
+      "archiveIndependentlyVerifiedByReviewer": true,
+      "directlyViewedScreenshotCount": 6
+    },
+    {
+      "artifactId": 14751358123,
+      "runId": 45014358726,
+      "jobId": 137183360915,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "archiveFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/station-frame-clock-environment-chromium-14751358123.zip",
+      "artifactBytes": 29366061,
+      "artifactSha256": "3bf8f0cffdb7e601bd46fc572b33fd4290e6b24a05582b23b9e56e26fd24842d",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 86,
+      "signedUrlsStored": false,
+      "sourceHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "sourceTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "githubArtifactName": "station-environment-chromium-ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "githubArtifactDigest": "sha256:3bf8f0cffdb7e601bd46fc572b33fd4290e6b24a05582b23b9e56e26fd24842d",
+      "reportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/browser-report.json",
+      "sourceTreeVerifiedWithGitHub": true,
+      "name": "environment-chromium",
+      "provenanceFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/artifact-provenance.json",
+      "provenanceSha256": "0eb2ae95288811fd6ddab6da5f788b0e4ca24e2a77dd5901b3a077c0b40c4148",
+      "browserReportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/browser-report.json",
+      "browserReportSha256": "90f6f38c71ea2bf5447f7980fa52a1705a2fcbc47e2a812ac1e78d7b18d628f5",
+      "browserVersion": "151.0.7922.34",
+      "browserReportCaseCount": 66,
+      "archiveIndependentlyVerifiedByReviewer": true,
+      "directlyViewedScreenshotCount": 6
+    },
+    {
+      "artifactId": 14751810118,
+      "runId": 45014358726,
+      "jobId": 137183360876,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "archiveFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/station-frame-clock-screens-firefox-14751810118.zip",
+      "artifactBytes": 93689118,
+      "artifactSha256": "8f57b72d7402b02bd3a1c2a48498df4635b4522e7ade0570b009594952db9609",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 10,
+      "signedUrlsStored": false,
+      "sourceHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "sourceTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "githubArtifactName": "station-screens-firefox-ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "githubArtifactDigest": "sha256:8f57b72d7402b02bd3a1c2a48498df4635b4522e7ade0570b009594952db9609",
+      "reportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/browser-report.json",
+      "sourceTreeVerifiedWithGitHub": true,
+      "name": "firefox",
+      "provenanceFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/artifact-provenance.json",
+      "provenanceSha256": "48f5e24e6490be974662043e1174327c6131746e62e00779c8a98d98f092aa08",
+      "browserReportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/browser-report.json",
+      "browserReportSha256": "e8aeb458d60f85d10dd3522e0585e21c2544d1789327eeb3d105689fa4087ec0",
+      "browserVersion": "153.0",
+      "browserReportCaseCount": 1113,
+      "archiveIndependentlyVerifiedByReviewer": true,
+      "directlyViewedScreenshotCount": 9
+    },
+    {
+      "artifactId": 14751309900,
+      "runId": 45014358726,
+      "jobId": 137183360706,
+      "head": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "checkout": "ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "tree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "archiveFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/station-frame-clock-screens-chromium-14751309900.zip",
+      "artifactBytes": 86200246,
+      "artifactSha256": "c5aaf92488207a0d12ad2b56028442814d4847e6f6a78f46b9ff36f12a5534fc",
+      "artifactHashVerified": true,
+      "reportStatus": "PASS",
+      "failure": null,
+      "extractedScreenshotHashesChecked": 10,
+      "signedUrlsStored": false,
+      "sourceHead": "3453c344a91490a1b4e7c7d8484b409aa509b2cb",
+      "sourceTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "checkoutTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+      "githubArtifactName": "station-screens-chromium-ba83ef7724912c087faab7258b8a36e0d6af48ee",
+      "githubArtifactDigest": "sha256:c5aaf92488207a0d12ad2b56028442814d4847e6f6a78f46b9ff36f12a5534fc",
+      "reportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/browser-report.json",
+      "sourceTreeVerifiedWithGitHub": true,
+      "name": "chromium",
+      "provenanceFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/artifact-provenance.json",
+      "provenanceSha256": "2bb63d50fb941755ed14f8ec3447d65554a9be1438351a8baa8e465234ba682e",
+      "browserReportFile": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/browser-report.json",
+      "browserReportSha256": "6b44bbfdab88528b78c7d6c2842e8f592f8137b6590a32163a37efad65fa0c92",
+      "browserVersion": "151.0.7922.34",
+      "browserReportCaseCount": 1124,
+      "archiveIndependentlyVerifiedByReviewer": true,
+      "directlyViewedScreenshotCount": 9
+    }
+  ],
+  "sourceDocuments": [
+    {
+      "path": "assets/source/environment/hub/r09/source-spec.json",
+      "commit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+      "bytes": 49790,
+      "sha256": "f21754e0d3a2f69b167f8837a22ebf9d2ffa62c182feb8c8db2dff3b7ff21f4c"
+    },
+    {
+      "path": "apps/web/public/hub/r09/manifest.json",
+      "commit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+      "bytes": 53136,
+      "sha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+    },
+    {
+      "path": "assets/generated/hub/r09/manifest.json",
+      "commit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+      "bytes": 53136,
+      "sha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+    },
+    {
+      "path": "packages/world-engine/src/assets/hub/r09-manifest.json",
+      "commit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+      "bytes": 53136,
+      "sha256": "1312d29cc9b25f21eeaeda1ba60285fad9574101d12644db807d628d4e689dfd"
+    },
+    {
+      "path": "docs/art/reviews/2026-11-22-station-r09-final-art-review.md",
+      "bytes": 20334,
+      "sha256": "0ca0fbe94946528db923be733bb333047556cc4bbfc675f458bbec416af5e9a2",
+      "use": "Prior independent acceptance; not counted as new screenshots."
+    },
+    {
+      "path": "docs/art/reviews/2026-11-22-station-r09-final-art-review.evidence.json",
+      "bytes": 17282,
+      "sha256": "eb7f78864ad9f4a437b9ce8936990fd897092df824bbe729caeabe9007cbc514",
+      "use": "Prior independent acceptance; not counted as new screenshots."
+    },
+    {
+      "path": "docs/testing/evidence/station-r09/pixel-review.md",
+      "bytes": 23644,
+      "sha256": "9b08d591e295fef32336a1c3a1cca28d17d964724eef4220fe9efc1ce5d3c591",
+      "use": "Prior independent acceptance; not counted as new screenshots."
+    },
+    {
+      "path": "docs/testing/evidence/station-r09/pixel-review-light-01.md",
+      "bytes": 8584,
+      "sha256": "7bbd417ea74f0ee5c06a36bab1c34108c6ee17761d627b05b943206f2a401fc5",
+      "use": "Prior independent acceptance; not counted as new screenshots."
+    }
+  ],
+  "sourceContinuity": {
+    "priorLocalCommit": "a10f91e74a5a348952137c94ba557fbf2bbf3e4c",
+    "priorPublishedHead": "7424d3ddc43594541321d370c80daef8a88d69c1",
+    "priorTree": "657a82389a74c3634f695d0596f768f6750168e3",
+    "currentLocalCommit": "af5a8ba86bb1ebd015b048c0fbc3fbe56960f9b6",
+    "currentTree": "40a7b05ef8f5589695cc87657551b804d28903a0",
+    "checkedPublicPngCount": 13,
+    "byteIdenticalPngCount": 13,
+    "changedManifestTopLevelFields": [
+      "provenance",
+      "sourceSpecCanonicalSha256"
+    ],
+    "pngs": [
+      {
+        "path": "apps/web/public/hub/r09/architecture-ground.png",
+        "bytes": 251757,
+        "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
+        "priorSha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/clouds-east-wisp.png",
+        "bytes": 290,
+        "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+        "priorSha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-central-topiary.png",
+        "bytes": 736,
+        "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6",
+        "priorSha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-foreground-right.png",
+        "bytes": 4061,
+        "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c",
+        "priorSha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-left-front-shrub.png",
+        "bytes": 660,
+        "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16",
+        "priorSha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-left-planter-topiary.png",
+        "bytes": 720,
+        "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65",
+        "priorSha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/foliage-right-planter-topiary.png",
+        "bytes": 684,
+        "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94",
+        "priorSha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/foreground.png",
+        "bytes": 46463,
+        "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc",
+        "priorSha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/ground-light-mask.png",
+        "bytes": 827,
+        "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
+        "priorSha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/lamp-light-mask.png",
+        "bytes": 708,
+        "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+        "priorSha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/sky.png",
+        "bytes": 35625,
+        "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
+        "priorSha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/water.png",
+        "bytes": 2070,
+        "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
+        "priorSha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      },
+      {
+        "path": "apps/web/public/hub/r09/window-light-mask.png",
+        "bytes": 905,
+        "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
+        "priorSha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da",
+        "byteIdenticalToPriorPixelAndArtAcceptedVersion": true
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "set": "environment-firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/solar-day-1366.png",
+      "relativeToEvidenceRoot": "environment-firefox/solar-day-1366.png",
+      "artifactId": 14751406611,
+      "bytes": 398397,
+      "sha256": "7930dc2afa46d915368aa75aac13b49cad7ae8162d2eca9702469cc8923e809c",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/solar-twilight-1366.png",
+      "relativeToEvidenceRoot": "environment-firefox/solar-twilight-1366.png",
+      "artifactId": 14751406611,
+      "bytes": 380507,
+      "sha256": "2aea4b9c718655d43f9aa972d912695b76df6807a31ecac189b85be4a0e1968f",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/solar-night-1366.png",
+      "relativeToEvidenceRoot": "environment-firefox/solar-night-1366.png",
+      "artifactId": 14751406611,
+      "bytes": 362616,
+      "sha256": "9c955d4540d7a2f4992f0ac94d6282670f6975fbf85b3e8f308b6fa4d0fb7b4e",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/solar-night-390.png",
+      "relativeToEvidenceRoot": "environment-firefox/solar-night-390.png",
+      "artifactId": 14751406611,
+      "bytes": 122816,
+      "sha256": "a7fda613700fb8f945a2b98f7ba5d66d95d479492b234dac8acc27508d91d079",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/solar-day-844.png",
+      "relativeToEvidenceRoot": "environment-firefox/solar-day-844.png",
+      "artifactId": 14751406611,
+      "bytes": 233186,
+      "sha256": "eb6cd65648b143fbbafb2875ecc22896ca08728edcc6bc46314c33a084573c0e",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-firefox/weather-rain-night-390.png",
+      "relativeToEvidenceRoot": "environment-firefox/weather-rain-night-390.png",
+      "artifactId": 14751406611,
+      "bytes": 120053,
+      "sha256": "c9a9f431c8f075d367d3784f0b5a93f89aa26cd9a6d77e974868c4627afb137e",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/solar-day-1366.png",
+      "relativeToEvidenceRoot": "environment-chromium/solar-day-1366.png",
+      "artifactId": 14751358123,
+      "bytes": 340614,
+      "sha256": "5db8c8cf8b229a25ec39ce399750ef3bbaa2291ddcb09ecb6d2efe4c5d1f3918",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/solar-twilight-1366.png",
+      "relativeToEvidenceRoot": "environment-chromium/solar-twilight-1366.png",
+      "artifactId": 14751358123,
+      "bytes": 316558,
+      "sha256": "9bb70200414b3df0d648ab7c256cb17b5bfcfdcac9ab7e6f974b57872b9216c9",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/solar-night-1366.png",
+      "relativeToEvidenceRoot": "environment-chromium/solar-night-1366.png",
+      "artifactId": 14751358123,
+      "bytes": 295380,
+      "sha256": "f95d3fc32aadb26daf134c4e50f065b11549f06dedde477f4b03cc2ebc3fdc62",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/solar-night-390.png",
+      "relativeToEvidenceRoot": "environment-chromium/solar-night-390.png",
+      "artifactId": 14751358123,
+      "bytes": 104010,
+      "sha256": "725a62706e4d6f2b21e46cb7b405610a75d5e913456303454a351e92618fdf8b",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/solar-day-844.png",
+      "relativeToEvidenceRoot": "environment-chromium/solar-day-844.png",
+      "artifactId": 14751358123,
+      "bytes": 208696,
+      "sha256": "ba8002a696bcb080ee44d377339eb9b6fd5d5371e0545aa1cda2b9d14a6988e5",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "environment-chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/environment-chromium/weather-rain-night-390.png",
+      "relativeToEvidenceRoot": "environment-chromium/weather-rain-night-390.png",
+      "artifactId": 14751358123,
+      "bytes": 100975,
+      "sha256": "4c465ab05ae5714d260219a6b9fc8d8995e4dd8a94be1f429072a83bee481e3a",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-motion-a-1366.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-motion-a-1366.png",
+      "artifactId": 14751810118,
+      "bytes": 398064,
+      "sha256": "3b0aedab8e4fba057a5d6228cc8ab2b120bc48ebea1ed6e9c8935b9887942e21",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-motion-b-1366.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-motion-b-1366.png",
+      "artifactId": 14751810118,
+      "bytes": 398199,
+      "sha256": "323a6ed77e1c1945fe02cf504445ab2c2bf76520f2fe23e6902d17c0b7e124ff",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-reduced-1366.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-reduced-1366.png",
+      "artifactId": 14751810118,
+      "bytes": 398147,
+      "sha256": "c91b2a4572815ad805edd522f040725a90ce567063e2d2ddea3ee2e435f66901",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-motion-a-390.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-motion-a-390.png",
+      "artifactId": 14751810118,
+      "bytes": 133195,
+      "sha256": "c860e899e9269fe97689d5753332cdb0639b49222dbebaa1ff7d5def9b503abb",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-motion-b-390.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-motion-b-390.png",
+      "artifactId": 14751810118,
+      "bytes": 133218,
+      "sha256": "f4d43bd59e1c1d822a72058277054324ad0ce97d298785a66ece24137487c61c",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-reduced-390.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-reduced-390.png",
+      "artifactId": 14751810118,
+      "bytes": 133193,
+      "sha256": "d465e02aba3385e6efa1daf69bbf5ac3b67048fd112d3867463597ba86ac5c44",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-motion-a-844.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-motion-a-844.png",
+      "artifactId": 14751810118,
+      "bytes": 232907,
+      "sha256": "99b2597e264a0c52caf5981b5e5ed52445b82d2bbf7c2e2c1f4fc649c05e833a",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-motion-b-844.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-motion-b-844.png",
+      "artifactId": 14751810118,
+      "bytes": 232943,
+      "sha256": "605bbd037ad470e5626d5574aceb922654bdeb5de42d6bf046a4c3ddfbfd1dce",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "firefox",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/firefox/station-r09-reduced-844.png",
+      "relativeToEvidenceRoot": "firefox/station-r09-reduced-844.png",
+      "artifactId": 14751810118,
+      "bytes": 232907,
+      "sha256": "1cc6e0fe3cc7e4707c8fee5f9b1ec097b4674f374b77936bd1cae20585644016",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-motion-a-1366.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-motion-a-1366.png",
+      "artifactId": 14751309900,
+      "bytes": 340146,
+      "sha256": "1e15d4d7755860061e79f5b0d00dc3dd5517b7f91cc40df8ef7bd43810580434",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-motion-b-1366.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-motion-b-1366.png",
+      "artifactId": 14751309900,
+      "bytes": 340338,
+      "sha256": "1db4a7438a081ea713cc13f3d83d136fb41f5b6df15d2ceeb3d7a34788151b9e",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-reduced-1366.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-reduced-1366.png",
+      "artifactId": 14751309900,
+      "bytes": 340280,
+      "sha256": "89c79535488ed0de7e8ad5acc770db763acf5e4f768436d1d4acc0c521251158",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-motion-a-390.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-motion-a-390.png",
+      "artifactId": 14751309900,
+      "bytes": 115196,
+      "sha256": "b81958f507e61dea82e220a9ed2080ac9f0199010d2225eb84cfe446f74056f2",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-motion-b-390.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-motion-b-390.png",
+      "artifactId": 14751309900,
+      "bytes": 115226,
+      "sha256": "726c1b28a5520e3c4ae2e4c101a2e75cd845e62f7c6631d3e8ca2ffb03b89232",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-reduced-390.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-reduced-390.png",
+      "artifactId": 14751309900,
+      "bytes": 115192,
+      "sha256": "e7a1b19831e86cf2f417b93765466bcaed2d538bec7a1b9e86ca297f28c98c88",
+      "dimensions": [
+        390,
+        844
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-motion-a-844.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-motion-a-844.png",
+      "artifactId": 14751309900,
+      "bytes": 208514,
+      "sha256": "1ff6288efce2430c35b86fffeb44cbf3614cd4112a5e601b5d71e43974fcb4ca",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-motion-b-844.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-motion-b-844.png",
+      "artifactId": 14751309900,
+      "bytes": 208353,
+      "sha256": "69a65c48ce3a2680c1b1b0b8979bf20cec1538a1fe8f3a0f9bbfd91269381aac",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    },
+    {
+      "set": "chromium",
+      "file": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-frame-clock/chromium/station-r09-reduced-844.png",
+      "relativeToEvidenceRoot": "chromium/station-r09-reduced-844.png",
+      "artifactId": 14751309900,
+      "bytes": 208476,
+      "sha256": "7d660208b8e01fc7e191294aaab8bb732f474ade3b8429beb914ca4bc8481b94",
+      "dimensions": [
+        844,
+        390
+      ],
+      "directlyViewed": true,
+      "viewMethod": "view_image; original PNG without edits",
+      "independentlyMatchesDownloadedProvenance": true
+    }
+  ],
+  "motionReportEvidence": [
+    {
+      "set": "firefox",
+      "name": "station-r09-real-motion-1366",
+      "maxima": {
+        "foliage": 369,
+        "clouds": 522,
+        "water": 99,
+        "fixed": 0
+      },
+      "rootDisplacement": 0,
+      "clockManipulated": false,
+      "observationCount": 7,
+      "scope": "Machine-reported sampled visible regions; not a continuous temporal art judgement."
+    },
+    {
+      "set": "firefox",
+      "name": "station-r09-real-motion-390",
+      "maxima": {
+        "foliage": 378,
+        "clouds": 0,
+        "water": 0,
+        "fixed": 0
+      },
+      "rootDisplacement": 0,
+      "clockManipulated": false,
+      "observationCount": 13,
+      "scope": "Machine-reported sampled visible regions; not a continuous temporal art judgement."
+    },
+    {
+      "set": "firefox",
+      "name": "station-r09-real-motion-844",
+      "maxima": {
+        "foliage": 12,
+        "clouds": 0,
+        "water": 0,
+        "fixed": 0
+      },
+      "rootDisplacement": 0,
+      "clockManipulated": false,
+      "observationCount": 2,
+      "scope": "Machine-reported sampled visible regions; not a continuous temporal art judgement."
+    },
+    {
+      "set": "chromium",
+      "name": "station-r09-real-motion-1366",
+      "maxima": {
+        "foliage": 369,
+        "clouds": 495,
+        "water": 144,
+        "fixed": 0
+      },
+      "rootDisplacement": 0,
+      "clockManipulated": false,
+      "observationCount": 3,
+      "scope": "Machine-reported sampled visible regions; not a continuous temporal art judgement."
+    },
+    {
+      "set": "chromium",
+      "name": "station-r09-real-motion-390",
+      "maxima": {
+        "foliage": 378,
+        "clouds": 0,
+        "water": 0,
+        "fixed": 0
+      },
+      "rootDisplacement": 0,
+      "clockManipulated": false,
+      "observationCount": 12,
+      "scope": "Machine-reported sampled visible regions; not a continuous temporal art judgement."
+    },
+    {
+      "set": "chromium",
+      "name": "station-r09-real-motion-844",
+      "maxima": {
+        "foliage": 12,
+        "clouds": 0,
+        "water": 0,
+        "fixed": 0
+      },
+      "rootDisplacement": 0,
+      "clockManipulated": false,
+      "observationCount": 2,
+      "scope": "Machine-reported sampled visible regions; not a continuous temporal art judgement."
+    }
+  ],
+  "reducedMotionReportEvidence": [
+    {
+      "set": "firefox",
+      "name": "station-r09-reduced-motion-1366",
+      "identicalCanvasPixels": true,
+      "animated": false,
+      "rootDisplacement": 0
+    },
+    {
+      "set": "firefox",
+      "name": "station-r09-reduced-motion-390",
+      "identicalCanvasPixels": true,
+      "animated": false,
+      "rootDisplacement": 0
+    },
+    {
+      "set": "firefox",
+      "name": "station-r09-reduced-motion-844",
+      "identicalCanvasPixels": true,
+      "animated": false,
+      "rootDisplacement": 0
+    },
+    {
+      "set": "chromium",
+      "name": "station-r09-reduced-motion-1366",
+      "identicalCanvasPixels": true,
+      "animated": false,
+      "rootDisplacement": 0
+    },
+    {
+      "set": "chromium",
+      "name": "station-r09-reduced-motion-390",
+      "identicalCanvasPixels": true,
+      "animated": false,
+      "rootDisplacement": 0
+    },
+    {
+      "set": "chromium",
+      "name": "station-r09-reduced-motion-844",
+      "identicalCanvasPixels": true,
+      "animated": false,
+      "rootDisplacement": 0
+    }
+  ],
+  "runtimeAndReleaseBoundary": {
+    "runtimeApprovalIssuedByThisReviewer": false,
+    "nativeChromiumReportStatus": "PASS",
+    "nativeChromiumReportSha256": "90f6f38c71ea2bf5447f7980fa52a1705a2fcbc47e2a812ac1e78d7b18d628f5",
+    "nativeScenarioIndependentlyAcceptedBy": "/root/station_runtime_acceptance",
+    "acceptanceSource": "Explicit recorded agent message in this session; final integration remains separate.",
+    "historicalFailurePreservedIn": "docs/art/reviews/2026-11-22-station-r09-final-art-review.md",
+    "candidateAcceptanceReport": "docs/testing/evidence/station-r09/runtime-ci-pr135-candidate-acceptance.json",
+    "candidateAcceptanceReportSha256": "c41501a667be8e7eb8540b32bc6b41773701b1211254c479bb3f9c7d251c60f5",
+    "candidateAcceptanceVerdictByIndependentRuntimeReviewer": "PASS",
+    "defaultActivationAcceptance": "PENDING; separately owned by Integration & Release"
+  },
+  "limits": [
+    "Only the 30 enumerated new screenshots were directly viewed in this follow-up; additional phases, low-power and context-restored images are not claimed as viewed.",
+    "PNG pairs do not establish all intermediate motion states, long-run frame timing or actual-device performance.",
+    "Only five registered foliage areas are animated; not every visible tree.",
+    "No independent navigation/key/pointer or all-actor-route approval is inferred from these screenshots.",
+    "No local browser/server/Playwright/CDP/CUA execution or new SpriteCook generation was used.",
+    "No full-game AAA+++ certification or release approval.",
+    "No screenshot is attributed to any later commit or activation of the normal route."
+  ],
+  "handoffValidation": {
+    "commands": [
+      {
+        "command": "python3 tools/validate_repo.py",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "python3 tools/validate_architecture.py",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "python3 tools/validate_brand.py",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "python3 tools/assets/check_asset_contract.py",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "python3 tools/assets/check_asset_manifests.py",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "python3 tools/validate_fonts.py",
+        "exitCode": 0,
+        "result": "PASS"
+      }
+    ],
+    "assetContractWarnings": [
+      "assets/manifests/brand.mark.v3.json: missing pre-existing source assets/source/ui/icons/candidates/brand_mark_sheet_v2.png",
+      "assets/manifests/effects.level1.json: missing pre-existing source assets/source/ui/frames/candidates/ui_frames_v2.png",
+      "assets/manifests/ui.kit.v3.json: missing pre-existing source assets/source/ui/frames/candidates/ui_frames_v2.png"
+    ],
+    "note": "No implementation or asset changes were made by this reviewer."
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "status": "PASS-local-only",
+  "browserAcceptance": "PENDING-automatic-push-PR-CI",
+  "createdAt": "2026-11-22T09:11:00.657722+00:00",
+  "nodeVersion": "v24.22.3",
+  "syntaxChecks": [
+    {
+      "file": "tools/test_station_r09_browser.cjs",
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "file": "tools/test_station_r09_layer.cjs",
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "file": "tools/test_station_environment_browser.cjs",
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "file": "tools/test_station_screens.cjs",
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "file": "tools/test_station_ui_browser.cjs",
+      "exitCode": 0,
+      "stderr": ""
+    }
+  ],
+  "inputs": [
+    {
+      "path": "tools/test_station_r09_browser.cjs",
+      "sha256": "b2cadabec74c9df1cbc394e63a9f5ca494d4b3bdd4a8fce641ede41e7c71bf80"
+    },
+    {
+      "path": "tools/test_station_r09_layer.cjs",
+      "sha256": "0b1ba9ffc56be421fc4bfc1e94158430ab5a403a74942ea7cde01b94a70e0142"
+    },
+    {
+      "path": "tools/test_station_environment_browser.cjs",
+      "sha256": "da570d3365f49643b0a8d940c25b5b5677b7e3a80b7aad7c698fb94316633a0a"
+    },
+    {
+      "path": "tools/test_station_screens.cjs",
+      "sha256": "2f8517ee4d7e04d77d3a70f8833dfa7f1b6aebb75ec4cd42a32e42d92e1e23e4"
+    },
+    {
+      "path": "tools/test_station_ui_browser.cjs",
+      "sha256": "84e826afea584f0696077b49d4bbb0ed29717c23ce34f2d7f14632e95d8e8b30"
+    },
+    {
+      "path": "tools/test_station_r09_wind_contract.mjs",
+      "sha256": "5a4d7b7330c95754fcd111f6bcab183efcd523eb64dde5d9e173db6bd095e61e"
+    },
+    {
+      "path": "packages/world-engine/src/assets/hub/r09-manifest.json",
+      "sha256": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/HubR09Layer.ts",
+      "sha256": "046730fcf4fc6f3bdd187d8751434857594b74e9ae14e11e8ce82fbb0359bba0"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/r09SceneModel.ts",
+      "sha256": "96241398fb0659c47f66a19ea37f0084c170477ca8608a7cf68634dcdb9611a4"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/r09WindModel.ts",
+      "sha256": "f817d78595555ac785c41aac222242e0e452ff418617d2a363d98c55c89df72d"
+    },
+    {
+      "path": "packages/world-engine/src/scenes/hub/HubVegetationWindLayer.ts",
+      "sha256": "4c2f7797e3d6fbb4b4d0e1f1b5956ad654642376cddaa3fbecc778b646d8c8aa"
+    },
+    {
+      "path": "apps/web/src/game/WorldCanvas.tsx",
+      "sha256": "712a2e0937127eb3d78e70d94c8588a3f0fb15ed82ec8dc72f3d0b09cb69cc87"
+    },
+    {
+      "path": "docs/testing/evidence/station-r09/runtime-layer-handlers.json",
+      "sha256": "971cf1637ff458e70333972141d1f2ee902dc8fb9ddea0ed8546251dafbecba2"
+    },
+    {
+      "path": "docs/testing/evidence/station-r09/runtime-wind-contract.json",
+      "sha256": "4b57bba3d5a3ff26f5a835629289b3089b170164ab8fe5f9fd3679c50a7ccd86"
+    }
+  ],
+  "decoderVerification": {
+    "scope": "Earlier real CI screenshots from completed PR133, used only to verify decoder, not new R09 artwork. Node decoded RGB hashes were independently compared to Pillow RGB hashes during this session.",
+    "fixtures": [
+      {
+        "engine": "chromium",
+        "name": "level-one-start-1366.png",
+        "size": [
+          1366,
+          768
+        ],
+        "rgbSha256": "2676158b5684a5fae4544265ddef5114a7889bcdc662cb9d07cb83c8e3398fca"
+      },
+      {
+        "engine": "firefox",
+        "name": "level-one-start-1366.png",
+        "size": [
+          1366,
+          768
+        ],
+        "rgbSha256": "d6913c387fd70b69b50fed27ec83f3dd32f3d8d6e0a70988aca80ad138722eb6"
+      }
+    ]
+  },
+  "localBrowserStarted": false,
+  "localHttpServerStarted": false,
+  "manualCiRun": false
+}

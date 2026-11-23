@@ -26,6 +26,7 @@ const preferences = moduleFrom('runtime/uiPreferences.ts');
 const bridgeModule = moduleFrom('bridge/WorldBridge.ts');
 const { worldBridge } = bridgeModule;
 const faunaMotion = moduleFrom('scenes/hub/stationFaunaMotion.ts');
+const r09Actors = moduleFrom('scenes/hub/r09ActorLayout.ts');
 const crowd = moduleFrom('scenes/hub/stationCrowd.ts', { './r01Layout.ts': moduleFrom('scenes/hub/r01Layout.ts', {
   '../../runtime/worldPixelSurface.ts': moduleFrom('runtime/worldPixelSurface.ts'),
 }) });
@@ -38,6 +39,7 @@ const { HubCharacterLayer, preloadHubCharacters } = moduleFrom('scenes/hub/HubCh
   './r01Layout': { getR01Layout(w, h) { return { width: w, height: h, portrait: w < h, shore: 150, zoom: 1 }; } },
   './stationCrowd': crowd,
   './stationFaunaMotion': faunaMotion,
+  './r09ActorLayout': r09Actors,
 });
 const pack = assets.parseCharacterManifest({ version: 1, artAcceptance: 'PASS', actors: [
   ['character.observer', 'npc'], ['character.vera', 'npc'], ['companion.pascal', 'npc'], ['npc.extra', 'npc'], ['legacy.player', 'player'], ['companion.tit', 'companion'],
@@ -46,14 +48,29 @@ const pack = assets.parseCharacterManifest({ version: 1, artAcceptance: 'PASS', 
   ...(id === 'character.observer' ? { walk: { assetId: `${id}.walk`, facing: 'right', url: '/hub/characters/observer-walk.png', frameWidth: 64, frameHeight: 96, frameCount: 4, durationsMs: [100, 100, 100, 100] } } : {}),
 } })), equipment: [ { id: 'held.tablet', assetId: 'item.tablet', url: '/hub/characters/tablet.png', displayHeight: 16, anchor: [.2, -.4] } ] });
 function makeScene(withPack = true) {
-  const images = [];
+  const images = [], graphics = [], ellipses = [];
   const store = new Map(withPack ? [['world.characters.manifest', pack]] : []);
   const texture = { source: [{ width: 256, height: 96 }], has: () => true, setFilter() {} };
   const scene = {
-    images, events: new Events(), scale: Object.assign(new Events(), { width: 960, height: 540 }),
+    images, graphics, ellipses, events: new Events(), scale: Object.assign(new Events(), { width: 960, height: 540 }),
     registry: { get(key) { return store.get(key); }, set(key, value) { store.set(key, value); }, remove(key) { store.delete(key); } },
     textures: { exists() { return true; }, get() { return texture; } },
-    add: { image(x, y, key, frame) {
+    add: { ellipse(x, y, width, height, color, alpha) {
+      const shadow = { x, y, width, height, color, alpha, visible: true, destroyCalls: 0,
+        setPosition(x, y) { this.x = x; this.y = y; return this; },
+        setDepth(depth) { this.depth = depth; return this; },
+        setVisible(value) { this.visible = value; return this; },
+        destroy() { this.destroyCalls++; },
+      }; ellipses.push(shadow); return shadow;
+    }, graphics() {
+      const item = { rectangles: [], writes: 0,
+        setDepth(value) { this.depth = value; return this; },
+        clear() { this.rectangles = []; this.writes++; return this; },
+        fillStyle(color, alpha) { this.color = color; this.alpha = alpha; return this; },
+        fillRect(x, y, width, height) { this.rectangles.push({x, y, width, height, color: this.color, alpha: this.alpha}); return this; },
+        destroy() { this.destroyed = true; },
+      }; graphics.push(item); return item;
+    }, image(x, y, key, frame) {
       const image = { x, y, key, frame, width: 64, height: 96, visible: true, frameWrites: 0, texture, depth: 0,
         setOrigin(x, y) { this.originX = x; this.originY = y; return this; },
         setScale(scale) { this.scale = scale; return this; },
@@ -263,4 +280,170 @@ for (const portrait of [false, true]) {
   assert.deepEqual([...moves.get('animal_squirrel')], ['idle', 'run']);
   assert.deepEqual([...moves.get('bird_tit')], ['idle', 'hop', 'flutter']);
 }
-console.log('PASS: NPC cadence, pivot, reduced motion, low-power sampling, portrait placement, complete published station staff, bounded online crowd, seated actors, conversational turns, closed routes, fauna and loader/layer cleanup.');
+
+// R09 reuses the same source pack while keeping actor geometry on its native
+// courtyard. The camera may crop/pan, but must not restart a walk on resize.
+const unchangedPack = JSON.stringify(productionPack);
+const fixedR09 = new Set(['character.r01.observer', 'npc.r01.vera', 'companion.r01.pascal', 'animal_squirrel', 'bird_tit']);
+for (const [width, height] of [[1366, 768], [390, 844], [844, 390]]) {
+  const stationScene = makeScene();
+  stationScene.scale.width = width; stationScene.scale.height = height;
+  stationScene.registry.set('world.characters.manifest', productionPack);
+  stationScene.textures.get = (key) => productionGeometry.get(key);
+  const stationLayer = new HubCharacterLayer(stationScene, { profile: 'r09' });
+  const diagnostic = () => stationScene.registry.get('world.characters.diagnostics');
+  const observerDefinition = productionPack.actors.find(({ id }) => id === 'character.r01.observer');
+  const observer = stationScene.images.find(({ key }) => key === assets.characterTextureKey(observerDefinition.clips.walk.assetId));
+  assert.deepEqual([observer.x, observer.y], [121, 217]);
+  assert.equal(observer.scale, 1 / 3, '48-pixel source frame has 16 native scene-pixel height');
+  assert.equal(observer.originY * observerDefinition.clips.walk.frameHeight, 46, 'Source foot pivot stays intact');
+  assert.equal(observer.depth, r09Actors.r09ActorDepth(217));
+  assert.equal(diagnostic().placementProfile, 'r09');
+  assert.equal(diagnostic().visibleActors, 7, 'Five existing fixed actors and two colleagues, without invented online visitors');
+  assert.equal(diagnostic().onlineVisitors, 0);
+  assert.equal(diagnostic().playerPresent, false);
+  assert.equal(diagnostic().actors.filter(({ state }) => state === 'sit').length, 0, 'No R01 seated pose floats over the new courtyard');
+  assert.deepEqual(new Set(diagnostic().actors.filter(({ id }) => fixedR09.has(id)).map(({ id }) => id)), fixedR09);
+  const shadows = stationScene.graphics[0];
+  assert.equal(stationScene.ellipses.length, 0, 'R09 profile options never enable R08 per-actor ellipse shadows');
+  assert.equal(stationScene.graphics.length, 1, 'One shared contact-shadow graphic, no per-actor textures');
+  assert.equal(shadows.depth, 19.8);
+  assert.equal(shadows.rectangles.length, 8, 'Four human figures have two small contact strips each');
+  assert(shadows.rectangles.every(({width, height, alpha}) => width <= 5 && height === 1 && alpha <= .22));
+  const sourceKeys = new Set(productionGeometry.keys());
+  assert(stationScene.images.every(({key}) => sourceKeys.has(key)), 'Only accepted source textures are used');
+
+  for (let frame = 0; frame < 37; frame++) stationLayer.update(100);
+  const imageState = () => stationScene.images.map(({x,y,key,frame,flipX,scale}) => [x,y,key,frame,flipX,scale]);
+  const beforeResize = imageState(), beforeShadowWrites = shadows.writes;
+  stationScene.scale.width = height; stationScene.scale.height = width; stationScene.scale.emit('resize');
+  assert.deepEqual(imageState(), beforeResize, 'R09 camera resize must preserve every position, facing and cel');
+  assert.equal(shadows.writes, beforeShadowWrites, 'Camera resize does not rebuild native contact geometry');
+  const priorX = observer.x;
+  stationLayer.update(100);
+  assert(Math.abs(observer.x - priorX) <= 1, 'Post-resize walk continues without a route restart');
+  const frames = new Set(), facings = new Set();
+  for (let frame = 0; frame < 240; frame++) {
+    stationLayer.update(100); frames.add(observer.frame); facings.add(observer.flipX);
+    assert(observer.x >= 116 && observer.x <= 156 && observer.y === 217, 'Observer stays on the left paved passage');
+    assert(stationScene.images.filter(({visible}) => visible).every(({x,y}) => x >= 0 && x <= 512 && y >= 0 && y <= 288));
+  }
+  assert.equal(frames.size, 4); assert.equal(facings.size, 2);
+  worldBridge.emit('server:station_presence', 99);
+  assert.equal(diagnostic().onlineVisitors, 6);
+  assert.equal(diagnostic().visibleActors, 13);
+  assert.equal(shadows.rectangles.length, 20, 'Contact strips follow the actual visible population');
+  stationScene.events.emit('ui:preferences', { lowPower: true });
+  assert.equal(diagnostic().onlineVisitors, 3);
+  assert.equal(diagnostic().visibleActors, 10);
+  stationScene.events.emit('ui:preferences', { reducedMotion: true });
+  const frozen = imageState(), frozenShadows = shadows.writes;
+  for (let frame = 0; frame < 80; frame++) stationLayer.update(100);
+  assert.deepEqual(imageState(), frozen, 'Reduced motion holds cels, fauna and all routes');
+  assert.equal(shadows.writes, frozenShadows);
+  stationLayer.destroy();
+  const lastPopulation = diagnostic().onlineVisitors;
+  worldBridge.emit('server:station_presence', 0);
+  assert.equal(diagnostic().onlineVisitors, lastPopulation);
+  assert(stationScene.images.every(({destroyed}) => destroyed) && shadows.destroyed);
+  assert.equal(stationScene.events.listenerCount(), 0); assert.equal(stationScene.scale.listenerCount(), 0);
+}
+assert.equal(JSON.stringify(productionPack), unchangedPack, 'R09 runtime placement must not mutate the accepted pack');
+assert.equal(r09Actors.r09CharacterDefinition({ ...productionPack.actors[0], id: 'prop.fountain' }), undefined, 'Unmapped scenery never becomes an actor');
+assert.equal(r09Actors.r09CharacterDefinition({ ...productionPack.actors[0], role: 'player' }), undefined, 'The personal avatar stays a saved portrait');
+const blockedFootprints = [
+  [168, 178, 110, 53], // Existing fountain, rim and planted shoulder.
+  [219, 230, 20, 25], // Central potted tree.
+  [263, 227, 54, 32], // Raised foreground flower bed.
+  [285, 139, 66, 74], // Archive facade and threshold.
+  [2, 113, 160, 88], // Cartography room and foundation.
+];
+for (const plan of r09Actors.r09CrowdPlan()) {
+  assert.notEqual(plan.action, 'sit');
+  for (let clock = 0; clock < 30_000; clock += 100) {
+    const pose = crowd.stationCrowdPose(plan, clock, false, 6);
+    assert(!blockedFootprints.some(([x,y,w,h]) => pose.x >= x && pose.x <= x+w && pose.y >= y && pose.y <= y+h), `R09 ${plan.id} crosses an occupied ground footprint`);
+  }
+}
+
+// Main's explicit R08 placement and distance-based gait must coexist with the
+// R09 native profile without filtering out crowd wardrobe or sharing scales.
+const r08Gait = moduleFrom('scenes/art/r08Gait.ts', {
+  '../../assets/characters/r08-walk.json': require('../packages/world-engine/src/assets/characters/r08-walk.json'),
+});
+const r08Layout = moduleFrom('scenes/art/r08StationLayout.ts', {
+  './r08PreviewModel.ts': moduleFrom('scenes/art/r08PreviewModel.ts'),
+});
+const { R08_CHARACTERS } = moduleFrom('scenes/art/r08StationCharacters.ts', {
+  './r08StationLayout.ts': r08Layout, './r08Gait.ts': r08Gait,
+});
+const r08Scene = makeScene(false), originalGeneratedPack = JSON.stringify(generated), queuedR08Clips = [];
+r08Scene.cache = { json: { exists: () => true, get: () => generated } };
+r08Scene.textures.exists = () => false;
+r08Scene.load = Object.assign(new Events(), { json() {}, spritesheet(key, url, geometry) { queuedR08Clips.push({key, url, geometry}); } });
+preloadHubCharacters(r08Scene, r08Gait.r08ActorClip);
+r08Scene.load.emit('complete');
+assert.equal(r08Scene.load.listenerCount(), 0);
+assert.equal(JSON.stringify(generated), originalGeneratedPack, 'The optional R08 adapter cannot modify the shared source manifest');
+assert(queuedR08Clips.some(({url, geometry}) => url.startsWith('/hub/characters/r08/') && geometry.endFrame === 7));
+const r08Pack = r08Scene.registry.get('world.characters.manifest');
+const r08Geometry = new Map(r08Pack.actors.flatMap(actor => Object.values(actor.clips).map(clip => [
+  assets.characterTextureKey(clip.assetId), { source: [{width: clip.frameWidth * clip.frameCount, height: clip.frameHeight}], has: () => true, setFilter() {} },
+])));
+r08Scene.textures.exists = key => r08Geometry.has(key);
+r08Scene.textures.get = key => r08Geometry.get(key);
+const placementCalls = [], gaitDistances = [];
+const r08Layer = new HubCharacterLayer(r08Scene, { ...R08_CHARACTERS,
+  placeActor(definition) { placementCalls.push({id: definition.id, role: definition.role}); return R08_CHARACTERS.placeActor(definition); },
+  walkFrame(distance) { gaitDistances.push(distance); return R08_CHARACTERS.walkFrame(distance); },
+});
+const r08Diagnostic = () => r08Scene.registry.get('world.characters.diagnostics');
+assert(placementCalls.every(({role}) => role === 'npc'), 'R08 fixed-position filtering must not discard the crowd wardrobe');
+assert.equal(r08Diagnostic().characterClass, 'r08-station-actor');
+assert.equal(r08Diagnostic().placementProfile, 'r08');
+assert.equal(r08Diagnostic().visibleActors, 8, 'R08 retains five fixed NPCs and its three autonomous colleagues');
+assert.equal(r08Diagnostic().onlineVisitors, 0);
+assert.equal(r08Scene.graphics.length, 0, 'Explicit R08 does not inherit the R09 native shadow graphic');
+assert.equal(r08Scene.ellipses.length, r08Scene.images.length - 1, 'Only the perched bird omits the R08 ground shadow');
+const r08ObserverDefinition = r08Pack.actors.find(({id}) => id === 'character.r01.observer');
+assert.equal(r08ObserverDefinition.clips.walk.frameCount, 8);
+const r08Observer = r08Scene.images.find(({key}) => key === assets.characterTextureKey(r08ObserverDefinition.clips.walk.assetId));
+assert.deepEqual([r08Observer.x, r08Observer.y], [636, 432]);
+assert.equal(r08Observer.depth, 432, 'R08 uses its own doubled source-space depth, not R09 depth bands');
+const r08Frames = new Set();
+for (let frame = 0; frame < 200; frame++) {
+  r08Layer.update(100); r08Frames.add(r08Observer.frame);
+  assert(r08Observer.x >= 630 && r08Observer.x <= 694 && r08Observer.y === 432);
+  assert(r08Scene.images.filter(({visible}) => visible).every(image => image.depth === image.y));
+  assert(r08Scene.ellipses.filter(({visible}) => visible).every(shadow => shadow.depth === shadow.y - .25
+    && r08Scene.images.some(image => image.visible && image.x === shadow.x && image.y === shadow.y)), 'Each R08 shadow follows a visible actor below its own feet');
+}
+assert.equal(r08Frames.size, 8, 'All eight adapted walk cels survive the merged character layer');
+assert(gaitDistances.some(distance => distance > 0), 'The actual layer calls the distance-based gait selector');
+worldBridge.emit('server:station_presence', 99);
+assert.equal(r08Diagnostic().visibleActors, 14); assert.equal(r08Diagnostic().onlineVisitors, 6);
+assert.equal(r08Scene.ellipses.filter(({visible}) => visible).length, 13);
+r08Scene.events.emit('ui:preferences', {lowPower: true});
+assert.equal(r08Diagnostic().onlineVisitors, 3);
+for (let frame = 0; frame < 3; frame++) r08Layer.update(100);
+const lowPositions = r08Scene.images.map(({x,y}) => [x,y]);
+for (let frame = 0; frame < 10; frame++) r08Layer.update(100);
+assert.deepEqual(r08Scene.images.map(({x,y}) => [x,y]), lowPositions, 'R08 low-power placement keeps its patrol and crowd still');
+r08Scene.events.emit('ui:preferences', {reducedMotion: true});
+const r08Still = r08Scene.images.map(({x,y,key,frame}) => [x,y,key,frame]);
+r08Layer.update(100);
+assert.deepEqual(r08Scene.images.map(({x,y,key,frame}) => [x,y,key,frame]), r08Still);
+r08Layer.destroy();
+assert(r08Scene.images.every(({destroyed}) => destroyed));
+assert(r08Scene.ellipses.every(({destroyCalls}) => destroyCalls === 1));
+assert.equal(r08Scene.events.listenerCount(), 0); assert.equal(r08Scene.scale.listenerCount(), 0);
+assert.equal(JSON.stringify(productionPack), unchangedPack, 'Using the R08 adapter leaves the accepted R09 source pack intact');
+const afterR08Scene = makeScene();
+afterR08Scene.registry.set('world.characters.manifest', productionPack);
+afterR08Scene.textures.get = key => productionGeometry.get(key);
+const afterR08Layer = new HubCharacterLayer(afterR08Scene, {profile: 'r09'});
+assert.equal(afterR08Scene.registry.get('world.characters.diagnostics').actors.find(({id}) => id === 'character.r01.observer').frames, 4);
+assert.equal(afterR08Scene.ellipses.length, 0); assert.equal(afterR08Scene.graphics.length, 1);
+assert(afterR08Scene.images.every(image => image.depth < 32 && !image.key.includes('.r08.')), 'Returning to R09 restores its own source textures and foreground ordering');
+afterR08Layer.destroy();
+console.log('PASS: NPC cadence, pivot, reduced motion, low-power sampling, portrait placement, complete published station staff, bounded online crowd, seated actors, conversational turns, closed routes, fauna and loader/layer cleanup. R09: constant native placement, source-pack preservation, bounded paved routes, resize continuity, ground contact, presence limits and cleanup. R08 integration: clip adapter, retained crowd wardrobe, eight-frame distance gait, raw source depth, foot shadows, population limits, low-power/reduced motion and isolation from R09.');

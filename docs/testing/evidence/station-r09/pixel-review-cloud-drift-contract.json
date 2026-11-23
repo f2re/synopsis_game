@@ -1,0 +1,212 @@
+{
+  "reviewer": "/root/station_pixel_review",
+  "source": "assets/source/environment/hub/r08/candidates/provider/master-01.png",
+  "sourceFileSha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+  "scope": "Conservative clean sky for this one fixed-y cloud; not a replacement of the whole scenery sky domain",
+  "cloudId": "hub.r09.clouds.east-wisp",
+  "sourceBounds": [
+    354,
+    39,
+    31,
+    6
+  ],
+  "clipRowSegmentsInclusive": [
+    [
+      39,
+      [
+        [
+          104,
+          127
+        ],
+        [
+          141,
+          511
+        ]
+      ]
+    ],
+    [
+      40,
+      [
+        [
+          104,
+          127
+        ],
+        [
+          141,
+          511
+        ]
+      ]
+    ],
+    [
+      41,
+      [
+        [
+          106,
+          127
+        ],
+        [
+          141,
+          511
+        ]
+      ]
+    ],
+    [
+      42,
+      [
+        [
+          107,
+          127
+        ],
+        [
+          141,
+          511
+        ]
+      ]
+    ],
+    [
+      43,
+      [
+        [
+          108,
+          110
+        ],
+        [
+          113,
+          127
+        ],
+        [
+          141,
+          511
+        ]
+      ]
+    ],
+    [
+      44,
+      [
+        [
+          109,
+          110
+        ],
+        [
+          113,
+          127
+        ],
+        [
+          141,
+          511
+        ]
+      ]
+    ]
+  ],
+  "clipRowSpansEndExclusive": [
+    [
+      39,
+      104,
+      128
+    ],
+    [
+      39,
+      141,
+      512
+    ],
+    [
+      40,
+      104,
+      128
+    ],
+    [
+      40,
+      141,
+      512
+    ],
+    [
+      41,
+      106,
+      128
+    ],
+    [
+      41,
+      141,
+      512
+    ],
+    [
+      42,
+      107,
+      128
+    ],
+    [
+      42,
+      141,
+      512
+    ],
+    [
+      43,
+      108,
+      111
+    ],
+    [
+      43,
+      113,
+      128
+    ],
+    [
+      43,
+      141,
+      512
+    ],
+    [
+      44,
+      109,
+      111
+    ],
+    [
+      44,
+      113,
+      128
+    ],
+    [
+      44,
+      141,
+      512
+    ]
+  ],
+  "sourceGeometryResult": "PASS if the fixed clip below is used for integer horizontal drift at y=39",
+  "requirements": [
+    "The sky clip stays in source/world space; it does not translate with the cloud",
+    "Y remains39 and source height remains6; no vertical drift or rotation",
+    "Cloud x uses integer native pixels; scene camera uses shared transform",
+    "Wrap only after complete offscreen exit; re-enter with the whole sprite initially left of x=0",
+    "Full movement speed, frame pacing, light and screenshots still require actual runtime acceptance"
+  ],
+  "negativeControls": [
+    [
+      50,
+      39
+    ],
+    [
+      56,
+      43
+    ],
+    [
+      105,
+      41
+    ],
+    [
+      112,
+      43
+    ],
+    [
+      135,
+      40
+    ],
+    [
+      138,
+      40
+    ]
+  ],
+  "notes": [
+    "All source pixels right of x141 in rows39..44 are sky; mountain peak starts y45",
+    "Sky holes between branches at left are intentionally conservative; no forest/mast material is included",
+    "Only the original61 cloud pixels need a clean hidden patch; further translation does not reveal additional donor area"
+  ]
+}

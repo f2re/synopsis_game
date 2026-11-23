@@ -1,0 +1,130 @@
+{
+  "task": "STATION-R09-ASSET-PIPELINE",
+  "author": "/root/station_asset_pipeline",
+  "date": "2026-11-22",
+  "checks": {
+    "export": "PASS",
+    "byteCheck": "PASS",
+    "sourceBoundaryTests": {
+      "passed": 20,
+      "failed": 0
+    },
+    "gitDiffCheck": "PASS",
+    "mandatoryValidators": {
+      "repo": "PASS",
+      "architecture": "PASS",
+      "brand": "PASS",
+      "asset-contract": "PASS",
+      "asset-manifests": "PASS",
+      "fonts": "PASS"
+    },
+    "manifestCount": 55,
+    "preexistingMissingCandidateWarnings": [
+      "brand.mark.v3",
+      "effects.level1",
+      "ui.kit.v3"
+    ]
+  },
+  "sourceAcceptance": {
+    "status": "PASS",
+    "reviewer": "/root/station_pixel_review",
+    "report": "docs/testing/evidence/station-r09/pixel-review.md",
+    "cloudDriftContract": "docs/testing/evidence/station-r09/pixel-review-cloud-drift-contract.json",
+    "scope": "Source pixels, clean patch, water selection and fixed cloud-clip geometry only",
+    "cloudMotionReady": true,
+    "productionReady": false,
+    "actualGameFrames": "PENDING",
+    "artDirection": "PENDING",
+    "webPerformance": "PENDING",
+    "integrationRelease": "PENDING"
+  },
+  "correctedBlockers": [
+    "R09-PX-CLOUD-01: replaced broad 19935-pixel extraction with one complete 61-pixel cloud island and unchanged same-row master sky patch",
+    "R09-PX-WATER-01: exact 729-pixel water mask excludes fir and shoreline; end-exclusive runtime scanlines equal exported alpha",
+    "Full drift: dedicated independently reviewed 2352-pixel cloudClip excludes forest and mast; fixed y39, integer x, east 0.55px/sec, offscreen-only wrap"
+  ],
+  "validation": {
+    "sourceHashesVerified": true,
+    "restRoundtripRgbaExact": true,
+    "outsideMovingMaskChangedPixels": 0,
+    "hiddenPlateUsedPixels": 2255,
+    "hiddenPlateChangedPixels": 2255,
+    "cloudPixels": 61,
+    "vegetationPieces": 5,
+    "cloudIslands": 1,
+    "cloudSilhouetteClearanceVerified": true,
+    "cloudClipPixels": 2352,
+    "cloudClipDomain": "cloudClip",
+    "skyPatchMode": "native-sky-region-copy",
+    "masterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
+    "exportResampling": "none",
+    "paletteQuantization": false,
+    "artAcceptanceImplied": false,
+    "pngBytes": 345398,
+    "decodedRgbaBytes": 2714248
+  },
+  "sourceFiles": {
+    "tools/assets/build_hub_r09.py": "ee67b4e1c9dd72084ee76747cf9c8f094fa6872c30db6354253840c50648a1cd",
+    "tools/assets/test_hub_r09.py": "1e7894d45e00825911be470f11433f9de6bff5218158413c8c7350d7291484b7",
+    "assets/source/environment/hub/r09/source-spec.json": "19baa8da7ce4afb99ef2c0423916159247d531b78ed8f722eb1f948342193366",
+    "assets/manifests/hub.r09-station.json": "e9984c02ab1e6d4cafabf43bb5abe405397b9d01d11f93f3c2dfedbd59e1a4b9",
+    "packages/world-engine/src/assets/hub/r09-manifest.json": "a638216fa1ac4fc4c3f244ce1fb7b551ffbc5e4f79f6ec92f4387232f89ae3db",
+    "docs/art/reviews/2026-11-22-station-r09-pipeline.md": "4d0ba25192e5798a8b28a3976651101062c65d9333552d2f7bf469629bcb074c"
+  },
+  "commandLogs": [
+    {
+      "name": "architecture",
+      "command": "python3 tools/validate_architecture.py",
+      "exitCode": 0,
+      "output": "Проверка архитектуры успешно завершена.\nApps: web, server; packages: kn01-codec, content-engine, game-rules, world-engine, contracts.\n"
+    },
+    {
+      "name": "brand",
+      "command": "python3 tools/validate_brand.py",
+      "exitCode": 0,
+      "output": "Проверка бренда успешно завершена: 26063: Позывной «Синоптик»\n"
+    },
+    {
+      "name": "asset-contract",
+      "command": "python3 tools/assets/check_asset_contract.py",
+      "exitCode": 0,
+      "output": "WARNING: assets/manifests/brand.mark.v3.json: source пока отсутствует: assets/source/ui/icons/candidates/brand_mark_sheet_v2.png\nWARNING: assets/manifests/effects.level1.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nWARNING: assets/manifests/ui.kit.v3.json: source пока отсутствует: assets/source/ui/frames/candidates/ui_frames_v2.png\nТехнический контракт assets: PASS (24 simple manifests, 30 иных manifests пропущено).\nХудожественное качество этим checker не оценивается.\n"
+    },
+    {
+      "name": "asset-manifests",
+      "command": "python3 tools/assets/check_asset_manifests.py",
+      "exitCode": 0,
+      "output": "✓ Проверено манифестов ассетов: 55. Все структуры корректны.\n"
+    },
+    {
+      "name": "fonts",
+      "command": "python3 tools/validate_fonts.py",
+      "exitCode": 0,
+      "output": "Проверка пиксельных шрифтов успешно завершена: все файлы на месте, 100% кириллица подтверждена, CSS и токены согласованы.\n"
+    },
+    {
+      "name": "gitDiffCheck",
+      "command": "git diff --check",
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "name": "byteCheck",
+      "command": "python3 tools/assets/build_hub_r09.py --check",
+      "exitCode": 0,
+      "output": "{\"result\": \"CHECK\", \"assets\": 13, \"sourceHashesVerified\": true, \"restRoundtripRgbaExact\": true, \"outsideMovingMaskChangedPixels\": 0, \"hiddenPlateUsedPixels\": 2255, \"hiddenPlateChangedPixels\": 2255, \"cloudPixels\": 61, \"vegetationPieces\": 5, \"cloudIslands\": 1, \"cloudSilhouetteClearanceVerified\": true, \"cloudClipPixels\": 2352, \"cloudClipDomain\": \"cloudClip\", \"skyPatchMode\": \"native-sky-region-copy\", \"masterRgbaSha256\": \"376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7\", \"exportResampling\": \"none\", \"paletteQuantization\": false, \"artAcceptanceImplied\": false, \"pngBytes\": 345398, \"decodedRgbaBytes\": 2714248}\n"
+    },
+    {
+      "name": "sourceBoundaryTests",
+      "command": "python3 tools/assets/test_hub_r09.py",
+      "exitCode": 0,
+      "output": "test_changed_provider_source_requires_new_pin (__main__.StationExportContract.test_changed_provider_source_requires_new_pin) ... ok\ntest_cloud_clip_excludes_forest_tree_tips_and_mast (__main__.StationExportContract.test_cloud_clip_excludes_forest_tree_tips_and_mast) ... ok\ntest_cloud_drift_cannot_change_y_or_wrap_onscreen (__main__.StationExportContract.test_cloud_drift_cannot_change_y_or_wrap_onscreen) ... ok\ntest_cloud_selector_is_versioned (__main__.StationExportContract.test_cloud_selector_is_versioned) ... ok\ntest_cloud_source_cannot_include_a_foreground_silhouette (__main__.StationExportContract.test_cloud_source_cannot_include_a_foreground_silhouette) ... ok\ntest_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop (__main__.StationExportContract.test_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop) ... ok\ntest_export_filename_is_not_a_path (__main__.StationExportContract.test_export_filename_is_not_a_path) ... ok\ntest_image_cannot_be_used_as_white_receiver_mask (__main__.StationExportContract.test_image_cannot_be_used_as_white_receiver_mask) ... ok\ntest_leaf_selection_outside_source_fails (__main__.StationExportContract.test_leaf_selection_outside_source_fails) ... ok\ntest_light_region_cannot_point_to_unknown_mask (__main__.StationExportContract.test_light_region_cannot_point_to_unknown_mask) ... ok\ntest_native_sky_patch_preserves_the_vertical_colour_ramp (__main__.StationExportContract.test_native_sky_patch_preserves_the_vertical_colour_ramp) ... ok\ntest_native_source_roundtrip_and_deterministic_bytes (__main__.StationExportContract.test_native_source_roundtrip_and_deterministic_bytes) ... ok\ntest_provider_path_cannot_escape_selected_project_source (__main__.StationExportContract.test_provider_path_cannot_escape_selected_project_source) ... ok\ntest_scene_transform_cannot_silently_change_grid (__main__.StationExportContract.test_scene_transform_cannot_silently_change_grid) ... ok\ntest_sky_water_partition_cannot_overlap (__main__.StationExportContract.test_sky_water_partition_cannot_overlap) ... ok\ntest_two_moving_layers_cannot_own_same_pixel (__main__.StationExportContract.test_two_moving_layers_cannot_own_same_pixel) ... ok\ntest_unbounded_gain_fails (__main__.StationExportContract.test_unbounded_gain_fails) ... ok\ntest_unreviewed_displacement_cap_fails (__main__.StationExportContract.test_unreviewed_displacement_cap_fails) ... ok\ntest_water_scanlines_match_png_and_exclude_fir_and_shore (__main__.StationExportContract.test_water_scanlines_match_png_and_exclude_fir_and_shore) ... ok\ntest_wrong_provider_size_does_not_get_rescaled (__main__.StationExportContract.test_wrong_provider_size_does_not_get_rescaled) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 3.589s\n\nOK\n"
+    },
+    {
+      "name": "repo",
+      "command": "python3 tools/validate_repo.py",
+      "exitCode": 0,
+      "output": "Проверка репозитория успешно завершена.\n"
+    }
+  ]
+}

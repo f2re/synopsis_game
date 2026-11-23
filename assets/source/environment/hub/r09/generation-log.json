@@ -1,0 +1,41 @@
+{
+  "task": "STATION-R09-LIVING-TERRAIN",
+  "date": "2026-11-22",
+  "provider": "SpriteCook",
+  "projectId": "f62cc12d-b463-4c6b-8550-f82ee24b29a3",
+  "collectionId": "e5f39008-fe78-41f6-b1a9-7a756d57cb45",
+  "referenceAssetId": "323d3288-8cdf-41f7-af52-812d51dea517",
+  "totalCredits": 24,
+  "operations": [
+    {
+      "jobId": "524082fa-35e7-4a3f-9a0d-d2ea747399a3",
+      "assetId": "2a3015b5-838f-4e39-a670-2cc42d674103",
+      "model": "NB2.1",
+      "credits": 12,
+      "file": "provider/clean-underlay-01.png",
+      "sha256": "8d586b87b1cf765dd218c74831abee8aa1b01198f8c89985b82669b97e83b4e2",
+      "dimensions": [
+        512,
+        288
+      ],
+      "purpose": "Clean hidden surfaces beneath selected foreground crowns while preserving authored geometry.",
+      "usage": "Only foliage-mask pixels. Never a full-scene replacement. Sky rejected because its cyan ramp differs from the master."
+    },
+    {
+      "jobId": "1339abab-d739-4a18-9554-15a1b54c94ac",
+      "assetId": "57984a4d-2e62-4be8-94d4-a5d1c5f29af4",
+      "model": "NB2.1",
+      "credits": 12,
+      "file": "provider/clean-sky-01.png",
+      "sha256": "f12179a3e3a7ae535cb78855dae6a73e1650f89ff482821cf2986f671b932fe7",
+      "dimensions": [
+        512,
+        288
+      ],
+      "purpose": "Remove clouds only, matching the original powder-blue ramp and preserving architecture and plants.",
+      "usage": "Archived candidate. Excluded from runtime compositing because sampled sky color still differs from the original."
+    }
+  ],
+  "runtimeAnimation": "Authored source crops and deterministic runtime motion. No provider animation job used.",
+  "downloadUrlsStored": false
+}

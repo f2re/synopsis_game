@@ -17,7 +17,7 @@
   position: absolute;
   z-index: 30;
   inset: max(12px, env(safe-area-inset-top)) 16px auto;
-  height: 72px;
+  height: 60px;
   display: grid;
   grid-template-columns: minmax(190px, 1.1fr) minmax(180px, 1fr) minmax(160px, 1fr) 128px 144px;
   align-items: center;
@@ -225,6 +225,34 @@ button.hub-route-card:active:not(:disabled) { box-shadow: var(--ui-control-press
 }
 html[data-reduced-motion='true'] .hub-screen *, html[data-low-power='true'] .hub-screen * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 @media (prefers-reduced-motion: reduce) { .hub-screen * { animation: none !important; transition: none !important; } }
+.station-pan-controls {
+  position: absolute;
+  top: 92px;
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+}
+.station-pan-controls button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #859684;
+  border-radius: 3px;
+  background: #142a2be8;
+  color: #ead9ac;
+  box-shadow: 0 2px 0 #091c20;
+  cursor: pointer;
+}
+.station-pan-controls button:hover:not(:disabled) { background: #2c4540; color: #ffe6a6; }
+.station-pan-controls button:focus-visible { outline: 2px solid #ffe0a0; outline-offset: 3px; }
+.station-pan-controls button:disabled { opacity: .42; cursor: default; }
+@media (max-height: 440px) {
+  .station-pan-controls { top: 74px; }
+}
 
 .world-canvas-r08-scroll { position: absolute; inset: 0; }
 .world-canvas-r08-plane { position: relative; width: 100%; height: 100dvh; }

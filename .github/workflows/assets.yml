@@ -6,20 +6,26 @@ on:
       - 'assets/manifests/**'
       - 'tools/assets/**'
       - 'assets/generated/hub/r01/**'
+      - 'assets/generated/hub/r09/**'
       - 'assets/generated/ui/hub-r01/**'
       - 'apps/web/public/hub/r01/**'
+      - 'apps/web/public/hub/r09/**'
       - 'apps/web/public/assets/ui/hub-r01/**'
       - 'packages/world-engine/src/assets/hub/r01-approval.json'
+      - 'packages/world-engine/src/assets/hub/r09-manifest.json'
   pull_request:
     paths:
       - 'assets/source/**'
       - 'assets/manifests/**'
       - 'tools/assets/**'
       - 'assets/generated/hub/r01/**'
+      - 'assets/generated/hub/r09/**'
       - 'assets/generated/ui/hub-r01/**'
       - 'apps/web/public/hub/r01/**'
+      - 'apps/web/public/hub/r09/**'
       - 'apps/web/public/assets/ui/hub-r01/**'
       - 'packages/world-engine/src/assets/hub/r01-approval.json'
+      - 'packages/world-engine/src/assets/hub/r09-manifest.json'
   workflow_dispatch:
 
 permissions:
@@ -44,6 +50,10 @@ jobs:
           python -m pip install --disable-pip-version-check -r tools/assets/requirements-r01.txt
           python tools/assets/build_hub_r01.py --check
           python tools/assets/build_workrooms_r01.py --check --require-approved
+      - name: Проверка воспроизводимости живой территории R09
+        run: |
+          python tools/assets/build_hub_r09.py --check
+          python tools/assets/test_hub_r09.py
       - name: Проверка структуры манифестов
         run: |
           python tools/assets/check_asset_manifests.py

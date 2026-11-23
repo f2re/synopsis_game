@@ -1,0 +1,371 @@
+{
+  "task": "STATION-R09-FRAME-TIME-DIAGNOSIS",
+  "reviewer": "/root/station_visibility_repro",
+  "date": "2026-11-22",
+  "status": "SOURCE_DIAGNOSIS_COMPLETE_NATIVE_VISIBILITY_HOLD",
+  "findings": [
+    "Actual installed Phaser TimeStep and RequestAnimationFrame continue scheduling after ordinary sleep/pause and wake/resume in both listener orders at 60 and 30 FPS. The native browser freeze is not reproduced by this source scheduler test.",
+    "The complete source class bodies are identical to those in the ESM distribution selected by Phaser package exports, after newline normalization.",
+    "Summing the FPS-limited Phaser callback delta overcounts elapsed time in the deterministic source experiment; independent genuine browser observations also show scene-clock advancement faster than observed wall intervals.",
+    "A reference elapsed clock based on successive native callback timestamps, with its boundary reset before suspension, excludes hidden time and does not outrun the visible interval. This reference is not the R09 implementation.",
+    "PHASER_GAME is absent from the installed release distributions and local built web chunks; the source-only debug pointer cannot be assumed available."
+  ],
+  "reproduction": {
+    "command": "node tools/test_station_timestep_repro.cjs",
+    "script": "tools/test_station_timestep_repro.cjs",
+    "scriptSha256": "dd15b62410968759c44172f69afdff029321ea2e4fd449a762580b7504e34b3d",
+    "exitCode": 0,
+    "nodeVersion": "v24.22.3",
+    "phaserVersion": "4.2.1",
+    "status": "PASS_SOURCE_DIAGNOSIS",
+    "scheduler": "Deterministic 60 Hz callback queue around the actual installed classes; no browser, HTTP server, dependencies or source implementation replaced.",
+    "assertions": [
+      "No callbacks and no reference-clock movement during 1500 ms suspension.",
+      "Callbacks continue after wake; actual Phaser running flags and one pending RAF remain active.",
+      "At both FPS limits and listener orders, reference visible elapsed is no greater than 3000 ms wall time, with less than 100 ms first-callback boundary omission."
+    ],
+    "sourceEquivalence": [
+      {
+        "name": "TimeStep",
+        "source": "src/core/TimeStep.js",
+        "sourceSha256": "9e825ed0e266f852ca2c387936b8a4bbd398b2e035d189557b3573c7019d23d6",
+        "classBodySha256": "fa6f66ec447b946b52aac1fc820e3d0e4ca433bd4eaa9fb984de03430537d81c",
+        "equalsEsmDistribution": true
+      },
+      {
+        "name": "RequestAnimationFrame",
+        "source": "src/dom/RequestAnimationFrame.js",
+        "sourceSha256": "590ff1167b3679de01ee2e1fd7048b1f49430cadfc2b3c0b44ea3ebd0c085a2c",
+        "classBodySha256": "b810939f43ae310bfbf05184ea22f7716915db2ca196e53c92a1fad7eff98702",
+        "equalsEsmDistribution": true
+      }
+    ],
+    "debugPointerInDistribution": false,
+    "cases": [
+      {
+        "fpsLimit": 60,
+        "listenerOrder": "react-first",
+        "before": {
+          "callbacks": 9,
+          "accumulatedPhaserDeltaMs": 299.99999999999966,
+          "monotonicElapsedMs": 133.33333333333394,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 10,
+          "now": 1166.6666666666672,
+          "limit": 60
+        },
+        "hidden": {
+          "callbacks": 9,
+          "accumulatedPhaserDeltaMs": 299.99999999999966,
+          "monotonicElapsedMs": 133.33333333333394,
+          "running": false,
+          "rafRunning": false,
+          "queuedFrames": 0,
+          "frame": 10,
+          "now": 2666.6666666666656,
+          "limit": 60
+        },
+        "resumed": {
+          "callbacks": 10,
+          "accumulatedPhaserDeltaMs": 333.3333333333329,
+          "monotonicElapsedMs": 133.33333333333394,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 11,
+          "now": 2666.6666666666656,
+          "limit": 60
+        },
+        "after": {
+          "callbacks": 189,
+          "accumulatedPhaserDeltaMs": 6116.666666665369,
+          "monotonicElapsedMs": 3133.33333333335,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 191,
+          "now": 5666.6666666666815,
+          "limit": 60
+        },
+        "visibleWallMs": 3000.000000000016,
+        "monotonicAdvanceMs": 3000.000000000016,
+        "accumulatedPhaserAdvanceMs": 5816.666666665369
+      },
+      {
+        "fpsLimit": 60,
+        "listenerOrder": "phaser-first",
+        "before": {
+          "callbacks": 9,
+          "accumulatedPhaserDeltaMs": 299.9999999999999,
+          "monotonicElapsedMs": 133.33333333333576,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 10,
+          "now": 5833.333333333351,
+          "limit": 60
+        },
+        "hidden": {
+          "callbacks": 9,
+          "accumulatedPhaserDeltaMs": 299.9999999999999,
+          "monotonicElapsedMs": 133.33333333333576,
+          "running": false,
+          "rafRunning": false,
+          "queuedFrames": 0,
+          "frame": 10,
+          "now": 7333.3333333333785,
+          "limit": 60
+        },
+        "resumed": {
+          "callbacks": 9,
+          "accumulatedPhaserDeltaMs": 299.9999999999999,
+          "monotonicElapsedMs": 133.33333333333576,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 11,
+          "now": 7333.3333333333785,
+          "limit": 60
+        },
+        "after": {
+          "callbacks": 188,
+          "accumulatedPhaserDeltaMs": 6266.666666661891,
+          "monotonicElapsedMs": 3099.999999999939,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 191,
+          "now": 10333.333333333316,
+          "limit": 60
+        },
+        "visibleWallMs": 2999.9999999999372,
+        "monotonicAdvanceMs": 2966.6666666666033,
+        "accumulatedPhaserAdvanceMs": 5966.666666661891
+      },
+      {
+        "fpsLimit": 30,
+        "listenerOrder": "react-first",
+        "before": {
+          "callbacks": 4,
+          "accumulatedPhaserDeltaMs": 199.99999999999432,
+          "monotonicElapsedMs": 99.99999999999636,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 10,
+          "now": 10499.999999999976,
+          "limit": 30
+        },
+        "hidden": {
+          "callbacks": 4,
+          "accumulatedPhaserDeltaMs": 199.99999999999432,
+          "monotonicElapsedMs": 99.99999999999636,
+          "running": false,
+          "rafRunning": false,
+          "queuedFrames": 0,
+          "frame": 10,
+          "now": 11999.999999999922,
+          "limit": 30
+        },
+        "resumed": {
+          "callbacks": 5,
+          "accumulatedPhaserDeltaMs": 249.99999999999042,
+          "monotonicElapsedMs": 99.99999999999636,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 11,
+          "now": 11999.999999999922,
+          "limit": 30
+        },
+        "after": {
+          "callbacks": 94,
+          "accumulatedPhaserDeltaMs": 4699.999999995068,
+          "monotonicElapsedMs": 3083.333333333221,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 191,
+          "now": 14999.999999999813,
+          "limit": 30
+        },
+        "visibleWallMs": 2999.999999999891,
+        "monotonicAdvanceMs": 2983.333333333225,
+        "accumulatedPhaserAdvanceMs": 4499.999999995073
+      },
+      {
+        "fpsLimit": 30,
+        "listenerOrder": "phaser-first",
+        "before": {
+          "callbacks": 4,
+          "accumulatedPhaserDeltaMs": 199.99999999999432,
+          "monotonicElapsedMs": 99.99999999999636,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 10,
+          "now": 15166.666666666473,
+          "limit": 30
+        },
+        "hidden": {
+          "callbacks": 4,
+          "accumulatedPhaserDeltaMs": 199.99999999999432,
+          "monotonicElapsedMs": 99.99999999999636,
+          "running": false,
+          "rafRunning": false,
+          "queuedFrames": 0,
+          "frame": 10,
+          "now": 16666.66666666645,
+          "limit": 30
+        },
+        "resumed": {
+          "callbacks": 4,
+          "accumulatedPhaserDeltaMs": 199.99999999999432,
+          "monotonicElapsedMs": 99.99999999999636,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 11,
+          "now": 16666.66666666645,
+          "limit": 30
+        },
+        "after": {
+          "callbacks": 94,
+          "accumulatedPhaserDeltaMs": 4250.000000000695,
+          "monotonicElapsedMs": 3050.000000000211,
+          "running": true,
+          "rafRunning": true,
+          "queuedFrames": 1,
+          "frame": 191,
+          "now": 19666.666666666668,
+          "limit": 30
+        },
+        "visibleWallMs": 3000.0000000002183,
+        "monotonicAdvanceMs": 2950.0000000002146,
+        "accumulatedPhaserAdvanceMs": 4050.0000000007003
+      }
+    ]
+  },
+  "actualBrowserObservations": [
+    {
+      "engine": "chromium",
+      "browser": "151.0.7922.34",
+      "reportStatus": "PASS",
+      "reportSha256": "ed7c695fd5fd052b254acde69a1dff43eae9f1f1e6e7f2673828e8d1db0d8b88",
+      "provenanceSha256": "42947d4bb75d4f97cc14317ad0e591ca3a59db8c54c930cd48de0ee5b21da3d6",
+      "runId": 45009703486,
+      "jobId": 137169082551,
+      "artifactId": 14749668153,
+      "artifactBytes": 85397069,
+      "artifactSha256": "8f2726bcb8f663312f348e2a4e10a86bc8743c7dad532691dfab1704351f3263",
+      "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+      "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+      "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "artifactHashVerified": true,
+      "r09Inputs": {
+        "runnerSha256": "d18afeed1e7ed27d9bd2ff0b2a285d7f1faf4115eec42edcd0466bed6c4b5fa4",
+        "manifestSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+        "selection": "explicit ?stationArt=r09; ordinary default routes remain covered by the full suite"
+      },
+      "measurements": [
+        {
+          "case": "station-r09-real-motion-1366",
+          "sampleCount": 4,
+          "first": {
+            "elapsedMs": 2491.379072999989,
+            "clockMs": 2007.9866666647222
+          },
+          "last": {
+            "elapsedMs": 9961.073710999975,
+            "clockMs": 11017.339999993585
+          },
+          "wallIntervalMs": 7469.694637999986,
+          "sceneClockIntervalMs": 9009.353333328861,
+          "sceneToWallRatio": 1.2061207010386061
+        },
+        {
+          "case": "station-r09-real-motion-390",
+          "sampleCount": 13,
+          "first": {
+            "elapsedMs": 1453.3228159999708,
+            "clockMs": 4011.5733333347725
+          },
+          "last": {
+            "elapsedMs": 19050.739961999992,
+            "clockMs": 34027.50333334412
+          },
+          "wallIntervalMs": 17597.41714600002,
+          "sceneClockIntervalMs": 30015.930000009343,
+          "sceneToWallRatio": 1.7057008850206241
+        }
+      ]
+    },
+    {
+      "engine": "firefox",
+      "browser": "153.0",
+      "reportStatus": "PASS",
+      "reportSha256": "7542b90942db145db2b7bb1c467d6e27ecce90546aab858d84629c35497b2f32",
+      "provenanceSha256": "7b37c4463f7bf73cab098d47115ed22d551fcaffb03124c3e550859090f88004",
+      "runId": 45009703486,
+      "jobId": 137169082515,
+      "artifactId": 14749468309,
+      "artifactBytes": 92616601,
+      "artifactSha256": "edf693f884b58b17d405500ed50a759b8de4999b6b2eac39cd65e938759b3d11",
+      "head": "7424d3ddc43594541321d370c80daef8a88d69c1",
+      "checkout": "12f843115ab2eaf2a52e9d414c33c6130e4829e6",
+      "tree": "657a82389a74c3634f695d0596f768f6750168e3",
+      "checkoutTreeVerifiedWithGitHub": true,
+      "artifactHashVerified": true,
+      "r09Inputs": {
+        "runnerSha256": "d18afeed1e7ed27d9bd2ff0b2a285d7f1faf4115eec42edcd0466bed6c4b5fa4",
+        "manifestSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+        "selection": "explicit ?stationArt=r09; ordinary default routes remain covered by the full suite"
+      },
+      "measurements": [
+        {
+          "case": "station-r09-real-motion-1366",
+          "sampleCount": 8,
+          "first": {
+            "elapsedMs": 1360.250154999987,
+            "clockMs": 3012.974000000019
+          },
+          "last": {
+            "elapsedMs": 10851.001358000009,
+            "clockMs": 17008.004666666926
+          },
+          "wallIntervalMs": 9490.751203000022,
+          "sceneClockIntervalMs": 13995.030666666908,
+          "sceneToWallRatio": 1.474596727627112
+        },
+        {
+          "case": "station-r09-real-motion-390",
+          "sampleCount": 9,
+          "first": {
+            "elapsedMs": 1275.3038750000123,
+            "clockMs": 3015.0326666666538
+          },
+          "last": {
+            "elapsedMs": 11497.623753000022,
+            "clockMs": 18016.866666666137
+          },
+          "wallIntervalMs": 10222.31987800001,
+          "sceneClockIntervalMs": 15001.833999999484,
+          "sceneToWallRatio": 1.467556697407378
+        }
+      ]
+    }
+  ],
+  "interpretationLimits": [
+    "Browser scene clocks are diagnostic snapshots published at no more than 1 Hz. The computed ratios describe the recorded endpoints, not an exact instantaneous clock-rate curve.",
+    "The 844-pixel cases had one motion observation each, so no interval ratio is inferred for them.",
+    "This evidence does not establish the cause of the native Chromium freeze and does not approve native visibility recovery.",
+    "No production code, renderer, scheduling policy, test timeout or acceptance gate was changed by this diagnostic task.",
+    "Any product change to use native frame timestamps needs separate actual-layer regression tests and genuine browser verification; this reference calculation does not self-approve that change.",
+    "An additional pending RAF observer may itself change browser scheduling. Its diagnostic phase must not convert an originally failed visibility gate into PASS."
+  ],
+  "nextDiscriminant": "Keep the original native visibility gate free of an additional RAF loop. On its original timeout, capture station/focus/visibility state first; then briefly observe genuine RAF callbacks and capture their progress; stop the observer and rethrow the original timeout unconditionally. This separates a possible diagnostic scheduling effect from the original result; native function identities and gate timing remain unchanged.",
+  "nativeVisibilityGate": "HOLD until actual corrected browser evidence; productionReady remains false at diagnosis time."
+}

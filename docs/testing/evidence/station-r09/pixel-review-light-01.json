@@ -1,0 +1,415 @@
+{
+  "reviewer": "/root/station_pixel_review",
+  "issue": "ART-LIGHT-01",
+  "verdict": "PASS_SOURCE_GEOMETRY",
+  "manifestFileSha256": "1388b78d4c5b3d7e627d607985073f37b08111a5efdb80bcb96211d1f72fe420",
+  "sourceSpecFileSha256": "e2b4d8d4e6f4ef2885749971be5cdfaf23f385444ac36a435c4c849e548bc0ec",
+  "masterFileSha256": "d8510e537afd99a0c55aa821c9df52ca09cd2270ca6dfd50e82c064197ff038c",
+  "contract": "pixel-review-light-01-contract.json",
+  "receiverMaskRGBAExactAgainstIndependentContract": true,
+  "unmodifiedR08ReceiverSourceHashes": {
+    "window-light-mask": "057f4cec9c1dfb01bd671e4524232d1f4c9de93508a299918b030bfb7605c635",
+    "ground-light-mask": "8c1ce2c964905006bdffecdf596e0529ec140f80a4c9405cc14dc4d0a2fcefc7"
+  },
+  "changedPngAssetIds": [
+    "hub.r09.window-light-mask",
+    "hub.r09.ground-light-mask"
+  ],
+  "allOther11PngByteHashesUnchanged": true,
+  "receiverDetails": [
+    {
+      "id": "central-entry",
+      "maskRole": "window-light-mask",
+      "actualOpaquePixelsInRegion": 150,
+      "sourceBounds": [
+        227,
+        155,
+        13,
+        15
+      ],
+      "negativeControls": [
+        {
+          "xy": [
+            218,
+            160
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            219,
+            156
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            221,
+            160
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            229,
+            154
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            229,
+            170
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            233,
+            160
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            234,
+            160
+          ],
+          "alpha": 0
+        }
+      ],
+      "positiveControls": [
+        {
+          "xy": [
+            229,
+            155
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            229,
+            160
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            237,
+            165
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            237,
+            169
+          ],
+          "alpha": 255
+        }
+      ],
+      "tint": "#FFB95A",
+      "suggestedAlpha": 0.46,
+      "verticalFalloff": null
+    },
+    {
+      "id": "archive-interior",
+      "maskRole": "window-light-mask",
+      "actualOpaquePixelsInRegion": 99,
+      "sourceBounds": [
+        300,
+        172,
+        14,
+        16
+      ],
+      "negativeControls": [
+        {
+          "xy": [
+            306,
+            173
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            307,
+            180
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            316,
+            185
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            317,
+            185
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            327,
+            198
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            302,
+            176
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            312,
+            182
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            312,
+            189
+          ],
+          "alpha": 0
+        }
+      ],
+      "positiveControls": [
+        {
+          "xy": [
+            302,
+            173
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            311,
+            174
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            302,
+            180
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            312,
+            185
+          ],
+          "alpha": 255
+        }
+      ],
+      "tint": "#FFB24C",
+      "suggestedAlpha": 0.38,
+      "verticalFalloff": null
+    },
+    {
+      "id": "central-steps",
+      "maskRole": "ground-light-mask",
+      "actualOpaquePixelsInRegion": 119,
+      "sourceBounds": [
+        214,
+        172,
+        31,
+        9
+      ],
+      "negativeControls": [
+        {
+          "xy": [
+            227,
+            172
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            227,
+            173
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            225,
+            175
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            228,
+            176
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            236,
+            179
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            239,
+            180
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            217,
+            169
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            212,
+            176
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            250,
+            176
+          ],
+          "alpha": 0
+        },
+        {
+          "xy": [
+            228,
+            185
+          ],
+          "alpha": 0
+        }
+      ],
+      "positiveControls": [
+        {
+          "xy": [
+            223,
+            172
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            235,
+            173
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            233,
+            175
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            241,
+            178
+          ],
+          "alpha": 255
+        },
+        {
+          "xy": [
+            220,
+            180
+          ],
+          "alpha": 255
+        }
+      ],
+      "tint": "#D79D58",
+      "suggestedAlpha": 0.11,
+      "verticalFalloff": [
+        1,
+        0.25
+      ]
+    }
+  ],
+  "baselineActualFrameReviewed": {
+    "path": "/workspace/scratch/5cf4b859cf71/delivery/ci-135-candidate/environment-firefox/solar-night-390.png",
+    "sha256": "3b5af13341d40bfd9ae338fc727d740c576e27af734a78dfd53c9951599b046d"
+  },
+  "lightRegionCount": 9,
+  "newGameFramesReviewed": false,
+  "productionAcceptance": false,
+  "scope": "Source material/geometry, binary white receiver masks and preservation of all non-light source PNGs only; final emission and fade require new actual CI images.",
+  "finalApprovalMetadataVerified": true,
+  "finalAssetDigests": [
+    {
+      "id": "hub.r09.sky",
+      "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2"
+    },
+    {
+      "id": "hub.r09.water",
+      "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781"
+    },
+    {
+      "id": "hub.r09.architecture-ground",
+      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7"
+    },
+    {
+      "id": "hub.r09.foreground",
+      "sha256": "603959c804952c0e880bd0ffc7ee06d05197af096646e96cf09a3e1535e54adc"
+    },
+    {
+      "id": "hub.r09.clouds.east-wisp",
+      "sha256": "68a8cb9bd11bcfe97be8e4e1d119c6d7a53bb15d4bb9c73f45e6b3f9ec849176"
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary",
+      "sha256": "e52db6693b59f59c2cf7fccaa49d9d4c789dd8cf825048a34f1c430d43279af6"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub",
+      "sha256": "afb840b7391413c179330e477f884a59cee5d46bd07798b760c90a6c69a29f16"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary",
+      "sha256": "9eeadafb1d0f6e6f4be8e4795bb972139210848ec0a967543b31ec23e07bdb65"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary",
+      "sha256": "811c063bd4a100c102e88e0f6eba04f66f8a76f42d475fa152fc8c7ebb5d8c94"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right",
+      "sha256": "fb14f0eb7b324a7388c99cbbbd35da1c39f4cd46f371ee37c87766bc08fc433c"
+    },
+    {
+      "id": "hub.r09.window-light-mask",
+      "sha256": "d72514e464baa3659071a0a7bb1ee9f6320efbb0b4ded09448a13fd51d6024da"
+    },
+    {
+      "id": "hub.r09.lamp-light-mask",
+      "sha256": "c084c4fdbc7b2356cbad3283ed2ad9519edba196f3be19a6b90f1de53377e602"
+    },
+    {
+      "id": "hub.r09.ground-light-mask",
+      "sha256": "3b697bce6cf7e7ec42261e9e606b152e6eabe99b3129013ee734b6dff9c36179"
+    }
+  ],
+  "validation": {
+    "requiredRepositoryValidators": "6 PASS",
+    "assetPipelineTests": "26 PASS",
+    "exporterCheck": "PASS",
+    "independentSourceCheck": "PASS_NUMERICAL_ONLY",
+    "independentReceiverMaskReconstruction": "PASS exact RGBA",
+    "existingWarnings": "check_asset_contract retains unrelated pre-existing missing-source warnings for brand.mark.v3, effects.level1 and ui.kit.v3"
+  }
+}
