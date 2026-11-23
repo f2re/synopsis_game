@@ -22,6 +22,9 @@ cp -a packages/kn01-codec/src "$PKG/server/node_modules/@synopsis/kn01-codec/"
 cp packages/content-engine/package.json "$PKG/server/node_modules/@synopsis/content-engine/"
 cp -a packages/content-engine/src "$PKG/server/node_modules/@synopsis/content-engine/"
 printf '%s\n' "$VERSION" > "$PKG/VERSION"
+if [[ -f "docs/releases/v$VERSION.md" ]]; then
+  cp "docs/releases/v$VERSION.md" "$PKG/RELEASE_NOTES.md"
+fi
 
 NODE_TAR="node-v${NODE_VERSION}-linux-x64.tar.xz"
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT

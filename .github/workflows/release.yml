@@ -10,6 +10,9 @@ on:
         required: true
 permissions:
   contents: write
+concurrency:
+  group: synopsis-game-release
+  cancel-in-progress: false
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -45,6 +48,9 @@ jobs:
           fi
           [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]
           [[ "$VERSION" == "$PACKAGE_VERSION" ]] || { echo "Версия выпуска $VERSION не совпадает с package.json: $PACKAGE_VERSION" >&2; exit 2; }
+          if [[ "$PUBLISH" == true ]]; then
+            test -s "docs/releases/v$VERSION.md" || { echo "Отсутствует описание релиза v$VERSION" >&2; exit 2; }
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "publish=$PUBLISH" >> "$GITHUB_OUTPUT"
       - name: Подготовить Python-проверки
@@ -62,6 +68,7 @@ jobs:
           python tools/validate_architecture.py
           python tools/validate_deployment.py
           python tools/test_deployment.py
+          sudo -n python3 tools/test_deployment.py --require-ownership
           bash -n deploy/scripts/*.sh scripts/release/*.sh
           python -m py_compile deploy/scripts/*.py scripts/release/*.py tools/*.py
       - name: Собрать релизный пакет
@@ -87,6 +94,11 @@ jobs:
           VERSION: ${{ steps.v.outputs.version }}
         run: |
           TAG="v$VERSION"
-          if ! git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then git tag "$TAG" "$GITHUB_SHA"; git push origin "$TAG"; fi
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "Synopsis Game $TAG" --generate-notes
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            [[ "$(git rev-parse "refs/tags/$TAG^{commit}")" == "$GITHUB_SHA" ]] || { echo "Тег $TAG указывает на другой коммит; опубликованная версия не заменена" >&2; exit 2; }
+          else
+            git tag "$TAG" "$GITHUB_SHA"
+            git push origin "$TAG"
+          fi
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "26063: Позывной «Синоптик» $TAG" --notes-file "docs/releases/v$VERSION.md"
           gh release upload "$TAG" "dist-release/synopsis-game-$VERSION-linux-x64.tar.gz" "dist-release/synopsis-game-$VERSION-linux-x64.tar.gz.sha256" --clobber

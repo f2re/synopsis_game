@@ -11,11 +11,12 @@ if [[ -f "$RELEASE_ARCHIVE.sha256" ]]; then
 fi
 
 # Повторный запуск установщика на уже управляемой системе всегда идёт через
-# штатный транзакционный обновлятор с резервным копированием и откатом.
+# обновлятор из нового пакета: его исправления нужны уже при первом переходе.
 if [[ -f /opt/synopsis-game/current/deploy/scripts/update.py ]]; then
+  INSTALLER_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
   args=("$RELEASE_ARCHIVE")
   [[ -n "$EXPECTED" ]] && args+=(--sha256 "$EXPECTED")
-  exec /usr/bin/python3 /opt/synopsis-game/current/deploy/scripts/update.py "${args[@]}"
+  exec /usr/bin/python3 "$INSTALLER_DIR/update.py" "${args[@]}"
 fi
 
 if [[ -r /etc/os-release ]]; then . /etc/os-release; fi
@@ -68,7 +69,7 @@ else
   rm -f /etc/synopsis-game/.app.env.new
 fi
 CONFIG_FILE=/etc/synopsis-game/app.env DEFAULTS_FILE="$DEFAULTS" /bin/bash /opt/synopsis-game/current/deploy/scripts/configure.sh
-CONFIG_FILE=/etc/synopsis-game/app.env /bin/bash /opt/synopsis-game/current/deploy/scripts/ensure-host-deps.sh
+SYNOPSIS_UPDATER_PROTOCOL=2 CONFIG_FILE=/etc/synopsis-game/app.env /bin/bash /opt/synopsis-game/current/deploy/scripts/ensure-host-deps.sh
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game.service /etc/systemd/system/synopsis-game.service
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game-update.service /etc/systemd/system/synopsis-game-update.service
 install -m 0644 /opt/synopsis-game/current/deploy/systemd/synopsis-game-update.timer /etc/systemd/system/synopsis-game-update.timer

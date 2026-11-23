@@ -28,6 +28,7 @@ jobs:
           python tools/validate_architecture.py
           python tools/validate_deployment.py
           python tools/test_deployment.py
+          sudo -n python3 tools/test_deployment.py --require-ownership
           python tools/validate_brand.py
           python tools/assets/check_asset_contract.py
           python tools/assets/check_asset_manifests.py
