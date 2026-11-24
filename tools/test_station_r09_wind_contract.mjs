@@ -1,4 +1,4 @@
-/** Independent contract against the five actual exported R09 plant cutouts. */
+/** Independent contract against the actual exported R09 plant cutouts. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
@@ -7,7 +7,12 @@ import { makeWindBands, sampleWindDisplacement, StationWindClock } from '../pack
 const manifestPath = 'packages/world-engine/src/assets/hub/r09-manifest.json';
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const plants = manifest.assets.filter(asset => asset.role === 'vegetation');
-assert.equal(plants.length, 5, 'Review the five real source selections, not invented large trees');
+assert.equal(plants.length, 9, 'Review the nine authored plant selections');
+const terraceCrowns = plants.filter(plant => plant.sourceBounds[1] < 220);
+assert.equal(terraceCrowns.length, 4, 'Visible wind includes the upper and middle terraces');
+assert.ok(Math.max(...terraceCrowns.map(plant => plant.anchorScenePx[0])) -
+  Math.min(...terraceCrowns.map(plant => plant.anchorScenePx[0])) >= 200,
+  'Terrace crowns span the station panorama');
 const results = [];
 for (const weather of ['clear', 'rain']) {
   const environment = { weather, reducedMotion: false, lowPower: false, paused: false };
@@ -63,6 +68,6 @@ for (let step = 0; step < 50; step++) clock.advance(100, { ...calm, paused: true
 assert.equal(clock.timeMs, held, 'A real paused interval does not advance the wind model');
 clock.advance(5_000, calm);
 assert.equal(clock.timeMs, held + 100, 'Resume cannot jump the foliage ahead by hidden wall-clock time');
-console.log(JSON.stringify({ status: 'PASS', contract: 'actual-r09-small-foliage', manifestPath,
+console.log(JSON.stringify({ status: 'PASS', contract: 'actual-r09-station-foliage', manifestPath,
   manifestSha256: crypto.createHash('sha256').update(fs.readFileSync(manifestPath)).digest('hex'),
   sampledDurationMs: 60_000, intervalMs: 100, results }, null, 2));

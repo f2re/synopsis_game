@@ -3,6 +3,7 @@ import type { WorldInteractionTarget } from '../../runtime/uiPreferences.ts';
 
 export const R09_SOURCE_WIDTH = 512;
 export const R09_SOURCE_HEIGHT = 288;
+export type R09ViewMode = 'overview' | 'detail';
 
 /** Entrances belong to one authored scene, regardless of screen orientation. */
 export const R09_ENTRANCES = [
@@ -16,6 +17,7 @@ export const R09_ENTRANCES = [
 
 export interface R09Viewport {
   bufferWidth: number; bufferHeight: number; cssWidth: number; cssHeight: number;
+  mode: R09ViewMode;
   pixelRatio: number; zoom: number; offsetX: number; offsetY: number;
   centerX: number; centerY: number; portrait: boolean;
   safeTop: number; safeBottom: number;
@@ -26,14 +28,33 @@ export interface R09Viewport {
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));
 const positive = (value: number, fallback: number) => Number.isFinite(value) && value > 0 ? value : fallback;
 
-/** One integer backing-pixel camera. Narrow screens pan the same terrace;
- * facades, plants and paths are never rearranged or scaled independently. */
-export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRatio = 1, requestedCenterX?: number): R09Viewport {
+/** Both views share one camera and the original terrace coordinates. */
+export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRatio = 1, requestedMode?: R09ViewMode, requestedCenterX?: number): R09Viewport {
   const width = Math.max(1, Math.round(positive(bufferWidth, 512)));
   const height = Math.max(1, Math.round(positive(bufferHeight, 288)));
   const ratio = positive(pixelRatio, 1);
   const cssWidth = width / ratio, cssHeight = height / ratio;
   const portrait = cssWidth / cssHeight < 1.1;
+  const mode = requestedMode ?? (portrait ? 'detail' : 'overview');
+  if (mode === 'overview') {
+    const safeTop = cssHeight <= 440 ? 76 : 82;
+    const twoRowDock = cssWidth <= 760 && (cssWidth < cssHeight || cssHeight > 540);
+    const safeBottom = twoRowDock ? 160 : cssHeight <= 440 ? 76 : cssHeight <= 760 ? 88 : 98;
+    const availableHeight = Math.max(1, height - (safeTop + safeBottom) * ratio);
+    const fit = Math.min(width / R09_SOURCE_WIDTH, availableHeight / R09_SOURCE_HEIGHT);
+    // Keep the 2× architecture texture on the backing-pixel grid where
+    // the frame permits it. A narrow screen still shows the whole picture.
+    const zoom = fit >= ratio ? Math.floor(fit * 2) / 2 : fit;
+    // Fractional zoom can align independent texture edges with the center of
+    // the same output pixel. Bias all planes together away from that tie.
+    const bias = Number.isInteger(zoom) ? 0 : .125;
+    const offsetX = Math.round((width - R09_SOURCE_WIDTH * zoom) / 2) + bias;
+    const offsetY = Math.round(safeTop * ratio + (availableHeight - R09_SOURCE_HEIGHT * zoom) / 2) + bias;
+    return { bufferWidth: width, bufferHeight: height, cssWidth, cssHeight, pixelRatio: ratio, mode,
+      zoom, offsetX, offsetY, centerX: (width / 2 - offsetX) / zoom, centerY: (height / 2 - offsetY) / zoom,
+      portrait, safeTop, safeBottom, visibleSourceBounds: [0, 0, R09_SOURCE_WIDTH, R09_SOURCE_HEIGHT],
+      canPanLeft: false, canPanRight: false };
+  }
   const zoom = Math.max(1, Math.ceil(Math.max(width / R09_SOURCE_WIDTH, height / R09_SOURCE_HEIGHT)));
   const visibleWidth = width / zoom, visibleHeight = height / zoom;
   const desiredX = requestedCenterX !== undefined && Number.isFinite(requestedCenterX) ? requestedCenterX : portrait ? 228 : 256;
@@ -52,14 +73,15 @@ export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRati
   const offsetY = Math.round(height / 2 - y * zoom);
   const centerX = (width / 2 - offsetX) / zoom, centerY = (height / 2 - offsetY) / zoom;
   const left = -offsetX / zoom, top = -offsetY / zoom;
-  return { bufferWidth: width, bufferHeight: height, cssWidth, cssHeight, pixelRatio: ratio,
+  return { bufferWidth: width, bufferHeight: height, cssWidth, cssHeight, pixelRatio: ratio, mode,
     zoom, offsetX, offsetY, centerX, centerY, portrait, safeTop, safeBottom,
     visibleSourceBounds: [left, top, visibleWidth, visibleHeight],
     canPanLeft: left > 1 / zoom, canPanRight: left + visibleWidth < R09_SOURCE_WIDTH - 1 / zoom };
 }
 
 export function r09Pan(viewport: R09Viewport, direction: 'left' | 'right'): R09Viewport {
-  return r09Viewport(viewport.bufferWidth, viewport.bufferHeight, viewport.pixelRatio,
+  if (viewport.mode !== 'detail') return viewport;
+  return r09Viewport(viewport.bufferWidth, viewport.bufferHeight, viewport.pixelRatio, 'detail',
     viewport.centerX + (direction === 'left' ? -1 : 1) * viewport.visibleSourceBounds[2] * .68);
 }
 
@@ -70,12 +92,15 @@ export function r09EntranceTargets(viewport: R09Viewport): WorldInteractionTarge
   const size = cssWidth > 1000 ? 48 : 44;
   const top = viewport.safeTop;
   const bottom = viewport.safeBottom;
-  return R09_ENTRANCES.flatMap((entry) => {
+  const targets: WorldInteractionTarget[] = [];
+  for (const entry of R09_ENTRANCES) {
     const x = Math.round((offsetX + entry.x * zoom) / pixelRatio - size / 2);
     const y = Math.round((offsetY + entry.y * zoom) / pixelRatio - size / 2);
-    if (x < 6 || x + size > cssWidth - 6 || y < top || y + size > cssHeight - bottom) return [];
-    return [{ id: entry.id, label: entry.label, state: entry.state, x, y, width: size, height: size }];
-  });
+    if (x < 6 || x + size > cssWidth - 6 || y < top || y + size > cssHeight - bottom) continue;
+    if (targets.some((target) => Math.abs(target.x - x) < size && Math.abs(target.y - y) < size)) continue;
+    targets.push({ id: entry.id, label: entry.label, state: entry.state, x, y, width: size, height: size });
+  }
+  return targets;
 }
 
 export interface R09PhaseStyle { sky: number; scenery: number; water: number; lights: number; stars: number; }

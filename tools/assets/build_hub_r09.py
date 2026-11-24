@@ -380,6 +380,23 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
     detail_mask = ImageChops.subtract(architecture_domain, moving_mask).filter(ImageFilter.MinFilter(3))
     detail_mask = detail_mask.resize(detail_size, Image.Resampling.NEAREST)
     detail = detail_source.resize(detail_size, Image.Resampling.BOX)
+    equipment = spec["aerologyEquipment"]
+    equipment_source, _ = pinned_image(equipment)
+    ex, ey, ew, eh = equipment["sourceBounds"]
+    if not all(integer(v) for v in (ex, ey, ew, eh)) or min(ex, ey) < 0 or min(ew, eh) <= 0:
+        raise ValueError("Aerology equipment requires positive integer source bounds")
+    equipment_box = (ex, ey, ex + ew, ey + eh)
+    stationary_architecture = ImageChops.subtract(architecture_domain, moving_mask)
+    if stationary_architecture.crop(equipment_box).getextrema() != (255, 255):
+        raise ValueError("Aerology equipment must stay inside stationary architecture")
+    # Area sampling keeps the thin suspension cord. Glass attenuates both
+    # color and opacity before the instrument goes into the opaque facade.
+    equipment_crop = equipment_source.getchannel("A").getbbox()
+    if equipment_crop is None:
+        raise ValueError("Aerology equipment cannot be transparent")
+    equipment_art = equipment_source.crop(equipment_crop)
+    equipment_art = equipment_art.resize((ew * 2, eh * 2), Image.Resampling.BOX)
+    equipment_art = ImageChops.multiply(equipment_art, Image.new("RGBA", equipment_art.size, (201, 226, 219, 224)))
     for asset_id, role, filename, image, depth in planes:
         extra = {"sourcePixelsExact": role == "clouds"}
         if role == "clouds":
@@ -392,14 +409,21 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
             # architecture quad spans the plaza and façades.
             image = image.resize(detail_size, Image.Resampling.NEAREST)
             image.paste(detail, (0, 0), detail_mask)
+            image.alpha_composite(equipment_art, (ex * 2, ey * 2))
             emit(asset_id, role, filename, image, depth, extra, density=2)
         else:
             emit(asset_id, role, filename, image, depth, extra)
     for entry in spec["vegetation"]:
-        emit(entry["id"], "vegetation", entry["file"], cutout(master, vegetation_masks[entry["id"]]), entry["depthSourceY"], {
+        mask = vegetation_masks[entry["id"]]
+        moving_pixels = count(mask)
+        foreground_pixels = count(ImageChops.multiply(mask, front_domain))
+        if foreground_pixels not in (0, moving_pixels):
+            raise ValueError(f"Vegetation selection crosses the foreground occlusion boundary: {entry['id']}")
+        emit(entry["id"], "vegetation", entry["file"], cutout(master, mask), entry["depthSourceY"], {
             "kind": entry["kind"], "rootFraction": entry["rootFraction"], "gain": entry["gain"],
             "maximumSourceDisplacement": entry["maximumSourceDisplacement"],
-            "sourcePixelsExact": True, "movingPixels": count(vegetation_masks[entry["id"]]),
+            "sourcePixelsExact": True, "movingPixels": moving_pixels,
+            "foregroundOccludesActors": foreground_pixels > 0,
             "maskRecipe": "editable-source-row-spans-or-polygons",
         })
     for entry in spec["receivers"]:

@@ -13,6 +13,8 @@ import { useAmbientWeather } from '../features/atmosphere/AtmosphereProvider';
 import { AUDIO_UNLOCK_EVENT, isAudioUnlocked } from '../features/atmosphere/audioGate';
 import { PixelScrollArea } from '../features/ui/PixelScrollArea';
 
+type StationView = { mode: 'overview' | 'detail'; canPanLeft: boolean; canPanRight: boolean };
+
 /** The world receives aggregate presence; the account portrait belongs to React. */
 export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -20,7 +22,7 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
   const [showR08] = useState(() => new URLSearchParams(window.location.search).get('stationArt') === 'r08');
   const hoveredBuilding = useRef<string | null>(null);
   const [targets, setTargets] = useState<WorldInteractionTarget[]>([]);
-  const [stationView, setStationView] = useState<{canPanLeft: boolean; canPanRight: boolean} | null>(null);
+  const [stationView, setStationView] = useState<StationView | null>(null);
   const weather = useAmbientWeather();
   const weatherRef = useRef(weather);
   const applyAudioRef = useRef<(() => void) | null>(null);
@@ -159,7 +161,7 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
       worldBridge.on<Record<string, unknown>>('world:station_diagnostics', (diagnostic) => {
         host.dataset.station = JSON.stringify(diagnostic);
       }),
-      worldBridge.on<{canPanLeft: boolean; canPanRight: boolean} | null>('world:station_view', (view) => {
+      worldBridge.on<StationView | null>('world:station_view', (view) => {
         if (!disposed) setStationView(view);
         if (!view) delete host.dataset.station;
       }),
@@ -298,16 +300,22 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
           <span className="r08-entrance-label" aria-hidden="true">{target.label}</span>
         </>}</button>
       ))}
-      {stationView && (stationView.canPanLeft || stationView.canPanRight) && (
-        <div className="station-pan-controls" role="group" aria-label="Панорама станции">
-          <button type="button" data-station-pan="left" aria-label="Посмотреть влево"
-            disabled={!stationView.canPanLeft} onClick={() => worldBridge.emit('ui:station_pan', 'left')}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3H8v3H5v6h3v3h3v-3H8V6h3z" fill="currentColor" /></svg>
+      {stationView && (
+        <div className="station-pan-controls" role="group" aria-label="Вид станции">
+          <button type="button" className="station-pan-controls__view" data-station-view-mode={stationView.mode}
+            onClick={() => worldBridge.emit('ui:station_view', stationView.mode === 'overview' ? 'detail' : 'overview')}>
+            {stationView.mode === 'overview' ? 'Приблизить' : 'Вся станция'}
           </button>
-          <button type="button" data-station-pan="right" aria-label="Посмотреть вправо"
-            disabled={!stationView.canPanRight} onClick={() => worldBridge.emit('ui:station_pan', 'right')}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3h3v3h3v6h-3v3H7v-3h3V6H7z" fill="currentColor" /></svg>
-          </button>
+          {(stationView.canPanLeft || stationView.canPanRight) && <>
+            <button type="button" data-station-pan="left" aria-label="Посмотреть влево"
+              disabled={!stationView.canPanLeft} onClick={() => worldBridge.emit('ui:station_pan', 'left')}>
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3H8v3H5v6h3v3h3v-3H8V6h3z" fill="currentColor" /></svg>
+            </button>
+            <button type="button" data-station-pan="right" aria-label="Посмотреть вправо"
+              disabled={!stationView.canPanRight} onClick={() => worldBridge.emit('ui:station_pan', 'right')}>
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3h3v3h3v6h-3v3H7v-3h3V6H7z" fill="currentColor" /></svg>
+            </button>
+          </>}
         </div>
       )}
     </>

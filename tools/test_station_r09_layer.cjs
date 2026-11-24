@@ -38,6 +38,7 @@ const phaser = { CANVAS: 1, WEBGL: 2, Textures: { FilterMode: { NEAREST: 1 } }, 
 const wind = load('scenes/hub/r09WindModel.ts');
 const windLayer = load('scenes/hub/HubVegetationWindLayer.ts', { phaser, './r09WindModel': wind });
 const sceneModel = load('scenes/hub/r09SceneModel.ts');
+const actorLayout = load('scenes/hub/r09ActorLayout.ts');
 const preferences = load('runtime/uiPreferences.ts');
 const weather = load('scenes/hub/r01Environment.ts');
 const manifestFile = root + 'assets/hub/r09-manifest.json';
@@ -45,7 +46,7 @@ const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
 const { HubR09Layer } = load('scenes/hub/HubR09Layer.ts', {
   phaser, '../../assets/hub/r09-manifest.json': manifest, '../../bridge/WorldBridge': { worldBridge: bridge },
   '../../runtime/uiPreferences': preferences, './HubVegetationWindLayer': windLayer,
-  './r01Environment': weather, './r09SceneModel': sceneModel,
+  './r01Environment': weather, './r09ActorLayout': actorLayout, './r09SceneModel': sceneModel,
 });
 
 function makeScene() {
@@ -138,9 +139,23 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.equal(architectureImages[0].scale[0], 1 / architecture.density);
   assert.equal(architectureImages[0].depth, 3);
   assert.equal(first.stationArt, 'r09'); assert.deepEqual(first.sourceCanvas, [512, 288]);
-  assert.equal(first.assets.count, manifest.assets.length); assert.equal(first.motion.foliage.placements, 5);
+  assert.equal(first.assets.count, manifest.assets.length);
+  assert.equal(first.motion.foliage.placements, manifest.assets.filter(asset => asset.role === 'vegetation').length);
+  const windDepth = (id) => {
+    const asset = manifest.assets.find(asset => asset.id === `hub.r09.foliage.${id}`);
+    const bands = scene.objects.filter(image => image.key === asset.key);
+    assert.ok(bands.length > 1, `${id} uses real moving source bands`);
+    assert.ok(bands.every(image => image.depth === bands[0].depth));
+    return bands[0].depth;
+  };
+  assert.ok(windDepth('west-stair-fir') < actorLayout.r09ActorDepth(217), 'Observer crosses in front of the west stair tree');
+  assert.ok(windDepth('east-walk-fir') > actorLayout.r09ActorDepth(222), 'A path behind the eastern fir remains occluded');
+  assert.ok(windDepth('east-walk-fir') < actorLayout.r09ActorDepth(236), 'A path in front of the eastern fir stays visible');
+  assert.ok(windDepth('foreground-right') > 31, 'The near shrubs paint over the stationary balustrade');
   assert.equal(first.motion.foliage.rootDisplacement, 0); assert.ok(scene.filters.every(value => value === phaser.Textures.FilterMode.NEAREST));
-  assert.ok(scene.cameras.main.round && Number.isInteger(scene.cameras.main.zoom));
+  assert.equal(first.camera.mode, 'overview');
+  assert.deepEqual(first.camera.visibleSourceBounds, [0, 0, 512, 288]);
+  assert.equal(scene.cameras.main.round, false);
   assert.equal(scene.masks.length, 3, 'Cloud, stars and water have distinct reviewed masks');
   const clouds = manifest.assets.filter(asset => asset.role === 'clouds').map(asset => ({ asset, image: scene.objects.find(value => value.key === asset.key) }));
   assert.equal(clouds.length, 1, 'Only the reviewed small cloud island is movable');
@@ -154,13 +169,20 @@ for (let cycle = 0; cycle < 3; cycle++) {
 
   const initialCamera = first.camera;
   bridge.emit('ui:station_pan', 'right');
-  assert.ok(snapshot().camera.centerX > initialCamera.centerX, 'The production panorama handler must actually move the camera');
+  assert.deepEqual(snapshot().camera, initialCamera, 'The complete overview does not pan');
+  bridge.emit('ui:station_view', 'detail');
+  const detailCamera = snapshot().camera;
+  assert.ok(scene.cameras.main.round && Number.isInteger(scene.cameras.main.zoom));
+  bridge.emit('ui:station_pan', 'right');
+  assert.ok(snapshot().camera.centerX > detailCamera.centerX, 'The production panorama handler must actually move the camera');
   for (const [width, height, ratio] of [[780, 1688, 2], [1688, 780, 2], [1366, 768, 1]]) {
     scene.scale.width = width; scene.scale.height = height; scene.registry.set('world.pixelRatio', ratio);
     scene.scale.emit('resize');
     assert.equal(scene.objects.length, created, 'Resizing reuses the same scene objects');
   }
-  assert.deepEqual(snapshot().camera, initialCamera, 'Returning to desktop restores the initial camera after a real pan');
+  assert.deepEqual(snapshot().camera, detailCamera, 'Returning to desktop restores the detail camera after a real pan');
+  bridge.emit('ui:station_view', 'overview');
+  assert.deepEqual(snapshot().camera, initialCamera, 'The overview always restores the complete composition');
   assert.deepEqual(fixed.map(value => [value.key, value.x, value.y]), coordinates, 'Pan and resize leave every static source object planted');
 
   const diagnosticCount = diagnostics.length;

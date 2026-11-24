@@ -124,8 +124,8 @@
       ],
       "depthSourceY": 2,
       "alphaPolicy": "binary",
-      "sha256": "c7cd96e7d07f7803039ef87bc555454cef727d320da70f34528323454aa0f40d",
-      "bytes": 849219,
+      "sha256": "05fb994c0a91670e96f6b43a1dea702a8e08248ee973fe6faf57cbf8d5e27dfa",
+      "bytes": 838356,
       "density": 2,
       "sourcePixelsExact": false
     },
@@ -202,6 +202,158 @@
       "clipDomain": "cloudClip"
     },
     {
+      "id": "hub.r09.foliage.west-stair-fir",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_west-stair-fir",
+      "url": "/hub/r09/foliage-west-stair-fir.png",
+      "width": 11,
+      "height": 22,
+      "originalSceneXY": [
+        143,
+        177
+      ],
+      "sourceBounds": [
+        143,
+        177,
+        11,
+        22
+      ],
+      "pivotLocalPx": [
+        5.5,
+        22
+      ],
+      "anchorScenePx": [
+        148.5,
+        199
+      ],
+      "depthSourceY": 199,
+      "alphaPolicy": "binary",
+      "sha256": "8a01213d1d8398b7e81566929ecc27bfc98c20a9fbf3590775524d82a9c262c9",
+      "bytes": 703,
+      "kind": "tree",
+      "rootFraction": 0.23,
+      "gain": 1.5,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 167,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.courtyard-east-ivy",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_courtyard-east-ivy",
+      "url": "/hub/r09/foliage-courtyard-east-ivy.png",
+      "width": 15,
+      "height": 38,
+      "originalSceneXY": [
+        274,
+        158
+      ],
+      "sourceBounds": [
+        274,
+        158,
+        15,
+        38
+      ],
+      "pivotLocalPx": [
+        7.5,
+        38
+      ],
+      "anchorScenePx": [
+        281.5,
+        196
+      ],
+      "depthSourceY": 195,
+      "alphaPolicy": "binary",
+      "sha256": "f95c422f23afaf04a7813a960e98f2efeda9ccf726125756166becac8007323f",
+      "bytes": 1578,
+      "kind": "shrub",
+      "rootFraction": 0.3,
+      "gain": 1.4,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 423,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.aerology-west-ivy",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_aerology-west-ivy",
+      "url": "/hub/r09/foliage-aerology-west-ivy.png",
+      "width": 21,
+      "height": 44,
+      "originalSceneXY": [
+        347,
+        93
+      ],
+      "sourceBounds": [
+        347,
+        93,
+        21,
+        44
+      ],
+      "pivotLocalPx": [
+        10.5,
+        44
+      ],
+      "anchorScenePx": [
+        357.5,
+        137
+      ],
+      "depthSourceY": 138,
+      "alphaPolicy": "binary",
+      "sha256": "3b0666962a935b9a0a4b50fa2373ea5318cdde14fbe3c61f27b139370a141a8d",
+      "bytes": 1889,
+      "kind": "shrub",
+      "rootFraction": 0.24,
+      "gain": 1.4,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 508,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.east-walk-fir",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_east-walk-fir",
+      "url": "/hub/r09/foliage-east-walk-fir.png",
+      "width": 10,
+      "height": 16,
+      "originalSceneXY": [
+        372,
+        212
+      ],
+      "sourceBounds": [
+        372,
+        212,
+        10,
+        16
+      ],
+      "pivotLocalPx": [
+        5.0,
+        16
+      ],
+      "anchorScenePx": [
+        377.0,
+        228
+      ],
+      "depthSourceY": 229,
+      "alphaPolicy": "binary",
+      "sha256": "f398881f56bf95245f0c35003ede36c848c22a9d2f04ef5064705afa63fe9d4c",
+      "bytes": 507,
+      "kind": "tree",
+      "rootFraction": 0.23,
+      "gain": 1.5,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 102,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
       "id": "hub.r09.foliage.central-topiary",
       "role": "vegetation",
       "key": "hub_r09_foliage_central-topiary",
@@ -236,6 +388,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 169,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -273,6 +426,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 145,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -310,6 +464,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 168,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -347,6 +502,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 153,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -384,6 +540,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 1559,
+      "foregroundOccludesActors": true,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -607,7 +764,7 @@
         31
       ],
       "tint": "#9FBEB3",
-      "suggestedAlpha": 0.1,
+      "suggestedAlpha": 0.2,
       "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
@@ -3041,7 +3198,7 @@
     }
   },
   "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
-  "sourceSpecCanonicalSha256": "100ac3741d76e1b64b9bf4f145ec27ba9f1d72fc08284d8f07f6bc33bac74bba",
+  "sourceSpecCanonicalSha256": "129bfa1832d8548cf3050b686e1d1a40399caf36307564eca6b3403308bc92df",
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
     "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
@@ -3135,10 +3292,10 @@
     "sourceHashesVerified": true,
     "restRoundtripRgbaExact": true,
     "outsideMovingMaskChangedPixels": 0,
-    "hiddenPlateUsedPixels": 2255,
-    "hiddenPlateChangedPixels": 2255,
+    "hiddenPlateUsedPixels": 3455,
+    "hiddenPlateChangedPixels": 3455,
     "cloudPixels": 61,
-    "vegetationPieces": 5,
+    "vegetationPieces": 9,
     "cloudIslands": 1,
     "cloudSilhouetteClearanceVerified": true,
     "cloudClipPixels": 2352,
@@ -3148,7 +3305,7 @@
     "exportResampling": "box, architecture detail only",
     "paletteQuantization": false,
     "artAcceptanceImplied": false,
-    "pngBytes": 942968,
-    "decodedRgbaBytes": 4422280
+    "pngBytes": 936782,
+    "decodedRgbaBytes": 4429864
   }
 }

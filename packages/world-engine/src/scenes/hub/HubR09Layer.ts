@@ -3,13 +3,15 @@ import manifestJson from '../../assets/hub/r09-manifest.json';
 import { worldBridge, type DayPhase } from '../../bridge/WorldBridge';
 import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
 import { HubVegetationWindLayer } from './HubVegetationWindLayer';
+import { r09ActorDepth } from './r09ActorLayout';
 import { normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT } from './r01Environment';
-import { R09_ENTRANCES, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09Viewport } from './r09SceneModel';
+import { R09_ENTRANCES, R09_SOURCE_HEIGHT, R09_SOURCE_WIDTH, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09ViewMode, type R09Viewport } from './r09SceneModel';
 
 interface StationAsset {
   id: string; role: string; key: string; url: string; width: number; height: number;
   originalSceneXY: number[]; anchorScenePx: number[]; depthSourceY: number;
   density?: number;
+  foregroundOccludesActors?: boolean;
   motionReady?: boolean; wind?: { kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number };
   kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number;
 }
@@ -43,6 +45,7 @@ export class HubR09Layer {
   private readonly wind: HubVegetationWindLayer;
   private readonly unsubs: (() => void)[] = [];
   private viewport: R09Viewport;
+  private requestedViewMode?: R09ViewMode;
   private requestedCenterX?: number;
   private phase: DayPhase = 'day';
   private weather = normalizeR01Weather(undefined);
@@ -103,9 +106,9 @@ export class HubR09Layer {
       id: asset.id, textureKey: asset.key,
       anchorX: asset.anchorScenePx[0], anchorY: asset.anchorScenePx[1],
       width: asset.width, height: asset.height,
-      // The foreground plate contains the clean donor. Crowns must cover it,
-      // while the plate itself occludes people behind the stone balustrade.
-      depth: 31.1 + asset.depthSourceY / 1000,
+      // The front balustrade occludes actors. Plants on the open terraces
+      // sort by their planted foot, on the same depth scale as the actors.
+      depth: asset.foregroundOccludesActors ? SCENE_PLANE_DEPTHS['foreground-occluder'] + .1 : r09ActorDepth(asset.depthSourceY),
       kind: asset.wind?.kind ?? asset.kind ?? 'shrub',
       rootFraction: asset.wind?.rootFraction ?? asset.rootFraction ?? .25,
       gain: asset.wind?.gain ?? asset.gain ?? 1.5,
@@ -115,8 +118,14 @@ export class HubR09Layer {
         this.focused = buildingId; this.drawFocus();
       }),
       worldBridge.on<'left'|'right'>('ui:station_pan', (direction) => {
-        if (direction !== 'left' && direction !== 'right') return;
+        if (this.viewport.mode !== 'detail' || (direction !== 'left' && direction !== 'right')) return;
         this.requestedCenterX = r09Pan(this.viewport, direction).centerX; this.resize();
+      }),
+      worldBridge.on<R09ViewMode>('ui:station_view', (mode) => {
+        if ((mode !== 'overview' && mode !== 'detail') || mode === this.viewport.mode) return;
+        this.requestedViewMode = mode;
+        this.requestedCenterX = undefined;
+        this.resize();
       }),
       worldBridge.on<boolean>('ui:world_visible', (visible) => {
         if (this.paused !== !visible) this.previousFrameTime = undefined;
@@ -193,14 +202,15 @@ export class HubR09Layer {
       this.requestedCenterX = undefined;
     }
     this.viewport = r09Viewport(this.scene.scale.width, this.scene.scale.height,
-      ratio, this.requestedCenterX);
+      ratio, this.requestedViewMode, this.requestedCenterX);
     const view = this.viewport;
     // The projection already has integer offsets. Canvas's roundPixels adds a
     // half source pixel to each sprite size, opening seams between alpha planes.
     this.scene.cameras.main.setViewport(0, 0, view.bufferWidth, view.bufferHeight)
-      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(!this.canvasRenderer);
+      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(!this.canvasRenderer && view.mode === 'detail');
+    this.updateCameraBackground();
     worldBridge.emit('world:interaction_layout', r09EntranceTargets(view));
-    worldBridge.emit('world:station_view', { stationArt: 'r09', canPanLeft: view.canPanLeft, canPanRight: view.canPanRight });
+    worldBridge.emit('world:station_view', { stationArt: 'r09', mode: view.mode, canPanLeft: view.canPanLeft, canPanRight: view.canPanRight });
     this.drawFocus(); this.drawRain(); this.publishDiagnostics();
   }
 
@@ -219,10 +229,14 @@ export class HubR09Layer {
       lowPower: this.preferences.lowPower, paused: this.paused });
   }
 
+  private updateCameraBackground(): void {
+    this.scene.cameras.main.setBackgroundColor(this.viewport.mode === 'overview' || this.phase === 'night' ? 0x101e25 : 0x21382b);
+  }
+
   applyDayPhase(phase: DayPhase): void {
     this.phase = phase;
     const style = r09PhaseStyle(phase, this.weather.mode === 'rain');
-    this.scene.cameras.main.setBackgroundColor(this.phase === 'night' ? 0x101e25 : 0x21382b);
+    this.updateCameraBackground();
     for (const { asset, image } of this.images) this.tintPlane(image, asset.key, asset.role === 'sky' ? style.sky : asset.role === 'water' ? style.water : style.scenery);
     this.cloudImages.forEach(({ asset, image }) => this.tintPlane(image, asset.key, style.sky));
     this.wind.setTint(style.scenery, this.canvasRenderer ? this.getCanvasTint : undefined);
@@ -280,7 +294,11 @@ export class HubR09Layer {
     for (let i = 0; i < R01_RAIN_DROP_LIMIT; i++) {
       const drop = r01RainDrop(i, this.clockMs, width, height);
       const x = Math.round(left + drop.x), y = Math.round(top + drop.y);
-      this.rain.fillRect(x, y, 1, Math.max(2, Math.round(drop.length)));
+      const splashTop = Math.max(0, y);
+      const splashBottom = Math.min(R09_SOURCE_HEIGHT, y + Math.max(2, Math.round(drop.length)));
+      if (x >= 0 && x < R09_SOURCE_WIDTH && splashBottom > splashTop) {
+        this.rain.fillRect(x, splashTop, 1, splashBottom - splashTop);
+      }
     }
   }
 
@@ -302,7 +320,7 @@ export class HubR09Layer {
     const v = this.viewport;
     const diagnostic = {
       stationArt: 'r09', sourceCanvas: [512, 288],
-      camera: { zoom: v.zoom, offsetX: v.offsetX, offsetY: v.offsetY, pixelRatio: v.pixelRatio,
+      camera: { mode: v.mode, zoom: v.zoom, offsetX: v.offsetX, offsetY: v.offsetY, pixelRatio: v.pixelRatio,
         centerX: v.centerX, centerY: v.centerY, visibleSourceBounds: v.visibleSourceBounds,
         canPanLeft: v.canPanLeft, canPanRight: v.canPanRight },
       assets: { count: R09_STATION_MANIFEST.assets.length,

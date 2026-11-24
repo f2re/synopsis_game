@@ -34,7 +34,12 @@ class StationExportContract(unittest.TestCase):
         self.assertTrue(manifest["validation"]["restRoundtripRgbaExact"])
         self.assertEqual(manifest["validation"]["outsideMovingMaskChangedPixels"], 0)
         self.assertFalse(manifest["validation"]["artAcceptanceImplied"])
-        self.assertEqual(manifest["validation"]["vegetationPieces"], 5)
+        self.assertEqual(manifest["validation"]["vegetationPieces"], 9)
+        foliage = [asset for asset in manifest["assets"] if asset["role"] == "vegetation"]
+        self.assertEqual(
+            [asset["id"] for asset in foliage if asset["foregroundOccludesActors"]],
+            ["hub.r09.foliage.foreground-right"],
+        )
         for asset in manifest["assets"]:
             self.assertNotIn("sourceRect", asset, "A world-space box must not be confused with texture crop coordinates")
             density = asset.get("density", 1)
@@ -49,6 +54,9 @@ class StationExportContract(unittest.TestCase):
 
     def test_changed_provider_source_requires_new_pin(self):
         self.reject(lambda s: s["sources"]["master"].update(sha256="0" * 64), "checksum changed")
+
+    def test_aerology_equipment_cannot_cover_water_or_sky(self):
+        self.reject(lambda s: s["aerologyEquipment"].update(sourceBounds=[377, 0, 8, 22]), "stationary architecture")
 
     def test_provider_path_cannot_escape_selected_project_source(self):
         self.reject(lambda s: s["sources"]["hiddenPlate"].update(source="README.md"), "must stay inside")

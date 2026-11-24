@@ -1086,6 +1086,12 @@
       "asset_id": "b6a542f8-05fd-46a0-b362-7142c6dce4e3",
       "sha12": "8b1a74eb0c79",
       "label": "26063 · R09 · контраст материалов · этюд 01"
+    },
+    {
+      "id": "assets/source/environment/hub/r09/provider/aerology-radiosonde-01.png",
+      "asset_id": "ef6cca60-8d00-4544-8c4e-5e28cb48ba02",
+      "sha12": "5227a6d30451",
+      "label": "26063 · R09 · радиозонд и стойка аэрологии"
     }
   ]
 }
