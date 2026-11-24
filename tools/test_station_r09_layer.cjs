@@ -87,15 +87,21 @@ function makeScene() {
     scale: Object.assign(emitter(), { width: 1366, height: 768 }),
     textures: {
       exists(key) { return canvasTextures.has(key) || manifest.assets.some(asset => asset.key === key); },
-      get(key) { const asset = manifest.assets.find(asset => asset.key === key); assert.ok(asset, `A real manifest asset is required: ${key}`);
-        return { setFilter(value) { filters.push(value); }, getSourceImage() {
+      get(key) { const actorSheet = key === 'character:test-actor';
+        const asset = actorSheet ? { width: 64, height: 48 } : manifest.assets.find(asset => asset.key === key);
+        assert.ok(asset, `A real manifest asset is required: ${key}`);
+        return { setFilter(value) { filters.push(value); },
+          getFrameNames() { return actorSheet ? ['0', '1'] : []; },
+          get(name) { return { cutX: Number(name) * 32, cutY: 0, cutWidth: 32, cutHeight: 48 }; },
+          getSourceImage() {
           return { width: asset.width, height: asset.height, naturalWidth: asset.width, ownerDocument };
         } }; },
       createCanvas() { assert.fail('A pooled Canvas can already have an opaque backing context'); },
       addCanvas(key, canvas) {
         assert.equal(canvas.alpha, true);
         assert.ok(!canvasTextures.has(key), 'One canvas texture per plane or fixed light color');
-        const texture = { writes: 0, setFilter(value) { filters.push(value); }, getContext() {
+        const texture = { frames: [], writes: 0, add(...frame) { this.frames.push(frame); },
+          setFilter(value) { filters.push(value); }, getContext() {
           return { clearRect() {}, drawImage() {}, getImageData() { return { data: new Uint8ClampedArray([255, 255, 255, 255, 0, 0, 0, 0]) }; },
             putImageData(pixels) { texture.pixels = [...pixels.data]; texture.writes++; } };
         } };
@@ -330,6 +336,16 @@ canvasLayer.applyDayPhase('day'); assert.equal(waterTexture.writes, 1, 'Repeated
 canvasLayer.applyDayPhase('night');
 assert.equal(canvasScene.canvasTextures.get(phaseKey), waterTexture, 'Phase changes recolor the same texture');
 assert.deepEqual(waterTexture.pixels, colorChannels(sceneModel.r09PhaseStyle('night', true).water));
+const actorLighting = canvasLayer.getActorLighting();
+assert.ok(actorLighting.lamp > actorLighting.ambient, 'The archive lamp warms and lifts the nighttime actor palette');
+const ambientActorKey = actorLighting.resolveTexture('character:test-actor', actorLighting.ambient, 'actor-ambient');
+const warmActorKey = actorLighting.resolveTexture('character:test-actor', actorLighting.lamp, 'actor-lamp');
+const actorTexture = canvasScene.canvasTextures.get(ambientActorKey);
+assert.deepEqual(actorTexture.frames, [['0', 0, 0, 0, 32, 48], ['1', 0, 32, 0, 32, 48]]);
+assert.deepEqual(actorTexture.pixels, colorChannels(actorLighting.ambient));
+assert.deepEqual(canvasScene.canvasTextures.get(warmActorKey).pixels, colorChannels(actorLighting.lamp));
+assert.equal(actorLighting.resolveTexture('character:test-actor', actorLighting.ambient, 'actor-ambient'), ambientActorKey);
+assert.equal(actorTexture.writes, 1, 'Actor motion and clip reuse do not rewrite the tint sheet');
 canvasLayer.destroy();
 assert.equal(canvasScene.canvasTextures.size, 0);
 assert.equal(bridgeEvents.count(), 0);

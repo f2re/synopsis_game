@@ -5,10 +5,11 @@ import type { stationCrowdPlan } from './stationCrowd';
 export const R09_ACTOR_SPACE = { width: 512, height: 288 } as const;
 type Point = [number, number];
 type Placement = { point: Point; height: number; patrol?: [number, number] };
+type WalkPlan = Extract<ReturnType<typeof stationCrowdPlan>[number], { action: 'walk' }>;
 
 const PLACEMENTS: Record<string, Placement> = {
   'character.r01.observer': { point: [121, 217], height: 16, patrol: [116, 156] },
-  'npc.r01.vera': { point: [302, 218], height: 16 },
+  'npc.r01.vera': { point: [285, 205], height: 16 },
   'companion.r01.pascal': { point: [194, 247], height: 12 },
   'animal_squirrel': { point: [104, 229], height: 16 },
   'bird_tit': { point: [371, 229], height: 12 },
@@ -44,6 +45,20 @@ export function r09CharacterDefinition(source: WorldCharacterDefinition): WorldC
     displayHeight: placement.height,
     positions: { landscape: [...placement.point], portrait: [...placement.point] },
     motion,
+  };
+}
+
+/** Preserve the published foot line and spawn point, with an idle at each end. */
+export function r09PatrolPlan(actor: WorldCharacterDefinition): WalkPlan | undefined {
+  if (!actor.motion?.patrol) return undefined;
+  const [left, right] = actor.motion.patrol.landscape;
+  const [anchor, y] = actor.positions.landscape;
+  const [start, end] = actor.motion.direction === 'right' ? [left, right] : [right, left];
+  const msPerPixel = 1000 / actor.motion.speed;
+  return {
+    id: actor.id, costume: 0, visitors: 0, action: 'walk',
+    from: [start, y], to: [end, y],
+    travelMs: (right - left) * msPerPixel, offset: Math.abs(anchor - start) * msPerPixel,
   };
 }
 

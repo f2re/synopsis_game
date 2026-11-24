@@ -3,6 +3,7 @@ import manifestJson from '../../assets/hub/r09-manifest.json';
 import { worldBridge, type DayPhase } from '../../bridge/WorldBridge';
 import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
 import { HubVegetationWindLayer } from './HubVegetationWindLayer';
+import type { StationActorLighting } from './HubCharacterLayer';
 import { r09ActorDepth } from './r09ActorLayout';
 import { normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT } from './r01Environment';
 import { R09_ENTRANCES, R09_SOURCE_HEIGHT, R09_SOURCE_WIDTH, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09ViewMode, type R09Viewport } from './r09SceneModel';
@@ -150,14 +151,15 @@ export class HubR09Layer {
   }
 
   // Phaser's Canvas image path applies alpha and blending but ignores sprite tint.
-  // Retain one mutable variant per lit plane (and one per fixed receiver color).
+  // Reuse a mutable texture for each plane, fixed receiver or actor-light tier.
   private readonly getCanvasTint = (sourceKey: string, tint: number, variant = 'phase'): string => {
     if (tint === 0xffffff) return sourceKey;
     const key = `${sourceKey}_r09_canvas_${variant}`;
     let cached = this.canvasTints.get(key);
     if (cached?.tint === tint) return key;
-    const source = this.scene.textures.get(sourceKey).getSourceImage();
-    // R09 source keys are loaded as images through the station manifest.
+    const original = this.scene.textures.get(sourceKey);
+    const source = original.getSourceImage();
+    // The station planes and character sheets are loaded from PNG sources.
     if (!('naturalWidth' in source)) return sourceKey;
     if (!cached) {
       // Phaser's pool may return an old opaque game canvas. Context alpha
@@ -169,6 +171,10 @@ export class HubR09Layer {
       const texture = this.scene.textures.addCanvas(key, canvas);
       if (!texture) return sourceKey;
       texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+      for (const name of original.getFrameNames()) {
+        const { cutX, cutY, cutWidth, cutHeight } = original.get(name);
+        texture.add(name, 0, cutX, cutY, cutWidth, cutHeight);
+      }
       cached = { texture, tint };
       this.canvasTints.set(key, cached);
     }
@@ -270,7 +276,18 @@ export class HubR09Layer {
     this.weather = normalizeR01Weather(value); this.syncMotion(); this.applyDayPhase(this.phase);
   }
 
-  getSceneryTint(): number { return r09PhaseStyle(this.phase, this.weather.mode === 'rain').scenery; }
+  getActorLighting(): StationActorLighting {
+    const style = r09PhaseStyle(this.phase, this.weather.mode === 'rain');
+    const ambient = style.scenery;
+    const red = Math.round((ambient >> 16) * .82 + 255 * .18);
+    const green = Math.round((ambient >> 8 & 255) * .82 + 211 * .18);
+    const blue = Math.round((ambient & 255) * .82 + 148 * .18);
+    return {
+      ambient,
+      lamp: style.lights >= .7 ? red << 16 | green << 8 | blue : undefined,
+      resolveTexture: this.canvasRenderer ? this.getCanvasTint : undefined,
+    };
+  }
 
   getEnvironment() {
     const animated = this.weather.mode === 'rain' && this.weather.animate && !this.paused && !this.preferences.reducedMotion && !this.preferences.lowPower;

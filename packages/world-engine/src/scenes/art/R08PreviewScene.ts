@@ -219,7 +219,7 @@ export class R08PreviewScene extends Phaser.Scene {
     }
     for (const { region, image } of this.lightImages) image.setAlpha(region.suggestedAlpha * (style?.lightAlpha ?? Number(this.preferences.phase !== 'day')));
     this.observer?.setTint(style?.sceneryTint ?? (this.preferences.phase === 'day' ? 0xffffff : 0x9eafb5));
-    this.characters?.applyLighting(style?.sceneryTint ?? 0xffffff);
+    this.characters?.applyLighting({ ambient: style?.sceneryTint ?? 0xffffff });
     this.paintObserver();
     this.resize();
     this.publishDiagnostics();
