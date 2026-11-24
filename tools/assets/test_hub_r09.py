@@ -8,7 +8,7 @@ import json
 import unittest
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 import build_hub_r09 as exporter
 
@@ -91,6 +91,22 @@ class StationExportContract(unittest.TestCase):
     def test_native_sky_patch_preserves_the_vertical_colour_ramp(self):
         self.reject(lambda s: s["skyPatch"].update(destination=[354, 38]), "vertical colour ramp")
 
+    def test_sky_texture_and_scanlines_follow_the_western_silhouette(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        asset = next(a for a in manifest["assets"] if a["role"] == "sky")
+        alpha = Image.new("L", (512, 288))
+        with Image.open(io.BytesIO(files["sky.png"])) as image:
+            alpha.paste(image.getchannel("A"), tuple(asset["originalSceneXY"]))
+        trace = Image.new("L", (512, 288))
+        pen = ImageDraw.Draw(trace)
+        for y, left, right in manifest["domains"]["sky"]["rowSpans"]:
+            pen.line((left, y, right - 1, y), fill=255)
+        for x, y in ((2, 11), (23, 14), (34, 24), (96, 28), (124, 54), (128, 49), (144, 58)):
+            self.assertEqual(trace.getpixel((x, y)), 255, "Open sky keeps its own tint")
+        for x, y in ((40, 29), (47, 34), (55, 42), (58, 38), (65, 28)):
+            self.assertEqual(trace.getpixel((x, y)), 0, "Forest and radome keep their terrain tint")
+        self.assertEqual(alpha.tobytes(), trace.filter(ImageFilter.MaxFilter(3)).tobytes())
+
     def test_cloud_drift_cannot_change_y_or_wrap_onscreen(self):
         self.reject(lambda s: s["cloudSelection"]["islands"][0]["motion"].update(constantSourceY=40), "fixed-y integer-x")
         self.reject(lambda s: s["cloudSelection"]["islands"][0]["motion"].update(wrapOnlyWhenFullyOffscreen=False), "fixed-y integer-x")
@@ -112,7 +128,7 @@ class StationExportContract(unittest.TestCase):
         self.assertNotIn("maximumHorizontalDisplacement", cloud)
         self.assertEqual(cloud["motion"]["constantSourceY"], cloud["originalSceneXY"][1])
 
-    def test_water_scanlines_match_png_and_exclude_fir_and_shore(self):
+    def test_water_effect_excludes_fir_and_shore_and_plane_bleeds_under_adjacent_terrain(self):
         files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
         asset = next(a for a in manifest["assets"] if a["role"] == "water")
         actual = Image.new("L", (512, 288))
@@ -122,10 +138,12 @@ class StationExportContract(unittest.TestCase):
         draw = ImageDraw.Draw(geometry)
         for y, start, end_exclusive in manifest["domains"]["water"]["rowSpans"]:
             draw.line((start, y, end_exclusive - 1, y), fill=255)
-        self.assertEqual(actual.tobytes(), geometry.tobytes())
+        sky = exporter.polygon_mask(self.source["domains"]["sky"])
+        bleed = ImageChops.subtract(geometry.filter(ImageFilter.MaxFilter(3)), sky)
+        self.assertEqual(actual.tobytes(), bleed.tobytes())
         for point in ((464, 108), (460, 114), (466, 115), (478, 101), (319, 77)):
-            self.assertEqual(actual.getpixel(point), 0, f"A tree or shoreline pixel entered the water effect: {point}")
-        self.assertEqual(actual.getpixel((450, 102)), 255)
+            self.assertEqual(geometry.getpixel(point), 0, f"A tree or shoreline pixel entered the water effect: {point}")
+        self.assertEqual(geometry.getpixel((450, 102)), 255)
 
     def test_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop(self):
         files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
@@ -138,7 +156,8 @@ class StationExportContract(unittest.TestCase):
                 if asset["role"] == "clouds":
                     mask.paste(image.getchannel("A"), tuple(asset["originalSceneXY"]))
                 else:
-                    base.alpha_composite(image, tuple(asset["originalSceneXY"]))
+                    logical = image.resize(tuple(asset["sourceBounds"][2:]), Image.Resampling.NEAREST)
+                    base.alpha_composite(logical, tuple(asset["originalSceneXY"]))
         self.assertEqual(mask.getpixel((250, 20)), 0)
         self.assertEqual(mask.getpixel((300, 20)), 0)
         self.assertEqual(mask.getpixel((370, 40)), 255)

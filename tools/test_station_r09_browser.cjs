@@ -255,17 +255,60 @@ async function saveCanvas(page, output, name, report) {
   return { bytes, image: decodePng(bytes) };
 }
 
+async function checkWidePlaneSeams({ base, browser, report, output }) {
+  const page = await browser.newPage({ viewport: { width: 1914, height: 934 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  try {
+    await page.addInitScript(installDayFixture, '2026-11-24T11:00:00Z');
+    await page.addInitScript(() => {
+      localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'clear', soundEnabled: false, reducedMotion: true }));
+    });
+    await page.goto(candidateUrl(base)); await stationReady(page);
+    await page.waitForFunction(() => {
+      const value = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]')?.dataset.station || '{}');
+      return value.phase === 'day' && value.weather === 'clear';
+    });
+    const { image } = await saveCanvas(page, output, 'station-r09-wide-plane-seams', report);
+    let edgePixels = 0, longestRun = 0;
+    for (let y = 0; y < image.height; y++) {
+      let run = 0;
+      for (let x = 0; x < image.width; x++) {
+        const i = (y * image.width + x) * image.channels;
+        if (image.pixels[i] === 16 && image.pixels[i + 1] === 30 && image.pixels[i + 2] === 37) {
+          run++;
+          longestRun = Math.max(longestRun, run);
+          if (x === 0 || y === 0 || x === image.width - 1 || y === image.height - 1) edgePixels++;
+        } else run = 0;
+      }
+    }
+    assert.equal(edgePixels, 0, 'The wide scene covers all four canvas edges');
+    assert.ok(longestRun <= 2, `Wide sky and terrain layers expose a ${longestRun}px horizontal seam`);
+    report.cases.push({ name: 'station-r09-wide-plane-seams', edgePixels, longestRun, width: image.width, height: image.height });
+  } finally {
+    await page.close();
+  }
+}
+
 async function checkCanvasFallback({ base, browser, report, output }) {
   const context = await browser.newContext({ viewport: { width: 1910, height: 931 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  const manifest = JSON.parse(fs.readFileSync('packages/world-engine/src/assets/hub/r09-manifest.json', 'utf8'));
+  const cloud = manifest.assets.find(asset => asset.role === 'clouds');
+  const cloudSource = decodePng(fs.readFileSync(path.join('apps/web/public', cloud.url)));
   try {
-    await context.addInitScript(() => {
+    await context.addInitScript(({ width, height }) => {
       const original = HTMLCanvasElement.prototype.getContext;
-      HTMLCanvasElement.prototype.getContext = function (type, ...options) {
+      HTMLCanvasElement.prototype.getContext = function (type, options) {
         if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') return null;
-        return original.call(this, type, ...options);
+        // Exercise the same configuration a reused opaque Phaser canvas
+        // reports. A later call cannot change the first context's alpha.
+        const opaquePool = type === '2d' && options?.willReadFrequently && options.alpha === undefined;
+        const context = original.call(this, type, opaquePool ? { ...options, alpha: false } : options);
+        if (type === '2d' && context && this.width === width && this.height === height) {
+          globalThis.__stationR09CloudContext = context;
+        }
+        return context;
       };
       localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'rain', soundEnabled: false, reducedMotion: true }));
-    });
+    }, { width: cloud.width, height: cloud.height });
     await context.addInitScript(installDayFixture, '2026-10-27T22:00:00+03:00');
     const page = await context.newPage();
     page.on('pageerror', error => report.errors.push({ scenario: 'station-r09-canvas-rain-palette', message: error.message }));
@@ -293,8 +336,17 @@ async function checkCanvasFallback({ base, browser, report, output }) {
     assert.equal(measured.exposedBackgroundPixels, 0, 'Independent texture planes must meet with no camera background showing through the lake');
     assert.ok(measured.windowRgb[0] > measured.windowRgb[2] + 35, 'Night entrance glass receives warm light in Canvas');
     assert.ok(measured.waterRgb[2] > measured.waterRgb[0] + 25 && measured.waterRgb[2] < 130, 'Night rain visibly cools and dims the lake in Canvas');
+    assert.equal(cloudSource.channels, 4);
+    const tintedCloudAlpha = await page.evaluate(({ width, height }) => {
+      const cloud = globalThis.__stationR09CloudContext;
+      if (!cloud) return null;
+      return Array.from(cloud.getImageData(0, 0, width, height).data).filter((_, i) => i % 4 === 3);
+    }, { width: cloud.width, height: cloud.height });
+    const authoredCloudAlpha = Array.from(cloudSource.pixels).filter((_, i) => i % 4 === 3);
+    assert.deepEqual(tintedCloudAlpha, authoredCloudAlpha, 'Every tinted cloud texel keeps its authored transparency even with opaque pooled canvases');
     await saveCanvas(page, output, 'station-r09-canvas-night-rain', report);
-    report.cases.push({ name: 'station-r09-canvas-rain-palette', ...measured });
+    report.cases.push({ name: 'station-r09-canvas-rain-palette', ...measured,
+      cloudAlphaVerified: tintedCloudAlpha.length, transparentCloudTexels: tintedCloudAlpha.filter(alpha => alpha === 0).length });
   } finally {
     await context.close();
   }
@@ -438,11 +490,15 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
     const loadingElapsedMs = performance.now() - loadingBegan;
     const starting = await stationState(page);
     assert.equal(starting.camera.mode, viewport.width < viewport.height ? 'detail' : 'overview');
+    const { offsetX, offsetY, zoom, pixelRatio } = starting.camera;
+    assert.ok(offsetX <= .5 && offsetX + 512 * zoom >= viewport.width * pixelRatio - .5, 'Station fills the framebuffer horizontally');
+    assert.ok(offsetY <= .5 && offsetY + 288 * zoom >= viewport.height * pixelRatio - .5, 'Station fills the framebuffer vertically');
     await setStationView(page, 'overview');
     const first = await stationState(page);
     assert.deepEqual(first.sourceCanvas, [512, 288]);
     assert.equal(first.camera.mode, 'overview');
-    assert.deepEqual(first.camera.visibleSourceBounds, [0, 0, 512, 288]);
+    if (viewport.width < viewport.height) assert.deepEqual(first.camera.visibleSourceBounds, [0, 0, 512, 288]);
+    else assert.ok(first.camera.visibleSourceBounds[2] > 511.9, 'Landscape overview preserves the source width');
     await page.locator('[data-building-id="lab"]').waitFor();
     assert.equal(first.assets.count, manifest.assets.length, 'The current manifest is loaded by the real R09 renderer');
     assert.equal(first.assets.estimatedRgbaBytes, rgbaBytes);
@@ -563,6 +619,7 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
     await context.close();
   }
   await checkCanvasFallback({ base, browser, report, output });
+  await checkWidePlaneSeams({ base, browser, report, output });
 }
 
 module.exports = { runStationR09Checks, stationState, stationReady, visibleEntranceGeometry,

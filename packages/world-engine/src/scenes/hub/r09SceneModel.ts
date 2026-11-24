@@ -27,6 +27,10 @@ export interface R09Viewport {
 
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));
 const positive = (value: number, fallback: number) => Number.isFinite(value) && value > 0 ? value : fallback;
+const RADAR_DOME_TOP = 22;
+const FRACTIONAL_CAMERA_BIAS = .1;
+const TOUCH_TARGET_SIZE = 44;
+const LOWER_ENTRANCE_Y = Math.max(...R09_ENTRANCES.map(({ y }) => y));
 
 /** Both views share one camera and the original terrace coordinates. */
 export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRatio = 1, requestedMode?: R09ViewMode, requestedCenterX?: number): R09Viewport {
@@ -36,10 +40,10 @@ export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRati
   const cssWidth = width / ratio, cssHeight = height / ratio;
   const portrait = cssWidth / cssHeight < 1.1;
   const mode = requestedMode ?? (portrait ? 'detail' : 'overview');
-  if (mode === 'overview') {
-    const safeTop = cssHeight <= 440 ? 76 : 82;
-    const twoRowDock = cssWidth <= 760 && (cssWidth < cssHeight || cssHeight > 540);
-    const safeBottom = twoRowDock ? 160 : cssHeight <= 440 ? 76 : cssHeight <= 760 ? 88 : 98;
+  const safeTop = cssHeight <= 440 ? 72 : 82;
+  const twoRowDock = cssWidth <= 760 && (cssWidth < cssHeight || cssHeight > 540);
+  const safeBottom = twoRowDock ? 160 : cssHeight <= 440 ? 76 : cssHeight <= 760 ? 88 : 98;
+  if (mode === 'overview' && portrait) {
     const availableHeight = Math.max(1, height - (safeTop + safeBottom) * ratio);
     const fit = Math.min(width / R09_SOURCE_WIDTH, availableHeight / R09_SOURCE_HEIGHT);
     // Keep the 2× architecture texture on the backing-pixel grid where
@@ -47,7 +51,7 @@ export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRati
     const zoom = fit >= ratio ? Math.floor(fit * 2) / 2 : fit;
     // Fractional zoom can align independent texture edges with the center of
     // the same output pixel. Bias all planes together away from that tie.
-    const bias = Number.isInteger(zoom) ? 0 : .125;
+    const bias = Number.isInteger(zoom) ? 0 : FRACTIONAL_CAMERA_BIAS;
     const offsetX = Math.round((width - R09_SOURCE_WIDTH * zoom) / 2) + bias;
     const offsetY = Math.round(safeTop * ratio + (availableHeight - R09_SOURCE_HEIGHT * zoom) / 2) + bias;
     return { bufferWidth: width, bufferHeight: height, cssWidth, cssHeight, pixelRatio: ratio, mode,
@@ -55,33 +59,38 @@ export function r09Viewport(bufferWidth: number, bufferHeight: number, pixelRati
       portrait, safeTop, safeBottom, visibleSourceBounds: [0, 0, R09_SOURCE_WIDTH, R09_SOURCE_HEIGHT],
       canPanLeft: false, canPanRight: false };
   }
-  const zoom = Math.max(1, Math.ceil(Math.max(width / R09_SOURCE_WIDTH, height / R09_SOURCE_HEIGHT)));
+  const cover = Math.max(width / R09_SOURCE_WIDTH, height / R09_SOURCE_HEIGHT);
+  // Keep the low eastern doorway reachable above the phone's two-row dock.
+  const doorClearance = (safeBottom + TOUCH_TARGET_SIZE / 2) * ratio;
+  const minimumPortraitZoom = portrait ? doorClearance / (R09_SOURCE_HEIGHT - LOWER_ENTRANCE_Y) : 0;
+  const zoom = mode === 'detail' ? Math.max(1, Math.ceil(cover), Math.ceil(minimumPortraitZoom * 2) / 2) : cover;
   const visibleWidth = width / zoom, visibleHeight = height / zoom;
   const desiredX = requestedCenterX !== undefined && Number.isFinite(requestedCenterX) ? requestedCenterX : portrait ? 228 : 256;
-  const safeTop = cssHeight <= 440 ? 72 : 88;
-  const safeBottom = cssWidth <= 760 ? 160 : cssHeight <= 440 ? 76 : cssHeight <= 760 ? 88 : 108;
-  // A short landscape view opens on the courtyard; its west panorama also
-  // reveals the upper radar entrance. Portrait framing raises the terrace
-  // above the two-row dock, instead of moving any authored objects.
   const westEdge = visibleWidth / 2;
-  const desiredY = portrait ? 170 : cssHeight <= 560 ? (desiredX <= westEdge + 1 ? 165 : 190) : 144;
+  const portraitY = Math.max(170, LOWER_ENTRANCE_Y - visibleHeight / 2 + doorClearance / zoom);
+  const desiredY = portrait ? portraitY : cssHeight <= 560 ? (desiredX <= westEdge + 1 ? 165 : 190) : 144;
   const x = clamp(desiredX, visibleWidth / 2, R09_SOURCE_WIDTH - visibleWidth / 2);
-  const minY = visibleHeight / 2 - safeTop * ratio / zoom;
-  const maxY = R09_SOURCE_HEIGHT - visibleHeight / 2 + safeBottom * ratio / zoom;
-  const y = clamp(desiredY, minY, maxY);
-  const offsetX = Math.round(width / 2 - x * zoom);
-  const offsetY = Math.round(height / 2 - y * zoom);
+  // A landscape cover projects the whole authored width when it can. Keep
+  // the radar's roof in the upper frame and let the dock overlay lower paving.
+  const top = mode === 'overview' ? safeTop * ratio - RADAR_DOME_TOP * zoom : height / 2 - desiredY * zoom;
+  // Avoid a binary fraction here. At 1914 px, a 1/8 px bias places
+  // the y=224 foreground edge exactly at the center of a backing pixel.
+  const bias = Number.isInteger(zoom) ? 0 : FRACTIONAL_CAMERA_BIAS;
+  const offsetX = clamp(Math.round(width / 2 - x * zoom), width - R09_SOURCE_WIDTH * zoom, 0) + bias;
+  const offsetY = clamp(mode === 'detail' ? Math.floor(top) : Math.round(top), height - R09_SOURCE_HEIGHT * zoom, 0) + bias;
   const centerX = (width / 2 - offsetX) / zoom, centerY = (height / 2 - offsetY) / zoom;
-  const left = -offsetX / zoom, top = -offsetY / zoom;
+  const left = Math.max(0, -offsetX / zoom), upper = Math.max(0, -offsetY / zoom);
+  const right = Math.min(R09_SOURCE_WIDTH, (width - offsetX) / zoom);
+  const bottom = Math.min(R09_SOURCE_HEIGHT, (height - offsetY) / zoom);
   return { bufferWidth: width, bufferHeight: height, cssWidth, cssHeight, pixelRatio: ratio, mode,
     zoom, offsetX, offsetY, centerX, centerY, portrait, safeTop, safeBottom,
-    visibleSourceBounds: [left, top, visibleWidth, visibleHeight],
-    canPanLeft: left > 1 / zoom, canPanRight: left + visibleWidth < R09_SOURCE_WIDTH - 1 / zoom };
+    visibleSourceBounds: [left, upper, right - left, bottom - upper],
+    canPanLeft: left > 1 / zoom, canPanRight: right < R09_SOURCE_WIDTH - 1 / zoom };
 }
 
 export function r09Pan(viewport: R09Viewport, direction: 'left' | 'right'): R09Viewport {
-  if (viewport.mode !== 'detail') return viewport;
-  return r09Viewport(viewport.bufferWidth, viewport.bufferHeight, viewport.pixelRatio, 'detail',
+  if (!(direction === 'left' ? viewport.canPanLeft : viewport.canPanRight)) return viewport;
+  return r09Viewport(viewport.bufferWidth, viewport.bufferHeight, viewport.pixelRatio, viewport.mode,
     viewport.centerX + (direction === 'left' ? -1 : 1) * viewport.visibleSourceBounds[2] * .68);
 }
 
@@ -89,7 +98,7 @@ export function r09Pan(viewport: R09Viewport, direction: 'left' | 'right'): R09V
  * building. The panorama controls and route dock keep them reachable. */
 export function r09EntranceTargets(viewport: R09Viewport): WorldInteractionTarget[] {
   const { cssWidth, cssHeight, pixelRatio, zoom, offsetX, offsetY } = viewport;
-  const size = cssWidth > 1000 ? 48 : 44;
+  const size = cssWidth > 1000 ? 48 : TOUCH_TARGET_SIZE;
   const top = viewport.safeTop;
   const bottom = viewport.safeBottom;
   const targets: WorldInteractionTarget[] = [];
@@ -109,7 +118,7 @@ const PHASES: Record<DayPhase, R09PhaseStyle> = {
   dawn: { sky: 0xe4bdd1, scenery: 0xd8d0da, water: 0xc5bbdb, lights: .7, stars: 0 },
   golden_hour: { sky: 0xffd7b2, scenery: 0xffe7c9, water: 0xf0d9c6, lights: .78, stars: 0 },
   twilight: { sky: 0x7886ba, scenery: 0x9ca5c1, water: 0x7f99ba, lights: 1.05, stars: .2 },
-  night: { sky: 0x364974, scenery: 0x697da3, water: 0x526f96, lights: 1.25, stars: .65 },
+  night: { sky: 0x303f71, scenery: 0x7785a4, water: 0x5578a6, lights: 1.32, stars: .65 },
   white_nights: { sky: 0x9db6cc, scenery: 0xabbcd2, water: 0x93b1c6, lights: .85, stars: .08 },
 };
 function multiplyTint(left: number, right: number): number {

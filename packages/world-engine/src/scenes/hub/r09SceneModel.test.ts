@@ -2,12 +2,11 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { R09_ENTRANCES, r09Viewport, r09Pan, r09EntranceTargets, r09PhaseStyle, r09CloudOffset } from './r09SceneModel.ts';
 
-test('the overview frames the entire painting below the HUD', () => {
-  for (const [w, h] of [[1910,931],[1366,768],[390,844],[844,390],[320,568],[2560,1440]]) for (const dpr of [1,2]) {
+test('portrait overview frames the entire painting below the HUD on request', () => {
+  for (const [w, h] of [[390,844],[320,568]]) for (const dpr of [1,2]) {
     const v = r09Viewport(w*dpr,h*dpr,dpr,'overview');
     assert.equal(v.mode, 'overview');
     assert.deepEqual(v.visibleSourceBounds, [0,0,512,288]);
-    assert.ok(Number.isInteger(v.offsetX * 8) && Number.isInteger(v.offsetY * 8));
     assert.ok(v.offsetX >= 0 && v.offsetX + 512 * v.zoom <= v.bufferWidth + .5);
     assert.ok(v.offsetY >= v.safeTop * dpr - .5 && v.offsetY + 288 * v.zoom <= v.bufferHeight - v.safeBottom * dpr + .5);
     const targets = r09EntranceTargets(v);
@@ -19,16 +18,33 @@ test('the overview frames the entire painting below the HUD', () => {
     assert.equal(v.canPanLeft || v.canPanRight, false);
   }
 });
-test('landscape starts in overview and portrait starts at a readable detail scale', () => {
-  assert.equal(r09Viewport(1910,931).mode, 'overview');
-  assert.equal(r09Viewport(1366,768).mode, 'overview');
-  assert.equal(r09Viewport(844,390).mode, 'overview');
-  assert.equal(r09Viewport(390,844).mode, 'detail');
+test('the default station covers every pixel center at wide and narrow sizes', () => {
+  for (const [w, h] of [[1914,934],[1910,934],[1366,768],[390,844],[844,390],[320,568],[1024,768],[2560,1440]]) {
+    for (const dpr of [1,2]) {
+      const v = r09Viewport(w*dpr,h*dpr,dpr);
+      assert.equal(v.mode, w < h ? 'detail' : 'overview');
+      assert.ok(v.offsetX <= .5 && v.offsetX + 512 * v.zoom >= v.bufferWidth - .5);
+      assert.ok(v.offsetY <= .5 && v.offsetY + 288 * v.zoom >= v.bufferHeight - .5);
+    }
+  }
 });
-test('detail covers every supported buffer on the native camera grid', () => {
+test('the wide start keeps the dome, plaza and aerology in one proportionate frame', () => {
+  for (const width of [1914,1910]) {
+    const v = r09Viewport(width,934);
+    assert.equal(v.zoom, width / 512);
+    assert.ok(v.offsetY + 22 * v.zoom >= 82);
+    const foregroundEdge = v.offsetY + 224 * v.zoom;
+    assert.ok(Math.abs(foregroundEdge % 1 - .5) > .01);
+    assert.ok(v.visibleSourceBounds[2] > 511.9);
+    assert.equal(v.canPanLeft || v.canPanRight, false);
+    const present = r09EntranceTargets(v).map(({ id }) => id);
+    for (const id of ['radar', 'lab', 'codepost', 'archive']) assert.ok(present.includes(id));
+  }
+});
+test('detail covers every supported buffer with a whole or half backing-pixel scale', () => {
   for (const [w, h] of [[1366,768],[390,844],[844,390],[320,568],[2560,1440]]) for (const dpr of [1,2]) {
     const v = r09Viewport(w*dpr,h*dpr,dpr,'detail');
-    assert.ok(Number.isInteger(v.zoom)); assert.ok(Number.isInteger(v.offsetX)); assert.ok(Number.isInteger(v.offsetY));
+    assert.ok(Number.isInteger(v.zoom * 2));
     const [x,y,vw,vh]=v.visibleSourceBounds;
     const visibleTop=y+v.safeTop*dpr/v.zoom;
     const visibleBottom=y+vh-v.safeBottom*dpr/v.zoom;

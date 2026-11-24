@@ -397,7 +397,22 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
     equipment_art = equipment_source.crop(equipment_crop)
     equipment_art = equipment_art.resize((ew * 2, eh * 2), Image.Resampling.BOX)
     equipment_art = ImageChops.multiply(equipment_art, Image.new("RGBA", equipment_art.size, (201, 226, 219, 224)))
+    # At fractional zoom the renderer can sample opposite sides of an alpha
+    # edge in two independently cropped planes. Extend only the lower plane
+    # by one logical texel with the same stationary source pixels underneath.
+    # The authored domains still own effects, silhouettes and the roundtrip.
+    underpaint = {
+        "sky": sky_domain.filter(ImageFilter.MaxFilter(3)),
+        "water": ImageChops.lighter(water_domain, ImageChops.multiply(
+            water_domain.filter(ImageFilter.MaxFilter(3)), ImageChops.lighter(architecture_domain, front_domain),
+        )),
+        "architecture-ground": ImageChops.lighter(architecture_domain, ImageChops.multiply(
+            architecture_domain.filter(ImageFilter.MaxFilter(3)), front_domain,
+        )),
+    }
     for asset_id, role, filename, image, depth in planes:
+        if role in underpaint:
+            image = cutout(base, underpaint[role])
         extra = {"sourcePixelsExact": role == "clouds"}
         if role == "clouds":
             extra["motionReady"] = spec["review"].get("cloudMotionReady", False)

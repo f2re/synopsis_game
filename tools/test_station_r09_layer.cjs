@@ -52,6 +52,17 @@ const { HubR09Layer } = load('scenes/hub/HubR09Layer.ts', {
 function makeScene() {
   const objects = [], masks = [], filters = [], registry = new Map([['world.pixelRatio', 1], ['ui.world_visible', true]]);
   const canvasTextures = new Map();
+  const ownerDocument = {
+    createElement(tag) {
+      assert.equal(tag, 'canvas');
+      return { getContext(kind, options) {
+        assert.equal(kind, '2d');
+        assert.equal(options.alpha, true, 'Tint canvas alpha is selected before Phaser initializes its context');
+        this.alpha = options.alpha;
+        return {};
+      } };
+    },
+  };
   const image = (x = 0, y = 0, key) => {
     const value = { x, y, key, destroyed: 0, width: 0, rectangles: [],
       setOrigin(x, y) { this.origin = [x, y]; return this; },
@@ -77,8 +88,12 @@ function makeScene() {
     textures: {
       exists(key) { return canvasTextures.has(key) || manifest.assets.some(asset => asset.key === key); },
       get(key) { const asset = manifest.assets.find(asset => asset.key === key); assert.ok(asset, `A real manifest asset is required: ${key}`);
-        return { setFilter(value) { filters.push(value); }, getSourceImage() { return { width: asset.width, height: asset.height, naturalWidth: asset.width }; } }; },
-      createCanvas(key) {
+        return { setFilter(value) { filters.push(value); }, getSourceImage() {
+          return { width: asset.width, height: asset.height, naturalWidth: asset.width, ownerDocument };
+        } }; },
+      createCanvas() { assert.fail('A pooled Canvas can already have an opaque backing context'); },
+      addCanvas(key, canvas) {
+        assert.equal(canvas.alpha, true);
         assert.ok(!canvasTextures.has(key), 'One canvas texture per plane or fixed light color');
         const texture = { writes: 0, setFilter(value) { filters.push(value); }, getContext() {
           return { clearRect() {}, drawImage() {}, getImageData() { return { data: new Uint8ClampedArray([255, 255, 255, 255, 0, 0, 0, 0]) }; },
@@ -154,7 +169,8 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.ok(windDepth('foreground-right') > 31, 'The near shrubs paint over the stationary balustrade');
   assert.equal(first.motion.foliage.rootDisplacement, 0); assert.ok(scene.filters.every(value => value === phaser.Textures.FilterMode.NEAREST));
   assert.equal(first.camera.mode, 'overview');
-  assert.deepEqual(first.camera.visibleSourceBounds, [0, 0, 512, 288]);
+  assert.ok(first.camera.visibleSourceBounds[2] > 511.9);
+  assert.ok(first.camera.offsetY <= .5 && first.camera.offsetY + first.camera.zoom * 288 >= 767.5);
   assert.equal(scene.cameras.main.round, false);
   assert.equal(scene.masks.length, 3, 'Cloud, stars and water have distinct reviewed masks');
   const clouds = manifest.assets.filter(asset => asset.role === 'clouds').map(asset => ({ asset, image: scene.objects.find(value => value.key === asset.key) }));
@@ -169,7 +185,7 @@ for (let cycle = 0; cycle < 3; cycle++) {
 
   const initialCamera = first.camera;
   bridge.emit('ui:station_pan', 'right');
-  assert.deepEqual(snapshot().camera, initialCamera, 'The complete overview does not pan');
+  assert.deepEqual(snapshot().camera, initialCamera, 'A panorama showing the full source width does not pan');
   bridge.emit('ui:station_view', 'detail');
   const detailCamera = snapshot().camera;
   assert.ok(scene.cameras.main.round && Number.isInteger(scene.cameras.main.zoom));
@@ -182,7 +198,7 @@ for (let cycle = 0; cycle < 3; cycle++) {
   }
   assert.deepEqual(snapshot().camera, detailCamera, 'Returning to desktop restores the detail camera after a real pan');
   bridge.emit('ui:station_view', 'overview');
-  assert.deepEqual(snapshot().camera, initialCamera, 'The overview always restores the complete composition');
+  assert.deepEqual(snapshot().camera, initialCamera, 'The overview always restores its fullscreen composition');
   assert.deepEqual(fixed.map(value => [value.key, value.x, value.y]), coordinates, 'Pan and resize leave every static source object planted');
 
   const diagnosticCount = diagnostics.length;

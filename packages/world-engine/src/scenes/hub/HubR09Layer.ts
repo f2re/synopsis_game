@@ -27,6 +27,13 @@ const SCENE_PLANE_DEPTHS: Record<string, number> = {
   sky: 0, water: 1, 'architecture-ground': 3, 'foreground-occluder': 31,
 };
 
+// Sparse native pixels with irregular spacing and three brightness levels.
+const STAR_GROUPS = [
+  { opacity: .42, points: [[156, 28], [193, 17], [228, 35], [254, 29], [284, 20], [298, 47], [333, 30], [407, 26], [468, 21]] },
+  { opacity: .66, points: [[174, 40], [217, 22], [271, 39], [319, 14], [342, 35], [440, 29]] },
+  { opacity: 1, points: [[238, 17], [299, 32], [401, 17]] },
+];
+
 /** A single authored 512×288 terrace. Only extracted organic pixels move;
  * the ground, architecture, contact edges and camera registration are shared. */
 export class HubR09Layer {
@@ -118,8 +125,10 @@ export class HubR09Layer {
         this.focused = buildingId; this.drawFocus();
       }),
       worldBridge.on<'left'|'right'>('ui:station_pan', (direction) => {
-        if (this.viewport.mode !== 'detail' || (direction !== 'left' && direction !== 'right')) return;
-        this.requestedCenterX = r09Pan(this.viewport, direction).centerX; this.resize();
+        if (direction !== 'left' && direction !== 'right') return;
+        const next = r09Pan(this.viewport, direction);
+        if (next === this.viewport) return;
+        this.requestedCenterX = next.centerX; this.resize();
       }),
       worldBridge.on<R09ViewMode>('ui:station_view', (mode) => {
         if ((mode !== 'overview' && mode !== 'detail') || mode === this.viewport.mode) return;
@@ -151,7 +160,13 @@ export class HubR09Layer {
     // R09 source keys are loaded as images through the station manifest.
     if (!('naturalWidth' in source)) return sourceKey;
     if (!cached) {
-      const texture = this.scene.textures.createCanvas(key, source.width, source.height);
+      // Phaser's pool may return an old opaque game canvas. Context alpha
+      // cannot be changed after the first getContext call, even on resize.
+      const canvas = source.ownerDocument.createElement('canvas');
+      canvas.width = source.width;
+      canvas.height = source.height;
+      if (!canvas.getContext('2d', { alpha: true, willReadFrequently: true })) return sourceKey;
+      const texture = this.scene.textures.addCanvas(key, canvas);
       if (!texture) return sourceKey;
       texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
       cached = { texture, tint };
@@ -204,10 +219,10 @@ export class HubR09Layer {
     this.viewport = r09Viewport(this.scene.scale.width, this.scene.scale.height,
       ratio, this.requestedViewMode, this.requestedCenterX);
     const view = this.viewport;
-    // The projection already has integer offsets. Canvas's roundPixels adds a
-    // half source pixel to each sprite size, opening seams between alpha planes.
+    // Canvas's roundPixels adds half a source pixel to each sprite size.
+    // Fractional scales also need a shared unsnapped projection across planes.
     this.scene.cameras.main.setViewport(0, 0, view.bufferWidth, view.bufferHeight)
-      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(!this.canvasRenderer && view.mode === 'detail');
+      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(!this.canvasRenderer && view.mode === 'detail' && Number.isInteger(view.zoom));
     this.updateCameraBackground();
     worldBridge.emit('world:interaction_layout', r09EntranceTargets(view));
     worldBridge.emit('world:station_view', { stationArt: 'r09', mode: view.mode, canPanLeft: view.canPanLeft, canPanRight: view.canPanRight });
@@ -241,9 +256,12 @@ export class HubR09Layer {
     this.cloudImages.forEach(({ asset, image }) => this.tintPlane(image, asset.key, style.sky));
     this.wind.setTint(style.scenery, this.canvasRenderer ? this.getCanvasTint : undefined);
     this.receivers.forEach(({ image, alpha }) => image.setAlpha(Math.min(.65, alpha * style.lights)));
-    this.stars.clear().fillStyle(0xe4edf2, style.stars);
+    this.stars.clear();
     if (style.stars > 0) {
-      for (let i = 0; i < 26; i++) this.stars.fillRect(164 + (i * 73) % 241, (i * 17 + 3) % 35, 1, 1);
+      for (const { opacity, points } of STAR_GROUPS) {
+        this.stars.fillStyle(0xd9e6f4, style.stars * opacity);
+        for (const [x, y] of points) this.stars.fillRect(x, y, 1, 1);
+      }
     }
     this.drawAmbient(this.preferences.reducedMotion); this.drawRain(); this.publishDiagnostics();
   }
