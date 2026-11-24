@@ -247,7 +247,8 @@ export class HubCharacterLayer {
       this.errors.push(`Frame geometry differs from manifest: ${clip.assetId}`);
       return false;
     }
-    texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+    // Phaser reuploads the sheet even when setFilter receives its current mode.
+    if (source.scaleMode !== Phaser.Textures.FilterMode.NEAREST) texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
     return true;
   }
 

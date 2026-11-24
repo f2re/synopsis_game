@@ -46,6 +46,7 @@ export class HubR09Layer {
   private readonly cloudImages: { asset: StationAsset; image: Phaser.GameObjects.Image; offset: number }[] = [];
   private readonly receivers: { image: Phaser.GameObjects.Image; alpha: number }[] = [];
   private readonly canvasRenderer: boolean;
+  private readonly webglClear?: { config: { backgroundColor: Phaser.Display.Color }; original: Phaser.Display.Color };
   private readonly canvasTints = new Map<string, { texture: Phaser.Textures.CanvasTexture; tint: number }>();
   private readonly maskGraphics: Phaser.GameObjects.Graphics[] = [];
   private readonly masks: Phaser.Display.Masks.GeometryMask[] = [];
@@ -72,7 +73,12 @@ export class HubR09Layer {
   private disposed = false;
 
   constructor(private readonly scene: Phaser.Scene) {
-    this.canvasRenderer = scene.game.renderer.type === Phaser.CANVAS;
+    const renderer = scene.game.renderer;
+    this.canvasRenderer = renderer.type === Phaser.CANVAS;
+    if (renderer.type === Phaser.WEBGL) {
+      const config = renderer.config as { backgroundColor: Phaser.Display.Color };
+      this.webglClear = { config, original: config.backgroundColor };
+    }
     this.viewport = r09Viewport(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
     for (const asset of R09_STATION_MANIFEST.assets) {
       scene.textures.get(asset.key).setFilter(Phaser.Textures.FilterMode.NEAREST);
@@ -265,7 +271,14 @@ export class HubR09Layer {
   }
 
   private updateCameraBackground(): void {
-    this.scene.cameras.main.setBackgroundColor(this.viewport.mode === 'overview' || this.phase === 'night' ? 0x101e25 : 0x21382b);
+    const color = this.viewport.mode === 'overview' || this.phase === 'night' ? 0x101e25 : 0x21382b;
+    if (this.webglClear) {
+      // The station camera covers the framebuffer. Fill its background with
+      // the existing WebGL clear instead of painting a second full-size quad.
+      this.webglClear.config.backgroundColor = Phaser.Display.Color.IntegerToColor(color);
+      return;
+    }
+    this.scene.cameras.main.setBackgroundColor(color);
   }
 
   applyDayPhase(phase: DayPhase): void {
@@ -427,6 +440,7 @@ export class HubR09Layer {
   destroy(): void {
     if (this.disposed) return;
     this.disposed = true;
+    if (this.webglClear) this.webglClear.config.backgroundColor = this.webglClear.original;
     this.scene.scale.off(Phaser.Scale.Events.RESIZE, this.resize, this);
     this.scene.events.off('ui:preferences', this.onPreferences, this);
     this.unsubs.forEach((off) => off()); this.wind.destroy();

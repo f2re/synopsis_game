@@ -34,7 +34,8 @@ const bridge = {
   on(event, fn) { bridgeEvents.on(event, fn); return () => bridgeEvents.off(event, fn); },
   emit(event, value) { if (event === 'world:station_diagnostics') diagnostics.push(value); bridgeEvents.emit(event, value); },
 };
-const phaser = { CANVAS: 1, WEBGL: 2, Textures: { FilterMode: { NEAREST: 1 } }, BlendModes: { ADD: 1 }, Scale: { Events: { RESIZE: 'resize' } } };
+const phaser = { CANVAS: 1, WEBGL: 2, Textures: { FilterMode: { NEAREST: 1 } }, BlendModes: { ADD: 1 }, Scale: { Events: { RESIZE: 'resize' } },
+  Display: { Color: { IntegerToColor: rgb => ({ rgb }) } } };
 const wind = load('scenes/hub/r09WindModel.ts');
 const windLayer = load('scenes/hub/HubVegetationWindLayer.ts', { phaser, './r09WindModel': wind });
 const sceneModel = load('scenes/hub/r09SceneModel.ts');
@@ -85,7 +86,8 @@ function makeScene() {
     };
     objects.push(value); return value;
   };
-  const scene = { objects, masks, filters, registry, canvasTextures, events: emitter(), game: { renderer: { type: phaser.WEBGL } },
+  const scene = { objects, masks, filters, registry, canvasTextures, events: emitter(),
+    game: { renderer: { type: phaser.WEBGL, config: { backgroundColor: { rgb: 0x08152f } } } },
     scale: Object.assign(emitter(), { width: 1366, height: 768 }),
     textures: {
       exists(key) { return canvasTextures.has(key) || manifest.assets.some(asset => asset.key === key); },
@@ -184,6 +186,8 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.ok(first.camera.visibleSourceBounds[2] > 511.9);
   assert.ok(first.camera.offsetY <= .5 && first.camera.offsetY + first.camera.zoom * 288 >= 767.5);
   assert.equal(scene.cameras.main.round, false);
+  assert.equal(scene.game.renderer.config.backgroundColor.rgb, 0x101e25);
+  assert.equal(scene.cameras.main.background, undefined, 'WebGL does not paint a second full-frame background');
   assert.equal(scene.masks.length, 3, 'Cloud, stars and water have distinct reviewed masks');
   const clouds = manifest.assets.filter(asset => asset.role === 'clouds').map(asset => ({ asset, image: scene.objects.find(value => value.key === asset.key) }));
   assert.equal(clouds.length, 1, 'Only the reviewed small cloud island is movable');
@@ -249,6 +253,7 @@ for (let cycle = 0; cycle < 3; cycle++) {
   const stepReceiver = inspectStepReceiver(scene, layer);
   const beforeNightGeometry = geometry();
   layer.applyDayPhase('night');
+  assert.equal(scene.game.renderer.config.backgroundColor.rgb, 0x101e25);
   assert.deepEqual(lit.map(value => value.key), dayKeys.map(key => nightKeys.get(key)), 'WebGL switches to the approved registered plates');
   assert.deepEqual(geometry(), beforeNightGeometry, 'The relight keeps positions, scale, occlusion and source crops');
   const scenery = scene.objects.find(value => value.key === nightKeys.get(architecture.key));
@@ -266,6 +271,7 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.equal(scene.objects.length, created, 'Lighting never adds render objects');
 
   layer.destroy(); layer.destroy();
+  assert.equal(scene.game.renderer.config.backgroundColor.rgb, 0x08152f, 'Leaving the station restores the game clear color');
   assert.ok(scene.objects.every(value => value.destroyed === 1), 'Every image and graphics object is released exactly once');
   assert.ok(scene.masks.every(value => value.destroyed === 1), 'Every geometry mask is released exactly once');
   assert.equal(scene.events.count(), 0); assert.equal(scene.scale.count(), 0); assert.equal(bridgeEvents.count(), 0);
