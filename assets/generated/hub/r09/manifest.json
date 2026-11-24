@@ -102,8 +102,8 @@
       "role": "architecture-ground",
       "key": "hub_r09_architecture-ground",
       "url": "/hub/r09/architecture-ground.png",
-      "width": 512,
-      "height": 278,
+      "width": 1024,
+      "height": 556,
       "originalSceneXY": [
         0,
         10
@@ -115,8 +115,8 @@
         278
       ],
       "pivotLocalPx": [
-        256.0,
-        278
+        512.0,
+        556
       ],
       "anchorScenePx": [
         256.0,
@@ -124,8 +124,9 @@
       ],
       "depthSourceY": 2,
       "alphaPolicy": "binary",
-      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
-      "bytes": 251757,
+      "sha256": "c7cd96e7d07f7803039ef87bc555454cef727d320da70f34528323454aa0f40d",
+      "bytes": 849219,
+      "density": 2,
       "sourcePixelsExact": false
     },
     {
@@ -3040,7 +3041,7 @@
     }
   },
   "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
-  "sourceSpecCanonicalSha256": "e7c12f56c50faccf610ed77c091552d15badd29a8a7ef0ea51fa086719eea6cc",
+  "sourceSpecCanonicalSha256": "100ac3741d76e1b64b9bf4f145ec27ba9f1d72fc08284d8f07f6bc33bac74bba",
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
     "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
@@ -3144,10 +3145,10 @@
     "cloudClipDomain": "cloudClip",
     "skyPatchMode": "native-sky-region-copy",
     "masterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
-    "exportResampling": "none",
+    "exportResampling": "box, architecture detail only",
     "paletteQuantization": false,
     "artAcceptanceImplied": false,
-    "pngBytes": 345506,
-    "decodedRgbaBytes": 2714248
+    "pngBytes": 942968,
+    "decodedRgbaBytes": 4422280
   }
 }

@@ -34,7 +34,7 @@ const bridge = {
   on(event, fn) { bridgeEvents.on(event, fn); return () => bridgeEvents.off(event, fn); },
   emit(event, value) { if (event === 'world:station_diagnostics') diagnostics.push(value); bridgeEvents.emit(event, value); },
 };
-const phaser = { Textures: { FilterMode: { NEAREST: 0 } }, BlendModes: { ADD: 1 }, Scale: { Events: { RESIZE: 'resize' } } };
+const phaser = { CANVAS: 1, WEBGL: 2, Textures: { FilterMode: { NEAREST: 1 } }, BlendModes: { ADD: 1 }, Scale: { Events: { RESIZE: 'resize' } } };
 const wind = load('scenes/hub/r09WindModel.ts');
 const windLayer = load('scenes/hub/HubVegetationWindLayer.ts', { phaser, './r09WindModel': wind });
 const sceneModel = load('scenes/hub/r09SceneModel.ts');
@@ -50,10 +50,12 @@ const { HubR09Layer } = load('scenes/hub/HubR09Layer.ts', {
 
 function makeScene() {
   const objects = [], masks = [], filters = [], registry = new Map([['world.pixelRatio', 1], ['ui.world_visible', true]]);
+  const canvasTextures = new Map();
   const image = (x = 0, y = 0, key) => {
     const value = { x, y, key, destroyed: 0, width: 0, rectangles: [],
       setOrigin(x, y) { this.origin = [x, y]; return this; },
       setDepth(v) { this.depth = v; return this; }, setTint(...values) { this.tint = values[0]; this.tintArguments = values; return this; },
+      setTexture(key) { this.key = key; return this; },
       setAlpha(...values) { this.alpha = values[0]; this.alphaArguments = values; return this; }, setBlendMode(v) { this.blend = v; return this; },
       setScale(x, y) { this.scale = [x, y]; return this; },
       setDisplayOrigin(x, y) { this.displayOrigin = [x, y]; return this; },
@@ -69,12 +71,22 @@ function makeScene() {
     };
     objects.push(value); return value;
   };
-  const scene = { objects, masks, filters, registry, events: emitter(),
+  const scene = { objects, masks, filters, registry, canvasTextures, events: emitter(), game: { renderer: { type: phaser.WEBGL } },
     scale: Object.assign(emitter(), { width: 1366, height: 768 }),
     textures: {
-      exists(key) { return manifest.assets.some(asset => asset.key === key); },
+      exists(key) { return canvasTextures.has(key) || manifest.assets.some(asset => asset.key === key); },
       get(key) { const asset = manifest.assets.find(asset => asset.key === key); assert.ok(asset, `A real manifest asset is required: ${key}`);
-        return { setFilter(value) { filters.push(value); }, getSourceImage() { return { width: asset.width, height: asset.height }; } }; },
+        return { setFilter(value) { filters.push(value); }, getSourceImage() { return { width: asset.width, height: asset.height, naturalWidth: asset.width }; } }; },
+      createCanvas(key) {
+        assert.ok(!canvasTextures.has(key), 'One canvas texture per plane or fixed light color');
+        const texture = { writes: 0, setFilter(value) { filters.push(value); }, getContext() {
+          return { clearRect() {}, drawImage() {}, getImageData() { return { data: new Uint8ClampedArray([255, 255, 255, 255, 0, 0, 0, 0]) }; },
+            putImageData(pixels) { texture.pixels = [...pixels.data]; texture.writes++; } };
+        } };
+        canvasTextures.set(key, texture);
+        return texture;
+      },
+      remove(key) { assert.ok(canvasTextures.delete(key), 'Every tinted texture is released once'); },
     },
     add: { image, graphics: () => image() },
     cameras: { main: {
@@ -119,9 +131,15 @@ for (let cycle = 0; cycle < 3; cycle++) {
   const first = snapshot(), created = scene.objects.length;
   const fixed = scene.objects.filter(value => manifest.assets.some(asset => ['sky', 'water', 'architecture-ground', 'foreground-occluder'].includes(asset.role) && asset.key === value.key));
   const coordinates = fixed.map(value => [value.key, value.x, value.y]);
+  const architecture = manifest.assets.find(asset => asset.role === 'architecture-ground');
+  const architectureImages = fixed.filter(image => image.key === architecture.key);
+  assert.equal(architectureImages.length, 1, 'Draw the architecture with one quad');
+  assert.deepEqual([architectureImages[0].x, architectureImages[0].y], architecture.originalSceneXY);
+  assert.equal(architectureImages[0].scale[0], 1 / architecture.density);
+  assert.equal(architectureImages[0].depth, 3);
   assert.equal(first.stationArt, 'r09'); assert.deepEqual(first.sourceCanvas, [512, 288]);
   assert.equal(first.assets.count, manifest.assets.length); assert.equal(first.motion.foliage.placements, 5);
-  assert.equal(first.motion.foliage.rootDisplacement, 0); assert.ok(scene.filters.every(value => value === 0));
+  assert.equal(first.motion.foliage.rootDisplacement, 0); assert.ok(scene.filters.every(value => value === phaser.Textures.FilterMode.NEAREST));
   assert.ok(scene.cameras.main.round && Number.isInteger(scene.cameras.main.zoom));
   assert.equal(scene.masks.length, 3, 'Cloud, stars and water have distinct reviewed masks');
   const clouds = manifest.assets.filter(asset => asset.role === 'clouds').map(asset => ({ asset, image: scene.objects.find(value => value.key === asset.key) }));
@@ -254,5 +272,28 @@ const nativeFrameClock = { status: 'PASS', nativeElapsedMs: 1000, returnedActorE
   lowPowerElapsedMs: lowAfter.clockMs - lowBefore.clockMs, lowPowerPaintedFrames: lowAfter.foliage.paintedFrames - lowBefore.foliage.paintedFrames,
   covered: ['inflated Phaser delta', 'duplicate/backwards/invalid timestamps', '100ms frame cap', 'native hidden/resume origin',
     'unchanged visibility notification', 'reduced-motion origin', 'low-power cadence', 'manual fallback reseeding', 'disposed layer'] };
+const canvasScene = makeScene();
+canvasScene.game.renderer.type = phaser.CANVAS;
+const canvasLayer = new HubR09Layer(canvasScene);
+assert.equal(canvasScene.cameras.main.round, false, 'Canvas must skip Phaser half-pixel sprite enlargement');
+const receiver = manifest.lightRegions[0];
+const receiverAsset = manifest.assets.find(asset => asset.role === receiver.maskRole);
+const receiverTexture = canvasScene.canvasTextures.get(`${receiverAsset.key}_r09_canvas_${receiver.tint}`);
+const colorChannels = tint => [tint >> 16 & 255, tint >> 8 & 255, tint & 255, 255, 0, 0, 0, 0];
+assert.deepEqual(receiverTexture.pixels, colorChannels(Number.parseInt(receiver.tint.slice(1), 16)), 'Tinted light samples preserve alpha and warm receiver color');
+const waterKey = manifest.assets.find(asset => asset.role === 'water').key;
+const waterPlane = canvasScene.objects.find(object => object.key === waterKey);
+canvasLayer.setWeather({ mode: 'rain' });
+const phaseKey = `${waterKey}_r09_canvas_phase`;
+assert.equal(waterPlane.key, phaseKey);
+const waterTexture = canvasScene.canvasTextures.get(phaseKey);
+assert.deepEqual(waterTexture.pixels, colorChannels(sceneModel.r09PhaseStyle('day', true).water));
+canvasLayer.applyDayPhase('day'); assert.equal(waterTexture.writes, 1, 'Repeated phase reuses the tinted source pixels');
+canvasLayer.applyDayPhase('night');
+assert.equal(canvasScene.canvasTextures.get(phaseKey), waterTexture, 'Phase changes recolor the same texture');
+assert.deepEqual(waterTexture.pixels, colorChannels(sceneModel.r09PhaseStyle('night', true).water));
+canvasLayer.destroy();
+assert.equal(canvasScene.canvasTextures.size, 0);
+assert.equal(bridgeEvents.count(), 0);
 console.log(JSON.stringify({ status: 'PASS', scope: 'Real R09 integration handlers with Phaser scene doubles; no browser or rendered-pixel acceptance',
   manifestSha256: crypto.createHash('sha256').update(fs.readFileSync(manifestFile)).digest('hex'), sources, cycles: rows, nativeFrameClock }, null, 2));

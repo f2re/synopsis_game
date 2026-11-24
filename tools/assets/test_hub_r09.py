@@ -37,10 +37,15 @@ class StationExportContract(unittest.TestCase):
         self.assertEqual(manifest["validation"]["vegetationPieces"], 5)
         for asset in manifest["assets"]:
             self.assertNotIn("sourceRect", asset, "A world-space box must not be confused with texture crop coordinates")
+            density = asset.get("density", 1)
             self.assertEqual(asset["anchorScenePx"], [
-                asset["originalSceneXY"][0] + asset["width"] / 2,
-                asset["originalSceneXY"][1] + asset["height"],
+                asset["originalSceneXY"][0] + asset["width"] / (2 * density),
+                asset["originalSceneXY"][1] + asset["height"] / density,
             ])
+        detail = next(asset for asset in manifest["assets"] if asset["role"] == "architecture-ground")
+        self.assertEqual(detail["density"], 2)
+        self.assertEqual([detail["width"], detail["height"]], [2 * n for n in detail["sourceBounds"][2:]])
+        self.assertEqual(detail["sourceBounds"], [0, 10, 512, 278])
 
     def test_changed_provider_source_requires_new_pin(self):
         self.reject(lambda s: s["sources"]["master"].update(sha256="0" * 64), "checksum changed")

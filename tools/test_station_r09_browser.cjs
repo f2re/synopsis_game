@@ -224,8 +224,8 @@ function installMetrics() {
       defaultFramebufferClears: s.clearTimes.length, clearTimes: [...s.clearTimes], draws: s.draws };
   }) });
 }
-function installDayFixture() {
-  const NativeDate = Date, fixed = NativeDate.parse('2026-06-21T09:00:00Z');
+function installDayFixture(iso = '2026-06-21T09:00:00Z') {
+  const NativeDate = Date, fixed = NativeDate.parse(iso);
   function FixedDate(...args) { if (!new.target) return new NativeDate(fixed).toString(); return Reflect.construct(NativeDate, args.length ? args : [fixed], new.target); }
   Object.setPrototypeOf(FixedDate, NativeDate); FixedDate.prototype = NativeDate.prototype;
   Object.defineProperty(FixedDate, 'now', { value: () => fixed }); globalThis.Date = FixedDate;
@@ -235,6 +235,48 @@ async function saveCanvas(page, output, name, report) {
   fs.writeFileSync(path.join(output, name + '.png'), bytes);
   report.screenshots.push({ name: name + '.png', sha256: crypto.createHash('sha256').update(bytes).digest('hex') });
   return { bytes, image: decodePng(bytes) };
+}
+
+async function checkCanvasFallback({ base, browser, report, output }) {
+  const context = await browser.newContext({ viewport: { width: 1910, height: 931 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  try {
+    await context.addInitScript(() => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, ...options) {
+        if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') return null;
+        return original.call(this, type, ...options);
+      };
+      localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'rain', soundEnabled: false, reducedMotion: true }));
+    });
+    await context.addInitScript(installDayFixture, '2026-10-27T22:00:00+03:00');
+    const page = await context.newPage();
+    page.on('pageerror', error => report.errors.push({ scenario: 'station-r09-canvas-rain-palette', message: error.message }));
+    await page.goto(candidateUrl(base)); await stationReady(page);
+    await page.waitForFunction(() => {
+      const value = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]')?.dataset.station || '{}');
+      return value.phase === 'night' && value.weather === 'rain';
+    });
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const measured = await page.locator('canvas').evaluate(canvas => {
+      const context = canvas.getContext('2d');
+      if (!context) return null;
+      const pixels = context.getImageData(1152, 190, 108, 49).data;
+      let exposedBackgroundPixels = 0;
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i] === 16 && pixels[i + 1] === 30 && pixels[i + 2] === 37) exposedBackgroundPixels++;
+      }
+      return { exposedBackgroundPixels, windowRgb: [...context.getImageData(850, 536, 1, 1).data].slice(0, 3),
+        waterRgb: [...context.getImageData(1190, 206, 1, 1).data].slice(0, 3) };
+    });
+    assert.ok(measured, 'The Canvas fallback must be active');
+    assert.equal(measured.exposedBackgroundPixels, 0, 'Independent texture planes must meet with no camera background showing through the lake');
+    assert.ok(measured.windowRgb[0] > measured.windowRgb[2] + 35, 'Night entrance glass receives warm light in Canvas');
+    assert.ok(measured.waterRgb[2] > measured.waterRgb[0] + 25 && measured.waterRgb[2] < 130, 'Night rain visibly cools and dims the lake in Canvas');
+    await saveCanvas(page, output, 'station-r09-canvas-night-rain', report);
+    report.cases.push({ name: 'station-r09-canvas-rain-palette', ...measured });
+  } finally {
+    await context.close();
+  }
 }
 
 async function nativeContextRestore(page, output, report, beforeImage) {
@@ -488,7 +530,8 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
       clockElapsedMs, paintedFrames, lowElapsedMs, defaultFramebufferClears: lowClears });
     await context.close();
   }
+  await checkCanvasFallback({ base, browser, report, output });
 }
 
 module.exports = { runStationR09Checks, stationState, stationReady, visibleEntranceGeometry,
-  forEachStationView, panOnce, showStationEntrance, candidateUrl, decodePng, pixelDifference, projectRegion, BUDGET };
+  forEachStationView, panOnce, showStationEntrance, candidateUrl, decodePng, pixelDifference, projectRegion, checkCanvasFallback, BUDGET };

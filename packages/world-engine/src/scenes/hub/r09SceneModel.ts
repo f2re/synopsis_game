@@ -95,8 +95,10 @@ function multiplyTint(left: number, right: number): number {
 export function r09PhaseStyle(phase: DayPhase, rain: boolean): R09PhaseStyle {
   const base = PHASES[phase] ?? PHASES.day;
   if (!rain) return { ...base };
-  return { sky: multiplyTint(base.sky, 0xaabed2), scenery: multiplyTint(base.scenery, 0xc5d3df),
-    water: multiplyTint(base.water, 0xa8bfd0), lights: Math.max(.55, base.lights), stars: 0 };
+  // Separate the cool wet air and water from stone and foliage, which retain
+  // their warmer source colors under a more neutral reduction in daylight.
+  return { sky: multiplyTint(base.sky, 0x97b2c9), scenery: multiplyTint(base.scenery, 0xc3c6cc),
+    water: multiplyTint(base.water, 0x86a7be), lights: Math.max(.58, base.lights), stars: 0 };
 }
 
 export function r09CloudOffset(timeMs: number, startX: number, width: number, still: boolean, index = 0): number {

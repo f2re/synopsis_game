@@ -9,6 +9,7 @@ import { R09_ENTRANCES, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyl
 interface StationAsset {
   id: string; role: string; key: string; url: string; width: number; height: number;
   originalSceneXY: number[]; anchorScenePx: number[]; depthSourceY: number;
+  density?: number;
   motionReady?: boolean; wind?: { kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number };
   kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number;
 }
@@ -20,12 +21,18 @@ interface StationManifest {
 }
 export const R09_STATION_MANIFEST = manifestJson as unknown as StationManifest;
 
+const SCENE_PLANE_DEPTHS: Record<string, number> = {
+  sky: 0, water: 1, 'architecture-ground': 3, 'foreground-occluder': 31,
+};
+
 /** A single authored 512×288 terrace. Only extracted organic pixels move;
  * the ground, architecture, contact edges and camera registration are shared. */
 export class HubR09Layer {
   private readonly images: { asset: StationAsset; image: Phaser.GameObjects.Image }[] = [];
   private readonly cloudImages: { asset: StationAsset; image: Phaser.GameObjects.Image; offset: number }[] = [];
   private readonly receivers: { image: Phaser.GameObjects.Image; alpha: number }[] = [];
+  private readonly canvasRenderer: boolean;
+  private readonly canvasTints = new Map<string, { texture: Phaser.Textures.CanvasTexture; tint: number }>();
   private readonly maskGraphics: Phaser.GameObjects.Graphics[] = [];
   private readonly masks: Phaser.Display.Masks.GeometryMask[] = [];
   private readonly waterGlints: Phaser.GameObjects.Graphics;
@@ -50,13 +57,14 @@ export class HubR09Layer {
   private disposed = false;
 
   constructor(private readonly scene: Phaser.Scene) {
+    this.canvasRenderer = scene.game.renderer.type === Phaser.CANVAS;
     this.viewport = r09Viewport(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
-    const depth: Record<string, number> = { sky: 0, water: 1, 'architecture-ground': 3, 'foreground-occluder': 31 };
     for (const asset of R09_STATION_MANIFEST.assets) {
       scene.textures.get(asset.key).setFilter(Phaser.Textures.FilterMode.NEAREST);
-      if (!(asset.role in depth) && asset.role !== 'clouds') continue;
+      if (!(asset.role in SCENE_PLANE_DEPTHS) && asset.role !== 'clouds') continue;
       const image = scene.add.image(asset.originalSceneXY[0], asset.originalSceneXY[1], asset.key)
-        .setOrigin(0, 0).setDepth(asset.role === 'clouds' ? .5 : depth[asset.role]);
+        .setOrigin(0, 0).setDepth(asset.role === 'clouds' ? .5 : SCENE_PLANE_DEPTHS[asset.role]);
+      if (asset.density) image.setScale(1 / asset.density);
       if (asset.role === 'clouds') this.cloudImages.push({ asset, image, offset: 0 });
       else this.images.push({ asset, image });
     }
@@ -76,14 +84,17 @@ export class HubR09Layer {
       if (!asset) continue;
       const [x, y, width, height] = region.sourceBounds;
       const rows = region.verticalFalloff ? height : 1;
+      const tint = Number.parseInt(region.tint.slice(1), 16);
+      const key = this.canvasRenderer ? this.getCanvasTint(asset.key, tint, region.tint) : asset.key;
       for (let row = 0; row < rows; row++) {
         const falloff = region.verticalFalloff;
         const weight = falloff ? falloff[0] + (falloff[1] - falloff[0]) * row / Math.max(1, rows - 1) : 1;
         // A receiver fade follows native rows. Vertex-alpha interpolation
         // would introduce a smooth gradient within each enlarged pixel.
-        const image = scene.add.image(0, 0, asset.key).setOrigin(0, 0)
+        const image = scene.add.image(0, 0, key).setOrigin(0, 0)
           .setCrop(x, y + (falloff ? row : 0), width, falloff ? 1 : height)
-          .setDepth(32).setTint(Number.parseInt(region.tint.slice(1), 16)).setBlendMode(Phaser.BlendModes.ADD);
+          .setDepth(32).setBlendMode(Phaser.BlendModes.ADD);
+        if (!this.canvasRenderer) image.setTint(tint);
         this.receivers.push({ image, alpha: region.suggestedAlpha * weight });
       }
     }
@@ -120,6 +131,45 @@ export class HubR09Layer {
     this.resize(); this.syncMotion(); this.applyDayPhase('day');
   }
 
+  // Phaser's Canvas image path applies alpha and blending but ignores sprite tint.
+  // Retain one mutable variant per lit plane (and one per fixed receiver color).
+  private readonly getCanvasTint = (sourceKey: string, tint: number, variant = 'phase'): string => {
+    if (tint === 0xffffff) return sourceKey;
+    const key = `${sourceKey}_r09_canvas_${variant}`;
+    let cached = this.canvasTints.get(key);
+    if (cached?.tint === tint) return key;
+    const source = this.scene.textures.get(sourceKey).getSourceImage();
+    // R09 source keys are loaded as images through the station manifest.
+    if (!('naturalWidth' in source)) return sourceKey;
+    if (!cached) {
+      const texture = this.scene.textures.createCanvas(key, source.width, source.height);
+      if (!texture) return sourceKey;
+      texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+      cached = { texture, tint };
+      this.canvasTints.set(key, cached);
+    }
+    const context = cached.texture.getContext();
+    context.clearRect(0, 0, source.width, source.height);
+    context.drawImage(source, 0, 0);
+    const pixels = context.getImageData(0, 0, source.width, source.height);
+    const red = (tint >> 16 & 255) / 255;
+    const green = (tint >> 8 & 255) / 255;
+    const blue = (tint & 255) / 255;
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      pixels.data[i] *= red;
+      pixels.data[i + 1] *= green;
+      pixels.data[i + 2] *= blue;
+    }
+    context.putImageData(pixels, 0, 0);
+    cached.tint = tint;
+    return key;
+  };
+
+  private tintPlane(image: Phaser.GameObjects.Image, sourceKey: string, tint: number): void {
+    if (this.canvasRenderer) image.setTexture(this.getCanvasTint(sourceKey, tint));
+    else image.setTint(tint);
+  }
+
   private makeMask(domain: Domain): Phaser.Display.Masks.GeometryMask {
     const graphic = this.scene.add.graphics().setVisible(false).fillStyle(0xffffff);
     if (domain.rowSpans?.length) {
@@ -145,8 +195,10 @@ export class HubR09Layer {
     this.viewport = r09Viewport(this.scene.scale.width, this.scene.scale.height,
       ratio, this.requestedCenterX);
     const view = this.viewport;
+    // The projection already has integer offsets. Canvas's roundPixels adds a
+    // half source pixel to each sprite size, opening seams between alpha planes.
     this.scene.cameras.main.setViewport(0, 0, view.bufferWidth, view.bufferHeight)
-      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(true);
+      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(!this.canvasRenderer);
     worldBridge.emit('world:interaction_layout', r09EntranceTargets(view));
     worldBridge.emit('world:station_view', { stationArt: 'r09', canPanLeft: view.canPanLeft, canPanRight: view.canPanRight });
     this.drawFocus(); this.drawRain(); this.publishDiagnostics();
@@ -171,9 +223,9 @@ export class HubR09Layer {
     this.phase = phase;
     const style = r09PhaseStyle(phase, this.weather.mode === 'rain');
     this.scene.cameras.main.setBackgroundColor(this.phase === 'night' ? 0x101e25 : 0x21382b);
-    for (const { asset, image } of this.images) image.setTint(asset.role === 'sky' ? style.sky : asset.role === 'water' ? style.water : style.scenery);
-    this.cloudImages.forEach(({ image }) => image.setTint(style.sky));
-    this.wind.setTint(style.scenery);
+    for (const { asset, image } of this.images) this.tintPlane(image, asset.key, asset.role === 'sky' ? style.sky : asset.role === 'water' ? style.water : style.scenery);
+    this.cloudImages.forEach(({ asset, image }) => this.tintPlane(image, asset.key, style.sky));
+    this.wind.setTint(style.scenery, this.canvasRenderer ? this.getCanvasTint : undefined);
     this.receivers.forEach(({ image, alpha }) => image.setAlpha(Math.min(.65, alpha * style.lights)));
     this.stars.clear().fillStyle(0xe4edf2, style.stars);
     if (style.stars > 0) {
@@ -297,6 +349,8 @@ export class HubR09Layer {
     this.unsubs.forEach((off) => off()); this.wind.destroy();
     [...this.images, ...this.cloudImages].forEach(({ image }) => { image.clearMask(); image.destroy(); });
     this.receivers.forEach(({ image }) => image.destroy());
+    for (const key of this.canvasTints.keys()) this.scene.textures.remove(key);
+    this.canvasTints.clear();
     [this.waterGlints, this.fountain, this.stars, this.rain, this.focus].forEach((graphic) => { graphic.clearMask(); graphic.destroy(); });
     this.masks.forEach((mask) => mask.destroy()); this.maskGraphics.forEach((graphic) => graphic.destroy());
     // React clears its own panorama on route/scene changes. An old Game can

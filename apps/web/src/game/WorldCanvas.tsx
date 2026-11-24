@@ -182,8 +182,10 @@ export function WorldCanvas({ stationPresence }: { stationPresence: number }) {
       const visible = !document.hidden && rendererReady;
       game.registry.set('ui.world_visible', visible);
       worldBridge.emit('ui:world_visible', visible);
-      if (!visible) game.loop.sleep();
-      else game.loop.wake();
+      // Native RAF and Phaser already handle visibility. Replacing the queued
+      // frame on a tab switch can stall Chromium until another frame is requested.
+      if (!rendererReady) game.loop.sleep();
+      else if (visible && !game.loop.running) game.loop.wake();
       applyInput();
       applyWeather();
       applyAudio();

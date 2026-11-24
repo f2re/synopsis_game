@@ -21,6 +21,15 @@
       ],
       "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517"
     },
+    "architectureDetail": {
+      "source": "assets/source/environment/hub/r08/candidates/provider/master-01.source.jpg",
+      "sha256": "a8a1ab1fcbebfb8758c98f6031b3828aea0eba9c71f22cf77d710c0a1641ad4d",
+      "size": [
+        1376,
+        768
+      ],
+      "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517"
+    },
     "hiddenPlate": {
       "source": "assets/source/environment/hub/r09/provider/clean-underlay-01.png",
       "sha256": "8d586b87b1cf765dd218c74831abee8aa1b01198f8c89985b82669b97e83b4e2",

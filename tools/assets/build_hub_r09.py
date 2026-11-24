@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Build the layered R09 station from pinned pixels and editable selection data.
 
-This exporter does not paint, resample, quantize, or approve artwork. The provider
-clean plate is used only below explicitly selected moving pixels. Recombining
-the exported layers at rest must reproduce the canonical master byte-for-byte
-in RGBA. --check compares all three generated manifest copies and PNG outputs.
+The provider clean plate is used only below explicitly selected moving pixels.
+Recombining the base layers at rest must reproduce the canonical master
+byte-for-byte in RGBA. The runtime architecture plane samples the same
+provider original at twice the texture density away from fixed edges. --check compares all generated
+manifest copies and PNG outputs.
 """
 from __future__ import annotations
 
@@ -12,10 +13,12 @@ import argparse
 import hashlib
 import io
 import json
+import struct
+import zlib
 from pathlib import Path
 
 import PIL
-from PIL import Image, ImageChops, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOT = ROOT / "assets/source/environment/hub"
@@ -38,10 +41,28 @@ def json_bytes(value: object) -> bytes:
 def png_bytes(image: Image.Image) -> bytes:
     stream = io.BytesIO()
     image.save(stream, format="PNG", compress_level=9, optimize=False)
-    return stream.getvalue()
+    # Pillow wheels can link either zlib or zlib-ng. Preserve Pillow's PNG
+    # filters and use Python's zlib to match the committed deflate profile.
+    png = stream.getvalue()
+    cursor = 8
+    idat = bytearray()
+    while cursor < len(png):
+        length, kind = struct.unpack_from(">I4s", png, cursor)
+        if kind == b"IDAT":
+            idat.extend(png[cursor + 8:cursor + 8 + length])
+        cursor += length + 12
+    deflater = zlib.compressobj(9, zlib.DEFLATED, 15, 9, zlib.Z_FILTERED)
+    compressed = deflater.compress(zlib.decompress(idat)) + deflater.flush()
+    result = bytearray(png[:33])  # Signature and IHDR. Export images carry only pixel data.
+    for offset in range(0, len(compressed), 65536):
+        payload = compressed[offset:offset + 65536]
+        chunk = b"IDAT" + payload
+        result.extend(struct.pack(">I", len(payload)) + chunk + struct.pack(">I", zlib.crc32(chunk)))
+    result.extend(png[-12:])  # IEND
+    return bytes(result)
 
 
-def pinned_image(description: dict) -> tuple[Image.Image, bytes]:
+def pinned_image(description: dict, image_format: str = "PNG") -> tuple[Image.Image, bytes]:
     path = (ROOT / description["source"]).resolve()
     if not path.is_relative_to(SOURCE_ROOT.resolve()):
         raise ValueError("R09 images must stay inside assets/source/environment/hub")
@@ -49,10 +70,10 @@ def pinned_image(description: dict) -> tuple[Image.Image, bytes]:
     if digest(data) != description["sha256"]:
         raise ValueError(f"Source checksum changed: {description['source']}")
     with Image.open(io.BytesIO(data)) as source:
-        if source.format != "PNG" or source.mode != "RGBA":
-            raise ValueError(f"Expected PNG RGBA: {description['source']}")
-        source.load()
-        image = source.copy()
+        expected_mode = "RGBA" if image_format == "PNG" else "RGB"
+        if source.format != image_format or source.mode != expected_mode:
+            raise ValueError(f"Expected {image_format} {expected_mode}: {description['source']}")
+        image = source.convert("RGBA")
     if list(image.size) != description["size"]:
         raise ValueError(f"Source dimensions changed: {description['source']}")
     return image, data
@@ -111,7 +132,9 @@ def count(mask: Image.Image) -> int:
 
 def cutout(source: Image.Image, mask: Image.Image) -> Image.Image:
     """Select original RGBA pixels; fully transparent RGB is always zero."""
-    result = Image.new("RGBA", CANVAS)
+    if source.size != mask.size:
+        raise ValueError("Cutout source and mask dimensions must match")
+    result = Image.new("RGBA", source.size)
     result.paste(source, (0, 0), mask)
     return result
 
@@ -317,7 +340,7 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
     outputs: dict[str, bytes] = {}
     assets = []
 
-    def emit(asset_id: str, role: str, filename: str, full: Image.Image, depth: int, extra: dict | None = None, crop: bool = True) -> None:
+    def emit(asset_id: str, role: str, filename: str, full: Image.Image, depth: int, extra: dict | None = None, crop: bool = True, density: int = 1) -> None:
         if Path(filename).name != filename or not filename.endswith(".png"):
             raise ValueError("Export filenames must be plain PNG names")
         if filename in outputs or any(a["id"] == asset_id for a in assets):
@@ -329,18 +352,34 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
         validate_rgba(image)
         data = png_bytes(image)
         outputs[filename] = data
-        anchor = [box[0] + image.width / 2, box[1] + image.height]
+        x, y, logical_width, logical_height = (
+            box[0] // density, box[1] // density, image.width // density, image.height // density,
+        )
+        anchor = [x + logical_width / 2, y + logical_height]
         asset = {
             "id": asset_id, "role": role, "key": asset_id.replace(".", "_"),
             "url": PUBLIC_PREFIX + filename, "width": image.width, "height": image.height,
-            "originalSceneXY": [box[0], box[1]], "sourceBounds": [box[0], box[1], image.width, image.height],
+            "originalSceneXY": [x, y], "sourceBounds": [x, y, logical_width, logical_height],
             "pivotLocalPx": [image.width / 2, image.height], "anchorScenePx": anchor,
             "depthSourceY": depth, "alphaPolicy": "binary", "sha256": digest(data), "bytes": len(data),
         }
+        if density != 1:
+            asset["density"] = density
         if extra:
             asset.update(extra)
         assets.append(asset)
 
+    detail_source, _ = pinned_image(spec["sources"]["architectureDetail"], "JPEG")
+    detail_size = (CANVAS[0] * 2, CANVAS[1] * 2)
+    if min(detail_source.width / detail_size[0], detail_source.height / detail_size[1]) < 1:
+        raise ValueError("Architecture detail must come from a higher-resolution source")
+    if detail_source.resize(CANVAS, Image.Resampling.NEAREST).tobytes() != master.tobytes():
+        raise ValueError("Architecture detail is not registered to the original master")
+    # Keep a logical pixel around moving silhouettes and layer seams. The
+    # reviewed source-grid masks still own their edges in all weather states.
+    detail_mask = ImageChops.subtract(architecture_domain, moving_mask).filter(ImageFilter.MinFilter(3))
+    detail_mask = detail_mask.resize(detail_size, Image.Resampling.NEAREST)
+    detail = detail_source.resize(detail_size, Image.Resampling.BOX)
     for asset_id, role, filename, image, depth in planes:
         extra = {"sourcePixelsExact": role == "clouds"}
         if role == "clouds":
@@ -348,7 +387,14 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
             extra["motionReview"] = spec["review"].get("cloudMotion", "pending-independent-review")
             extra["motion"] = next(bank["motion"] for bank in banks if bank["id"] == asset_id)
             extra["clipDomain"] = "cloudClip"
-        emit(asset_id, role, filename, image, depth, extra)
+        if role == "architecture-ground":
+            # Composite the opaque detail here, once. At runtime only one
+            # architecture quad spans the plaza and façades.
+            image = image.resize(detail_size, Image.Resampling.NEAREST)
+            image.paste(detail, (0, 0), detail_mask)
+            emit(asset_id, role, filename, image, depth, extra, density=2)
+        else:
+            emit(asset_id, role, filename, image, depth, extra)
     for entry in spec["vegetation"]:
         emit(entry["id"], "vegetation", entry["file"], cutout(master, vegetation_masks[entry["id"]]), entry["depthSourceY"], {
             "kind": entry["kind"], "rootFraction": entry["rootFraction"], "gain": entry["gain"],
@@ -442,7 +488,7 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
             "cloudIslands": len(banks), "cloudSilhouetteClearanceVerified": True,
             "cloudClipPixels": count(cloud_clip), "cloudClipDomain": "cloudClip",
             "skyPatchMode": spec.get("skyPatch", {}).get("kind", "provider-hidden-plate"),
-            "masterRgbaSha256": digest(master.tobytes()), "exportResampling": "none",
+            "masterRgbaSha256": digest(master.tobytes()), "exportResampling": "box, architecture detail only",
             "paletteQuantization": False, "artAcceptanceImplied": False,
             "pngBytes": sum(len(data) for data in outputs.values()),
             "decodedRgbaBytes": sum(a["width"] * a["height"] * 4 for a in assets),

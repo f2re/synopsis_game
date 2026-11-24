@@ -51,7 +51,7 @@ export function sampleWindField(timeMs: number, sourceX: number, sourceY: number
   const travelling = seconds * .29 - sourceX * .009 - sourceY * .003 + phase;
   const gust = ((Math.sin(travelling) + 1) / 2) ** 3;
   const breeze = Math.sin(seconds * .77 + phase) * .36 + Math.sin(seconds * .31 + phase * 1.7) * .16;
-  return { gust, bend: breeze + gust * .62, seconds };
+  return { gust, bend: breeze + gust * .62, seconds, phase };
 }
 
 /** Exact, disjoint source crops. The lower vegetation band never moves. A
@@ -101,12 +101,15 @@ export function sampleWindDisplacement(timeMs: number, actor: WindSample, enviro
   if (environment.reducedMotion || actor.freedom <= 0) return { x: 0, y: 0 };
   const field = sampleWindField(timeMs, actor.sourceX, actor.sourceY, stationSeed);
   const phase = windSeed(actor.id, stationSeed);
-  const ripple = Math.sin(field.seconds * (actor.kind === 'flag' ? 2.6 : 1.45) + phase + actor.freedom * 1.7) * .17;
+  const spatialPhase = actor.sourceX * .008 + actor.sourceY * .003;
+  const sway = Math.sin(field.seconds * 1.55 + field.phase - spatialPhase + Math.sin(phase) * .75) * .7;
+  const ripple = Math.sin(field.seconds * (actor.kind === 'flag' ? 2.6 : 2.05) + phase + actor.freedom * 1.7) * .09;
   const flexibility = actor.kind === 'tree' ? 1 : actor.kind === 'shrub' ? .8 : 1.15;
   const gain = Number.isFinite(actor.gain) ? Math.max(0, Math.min(1.5, actor.gain!)) : 1;
-  const amplitude = Math.max(1.25, Math.min(3, actor.sourceHeight * .045)) * flexibility * gain;
-  const weatherGain = environment.weather === 'rain' ? 1 : .76;
-  const raw = (field.bend + ripple) * amplitude * weatherGain * Math.max(0, Math.min(1, actor.freedom));
+  const amplitude = Math.max(2.2, Math.min(3, actor.sourceHeight * .045)) * flexibility * gain;
+  const weatherGain = environment.weather === 'rain' ? 1 : .82;
+  // Small crowns need enough sway to cross the integer pixel threshold in clear weather.
+  const raw = (field.bend * .5 + sway + ripple) * amplitude * weatherGain * Math.max(0, Math.min(1, actor.freedom));
   const displacement = Math.max(-R09_WIND_LIMITS.maxSourceDisplacement, Math.min(R09_WIND_LIMITS.maxSourceDisplacement, Math.round(raw)));
   return actor.kind === 'flag' ? { x: 0, y: displacement } : { x: displacement, y: 0 };
 }

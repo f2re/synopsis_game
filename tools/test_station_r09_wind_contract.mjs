@@ -15,6 +15,7 @@ for (const weather of ['clear', 'rain']) {
   for (const plant of plants) {
     const bands = makeWindBands(plant.width, plant.height, plant.kind, plant.rootFraction);
     let movingSamples = 0, maximumDisplacement = 0, firstMovementMs = null;
+    let previousPose, firstPoseChangeMs = null, lastPoseChangeMs = 0, longestHeldPoseMs = 0;
     const frames = [];
     for (let timeMs = 0; timeMs <= 60_000; timeMs += 100) {
       const offsets = bands.map(band => sampleWindDisplacement(timeMs, {
@@ -30,13 +31,22 @@ for (const weather of ['clear', 'rain']) {
       });
       const moving = offsets.some(offset => offset.x || offset.y);
       if (moving) { movingSamples++; firstMovementMs ??= timeMs; }
-      frames.push(offsets.map(offset => `${offset.x},${offset.y}`).join(';'));
+      const pose = offsets.map(offset => `${offset.x},${offset.y}`).join(';');
+      if (pose !== previousPose) {
+        if (previousPose !== undefined) firstPoseChangeMs ??= timeMs;
+        lastPoseChangeMs = timeMs;
+        previousPose = pose;
+      }
+      longestHeldPoseMs = Math.max(longestHeldPoseMs, timeMs - lastPoseChangeMs);
+      frames.push(pose);
     }
     assert.ok(movingSamples > 0, `${plant.id}/${weather}: actual small cutout must move; low gain must not round every pose to zero`);
+    assert.ok(firstPoseChangeMs !== null && firstPoseChangeMs <= 3_000, `${plant.id}/${weather}: visible pose changes in the first three seconds`);
+    assert.ok(longestHeldPoseMs <= 4_000, `${plant.id}/${weather}: a crown holds one pose for ${longestHeldPoseMs} ms`);
     const signature = crypto.createHash('sha256').update(frames.join('\n')).digest('hex');
     signatures.add(signature);
     results.push({ id: plant.id, weather, sourceSize: [plant.width, plant.height], gain: plant.gain,
-      bands: bands.length, samples: frames.length, movingSamples, firstMovementMs, maximumDisplacement, signature });
+      bands: bands.length, samples: frames.length, movingSamples, firstMovementMs, firstPoseChangeMs, longestHeldPoseMs, maximumDisplacement, signature });
     const reduced = { ...environment, reducedMotion: true };
     for (const band of bands) assert.deepEqual(sampleWindDisplacement(14_000, {
       id: plant.id, kind: plant.kind, sourceX: plant.anchorScenePx[0], sourceY: plant.anchorScenePx[1],
