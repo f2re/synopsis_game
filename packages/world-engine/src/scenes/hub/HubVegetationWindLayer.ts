@@ -39,6 +39,7 @@ export class HubVegetationWindLayer {
   private environment = normalizeWindEnvironment();
   private tint = 0xffffff;
   private tintTexture?: WindTextureResolver;
+  private nativeTint = false;
   private disposed = false;
 
   constructor(private readonly scene: Phaser.Scene, private readonly stationSeed = 26063) {}
@@ -79,7 +80,7 @@ export class HubVegetationWindLayer {
           image.setScale(plan.scaleX, plan.scaleY)
             .setDisplayOrigin(plan.source.x + plan.source.width / 2, plan.source.y + plan.source.height)
             .setCrop(plan.source.x + band.x, plan.source.y + band.y, band.width, band.height)
-            .setDepth(plan.placement.depth).setTint(this.tintTexture ? 0xffffff : this.tint);
+            .setDepth(plan.placement.depth).setTint(this.tintTexture && !this.nativeTint ? 0xffffff : this.tint);
         }
       }
     } catch (error) {
@@ -103,12 +104,14 @@ export class HubVegetationWindLayer {
     if (next.reducedMotion || (!next.paused && (previous.reducedMotion || next.weather !== previous.weather))) this.paint();
   }
 
-  /** Resolved textures must use the same source pixel grid as the original. */
-  setTint(tint: number, tintTexture?: WindTextureResolver): void {
-    if (this.disposed || (tint === this.tint && tintTexture === this.tintTexture)) return;
+  /** Resolve a texture on the original pixel grid. Native modulation is only
+   * needed when the resolver swaps a plate and leaves the weather tint to WebGL. */
+  setTint(tint: number, tintTexture?: WindTextureResolver, nativeTint = false): void {
+    if (this.disposed || (tint === this.tint && tintTexture === this.tintTexture && nativeTint === this.nativeTint)) return;
     const previousResolver = this.tintTexture;
     this.tint = tint;
     this.tintTexture = tintTexture;
+    this.nativeTint = nativeTint;
     for (const { placement, source, bands } of this.actors) {
       const textureKey = tintTexture?.(placement.textureKey, tint) ?? placement.textureKey;
       for (const { image, band } of bands) {
@@ -117,7 +120,7 @@ export class HubVegetationWindLayer {
             .setDisplayOrigin(source.x + source.width / 2, source.y + source.height)
             .setCrop(source.x + band.x, source.y + band.y, band.width, band.height);
         }
-        image.setTint(tintTexture ? 0xffffff : tint);
+        image.setTint(tintTexture && !nativeTint ? 0xffffff : tint);
       }
     }
   }

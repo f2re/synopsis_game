@@ -1092,6 +1092,12 @@
       "asset_id": "ef6cca60-8d00-4544-8c4e-5e28cb48ba02",
       "sha12": "5227a6d30451",
       "label": "26063 · R09 · радиозонд и стойка аэрологии"
+    },
+    {
+      "id": "assets/source/environment/hub/r09/provider/night-relight-guide-01.jpg",
+      "asset_id": "958c2888-a324-4b31-a9b9-a532eb707280",
+      "sha12": "144486f3ea2a",
+      "label": "26063 · R09 · освещение исходного кадра"
     }
   ]
 }

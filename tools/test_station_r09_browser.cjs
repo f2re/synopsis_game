@@ -309,8 +309,8 @@ async function checkCanvasFallback({ base, browser, report, output }) {
       };
       localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'rain', soundEnabled: false, reducedMotion: true }));
     }, { width: cloud.width, height: cloud.height });
-    await context.addInitScript(installDayFixture, '2026-10-27T22:00:00+03:00');
     const page = await context.newPage();
+    await page.addInitScript(installDayFixture, '2026-10-27T22:00:00+03:00');
     page.on('pageerror', error => report.errors.push({ scenario: 'station-r09-canvas-rain-palette', message: error.message }));
     await page.goto(candidateUrl(base)); await stationReady(page);
     await page.waitForFunction(() => {
@@ -336,15 +336,24 @@ async function checkCanvasFallback({ base, browser, report, output }) {
     assert.equal(measured.exposedBackgroundPixels, 0, 'Independent texture planes must meet with no camera background showing through the lake');
     assert.ok(measured.windowRgb[0] > measured.windowRgb[2] + 35, 'Night entrance glass receives warm light in Canvas');
     assert.ok(measured.waterRgb[2] > measured.waterRgb[0] + 25 && measured.waterRgb[2] < 130, 'Night rain visibly cools and dims the lake in Canvas');
+    await saveCanvas(page, output, 'station-r09-canvas-night-rain', report);
+    await page.close();
+    const day = await context.newPage();
+    await day.addInitScript(installDayFixture, '2026-11-24T11:00:00Z');
+    day.on('pageerror', error => report.errors.push({ scenario: 'station-r09-canvas-day-cloud', message: error.message }));
+    await day.goto(candidateUrl(base)); await stationReady(day);
     assert.equal(cloudSource.channels, 4);
-    const tintedCloudAlpha = await page.evaluate(({ width, height }) => {
+    await day.waitForFunction(() => {
+      const value = JSON.parse(document.querySelector('[data-station]')?.dataset.station || '{}');
+      return value.phase === 'day' && Boolean(globalThis.__stationR09CloudContext);
+    });
+    const tintedCloudAlpha = await day.evaluate(({ width, height }) => {
       const cloud = globalThis.__stationR09CloudContext;
       if (!cloud) return null;
       return Array.from(cloud.getImageData(0, 0, width, height).data).filter((_, i) => i % 4 === 3);
     }, { width: cloud.width, height: cloud.height });
     const authoredCloudAlpha = Array.from(cloudSource.pixels).filter((_, i) => i % 4 === 3);
     assert.deepEqual(tintedCloudAlpha, authoredCloudAlpha, 'Every tinted cloud texel keeps its authored transparency even with opaque pooled canvases');
-    await saveCanvas(page, output, 'station-r09-canvas-night-rain', report);
     report.cases.push({ name: 'station-r09-canvas-rain-palette', ...measured,
       cloudAlphaVerified: tintedCloudAlpha.length, transparentCloudTexels: tintedCloudAlpha.filter(alpha => alpha === 0).length });
   } finally {

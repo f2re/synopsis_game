@@ -544,6 +544,410 @@
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
+      "id": "hub.r09.sky.night",
+      "role": "night-light",
+      "key": "hub_r09_sky_night",
+      "url": "/hub/r09/night-sky.png",
+      "width": 512,
+      "height": 77,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        512,
+        77
+      ],
+      "pivotLocalPx": [
+        256.0,
+        77
+      ],
+      "anchorScenePx": [
+        256.0,
+        77
+      ],
+      "depthSourceY": 0,
+      "alphaPolicy": "binary",
+      "sha256": "08a68fb13fd49f6b3917091bdaffb97624b704b7cc7831d220b77ff51dac02bf",
+      "bytes": 33931,
+      "dayKey": "hub_r09_sky"
+    },
+    {
+      "id": "hub.r09.water.night",
+      "role": "night-light",
+      "key": "hub_r09_water_night",
+      "url": "/hub/r09/night-water.png",
+      "width": 207,
+      "height": 58,
+      "originalSceneXY": [
+        305,
+        75
+      ],
+      "sourceBounds": [
+        305,
+        75,
+        207,
+        58
+      ],
+      "pivotLocalPx": [
+        103.5,
+        58
+      ],
+      "anchorScenePx": [
+        408.5,
+        133
+      ],
+      "depthSourceY": 1,
+      "alphaPolicy": "binary",
+      "sha256": "9f472446d97e05e8b4f2982b073505f79f7dbfdf12651fd56fdb80a10aa99888",
+      "bytes": 2865,
+      "dayKey": "hub_r09_water"
+    },
+    {
+      "id": "hub.r09.architecture-ground.night",
+      "role": "night-light",
+      "key": "hub_r09_architecture-ground_night",
+      "url": "/hub/r09/night-architecture-ground.png",
+      "width": 1024,
+      "height": 556,
+      "originalSceneXY": [
+        0,
+        10
+      ],
+      "sourceBounds": [
+        0,
+        10,
+        512,
+        278
+      ],
+      "pivotLocalPx": [
+        512.0,
+        556
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 2,
+      "alphaPolicy": "binary",
+      "sha256": "466fc85529b0f866717b98fb34165e882de6087478ffe683e7d8ba94d2e8a58f",
+      "bytes": 744951,
+      "density": 2,
+      "dayKey": "hub_r09_architecture-ground"
+    },
+    {
+      "id": "hub.r09.foreground.night",
+      "role": "night-light",
+      "key": "hub_r09_foreground_night",
+      "url": "/hub/r09/night-foreground.png",
+      "width": 512,
+      "height": 79,
+      "originalSceneXY": [
+        0,
+        209
+      ],
+      "sourceBounds": [
+        0,
+        209,
+        512,
+        79
+      ],
+      "pivotLocalPx": [
+        256.0,
+        79
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 260,
+      "alphaPolicy": "binary",
+      "sha256": "03a4c6cb8a008aed3d456cfd23e1f702ca505f023c2c9df91d763bc06efc4ad0",
+      "bytes": 40473,
+      "dayKey": "hub_r09_foreground"
+    },
+    {
+      "id": "hub.r09.foliage.west-stair-fir.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_west-stair-fir_night",
+      "url": "/hub/r09/night-foliage-west-stair-fir.png",
+      "width": 11,
+      "height": 22,
+      "originalSceneXY": [
+        143,
+        177
+      ],
+      "sourceBounds": [
+        143,
+        177,
+        11,
+        22
+      ],
+      "pivotLocalPx": [
+        5.5,
+        22
+      ],
+      "anchorScenePx": [
+        148.5,
+        199
+      ],
+      "depthSourceY": 199,
+      "alphaPolicy": "binary",
+      "sha256": "03bbda5874467beca4f34de687a29743e120f54e1a833253eaa2f957bd1e6b0a",
+      "bytes": 653,
+      "dayKey": "hub_r09_foliage_west-stair-fir"
+    },
+    {
+      "id": "hub.r09.foliage.courtyard-east-ivy.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_courtyard-east-ivy_night",
+      "url": "/hub/r09/night-foliage-courtyard-east-ivy.png",
+      "width": 15,
+      "height": 38,
+      "originalSceneXY": [
+        274,
+        158
+      ],
+      "sourceBounds": [
+        274,
+        158,
+        15,
+        38
+      ],
+      "pivotLocalPx": [
+        7.5,
+        38
+      ],
+      "anchorScenePx": [
+        281.5,
+        196
+      ],
+      "depthSourceY": 195,
+      "alphaPolicy": "binary",
+      "sha256": "7e13b10ed1db07ff58c64900302bddce3d690a8e5433d9451d1ccdd17bf5e3e8",
+      "bytes": 1496,
+      "dayKey": "hub_r09_foliage_courtyard-east-ivy"
+    },
+    {
+      "id": "hub.r09.foliage.aerology-west-ivy.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_aerology-west-ivy_night",
+      "url": "/hub/r09/night-foliage-aerology-west-ivy.png",
+      "width": 21,
+      "height": 44,
+      "originalSceneXY": [
+        347,
+        93
+      ],
+      "sourceBounds": [
+        347,
+        93,
+        21,
+        44
+      ],
+      "pivotLocalPx": [
+        10.5,
+        44
+      ],
+      "anchorScenePx": [
+        357.5,
+        137
+      ],
+      "depthSourceY": 138,
+      "alphaPolicy": "binary",
+      "sha256": "be080d55c98f584f4927bf6529ae374061a9eadb43804feca7315149585668f8",
+      "bytes": 1704,
+      "dayKey": "hub_r09_foliage_aerology-west-ivy"
+    },
+    {
+      "id": "hub.r09.foliage.east-walk-fir.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_east-walk-fir_night",
+      "url": "/hub/r09/night-foliage-east-walk-fir.png",
+      "width": 10,
+      "height": 16,
+      "originalSceneXY": [
+        372,
+        212
+      ],
+      "sourceBounds": [
+        372,
+        212,
+        10,
+        16
+      ],
+      "pivotLocalPx": [
+        5.0,
+        16
+      ],
+      "anchorScenePx": [
+        377.0,
+        228
+      ],
+      "depthSourceY": 229,
+      "alphaPolicy": "binary",
+      "sha256": "187b8a73d39374e65d2b0d44396a487fc5041e06d7537d475993b900116cb29e",
+      "bytes": 474,
+      "dayKey": "hub_r09_foliage_east-walk-fir"
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_central-topiary_night",
+      "url": "/hub/r09/night-foliage-central-topiary.png",
+      "width": 16,
+      "height": 15,
+      "originalSceneXY": [
+        220,
+        232
+      ],
+      "sourceBounds": [
+        220,
+        232,
+        16,
+        15
+      ],
+      "pivotLocalPx": [
+        8.0,
+        15
+      ],
+      "anchorScenePx": [
+        228.0,
+        247
+      ],
+      "depthSourceY": 250,
+      "alphaPolicy": "binary",
+      "sha256": "611198d722aab6b280ccf3aab1ae74cda3e61c417ac036747d02742b25c93243",
+      "bytes": 682,
+      "dayKey": "hub_r09_foliage_central-topiary"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_left-front-shrub_night",
+      "url": "/hub/r09/night-foliage-left-front-shrub.png",
+      "width": 15,
+      "height": 14,
+      "originalSceneXY": [
+        125,
+        222
+      ],
+      "sourceBounds": [
+        125,
+        222,
+        15,
+        14
+      ],
+      "pivotLocalPx": [
+        7.5,
+        14
+      ],
+      "anchorScenePx": [
+        132.5,
+        236
+      ],
+      "depthSourceY": 240,
+      "alphaPolicy": "binary",
+      "sha256": "ddafc727bf4f01d64ebd851c821716de9567ff5cdb4c60ba62b534b0e9b3f2fe",
+      "bytes": 615,
+      "dayKey": "hub_r09_foliage_left-front-shrub"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_left-planter-topiary_night",
+      "url": "/hub/r09/night-foliage-left-planter-topiary.png",
+      "width": 15,
+      "height": 15,
+      "originalSceneXY": [
+        263,
+        230
+      ],
+      "sourceBounds": [
+        263,
+        230,
+        15,
+        15
+      ],
+      "pivotLocalPx": [
+        7.5,
+        15
+      ],
+      "anchorScenePx": [
+        270.5,
+        245
+      ],
+      "depthSourceY": 250,
+      "alphaPolicy": "binary",
+      "sha256": "0d38be66e98e2f91c88ff90f2692d75583a05dcd905f47cbb31012b14f9f67ed",
+      "bytes": 673,
+      "dayKey": "hub_r09_foliage_left-planter-topiary"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_right-planter-topiary_night",
+      "url": "/hub/r09/night-foliage-right-planter-topiary.png",
+      "width": 15,
+      "height": 15,
+      "originalSceneXY": [
+        295,
+        228
+      ],
+      "sourceBounds": [
+        295,
+        228,
+        15,
+        15
+      ],
+      "pivotLocalPx": [
+        7.5,
+        15
+      ],
+      "anchorScenePx": [
+        302.5,
+        243
+      ],
+      "depthSourceY": 249,
+      "alphaPolicy": "binary",
+      "sha256": "b509f4a8f749b8badeb633f8e62f10dbb9f86ed332c17ff18e38bcd6c88c2279",
+      "bytes": 636,
+      "dayKey": "hub_r09_foliage_right-planter-topiary"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_foreground-right_night",
+      "url": "/hub/r09/night-foliage-foreground-right.png",
+      "width": 67,
+      "height": 28,
+      "originalSceneXY": [
+        430,
+        260
+      ],
+      "sourceBounds": [
+        430,
+        260,
+        67,
+        28
+      ],
+      "pivotLocalPx": [
+        33.5,
+        28
+      ],
+      "anchorScenePx": [
+        463.5,
+        288
+      ],
+      "depthSourceY": 289,
+      "alphaPolicy": "binary",
+      "sha256": "fd676263ef2c4a908eb172a4276fe9ed31bf86aad1f32a3586a505a6062b547f",
+      "bytes": 3379,
+      "dayKey": "hub_r09_foliage_foreground-right"
+    },
+    {
       "id": "hub.r09.window-light-mask",
       "role": "window-light-mask",
       "key": "hub_r09_window-light-mask",
@@ -4556,7 +4960,7 @@
     }
   },
   "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
-  "sourceSpecCanonicalSha256": "d76589a0392c99569adf8d2ba6612414a799ef84065f6511c8d7534aa0848ef9",
+  "sourceSpecCanonicalSha256": "6de61182374d341e280518d50f038d2813fb4a162b1b21e369d5e669308baa08",
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
     "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
@@ -4663,7 +5067,7 @@
     "exportResampling": "box, architecture detail only",
     "paletteQuantization": false,
     "artAcceptanceImplied": false,
-    "pngBytes": 941533,
-    "decodedRgbaBytes": 4433792
+    "pngBytes": 1774065,
+    "decodedRgbaBytes": 7097368
   }
 }

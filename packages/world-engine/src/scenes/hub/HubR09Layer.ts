@@ -6,12 +6,13 @@ import { HubVegetationWindLayer } from './HubVegetationWindLayer';
 import type { StationActorLighting } from './HubCharacterLayer';
 import { r09ActorDepth } from './r09ActorLayout';
 import { normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT } from './r01Environment';
-import { R09_ENTRANCES, R09_SOURCE_HEIGHT, R09_SOURCE_WIDTH, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09ViewMode, type R09Viewport } from './r09SceneModel';
+import { R09_ENTRANCES, R09_RAIN_TINTS, R09_SOURCE_HEIGHT, R09_SOURCE_WIDTH, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09ViewMode, type R09Viewport } from './r09SceneModel';
 
 interface StationAsset {
   id: string; role: string; key: string; url: string; width: number; height: number;
   originalSceneXY: number[]; anchorScenePx: number[]; depthSourceY: number;
   density?: number;
+  dayKey?: string;
   foregroundOccludesActors?: boolean;
   motionReady?: boolean; wind?: { kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number };
   kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number;
@@ -27,6 +28,9 @@ export const R09_STATION_MANIFEST = manifestJson as unknown as StationManifest;
 const SCENE_PLANE_DEPTHS: Record<string, number> = {
   sky: 0, water: 1, 'architecture-ground': 3, 'foreground-occluder': 31,
 };
+const NIGHT_TEXTURES = new Map(R09_STATION_MANIFEST.assets.flatMap(({ role, dayKey, key }) =>
+  role === 'night-light' && dayKey ? [[dayKey, key] as const] : []));
+const HAS_NIGHT_SKY = R09_STATION_MANIFEST.assets.some(({ role, key }) => role === 'sky' && NIGHT_TEXTURES.has(key));
 
 // Sparse native pixels with irregular spacing and three brightness levels.
 const STAR_GROUPS = [
@@ -196,8 +200,18 @@ export class HubR09Layer {
   };
 
   private tintPlane(image: Phaser.GameObjects.Image, sourceKey: string, tint: number): void {
-    if (this.canvasRenderer) image.setTexture(this.getCanvasTint(sourceKey, tint));
-    else image.setTint(tint);
+    const key = this.canvasRenderer ? this.getCanvasTint(sourceKey, tint) : sourceKey;
+    if (image.texture.key !== key) image.setTexture(key);
+    if (!this.canvasRenderer) image.setTint(tint);
+  }
+
+  private readonly resolveNightTexture = (sourceKey: string, tint: number): string => {
+    const key = NIGHT_TEXTURES.get(sourceKey) ?? sourceKey;
+    return this.canvasRenderer ? this.getCanvasTint(key, tint) : key;
+  };
+
+  private usesNightSky(): boolean {
+    return this.phase === 'night' && HAS_NIGHT_SKY;
   }
 
   private makeMask(domain: Domain): Phaser.Display.Masks.GeometryMask {
@@ -256,14 +270,29 @@ export class HubR09Layer {
 
   applyDayPhase(phase: DayPhase): void {
     this.phase = phase;
-    const style = r09PhaseStyle(phase, this.weather.mode === 'rain');
+    const rain = this.weather.mode === 'rain';
+    const style = r09PhaseStyle(phase, rain);
+    const nightSky = this.usesNightSky();
     this.updateCameraBackground();
-    for (const { asset, image } of this.images) this.tintPlane(image, asset.key, asset.role === 'sky' ? style.sky : asset.role === 'water' ? style.water : style.scenery);
-    this.cloudImages.forEach(({ asset, image }) => this.tintPlane(image, asset.key, style.sky));
-    this.wind.setTint(style.scenery, this.canvasRenderer ? this.getCanvasTint : undefined);
+    for (const { asset, image } of this.images) {
+      const nightKey = phase === 'night' ? NIGHT_TEXTURES.get(asset.key) : undefined;
+      const tintRole = asset.role === 'sky' || asset.role === 'water' ? asset.role : 'scenery';
+      const nightTint = rain ? R09_RAIN_TINTS[tintRole] : 0xffffff;
+      this.tintPlane(image, nightKey ?? asset.key, nightKey ? nightTint : style[tintRole]);
+    }
+    for (const { asset, image } of this.cloudImages) {
+      // The approved sky is lit with its original clouds in place.
+      image.setVisible(!nightSky);
+      if (!nightSky) this.tintPlane(image, asset.key, style.sky);
+    }
+    if (phase === 'night' && NIGHT_TEXTURES.size > 0) {
+      this.wind.setTint(rain ? R09_RAIN_TINTS.scenery : 0xffffff, this.resolveNightTexture, !this.canvasRenderer);
+    } else {
+      this.wind.setTint(style.scenery, this.canvasRenderer ? this.getCanvasTint : undefined);
+    }
     this.receivers.forEach(({ image, alpha }) => image.setAlpha(Math.min(.65, alpha * style.lights)));
     this.stars.clear();
-    if (style.stars > 0) {
+    if (!nightSky && style.stars > 0) {
       for (const { opacity, points } of STAR_GROUPS) {
         this.stars.fillStyle(0xd9e6f4, style.stars * opacity);
         for (const [x, y] of points) this.stars.fillRect(x, y, 1, 1);
@@ -296,10 +325,11 @@ export class HubR09Layer {
 
   private drawAmbient(still = false): void {
     const time = still ? 0 : this.clockMs;
+    const nightSky = this.usesNightSky();
     this.waterFrame = Math.floor(time / (this.preferences.lowPower ? 600 : 350));
     for (const [index, cloud] of this.cloudImages.entries()) {
       const start = cloud.asset.originalSceneXY[0], width = cloud.asset.width;
-      cloud.offset = r09CloudOffset(time, start, width, still || cloud.asset.motionReady !== true, index);
+      cloud.offset = r09CloudOffset(time, start, width, still || nightSky || cloud.asset.motionReady !== true, index);
       cloud.image.setX(start + cloud.offset);
     }
     const glintAlpha = this.phase === 'night' ? .17 : this.weather.mode === 'rain' ? .2 : .37;

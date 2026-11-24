@@ -55,6 +55,23 @@ class StationExportContract(unittest.TestCase):
     def test_changed_provider_source_requires_new_pin(self):
         self.reject(lambda s: s["sources"]["master"].update(sha256="0" * 64), "checksum changed")
 
+    def test_night_relight_keeps_every_plane_and_foliage_alpha_registered(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        by_key = {asset["key"]: asset for asset in manifest["assets"]}
+        variants = [asset for asset in manifest["assets"] if asset["role"] == "night-light"]
+        original_roles = {"sky", "water", "architecture-ground", "foreground-occluder", "vegetation"}
+        self.assertEqual({asset["dayKey"] for asset in variants},
+                         {asset["key"] for asset in by_key.values() if asset["role"] in original_roles})
+        for variant in variants:
+            original = by_key[variant["dayKey"]]
+            for field in ("width", "height", "originalSceneXY", "sourceBounds", "anchorScenePx",
+                          "pivotLocalPx", "depthSourceY", "density"):
+                self.assertEqual(variant.get(field), original.get(field))
+            with Image.open(io.BytesIO(files[Path(original["url"]).name])) as day:
+                with Image.open(io.BytesIO(files[Path(variant["url"]).name])) as night:
+                    self.assertEqual(day.getchannel("A").tobytes(), night.getchannel("A").tobytes())
+                    self.assertNotEqual(day.tobytes(), night.tobytes())
+
     def test_aerology_equipment_cannot_cover_water_or_sky(self):
         self.reject(lambda s: s["aerologyEquipment"].update(sourceBounds=[377, 0, 8, 22]), "stationary architecture")
 

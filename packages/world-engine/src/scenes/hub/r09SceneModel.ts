@@ -113,12 +113,13 @@ export function r09EntranceTargets(viewport: R09Viewport): WorldInteractionTarge
 }
 
 export interface R09PhaseStyle { sky: number; scenery: number; water: number; lights: number; stars: number; }
+export const R09_RAIN_TINTS = { sky: 0x97b2c9, scenery: 0xc3c6cc, water: 0x86a7be } as const;
 const PHASES: Record<DayPhase, R09PhaseStyle> = {
   day: { sky: 0xffffff, scenery: 0xffffff, water: 0xffffff, lights: .06, stars: 0 },
   dawn: { sky: 0xe4bdd1, scenery: 0xd8d0da, water: 0xc5bbdb, lights: .7, stars: 0 },
   golden_hour: { sky: 0xffd7b2, scenery: 0xffe7c9, water: 0xf0d9c6, lights: .78, stars: 0 },
   twilight: { sky: 0x7886ba, scenery: 0x9ca5c1, water: 0x7f99ba, lights: 1.05, stars: .2 },
-  night: { sky: 0x303f71, scenery: 0x7785a4, water: 0x5578a6, lights: 1.32, stars: .65 },
+  night: { sky: 0x303f71, scenery: 0x7785a4, water: 0x5578a6, lights: 1.13, stars: .65 },
   white_nights: { sky: 0x9db6cc, scenery: 0xabbcd2, water: 0x93b1c6, lights: .85, stars: .08 },
 };
 function multiplyTint(left: number, right: number): number {
@@ -131,8 +132,8 @@ export function r09PhaseStyle(phase: DayPhase, rain: boolean): R09PhaseStyle {
   if (!rain) return { ...base };
   // Separate the cool wet air and water from stone and foliage, which retain
   // their warmer source colors under a more neutral reduction in daylight.
-  return { sky: multiplyTint(base.sky, 0x97b2c9), scenery: multiplyTint(base.scenery, 0xc3c6cc),
-    water: multiplyTint(base.water, 0x86a7be), lights: Math.max(.58, base.lights), stars: 0 };
+  return { sky: multiplyTint(base.sky, R09_RAIN_TINTS.sky), scenery: multiplyTint(base.scenery, R09_RAIN_TINTS.scenery),
+    water: multiplyTint(base.water, R09_RAIN_TINTS.water), lights: Math.max(.58, base.lights), stars: 0 };
 }
 
 export function r09CloudOffset(timeMs: number, startX: number, width: number, still: boolean, index = 0): number {

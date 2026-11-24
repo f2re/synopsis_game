@@ -30,6 +30,13 @@
       ],
       "asset_id": "323d3288-8cdf-41f7-af52-812d51dea517"
     },
+    "nightLightingGuide": {
+      "source": "assets/source/environment/hub/r09/provider/night-relight-guide-01.jpg",
+      "sha256": "144486f3ea2adec12b0b0f8f1f768e305f441c2f7a2b5a8f6c0055af231bb38a",
+      "size": [1376, 768],
+      "asset_id": "958c2888-a324-4b31-a9b9-a532eb707280",
+      "usage": "Low-frequency RGB gain only, sampled from the approved lighting guide. Source RGBA positions, alpha masks and depth stay registered."
+    },
     "hiddenPlate": {
       "source": "assets/source/environment/hub/r09/provider/clean-underlay-01.png",
       "sha256": "8d586b87b1cf765dd218c74831abee8aa1b01198f8c89985b82669b97e83b4e2",

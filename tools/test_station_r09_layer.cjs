@@ -43,6 +43,7 @@ const preferences = load('runtime/uiPreferences.ts');
 const weather = load('scenes/hub/r01Environment.ts');
 const manifestFile = root + 'assets/hub/r09-manifest.json';
 const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+const nightKeys = new Map(manifest.assets.filter(asset => asset.role === 'night-light').map(asset => [asset.dayKey, asset.key]));
 const { HubR09Layer } = load('scenes/hub/HubR09Layer.ts', {
   phaser, '../../assets/hub/r09-manifest.json': manifest, '../../bridge/WorldBridge': { worldBridge: bridge },
   '../../runtime/uiPreferences': preferences, './HubVegetationWindLayer': windLayer,
@@ -65,6 +66,7 @@ function makeScene() {
   };
   const image = (x = 0, y = 0, key) => {
     const value = { x, y, key, destroyed: 0, width: 0, rectangles: [],
+      get texture() { return { key: this.key }; },
       setOrigin(x, y) { this.origin = [x, y]; return this; },
       setDepth(v) { this.depth = v; return this; }, setTint(...values) { this.tint = values[0]; this.tintArguments = values; return this; },
       setTexture(key) { this.key = key; return this; },
@@ -142,6 +144,7 @@ function inspectStepReceiver(scene, layer) {
     assert.ok(Math.abs(alphas.at(-1) / alphas[0] - .25) < 1e-12, 'The lower edge has one quarter of the upper-row receiver strength');
     assert.ok(strips.every(strip => strip.alphaArguments.length === 1 && strip.tintArguments.length === 1),
       'Every native strip has uniform alpha/tint, without per-vertex interpolation');
+    if (phase === 'night') assert.equal(alphas[0], Math.min(.65, region.suggestedAlpha * 1.13));
     phaseAlphas.push({ phase, alphas });
   }
   return { id: region.id, weather: layer.getEnvironment().weather, rows: strips.length, sourceBounds: region.sourceBounds, phaseAlphas };
@@ -152,6 +155,9 @@ for (let cycle = 0; cycle < 3; cycle++) {
   const snapshot = () => scene.registry.get('world.station');
   const first = snapshot(), created = scene.objects.length;
   const fixed = scene.objects.filter(value => manifest.assets.some(asset => ['sky', 'water', 'architecture-ground', 'foreground-occluder'].includes(asset.role) && asset.key === value.key));
+  const lit = scene.objects.filter(value => nightKeys.has(value.key));
+  const dayKeys = lit.map(value => value.key);
+  const geometry = () => lit.map(({ x, y, origin, scale, depth, crop, displayOrigin }) => [x, y, origin, scale, depth, crop, displayOrigin]);
   const coordinates = fixed.map(value => [value.key, value.x, value.y]);
   const architecture = manifest.assets.find(asset => asset.role === 'architecture-ground');
   const architectureImages = fixed.filter(image => image.key === architecture.key);
@@ -241,6 +247,23 @@ for (let cycle = 0; cycle < 3; cycle++) {
   assert.equal(snapshot().motion.foliage.cadenceMs, 200);
   layer.applyDayPhase('night'); assert.equal(snapshot().phase, 'night');
   const stepReceiver = inspectStepReceiver(scene, layer);
+  const beforeNightGeometry = geometry();
+  layer.applyDayPhase('night');
+  assert.deepEqual(lit.map(value => value.key), dayKeys.map(key => nightKeys.get(key)), 'WebGL switches to the approved registered plates');
+  assert.deepEqual(geometry(), beforeNightGeometry, 'The relight keeps positions, scale, occlusion and source crops');
+  const scenery = scene.objects.find(value => value.key === nightKeys.get(architecture.key));
+  assert.equal(scenery.tint, sceneModel.R09_RAIN_TINTS.scenery, 'Rain only modulates the approved night plate');
+  assert.equal(clouds[0].image.visible, false, 'The original wisp is already inside the approved night sky');
+  assert.equal(scene.objects.find(value => value.depth === .25).rectangles.length, 0, 'The approved night sky has no extra procedural stars');
+  for (let frame = 0; frame < 100; frame++) layer.update(100);
+  assert.ok(snapshot().motion.cloudOffsets.every(value => value === 0), 'The previous moving cloud stays detached from the night render at late times');
+  layer.setWeather({ mode: 'clear' });
+  assert.ok(lit.every(image => image.tint === 0xffffff), 'Clear night plates are never tinted twice');
+  layer.applyDayPhase('day');
+  assert.deepEqual(lit.map(value => value.key), dayKeys, 'Day returns to the original textures');
+  assert.equal(clouds[0].image.visible, true);
+  assert.ok(snapshot().motion.cloudOffsets.some(value => value !== 0), 'The daytime cloud resumes its route');
+  assert.equal(scene.objects.length, created, 'Lighting never adds render objects');
 
   layer.destroy(); layer.destroy();
   assert.ok(scene.objects.every(value => value.destroyed === 1), 'Every image and graphics object is released exactly once');
@@ -334,8 +357,15 @@ const waterTexture = canvasScene.canvasTextures.get(phaseKey);
 assert.deepEqual(waterTexture.pixels, colorChannels(sceneModel.r09PhaseStyle('day', true).water));
 canvasLayer.applyDayPhase('day'); assert.equal(waterTexture.writes, 1, 'Repeated phase reuses the tinted source pixels');
 canvasLayer.applyDayPhase('night');
-assert.equal(canvasScene.canvasTextures.get(phaseKey), waterTexture, 'Phase changes recolor the same texture');
-assert.deepEqual(waterTexture.pixels, colorChannels(sceneModel.r09PhaseStyle('night', true).water));
+const nightWaterKey = nightKeys.get(waterKey);
+const nightWaterTint = canvasScene.canvasTextures.get(`${nightWaterKey}_r09_canvas_phase`);
+assert.equal(waterPlane.key, `${nightWaterKey}_r09_canvas_phase`);
+assert.deepEqual(nightWaterTint.pixels, colorChannels(sceneModel.R09_RAIN_TINTS.water));
+canvasLayer.applyDayPhase('night');
+assert.equal(nightWaterTint.writes, 1, 'A repeated night phase reuses the tinted night texture');
+assert.equal(waterTexture.writes, 1, 'Night leaves the daytime palette cache intact');
+canvasLayer.setWeather({ mode: 'clear' });
+assert.equal(waterPlane.key, nightWaterKey, 'Clear Canvas night uses the approved source plate directly');
 const actorLighting = canvasLayer.getActorLighting();
 assert.ok(actorLighting.lamp > actorLighting.ambient, 'The archive lamp warms and lifts the nighttime actor palette');
 const ambientActorKey = actorLighting.resolveTexture('character:test-actor', actorLighting.ambient, 'actor-ambient');

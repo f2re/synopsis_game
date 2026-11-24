@@ -18,7 +18,7 @@ import zlib
 from pathlib import Path
 
 import PIL
-from PIL import Image, ImageChops, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageMath
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOT = ROOT / "assets/source/environment/hub"
@@ -137,6 +137,27 @@ def cutout(source: Image.Image, mask: Image.Image) -> Image.Image:
     result = Image.new("RGBA", source.size)
     result.paste(source, (0, 0), mask)
     return result
+
+
+def relight_gains(original: Image.Image, guide: Image.Image) -> tuple[Image.Image, ...]:
+    """Extract the approved low-frequency RGB light field from the guide."""
+    if original.size != guide.size:
+        raise ValueError("Night lighting guide must share the architecture source dimensions")
+    original_rgb = original.convert("RGB").filter(ImageFilter.GaussianBlur(40)).split()
+    guide_rgb = guide.convert("RGB").filter(ImageFilter.GaussianBlur(40)).split()
+    return tuple(ImageMath.lambda_eval(
+        lambda op: op["min"](op["max"]((op["float"](op["light"]) + 5) / (op["float"](op["source"]) + 5), .24), 1.05),
+        source=source, light=light,
+    ) for source, light in zip(original_rgb, guide_rgb))
+
+
+def apply_relight(source: Image.Image, gains: tuple[Image.Image, ...]) -> Image.Image:
+    red, green, blue, alpha = source.split()
+    lit = [ImageMath.lambda_eval(
+        lambda op: op["convert"](op["float"](op["source"]) * op["gain"] + .5, "L"),
+        source=channel, gain=gain,
+    ) for channel, gain in zip((red, green, blue), gains)]
+    return Image.merge("RGBA", (*lit, alpha))
 
 
 def difference_pixels(left: Image.Image, right: Image.Image) -> int:
@@ -380,6 +401,14 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
     detail_mask = ImageChops.subtract(architecture_domain, moving_mask).filter(ImageFilter.MinFilter(3))
     detail_mask = detail_mask.resize(detail_size, Image.Resampling.NEAREST)
     detail = detail_source.resize(detail_size, Image.Resampling.BOX)
+    lighting_guide, _ = pinned_image(spec["sources"]["nightLightingGuide"], "JPEG")
+    gains = relight_gains(detail_source, lighting_guide)
+    gains_by_size = {
+        size: tuple(gain.resize(size, Image.Resampling.BILINEAR) for gain in gains)
+        for size in (CANVAS, detail_size)
+    }
+    night_planes: list[tuple[str, str, Image.Image, int, int]] = []
+
     equipment = spec["aerologyEquipment"]
     equipment_source, _ = pinned_image(equipment)
     ex, ey, ew, eh = equipment["sourceBounds"]
@@ -426,21 +455,36 @@ def build_outputs(spec: dict) -> tuple[dict[str, bytes], dict]:
             image.paste(detail, (0, 0), detail_mask)
             image.alpha_composite(equipment_art, (ex * 2, ey * 2))
             emit(asset_id, role, filename, image, depth, extra, density=2)
+            night_planes.append((asset_id, filename, image, depth, 2))
         else:
             emit(asset_id, role, filename, image, depth, extra)
+            if role == "sky":
+                # The reference retains the original sky with its cloud at its
+                # authored location. Keep the daylight underpaint at the edges.
+                still_sky = base.copy()
+                still_sky.paste(master, (0, 0), cloud_mask)
+                night_planes.append((asset_id, filename, cutout(still_sky, underpaint[role]), depth, 1))
+            elif role in {"water", "foreground-occluder"}:
+                night_planes.append((asset_id, filename, image, depth, 1))
     for entry in spec["vegetation"]:
         mask = vegetation_masks[entry["id"]]
         moving_pixels = count(mask)
         foreground_pixels = count(ImageChops.multiply(mask, front_domain))
         if foreground_pixels not in (0, moving_pixels):
             raise ValueError(f"Vegetation selection crosses the foreground occlusion boundary: {entry['id']}")
-        emit(entry["id"], "vegetation", entry["file"], cutout(master, mask), entry["depthSourceY"], {
+        image = cutout(master, mask)
+        emit(entry["id"], "vegetation", entry["file"], image, entry["depthSourceY"], {
             "kind": entry["kind"], "rootFraction": entry["rootFraction"], "gain": entry["gain"],
             "maximumSourceDisplacement": entry["maximumSourceDisplacement"],
             "sourcePixelsExact": True, "movingPixels": moving_pixels,
             "foregroundOccludesActors": foreground_pixels > 0,
             "maskRecipe": "editable-source-row-spans-or-polygons",
         })
+        night_planes.append((entry["id"], entry["file"], image, entry["depthSourceY"], 1))
+    for asset_id, filename, image, depth, density in night_planes:
+        emit(f"{asset_id}.night", "night-light", f"night-{filename}",
+             apply_relight(image, gains_by_size[image.size]), depth,
+             {"dayKey": asset_id.replace(".", "_")}, density=density)
     for entry in spec["receivers"]:
         image, _ = pinned_image(entry)
         if image.size != CANVAS:
