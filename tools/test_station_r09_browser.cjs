@@ -9,7 +9,7 @@ const { inflateSync } = require('node:zlib');
 
 const HOST = '.world-canvas-host > div[data-station]';
 const BUDGET = Object.freeze({ pngBytes: 2 * 1024 * 1024, rgbaBytes: 8 * 1024 * 1024,
-  plants: 5, foliageBands: 40, normalCadenceMs: 100, lowCadenceMs: 200, softwareClearP95Ms: 100 });
+  plants: 9, foliageBands: 40, normalCadenceMs: 100, lowCadenceMs: 200, softwareClearP95Ms: 100 });
 const IDS = ['codepost', 'archive', 'cartography', 'radar', 'lab', 'hall'];
 const ENTRANCES = Object.freeze({ codepost: [228, 175], archive: [317, 211], cartography: [86, 192],
   radar: [75, 115], lab: [363, 151], hall: [449, 213] });
@@ -31,6 +31,19 @@ async function visibleEntranceGeometry(page) {
     return b.width && b.height && getComputedStyle(node).visibility !== 'hidden'
       ? [{ id: node.dataset.buildingId, x: b.x, y: b.y, width: b.width, height: b.height }] : [];
   }));
+}
+async function setStationView(page, mode) {
+  const before = await stationState(page);
+  if (!before.camera.mode || before.camera.mode === mode) return;
+  const control = page.locator('[data-station-view-mode]');
+  const box = await control.boundingBox();
+  assert.ok(box && box.width >= 44 && box.height >= 44, 'The station view control has a 44px target');
+  await control.click();
+  await page.waitForFunction((expected) => {
+    const raw = document.querySelector('.world-canvas-host > div[data-station]')?.dataset.station;
+    return raw && JSON.parse(raw).camera.mode === expected;
+  }, mode);
+  assert.equal((await stationState(page)).staticGeometrySignature, before.staticGeometrySignature);
 }
 async function panOnce(page, direction) {
   const control = page.locator(`[data-station-pan="${direction}"]`);
@@ -58,6 +71,8 @@ async function panOnce(page, direction) {
 async function showStationEntrance(page, id) {
   assert.ok(ENTRANCES[id], 'A known station entrance is required');
   const target = page.locator(`[data-building-id="${id}"]`), trace = [];
+  if (await target.isVisible()) return trace;
+  await setStationView(page, 'detail');
   const initial = await stationState(page);
   const preferred = ENTRANCES[id][0] < initial.camera.centerX ? 'left' : 'right';
   for (const direction of [preferred, preferred === 'left' ? 'right' : 'left']) {
@@ -72,6 +87,8 @@ async function showStationEntrance(page, id) {
   return trace;
 }
 async function forEachStationView(page, visit) {
+  const initialMode = (await stationState(page)).camera.mode;
+  await setStationView(page, 'detail');
   for (let step = 0; step < 12; step++) {
     if (!await panOnce(page, 'left')) break;
     assert.ok(step < 11, 'The left station edge must be reachable in a bounded number of pans');
@@ -103,6 +120,7 @@ async function forEachStationView(page, visit) {
   }
   const ids = new Set(views.flatMap(view => view.boxes.map(box => box.id)));
   assert.deepEqual([...ids].sort(), [...IDS].sort(), 'All six real entrances remain reachable by panorama controls');
+  await setStationView(page, initialMode);
   return views;
 }
 
@@ -224,8 +242,8 @@ function installMetrics() {
       defaultFramebufferClears: s.clearTimes.length, clearTimes: [...s.clearTimes], draws: s.draws };
   }) });
 }
-function installDayFixture() {
-  const NativeDate = Date, fixed = NativeDate.parse('2026-06-21T09:00:00Z');
+function installDayFixture(iso = '2026-06-21T09:00:00Z') {
+  const NativeDate = Date, fixed = NativeDate.parse(iso);
   function FixedDate(...args) { if (!new.target) return new NativeDate(fixed).toString(); return Reflect.construct(NativeDate, args.length ? args : [fixed], new.target); }
   Object.setPrototypeOf(FixedDate, NativeDate); FixedDate.prototype = NativeDate.prototype;
   Object.defineProperty(FixedDate, 'now', { value: () => fixed }); globalThis.Date = FixedDate;
@@ -235,6 +253,112 @@ async function saveCanvas(page, output, name, report) {
   fs.writeFileSync(path.join(output, name + '.png'), bytes);
   report.screenshots.push({ name: name + '.png', sha256: crypto.createHash('sha256').update(bytes).digest('hex') });
   return { bytes, image: decodePng(bytes) };
+}
+
+async function checkWidePlaneSeams({ base, browser, report, output }) {
+  const page = await browser.newPage({ viewport: { width: 1914, height: 934 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  try {
+    await page.addInitScript(installDayFixture, '2026-11-24T11:00:00Z');
+    await page.addInitScript(() => {
+      localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'clear', soundEnabled: false, reducedMotion: true }));
+    });
+    await page.goto(candidateUrl(base)); await stationReady(page);
+    await page.waitForFunction(() => {
+      const value = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]')?.dataset.station || '{}');
+      return value.phase === 'day' && value.weather === 'clear';
+    });
+    const { image } = await saveCanvas(page, output, 'station-r09-wide-plane-seams', report);
+    let edgePixels = 0, longestRun = 0;
+    for (let y = 0; y < image.height; y++) {
+      let run = 0;
+      for (let x = 0; x < image.width; x++) {
+        const i = (y * image.width + x) * image.channels;
+        if (image.pixels[i] === 16 && image.pixels[i + 1] === 30 && image.pixels[i + 2] === 37) {
+          run++;
+          longestRun = Math.max(longestRun, run);
+          if (x === 0 || y === 0 || x === image.width - 1 || y === image.height - 1) edgePixels++;
+        } else run = 0;
+      }
+    }
+    assert.equal(edgePixels, 0, 'The wide scene covers all four canvas edges');
+    assert.ok(longestRun <= 2, `Wide sky and terrain layers expose a ${longestRun}px horizontal seam`);
+    report.cases.push({ name: 'station-r09-wide-plane-seams', edgePixels, longestRun, width: image.width, height: image.height });
+  } finally {
+    await page.close();
+  }
+}
+
+async function checkCanvasFallback({ base, browser, report, output }) {
+  const context = await browser.newContext({ viewport: { width: 1910, height: 931 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  const manifest = JSON.parse(fs.readFileSync('packages/world-engine/src/assets/hub/r09-manifest.json', 'utf8'));
+  const cloud = manifest.assets.find(asset => asset.role === 'clouds');
+  const cloudSource = decodePng(fs.readFileSync(path.join('apps/web/public', cloud.url)));
+  try {
+    await context.addInitScript(({ width, height }) => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, options) {
+        if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') return null;
+        // Exercise the same configuration a reused opaque Phaser canvas
+        // reports. A later call cannot change the first context's alpha.
+        const opaquePool = type === '2d' && options?.willReadFrequently && options.alpha === undefined;
+        const context = original.call(this, type, opaquePool ? { ...options, alpha: false } : options);
+        if (type === '2d' && context && this.width === width && this.height === height) {
+          globalThis.__stationR09CloudContext = context;
+        }
+        return context;
+      };
+      localStorage.setItem('synopsis_26063_settings', JSON.stringify({ weather: 'rain', soundEnabled: false, reducedMotion: true }));
+    }, { width: cloud.width, height: cloud.height });
+    const page = await context.newPage();
+    await page.addInitScript(installDayFixture, '2026-10-27T22:00:00+03:00');
+    page.on('pageerror', error => report.errors.push({ scenario: 'station-r09-canvas-rain-palette', message: error.message }));
+    await page.goto(candidateUrl(base)); await stationReady(page);
+    await page.waitForFunction(() => {
+      const value = JSON.parse(document.querySelector('.world-canvas-host > div[data-station]')?.dataset.station || '{}');
+      return value.phase === 'night' && value.weather === 'rain';
+    });
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const { camera } = await stationState(page);
+    const measured = await page.locator('canvas').evaluate((canvas, camera) => {
+      const context = canvas.getContext('2d');
+      if (!context) return null;
+      const px = (x) => Math.floor(camera.offsetX + x * camera.zoom);
+      const py = (y) => Math.floor(camera.offsetY + y * camera.zoom);
+      const pixels = context.getImageData(px(306), py(75), px(332) - px(306), py(87) - py(75)).data;
+      let exposedBackgroundPixels = 0;
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i] === 16 && pixels[i + 1] === 30 && pixels[i + 2] === 37) exposedBackgroundPixels++;
+      }
+      return { exposedBackgroundPixels, windowRgb: [...context.getImageData(px(229.75), py(161.5), 1, 1).data].slice(0, 3),
+        waterRgb: [...context.getImageData(px(314.75), py(79), 1, 1).data].slice(0, 3) };
+    }, camera);
+    assert.ok(measured, 'The Canvas fallback must be active');
+    assert.equal(measured.exposedBackgroundPixels, 0, 'Independent texture planes must meet with no camera background showing through the lake');
+    assert.ok(measured.windowRgb[0] > measured.windowRgb[2] + 35, 'Night entrance glass receives warm light in Canvas');
+    assert.ok(measured.waterRgb[2] > measured.waterRgb[0] + 25 && measured.waterRgb[2] < 130, 'Night rain visibly cools and dims the lake in Canvas');
+    await saveCanvas(page, output, 'station-r09-canvas-night-rain', report);
+    await page.close();
+    const day = await context.newPage();
+    await day.addInitScript(installDayFixture, '2026-11-24T11:00:00Z');
+    day.on('pageerror', error => report.errors.push({ scenario: 'station-r09-canvas-day-cloud', message: error.message }));
+    await day.goto(candidateUrl(base)); await stationReady(day);
+    assert.equal(cloudSource.channels, 4);
+    await day.waitForFunction(() => {
+      const value = JSON.parse(document.querySelector('[data-station]')?.dataset.station || '{}');
+      return value.phase === 'day' && Boolean(globalThis.__stationR09CloudContext);
+    });
+    const tintedCloudAlpha = await day.evaluate(({ width, height }) => {
+      const cloud = globalThis.__stationR09CloudContext;
+      if (!cloud) return null;
+      return Array.from(cloud.getImageData(0, 0, width, height).data).filter((_, i) => i % 4 === 3);
+    }, { width: cloud.width, height: cloud.height });
+    const authoredCloudAlpha = Array.from(cloudSource.pixels).filter((_, i) => i % 4 === 3);
+    assert.deepEqual(tintedCloudAlpha, authoredCloudAlpha, 'Every tinted cloud texel keeps its authored transparency even with opaque pooled canvases');
+    report.cases.push({ name: 'station-r09-canvas-rain-palette', ...measured,
+      cloudAlphaVerified: tintedCloudAlpha.length, transparentCloudTexels: tintedCloudAlpha.filter(alpha => alpha === 0).length });
+  } finally {
+    await context.close();
+  }
 }
 
 async function nativeContextRestore(page, output, report, beforeImage) {
@@ -373,8 +497,18 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
     await page.goto(candidateUrl(base)); await stationReady(page); await page.mouse.move(1, 1);
     await Promise.all(responseReads);
     const loadingElapsedMs = performance.now() - loadingBegan;
+    const starting = await stationState(page);
+    assert.equal(starting.camera.mode, viewport.width < viewport.height ? 'detail' : 'overview');
+    const { offsetX, offsetY, zoom, pixelRatio } = starting.camera;
+    assert.ok(offsetX <= .5 && offsetX + 512 * zoom >= viewport.width * pixelRatio - .5, 'Station fills the framebuffer horizontally');
+    assert.ok(offsetY <= .5 && offsetY + 288 * zoom >= viewport.height * pixelRatio - .5, 'Station fills the framebuffer vertically');
+    await setStationView(page, 'overview');
     const first = await stationState(page);
     assert.deepEqual(first.sourceCanvas, [512, 288]);
+    assert.equal(first.camera.mode, 'overview');
+    if (viewport.width < viewport.height) assert.deepEqual(first.camera.visibleSourceBounds, [0, 0, 512, 288]);
+    else assert.ok(first.camera.visibleSourceBounds[2] > 511.9, 'Landscape overview preserves the source width');
+    await page.locator('[data-building-id="lab"]').waitFor();
     assert.equal(first.assets.count, manifest.assets.length, 'The current manifest is loaded by the real R09 renderer');
     assert.equal(first.assets.estimatedRgbaBytes, rgbaBytes);
     for (const source of sourceFiles) {
@@ -392,7 +526,7 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
     assert.equal(first.staticGeometrySignature, geometrySignature, 'One source geometry across all viewport orientations');
     await capture(page, `station-r09-day-${viewport.width}`);
     const initial = await saveCanvas(page, output, `station-r09-motion-a-${viewport.width}`, report);
-    const blockers = await page.locator('.hub-topbar,.hub-dock,.hub-scene-caption,[data-station-pan]').evaluateAll(nodes => nodes.map(node => {
+    const blockers = await page.locator('.hub-topbar,.hub-dock,.hub-scene-caption,.station-pan-controls').evaluateAll(nodes => nodes.map(node => {
       const b = node.getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height };
     }).filter(box => box.width && box.height));
     const definitions = [
@@ -406,9 +540,10 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
       const rect = projectRegion(definition.bounds, first, viewport, initial.image, blockers);
       return rect ? [{ ...definition, rect }] : [];
     });
-    assert.ok(regions.some(region => region.group === 'foliage'), 'At least one moving crown is actually visible above the HUD');
+    assert.ok(regions.filter(region => region.group === 'foliage').length >= 3, 'Several authored crowns are visible above the HUD');
     assert.ok(regions.some(region => region.group === 'fixed'), 'A real architecture patch is visible for the movement comparison');
     const maxima = { foliage: 0, clouds: 0, water: 0, fixed: 0 }, observations = [];
+    const visiblyMovingCrowns = new Set();
     let latest, latestState;
     const started = performance.now();
     while (performance.now() - started < 28_000) {
@@ -419,18 +554,22 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
       assert.equal(latestState.motion.foliage.rootDisplacement, 0);
       for (const pose of latestState.motion.foliage.poses) for (const offset of pose.offsets) assert.ok(Math.abs(offset[0]) + Math.abs(offset[1]) <= 1);
       const differences = regions.map(region => ({ id: region.id, group: region.group, ...pixelDifference(initial.image, latest.image, region.rect) }));
-      for (const difference of differences) maxima[difference.group] = Math.max(maxima[difference.group], difference.changed);
+      for (const difference of differences) {
+        maxima[difference.group] = Math.max(maxima[difference.group], difference.changed);
+        if (difference.group === 'foliage' && difference.changed >= 4) visiblyMovingCrowns.add(difference.id);
+      }
       observations.push({ elapsedMs: performance.now() - started, clockMs: latestState.motion.clockMs,
         paintedFrames: latestState.motion.foliage.paintedFrames, differences });
       assert.equal(maxima.fixed, 0, 'Buildings remain pixel-stable while weather, water and foliage move');
-      if (maxima.foliage > 0 && (viewport.width !== 1366 || (maxima.clouds > 0 && maxima.water > 0))) break;
+      if (visiblyMovingCrowns.size >= 3 && (viewport.width !== 1366 || (maxima.clouds > 0 && maxima.water > 0))) break;
     }
-    assert.ok(maxima.foliage > 0, 'The visible crowns must move in actual rendered pixels, not only the diagnostics');
+    assert.ok(visiblyMovingCrowns.size >= 3, 'At least three distinct crowns change actual rendered pixels');
     if (viewport.width === 1366) { assert.ok(maxima.clouds > 0, 'The authored cloud island visibly drifts'); assert.ok(maxima.water > 0, 'The authored distant water visibly moves'); }
     const lastName = `station-r09-motion-b-${viewport.width}.png`;
     fs.writeFileSync(path.join(output, lastName), latest.bytes);
     report.screenshots.push({ name: lastName, sha256: crypto.createHash('sha256').update(latest.bytes).digest('hex') });
     report.cases.push({ name: `station-r09-real-motion-${viewport.width}`, state: latestState, regions, maxima, observations,
+      visiblyMovingCrowns: [...visiblyMovingCrowns],
       clockManipulated: false, assertionScope: 'Visible source regions; camera, stone and timber samples remain fixed' });
 
     const measuredFrom = await page.evaluate(() => performance.now());
@@ -488,7 +627,9 @@ async function runStationR09Checks({ base, browser, report, capture, output }) {
       clockElapsedMs, paintedFrames, lowElapsedMs, defaultFramebufferClears: lowClears });
     await context.close();
   }
+  await checkCanvasFallback({ base, browser, report, output });
+  await checkWidePlaneSeams({ base, browser, report, output });
 }
 
 module.exports = { runStationR09Checks, stationState, stationReady, visibleEntranceGeometry,
-  forEachStationView, panOnce, showStationEntrance, candidateUrl, decodePng, pixelDifference, projectRegion, BUDGET };
+  forEachStationView, panOnce, showStationEntrance, candidateUrl, decodePng, pixelDifference, projectRegion, checkCanvasFallback, BUDGET };

@@ -27,8 +27,10 @@ interface WindActor {
   bands: Array<{ band: WindBand; image: Phaser.GameObjects.Image; dx: number; dy: number }>;
 }
 
-/** Small masked cutouts on the Hub's existing camera. No shader, canvas redraw,
- * generated texture, input target, animation timer, or per-frame React state.
+type WindTextureResolver = (sourceKey: string, tint: number) => string;
+
+/** Small masked cutouts on the Hub's existing camera. Motion only updates
+ * image positions. The renderer may supply pre-tinted sources on phase changes.
  * The base plate MUST already have these moving crowns removed, otherwise it
  * would leave a second stationary silhouette beneath the moving cutouts. */
 export class HubVegetationWindLayer {
@@ -36,6 +38,8 @@ export class HubVegetationWindLayer {
   private actors: WindActor[] = [];
   private environment = normalizeWindEnvironment();
   private tint = 0xffffff;
+  private tintTexture?: WindTextureResolver;
+  private nativeTint = false;
   private disposed = false;
 
   constructor(private readonly scene: Phaser.Scene, private readonly stationSeed = 26063) {}
@@ -69,13 +73,14 @@ export class HubVegetationWindLayer {
         this.scene.textures.get(plan.placement.textureKey).setFilter(Phaser.Textures.FilterMode.NEAREST);
         const actor: WindActor = { ...plan, bands: [] };
         next.push(actor);
+        const textureKey = this.tintTexture?.(plan.placement.textureKey, this.tint) ?? plan.placement.textureKey;
         for (const band of plan.bands) {
-          const image = this.scene.add.image(plan.placement.anchorX, plan.placement.anchorY, plan.placement.textureKey);
+          const image = this.scene.add.image(plan.placement.anchorX, plan.placement.anchorY, textureKey);
           actor.bands.push({ band, image, dx: 0, dy: 0 });
           image.setScale(plan.scaleX, plan.scaleY)
             .setDisplayOrigin(plan.source.x + plan.source.width / 2, plan.source.y + plan.source.height)
             .setCrop(plan.source.x + band.x, plan.source.y + band.y, band.width, band.height)
-            .setDepth(plan.placement.depth).setTint(this.tint);
+            .setDepth(plan.placement.depth).setTint(this.tintTexture && !this.nativeTint ? 0xffffff : this.tint);
         }
       }
     } catch (error) {
@@ -99,10 +104,25 @@ export class HubVegetationWindLayer {
     if (next.reducedMotion || (!next.paused && (previous.reducedMotion || next.weather !== previous.weather))) this.paint();
   }
 
-  setTint(tint: number): void {
-    if (this.disposed || tint === this.tint) return;
+  /** Resolve a texture on the original pixel grid. Native modulation is only
+   * needed when the resolver swaps a plate and leaves the weather tint to WebGL. */
+  setTint(tint: number, tintTexture?: WindTextureResolver, nativeTint = false): void {
+    if (this.disposed || (tint === this.tint && tintTexture === this.tintTexture && nativeTint === this.nativeTint)) return;
+    const previousResolver = this.tintTexture;
     this.tint = tint;
-    this.actors.forEach((actor) => actor.bands.forEach(({ image }) => image.setTint(tint)));
+    this.tintTexture = tintTexture;
+    this.nativeTint = nativeTint;
+    for (const { placement, source, bands } of this.actors) {
+      const textureKey = tintTexture?.(placement.textureKey, tint) ?? placement.textureKey;
+      for (const { image, band } of bands) {
+        if (previousResolver || tintTexture) {
+          image.setTexture(textureKey)
+            .setDisplayOrigin(source.x + source.width / 2, source.y + source.height)
+            .setCrop(source.x + band.x, source.y + band.y, band.width, band.height);
+        }
+        image.setTint(tintTexture && !nativeTint ? 0xffffff : tint);
+      }
+    }
   }
 
   update(deltaMs: number): void {
@@ -118,6 +138,7 @@ export class HubVegetationWindLayer {
           sourceX: placement.anchorX / actor.scaleX, sourceY: placement.anchorY / actor.scaleY,
           sourceHeight: actor.source.height, freedom: rendered.band.freedom, gain: placement.gain,
         }, this.environment, this.stationSeed);
+        if (rendered.dx === displacement.x && rendered.dy === displacement.y) continue;
         rendered.dx = displacement.x;
         rendered.dy = displacement.y;
         rendered.image.setPosition(placement.anchorX + displacement.x * actor.scaleX, placement.anchorY + displacement.y * actor.scaleY);

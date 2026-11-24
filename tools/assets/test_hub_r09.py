@@ -8,7 +8,7 @@ import json
 import unittest
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 import build_hub_r09 as exporter
 
@@ -34,16 +34,46 @@ class StationExportContract(unittest.TestCase):
         self.assertTrue(manifest["validation"]["restRoundtripRgbaExact"])
         self.assertEqual(manifest["validation"]["outsideMovingMaskChangedPixels"], 0)
         self.assertFalse(manifest["validation"]["artAcceptanceImplied"])
-        self.assertEqual(manifest["validation"]["vegetationPieces"], 5)
+        self.assertEqual(manifest["validation"]["vegetationPieces"], 9)
+        foliage = [asset for asset in manifest["assets"] if asset["role"] == "vegetation"]
+        self.assertEqual(
+            [asset["id"] for asset in foliage if asset["foregroundOccludesActors"]],
+            ["hub.r09.foliage.foreground-right"],
+        )
         for asset in manifest["assets"]:
             self.assertNotIn("sourceRect", asset, "A world-space box must not be confused with texture crop coordinates")
+            density = asset.get("density", 1)
             self.assertEqual(asset["anchorScenePx"], [
-                asset["originalSceneXY"][0] + asset["width"] / 2,
-                asset["originalSceneXY"][1] + asset["height"],
+                asset["originalSceneXY"][0] + asset["width"] / (2 * density),
+                asset["originalSceneXY"][1] + asset["height"] / density,
             ])
+        detail = next(asset for asset in manifest["assets"] if asset["role"] == "architecture-ground")
+        self.assertEqual(detail["density"], 2)
+        self.assertEqual([detail["width"], detail["height"]], [2 * n for n in detail["sourceBounds"][2:]])
+        self.assertEqual(detail["sourceBounds"], [0, 10, 512, 278])
 
     def test_changed_provider_source_requires_new_pin(self):
         self.reject(lambda s: s["sources"]["master"].update(sha256="0" * 64), "checksum changed")
+
+    def test_night_relight_keeps_every_plane_and_foliage_alpha_registered(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        by_key = {asset["key"]: asset for asset in manifest["assets"]}
+        variants = [asset for asset in manifest["assets"] if asset["role"] == "night-light"]
+        original_roles = {"sky", "water", "architecture-ground", "foreground-occluder", "vegetation"}
+        self.assertEqual({asset["dayKey"] for asset in variants},
+                         {asset["key"] for asset in by_key.values() if asset["role"] in original_roles})
+        for variant in variants:
+            original = by_key[variant["dayKey"]]
+            for field in ("width", "height", "originalSceneXY", "sourceBounds", "anchorScenePx",
+                          "pivotLocalPx", "depthSourceY", "density"):
+                self.assertEqual(variant.get(field), original.get(field))
+            with Image.open(io.BytesIO(files[Path(original["url"]).name])) as day:
+                with Image.open(io.BytesIO(files[Path(variant["url"]).name])) as night:
+                    self.assertEqual(day.getchannel("A").tobytes(), night.getchannel("A").tobytes())
+                    self.assertNotEqual(day.tobytes(), night.tobytes())
+
+    def test_aerology_equipment_cannot_cover_water_or_sky(self):
+        self.reject(lambda s: s["aerologyEquipment"].update(sourceBounds=[377, 0, 8, 22]), "stationary architecture")
 
     def test_provider_path_cannot_escape_selected_project_source(self):
         self.reject(lambda s: s["sources"]["hiddenPlate"].update(source="README.md"), "must stay inside")
@@ -78,6 +108,22 @@ class StationExportContract(unittest.TestCase):
     def test_native_sky_patch_preserves_the_vertical_colour_ramp(self):
         self.reject(lambda s: s["skyPatch"].update(destination=[354, 38]), "vertical colour ramp")
 
+    def test_sky_texture_and_scanlines_follow_the_western_silhouette(self):
+        files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
+        asset = next(a for a in manifest["assets"] if a["role"] == "sky")
+        alpha = Image.new("L", (512, 288))
+        with Image.open(io.BytesIO(files["sky.png"])) as image:
+            alpha.paste(image.getchannel("A"), tuple(asset["originalSceneXY"]))
+        trace = Image.new("L", (512, 288))
+        pen = ImageDraw.Draw(trace)
+        for y, left, right in manifest["domains"]["sky"]["rowSpans"]:
+            pen.line((left, y, right - 1, y), fill=255)
+        for x, y in ((2, 11), (23, 14), (34, 24), (96, 28), (124, 54), (128, 49), (144, 58)):
+            self.assertEqual(trace.getpixel((x, y)), 255, "Open sky keeps its own tint")
+        for x, y in ((40, 29), (47, 34), (55, 42), (58, 38), (65, 28)):
+            self.assertEqual(trace.getpixel((x, y)), 0, "Forest and radome keep their terrain tint")
+        self.assertEqual(alpha.tobytes(), trace.filter(ImageFilter.MaxFilter(3)).tobytes())
+
     def test_cloud_drift_cannot_change_y_or_wrap_onscreen(self):
         self.reject(lambda s: s["cloudSelection"]["islands"][0]["motion"].update(constantSourceY=40), "fixed-y integer-x")
         self.reject(lambda s: s["cloudSelection"]["islands"][0]["motion"].update(wrapOnlyWhenFullyOffscreen=False), "fixed-y integer-x")
@@ -99,7 +145,7 @@ class StationExportContract(unittest.TestCase):
         self.assertNotIn("maximumHorizontalDisplacement", cloud)
         self.assertEqual(cloud["motion"]["constantSourceY"], cloud["originalSceneXY"][1])
 
-    def test_water_scanlines_match_png_and_exclude_fir_and_shore(self):
+    def test_water_effect_excludes_fir_and_shore_and_plane_bleeds_under_adjacent_terrain(self):
         files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
         asset = next(a for a in manifest["assets"] if a["role"] == "water")
         actual = Image.new("L", (512, 288))
@@ -109,10 +155,12 @@ class StationExportContract(unittest.TestCase):
         draw = ImageDraw.Draw(geometry)
         for y, start, end_exclusive in manifest["domains"]["water"]["rowSpans"]:
             draw.line((start, y, end_exclusive - 1, y), fill=255)
-        self.assertEqual(actual.tobytes(), geometry.tobytes())
+        sky = exporter.polygon_mask(self.source["domains"]["sky"])
+        bleed = ImageChops.subtract(geometry.filter(ImageFilter.MaxFilter(3)), sky)
+        self.assertEqual(actual.tobytes(), bleed.tobytes())
         for point in ((464, 108), (460, 114), (466, 115), (478, 101), (319, 77)):
-            self.assertEqual(actual.getpixel(point), 0, f"A tree or shoreline pixel entered the water effect: {point}")
-        self.assertEqual(actual.getpixel((450, 102)), 255)
+            self.assertEqual(geometry.getpixel(point), 0, f"A tree or shoreline pixel entered the water effect: {point}")
+        self.assertEqual(geometry.getpixel((450, 102)), 255)
 
     def test_cloud_uses_only_selected_source_pixels_and_unchanged_sky_crop(self):
         files, manifest = exporter.build_outputs(copy.deepcopy(self.source))
@@ -125,7 +173,8 @@ class StationExportContract(unittest.TestCase):
                 if asset["role"] == "clouds":
                     mask.paste(image.getchannel("A"), tuple(asset["originalSceneXY"]))
                 else:
-                    base.alpha_composite(image, tuple(asset["originalSceneXY"]))
+                    logical = image.resize(tuple(asset["sourceBounds"][2:]), Image.Resampling.NEAREST)
+                    base.alpha_composite(logical, tuple(asset["originalSceneXY"]))
         self.assertEqual(mask.getpixel((250, 20)), 0)
         self.assertEqual(mask.getpixel((300, 20)), 0)
         self.assertEqual(mask.getpixel((370, 40)), 255)

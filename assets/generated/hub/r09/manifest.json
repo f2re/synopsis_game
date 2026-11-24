@@ -41,7 +41,7 @@
       "key": "hub_r09_sky",
       "url": "/hub/r09/sky.png",
       "width": 512,
-      "height": 76,
+      "height": 77,
       "originalSceneXY": [
         0,
         0
@@ -50,20 +50,20 @@
         0,
         0,
         512,
-        76
+        77
       ],
       "pivotLocalPx": [
         256.0,
-        76
+        77
       ],
       "anchorScenePx": [
         256.0,
-        76
+        77
       ],
       "depthSourceY": 0,
       "alphaPolicy": "binary",
-      "sha256": "3ecb362c29ae387aab50ac15abc4d3a474c9bcab67bcb9d436c4aa4d0c3f7bb2",
-      "bytes": 35625,
+      "sha256": "3fa097fb0759fae712c335ed5a3d35925fbc6b4c9746d8d7cddec2075bde3a9b",
+      "bytes": 39709,
       "sourcePixelsExact": false
     },
     {
@@ -71,30 +71,30 @@
       "role": "water",
       "key": "hub_r09_water",
       "url": "/hub/r09/water.png",
-      "width": 206,
-      "height": 56,
+      "width": 207,
+      "height": 58,
       "originalSceneXY": [
-        306,
-        76
+        305,
+        75
       ],
       "sourceBounds": [
-        306,
-        76,
-        206,
-        56
+        305,
+        75,
+        207,
+        58
       ],
       "pivotLocalPx": [
-        103.0,
-        56
+        103.5,
+        58
       ],
       "anchorScenePx": [
-        409.0,
-        132
+        408.5,
+        133
       ],
       "depthSourceY": 1,
       "alphaPolicy": "binary",
-      "sha256": "40cd01dbf679f8fd16dec7e486062a5337ace9452a59b573ce54780ef0b46781",
-      "bytes": 2070,
+      "sha256": "7e70f75ea3a3211c3737df0230619bf791f9b020db740bc4075db7d31618c442",
+      "bytes": 3026,
       "sourcePixelsExact": false
     },
     {
@@ -102,8 +102,8 @@
       "role": "architecture-ground",
       "key": "hub_r09_architecture-ground",
       "url": "/hub/r09/architecture-ground.png",
-      "width": 512,
-      "height": 278,
+      "width": 1024,
+      "height": 556,
       "originalSceneXY": [
         0,
         10
@@ -115,8 +115,8 @@
         278
       ],
       "pivotLocalPx": [
-        256.0,
-        278
+        512.0,
+        556
       ],
       "anchorScenePx": [
         256.0,
@@ -124,8 +124,9 @@
       ],
       "depthSourceY": 2,
       "alphaPolicy": "binary",
-      "sha256": "0683053e2ea4cda7cda4f519dcbf0f8814ee7d0956050165ead0ffa3596f9ca7",
-      "bytes": 251757,
+      "sha256": "2c29f9bf3d6f9a0c0fbbfa70c796d0dbbe4e37f01e12117d7801484baf891188",
+      "bytes": 838067,
+      "density": 2,
       "sourcePixelsExact": false
     },
     {
@@ -201,6 +202,158 @@
       "clipDomain": "cloudClip"
     },
     {
+      "id": "hub.r09.foliage.west-stair-fir",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_west-stair-fir",
+      "url": "/hub/r09/foliage-west-stair-fir.png",
+      "width": 11,
+      "height": 22,
+      "originalSceneXY": [
+        143,
+        177
+      ],
+      "sourceBounds": [
+        143,
+        177,
+        11,
+        22
+      ],
+      "pivotLocalPx": [
+        5.5,
+        22
+      ],
+      "anchorScenePx": [
+        148.5,
+        199
+      ],
+      "depthSourceY": 199,
+      "alphaPolicy": "binary",
+      "sha256": "8a01213d1d8398b7e81566929ecc27bfc98c20a9fbf3590775524d82a9c262c9",
+      "bytes": 703,
+      "kind": "tree",
+      "rootFraction": 0.23,
+      "gain": 1.5,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 167,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.courtyard-east-ivy",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_courtyard-east-ivy",
+      "url": "/hub/r09/foliage-courtyard-east-ivy.png",
+      "width": 15,
+      "height": 38,
+      "originalSceneXY": [
+        274,
+        158
+      ],
+      "sourceBounds": [
+        274,
+        158,
+        15,
+        38
+      ],
+      "pivotLocalPx": [
+        7.5,
+        38
+      ],
+      "anchorScenePx": [
+        281.5,
+        196
+      ],
+      "depthSourceY": 195,
+      "alphaPolicy": "binary",
+      "sha256": "f95c422f23afaf04a7813a960e98f2efeda9ccf726125756166becac8007323f",
+      "bytes": 1578,
+      "kind": "shrub",
+      "rootFraction": 0.3,
+      "gain": 1.4,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 423,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.aerology-west-ivy",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_aerology-west-ivy",
+      "url": "/hub/r09/foliage-aerology-west-ivy.png",
+      "width": 21,
+      "height": 44,
+      "originalSceneXY": [
+        347,
+        93
+      ],
+      "sourceBounds": [
+        347,
+        93,
+        21,
+        44
+      ],
+      "pivotLocalPx": [
+        10.5,
+        44
+      ],
+      "anchorScenePx": [
+        357.5,
+        137
+      ],
+      "depthSourceY": 138,
+      "alphaPolicy": "binary",
+      "sha256": "3b0666962a935b9a0a4b50fa2373ea5318cdde14fbe3c61f27b139370a141a8d",
+      "bytes": 1889,
+      "kind": "shrub",
+      "rootFraction": 0.24,
+      "gain": 1.4,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 508,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.foliage.east-walk-fir",
+      "role": "vegetation",
+      "key": "hub_r09_foliage_east-walk-fir",
+      "url": "/hub/r09/foliage-east-walk-fir.png",
+      "width": 10,
+      "height": 16,
+      "originalSceneXY": [
+        372,
+        212
+      ],
+      "sourceBounds": [
+        372,
+        212,
+        10,
+        16
+      ],
+      "pivotLocalPx": [
+        5.0,
+        16
+      ],
+      "anchorScenePx": [
+        377.0,
+        228
+      ],
+      "depthSourceY": 229,
+      "alphaPolicy": "binary",
+      "sha256": "f398881f56bf95245f0c35003ede36c848c22a9d2f04ef5064705afa63fe9d4c",
+      "bytes": 507,
+      "kind": "tree",
+      "rootFraction": 0.23,
+      "gain": 1.5,
+      "maximumSourceDisplacement": 1,
+      "sourcePixelsExact": true,
+      "movingPixels": 102,
+      "foregroundOccludesActors": false,
+      "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
       "id": "hub.r09.foliage.central-topiary",
       "role": "vegetation",
       "key": "hub_r09_foliage_central-topiary",
@@ -235,6 +388,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 169,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -272,6 +426,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 145,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -309,6 +464,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 168,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -346,6 +502,7 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 153,
+      "foregroundOccludesActors": false,
       "maskRecipe": "editable-source-row-spans-or-polygons"
     },
     {
@@ -383,7 +540,412 @@
       "maximumSourceDisplacement": 1,
       "sourcePixelsExact": true,
       "movingPixels": 1559,
+      "foregroundOccludesActors": true,
       "maskRecipe": "editable-source-row-spans-or-polygons"
+    },
+    {
+      "id": "hub.r09.sky.night",
+      "role": "night-light",
+      "key": "hub_r09_sky_night",
+      "url": "/hub/r09/night-sky.png",
+      "width": 512,
+      "height": 77,
+      "originalSceneXY": [
+        0,
+        0
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        512,
+        77
+      ],
+      "pivotLocalPx": [
+        256.0,
+        77
+      ],
+      "anchorScenePx": [
+        256.0,
+        77
+      ],
+      "depthSourceY": 0,
+      "alphaPolicy": "binary",
+      "sha256": "08a68fb13fd49f6b3917091bdaffb97624b704b7cc7831d220b77ff51dac02bf",
+      "bytes": 33931,
+      "dayKey": "hub_r09_sky"
+    },
+    {
+      "id": "hub.r09.water.night",
+      "role": "night-light",
+      "key": "hub_r09_water_night",
+      "url": "/hub/r09/night-water.png",
+      "width": 207,
+      "height": 58,
+      "originalSceneXY": [
+        305,
+        75
+      ],
+      "sourceBounds": [
+        305,
+        75,
+        207,
+        58
+      ],
+      "pivotLocalPx": [
+        103.5,
+        58
+      ],
+      "anchorScenePx": [
+        408.5,
+        133
+      ],
+      "depthSourceY": 1,
+      "alphaPolicy": "binary",
+      "sha256": "9f472446d97e05e8b4f2982b073505f79f7dbfdf12651fd56fdb80a10aa99888",
+      "bytes": 2865,
+      "dayKey": "hub_r09_water"
+    },
+    {
+      "id": "hub.r09.architecture-ground.night",
+      "role": "night-light",
+      "key": "hub_r09_architecture-ground_night",
+      "url": "/hub/r09/night-architecture-ground.png",
+      "width": 1024,
+      "height": 556,
+      "originalSceneXY": [
+        0,
+        10
+      ],
+      "sourceBounds": [
+        0,
+        10,
+        512,
+        278
+      ],
+      "pivotLocalPx": [
+        512.0,
+        556
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 2,
+      "alphaPolicy": "binary",
+      "sha256": "466fc85529b0f866717b98fb34165e882de6087478ffe683e7d8ba94d2e8a58f",
+      "bytes": 744951,
+      "density": 2,
+      "dayKey": "hub_r09_architecture-ground"
+    },
+    {
+      "id": "hub.r09.foreground.night",
+      "role": "night-light",
+      "key": "hub_r09_foreground_night",
+      "url": "/hub/r09/night-foreground.png",
+      "width": 512,
+      "height": 79,
+      "originalSceneXY": [
+        0,
+        209
+      ],
+      "sourceBounds": [
+        0,
+        209,
+        512,
+        79
+      ],
+      "pivotLocalPx": [
+        256.0,
+        79
+      ],
+      "anchorScenePx": [
+        256.0,
+        288
+      ],
+      "depthSourceY": 260,
+      "alphaPolicy": "binary",
+      "sha256": "03a4c6cb8a008aed3d456cfd23e1f702ca505f023c2c9df91d763bc06efc4ad0",
+      "bytes": 40473,
+      "dayKey": "hub_r09_foreground"
+    },
+    {
+      "id": "hub.r09.foliage.west-stair-fir.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_west-stair-fir_night",
+      "url": "/hub/r09/night-foliage-west-stair-fir.png",
+      "width": 11,
+      "height": 22,
+      "originalSceneXY": [
+        143,
+        177
+      ],
+      "sourceBounds": [
+        143,
+        177,
+        11,
+        22
+      ],
+      "pivotLocalPx": [
+        5.5,
+        22
+      ],
+      "anchorScenePx": [
+        148.5,
+        199
+      ],
+      "depthSourceY": 199,
+      "alphaPolicy": "binary",
+      "sha256": "03bbda5874467beca4f34de687a29743e120f54e1a833253eaa2f957bd1e6b0a",
+      "bytes": 653,
+      "dayKey": "hub_r09_foliage_west-stair-fir"
+    },
+    {
+      "id": "hub.r09.foliage.courtyard-east-ivy.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_courtyard-east-ivy_night",
+      "url": "/hub/r09/night-foliage-courtyard-east-ivy.png",
+      "width": 15,
+      "height": 38,
+      "originalSceneXY": [
+        274,
+        158
+      ],
+      "sourceBounds": [
+        274,
+        158,
+        15,
+        38
+      ],
+      "pivotLocalPx": [
+        7.5,
+        38
+      ],
+      "anchorScenePx": [
+        281.5,
+        196
+      ],
+      "depthSourceY": 195,
+      "alphaPolicy": "binary",
+      "sha256": "7e13b10ed1db07ff58c64900302bddce3d690a8e5433d9451d1ccdd17bf5e3e8",
+      "bytes": 1496,
+      "dayKey": "hub_r09_foliage_courtyard-east-ivy"
+    },
+    {
+      "id": "hub.r09.foliage.aerology-west-ivy.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_aerology-west-ivy_night",
+      "url": "/hub/r09/night-foliage-aerology-west-ivy.png",
+      "width": 21,
+      "height": 44,
+      "originalSceneXY": [
+        347,
+        93
+      ],
+      "sourceBounds": [
+        347,
+        93,
+        21,
+        44
+      ],
+      "pivotLocalPx": [
+        10.5,
+        44
+      ],
+      "anchorScenePx": [
+        357.5,
+        137
+      ],
+      "depthSourceY": 138,
+      "alphaPolicy": "binary",
+      "sha256": "be080d55c98f584f4927bf6529ae374061a9eadb43804feca7315149585668f8",
+      "bytes": 1704,
+      "dayKey": "hub_r09_foliage_aerology-west-ivy"
+    },
+    {
+      "id": "hub.r09.foliage.east-walk-fir.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_east-walk-fir_night",
+      "url": "/hub/r09/night-foliage-east-walk-fir.png",
+      "width": 10,
+      "height": 16,
+      "originalSceneXY": [
+        372,
+        212
+      ],
+      "sourceBounds": [
+        372,
+        212,
+        10,
+        16
+      ],
+      "pivotLocalPx": [
+        5.0,
+        16
+      ],
+      "anchorScenePx": [
+        377.0,
+        228
+      ],
+      "depthSourceY": 229,
+      "alphaPolicy": "binary",
+      "sha256": "187b8a73d39374e65d2b0d44396a487fc5041e06d7537d475993b900116cb29e",
+      "bytes": 474,
+      "dayKey": "hub_r09_foliage_east-walk-fir"
+    },
+    {
+      "id": "hub.r09.foliage.central-topiary.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_central-topiary_night",
+      "url": "/hub/r09/night-foliage-central-topiary.png",
+      "width": 16,
+      "height": 15,
+      "originalSceneXY": [
+        220,
+        232
+      ],
+      "sourceBounds": [
+        220,
+        232,
+        16,
+        15
+      ],
+      "pivotLocalPx": [
+        8.0,
+        15
+      ],
+      "anchorScenePx": [
+        228.0,
+        247
+      ],
+      "depthSourceY": 250,
+      "alphaPolicy": "binary",
+      "sha256": "611198d722aab6b280ccf3aab1ae74cda3e61c417ac036747d02742b25c93243",
+      "bytes": 682,
+      "dayKey": "hub_r09_foliage_central-topiary"
+    },
+    {
+      "id": "hub.r09.foliage.left-front-shrub.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_left-front-shrub_night",
+      "url": "/hub/r09/night-foliage-left-front-shrub.png",
+      "width": 15,
+      "height": 14,
+      "originalSceneXY": [
+        125,
+        222
+      ],
+      "sourceBounds": [
+        125,
+        222,
+        15,
+        14
+      ],
+      "pivotLocalPx": [
+        7.5,
+        14
+      ],
+      "anchorScenePx": [
+        132.5,
+        236
+      ],
+      "depthSourceY": 240,
+      "alphaPolicy": "binary",
+      "sha256": "ddafc727bf4f01d64ebd851c821716de9567ff5cdb4c60ba62b534b0e9b3f2fe",
+      "bytes": 615,
+      "dayKey": "hub_r09_foliage_left-front-shrub"
+    },
+    {
+      "id": "hub.r09.foliage.left-planter-topiary.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_left-planter-topiary_night",
+      "url": "/hub/r09/night-foliage-left-planter-topiary.png",
+      "width": 15,
+      "height": 15,
+      "originalSceneXY": [
+        263,
+        230
+      ],
+      "sourceBounds": [
+        263,
+        230,
+        15,
+        15
+      ],
+      "pivotLocalPx": [
+        7.5,
+        15
+      ],
+      "anchorScenePx": [
+        270.5,
+        245
+      ],
+      "depthSourceY": 250,
+      "alphaPolicy": "binary",
+      "sha256": "0d38be66e98e2f91c88ff90f2692d75583a05dcd905f47cbb31012b14f9f67ed",
+      "bytes": 673,
+      "dayKey": "hub_r09_foliage_left-planter-topiary"
+    },
+    {
+      "id": "hub.r09.foliage.right-planter-topiary.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_right-planter-topiary_night",
+      "url": "/hub/r09/night-foliage-right-planter-topiary.png",
+      "width": 15,
+      "height": 15,
+      "originalSceneXY": [
+        295,
+        228
+      ],
+      "sourceBounds": [
+        295,
+        228,
+        15,
+        15
+      ],
+      "pivotLocalPx": [
+        7.5,
+        15
+      ],
+      "anchorScenePx": [
+        302.5,
+        243
+      ],
+      "depthSourceY": 249,
+      "alphaPolicy": "binary",
+      "sha256": "b509f4a8f749b8badeb633f8e62f10dbb9f86ed332c17ff18e38bcd6c88c2279",
+      "bytes": 636,
+      "dayKey": "hub_r09_foliage_right-planter-topiary"
+    },
+    {
+      "id": "hub.r09.foliage.foreground-right.night",
+      "role": "night-light",
+      "key": "hub_r09_foliage_foreground-right_night",
+      "url": "/hub/r09/night-foliage-foreground-right.png",
+      "width": 67,
+      "height": 28,
+      "originalSceneXY": [
+        430,
+        260
+      ],
+      "sourceBounds": [
+        430,
+        260,
+        67,
+        28
+      ],
+      "pivotLocalPx": [
+        33.5,
+        28
+      ],
+      "anchorScenePx": [
+        463.5,
+        288
+      ],
+      "depthSourceY": 289,
+      "alphaPolicy": "binary",
+      "sha256": "fd676263ef2c4a908eb172a4276fe9ed31bf86aad1f32a3586a505a6062b547f",
+      "bytes": 3379,
+      "dayKey": "hub_r09_foliage_foreground-right"
     },
     {
       "id": "hub.r09.window-light-mask",
@@ -606,7 +1168,7 @@
         31
       ],
       "tint": "#9FBEB3",
-      "suggestedAlpha": 0.1,
+      "suggestedAlpha": 0.2,
       "status": "PASS_ART_FOLLOWUP",
       "usage": "Local receiver tint/opacity; no full-frame day/night replacement."
     },
@@ -666,7 +1228,7 @@
         9
       ],
       "tint": "#D79D58",
-      "suggestedAlpha": 0.11,
+      "suggestedAlpha": 0.12,
       "status": "PASS_ART_FOLLOWUP",
       "usage": "Weak reflected warmth on source-reviewed upper stone strips only; gaps exclude the armillary instrument and plants. No full-scene illumination.",
       "verticalFalloff": [
@@ -941,6 +1503,1054 @@
           ]
         ]
       ],
+      "subtractPolygons": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            143,
+            0
+          ],
+          [
+            143,
+            61
+          ],
+          [
+            0,
+            61
+          ]
+        ]
+      ],
+      "rowSegments": [
+        [
+          0,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          1,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          2,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          3,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          4,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          5,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          6,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          7,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          8,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          9,
+          [
+            [
+              0,
+              143
+            ]
+          ]
+        ],
+        [
+          10,
+          [
+            [
+              0,
+              3
+            ],
+            [
+              5,
+              15
+            ],
+            [
+              17,
+              143
+            ]
+          ]
+        ],
+        [
+          11,
+          [
+            [
+              0,
+              3
+            ],
+            [
+              5,
+              15
+            ],
+            [
+              18,
+              143
+            ]
+          ]
+        ],
+        [
+          12,
+          [
+            [
+              1,
+              2
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              18,
+              143
+            ]
+          ]
+        ],
+        [
+          13,
+          [
+            [
+              7,
+              15
+            ],
+            [
+              19,
+              143
+            ]
+          ]
+        ],
+        [
+          14,
+          [
+            [
+              7,
+              7
+            ],
+            [
+              9,
+              15
+            ],
+            [
+              20,
+              143
+            ]
+          ]
+        ],
+        [
+          15,
+          [
+            [
+              12,
+              14
+            ],
+            [
+              19,
+              143
+            ]
+          ]
+        ],
+        [
+          16,
+          [
+            [
+              12,
+              14
+            ],
+            [
+              19,
+              25
+            ],
+            [
+              27,
+              143
+            ]
+          ]
+        ],
+        [
+          17,
+          [
+            [
+              13,
+              13
+            ],
+            [
+              20,
+              25
+            ],
+            [
+              27,
+              143
+            ]
+          ]
+        ],
+        [
+          18,
+          [
+            [
+              13,
+              13
+            ],
+            [
+              20,
+              24
+            ],
+            [
+              28,
+              143
+            ]
+          ]
+        ],
+        [
+          19,
+          [
+            [
+              13,
+              13
+            ],
+            [
+              20,
+              24
+            ],
+            [
+              28,
+              143
+            ]
+          ]
+        ],
+        [
+          20,
+          [
+            [
+              13,
+              13
+            ],
+            [
+              20,
+              24
+            ],
+            [
+              29,
+              143
+            ]
+          ]
+        ],
+        [
+          21,
+          [
+            [
+              20,
+              24
+            ],
+            [
+              29,
+              143
+            ]
+          ]
+        ],
+        [
+          22,
+          [
+            [
+              20,
+              23
+            ],
+            [
+              29,
+              76
+            ],
+            [
+              85,
+              143
+            ]
+          ]
+        ],
+        [
+          23,
+          [
+            [
+              22,
+              23
+            ],
+            [
+              29,
+              72
+            ],
+            [
+              88,
+              143
+            ]
+          ]
+        ],
+        [
+          24,
+          [
+            [
+              30,
+              37
+            ],
+            [
+              39,
+              69
+            ],
+            [
+              90,
+              132
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          25,
+          [
+            [
+              29,
+              37
+            ],
+            [
+              39,
+              68
+            ],
+            [
+              92,
+              133
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          26,
+          [
+            [
+              29,
+              37
+            ],
+            [
+              39,
+              67
+            ],
+            [
+              93,
+              133
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          27,
+          [
+            [
+              32,
+              36
+            ],
+            [
+              40,
+              46
+            ],
+            [
+              48,
+              65
+            ],
+            [
+              95,
+              143
+            ]
+          ]
+        ],
+        [
+          28,
+          [
+            [
+              33,
+              36
+            ],
+            [
+              41,
+              46
+            ],
+            [
+              48,
+              64
+            ],
+            [
+              96,
+              143
+            ]
+          ]
+        ],
+        [
+          29,
+          [
+            [
+              33,
+              36
+            ],
+            [
+              41,
+              45
+            ],
+            [
+              48,
+              53
+            ],
+            [
+              55,
+              63
+            ],
+            [
+              97,
+              143
+            ]
+          ]
+        ],
+        [
+          30,
+          [
+            [
+              42,
+              45
+            ],
+            [
+              49,
+              52
+            ],
+            [
+              55,
+              63
+            ],
+            [
+              97,
+              128
+            ],
+            [
+              131,
+              133
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          31,
+          [
+            [
+              42,
+              44
+            ],
+            [
+              49,
+              52
+            ],
+            [
+              55,
+              62
+            ],
+            [
+              98,
+              128
+            ],
+            [
+              131,
+              132
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          32,
+          [
+            [
+              42,
+              43
+            ],
+            [
+              49,
+              51
+            ],
+            [
+              55,
+              61
+            ],
+            [
+              99,
+              128
+            ],
+            [
+              131,
+              133
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          33,
+          [
+            [
+              43,
+              43
+            ],
+            [
+              49,
+              51
+            ],
+            [
+              55,
+              60
+            ],
+            [
+              99,
+              129
+            ],
+            [
+              131,
+              133
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          34,
+          [
+            [
+              50,
+              51
+            ],
+            [
+              57,
+              60
+            ],
+            [
+              100,
+              129
+            ],
+            [
+              131,
+              132
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          35,
+          [
+            [
+              50,
+              51
+            ],
+            [
+              56,
+              60
+            ],
+            [
+              100,
+              128
+            ],
+            [
+              132,
+              132
+            ],
+            [
+              134,
+              143
+            ]
+          ]
+        ],
+        [
+          36,
+          [
+            [
+              50,
+              50
+            ],
+            [
+              57,
+              59
+            ],
+            [
+              101,
+              128
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          37,
+          [
+            [
+              57,
+              57
+            ],
+            [
+              101,
+              128
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          38,
+          [
+            [
+              102,
+              127
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          39,
+          [
+            [
+              102,
+              127
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          40,
+          [
+            [
+              102,
+              127
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          41,
+          [
+            [
+              102,
+              103
+            ],
+            [
+              105,
+              127
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          42,
+          [
+            [
+              102,
+              103
+            ],
+            [
+              106,
+              127
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          43,
+          [
+            [
+              102,
+              103
+            ],
+            [
+              108,
+              127
+            ],
+            [
+              136,
+              143
+            ]
+          ]
+        ],
+        [
+          44,
+          [
+            [
+              102,
+              103
+            ],
+            [
+              109,
+              127
+            ],
+            [
+              136,
+              143
+            ]
+          ]
+        ],
+        [
+          45,
+          [
+            [
+              107,
+              109
+            ],
+            [
+              115,
+              127
+            ],
+            [
+              136,
+              143
+            ]
+          ]
+        ],
+        [
+          46,
+          [
+            [
+              108,
+              108
+            ],
+            [
+              110,
+              110
+            ],
+            [
+              115,
+              127
+            ],
+            [
+              136,
+              143
+            ]
+          ]
+        ],
+        [
+          47,
+          [
+            [
+              115,
+              127
+            ],
+            [
+              135,
+              143
+            ]
+          ]
+        ],
+        [
+          48,
+          [
+            [
+              116,
+              117
+            ],
+            [
+              121,
+              127
+            ],
+            [
+              135,
+              136
+            ],
+            [
+              138,
+              143
+            ]
+          ]
+        ],
+        [
+          49,
+          [
+            [
+              122,
+              129
+            ],
+            [
+              138,
+              143
+            ]
+          ]
+        ],
+        [
+          50,
+          [
+            [
+              116,
+              116
+            ],
+            [
+              122,
+              129
+            ],
+            [
+              136,
+              136
+            ],
+            [
+              138,
+              143
+            ]
+          ]
+        ],
+        [
+          51,
+          [
+            [
+              116,
+              116
+            ],
+            [
+              122,
+              129
+            ],
+            [
+              136,
+              136
+            ],
+            [
+              138,
+              143
+            ]
+          ]
+        ],
+        [
+          52,
+          [
+            [
+              122,
+              129
+            ],
+            [
+              135,
+              135
+            ],
+            [
+              138,
+              143
+            ]
+          ]
+        ],
+        [
+          53,
+          [
+            [
+              122,
+              122
+            ],
+            [
+              124,
+              129
+            ],
+            [
+              131,
+              131
+            ],
+            [
+              136,
+              136
+            ],
+            [
+              139,
+              143
+            ]
+          ]
+        ],
+        [
+          54,
+          [
+            [
+              124,
+              129
+            ],
+            [
+              138,
+              143
+            ]
+          ]
+        ],
+        [
+          55,
+          [
+            [
+              124,
+              126
+            ],
+            [
+              138,
+              144
+            ]
+          ]
+        ],
+        [
+          56,
+          [
+            [
+              124,
+              125
+            ],
+            [
+              135,
+              136
+            ],
+            [
+              138,
+              146
+            ]
+          ]
+        ],
+        [
+          57,
+          [
+            [
+              125,
+              125
+            ],
+            [
+              138,
+              146
+            ]
+          ]
+        ],
+        [
+          58,
+          [
+            [
+              138,
+              142
+            ],
+            [
+              144,
+              146
+            ]
+          ]
+        ],
+        [
+          59,
+          [
+            [
+              138,
+              141
+            ]
+          ]
+        ],
+        [
+          60,
+          [
+            [
+              138,
+              138
+            ]
+          ]
+        ],
+        [
+          61,
+          [
+            [
+              138,
+              138
+            ],
+            [
+              140,
+              140
+            ]
+          ]
+        ]
+      ],
       "rowSpans": [
         [
           0,
@@ -995,67 +2605,92 @@
         [
           10,
           0,
-          20
+          4
         ],
         [
           10,
-          21,
+          5,
+          16
+        ],
+        [
+          10,
+          17,
           512
+        ],
+        [
+          11,
+          0,
+          4
         ],
         [
           11,
           5,
-          20
+          16
         ],
         [
           11,
-          23,
+          18,
           512
         ],
         [
           12,
+          1,
+          3
+        ],
+        [
+          12,
+          6,
+          16
+        ],
+        [
+          12,
+          18,
+          512
+        ],
+        [
+          13,
           7,
-          11
-        ],
-        [
-          12,
-          14,
-          19
-        ],
-        [
-          12,
-          24,
-          512
+          16
         ],
         [
           13,
-          8,
-          9
-        ],
-        [
-          13,
-          15,
-          19
-        ],
-        [
-          13,
-          25,
+          19,
           512
         ],
         [
           14,
-          17,
-          18
+          7,
+          8
         ],
         [
           14,
-          25,
+          9,
+          16
+        ],
+        [
+          14,
+          20,
           512
         ],
         [
           15,
-          26,
+          12,
+          15
+        ],
+        [
+          15,
+          19,
           512
+        ],
+        [
+          16,
+          12,
+          15
+        ],
+        [
+          16,
+          19,
+          26
         ],
         [
           16,
@@ -1064,8 +2699,28 @@
         ],
         [
           17,
-          28,
+          13,
+          14
+        ],
+        [
+          17,
+          20,
+          26
+        ],
+        [
+          17,
+          27,
           512
+        ],
+        [
+          18,
+          13,
+          14
+        ],
+        [
+          18,
+          20,
+          25
         ],
         [
           18,
@@ -1074,168 +2729,283 @@
         ],
         [
           19,
-          29,
+          13,
+          14
+        ],
+        [
+          19,
+          20,
+          25
+        ],
+        [
+          19,
+          28,
           512
         ],
         [
           20,
-          30,
+          13,
+          14
+        ],
+        [
+          20,
+          20,
+          25
+        ],
+        [
+          20,
+          29,
           512
         ],
         [
           21,
-          32,
+          20,
+          25
+        ],
+        [
+          21,
+          29,
           512
         ],
         [
           22,
-          33,
-          76
+          20,
+          24
         ],
         [
           22,
-          87,
+          29,
+          77
+        ],
+        [
+          22,
+          85,
           512
         ],
         [
           23,
-          34,
-          74
+          22,
+          24
         ],
         [
           23,
-          91,
+          29,
+          73
+        ],
+        [
+          23,
+          88,
           512
         ],
         [
           24,
-          35,
-          72
+          30,
+          38
         ],
         [
           24,
-          92,
-          130
-        ],
-        [
-          24,
-          131,
-          512
-        ],
-        [
-          25,
-          36,
+          39,
           70
         ],
         [
-          25,
-          94,
-          130
+          24,
+          90,
+          133
         ],
         [
-          25,
-          132,
+          24,
+          135,
           512
         ],
         [
-          26,
-          37,
+          25,
+          29,
+          38
+        ],
+        [
+          25,
+          39,
           69
         ],
         [
-          26,
-          95,
-          129
+          25,
+          92,
+          134
         ],
         [
-          26,
-          133,
+          25,
+          135,
           512
         ],
         [
-          27,
-          38,
+          26,
+          29,
+          38
+        ],
+        [
+          26,
+          39,
           68
         ],
         [
-          27,
-          96,
-          129
+          26,
+          93,
+          134
         ],
         [
-          27,
-          133,
+          26,
+          135,
           512
         ],
         [
-          28,
-          39,
-          67
+          27,
+          32,
+          37
         ],
         [
-          28,
-          98,
-          128
-        ],
-        [
-          28,
-          134,
-          512
-        ],
-        [
-          29,
+          27,
           40,
+          47
+        ],
+        [
+          27,
+          48,
           66
         ],
         [
-          29,
-          99,
-          128
-        ],
-        [
-          29,
-          135,
+          27,
+          95,
           512
         ],
         [
-          30,
+          28,
+          33,
+          37
+        ],
+        [
+          28,
           41,
+          47
+        ],
+        [
+          28,
+          48,
           65
         ],
         [
+          28,
+          96,
+          512
+        ],
+        [
+          29,
+          33,
+          37
+        ],
+        [
+          29,
+          41,
+          46
+        ],
+        [
+          29,
+          48,
+          54
+        ],
+        [
+          29,
+          55,
+          64
+        ],
+        [
+          29,
+          97,
+          512
+        ],
+        [
           30,
+          42,
+          46
+        ],
+        [
+          30,
+          49,
+          53
+        ],
+        [
+          30,
+          55,
+          64
+        ],
+        [
+          30,
+          97,
+          129
+        ],
+        [
+          30,
+          131,
+          134
+        ],
+        [
+          30,
+          135,
+          512
+        ],
+        [
+          31,
+          42,
+          45
+        ],
+        [
+          31,
+          49,
+          53
+        ],
+        [
+          31,
+          55,
+          63
+        ],
+        [
+          31,
+          98,
+          129
+        ],
+        [
+          31,
+          131,
+          133
+        ],
+        [
+          31,
+          135,
+          512
+        ],
+        [
+          32,
+          42,
+          44
+        ],
+        [
+          32,
+          49,
+          52
+        ],
+        [
+          32,
+          55,
+          62
+        ],
+        [
+          32,
           99,
-          128
-        ],
-        [
-          30,
-          135,
-          512
-        ],
-        [
-          31,
-          42,
-          64
-        ],
-        [
-          31,
-          100,
-          128
-        ],
-        [
-          31,
-          135,
-          512
+          129
         ],
         [
           32,
-          42,
-          64
-        ],
-        [
-          32,
-          100,
-          128
+          131,
+          134
         ],
         [
           32,
@@ -1245,101 +3015,131 @@
         [
           33,
           43,
-          63
+          44
         ],
         [
           33,
-          101,
-          128
+          49,
+          52
         ],
         [
           33,
-          135,
-          512
-        ],
-        [
-          34,
-          44,
-          63
-        ],
-        [
-          34,
-          101,
-          128
-        ],
-        [
-          34,
-          135,
-          512
-        ],
-        [
-          35,
-          45,
-          62
-        ],
-        [
-          35,
-          102,
-          128
-        ],
-        [
-          35,
-          135,
-          512
-        ],
-        [
-          36,
-          47,
-          62
-        ],
-        [
-          36,
-          102,
-          128
-        ],
-        [
-          36,
-          135,
-          512
-        ],
-        [
-          37,
-          48,
+          55,
           61
         ],
         [
-          37,
-          103,
-          128
+          33,
+          99,
+          130
         ],
         [
-          37,
+          33,
+          131,
+          134
+        ],
+        [
+          33,
           135,
           512
         ],
         [
-          38,
-          49,
-          60
-        ],
-        [
-          38,
-          103,
-          128
-        ],
-        [
-          38,
-          135,
-          512
-        ],
-        [
-          39,
+          34,
           50,
+          52
+        ],
+        [
+          34,
+          57,
+          61
+        ],
+        [
+          34,
+          100,
+          130
+        ],
+        [
+          34,
+          131,
+          133
+        ],
+        [
+          34,
+          135,
+          512
+        ],
+        [
+          35,
+          50,
+          52
+        ],
+        [
+          35,
+          56,
+          61
+        ],
+        [
+          35,
+          100,
+          129
+        ],
+        [
+          35,
+          132,
+          133
+        ],
+        [
+          35,
+          134,
+          512
+        ],
+        [
+          36,
+          50,
+          51
+        ],
+        [
+          36,
+          57,
           60
         ],
         [
+          36,
+          101,
+          129
+        ],
+        [
+          36,
+          135,
+          512
+        ],
+        [
+          37,
+          57,
+          58
+        ],
+        [
+          37,
+          101,
+          129
+        ],
+        [
+          37,
+          135,
+          512
+        ],
+        [
+          38,
+          102,
+          128
+        ],
+        [
+          38,
+          135,
+          512
+        ],
+        [
           39,
-          104,
+          102,
           128
         ],
         [
@@ -1349,12 +3149,7 @@
         ],
         [
           40,
-          52,
-          59
-        ],
-        [
-          40,
-          104,
+          102,
           128
         ],
         [
@@ -1364,8 +3159,8 @@
         ],
         [
           41,
-          53,
-          58
+          102,
+          104
         ],
         [
           41,
@@ -1379,8 +3174,8 @@
         ],
         [
           42,
-          55,
-          58
+          102,
+          104
         ],
         [
           42,
@@ -1394,8 +3189,8 @@
         ],
         [
           43,
-          56,
-          57
+          102,
+          104
         ],
         [
           43,
@@ -1409,6 +3204,11 @@
         ],
         [
           44,
+          102,
+          104
+        ],
+        [
+          44,
           109,
           128
         ],
@@ -1419,7 +3219,12 @@
         ],
         [
           45,
-          110,
+          107,
+          110
+        ],
+        [
+          45,
+          115,
           128
         ],
         [
@@ -1434,7 +3239,17 @@
         ],
         [
           46,
-          113,
+          108,
+          109
+        ],
+        [
+          46,
+          110,
+          111
+        ],
+        [
+          46,
+          115,
           128
         ],
         [
@@ -1449,12 +3264,12 @@
         ],
         [
           47,
-          116,
+          115,
           128
         ],
         [
           47,
-          136,
+          135,
           424
         ],
         [
@@ -1464,12 +3279,22 @@
         ],
         [
           48,
-          119,
+          116,
+          118
+        ],
+        [
+          48,
+          121,
           128
         ],
         [
           48,
-          136,
+          135,
+          137
+        ],
+        [
+          48,
+          138,
           423
         ],
         [
@@ -1480,11 +3305,11 @@
         [
           49,
           122,
-          128
+          130
         ],
         [
           49,
-          136,
+          138,
           422
         ],
         [
@@ -1494,12 +3319,22 @@
         ],
         [
           50,
-          124,
-          128
+          116,
+          117
+        ],
+        [
+          50,
+          122,
+          130
         ],
         [
           50,
           136,
+          137
+        ],
+        [
+          50,
+          138,
           421
         ],
         [
@@ -1509,12 +3344,22 @@
         ],
         [
           51,
-          127,
-          128
+          116,
+          117
+        ],
+        [
+          51,
+          122,
+          130
         ],
         [
           51,
           136,
+          137
+        ],
+        [
+          51,
+          138,
           420
         ],
         [
@@ -1524,7 +3369,17 @@
         ],
         [
           52,
-          136,
+          122,
+          130
+        ],
+        [
+          52,
+          135,
+          136
+        ],
+        [
+          52,
+          138,
           418
         ],
         [
@@ -1534,7 +3389,27 @@
         ],
         [
           53,
+          122,
+          123
+        ],
+        [
+          53,
+          124,
+          130
+        ],
+        [
+          53,
+          131,
+          132
+        ],
+        [
+          53,
           136,
+          137
+        ],
+        [
+          53,
+          139,
           417
         ],
         [
@@ -1544,7 +3419,12 @@
         ],
         [
           54,
-          136,
+          124,
+          130
+        ],
+        [
+          54,
+          138,
           415
         ],
         [
@@ -1554,12 +3434,12 @@
         ],
         [
           55,
-          136,
-          142
+          124,
+          127
         ],
         [
           55,
-          145,
+          138,
           414
         ],
         [
@@ -1569,12 +3449,17 @@
         ],
         [
           56,
-          136,
-          139
+          124,
+          126
         ],
         [
           56,
-          147,
+          135,
+          137
+        ],
+        [
+          56,
+          138,
           154
         ],
         [
@@ -1589,8 +3474,13 @@
         ],
         [
           57,
-          136,
-          137
+          125,
+          126
+        ],
+        [
+          57,
+          138,
+          147
         ],
         [
           57,
@@ -1609,6 +3499,16 @@
         ],
         [
           58,
+          138,
+          143
+        ],
+        [
+          58,
+          144,
+          147
+        ],
+        [
+          58,
           169,
           398
         ],
@@ -1616,6 +3516,11 @@
           58,
           485,
           512
+        ],
+        [
+          59,
+          138,
+          142
         ],
         [
           59,
@@ -1631,6 +3536,11 @@
           59,
           487,
           512
+        ],
+        [
+          60,
+          138,
+          139
         ],
         [
           60,
@@ -1651,6 +3561,16 @@
           60,
           491,
           512
+        ],
+        [
+          61,
+          138,
+          139
+        ],
+        [
+          61,
+          140,
+          141
         ],
         [
           61,
@@ -3040,7 +4960,7 @@
     }
   },
   "sourceSpec": "assets/source/environment/hub/r09/source-spec.json",
-  "sourceSpecCanonicalSha256": "e7c12f56c50faccf610ed77c091552d15badd29a8a7ef0ea51fa086719eea6cc",
+  "sourceSpecCanonicalSha256": "6de61182374d341e280518d50f038d2813fb4a162b1b21e369d5e669308baa08",
   "provenance": {
     "origin": "Project-commissioned SpriteCook source and clean hidden plate; source-exact masked extraction only.",
     "rights": "Existing project-commissioned SpriteCook artwork; original provider assets and metadata remain in the project.",
@@ -3134,20 +5054,20 @@
     "sourceHashesVerified": true,
     "restRoundtripRgbaExact": true,
     "outsideMovingMaskChangedPixels": 0,
-    "hiddenPlateUsedPixels": 2255,
-    "hiddenPlateChangedPixels": 2255,
+    "hiddenPlateUsedPixels": 3455,
+    "hiddenPlateChangedPixels": 3455,
     "cloudPixels": 61,
-    "vegetationPieces": 5,
+    "vegetationPieces": 9,
     "cloudIslands": 1,
     "cloudSilhouetteClearanceVerified": true,
     "cloudClipPixels": 2352,
     "cloudClipDomain": "cloudClip",
     "skyPatchMode": "native-sky-region-copy",
     "masterRgbaSha256": "376cb858d480709b979f8d5d4178088e2a4cef453316b69079216eaffe6377c7",
-    "exportResampling": "none",
+    "exportResampling": "box, architecture detail only",
     "paletteQuantization": false,
     "artAcceptanceImplied": false,
-    "pngBytes": 345506,
-    "decodedRgbaBytes": 2714248
+    "pngBytes": 1774065,
+    "decodedRgbaBytes": 7097368
   }
 }

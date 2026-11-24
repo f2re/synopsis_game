@@ -10,8 +10,8 @@ export function r08ActorClip(clip: WorldCharacterClip): WorldCharacterClip {
 }
 
 /** Phase the planted foot from distance travelled, regardless of route speed. */
-export function r08WalkFrame(distancePx: number): number {
+export function r08WalkFrame(distancePx: number, frameCount = CYCLE_FRAMES): number {
   if (!Number.isFinite(distancePx) || distancePx <= 0) return 0;
   const progress = (distancePx % walkAssets.cycleDistancePx) / walkAssets.cycleDistancePx;
-  return Math.floor(progress * CYCLE_FRAMES);
+  return Math.floor(progress * frameCount);
 }

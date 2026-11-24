@@ -25,6 +25,7 @@ function makeScene() {
     get: () => ({ getSourceImage: () => source, setFilter: (filter) => filters.push(filter) }),
   }, add: { image(x, y, key) {
     const image = { x, y, key, destroyed: false,
+      setTexture(value) { this.key = value; this.originX = 0; this.originY = 0; this.crop = null; return this; },
       setScale(x, y) { this.scaleX = x; this.scaleY = y; return this; },
       setDisplayOrigin(x, y) { this.originX = x; this.originY = y; return this; },
       setCrop(x, y, width, height) { this.crop = { x, y, width, height }; return this; },
@@ -86,6 +87,16 @@ assert.ok(priorImages.every((image) => !image.destroyed), 'Invalid replacement p
 layer.setPlacements([{ ...tree, anchorX: 200 }]);
 assert.ok(priorImages.every((image) => image.destroyed));
 assert.ok(scene.images.filter((image) => !image.destroyed).every((image) => image.tint === 0x8296ab));
+const resolveTint = (key, tint) => `${key}-${tint.toString(16)}`;
+layer.setTint(0x8296ab, resolveTint);
+for (const image of scene.images.filter((entry) => !entry.destroyed)) {
+  assert.equal(image.tint, 0xffffff);
+  assert.equal(image.key, 'masked-crowns-8296ab');
+  assert.equal(image.originX, 61.5); assert.equal(image.originY, 240);
+  assert.equal(image.crop.x, 44); assert.equal(image.crop.width, 35);
+}
+layer.setTint(0x8296ab);
+assert.ok(scene.images.filter((image) => !image.destroyed).every((image) => image.key === 'masked-crowns' && image.tint === 0x8296ab));
 layer.destroy(); layer.destroy(); layer.update(100); layer.setPlacements([tree]);
 assert.ok(scene.images.every((image) => image.destroyed));
 assert.equal(layer.getDiagnostics().placements, 0);

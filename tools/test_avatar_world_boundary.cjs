@@ -45,7 +45,8 @@ const scene = { input: { enabled: true, keyboard: { enabled: true } }, tweens: {
 const game = {
   registry: { get: (key) => registry.get(key), set: (key, value) => registry.set(key, value) },
   input: { enabled: true }, scene: { getScenes: () => [scene], isActive: () => true },
-  loop: { fpsLimit: 60, setFPSLimit(value) { this.fpsLimit = value; }, sleep() { sleeps++; }, wake() { wakes++; } },
+  loop: { fpsLimit: 60, running: true, setFPSLimit(value) { this.fpsLimit = value; },
+    sleep() { sleeps++; this.running = false; }, wake() { wakes++; this.running = true; } },
   renderer: Object.assign(new Events(), { gl: ownedContext }), events: new Events(), destroy(value) { destroyed = value; },
 };
 let muted = true, unlocked = false, hookIndex = 0, weather = 'rain';
@@ -160,6 +161,10 @@ assertWeather('rain', true, 'Turning off the motion limits restores the current 
 document.hidden = true; document.emit('visibilitychange');
 weather = 'clear'; render(); weather = 'rain'; render();
 assertWeather('rain', false, 'Weather changes while hidden cannot wake decorative motion');
+assert.equal(sleeps, 1, 'An ordinary tab switch lets the browser throttle the existing Phaser RAF');
+document.hidden = false; document.emit('visibilitychange');
+assert.equal(wakes, 1, 'Foregrounding does not restart a healthy scheduler');
+assertWeather('rain', true, 'Foregrounding restores scene motion');
 assert.equal(nativeLossRequests, 0, 'A live canvas keeps its genuine context loss/restoration lifecycle');
 
 for (const hook of hooks) hook?.cleanup?.();

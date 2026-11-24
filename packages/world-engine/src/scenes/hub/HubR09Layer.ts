@@ -3,12 +3,17 @@ import manifestJson from '../../assets/hub/r09-manifest.json';
 import { worldBridge, type DayPhase } from '../../bridge/WorldBridge';
 import { normalizeWorldPreferences } from '../../runtime/uiPreferences';
 import { HubVegetationWindLayer } from './HubVegetationWindLayer';
+import type { StationActorLighting } from './HubCharacterLayer';
+import { r09ActorDepth } from './r09ActorLayout';
 import { normalizeR01Weather, r01RainDrop, R01_RAIN_DROP_LIMIT } from './r01Environment';
-import { R09_ENTRANCES, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09Viewport } from './r09SceneModel';
+import { R09_ENTRANCES, R09_RAIN_TINTS, R09_SOURCE_HEIGHT, R09_SOURCE_WIDTH, r09CloudOffset, r09EntranceTargets, r09Pan, r09PhaseStyle, r09Viewport, type R09ViewMode, type R09Viewport } from './r09SceneModel';
 
 interface StationAsset {
   id: string; role: string; key: string; url: string; width: number; height: number;
   originalSceneXY: number[]; anchorScenePx: number[]; depthSourceY: number;
+  density?: number;
+  dayKey?: string;
+  foregroundOccludesActors?: boolean;
   motionReady?: boolean; wind?: { kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number };
   kind?: 'tree'|'shrub'|'grass'|'reed'|'flag'; rootFraction?: number; gain?: number;
 }
@@ -20,12 +25,29 @@ interface StationManifest {
 }
 export const R09_STATION_MANIFEST = manifestJson as unknown as StationManifest;
 
+const SCENE_PLANE_DEPTHS: Record<string, number> = {
+  sky: 0, water: 1, 'architecture-ground': 3, 'foreground-occluder': 31,
+};
+const NIGHT_TEXTURES = new Map(R09_STATION_MANIFEST.assets.flatMap(({ role, dayKey, key }) =>
+  role === 'night-light' && dayKey ? [[dayKey, key] as const] : []));
+const HAS_NIGHT_SKY = R09_STATION_MANIFEST.assets.some(({ role, key }) => role === 'sky' && NIGHT_TEXTURES.has(key));
+
+// Sparse native pixels with irregular spacing and three brightness levels.
+const STAR_GROUPS = [
+  { opacity: .42, points: [[156, 28], [193, 17], [228, 35], [254, 29], [284, 20], [298, 47], [333, 30], [407, 26], [468, 21]] },
+  { opacity: .66, points: [[174, 40], [217, 22], [271, 39], [319, 14], [342, 35], [440, 29]] },
+  { opacity: 1, points: [[238, 17], [299, 32], [401, 17]] },
+];
+
 /** A single authored 512×288 terrace. Only extracted organic pixels move;
  * the ground, architecture, contact edges and camera registration are shared. */
 export class HubR09Layer {
   private readonly images: { asset: StationAsset; image: Phaser.GameObjects.Image }[] = [];
   private readonly cloudImages: { asset: StationAsset; image: Phaser.GameObjects.Image; offset: number }[] = [];
   private readonly receivers: { image: Phaser.GameObjects.Image; alpha: number }[] = [];
+  private readonly canvasRenderer: boolean;
+  private readonly webglClear?: { config: { backgroundColor: Phaser.Display.Color }; original: Phaser.Display.Color };
+  private readonly canvasTints = new Map<string, { texture: Phaser.Textures.CanvasTexture; tint: number }>();
   private readonly maskGraphics: Phaser.GameObjects.Graphics[] = [];
   private readonly masks: Phaser.Display.Masks.GeometryMask[] = [];
   private readonly waterGlints: Phaser.GameObjects.Graphics;
@@ -36,6 +58,7 @@ export class HubR09Layer {
   private readonly wind: HubVegetationWindLayer;
   private readonly unsubs: (() => void)[] = [];
   private viewport: R09Viewport;
+  private requestedViewMode?: R09ViewMode;
   private requestedCenterX?: number;
   private phase: DayPhase = 'day';
   private weather = normalizeR01Weather(undefined);
@@ -50,13 +73,19 @@ export class HubR09Layer {
   private disposed = false;
 
   constructor(private readonly scene: Phaser.Scene) {
+    const renderer = scene.game.renderer;
+    this.canvasRenderer = renderer.type === Phaser.CANVAS;
+    if (renderer.type === Phaser.WEBGL) {
+      const config = renderer.config as { backgroundColor: Phaser.Display.Color };
+      this.webglClear = { config, original: config.backgroundColor };
+    }
     this.viewport = r09Viewport(scene.scale.width, scene.scale.height, scene.registry.get('world.pixelRatio'));
-    const depth: Record<string, number> = { sky: 0, water: 1, 'architecture-ground': 3, 'foreground-occluder': 31 };
     for (const asset of R09_STATION_MANIFEST.assets) {
       scene.textures.get(asset.key).setFilter(Phaser.Textures.FilterMode.NEAREST);
-      if (!(asset.role in depth) && asset.role !== 'clouds') continue;
+      if (!(asset.role in SCENE_PLANE_DEPTHS) && asset.role !== 'clouds') continue;
       const image = scene.add.image(asset.originalSceneXY[0], asset.originalSceneXY[1], asset.key)
-        .setOrigin(0, 0).setDepth(asset.role === 'clouds' ? .5 : depth[asset.role]);
+        .setOrigin(0, 0).setDepth(asset.role === 'clouds' ? .5 : SCENE_PLANE_DEPTHS[asset.role]);
+      if (asset.density) image.setScale(1 / asset.density);
       if (asset.role === 'clouds') this.cloudImages.push({ asset, image, offset: 0 });
       else this.images.push({ asset, image });
     }
@@ -76,14 +105,17 @@ export class HubR09Layer {
       if (!asset) continue;
       const [x, y, width, height] = region.sourceBounds;
       const rows = region.verticalFalloff ? height : 1;
+      const tint = Number.parseInt(region.tint.slice(1), 16);
+      const key = this.canvasRenderer ? this.getCanvasTint(asset.key, tint, region.tint) : asset.key;
       for (let row = 0; row < rows; row++) {
         const falloff = region.verticalFalloff;
         const weight = falloff ? falloff[0] + (falloff[1] - falloff[0]) * row / Math.max(1, rows - 1) : 1;
         // A receiver fade follows native rows. Vertex-alpha interpolation
         // would introduce a smooth gradient within each enlarged pixel.
-        const image = scene.add.image(0, 0, asset.key).setOrigin(0, 0)
+        const image = scene.add.image(0, 0, key).setOrigin(0, 0)
           .setCrop(x, y + (falloff ? row : 0), width, falloff ? 1 : height)
-          .setDepth(32).setTint(Number.parseInt(region.tint.slice(1), 16)).setBlendMode(Phaser.BlendModes.ADD);
+          .setDepth(32).setBlendMode(Phaser.BlendModes.ADD);
+        if (!this.canvasRenderer) image.setTint(tint);
         this.receivers.push({ image, alpha: region.suggestedAlpha * weight });
       }
     }
@@ -92,9 +124,9 @@ export class HubR09Layer {
       id: asset.id, textureKey: asset.key,
       anchorX: asset.anchorScenePx[0], anchorY: asset.anchorScenePx[1],
       width: asset.width, height: asset.height,
-      // The foreground plate contains the clean donor. Crowns must cover it,
-      // while the plate itself occludes people behind the stone balustrade.
-      depth: 31.1 + asset.depthSourceY / 1000,
+      // The front balustrade occludes actors. Plants on the open terraces
+      // sort by their planted foot, on the same depth scale as the actors.
+      depth: asset.foregroundOccludesActors ? SCENE_PLANE_DEPTHS['foreground-occluder'] + .1 : r09ActorDepth(asset.depthSourceY),
       kind: asset.wind?.kind ?? asset.kind ?? 'shrub',
       rootFraction: asset.wind?.rootFraction ?? asset.rootFraction ?? .25,
       gain: asset.wind?.gain ?? asset.gain ?? 1.5,
@@ -105,7 +137,15 @@ export class HubR09Layer {
       }),
       worldBridge.on<'left'|'right'>('ui:station_pan', (direction) => {
         if (direction !== 'left' && direction !== 'right') return;
-        this.requestedCenterX = r09Pan(this.viewport, direction).centerX; this.resize();
+        const next = r09Pan(this.viewport, direction);
+        if (next === this.viewport) return;
+        this.requestedCenterX = next.centerX; this.resize();
+      }),
+      worldBridge.on<R09ViewMode>('ui:station_view', (mode) => {
+        if ((mode !== 'overview' && mode !== 'detail') || mode === this.viewport.mode) return;
+        this.requestedViewMode = mode;
+        this.requestedCenterX = undefined;
+        this.resize();
       }),
       worldBridge.on<boolean>('ui:world_visible', (visible) => {
         if (this.paused !== !visible) this.previousFrameTime = undefined;
@@ -118,6 +158,66 @@ export class HubR09Layer {
     this.paused = scene.registry.get('ui.world_visible') === false;
     this.weather = normalizeR01Weather(scene.registry.get('ui.weather'));
     this.resize(); this.syncMotion(); this.applyDayPhase('day');
+  }
+
+  // Phaser's Canvas image path applies alpha and blending but ignores sprite tint.
+  // Reuse a mutable texture for each plane, fixed receiver or actor-light tier.
+  private readonly getCanvasTint = (sourceKey: string, tint: number, variant = 'phase'): string => {
+    if (tint === 0xffffff) return sourceKey;
+    const key = `${sourceKey}_r09_canvas_${variant}`;
+    let cached = this.canvasTints.get(key);
+    if (cached?.tint === tint) return key;
+    const original = this.scene.textures.get(sourceKey);
+    const source = original.getSourceImage();
+    // The station planes and character sheets are loaded from PNG sources.
+    if (!('naturalWidth' in source)) return sourceKey;
+    if (!cached) {
+      // Phaser's pool may return an old opaque game canvas. Context alpha
+      // cannot be changed after the first getContext call, even on resize.
+      const canvas = source.ownerDocument.createElement('canvas');
+      canvas.width = source.width;
+      canvas.height = source.height;
+      if (!canvas.getContext('2d', { alpha: true, willReadFrequently: true })) return sourceKey;
+      const texture = this.scene.textures.addCanvas(key, canvas);
+      if (!texture) return sourceKey;
+      texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+      for (const name of original.getFrameNames()) {
+        const { cutX, cutY, cutWidth, cutHeight } = original.get(name);
+        texture.add(name, 0, cutX, cutY, cutWidth, cutHeight);
+      }
+      cached = { texture, tint };
+      this.canvasTints.set(key, cached);
+    }
+    const context = cached.texture.getContext();
+    context.clearRect(0, 0, source.width, source.height);
+    context.drawImage(source, 0, 0);
+    const pixels = context.getImageData(0, 0, source.width, source.height);
+    const red = (tint >> 16 & 255) / 255;
+    const green = (tint >> 8 & 255) / 255;
+    const blue = (tint & 255) / 255;
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      pixels.data[i] *= red;
+      pixels.data[i + 1] *= green;
+      pixels.data[i + 2] *= blue;
+    }
+    context.putImageData(pixels, 0, 0);
+    cached.tint = tint;
+    return key;
+  };
+
+  private tintPlane(image: Phaser.GameObjects.Image, sourceKey: string, tint: number): void {
+    const key = this.canvasRenderer ? this.getCanvasTint(sourceKey, tint) : sourceKey;
+    if (image.texture.key !== key) image.setTexture(key);
+    if (!this.canvasRenderer) image.setTint(tint);
+  }
+
+  private readonly resolveNightTexture = (sourceKey: string, tint: number): string => {
+    const key = NIGHT_TEXTURES.get(sourceKey) ?? sourceKey;
+    return this.canvasRenderer ? this.getCanvasTint(key, tint) : key;
+  };
+
+  private usesNightSky(): boolean {
+    return this.phase === 'night' && HAS_NIGHT_SKY;
   }
 
   private makeMask(domain: Domain): Phaser.Display.Masks.GeometryMask {
@@ -143,12 +243,15 @@ export class HubR09Layer {
       this.requestedCenterX = undefined;
     }
     this.viewport = r09Viewport(this.scene.scale.width, this.scene.scale.height,
-      ratio, this.requestedCenterX);
+      ratio, this.requestedViewMode, this.requestedCenterX);
     const view = this.viewport;
+    // Canvas's roundPixels adds half a source pixel to each sprite size.
+    // Fractional scales also need a shared unsnapped projection across planes.
     this.scene.cameras.main.setViewport(0, 0, view.bufferWidth, view.bufferHeight)
-      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(true);
+      .setZoom(view.zoom).centerOn(view.centerX, view.centerY).setRoundPixels(!this.canvasRenderer && view.mode === 'detail' && Number.isInteger(view.zoom));
+    this.updateCameraBackground();
     worldBridge.emit('world:interaction_layout', r09EntranceTargets(view));
-    worldBridge.emit('world:station_view', { stationArt: 'r09', canPanLeft: view.canPanLeft, canPanRight: view.canPanRight });
+    worldBridge.emit('world:station_view', { stationArt: 'r09', mode: view.mode, canPanLeft: view.canPanLeft, canPanRight: view.canPanRight });
     this.drawFocus(); this.drawRain(); this.publishDiagnostics();
   }
 
@@ -167,17 +270,46 @@ export class HubR09Layer {
       lowPower: this.preferences.lowPower, paused: this.paused });
   }
 
+  private updateCameraBackground(): void {
+    const color = this.viewport.mode === 'overview' || this.phase === 'night' ? 0x101e25 : 0x21382b;
+    if (this.webglClear) {
+      // The station camera covers the framebuffer. Fill its background with
+      // the existing WebGL clear instead of painting a second full-size quad.
+      this.webglClear.config.backgroundColor = Phaser.Display.Color.IntegerToColor(color);
+      return;
+    }
+    this.scene.cameras.main.setBackgroundColor(color);
+  }
+
   applyDayPhase(phase: DayPhase): void {
     this.phase = phase;
-    const style = r09PhaseStyle(phase, this.weather.mode === 'rain');
-    this.scene.cameras.main.setBackgroundColor(this.phase === 'night' ? 0x101e25 : 0x21382b);
-    for (const { asset, image } of this.images) image.setTint(asset.role === 'sky' ? style.sky : asset.role === 'water' ? style.water : style.scenery);
-    this.cloudImages.forEach(({ image }) => image.setTint(style.sky));
-    this.wind.setTint(style.scenery);
+    const rain = this.weather.mode === 'rain';
+    const style = r09PhaseStyle(phase, rain);
+    const nightSky = this.usesNightSky();
+    this.updateCameraBackground();
+    for (const { asset, image } of this.images) {
+      const nightKey = phase === 'night' ? NIGHT_TEXTURES.get(asset.key) : undefined;
+      const tintRole = asset.role === 'sky' || asset.role === 'water' ? asset.role : 'scenery';
+      const nightTint = rain ? R09_RAIN_TINTS[tintRole] : 0xffffff;
+      this.tintPlane(image, nightKey ?? asset.key, nightKey ? nightTint : style[tintRole]);
+    }
+    for (const { asset, image } of this.cloudImages) {
+      // The approved sky is lit with its original clouds in place.
+      image.setVisible(!nightSky);
+      if (!nightSky) this.tintPlane(image, asset.key, style.sky);
+    }
+    if (phase === 'night' && NIGHT_TEXTURES.size > 0) {
+      this.wind.setTint(rain ? R09_RAIN_TINTS.scenery : 0xffffff, this.resolveNightTexture, !this.canvasRenderer);
+    } else {
+      this.wind.setTint(style.scenery, this.canvasRenderer ? this.getCanvasTint : undefined);
+    }
     this.receivers.forEach(({ image, alpha }) => image.setAlpha(Math.min(.65, alpha * style.lights)));
-    this.stars.clear().fillStyle(0xe4edf2, style.stars);
-    if (style.stars > 0) {
-      for (let i = 0; i < 26; i++) this.stars.fillRect(164 + (i * 73) % 241, (i * 17 + 3) % 35, 1, 1);
+    this.stars.clear();
+    if (!nightSky && style.stars > 0) {
+      for (const { opacity, points } of STAR_GROUPS) {
+        this.stars.fillStyle(0xd9e6f4, style.stars * opacity);
+        for (const [x, y] of points) this.stars.fillRect(x, y, 1, 1);
+      }
     }
     this.drawAmbient(this.preferences.reducedMotion); this.drawRain(); this.publishDiagnostics();
   }
@@ -186,7 +318,18 @@ export class HubR09Layer {
     this.weather = normalizeR01Weather(value); this.syncMotion(); this.applyDayPhase(this.phase);
   }
 
-  getSceneryTint(): number { return r09PhaseStyle(this.phase, this.weather.mode === 'rain').scenery; }
+  getActorLighting(): StationActorLighting {
+    const style = r09PhaseStyle(this.phase, this.weather.mode === 'rain');
+    const ambient = style.scenery;
+    const red = Math.round((ambient >> 16) * .82 + 255 * .18);
+    const green = Math.round((ambient >> 8 & 255) * .82 + 211 * .18);
+    const blue = Math.round((ambient & 255) * .82 + 148 * .18);
+    return {
+      ambient,
+      lamp: style.lights >= .7 ? red << 16 | green << 8 | blue : undefined,
+      resolveTexture: this.canvasRenderer ? this.getCanvasTint : undefined,
+    };
+  }
 
   getEnvironment() {
     const animated = this.weather.mode === 'rain' && this.weather.animate && !this.paused && !this.preferences.reducedMotion && !this.preferences.lowPower;
@@ -195,10 +338,11 @@ export class HubR09Layer {
 
   private drawAmbient(still = false): void {
     const time = still ? 0 : this.clockMs;
+    const nightSky = this.usesNightSky();
     this.waterFrame = Math.floor(time / (this.preferences.lowPower ? 600 : 350));
     for (const [index, cloud] of this.cloudImages.entries()) {
       const start = cloud.asset.originalSceneXY[0], width = cloud.asset.width;
-      cloud.offset = r09CloudOffset(time, start, width, still || cloud.asset.motionReady !== true, index);
+      cloud.offset = r09CloudOffset(time, start, width, still || nightSky || cloud.asset.motionReady !== true, index);
       cloud.image.setX(start + cloud.offset);
     }
     const glintAlpha = this.phase === 'night' ? .17 : this.weather.mode === 'rain' ? .2 : .37;
@@ -228,7 +372,11 @@ export class HubR09Layer {
     for (let i = 0; i < R01_RAIN_DROP_LIMIT; i++) {
       const drop = r01RainDrop(i, this.clockMs, width, height);
       const x = Math.round(left + drop.x), y = Math.round(top + drop.y);
-      this.rain.fillRect(x, y, 1, Math.max(2, Math.round(drop.length)));
+      const splashTop = Math.max(0, y);
+      const splashBottom = Math.min(R09_SOURCE_HEIGHT, y + Math.max(2, Math.round(drop.length)));
+      if (x >= 0 && x < R09_SOURCE_WIDTH && splashBottom > splashTop) {
+        this.rain.fillRect(x, splashTop, 1, splashBottom - splashTop);
+      }
     }
   }
 
@@ -250,7 +398,7 @@ export class HubR09Layer {
     const v = this.viewport;
     const diagnostic = {
       stationArt: 'r09', sourceCanvas: [512, 288],
-      camera: { zoom: v.zoom, offsetX: v.offsetX, offsetY: v.offsetY, pixelRatio: v.pixelRatio,
+      camera: { mode: v.mode, zoom: v.zoom, offsetX: v.offsetX, offsetY: v.offsetY, pixelRatio: v.pixelRatio,
         centerX: v.centerX, centerY: v.centerY, visibleSourceBounds: v.visibleSourceBounds,
         canPanLeft: v.canPanLeft, canPanRight: v.canPanRight },
       assets: { count: R09_STATION_MANIFEST.assets.length,
@@ -292,11 +440,14 @@ export class HubR09Layer {
   destroy(): void {
     if (this.disposed) return;
     this.disposed = true;
+    if (this.webglClear) this.webglClear.config.backgroundColor = this.webglClear.original;
     this.scene.scale.off(Phaser.Scale.Events.RESIZE, this.resize, this);
     this.scene.events.off('ui:preferences', this.onPreferences, this);
     this.unsubs.forEach((off) => off()); this.wind.destroy();
     [...this.images, ...this.cloudImages].forEach(({ image }) => { image.clearMask(); image.destroy(); });
     this.receivers.forEach(({ image }) => image.destroy());
+    for (const key of this.canvasTints.keys()) this.scene.textures.remove(key);
+    this.canvasTints.clear();
     [this.waterGlints, this.fountain, this.stars, this.rain, this.focus].forEach((graphic) => { graphic.clearMask(); graphic.destroy(); });
     this.masks.forEach((mask) => mask.destroy()); this.maskGraphics.forEach((graphic) => graphic.destroy());
     // React clears its own panorama on route/scene changes. An old Game can

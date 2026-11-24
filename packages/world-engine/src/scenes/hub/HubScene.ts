@@ -27,6 +27,7 @@ import { HubWeatherOverlay, type WeatherMode } from './HubWeatherOverlay';
 import { HubScheduleManager } from '../../world/hubSchedule';
 import { worldBridge } from '../../bridge/WorldBridge';
 import { getR01PhaseStyle, normalizeR01Weather } from './r01Environment';
+import { r08ActorClip } from '../art/r08Gait';
 
 export class HubScene extends Phaser.Scene {
   private timeOfDay: HubTimeOfDay;
@@ -65,7 +66,7 @@ export class HubScene extends Phaser.Scene {
     this.useR01 = false;
     this.useR09 = !legacyComparator && (query?.get('stationArt') === 'r09' || R09_STATION_MANIFEST.review.productionReady);
     if (this.useR09) {
-      preloadHubCharacters(this);
+      preloadHubCharacters(this, (clip) => clip.assetId.endsWith('.walk') ? r08ActorClip(clip) : clip);
       for (const asset of R09_STATION_MANIFEST.assets) this.load.image(asset.key, asset.url);
       return;
     }
@@ -191,7 +192,7 @@ export class HubScene extends Phaser.Scene {
     this.r01Layer?.applyDayPhase(effectivePhase, colors);
     this.r09Layer?.applyDayPhase(effectivePhase);
     const weather = normalizeR01Weather(this.registry.get('ui.weather'));
-    this.characterLayer?.applyLighting(this.r09Layer?.getSceneryTint() ?? getR01PhaseStyle(effectivePhase, weather.mode).sceneryTint);
+    this.characterLayer?.applyLighting(this.r09Layer?.getActorLighting() ?? { ambient: getR01PhaseStyle(effectivePhase, weather.mode).sceneryTint });
 
     this.environmentLayer?.applyDayPhase(phase, colors);
     this.groundDecorLayer?.applyDayPhase(phase, colors);
@@ -274,7 +275,7 @@ export class HubScene extends Phaser.Scene {
       this.r01Layer?.setWeather(weather);
       this.r09Layer?.setWeather(weather);
       const phase = (!this.r09Layer && this.getAuthoredPhase()) || this.timeOfDay.getCurrentPhase();
-      this.characterLayer?.applyLighting(this.r09Layer?.getSceneryTint() ?? getR01PhaseStyle(phase, weather.mode).sceneryTint);
+      this.characterLayer?.applyLighting(this.r09Layer?.getActorLighting() ?? { ambient: getR01PhaseStyle(phase, weather.mode).sceneryTint });
       this.publishEnvironment(phase);
     });
     const unsubVisibility = worldBridge.on<boolean>('ui:world_visible', (visible) => {

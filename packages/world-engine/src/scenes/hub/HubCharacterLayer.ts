@@ -18,7 +18,8 @@ import {
   STATION_CROWD_TEXTURES, STATION_VISITOR_LIMIT, STATION_VISITOR_LOW_POWER_LIMIT,
 } from './stationCrowd';
 import { isMovingFauna, stationFaunaPose, STATION_FAUNA_CYCLE_MS } from './stationFaunaMotion';
-import { R09_ACTOR_SPACE, r09ActorDepth, r09CharacterDefinition, r09CrowdPlan, r09FaunaOffset, r09HasContactShadow } from './r09ActorLayout';
+import { r08WalkFrame } from '../art/r08Gait';
+import { R09_ACTOR_SPACE, r09ActorDepth, r09CharacterDefinition, r09CrowdPlan, r09FaunaOffset, r09HasContactShadow, r09PatrolPlan } from './r09ActorLayout';
 
 const MANIFEST_KEY = 'hub.characters.manifest.v1';
 const MANIFEST_URL = '/hub/characters/manifest.json';
@@ -89,7 +90,16 @@ interface Actor {
   frame: number;
   state: WorldCharacterAction;
   faunaReady: boolean;
+  patrol?: { plan: NonNullable<ReturnType<typeof r09PatrolPlan>>; timeMs: number };
+  tint?: number;
+  nearLamp?: boolean;
   shadow?: Phaser.GameObjects.Ellipse;
+}
+
+export interface StationActorLighting {
+  ambient: number;
+  lamp?: number;
+  resolveTexture?: (sourceKey: string, tint: number, variant: string) => string;
 }
 
 type CrowdActor = { actor: Actor; plan: ReturnType<typeof stationCrowdPlan>[number] };
@@ -102,7 +112,7 @@ export interface StationCharacterPlacement {
   walkFrame?: (distance: number) => number;
 }
 
-/** Authored frames only. No breathing scale/tween, texture redraw or React frame events. */
+/** Authored frames stay on the source grid. Lighting changes reuse tint textures. */
 export class HubCharacterLayer {
   private readonly actors: Actor[] = [];
   private readonly crowd: CrowdActor[] = [];
@@ -123,6 +133,7 @@ export class HubCharacterLayer {
   private r09Placed = false;
   private readonly contactShadows?: Phaser.GameObjects.Graphics;
   private shadowsDirty = true;
+  private lighting: StationActorLighting = { ambient: 0xffffff };
 
   constructor(private readonly scene: Phaser.Scene, options: HubCharacterLayerOptions | StationCharacterPlacement = {}) {
     this.profile = 'profile' in options ? options.profile ?? 'r01' : 'r01';
@@ -186,18 +197,28 @@ export class HubCharacterLayer {
 
   private place(image: Phaser.GameObjects.Image, x: number, y: number): void {
     if (image.x === x && image.y === y) return;
+    if (Math.round(image.x) !== Math.round(x) || Math.round(image.y) !== Math.round(y)) this.shadowsDirty = true;
     image.setPosition(x, y);
-    this.shadowsDirty = true;
+  }
+
+  private placeOnRoute(actor: Actor, pose: ReturnType<typeof stationCrowdPose>): void {
+    // While walking, align to the scaled sprite texel so support motion and
+    // step cels keep the same grid. Seated and standing anchors stay integral.
+    const grid = this.profile === 'r09' && pose.action === 'walk'
+      ? actor.clip.frameHeight / actor.definition.displayHeight : 1;
+    this.place(actor.image, Math.round(pose.x * grid) / grid, Math.round(pose.y));
   }
 
   private paintContactShadows(): void {
     if (!this.contactShadows || !this.shadowsDirty) return;
     this.contactShadows.clear();
     for (const actor of [...this.actors, ...this.crowd.map(({ actor }) => actor)]) {
-      if (!actor.image.visible || !r09HasContactShadow(actor.definition)) continue;
+      if (!actor.image.visible) continue;
+      this.paintActorLight(actor);
+      if (!r09HasContactShadow(actor.definition)) continue;
       const x = Math.round(actor.image.x), y = Math.round(actor.image.y);
-      this.contactShadows.fillStyle(0x142b2c, .22).fillRect(x - 2, y, 5, 1);
-      this.contactShadows.fillStyle(0x142b2c, .14).fillRect(x - 1, y - 1, 3, 1);
+      this.contactShadows.fillStyle(0x101b25, .28).fillRect(x - 3, y, 7, 1);
+      this.contactShadows.fillStyle(0x101b25, .18).fillRect(x - 2, y + 1, 5, 1);
     }
     this.shadowsDirty = false;
   }
@@ -210,7 +231,9 @@ export class HubCharacterLayer {
     const shadow = this.placement && definition.id !== 'bird_tit'
       ? this.scene.add.ellipse(0, 0, definition.displayHeight * .24, 4, 0x233339, .52)
       : undefined;
-    return { definition, image, clip, elapsedMs: 0, frame: 0, state: 'idle', faunaReady, shadow };
+    const plan = this.profile === 'r09' ? r09PatrolPlan(definition) : undefined;
+    return { definition, image, clip, elapsedMs: 0, frame: 0, state: 'idle', faunaReady, shadow,
+      patrol: plan && { plan, timeMs: 0 } };
   }
 
   private validTexture(clip: WorldCharacterClip): boolean {
@@ -224,7 +247,8 @@ export class HubCharacterLayer {
       this.errors.push(`Frame geometry differs from manifest: ${clip.assetId}`);
       return false;
     }
-    texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+    // Phaser reuploads the sheet even when setFilter receives its current mode.
+    if (source.scaleMode !== Phaser.Textures.FilterMode.NEAREST) texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
     return true;
   }
 
@@ -242,6 +266,7 @@ export class HubCharacterLayer {
       actor.image.setFrame(0);
       if (this.placement) this.placeDepth(actor);
       else actor.image.setDepth(this.profile === 'r09' ? r09ActorDepth(point[1]) : actor.definition.motion?.patrol?.depth ?? 24 + point[1] / this.layout.height * 4);
+      if (actor.patrol && !this.preferences.reducedMotion) this.paintPatrol(actor, actor.patrol.plan);
     }
     if (this.crowd.length > 0) {
       const plans = this.getCrowdPlan();
@@ -271,11 +296,15 @@ export class HubCharacterLayer {
         }
         this.setClip(actor, 'idle');
         actor.elapsedMs = 0;
+        if (actor.patrol) actor.patrol.timeMs = 0;
         actor.image.setFrame(0);
         actor.frame = 0;
       }
     } else {
-      for (const actor of this.actors) if (actor.definition.motion) this.setClip(actor, 'walk');
+      for (const actor of this.actors) {
+        if (actor.patrol) this.paintPatrol(actor, actor.patrol.plan);
+        else if (actor.definition.motion) this.setClip(actor, 'walk');
+      }
     }
     this.paintCrowd();
     this.paintContactShadows();
@@ -292,6 +321,7 @@ export class HubCharacterLayer {
       actor.elapsedMs = 0;
       actor.frame = 0;
       actor.image.setTexture(characterTextureKey(clip.assetId), 0);
+      if (this.lighting.resolveTexture) this.paintActorLight(actor, true);
     }
     return true;
   }
@@ -315,9 +345,29 @@ export class HubCharacterLayer {
     }
   }
 
-  applyLighting(tint: number): void {
-    for (const actor of this.actors) actor.image.setTint(tint);
-    for (const { actor } of this.crowd) actor.image.setTint(tint);
+  applyLighting(lighting: StationActorLighting): void {
+    this.lighting = lighting;
+    for (const actor of this.actors) this.paintActorLight(actor, true);
+    for (const { actor } of this.crowd) {
+      if (!lighting.resolveTexture || actor.image.visible) this.paintActorLight(actor, true);
+    }
+  }
+
+  private paintActorLight(actor: Actor, force = false): void {
+    const { ambient, lamp, resolveTexture } = this.lighting;
+    // The archive lamp reaches the adjoining path. Sampling at the foot keeps
+    // the light attached to the courtyard as an actor walks past.
+    const nearLamp = lamp !== undefined && ((actor.image.x - 294) / 16) ** 2 + ((actor.image.y - 211) / 10) ** 2 <= 1;
+    const tint = nearLamp && lamp !== undefined ? lamp : ambient;
+    if (!force && actor.tint === tint && actor.nearLamp === nearLamp) return;
+    actor.tint = tint;
+    actor.nearLamp = nearLamp;
+    if (resolveTexture) {
+      const key = resolveTexture(characterTextureKey(actor.clip.assetId), tint, nearLamp ? 'actor-lamp' : 'actor-ambient');
+      actor.image.setTexture(key, actor.frame);
+    } else {
+      actor.image.setTint(tint);
+    }
   }
 
   private paintCrowd(): void {
@@ -332,8 +382,8 @@ export class HubCharacterLayer {
       const still = this.preferences.reducedMotion || (this.preferences.lowPower && (this.placement !== undefined || plan.visitors > 0));
       const pose = stationCrowdPose(plan, this.crowdTimeMs, still, online);
       this.setClip(actor, pose.action);
-      const x = Math.round(pose.x), y = Math.round(pose.y);
-      this.place(image, x, y);
+      const y = Math.round(pose.y);
+      this.placeOnRoute(actor, pose);
       if (image.flipX !== pose.facesLeft) image.setFlipX(pose.facesLeft);
       if (this.placement) this.placeDepth(actor);
       else {
@@ -366,6 +416,11 @@ export class HubCharacterLayer {
     for (const actor of this.actors) {
       if (!actor.image.visible) continue;
       if (isMovingFauna(actor.definition.id)) continue;
+      if (actor.patrol) {
+        actor.patrol.timeMs += delta;
+        if (sample) this.paintPatrol(actor, actor.patrol.plan);
+        continue;
+      }
       if (this.placement?.patrol && actor.definition.motion) {
         if (sample) this.paintPatrol(actor, this.placement.patrol);
         continue;
@@ -405,17 +460,22 @@ export class HubCharacterLayer {
   }
 
   private plannedFrame(actor: Actor, plan: CrowdActor['plan'], pose: ReturnType<typeof stationCrowdPose>): number {
-    if (this.placement?.walkFrame && pose.action === 'walk' && plan.action === 'walk') {
+    if (pose.action === 'walk' && plan.action === 'walk') {
       const length = Math.hypot(plan.to[0] - plan.from[0], plan.to[1] - plan.from[1]);
-      return Math.min(actor.clip.frameCount - 1, this.placement.walkFrame(length * pose.elapsed / plan.travelMs));
+      const distance = length * pose.elapsed / plan.travelMs;
+      if (this.profile === 'r09') {
+        return r08WalkFrame(distance * actor.clip.frameHeight / actor.definition.displayHeight, actor.clip.frameCount);
+      }
+      if (this.placement?.walkFrame) return Math.min(actor.clip.frameCount - 1, this.placement.walkFrame(distance));
     }
     return characterFrameAtTime(actor.clip, pose.elapsed);
   }
 
   private paintPatrol(actor: Actor, plan: CrowdActor['plan']): void {
-    const pose = stationCrowdPose(plan, this.crowdTimeMs, this.preferences.lowPower, 0);
+    const pose = stationCrowdPose(plan, actor.patrol?.timeMs ?? this.crowdTimeMs, !actor.patrol && this.preferences.lowPower, 0);
     this.setClip(actor, pose.action);
-    actor.image.setPosition(Math.round(pose.x), Math.round(pose.y)).setFlipX(pose.facesLeft);
+    this.placeOnRoute(actor, pose);
+    if (actor.image.flipX !== pose.facesLeft) actor.image.setFlipX(pose.facesLeft);
     this.placeDepth(actor);
     const frame = this.plannedFrame(actor, plan, pose);
     if (actor.frame !== frame) { actor.image.setFrame(frame); actor.frame = frame; }
